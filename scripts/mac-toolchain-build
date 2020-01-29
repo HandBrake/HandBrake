@@ -146,11 +146,11 @@ function mac_toolchain_build {
     local AUTOCONF_VER AUTOMAKE_VER CMAKE_VER LIBTOOL_VER MESON_VER NASM_VER NINJA_VER PKGCONFIG_VER VERSIONS
     AUTOCONF_VER="2.69"
     AUTOMAKE_VER="1.16.1"
-    CMAKE_VER="3.15.4"
+    CMAKE_VER="3.16.3"
     LIBTOOL_VER="2.4.6"
-    MESON_VER="0.52.0"
+    MESON_VER="0.53.1"
     NASM_VER="2.14.02"
-    NINJA_VER="1.9.0"
+    NINJA_VER="1.10.0"
     PKGCONFIG_VER="0.29.2"
     VERSIONS=("${AUTOCONF_VER}" "${AUTOMAKE_VER}" "${CMAKE_VER}" "${LIBTOOL_VER}" "${MESON_VER}" "${NASM_VER}" "${NINJA_VER}" "${PKGCONFIG_VER}")
 
@@ -170,7 +170,7 @@ function mac_toolchain_build {
     local AUTOCONF_URLS AUTOMAKE_URLS CMAKE_URLS LIBTOOL_URLS MESON_URLS NASM_URLS NINJA_URLS PKGCONFIG_URLS URLS_VARNAMES
     AUTOCONF_URLS=("https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VER}.tar.gz")
     AUTOMAKE_URLS=("https://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VER}.tar.gz")
-    CMAKE_URLS=("https://cmake.org/files/v3.15/cmake-${CMAKE_VER}.tar.gz")
+    CMAKE_URLS=("https://cmake.org/files/v3.16/cmake-${CMAKE_VER}.tar.gz")
     LIBTOOL_URLS=("https://ftp.gnu.org/gnu/libtool/libtool-${LIBTOOL_VER}.tar.gz")
     MESON_URLS=("https://github.com/mesonbuild/meson/archive/${MESON_VER}.tar.gz")
     NASM_URLS=("https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-${NASM_VER}.tar.bz2")
@@ -182,18 +182,18 @@ function mac_toolchain_build {
     local AUTOCONF_SHA256 AUTOMAKE_SHA256 CMAKE_SHA256 LIBTOOL_SHA256 MESON_SHA256 NASM_SHA256 NINJA_SHA256 PKGCONFIG_SHA256 CHECKSUMS
     AUTOCONF_SHA256="954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969"
     AUTOMAKE_SHA256="608a97523f97db32f1f5d5615c98ca69326ced2054c9f82e65bade7fc4c9dea8"
-    CMAKE_SHA256="8a211589ea21374e49b25fc1fc170e2d5c7462b795f1b29c84dd0e984301ed7a"
+    CMAKE_SHA256="e54f16df9b53dac30fd626415833a6e75b0e47915393843da1825b096ee60668"
     LIBTOOL_SHA256="e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3"
-    MESON_SHA256="0f426ed1362c38bcc5b9027ec6aec3445d6db88e8d7249ed992e9af88a42d0e0"
+    MESON_SHA256="f69ff8ce6cb52cbfb9bcc844086fade76920a292a017e68201317eeacd3ab943"
     NASM_SHA256="34fd26c70a277a9fdd54cb5ecf389badedaf48047b269d1008fbc819b24e80bc"
-    NINJA_SHA256="5d7ec75828f8d3fd1a0c2f31b5b0cea780cdfe1031359228c428c1a48bfcd5b9"
+    NINJA_SHA256="3810318b08489435f8efc19c05525e80a993af5a55baa0dfeae0465a9d45f99f"
     PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
     CHECKSUMS=("${AUTOCONF_SHA256}" "${AUTOMAKE_SHA256}" "${CMAKE_SHA256}" "${LIBTOOL_SHA256}" "${MESON_SHA256}" "${NASM_SHA256}" "${NINJA_SHA256}" "${PKGCONFIG_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="2.0.0"
+    VERSION="2.0.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
