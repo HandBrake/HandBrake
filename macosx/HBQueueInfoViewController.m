@@ -53,8 +53,7 @@
 
                                if (startedItem == self.item)
                                {
-                                   [self updateLabels];
-                                   [self updateReset];
+                                   [self updateUI];
                                }
                            }];
 
@@ -66,8 +65,7 @@
 
          if (completedItem == self.item)
          {
-             [self updateLabels];
-             [self updateReset];
+             [self updateUI];
          }
      }];
 
@@ -75,10 +73,18 @@
                         object:nil
                          queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
      {
-         [self updateLabels];
-         [self updateReset];
+         [self updateUI];
      }];
 
+}
+
+- (void)updateUI
+{
+    [self updateLabels];
+    [self updateReset];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDivider];
+    });
 }
 
 - (void)updateReset
@@ -97,7 +103,9 @@
         self.statisticsLabel.attributedStringValue = self.item.attributedStatistics;
         self.summaryLabel.attributedStringValue = self.item.attributedDescription;
 
-        [self.scrollView flashScrollers];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.scrollView flashScrollers];
+        });
     }
     else
     {
@@ -107,17 +115,21 @@
     }
 }
 
+- (void)updateDivider
+{
+    self.divider.hidden = self.scrollView.frame.size.height > self.scrollView.contentView.documentView.frame.size.height;
+}
+
 - (void)viewDidLayout
 {
     [super viewDidLayout];
-    self.divider.hidden = self.scrollView.frame.size.height > self.scrollView.contentView.documentView.frame.size.height;
+    [self updateDivider];
 }
 
 - (void)setItem:(HBQueueItem *)item
 {
     _item = item;
-    [self updateLabels];
-    [self updateReset];
+    [self updateUI];
 }
 
 - (IBAction)editItem:(id)sender
