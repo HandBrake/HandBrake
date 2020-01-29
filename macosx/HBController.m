@@ -194,7 +194,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             _destinationURL = [HBUtilities URLFromBookmark:bookmark];
         }
 #else
-        _currentDestination = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
+        _destinationURL = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
 
         if (!_destinationURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationURL.path isDirectory:nil] == NO)
