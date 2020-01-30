@@ -394,8 +394,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
 
-            // Allow 2 B frames, otherwise none would be produced
-            av_dict_set( &av_opts, "bf", "2", 0 );
+            if( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ) {
+                // Allow 2 B frames for h264, otherwise none would be produced
+                // h265(hevc) doesn't support B frames
+                av_dict_set( &av_opts, "bf", "2", 0 );
+            }
 
             // Lookahead: See Chapter 8.1 of Video_Codec_SDK_8.0.14/doc/NVENC_VideoEncoder_API_ProgGuide.pdf
             // This also adds B frames (h264 only it seems for now) and supposed to add P frames 
