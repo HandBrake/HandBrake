@@ -103,29 +103,14 @@
                                                           presetsManager:self.presetsManager];
     [self.presetsMenuBuilder build];
 
-    // Get the number of HandBrake instances currently running
-    NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:NSBundle.mainBundle.bundleIdentifier].count;
-
     // Open debug output window now if it was visible when HB was closed
     if ([ud boolForKey:@"OutputPanelIsOpen"])
     {
         [self showOutputPanel:nil];
     }
 
-    // On Screen Notification
-    // We check to see if there is already another instance of hb running.
-    if (instances > 1)
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", @"Queue -> Multiple instances alert message")];
-        [alert setInformativeText:NSLocalizedString(@"The queue will be shared between the instances.", @"Queue -> Multiple instances alert informative text")];
-        [alert runModal];
-    }
-    else
-    {
-        [self.queue setEncodingJobsAsPending];
-        [self.queue removeCompletedAndCancelledItems];
-    }
+    [self.queue setEncodingJobsAsPending];
+    [self.queue removeCompletedAndCancelledItems];
 
     // Now we re-check the queue array to see if there are
     // any remaining encodes to be done
@@ -153,15 +138,7 @@
             [self cleanEncodeLogs];
         }
 
-        // If we are a single instance it is safe to clean up the previews if there are any
-        // left over. This is a bit of a kludge but will prevent a build up of old instance
-        // live preview cruft. No danger of removing an active preview directory since they
-        // are created later in HBPreviewController if they don't exist at the moment a live
-        // preview encode is initiated.
-        if (instances == 1)
-        {
-            [self cleanPreviews];
-        }
+        [self cleanPreviews];
     });
 }
 

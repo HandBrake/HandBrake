@@ -60,15 +60,12 @@ static NSDictionary     *shortHeightAttr;
 @synthesize job = _job;
 @synthesize attributedDescription = _attributedDescription;
 
-@synthesize uuid = _uuid;
-
 - (instancetype)initWithJob:(HBJob *)job
 {
     self = [super init];
     if (self)
     {
         _job = job;
-        _uuid = [NSUUID UUID].UUIDString;
     }
     return self;
 }
@@ -232,7 +229,6 @@ static NSString *versionKey = @"HBQueueItemVersion";
     [coder encodeInt:1 forKey:versionKey];
     encodeInteger(_state);
     encodeObject(_job);
-    encodeObject(_uuid);
 
     encodeObject(_activityLogURL);
 
@@ -253,7 +249,6 @@ static NSString *versionKey = @"HBQueueItemVersion";
     {
         decodeInteger(_state); if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed) { goto fail; }
         decodeObjectOrFail(_job, HBJob);
-        decodeObjectOrFail(_uuid, NSString);
 
         decodeObject(_activityLogURL, NSURL);
 

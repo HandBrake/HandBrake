@@ -7,7 +7,6 @@
 #import <Cocoa/Cocoa.h>
 
 #import "HBQueue.h"
-#import "HBDistributedArray.h"
 #import "HBQueueItem.h"
 
 NS_ASSUME_NONNULL_BEGIN

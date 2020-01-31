@@ -51,11 +51,14 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 @property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
 
+@property (nonatomic, readonly) NSURL *fileURL;
+@property (nonatomic, readonly) NSMutableArray<HBQueueItem *> *itemsInternal;
+
 @end
 
 @implementation HBQueue
 
-- (instancetype)initWithURL:(NSURL *)queueURL
+- (instancetype)initWithURL:(NSURL *)fileURL
 {
     self = [super init];
     if (self)
@@ -66,11 +69,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
         _core.automaticallyPreventSleep = NO;
 
-        _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
+        _fileURL = fileURL;
+        _itemsInternal = [self load];
         _undoManager = [[NSUndoManager alloc] init];
-
-        // Set up the observers
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_items];
 
         [self updateStats];
 
@@ -107,7 +108,47 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self.core invalidate];
 }
 
+#pragma mark - Load and save
+
+- (NSMutableArray *)load
+{
+    NSError *error;
+
+    NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
+    unarchiver.requiresSecureCoding = YES;
+
+    NSSet *objectClasses = [NSSet setWithObjects:[NSMutableArray class], [HBQueueItem class], nil];
+
+    NSArray *loadedItems = [unarchiver decodeTopLevelObjectOfClasses:objectClasses
+                                                              forKey:NSKeyedArchiveRootObjectKey
+                                                               error:&error];
+
+    if (error)
+    {
+        [HBUtilities writeErrorToActivityLog:error];
+    }
+
+    [unarchiver finishDecoding];
+
+    return loadedItems ? [loadedItems mutableCopy] : [NSMutableArray array];
+}
+
+- (void)save
+{
+    if (![NSKeyedArchiver archiveRootObject:self.itemsInternal toFile:self.fileURL.path])
+    {
+        [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
+    }
+}
+
+
 #pragma mark - Public methods
+
+- (NSArray *)items
+{
+    return self.itemsInternal;
+}
 
 - (void)addJob:(HBJob *)item
 {
@@ -127,7 +168,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
     if (itemsToAdd.count)
     {
-        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.items.count, itemsToAdd.count)];
+        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.itemsInternal.count, itemsToAdd.count)];
         [self addItems:itemsToAdd atIndexes:indexes];
     }
 }
@@ -136,7 +177,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 {
     NSParameterAssert(url);
 
-    for (HBQueueItem *item in self.items)
+    for (HBQueueItem *item in self.itemsInternal)
     {
         if ((item.state == HBQueueItemStateReady || item.state == HBQueueItemStateWorking)
             && [item.completeOutputURL isEqualTo:url])
@@ -151,14 +192,13 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 {
     NSParameterAssert(items);
     NSParameterAssert(indexes);
-    [self.items beginTransaction];
 
     // Forward
     NSUInteger currentIndex = indexes.firstIndex;
     NSUInteger currentObjectIndex = 0;
     while (currentIndex != NSNotFound)
     {
-        [self.items insertObject:items[currentObjectIndex] atIndex:currentIndex];
+        [self.itemsInternal insertObject:items[currentObjectIndex] atIndex:currentIndex];
         currentIndex = [indexes indexGreaterThanIndex:currentIndex];
         currentObjectIndex++;
     }
@@ -181,12 +221,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 
     [self updateStats];
-    [self.items commit];
-}
-
-- (void)removeItemAtIndex:(NSUInteger)index
-{
-    [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+    [self save];
 }
 
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes
@@ -198,13 +233,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         return;
     }
 
-    [self.items beginTransaction];
+    NSArray<HBQueueItem *> *removeItems = [self.itemsInternal objectsAtIndexes:indexes];
 
-    NSArray<HBQueueItem *> *removeItems = [self.items objectsAtIndexes:indexes];
-
-    if (self.items.count > indexes.lastIndex)
+    if (self.itemsInternal.count > indexes.lastIndex)
     {
-        [self.items removeObjectsAtIndexes:indexes];
+        [self.itemsInternal removeObjectsAtIndexes:indexes];
     }
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
@@ -225,27 +258,25 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 
     [self updateStats];
-    [self.items commit];
+    [self save];
 }
 
 - (void)moveItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index
 {
-    [self.items beginTransaction];
-
     NSMutableArray<NSNumber *> *source = [NSMutableArray array];
     NSMutableArray<NSNumber *> *dest = [NSMutableArray array];
 
     for (id object in items.reverseObjectEnumerator)
     {
-        NSUInteger sourceIndex = [self.items indexOfObject:object];
-        [self.items removeObjectAtIndex:sourceIndex];
+        NSUInteger sourceIndex = [self.itemsInternal indexOfObject:object];
+        [self.itemsInternal removeObjectAtIndex:sourceIndex];
 
         if (sourceIndex < index)
         {
             index--;
         }
 
-        [self.items insertObject:object atIndex:index];
+        [self.itemsInternal insertObject:object atIndex:index];
 
         [source addObject:@(index)];
         [dest addObject:@(sourceIndex)];
@@ -271,13 +302,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         }
     }
 
-    [self.items commit];
+    [self save];
 }
 
 - (void)moveQueueItemsAtIndexes:(NSArray *)source toIndexes:(NSArray *)dest
 {
-    [self.items beginTransaction];
-
     NSMutableArray<NSNumber *> *newSource = [NSMutableArray array];
     NSMutableArray<NSNumber *> *newDest = [NSMutableArray array];
 
@@ -289,9 +318,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         [newSource addObject:@(destIndex)];
         [newDest addObject:@(sourceIndex)];
 
-        id obj = [self.items objectAtIndex:sourceIndex];
-        [self.items removeObjectAtIndex:sourceIndex];
-        [self.items insertObject:obj atIndex:destIndex];
+        id obj = [self.itemsInternal objectAtIndex:sourceIndex];
+        [self.itemsInternal removeObjectAtIndex:sourceIndex];
+        [self.itemsInternal insertObject:obj atIndex:destIndex];
     }
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidMoveItemNotification
@@ -314,7 +343,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         }
     }
 
-    [self.items commit];
+    [self save];
 }
 
 /**
@@ -323,13 +352,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)removeCompletedAndCancelledItems
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
     [self removeItemsAtIndexes:indexes];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{@"indexes": indexes}];
-    [self.items commit];
+    [self save];
 }
 
 /**
@@ -337,45 +365,33 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)removeAllItems
 {
-    [self.items beginTransaction];
-    [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.items.count)]];
-    [self.items commit];
+    [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.itemsInternal.count)]];
+    [self save];
 }
 
 - (void)removeNotWorkingItems
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state != HBQueueItemStateWorking);
     }];
     [self removeItemsAtIndexes:indexes];
-    [self.items commit];
 }
 
 - (void)removeCompletedItems
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateCompleted);
     }];
     [self removeItemsAtIndexes:indexes];
-    [self.items commit];
 }
 
 - (void)resetItemsAtIndexes:(NSIndexSet *)indexes
 {
-    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execute the action if the array changed.
-        [self.items commit];
-        return;
-    }
-
     NSMutableIndexSet *updatedIndexes = [NSMutableIndexSet indexSet];
 
     NSUInteger currentIndex =  indexes.firstIndex;
     while (currentIndex != NSNotFound) {
-        HBQueueItem *item = self.items[currentIndex];
+        HBQueueItem *item = self.itemsInternal[currentIndex];
 
         if (item.state == HBQueueItemStateCanceled || item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
         {
@@ -387,27 +403,23 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     [self updateStats];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
-    [self.items commit];
+    [self save];
 }
 
 - (void)resetAllItems
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state != HBQueueItemStateWorking);
     }];
     [self resetItemsAtIndexes:indexes];
-    [self.items commit];
 }
 
 - (void)resetFailedItems
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateFailed);
     }];
     [self resetItemsAtIndexes:indexes];
-    [self.items commit];
 }
 
 /**
@@ -416,11 +428,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)setEncodingJobsAsPending
 {
-    [self.items beginTransaction];
-
     NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
     NSUInteger idx = 0;
-    for (HBQueueItem *item in self.items)
+    for (HBQueueItem *item in self.itemsInternal)
     {
         // We want to keep any queue item that is pending or was previously being encoded
         if (item.state == HBQueueItemStateWorking)
@@ -433,7 +443,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     [self updateStats];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
-    [self.items commit];
+
+    [self save];
 }
 
 - (BOOL)canEncode
@@ -474,21 +485,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 #pragma mark - Private queue editing methods
 
-/**
- *  Reloads the queue, this is called
- *  when another HandBrake instance modifies the queue
- */
-- (void)reloadQueue
-{
-    [self updateStats];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueReloadItemsNotification object:self];
-}
-
 - (void)updateStats
 {
     NSUInteger pendingCount = 0, failedCount = 0, completedCount = 0;
 
-    for (HBQueueItem *item in self.items)
+    for (HBQueueItem *item in self.itemsInternal)
     {
         if (item.state == HBQueueItemStateReady)
         {
@@ -544,7 +545,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (HBQueueItem *)getNextPendingQueueItem
 {
-    for (HBQueueItem *item in self.items)
+    for (HBQueueItem *item in self.itemsInternal)
     {
         if (item.state == HBQueueItemStateReady)
         {
@@ -569,8 +570,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)encodeNextQueueItem
 {
-    [self.items beginTransaction];
-
     // since we have completed an encode, we go to the next
     if (self.stop)
     {
@@ -614,7 +613,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             }
 
             self.currentItem = nextItem;
-            NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:[self.items indexOfObject:nextItem]];
+            NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:[self.itemsInternal indexOfObject:nextItem]];
 
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: nextItem,
                                                                                                                             HBQueueItemNotificationIndexesKey: indexes}];
@@ -638,13 +637,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
 
-    [self.items commit];
+    [self save];
 }
 
 - (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result
 {
     NSParameterAssert(item);
-    [self.items beginTransaction];
 
     item.endedDate = [NSDate date];
 
@@ -687,12 +685,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification object:self userInfo:@{HBQueueProgressNotificationPercentKey: @1.0,
                                                                                                                 HBQueueProgressNotificationInfoKey: info}];
 
-    NSUInteger index = [self.items indexOfObject:item];
+    NSUInteger index = [self.itemsInternal indexOfObject:item];
     NSIndexSet *indexes = index != NSNotFound ? [NSIndexSet indexSetWithIndex:index] : [NSIndexSet indexSet];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item,
                                                                                                                        HBQueueItemNotificationIndexesKey: indexes}];
 
-    [self.items commit];
+    [self save];
 }
 
 /**

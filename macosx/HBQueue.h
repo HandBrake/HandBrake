@@ -6,7 +6,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HBDistributedArray.h"
 #import "HBQueueItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -43,9 +42,9 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 @interface HBQueue : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithURL:(NSURL *)queueURL;
+- (instancetype)initWithURL:(NSURL *)fileURL;
 
-@property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
+@property (nonatomic, readonly) NSArray<HBQueueItem *> *items;
 
 @property (nonatomic, nullable) HBQueueItem *currentItem;
 
@@ -59,7 +58,6 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (void)addJobs:(NSArray<HBJob *> *)jobs;
 
 - (void)addItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes;
-- (void)removeItemAtIndex:(NSUInteger)index;
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)moveItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index;
 

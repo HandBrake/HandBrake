@@ -309,13 +309,6 @@
  */
 - (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes
 {
-    if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execture the action if the array changed.
-        [self.queue.items commit];
-        return;
-    }
-
     if (indexes.count)
     {
         NSMutableIndexSet *mutableIndexes = [indexes mutableCopy];
@@ -350,13 +343,9 @@
                 [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
                     if (returnCode == NSAlertSecondButtonReturn)
                     {
-                        [self.queue.items beginTransaction];
-
                         NSInteger index = [self.queue.items indexOfObject:self.queue.currentItem];
                         [self.queue cancelCurrentItemAndContinue];
-
-                        [self.queue removeItemAtIndex:index];
-                        [self.queue.items commit];
+                        [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
                     }
                 }];
             }
@@ -365,13 +354,11 @@
         // remove the non working items immediately
         [self.queue removeItemsAtIndexes:mutableIndexes];
     }
-    [self.queue.items commit];
 }
 
 - (void)doEditQueueItem:(HBQueueItem *)item
 {
     NSParameterAssert(item);
-    [self.queue.items beginTransaction];
 
     if (item == self.queue.currentItem)
     {
@@ -383,23 +370,19 @@
     }
 
     [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
-        [self.queue.items beginTransaction];
         if (result)
         {
             // Now that source is loaded and settings applied, delete the queue item from the queue
             NSInteger index = [self.queue.items indexOfObject:item];
             item.state = HBQueueItemStateReady;
-            [self.queue removeItemAtIndex:index];
+            [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
         }
         else
         {
             item.state = HBQueueItemStateFailed;
             NSBeep();
         }
-        [self.queue.items commit];
     }];
-
-    [self.queue.items commit];
 }
 
 /**
@@ -407,13 +390,6 @@
  */
 - (void)editQueueItem:(HBQueueItem *)item
 {
-    if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execture the action if the array changed.
-        [self.queue.items commit];
-        return;
-    }
-
     // if this is a currently encoding item, we need to be sure to alert the user,
     // to let them decide to cancel it first, then if they do, we can come back and
     // remove it
@@ -442,8 +418,6 @@
     {
         [self doEditQueueItem:item];
     }
-
-    [self.queue.items commit];
 }
 
 - (void)resetQueueItemsAtIndexes:(NSIndexSet *)indexes

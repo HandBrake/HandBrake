@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBDistributedArray.h"
 
 @import HandBrakeKit;
 
@@ -22,7 +21,7 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
     HBQueueItemStateFailed
 };
 
-@interface HBQueueItem : NSObject<NSSecureCoding, HBUniqueObject>
+@interface HBQueueItem : NSObject<NSSecureCoding>
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithJob:(HBJob *)job;
