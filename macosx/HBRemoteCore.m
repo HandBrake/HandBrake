@@ -37,8 +37,19 @@
         _stdoutRedirect = HBRedirect.stdoutRedirect;
         _stderrRedirect = HBRedirect.stderrRedirect;
         _assertionID = -1;
+        _level = 1;
+        _name = @"HandBrakeXPC";
+    }
+    return self;
+}
 
-        [self connect];
+- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
+{
+    self = [self init];
+    if (self)
+    {
+        _level = level;
+        _name = name;
     }
     return self;
 }
@@ -73,6 +84,9 @@
     }];
 
     [_connection resume];
+
+    [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
+    [_proxy setUpWithLogLevel:self.level name:self.name];
 }
 
 - (void)invalidate
@@ -101,19 +115,6 @@
     }
 
     [self forwardError:@"XPC: Service did crash\n"];
-}
-
-- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
-{
-    self = [self init];
-    if (self)
-    {
-        _level = level;
-        _name = name;
-        [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
-        [_proxy setUpWithLogLevel:level name:name];
-    }
-    return self;
 }
 
 - (void)updateState:(HBState)state {
@@ -181,6 +182,11 @@
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
 {
+    if (!_connection)
+    {
+        [self connect];
+    }
+
     [self preventAutoSleep];
 
 #ifdef __SANDBOX_ENABLED__
