@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -147,9 +147,7 @@ Personnalisé : vous pouvez éventuellement définir une largeur et une hauteur
 Source maximum : Encodez toujours à la résolution des sources lorsque cela est possible.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 The HandBrake Team
-
-Ce programme est un logiciel libre; vous pouvez le redistribuer et / ou le
+    <value>Ce programme est un logiciel libre; vous pouvez le redistribuer et / ou le
 modifier selon les termes de la Licence Publique Générale GNU tel que
 publié par la Free Software Foundation; soit la version 2 de la licence, 
 ou (à votre choix) toute version ultérieure.
@@ -282,10 +280,10 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
     <value>Veuillez sélectionner un préréglage à mettre à jour.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>Sélectionnez "Source" pour continuer</value>
+    <value>Sélectionnez "Ouvrir source" pour continuer</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Encodages restants</value>
+    <value>{0} Travaux en attente </value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Remarque</value>
@@ -333,7 +331,7 @@ Voulez-vous continuer ?</value>
     <value>Sortie : {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Format du fichier de sortie. En plus des caractères pris en charge par le système de fichier, vous pouvez utiliser les caractères de substitution suivants qui seront remplacés lorsque vous changez de titre ou scannez une source.
+    <value>Format du fichier de sortie. En plus des caractères pris en charge par le système de fichier, vous pouvez utiliser les champs de substitution suivants qui seront remplacés lorsque vous changez de titre ou scannez une source.
 
 Options mises à jour en direct : {source} {title} {chapters}
 Options en différé : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Ceux-ci changent uniquement quand vous scannez une nouvelle source, changez de titre ou de chapitres)</value>
@@ -486,7 +484,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Aucun travail d'encodage en cours</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>File</value>
+    <value>File d'attente</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir nettoyer la file ?</value>
@@ -495,7 +493,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Confirmer</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0}travaux en attente </value>
+    <value>{0} travaux en attente </value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>File mise en pause</value>
@@ -1086,7 +1084,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Aperçu</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>File</value>
+    <value>File d'attente</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
     <value>Source :</value>
@@ -1794,7 +1792,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>_Préréglages</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_File</value>
+    <value>_File d'attente</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
     <value>_Réinitialiser les préréglages intégrés</value>
@@ -1848,7 +1846,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>'Ajouter tout' à la file</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>'Ajouter la sélection' à la File</value>
+    <value>'Ajouter la sélection' à la file</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Lire le fichier</value>
@@ -2174,5 +2172,21 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Toujours utiliser le chemin par défaut pour chaque nouveau nom généré.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>La plage de ports doit être comprise entre 5000 et 32767</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>Expérimental</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Champs de substitution : {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Une nouvelle version d'HandBrake est disponible !</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
   </data>
 </root>
