@@ -618,6 +618,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
 
             // Filters
+            preset.UsesPictureFilters = true;
             preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;
             preset.PictureDeblockTune = export.Task.DeblockTune?.Key;
             preset.PictureDeblockCustom = export.Task.CustomDeblock;
