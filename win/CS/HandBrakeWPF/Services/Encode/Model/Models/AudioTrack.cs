@@ -130,8 +130,14 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
             {
                 chosenEncoder = fallback;
-                encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
             }
+
+            if (track.IsPassthru && chosenEncoder == AudioEncoder.Passthrough)
+            {
+                chosenEncoder = fallback;
+            }
+
+            encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(chosenEncoder));
 
             this.scannedTrack = sourceTrack;
             this.drc = track.DRC;
