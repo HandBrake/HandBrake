@@ -2003,7 +2003,7 @@ Where supported, any user presets will have been imported.</value>
     <value>System Battery Critical! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>System Battery Low! ({0} %). Your encode has been paused to protect the system. System sleep is set to allowed!</value>
+    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
@@ -2188,5 +2188,11 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Low battery level:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pause any running jobs when the battery gets low.</value>
   </data>
 </root>

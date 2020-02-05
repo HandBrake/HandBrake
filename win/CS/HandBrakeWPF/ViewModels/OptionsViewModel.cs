@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -108,10 +109,14 @@ namespace HandBrakeWPF.ViewModels
         private bool whenDonePerformActionImmediately;
         private bool useDarkTheme;
         private bool alwaysUseDefaultPath;
+        private bool pauseOnLowBattery;
+        private int lowBatteryLevel;
 
         // Experimental
         private int remoteServicePort;
         private bool remoteServiceEnabled;
+
+
 
         #endregion
 
@@ -192,6 +197,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();
+
+        public bool HasSystemBattery => PowerService.HasBattery();
 
         #region General
 
@@ -1072,6 +1079,28 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool PauseOnLowBattery
+        {
+            get => this.pauseOnLowBattery;
+            set
+            {
+                if (value == this.pauseOnLowBattery) return;
+                this.pauseOnLowBattery = value;
+                this.NotifyOfPropertyChange(() => this.PauseOnLowBattery);
+            }
+        }
+
+        public int LowBatteryLevel
+        {
+            get => this.lowBatteryLevel;
+            set
+            {
+                if (value == this.lowBatteryLevel) return;
+                this.lowBatteryLevel = value;
+                this.NotifyOfPropertyChange(() => this.LowBatteryLevel);
+            }
+        }
+
         #endregion
 
         #region Video
@@ -1618,6 +1647,9 @@ namespace HandBrakeWPF.ViewModels
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
 
+            this.PauseOnLowBattery = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseEncodingOnLowBattery);
+            this.LowBatteryLevel = userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
+
             // #############################
             // Experimental
             // #############################
@@ -1728,6 +1760,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+
+            this.userSettingService.SetUserSetting(UserSettingConstants.PauseEncodingOnLowBattery, this.PauseOnLowBattery);
+            this.userSettingService.SetUserSetting(UserSettingConstants.LowBatteryLevel, this.LowBatteryLevel);
 
             /* Experimental */
             this.userSettingService.SetUserSetting(UserSettingConstants.RemoteServiceEnabled, this.RemoteServiceEnabled);

@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Utilities;
 
     public class SystemService : ISystemService
@@ -23,6 +24,8 @@ namespace HandBrakeWPF.Services
         private readonly IUserSettingService userSettingService;
         private readonly IEncode encodeService;
         private readonly ILog log = null;
+        private readonly IQueueService queueService;
+
         private Timer pollTimer;
 
         private bool criticalStateHit = false;
@@ -30,9 +33,10 @@ namespace HandBrakeWPF.Services
         private bool lowPowerPause = false;
         private bool storageLowPause = false;
 
-        public SystemService(IUserSettingService userSettingService, IEncode encodeService, ILog logService)
+        public SystemService(IUserSettingService userSettingService, IEncode encodeService, ILog logService, IQueueService queueService)
         {
             this.log = logService;
+            this.queueService = queueService;
             this.userSettingService = userSettingService;
             this.encodeService = encodeService;
         }
@@ -70,7 +74,7 @@ namespace HandBrakeWPF.Services
                         string.Format(
                             Resources.SystemService_LowDiskSpaceLog,
                             lowLevel / 1000 / 1000 / 1000));
-                    this.encodeService.Pause();
+                    this.queueService.Pause();
                     this.storageLowPause = true;
                 }
             }
@@ -78,6 +82,11 @@ namespace HandBrakeWPF.Services
 
         private void PowerCheck()
         {
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseEncodingOnLowBattery))
+            {
+                return;
+            }
+
             Win32.PowerState state = Win32.PowerState.GetPowerState();
 
             if (state == null || state.BatteryFlag == Win32.BatteryFlag.NoSystemBattery || state.BatteryFlag == Win32.BatteryFlag.Unknown)
@@ -85,12 +94,14 @@ namespace HandBrakeWPF.Services
                 return; // Only run if we have a battery.
             }
 
-            if (state.ACLineStatus == Win32.ACLineStatus.Offline && state.BatteryFlag == Win32.BatteryFlag.Low && !this.lowStateHit)
+            int lowBatteryLevel = this.userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
+
+            if (state.ACLineStatus == Win32.ACLineStatus.Offline && state.BatteryLifePercent <= lowBatteryLevel && !this.lowStateHit)
             {
                 if (this.encodeService.IsEncoding && !this.encodeService.IsPasued)
                 {
                     this.lowPowerPause = true;
-                    this.encodeService.Pause();
+                    this.queueService.Pause();
                 }
 
                 Win32.AllowSleep();
@@ -99,26 +110,12 @@ namespace HandBrakeWPF.Services
                 this.lowStateHit = true;
             }
 
-            if (state.ACLineStatus == Win32.ACLineStatus.Offline && state.BatteryFlag == Win32.BatteryFlag.Critical && !this.criticalStateHit)
-            {
-                if (this.encodeService.IsEncoding && !this.encodeService.IsPasued)
-                {
-                    this.lowPowerPause = true;
-                    this.encodeService.Pause(); // In case we missed the low state!
-                }
-
-                Win32.AllowSleep();
-
-                this.ServiceLogMessage(string.Format(Resources.SystemService_CriticalBattery, state.BatteryLifePercent));
-                this.criticalStateHit = true;
-            }
-
             // Reset the flags when we start charging. 
-            if (state.ACLineStatus == Win32.ACLineStatus.Online && state.BatteryFlag >= Win32.BatteryFlag.Low)
+            if (state.ACLineStatus == Win32.ACLineStatus.Online)
             {
                 if (this.lowPowerPause && this.encodeService.IsPasued)
                 {
-                    this.encodeService.Resume();
+                    this.queueService.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                     this.ServiceLogMessage(string.Format(Resources.SystemService_ACMains, state.BatteryLifePercent));
                 }
 

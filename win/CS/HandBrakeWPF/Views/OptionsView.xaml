@@ -353,7 +353,16 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_PreventSleep}" IsChecked="{Binding PreventSleep}" />
-                            <CheckBox Content="{x:Static Properties:Resources.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" />
+
+                            <CheckBox Content="{x:Static Properties:Resources.Options_PauseOnLowBattery}" IsChecked="{Binding PauseOnLowBattery}" Visibility="{Binding HasSystemBattery, Converter={StaticResource boolToVisConverter}}" />
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="{Binding HasSystemBattery, Converter={StaticResource boolToVisConverter}}">
+                                <TextBlock Text="{x:Static Properties:Resources.Options_LowBatteryLevel}" Width="230" VerticalAlignment="Center" />
+                                <TextBox x:Name="LowBatteryLevel" Text="{Binding LowBatteryLevel, UpdateSourceTrigger=PropertyChanged}"  Width="120" VerticalContentAlignment="Center" />
+                                <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            </StackPanel>
+
+
+                            <CheckBox Content="{x:Static Properties:Resources.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" Margin="0,8,0,0" />
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <CheckBox Content="{x:Static Properties:Resources.Options_LowDiskspaceSize}" IsChecked="{Binding PauseOnLowDiskspace}" Width="255" />
                                 <TextBox x:Name="PauseOnLowDiskspaceLevel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}"  Width="120"/>

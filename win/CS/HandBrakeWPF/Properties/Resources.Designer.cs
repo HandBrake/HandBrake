@@ -2975,6 +2975,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low battery level:.
+        /// </summary>
+        public static string Options_LowBatteryLevel {
+            get {
+                return ResourceManager.GetString("Options_LowBatteryLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pause queue if disk space is lower than:.
         /// </summary>
         public static string Options_LowDiskspaceSize {
@@ -3070,6 +3079,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_PathToVLC {
             get {
                 return ResourceManager.GetString("Options_PathToVLC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause any running jobs when the battery gets low..
+        /// </summary>
+        public static string Options_PauseOnLowBattery {
+            get {
+                return ResourceManager.GetString("Options_PauseOnLowBattery", resourceCulture);
             }
         }
         
@@ -5674,7 +5692,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to System Battery Low! ({0} %). Your encode has been paused to protect the system. System sleep is set to allowed!.
+        ///   Looks up a localized string similar to System Battery Low! ({0} %). Your encode has been paused..
         /// </summary>
         public static string SystemService_LowBatteryLog {
             get {

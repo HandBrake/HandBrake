@@ -283,6 +283,9 @@ namespace HandBrakeWPF.Services
 
             // Advanced
             defaults.Add(UserSettingConstants.PreventSleep, true);
+            defaults.Add(UserSettingConstants.PauseEncodingOnLowBattery, true);
+            defaults.Add(UserSettingConstants.LowBatteryLevel, 15);
+
             defaults.Add(UserSettingConstants.DisableLibDvdNav, false);
             defaults.Add(UserSettingConstants.PauseOnLowDiskspace, true);
             defaults.Add(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, 2000000000L);

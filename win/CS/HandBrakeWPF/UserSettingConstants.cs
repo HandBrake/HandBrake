@@ -75,5 +75,7 @@ namespace HandBrakeWPF
         public const string UseDarkTheme = "UseDarkTheme";
         public const string PreviewRotationFlip = "PreviewRotationFlip";
         public const string AlwaysUseDefaultPath = "AlwaysUseDefaultPath";
+        public const string PauseEncodingOnLowBattery = "PauseEncodingOnLowBattery";
+        public const string LowBatteryLevel = "LowBatteryLevel";
     }
 }
