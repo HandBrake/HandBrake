@@ -1170,8 +1170,8 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         }
         if (count <= 0)
         {
-            // No matching language.  Try "Unknown" language
-            add_subtitle_for_lang(list, title, mux, "und", &behavior);
+            // No languages in language list, assume "any"
+            add_subtitle_for_lang(list, title, mux, "any", &behavior);
         }
     }
 
