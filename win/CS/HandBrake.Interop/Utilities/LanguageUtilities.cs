@@ -10,16 +10,17 @@
 namespace HandBrake.Interop.Utilities
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
+
+    using HandBrake.Interop.Interop.HbLib;
 
     /// <summary>
     /// Language Utilities
     /// </summary>
     public class LanguageUtilities
     {
-        /// <summary>
-        /// The language map.
-        /// </summary>
+        public static string Any = "(Any)";
         private static IDictionary<string, string> languageMap;
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace HandBrake.Interop.Utilities
 
             languageMap = new Dictionary<string, string>
                           {
-                              { "(Any)", "any" },
+                              { Any, "any" },
                               { "(Unknown)", "und" },
                               { "Afar", "aar" },
                               { "Abkhazian", "abk" },
@@ -308,6 +309,25 @@ namespace HandBrake.Interop.Utilities
             }
 
             return null;
+        }
+
+        public static List<string> OrderIsoCodes(List<string> iso6392Codes, IList<string> userLanguages)
+        {
+            List<string> orderedSet = new List<string>();
+            foreach (var item in userLanguages)
+            {
+                string isoCode;
+                if (MapLanguages().TryGetValue(item, out isoCode))
+                {
+                    orderedSet.Add(isoCode);
+                }
+            }
+
+            List<string> unorderedSet = iso6392Codes.Where(isoCode => !orderedSet.Contains(isoCode)).ToList();
+
+            List<string> orderedList = orderedSet.Union(unorderedSet).ToList();
+            
+            return orderedList;
         }
     }
 }

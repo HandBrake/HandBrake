@@ -710,10 +710,16 @@ namespace HandBrakeWPF.ViewModels
         private List<Subtitle> GetSelectedLanguagesTracks()
         {
             // Translate to Iso Codes
-            List<string> iso6392Codes = this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any)
-                ? LanguageUtilities.GetIsoCodes()
-                : LanguageUtilities.GetLanguageCodes(
-                    this.SubtitleBehaviours.SelectedLangauges.ToArray());
+            List<string> iso6392Codes = new List<string>();
+            if (this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any))
+            {
+                iso6392Codes = LanguageUtilities.GetIsoCodes();
+                iso6392Codes = LanguageUtilities.OrderIsoCodes(iso6392Codes, this.SubtitleBehaviours.SelectedLangauges);
+            }
+            else
+            {
+                iso6392Codes = LanguageUtilities.GetLanguageCodes(this.SubtitleBehaviours.SelectedLangauges.ToArray());
+            }
 
 
             List<Subtitle> orderedSubtitles = new List<Subtitle>();
