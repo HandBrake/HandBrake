@@ -811,14 +811,17 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IntermediateProgress = false;
 
+                string totalHrsLeft = e.EstimatedTimeLeft.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", e.EstimatedTimeLeft) : string.Format(@"{0:hh\:mm\:ss}", e.EstimatedTimeLeft);
+                string elapsedTimeHrs = e.ElapsedTime.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", e.ElapsedTime) : string.Format(@"{0:hh\:mm\:ss}", e.ElapsedTime);
+
                 if (e.IsSubtitleScan)
                 {
                     this.JobStatus = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
                         e.Task,
                         e.TaskCount,
                         e.PercentComplete,
-                        e.EstimatedTimeLeft,
-                        e.ElapsedTime,
+                        totalHrsLeft,
+                        elapsedTimeHrs,
                         null);
 
                     this.ProgressValue = e.PercentComplete;
@@ -842,8 +845,8 @@ namespace HandBrakeWPF.ViewModels
                             e.PercentComplete,
                             e.CurrentFrameRate,
                             e.AverageFrameRate,
-                            e.EstimatedTimeLeft,
-                            e.ElapsedTime,
+                            totalHrsLeft,
+                            elapsedTimeHrs,
                             null);
                     this.ProgressValue = e.PercentComplete;
                 }
