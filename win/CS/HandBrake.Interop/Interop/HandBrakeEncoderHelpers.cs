@@ -211,6 +211,13 @@ namespace HandBrake.Interop.Interop
             return AudioEncoders.SingleOrDefault(e => e.Id == codecId);
         }
 
+        public static HBAudioEncoder GetAutoPassthruEncoder(int inputCodec, int copyMask, int fallback, int muxer)
+        {
+           int encoder = HBFunctions.hb_autopassthru_get_encoder(inputCodec, copyMask, fallback, muxer);
+
+           return GetAudioEncoder(encoder);
+        }
+
         /// <summary>
         /// Gets the video encoder with the specified short name.
         /// </summary>
@@ -658,6 +665,53 @@ namespace HandBrake.Interop.Interop
         public static double GetDefaultAudioCompression(HBAudioEncoder encoder)
         {
             return hbFunctions.hb_audio_compression_get_default((uint)encoder.Id);
+        }
+
+        public static uint BuildCopyMask(bool audioAllowMP3Pass, bool audioAllowAACPass, bool audioAllowAC3Pass, bool audioAllowDTSPass, bool audioAllowDTSHDPass, bool audioAllowEac3Pass, bool audioAllowFlacPass, bool audioAllowTruehdPass)
+        {
+            uint mask = 0;
+
+            if (audioAllowMP3Pass)
+            {
+                mask |= NativeConstants.HB_ACODEC_MP3_PASS;
+            }
+
+            if (audioAllowAACPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_AAC_PASS;
+            }
+
+            if (audioAllowAC3Pass)
+            {
+                mask |= NativeConstants.HB_ACODEC_AC3_PASS;
+            }
+
+            if (audioAllowDTSPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_DCA_PASS;
+            }
+
+            if (audioAllowDTSHDPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_DCA_HD_PASS;
+            }
+
+            if (audioAllowEac3Pass)
+            {
+                mask |= NativeConstants.HB_ACODEC_EAC3_PASS;
+            }
+
+            if (audioAllowFlacPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_FLAC_PASS;
+            }
+
+            if (audioAllowTruehdPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_TRUEHD_PASS;
+            }
+
+            return mask;
         }
     }
 }

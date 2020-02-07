@@ -437,7 +437,7 @@ namespace HandBrakeWPF.ViewModels
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
                             if (this.CanAddTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
                             {
-                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
                             }
                             break;
                         case AudioTrackDefaultsMode.AllTracks:
@@ -445,7 +445,7 @@ namespace HandBrakeWPF.ViewModels
                             {
                                 if (this.CanAddTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
                                 {
-                                    this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                                    this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.Task.AllowedPassthruOptions, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
                                 }
                             }
 
@@ -497,7 +497,7 @@ namespace HandBrakeWPF.ViewModels
                 Audio sourceTrack = this.GetPreferredAudioTrack();
                 if (this.CanAddTrack(track, sourceTrack, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
                 {
-                    this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.Task.AllowedPassthruOptions.AudioEncoderFallback));
+                    this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.Task.AllowedPassthruOptions, this.Task.OutputFormat));
                 }
             }
            
