@@ -2195,4 +2195,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
     <value>Pause any running jobs when the battery gets low.</value>
   </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
 </root>

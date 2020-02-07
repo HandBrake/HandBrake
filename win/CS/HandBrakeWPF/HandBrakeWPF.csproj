@@ -36,6 +36,8 @@
 
   <ItemGroup>
     <None Remove="handbrakepineapple.ico" />
+    <None Remove="Views\Images\Dark\Reorder.png" />
+    <None Remove="Views\Images\Light\Reorder.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,6 +80,7 @@
     <Resource Include="Views\Images\Dark\Queue.png" />
     <Resource Include="Views\Images\Dark\Refresh.png" />
     <Resource Include="Views\Images\Dark\Remove.png" />
+    <Resource Include="Views\Images\Dark\Reorder.png" />
     <Resource Include="Views\Images\Dark\Settings.png" />
     <Resource Include="Views\Images\Dark\Source.png" />
     <Resource Include="Views\Images\Disc.png" />
@@ -100,6 +103,7 @@
     <Resource Include="Views\Images\Light\Queue.png" />
     <Resource Include="Views\Images\Light\Refresh.png" />
     <Resource Include="Views\Images\Light\Remove.png" />
+    <Resource Include="Views\Images\Light\Reorder.png" />
     <Resource Include="Views\Images\Light\Settings.png" />
     <Resource Include="Views\Images\Light\Source.png" />
     <Resource Include="Views\Images\logo128.png" />

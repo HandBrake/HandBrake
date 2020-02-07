@@ -5503,6 +5503,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add All Remaining Closed Captions.
+        /// </summary>
+        public static string SubtitleView_AddRemainingCC {
+            get {
+                return ResourceManager.GetString("SubtitleView_AddRemainingCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video..
         /// </summary>
         public static string SubtitleView_SubtitleDefaultsDescription {
