@@ -162,6 +162,9 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_can_apply_drc2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_audio_can_apply_drc2(IntPtr handle, int title_index, int audio_index, int encoder);
 
+        [DllImport("hb", EntryPoint = "hb_autopassthru_get_encoder", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback, int muxer);
+
         [DllImport("hb", EntryPoint = "hb_mixdown_is_supported", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_is_supported(int mixdown, uint codec, ulong layout);
 

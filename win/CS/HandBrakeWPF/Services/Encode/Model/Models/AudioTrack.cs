@@ -123,18 +123,36 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <param name="fallback">
         /// An encoder to fall back to.
         /// </param>
-        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
+        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, AllowedPassthru fallback, OutputFormat container)
         {
             AudioEncoder chosenEncoder = track.Encoder;
             HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
             if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
             {
-                chosenEncoder = fallback;
+                chosenEncoder = fallback.AudioEncoderFallback;
             }
 
             if (track.IsPassthru && chosenEncoder == AudioEncoder.Passthrough)
             {
-                chosenEncoder = fallback;
+                HBAudioEncoder fallbackEncoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(fallback.AudioEncoderFallback));
+
+                if (fallbackEncoderInfo != null)
+                {
+                    int format = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(container)).Id;
+                    int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(
+                        fallback.AudioAllowMP3Pass,
+                        fallback.AudioAllowAACPass,
+                        fallback.AudioAllowAC3Pass,
+                        fallback.AudioAllowDTSPass,
+                        fallback.AudioAllowDTSHDPass,
+                        fallback.AudioAllowEAC3Pass,
+                        fallback.AudioAllowFlacPass,
+                        fallback.AudioAllowTrueHDPass));
+
+                    HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoderInfo.Id, format);
+                    AudioEncoder autoPassthru = EnumHelper<AudioEncoder>.GetValue(autoPassthruEncoderOption.ShortName);
+                    chosenEncoder = autoPassthru;
+                }
             }
 
             encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(chosenEncoder));
