@@ -3324,18 +3324,18 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
+        end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
         if (start >= end)
         {
             ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
-            start = end - 1;
+            start = end - 90000;
         }
         ghb_check_dependency(ud, widget, NULL);
         update_title_duration(ud);
 
-        ghb_dict_set_int(range, "Start", start * 90000);
-        ghb_dict_set_int(range, "End", end * 90000);
+        ghb_dict_set_int(range, "Start", start);
+        ghb_dict_set_int(range, "End", end);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
