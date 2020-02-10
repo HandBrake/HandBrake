@@ -25,7 +25,7 @@
 #include <kernel/OS.h>
 #endif
 
-#if defined(SYS_DARWIN) || defined(SYS_FREEBSD)
+#if defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #if HB_PROJECT_FEATURE_QSV && defined(SYS_FREEBSD)
@@ -222,7 +222,7 @@ void hb_snooze( int delay )
     }
 #if defined( SYS_BEOS )
     snooze( 1000 * delay );
-#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || defined( SYS_SunOS )
+#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || defined(SYS_NETBSD) || defined( SYS_SunOS )
     usleep( 1000 * delay );
 #elif defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     Sleep( delay );
@@ -447,9 +447,9 @@ static int init_cpu_count()
     get_system_info( &info );
     cpu_count = info.cpu_count;
 
-#elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_OPENBSD)
+#elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
     size_t length = sizeof( cpu_count );
-#ifdef SYS_OPENBSD
+#ifdef SYS_OPENBSD || defined(SYS_NETBSD)
     int mib[2] = { CTL_HW, HW_NCPU };
     if( sysctl(mib, 2, &cpu_count, &length, NULL, 0) )
 #else
@@ -862,7 +862,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
 {
     hb_thread_t * t = (hb_thread_t *) _t;
 
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
     /* Set the thread priority */
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
@@ -1009,7 +1009,7 @@ hb_lock_t * hb_lock_init()
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ )
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 

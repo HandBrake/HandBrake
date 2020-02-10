@@ -1378,10 +1378,10 @@ def createCLI( cross = None ):
     h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gtk', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
 
     h = 'enable GTK GUI for Windows' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
@@ -1390,7 +1390,7 @@ def createCLI( cross = None ):
     h = IfHost( 'Build GUI with GTK4', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-gtk4', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', '*-*-netbsd*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
     h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
@@ -2042,7 +2042,7 @@ int main()
 
     else:
         doc.addBlank()
-        if host_tuple.system == 'freebsd':
+        if host_tuple.system in ('freebsd', 'netbsd'):
             doc.add( 'HAS.pthread', 1 )
         if not strerror_r.fail:
             doc.add( 'HAS.strerror_r', 1 )

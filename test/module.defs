@@ -71,7 +71,7 @@ ifeq (1, $(FEATURE.numa))
 endif
 else ifeq ($(HOST.system),kfreebsd)
     TEST.GCC.l += pthread dl m
-else ifeq ($(HOST.system),freebsd)
+else ifneq (,$(filter $(HOST.system),freebsd netbsd))
     TEST.GCC.L += $(LOCALBASE)/lib
     TEST.GCC.l += pthread m
 else ifeq ($(HOST.system),solaris)

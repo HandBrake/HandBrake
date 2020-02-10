@@ -64,6 +64,8 @@ else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),freebsd)
     LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(HOST.system),netbsd)
+    LIBHB.GCC.D += SYS_NETBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
 ifneq ($(HAS.pthread),1)
