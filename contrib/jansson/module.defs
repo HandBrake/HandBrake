@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,JANSSON,jansson))
 $(eval $(call import.CONTRIB.defs,JANSSON))
 
-JANSSON.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/jansson-2.12.tar.bz2
+JANSSON.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/jansson-2.12.tar.bz2
 JANSSON.FETCH.url    += http://www.digip.org/jansson/releases/jansson-2.12.tar.bz2
 JANSSON.FETCH.sha256  = 645d72cc5dbebd4df608d33988e55aa42a7661039e19a379fcbe5c79d1aee1d2
 

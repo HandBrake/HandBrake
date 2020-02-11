@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libbluray-1.1.2.tar.bz2
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libbluray-1.1.2.tar.bz2
 LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.1.2/libbluray-1.1.2.tar.bz2
 LIBBLURAY.FETCH.sha256  = a3dd452239b100dc9da0d01b30e1692693e2a332a7d29917bf84bb10ea7c0b42
 

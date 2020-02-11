@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBGNURX,libgnurx))
 $(eval $(call import.CONTRIB.defs,LIBGNURX))
 
-LIBGNURX.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/mingw-libgnurx-2.5.1-src.tar.gz
+LIBGNURX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/mingw-libgnurx-2.5.1-src.tar.gz
 LIBGNURX.FETCH.url    += https://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/mingw-regex-2.5.1/mingw-libgnurx-2.5.1-src.tar.gz
 LIBGNURX.FETCH.sha256  = 7147b7f806ec3d007843b38e19f42a5b7c65894a57ffc297a76b0dcd5f675d76
 LIBGNURX.EXTRACT.tarbase = mingw-libgnurx-2.5.1
