@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBMFX,libmfx))
 $(eval $(call import.CONTRIB.defs,LIBMFX))
 
-LIBMFX.FETCH.url       = https://download.handbrake.fr/contrib/mfx_dispatch-c200d83.tar.gz
+LIBMFX.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/mfx_dispatch-c200d83.tar.gz
 LIBMFX.FETCH.url      += https://github.com/lu-zero/mfx_dispatch/archive/c200d833e25a91e3e49d69890dac1ffa3486cbe9.tar.gz
 LIBMFX.FETCH.sha256    = ec1da009e7c77fcc3e45ff665b30c9390437cd920f2951ccabf3d79e8d5703a9
 LIBMFX.FETCH.basename  = mfx_dispatch-c200d83.tar.gz

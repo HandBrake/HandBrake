@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
-AMF.FETCH.url      = https://download.handbrake.fr/contrib/AMF-1.4.9.tar.gz
+AMF.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/AMF-1.4.9.tar.gz
 AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/v1.4.9.tar.gz
 AMF.FETCH.sha256   = d10f75612da5bcbc26325adecc5d398dcddf216c0dae3406d9a29b9d0b44b112
 AMF.FETCH.basename = AMF-1.4.9.tar.gz

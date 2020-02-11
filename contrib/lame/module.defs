@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LAME,lame))
 $(eval $(call import.CONTRIB.defs,LAME))
 
-LAME.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/lame-3.100.tar.gz
+LAME.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/lame-3.100.tar.gz
 LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
 LAME.FETCH.sha256  = ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
