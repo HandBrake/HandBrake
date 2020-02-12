@@ -84,6 +84,11 @@ typedef struct
     int                  last_match_idx;
 } preset_search_context_t;
 
+typedef struct
+{
+    preset_do_context_t  do_ctx;
+} preset_scrub_context_t;
+
 typedef int (*preset_do_f)(hb_value_t *preset, preset_do_context_t *ctx);
 
 static int preset_cmp_idx(hb_value_t *preset, int idx,
@@ -168,6 +173,50 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
     }
 
     return result;
+}
+
+static int preset_hw_scrub(hb_value_t *preset)
+{
+    int disabled = 0;
+    hb_value_t *val = hb_dict_get(preset, "VideoEncoder");
+    if (val != NULL)
+    {
+        const char *s;
+        int vcodec;
+        s = hb_value_get_string(val);
+        vcodec = hb_video_encoder_get_from_name(s);
+        if (vcodec != HB_VCODEC_INVALID)
+        {
+            if (vcodec & HB_VCODEC_QSV_MASK)
+            {
+                if(hb_qsv_available())
+                {
+#if HB_PROJECT_FEATURE_QSV
+                    // check the qsv codec is supported by hw
+                    disabled = hb_qsv_video_encoder_is_enabled(vcodec) ? 0 : 1;
+#endif
+                }
+                else
+                {
+                    disabled = 1;
+                }
+            }
+            // TODO: other hw codecs for non Intel platforms
+        }
+    }
+
+    if(disabled)
+    {
+        hb_dict_set_int(preset, "PresetDisabled", disabled);
+    }
+    return 0;
+}
+
+static int do_preset_hw_scrub(hb_value_t *preset, preset_do_context_t *do_ctx)
+{
+    preset_scrub_context_t *ctx = (preset_scrub_context_t*)do_ctx;
+    preset_hw_scrub(preset);
+    return PRESET_DO_NEXT;
 }
 
 static int do_preset_import(hb_value_t *preset, preset_do_context_t *do_ctx)
@@ -2341,6 +2390,17 @@ void hb_presets_clean(hb_value_t *preset)
     presets_clean(preset, hb_preset_template);
 }
 
+static void presets_hw_scrub(hb_value_t *presets)
+{
+    preset_scrub_context_t ctx;
+    presets_do(do_preset_hw_scrub, presets, (preset_do_context_t*)&ctx);
+}
+
+void hb_presets_hw_scrub(hb_value_t *preset)
+{
+    presets_hw_scrub(preset);
+}
+
 static char * fix_name_collisions(hb_value_t * list, const char * name)
 {
     char * new_name = strdup(name);
@@ -3396,6 +3456,7 @@ int hb_presets_import(const hb_value_t *in, hb_value_t **out)
     dup = hb_value_dup(in);
     hb_presets_version(dup, &ctx.major, &ctx.minor, &ctx.micro);
     presets_do(do_preset_import, dup, (preset_do_context_t*)&ctx);
+    presets_do(do_preset_hw_scrub, dup, (preset_do_context_t*)&ctx);
     if (cmpVersion(ctx.major, ctx.minor, ctx.micro, 29, 0, 0) <= 0)
     {
         hb_value_t * tmp;
@@ -3522,6 +3583,7 @@ void hb_presets_builtin_init(void)
 
     hb_presets_builtin = hb_value_dup(hb_dict_get(dict, "PresetBuiltin"));
     hb_presets_clean(hb_presets_builtin);
+    hb_presets_hw_scrub(hb_presets_builtin);
 
     hb_presets = hb_value_array_init();
     hb_value_free(&dict);
@@ -3532,6 +3594,7 @@ int hb_presets_cli_default_init(void)
     hb_value_t * dict = hb_value_json(hb_builtin_presets_json);
     hb_presets_cli_default = hb_value_dup(hb_dict_get(dict, "PresetCLIDefault"));
     hb_presets_clean(hb_presets_cli_default);
+    hb_presets_hw_scrub(hb_presets_cli_default);
 
     int result = hb_presets_add_internal(hb_presets_cli_default);
     hb_value_free(&dict);
