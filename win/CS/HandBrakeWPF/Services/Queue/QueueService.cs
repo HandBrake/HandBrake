@@ -211,6 +211,10 @@ namespace HandBrakeWPF.Services.Queue
                     {
                         foreach (QueueTask task in duplicates)
                         {
+                            if (task.Status == QueueItemStatus.InProgress)
+                            {
+                                this.Stop();
+                            }
                             this.queue.Remove(task);
                         }
 
@@ -450,6 +454,7 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.EncodeService.Stop();
             }
+
             this.IsProcessing = false;
             this.InvokeQueuePaused(EventArgs.Empty);
         }

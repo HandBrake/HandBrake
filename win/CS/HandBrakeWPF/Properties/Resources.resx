@@ -2199,7 +2199,8 @@ Where supported, any user presets will have been imported.</value>
     <value>Add All Remaining Closed Captions</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records?</value>
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>Duplicates Detected</value>
