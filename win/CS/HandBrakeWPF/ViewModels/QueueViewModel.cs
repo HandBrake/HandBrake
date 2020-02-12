@@ -399,7 +399,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            List<QueueTask> tasksToRemove = this.SelectedItems.Where(i => i.Status != QueueItemStatus.InProgress).ToList();
+            List<QueueTask> tasksToRemove = this.SelectedItems.OrderBy(s => s.Status).ToList();
             foreach (QueueTask job in tasksToRemove)
             {
                 this.RemoveJob(job);
