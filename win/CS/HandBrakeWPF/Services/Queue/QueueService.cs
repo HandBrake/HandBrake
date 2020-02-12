@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Windows;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop.Json.Queue;
@@ -47,14 +48,17 @@ namespace HandBrakeWPF.Services.Queue
         private static readonly object QueueLock = new object();
         private readonly IUserSettingService userSettingService;
         private readonly ILog logService;
+        private readonly IErrorService errorService;
+
         private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
         private bool clearCompleted;
 
-        public QueueService(IEncode encodeService, IUserSettingService userSettingService, ILog logService)
+        public QueueService(IEncode encodeService, IUserSettingService userSettingService, ILog logService, IErrorService errorService)
         {
             this.userSettingService = userSettingService;
             this.logService = logService;
+            this.errorService = errorService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -193,8 +197,34 @@ namespace HandBrakeWPF.Services.Queue
                     return;
                 }
 
+                List<QueueTask> duplicates = queue.Where(task => reloadedQueue.Any(queueTask => queueTask.TaskId == task.TaskId)).ToList();
+                bool replaceDuplicates = false;
+                if (duplicates.Any())
+                {
+                    MessageBoxResult result = this.errorService.ShowMessageBox(
+                        Properties.Resources.QueueService_DuplicatesQuestion,
+                        Properties.Resources.QueueService_DuplicatesTitle,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        foreach (QueueTask task in duplicates)
+                        {
+                            this.queue.Remove(task);
+                        }
+
+                        replaceDuplicates = true;
+                    }
+                }
+
                 foreach (QueueTask task in reloadedQueue)
                 {
+                    if (!replaceDuplicates && this.queue.Any(s => s.TaskId == task.TaskId))
+                    {
+                        continue;
+                    } 
+                    
                     this.queue.Add(task);
                 }
 
@@ -204,6 +234,7 @@ namespace HandBrakeWPF.Services.Queue
                 }
             }
         }
+
 
         public bool CheckForDestinationPathDuplicates(string destination)
         {

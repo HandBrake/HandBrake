@@ -4350,6 +4350,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records?.
+        /// </summary>
+        public static string QueueService_DuplicatesQuestion {
+            get {
+                return ResourceManager.GetString("QueueService_DuplicatesQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicates Detected.
+        /// </summary>
+        public static string QueueService_DuplicatesTitle {
+            get {
+                return ResourceManager.GetString("QueueService_DuplicatesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         public static string QueueView_Actions {

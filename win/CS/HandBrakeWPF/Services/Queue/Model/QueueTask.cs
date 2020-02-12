@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Services.Queue.Model
 {
+    using System;
     using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
@@ -55,7 +56,11 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
 
             this.Statistics = new QueueStats();
+            this.TaskId = Guid.NewGuid().ToString();
         }
+
+        [JsonProperty]
+        public string TaskId { get; set; }
 
         [JsonIgnore]
         public string Id { get; }
