@@ -30,7 +30,7 @@ else
 endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
-    LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))x86_64-w64-mingw32.meson
+    LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))$(HOST.machine)-w64-mingw32.meson
 endif
 
 LIBDAV1D.BUILD.make       = $(NINJA.exe)
