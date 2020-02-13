@@ -48,8 +48,9 @@ ifeq (1,$(HOST.cross))
         X265_12.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    else
+        X265_12.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     endif
-    X265_12.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     X265_12.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"
 else
     X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
