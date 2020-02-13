@@ -52,6 +52,7 @@ ifeq (1,$(HOST.cross))
         X265_12.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     endif
     X265_12.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"
+    X265_12.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
 else
     X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
 endif
