@@ -25,6 +25,8 @@ ifeq (1,$(HOST.cross))
         LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
     else ifeq (x86_64,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+    else ifeq (aarch64,$(HOST.machine))
+        LIBVPX.CONFIGURE.extra += --target=arm64-win64-gcc
     endif
 endif
 
