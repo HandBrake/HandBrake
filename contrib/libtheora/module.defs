@@ -5,6 +5,8 @@ LIBTHEORA.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releas
 LIBTHEORA.FETCH.url    += https://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
 LIBTHEORA.FETCH.sha256  = b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
 
+LIBTHEORA.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
+
 LIBTHEORA.CONFIGURE.extra = \
     --disable-examples \
     --disable-oggtest \
