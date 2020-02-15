@@ -347,7 +347,9 @@ namespace HandBrakeWPF.Services.Encode.Factories
             audio.CopyMask = copyMaskList.ToArray();
 
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
-            audio.FallbackEncoder = audioEncoder.ShortName;
+            audio.FallbackEncoder = audioEncoder?.ShortName;
+
+            Validate.NotNull(audio.FallbackEncoder, string.Format("Unrecognized audio encoder: {0} \n", job.AllowedPassthruOptions.AudioEncoderFallback));
 
             audio.AudioList = new List<HandBrake.Interop.Interop.Json.Encode.AudioTrack>();
             foreach (AudioTrack item in job.AudioTracks)
