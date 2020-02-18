@@ -65,7 +65,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     {
         NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
 
-        // Init a separate instance of libhb for the queue
         _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
         _core.automaticallyPreventSleep = NO;
 
