@@ -6,6 +6,10 @@ GTK.build/ = $(BUILD/)gtk/
 
 GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
 
+ifeq ($(HOST.system),netbsd)
+    LDFLAGS += -Wl,-R$(X11BASE)/lib
+endif
+
 ###############################################################################
 
 GTK.out += $(GTK.CONFIGURE.stamp)

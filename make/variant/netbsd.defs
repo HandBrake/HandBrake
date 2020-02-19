@@ -1,5 +1,6 @@
 # LOCALBASE is where NetBSD packages are installed. default is '/usr/pkg'.
 LOCALBASE  ?= /usr/pkg
+X11BASE    ?= /usr/X11R7
 
 TARGET.dylib.ext = .so
 
