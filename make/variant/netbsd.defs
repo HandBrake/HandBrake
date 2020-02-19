@@ -16,4 +16,4 @@ GCC.args.g.max  = -g3
 GCC.MAJOR_VERSION = $(shell $(GCC.gcc) -dumpversion | cut -f 1 -d .)
 GCC.LDFLAGS =
 LDFLAGS += $(if $(findstring gcc, $(GCC.gcc)), $(GCC.LDFLAGS), )
-LDFLAGS += -L/usr/pkg/lib -Wl,-R/usr/pkg/lib
+LDFLAGS += -L$(LOCALBASE)/lib -Wl,-R$(LOCALBASE)/lib
