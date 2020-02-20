@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -289,7 +289,7 @@ FFMpegとTheoraのスケールはより直線的です。
 この二つにはロスレスモードはありません。</value>
   </data>
   <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>2パスエンコードのうちの最初で、速度設定が影響します。</value>
+    <value>2パスエンコードのうちの最初のパスの、速度に関わる設定です。</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
     <value>2パスエンコードを行います。
