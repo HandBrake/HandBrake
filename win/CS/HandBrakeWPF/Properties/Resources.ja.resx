@@ -401,7 +401,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>プリセットを削除してもよろしいですか？</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>エンコード中: パス{0}of {1} {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 残り時間: {5}, 経過時間: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>エンコード中: パス {0} of {1},  {2:00.00}%, FPS: {3:000.0},  平均FPS: {4:000.0},  残り時間: {5},  経過時間: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>プリセットには名前が必要です。プリセット名の欄に記入してください。</value>
@@ -673,7 +673,7 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
     <value>保存先のディレクトリが有効か確認してください。</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>処理中: パス {0} of {1}, (字幕スキャン)  {2:00.00}%, スキャン残り時間: {3},  経過時間: {4:d\:hh\:mm\:ss}</value>
+    <value>処理中 パス {0} of {1}, (字幕スキャン)  {2:00.00}%, スキャン残り時間: {3},  経過時間: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>追加情報はありません</value>
@@ -1880,7 +1880,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>エンコード中: パス {0} of {1},  {2:00.00}%, FPS: {3:000.0},  平均FPS: {4:000.0}
-残り時間: {5:hh\:mm\:ss},  経過時間: {6:hh\:mm\:ss} {7}</value>
+残り時間: {5},  経過時間: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>選択を消去</value>
@@ -2001,7 +2001,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>システムのバッテリー残量が致命的です！ ({0}%)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>システムのバッテリーが少なくなっています！ ({0}%) システム保護のためエンコードは一時停止されました。また、システムのスリープを許可しました！</value>
+    <value>システムのバッテリーが少なくなっています！ ({0}%)  エンコードは一時停止されました。</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>保存先ドライブの残り容量が {0}GB を下回りました。エンコードを一時停止中...</value>
@@ -2186,5 +2186,22 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>バッテリー残量低下:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>バッテリーが少なくなったら全ての実行中のジョブを一時停止する。</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>残りの全てのクローズドキャプションを追加する</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>インポートしようとしたキューファイルの中に重複したジョブが見つかりました。
+すでにある記録を上書きしますか？
+また、これは稼働中のジョブを全て停止します。</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>重複を検出しました</value>
   </data>
 </root>

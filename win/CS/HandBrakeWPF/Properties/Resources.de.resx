@@ -405,7 +405,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Soll folgende Voreinstellung wirklich gelöscht werden:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}, verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}, verbleibende Zeit: {5}, vergangen: {6} {7} </value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Eine Voreinstellung muss einen Namen haben. Bitte das Feld für den Namen der Voreinstellung ausfüllen.</value>
@@ -678,7 +678,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Bitte überprüfen, dass das Zielverzeichnis gültig ist.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Durchgang {0} von {1}wird verarbeitet, (Untertitelprüfung) {2:00.00} %, verbleibende Prüfungszeit: {3}, vergangen: {4:d\:hh\:mm\:ss}</value>
+    <value>Durchgang {0} von {1} wird verarbeitet, (Untertitelprüfung) {2:00.00} %, verbleibende Prüfungszeit: {3}, vergangen: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Keine zusätzlichen Informationen</value>
@@ -1884,7 +1884,7 @@ Dies hat keinen Einfluss auf die Software-Encoder.</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}
-verbleibende Zeit: {5:hh\:mm\:ss}, vergangen: {6:hh\:mm\:ss} {7}</value>
+Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Ausgewähltes löschen</value>
@@ -2005,7 +2005,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Systembatterie kritisch! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten, um das System zu schützen. Ruhezustand ist auf erlauben gesetzt!</value>
+    <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
@@ -2190,5 +2190,21 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003–2020 Das HandBrake-Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Geringe Batteriekapazität:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Alle laufenden Aufgaben bei geringer Batteriekapazität anhalten.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Alle restlichen CC-Untertitel hinzufügen</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>In der Warteschlangendatei, die Sie importieren möchten, wurden doppelte Aufgaben entdeckt. Möchten Sie die vorhandenen Datensätze überschreiben? 
+Dadurch werden auch alle bereits laufenden Aufgaben gestoppt.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Duplikate erkannt</value>
   </data>
 </root>

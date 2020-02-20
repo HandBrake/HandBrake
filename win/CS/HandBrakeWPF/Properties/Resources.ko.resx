@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -147,17 +147,18 @@ x264와 x265의 규모는 대수이며 더 낮은 값은 더 높은 품질에 �
 Source Maximum: 가능한 경우 항상 원본 해상도로 인코딩하십시오.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 The HandBrake Team
-
-이 프로그램은 자유 소프트웨어입니다; FSF에 의해 출시된 GNU GPL, GPLv2, 그 이후의 버전(사용자 옵션에 따라)에 따라서 재배포와 변경이 가능합니다.
+    <value>이 프로그램은 자유 소프트웨어입니다; FSF에 의해 출시된
+GNU GPL, GPLv2, 그 이후의 버전(사용자 옵션에 따라)에
+따라서 재배포와 변경이 가능합니다.
 
 이 프로그램은 사용자의 유용성을 위해 배포되었지만,
-어떠한 보증 또는 묵시적인 보증 없이
-특정한 목적에 대한 프로그램 사용 적합성에 대해서 재배포할 수 없습니다. 
+어떠한 보증 또는 묵시적인 보증 없이 특정한 목적에 대한
+프로그램 사용 적합성에 대해서 재배포할 수 없습니다.
 GNU GPL을 자세히 살펴보십시오.
 
-이 프로그램과 함께 GNU GPL의 복사본을 받게 될 것입니다; 그렇지 않았다면, Free Software
- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA 라고 적으시오.</value>
+이 프로그램과 함께 GNU GPL의 복사본을 받게 될 것입니다;
+그러지 않았다면, Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으십시오.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>경고: 자동 파일 이름 설정이 켜져있지 않습니다. 옵션에서 해당 설정을 가능하게 해주십시오.</value>
@@ -281,7 +282,7 @@ GNU GPL을 자세히 살펴보십시오.
     <value>계속하기 위해서 '파일'을 선택하십시오.</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0}인코딩 보류 중</value>
+    <value>{0} 작업 보류 중</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>알림</value>
@@ -400,7 +401,7 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>환경 설정을 삭제하시겠습니까:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%. FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6}{7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>환경 설정은 이름이 필요합니다. 환경 설정 이름 칸을 채워주십시오.</value>
@@ -673,7 +674,7 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
     <value>유효한 대상 디렉토리인지 확인하십시오.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>{1}의 {0} 통과를 진행 중, (자막 스캔)  {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4:d\:hh\:mm\:ss}</value>
+    <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>추가적인 정보 없음</value>
@@ -1880,7 +1881,7 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}
-남은 시간: {5:hh\:mm\:ss}, 경과 시간: {6:hh\:mm\:ss} {7}</value>
+남은 시간: {5}, 경과 시간: {6}{7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>선택한 항목 삭제</value>
@@ -2001,7 +2002,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>시스템 배터리가 부족합니다! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %). 시스템 보호를 위해 인코딩이 중단됩니다. 시스템 절전모드가 허용됩니다!</value>
+    <value>시스템 배터리가 부족합니다! ({0} %). 인코딩이 중단됩니다.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>대상 드라이브의 남은 디스크 크기가 {0} GB로 떨어졌습니다. 인코딩 중단 중...</value>
@@ -2170,5 +2171,37 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>각 생성된 새로운 이름에 항상 기본 경로를 사용합니다.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>실험</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>대체 표시자: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>저전력 단계:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>배터리가 부족할 경우 진행 중인 작업을 중지하시오.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>모든 남아있는 내장 자막 추가</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>가져오려고 하는 대기열 파일에서 중복된 작업이 있습니다. 기존 작업 기록을 덮어쓰기 하시겠습니까?
+이는 또한 기존의 모든 실행 중인 작업을 중단시키게 됩니다.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>중복 감지</value>
   </data>
 </root>
