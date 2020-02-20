@@ -30,7 +30,7 @@
         _container = HB_MUX_MKV;
         _sampleRate = 0;
         _bitRate = 160;
-        _mixdown = HB_AMIXDOWN_DOLBYPLII;
+        _mixdown = HB_AMIXDOWN_STEREO;
     }
     return self;
 }
