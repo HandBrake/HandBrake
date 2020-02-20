@@ -449,7 +449,7 @@ static int init_cpu_count()
 
 #elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
     size_t length = sizeof( cpu_count );
-#ifdef SYS_OPENBSD || defined(SYS_NETBSD)
+#if defined SYS_OPENBSD || defined(SYS_NETBSD)
     int mib[2] = { CTL_HW, HW_NCPU };
     if( sysctl(mib, 2, &cpu_count, &length, NULL, 0) )
 #else
