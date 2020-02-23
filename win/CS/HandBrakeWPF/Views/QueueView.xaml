@@ -142,7 +142,7 @@
                              ItemsSource="{Binding QueueTasks, Mode=OneWay}"
                              helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
                              SelectedItem="{Binding SelectedTask}"
-                             SelectionMode="Extended"
+                             SelectionMode="Single"
                              BorderThickness="1"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
 
