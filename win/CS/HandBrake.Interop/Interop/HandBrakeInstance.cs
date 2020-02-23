@@ -470,8 +470,16 @@ namespace HandBrake.Interop.Interop
             {
                 if (this.EncodeProgress != null)
                 {
-                    TimeSpan eta = TimeSpan.FromSeconds(state.Working.ETASeconds);
-                    var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, eta, state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState.Code);
+                    TimeSpan eta = TimeSpan.FromSeconds(state?.Working?.ETASeconds ?? 0);
+                    var progressEventArgs = new EncodeProgressEventArgs(0, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
+                    if (taskState == TaskState.Muxing || state.Working == null)
+                    {
+                        progressEventArgs = new EncodeProgressEventArgs(100, 0, 0, TimeSpan.MinValue, 0, 0, 0, taskState.Code);
+                    }
+                    else
+                    {
+                        progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, eta, state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState.Code);
+                    }
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
