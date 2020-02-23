@@ -286,7 +286,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.DisableLibDvdNav, false);
             defaults.Add(UserSettingConstants.PauseOnLowDiskspace, true);
             defaults.Add(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, 2000000000L);
-            defaults.Add(UserSettingConstants.PauseEncodeOnLowDiskspaceLevel, 2000000000L);
             defaults.Add(UserSettingConstants.PreviewScanCount, 10);
             defaults.Add(UserSettingConstants.MinScanDuration, 10);
             defaults.Add(UserSettingConstants.ProcessPriorityInt, 3);

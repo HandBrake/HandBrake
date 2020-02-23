@@ -1341,13 +1341,7 @@ namespace HandBrakeWPF.ViewModels
             command.Execute(OptionsTab.Updates);
         }
 
-        /// <summary>
-        /// Add the current task to the queue.
-        /// </summary>
-        /// <returns>
-        /// True if added, false if error.
-        /// </returns>
-        public AddQueueError AddToQueue()
+        public AddQueueError AddToQueue(bool batch)
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
@@ -1369,7 +1363,7 @@ namespace HandBrakeWPF.ViewModels
                 FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour);
                 if (behaviour == FileOverwriteBehaviour.Ask)
                 {
-                    MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.No)
                     {
                         return null; // Handled by the above action.
@@ -1382,11 +1376,15 @@ namespace HandBrakeWPF.ViewModels
                 return new AddQueueError(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if (!DriveUtilities.HasMinimumDiskSpace(
+            if (!batch && !DriveUtilities.HasMinimumDiskSpace(
                 this.Destination,
                 this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
             {
-                return new AddQueueError(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    return null; // Handled by the above action.
+                }
             }
 
             // Sanity check the filename
@@ -1423,7 +1421,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void AddToQueueWithErrorHandling()
         {
-            var addError = this.AddToQueue();
+            var addError = this.AddToQueue(false);
             if (addError != null)
             {
                 this.errorService.ShowMessageBox(addError.Message, addError.Header, addError.Buttons, addError.ErrorType);
@@ -1447,6 +1445,15 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            if (!DriveUtilities.HasMinimumDiskSpace(this.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    return; // Handled by the above action.
+                }
+            }
+
             if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
             {
                 if ((this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
@@ -1468,7 +1475,7 @@ namespace HandBrakeWPF.ViewModels
             foreach (Title title in this.ScannedSource.Titles)
             {
                 this.SelectedTitle = title;
-                var addError = this.AddToQueue();
+                var addError = this.AddToQueue(true);
                 if (addError != null)
                 {
                     MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
@@ -1498,6 +1505,15 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            if (!DriveUtilities.HasMinimumDiskSpace(this.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    return; // Handled by the above action.
+                }
+            }
+
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
@@ -1506,7 +1522,7 @@ namespace HandBrakeWPF.ViewModels
                 foreach (SelectionTitle title in tasks)
                 {
                     this.SelectedTitle = title.Title;
-                    var addError = this.AddToQueue();
+                    var addError = this.AddToQueue(true);
                     if (addError != null)
                     {
                         MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
@@ -1606,7 +1622,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Create the Queue Task and Start Processing
-            var addError = this.AddToQueue();
+            var addError = this.AddToQueue(false);
             if (addError == null)
             {
                 this.IsEncoding = true;
