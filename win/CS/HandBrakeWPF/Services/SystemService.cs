@@ -65,9 +65,9 @@ namespace HandBrakeWPF.Services
         private void StorageCheck()
         {
             string directory = this.encodeService.GetActiveJob()?.Destination;
-            if (!string.IsNullOrEmpty(directory)  && this.encodeService.IsEncoding)
+            if (!string.IsNullOrEmpty(directory) && this.encodeService.IsEncoding)
             {
-                long lowLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseEncodeOnLowDiskspaceLevel);
+                long lowLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel);
                 if (!this.storageLowPause && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(directory, lowLevel))
                 {
                     this.log.LogMessage(

@@ -1333,7 +1333,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your destination directory is low on diskspace. Please free up some disk space on your destination drive. Alternatively you can change the level at which this alert triggers in Options. .
+        ///   Looks up a localized string similar to Your destination directory is low on diskspace. 
+        ///
+        ///You can configure the level at which this alert appears in preferences. 
+        ///
+        ///Do you wish to continue? .
         /// </summary>
         public static string Main_LowDiskspace {
             get {
@@ -2984,7 +2988,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pause queue if disk space is lower than:.
+        ///   Looks up a localized string similar to Pause queue if disk space is low.
         /// </summary>
         public static string Options_LowDiskspaceSize {
             get {

@@ -50,7 +50,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <returns>
         /// True if added, false if error
         /// </returns>
-        AddQueueError AddToQueue();
+        AddQueueError AddToQueue(bool batch = false);
         void AddToQueueWithErrorHandling();
         void AddAllToQueue();
         void AddSelectionToQueue();
