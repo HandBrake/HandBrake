@@ -446,6 +446,10 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.ProcessNextJob();
             }
+            else
+            {
+                this.IsProcessing = true;
+            }
         }
 
         public void Stop()
