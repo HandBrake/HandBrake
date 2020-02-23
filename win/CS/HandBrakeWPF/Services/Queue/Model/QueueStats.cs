@@ -126,7 +126,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                     return string.Empty;
                 }
 
-                return PausedDuration.ToString("hh\\:mm\\:ss");
+                return this.PausedDuration.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", this.PausedDuration) : string.Format(@"{0:hh\:mm\:ss}", this.PausedDuration);
             }
         }
 
@@ -152,7 +152,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                     return string.Empty;
                 }
 
-                return this.Duration.ToString("hh\\:mm\\:ss");
+                return this.Duration.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", this.Duration) : string.Format(@"{0:hh\:mm\:ss}", this.Duration);
             }
         }
 
