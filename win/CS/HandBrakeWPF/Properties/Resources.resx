@@ -1052,7 +1052,7 @@ Would you like to overwrite it?</value>
     <value>Delete Preset</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Presets</value>
+    <value>Preset:</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Preview</value>

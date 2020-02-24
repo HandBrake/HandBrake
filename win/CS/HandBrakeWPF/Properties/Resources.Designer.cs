@@ -2119,7 +2119,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Presets.
+        ///   Looks up a localized string similar to Preset:.
         /// </summary>
         public static string MainView_Presets {
             get {
