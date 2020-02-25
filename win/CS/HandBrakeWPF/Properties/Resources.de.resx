@@ -699,7 +699,11 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Warteschlange angehalten</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Das Zielverzeichnis hat wenig freien Speicherplatz. Bitte mehr Speicherplatz freigeben. Alternativ kann der Wert in den Einstellungen angepasst werden, bei dem diese Warnmeldung ausgelöst wird.</value>
+    <value>Das Zielverzeichnis hat wenig freien Speicherplatz.
+
+In den Einstellungen kann definiert werden, ab welchem Batterielevel diese Warnung erscheint.
+
+Soll fortgefahren werden?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>Der Status der Aufgabe kann nicht zurückgesetzt werden, da er sich nicht im Fehlerzustand oder im bearbeiteten Zustand  befindet</value>
@@ -1050,7 +1054,7 @@ Soll sie überschrieben werden?</value>
     <value>Voreinstellung löschen</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Voreinstellungen</value>
+    <value>Voreinstellung:</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Vorschau</value>
@@ -1239,7 +1243,7 @@ Soll sie überschrieben werden?</value>
     <value>Pfad des Protokolls:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Anhalten, wenn Speicherplatz kleiner als:</value>
+    <value>Warteschlange anhalten, wenn Speicherplatz zu klein</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Den Infobereich (System Tray) minimieren (erfordert einen Neustart)</value>
