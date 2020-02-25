@@ -695,7 +695,11 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
     <value>キュー中断</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>保存先ディレクトリの空き容量が少なくなっています。ドライブの空きを増やしてください。もしくは、オプションからこの警告のレベルを変更することができます。</value>
+    <value>保存先ディレクトリの空き容量が少なくなっています。
+
+この警告が出る条件を設定から変更することができます。
+
+このまま続けますか？</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>エラーでも完了でもないためジョブの状態をリセットできません</value>
@@ -1046,7 +1050,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>プリセットを削除</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>プリセット</value>
+    <value>プリセット:</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>プレビュー</value>
@@ -1235,7 +1239,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>ログのパス:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>ディスクの空きがこれ以上少なくなったらキューを一時停止する:</value>
+    <value>ディスクの空きが少なくなったらキューを一時停止する</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>システムトレイに最小化(要再起動)</value>
