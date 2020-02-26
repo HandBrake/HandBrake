@@ -51,6 +51,10 @@ jobs:
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
         cd build
         make pkg.create.zip
+    - uses: actions/upload-artifact@v1
+      with:
+        name: HandBrake Windows CLI
+        path: ./build/HandBrakeCLI.exe
 
   build_gui:
     name: Windows UI
@@ -80,3 +84,11 @@ jobs:
       run: |      
         $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:Nightly
+    - name: Copy HandBrake libary
+      run: | 
+        cd ../..
+        copy build/libhb/hb.dll win/CS/HandBrakeWPF/bin/x64/Release/hb.dll
+    - uses: actions/upload-artifact@v1
+      with:
+        name: HandBrake Windows GUI
+        path: ./win/CS/HandBrakeWPF/bin/x64/Release
