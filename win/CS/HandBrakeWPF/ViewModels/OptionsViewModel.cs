@@ -111,12 +111,12 @@ namespace HandBrakeWPF.ViewModels
         private bool alwaysUseDefaultPath;
         private bool pauseOnLowBattery;
         private int lowBatteryLevel;
-
+        
         // Experimental
         private int remoteServicePort;
         private bool remoteServiceEnabled;
 
-
+        private bool enableQuickSyncLowPower;
 
         #endregion
 
@@ -1169,6 +1169,21 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool EnableQuickSyncLowPower
+        {
+            get => this.enableQuickSyncLowPower;
+            set
+            {
+                if (value == this.enableQuickSyncLowPower)
+                {
+                    return;
+                }
+
+                this.enableQuickSyncLowPower = value;
+                this.NotifyOfPropertyChange(() => this.EnableQuickSyncLowPower);
+            }
+        }
+
         public VideoScaler SelectedScalingMode { get; set; }
 
         public bool IsQuickSyncAvailable
@@ -1581,6 +1596,7 @@ namespace HandBrakeWPF.ViewModels
             this.EnableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
             this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
+            this.EnableQuickSyncLowPower = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
 
             this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
@@ -1735,6 +1751,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncEncoding, this.EnableQuickSyncEncoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);
 
             /* System and Logging */
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriorityInt, this.SelectedPriority);

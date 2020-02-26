@@ -76,5 +76,6 @@ namespace HandBrakeWPF
         public const string AlwaysUseDefaultPath = "AlwaysUseDefaultPath";
         public const string PauseEncodingOnLowBattery = "PauseEncodingOnLowBattery";
         public const string LowBatteryLevel = "LowBatteryLevel";
+        public const string EnableQuickSyncLowPower = "EnableQuickSyncLowPower";
     }
 }

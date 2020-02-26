@@ -287,7 +287,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             video.Level = job.VideoLevel?.ShortName;
-            video.Options = job.ExtraAdvancedArguments;
             video.Preset = job.VideoPreset?.ShortName;
             video.Profile = job.VideoProfile?.ShortName;
 
@@ -317,6 +316,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265 && job.VideoEncoder != VideoEncoder.QuickSyncH26510b)
             {
                 video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
+            }
+
+
+            video.Options = job.ExtraAdvancedArguments;
+
+            if (job.VideoEncoder == VideoEncoder.QuickSync || job.VideoEncoder == VideoEncoder.QuickSyncH265 || job.VideoEncoder == VideoEncoder.QuickSyncH26510b)
+            {
+                if (configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
+                {
+                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=1" : ":lowpower=1";
+                }
             }
 
             return video;

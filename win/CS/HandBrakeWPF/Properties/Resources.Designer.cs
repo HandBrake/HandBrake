@@ -3447,6 +3447,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Low Power QuickSync Hardware..
+        /// </summary>
+        public static string OptionsView_EnableQuicksyncLowPower {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableQuicksyncLowPower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow use of the AMD VCE Encoders.
         /// </summary>
         public static string OptionsView_EnableVceEncoding {

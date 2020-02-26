@@ -49,8 +49,9 @@ namespace HandBrakeWPF.Factories
                                              EnableNvencEncoder = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder),
                                              EnableQsvEncoder = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding),
                                              EnableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding),
-                                             UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc)
-                                         };
+                                             UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc),
+                                             EnableQsvLowPower = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower)
+            };
 
             return config;
         }

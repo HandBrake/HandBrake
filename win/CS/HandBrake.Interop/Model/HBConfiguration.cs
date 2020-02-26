@@ -80,5 +80,7 @@ namespace HandBrake.Interop.Model
         public bool EnableNvencEncoder { get; set; }
 
         public bool EnableQsvEncoder { get; set; }
+
+        public bool EnableQsvLowPower { get; set; }
     }
 }

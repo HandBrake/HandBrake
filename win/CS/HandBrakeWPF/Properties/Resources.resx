@@ -2209,4 +2209,7 @@ This will also stop any existing running jobs.</value>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>Duplicates Detected</value>
   </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Enable Low Power QuickSync Hardware.</value>
+  </data>
 </root>
