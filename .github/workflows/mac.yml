@@ -36,3 +36,7 @@ jobs:
         ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
         cd build
         make pkg.create
+    - uses: actions/upload-artifact@v1
+      with:
+        name: HandBrake macOS
+        path: ./build/pkg
