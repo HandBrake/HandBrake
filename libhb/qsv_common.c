@@ -100,6 +100,8 @@ static hb_triplet_t hb_qsv_h265_levels[] =
     { NULL,                            },
 };
 
+#define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+
 // check available Intel Media SDK version against a minimum
 #define HB_CHECK_MFX_VERSION(MFX_VERSION, MAJOR, MINOR) \
     (MFX_VERSION.Major == MAJOR  && MFX_VERSION.Minor >= MINOR)
@@ -2299,7 +2301,7 @@ extern EncQSVFramesContext hb_enc_qsv_frames_ctx;
 AVBufferRef *hb_hw_device_ctx = NULL;
 char *qsv_device = NULL;
 mfxHDL device_manager_handle = NULL;
-mfxHandleType device_handle_type = MFX_HANDLE_D3D11_DEVICE;
+mfxIMPL device_impl;
 
 #if defined(_WIN32) || defined(__MINGW32__)
 // Direct X
@@ -2667,32 +2669,36 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
 
     hb_qsv_get_free_surface_from_pool(0, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, &mid, &output_surface);
 
-    static const mfxHandleType handle_types[] = {
-        MFX_HANDLE_VA_DISPLAY,
-        MFX_HANDLE_D3D11_DEVICE,
-        MFX_HANDLE_D3D9_DEVICE_MANAGER
-    };
-
-    int i;
-
     AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
     AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;
     mfxSession        parent_session = device_hwctx->session;
 
     if (device_manager_handle == NULL)
     {
-        for (i = 0; i < 3; i++)
+        mfxHandleType handle_type;
+        int err = MFXQueryIMPL(parent_session, &device_impl);
+        if (err != MFX_ERR_NONE)
         {
-            int err = MFXVideoCORE_GetHandle(parent_session, handle_types[i], &device_manager_handle);
-            if (err == MFX_ERR_NONE)
-            {
-                device_handle_type = handle_types[i];
-                break;
-            }
-            device_manager_handle = NULL;
+            hb_error("hb_qsv_copy_frame: no impl could be retrieved");
+            return out;
         }
 
-        if (!device_manager_handle)
+        if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(device_impl))
+        {
+            handle_type = MFX_HANDLE_D3D11_DEVICE;
+        }
+        else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
+        {
+            handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
+        }
+        else
+        {
+            hb_error("hb_qsv_copy_frame: unsupported impl");
+            return out;
+        }
+
+        err = MFXVideoCORE_GetHandle(parent_session, handle_type, &device_manager_handle);
+        if (err != MFX_ERR_NONE)
         {
             hb_error("hb_qsv_copy_frame: no supported hw handle could be retrieved "
                 "from the session\n");
@@ -2700,7 +2706,7 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         }
     }
 
-    if (device_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
+    if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
     {
         IDirect3DDevice9 *pDevice = NULL;
         HANDLE handle;
@@ -2731,8 +2737,8 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
             hb_error("hb_qsv_copy_frame: unlock_device failded %d", result);
             return out;
         }
-    }
-    else
+    } 
+    else if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(device_impl))
     {
         ID3D11DeviceContext *device_context = NULL;
         ID3D11Device *device = (ID3D11Device *)device_manager_handle;
@@ -2748,6 +2754,11 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         output_surface->Data.MemId = mid;
         // copy input sufrace to sufrace from the pool
         ID3D11DeviceContext_CopySubresourceRegion(device_context, mid->texture, (uint64_t)mid->handle, 0, 0, 0, hb_enc_qsv_frames_ctx.input_texture, (uint64_t)input_surface->Data.MemId, NULL);
+    }
+    else 
+    {
+        hb_error("hb_qsv_copy_frame: incorrect mfx impl");
+        return out;
     }
 
     out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
@@ -2793,6 +2804,9 @@ static int qsv_device_init(AVCodecContext *s)
         if (err < 0)
             return err;
     }
+
+    err = av_dict_set(&dict, "child_device_type", "d3d11va", 0);
+    err = av_dict_set(&dict, "vendor", "0x8086", 0);
 
     err = av_hwdevice_ctx_create(&hb_hw_device_ctx, AV_HWDEVICE_TYPE_QSV,
                                  0, dict, 0);
