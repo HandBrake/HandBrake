@@ -209,12 +209,10 @@ namespace HandBrakeWPF.Services.Queue
 
                     if (result == MessageBoxResult.Yes)
                     {
+                        this.Stop();
+
                         foreach (QueueTask task in duplicates)
                         {
-                            if (task.Status == QueueItemStatus.InProgress)
-                            {
-                                this.Stop();
-                            }
                             this.queue.Remove(task);
                         }
 
@@ -224,11 +222,20 @@ namespace HandBrakeWPF.Services.Queue
 
                 foreach (QueueTask task in reloadedQueue)
                 {
+                    // Reset the imported jobs that were running in a previous session.
+                    if (task.Status == QueueItemStatus.InProgress)
+                    {
+                        task.Status = QueueItemStatus.Waiting;
+                        task.Statistics.Reset();
+                    }
+
+                    // Ignore jobs if the user has chosen not to replace them.
                     if (!replaceDuplicates && this.queue.Any(s => s.TaskId == task.TaskId))
                     {
                         continue;
-                    } 
-                    
+                    }
+
+                    // If the above conditions are not met, add it back in.
                     this.queue.Add(task);
                 }
 
