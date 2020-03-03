@@ -12,6 +12,7 @@
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
+             xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -26,6 +27,7 @@
         <Converters:BooleanConverter x:Key="NotBooleanConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <main:PointToPointConverter x:Key="PointToPointConverter" />
 
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
@@ -409,8 +411,8 @@
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="5,0,0,0"
-                                  ItemsSource="{Binding RangeMode}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
-                                  SelectedItem="{Binding SelectedPointToPoint}" />
+                                  ItemsSource="{Binding RangeMode, Converter={StaticResource PointToPointConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
+                                  SelectedItem="{Binding SelectedPointToPoint, Converter={StaticResource PointToPointConverter}}" />
                         <ComboBox Name="StartPoint"
                                   MinWidth="60"
                                   Margin="5,0,0,0"

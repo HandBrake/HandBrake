@@ -471,11 +471,11 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets RangeMode.
         /// </summary>
-        public IEnumerable<PointToPointMode> RangeMode
+        public BindingList<PointToPointMode> RangeMode
         {
             get
             {
-                return new List<PointToPointMode>
+                return new BindingList<PointToPointMode>
                     {
                         PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames
                     };

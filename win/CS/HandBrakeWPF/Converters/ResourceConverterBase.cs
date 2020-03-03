@@ -46,7 +46,7 @@ namespace HandBrakeWPF.Converters
             {
                 return
                     new BindingList<string>(
-                        EnumHelper<T>.GetEnumDisplayValues(typeof(T)).ToList());
+                        EnumHelper<T>.GetEnumDisplayValuesSubset((BindingList<T>)value).ToList());
             }
 
             if (value != null && value.GetType() == typeof(T))
