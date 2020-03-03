@@ -705,7 +705,7 @@
 
                     <ToolBar Name="presetsToolBar"
                              Grid.Row="1"
-                             HorizontalAlignment="Center"
+                             HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
