@@ -2030,6 +2030,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.NumRefFrame  = 0; // use Media SDK default
         param->videoParam->mfx.GopPicSize   = 0; // use Media SDK default
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
+        param->videoParam->mfx.LowPower     = MFX_CODINGOPTION_OFF; // use Media SDK default
         // introduced in API 1.1
         param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
         // introduced in API 1.3
@@ -2052,6 +2053,10 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         if (info->capabilities & HB_QSV_CAP_OPTION2)
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption2;
+        }
+        if ((info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE) && (info->codec_id == MFX_CODEC_HEVC))
+        {
+            param->videoParam->mfx.LowPower = MFX_CODINGOPTION_ON;
         }
     }
     else
