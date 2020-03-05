@@ -327,6 +327,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 {
                     video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=1" : ":lowpower=1";
                 }
+                else if(!configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
+                {
+                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=0" : ":lowpower=0";
+                }
             }
 
             return video;
