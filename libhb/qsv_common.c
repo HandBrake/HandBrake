@@ -2547,16 +2547,8 @@ int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface)
     int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
     if (ret < 0)
     {
-        ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
-        if (ret < 0)
-        {
-            hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
-            return -1;
-        }
-        else
-        {
-            surface->Data.MemId = &hb_enc_qsv_frames_ctx.mids2[ret];
-        }
+        hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
+        return -1;
     }
     else
     {
@@ -2570,16 +2562,8 @@ int hb_qsv_release_surface_from_pool(const QSVMid *mid)
     int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
     if (ret < 0)
     {
-        ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
-        if (ret < 0)
-        {
-            hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
-            return -1;
-        }
-        else
-        {
-            ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool2[ret]);
-        }
+        hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
+        return -1;
     }
     else
     {
@@ -2595,9 +2579,6 @@ void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_inde
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx.hw_frames_ctx->data;
     AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
-
-    AVHWFramesContext *frames_ctx2 = (AVHWFramesContext*)hb_enc_qsv_frames_ctx.hw_frames_ctx2->data;
-    AVQSVFramesContext *frames_hwctx2 = frames_ctx2->hwctx;
 
     // find the first available surface in the pool
     int count = 0;
@@ -2620,22 +2601,6 @@ void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_inde
                     *out_mid = mid;
                     *out_surface = output_surface;
                     ff_qsv_atomic_inc(&hb_enc_qsv_frames_ctx.pool[i]);
-                    return;
-                }
-            }
-        }
-
-        for(int i = start_index; i < end_index; i++)
-        {
-            if(hb_enc_qsv_frames_ctx.pool2[i] == 0)
-            {
-                mid = &hb_enc_qsv_frames_ctx.mids2[i];
-                output_surface = &frames_hwctx2->surfaces[i];
-                if(output_surface->Data.Locked == 0)
-                {
-                    *out_mid = mid;
-                    *out_surface = output_surface;
-                    ff_qsv_atomic_inc(&hb_enc_qsv_frames_ctx.pool2[i]);
                     return;
                 }
             }
@@ -2870,38 +2835,14 @@ static int qsv_init(AVCodecContext *s)
     if (!enc_hw_frames_ctx)
         return AVERROR(ENOMEM);
 
-    hb_enc_qsv_frames_ctx.hw_frames_ctx2 = enc_hw_frames_ctx;
-    frames_ctx   = (AVHWFramesContext*)enc_hw_frames_ctx->data;
-    frames_hwctx = frames_ctx->hwctx;
-
-    frames_ctx->width             = FFALIGN(s->coded_width,  32);
-    frames_ctx->height            = FFALIGN(s->coded_height, 32);
-    frames_ctx->format            = AV_PIX_FMT_QSV;
-    frames_ctx->sw_format         = s->sw_pix_fmt;
-    frames_ctx->initial_pool_size = HB_POOL_SURFACE_SIZE;
-    frames_hwctx->frame_type      = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
-
-    ret = av_hwframe_ctx_init(enc_hw_frames_ctx);
-    if (ret < 0) {
-        hb_error("qsv_init: av_hwframe_ctx_init failed %d", ret);
-        return ret;
-    }
-
     /* allocate the memory ids for the external frames */
     av_buffer_unref(&hb_enc_qsv_frames_ctx.mids_buf);
     hb_enc_qsv_frames_ctx.mids_buf = hb_qsv_create_mids(hb_enc_qsv_frames_ctx.hw_frames_ctx);
     if (!hb_enc_qsv_frames_ctx.mids_buf)
         return AVERROR(ENOMEM);
-    av_buffer_unref(&hb_enc_qsv_frames_ctx.mids_buf2);
-    hb_enc_qsv_frames_ctx.mids_buf2 = hb_qsv_create_mids(hb_enc_qsv_frames_ctx.hw_frames_ctx2);
-    if (!hb_enc_qsv_frames_ctx.mids_buf2)
-        return AVERROR(ENOMEM);
-
     hb_enc_qsv_frames_ctx.mids    = (QSVMid*)hb_enc_qsv_frames_ctx.mids_buf->data;
-    hb_enc_qsv_frames_ctx.mids2   = (QSVMid*)hb_enc_qsv_frames_ctx.mids_buf2->data;
     hb_enc_qsv_frames_ctx.nb_mids = frames_hwctx->nb_surfaces;
     memset(hb_enc_qsv_frames_ctx.pool, 0, hb_enc_qsv_frames_ctx.nb_mids * sizeof(hb_enc_qsv_frames_ctx.pool[0]));
-    memset(hb_enc_qsv_frames_ctx.pool2, 0, hb_enc_qsv_frames_ctx.nb_mids * sizeof(hb_enc_qsv_frames_ctx.pool2[0]));
     return 0;
 }
 

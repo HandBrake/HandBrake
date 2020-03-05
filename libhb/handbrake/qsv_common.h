@@ -231,7 +231,6 @@ typedef struct QSVFrame {
 
 typedef struct EncQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
-    AVBufferRef *hw_frames_ctx2;
     //void *logctx;
 
     /* The memory ids for the external frames.
@@ -239,12 +238,9 @@ typedef struct EncQSVFramesContext {
      * (i.e. by the encoder/decoder) and another one given to the MFX session
      * from the frame allocator. */
     AVBufferRef *mids_buf;
-    AVBufferRef *mids_buf2;
     QSVMid *mids;
-    QSVMid *mids2;
     int  nb_mids;
     int pool[HB_POOL_SURFACE_SIZE];
-    int pool2[HB_POOL_SURFACE_SIZE];
     void *input_texture;
 } EncQSVFramesContext;
 
