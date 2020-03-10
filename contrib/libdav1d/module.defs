@@ -13,9 +13,21 @@ LIBDAV1D.CONFIGURE.shared =
 LIBDAV1D.CONFIGURE.host   =
 LIBDAV1D.CONFIGURE.build  =
 LIBDAV1D.CONFIGURE.static = -Ddefault_library=static
-LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ --buildtype=release \
+LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ \
                             -Denable_tools=false -Denable_tests=false
 LIBDAV1D.CONFIGURE.env    =
+
+ifneq (none,$(LIBDAV1D.GCC.g))
+    LIBDAV1D.CONFIGURE.extra += --buildtype=debug
+    ifeq (none,$(LIBDAV1D.GCC.O))
+        LIBDAV1D.CONFIGURE.extra += --optimization=g
+    endif
+else
+    LIBDAV1D.CONFIGURE.extra += --buildtype=release
+    ifneq (,$(filter $(LIBDAV1D.GCC.O),size size-aggressive))
+        LIBDAV1D.CONFIGURE.extra += --optimization=s
+    endif
+endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))x86_64-w64-mingw32.meson
