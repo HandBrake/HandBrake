@@ -2054,7 +2054,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption2;
         }
-        if ((info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE) && (info->codec_id == MFX_CODEC_HEVC))
+        if (info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
         {
             param->videoParam->mfx.LowPower = MFX_CODINGOPTION_ON;
         }
