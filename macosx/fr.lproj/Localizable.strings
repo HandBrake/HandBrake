@@ -50,8 +50,14 @@
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Avancé";
 
+/* HBLanguage -> Any language */
+"Any" = "Tout";
+
 /* Delete preset alert -> message */
 "Are you sure you want to permanently delete the selected preset?" = "Êtes-vous sûr de vouloir supprimer définitivement le préréglage sélectionné ?";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "Êtes-vous sûr de vouloir supprimer définitivement les préréglages sélectionnés ?";
 
 /* Quit Alert -> message */
 "Are you sure you want to quit HandBrake?" = "Êtes-vous sûr(e) de vouloir quitter HandBrake ?";
@@ -110,6 +116,9 @@
 /* Delete preset alert -> first button */
 "Delete Preset" = "Effacer le préréglage";
 
+/* Delete preset alert -> first button */
+"Delete Presets" = "Supprimer les préréglages";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Voulez-vous remplacer %@ ?";
@@ -150,6 +159,9 @@
 
 /* Job statistics */
 "Ended at:" = "Fini à : ";
+
+/* Export presets save panel title */
+"Export preset" = "Exporter préréglage";
 
 /* Export presets save panel title */
 "Export presets" = "Exporter les préréglages";
@@ -310,6 +322,9 @@
 
 /* Job statistics */
 "Run time:" = "Temps d'exécution :";
+
+/* Export presets panel prompt */
+"Save" = "Enregistrer";
 
 /* Picture HUD -> scale button
    Touch bar */
