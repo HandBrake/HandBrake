@@ -80,8 +80,10 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.JobStatus = string.Empty;
             this.SelectedItems = new BindingList<QueueTask>();
+            this.SelectedItems.ListChanged += this.SelectedItems_ListChanged;
             this.DisplayName = "Queue";
             this.IsQueueRunning = false;
+            this.SelectedTabIndex = 0;
 
             this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
         }
@@ -174,9 +176,9 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the selected items.
+        /// Gets the selected items.
         /// </summary>
-        public BindingList<QueueTask> SelectedItems { get; set; }
+        public BindingList<QueueTask> SelectedItems { get; }
 
         public QueueTask SelectedTask
         {
@@ -198,8 +200,19 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CanPerformActionOnSource);
                 this.NotifyOfPropertyChange(() => this.CanPlayFile);
                 this.NotifyOfPropertyChange(() => this.StatsVisible);
+                this.NotifyOfPropertyChange(() => this.JobInfoVisible);
             }
         }
+
+        public bool JobInfoVisible
+        {
+            get
+            {
+                return SelectedItems.Count == 1;
+            }
+        }
+
+        public int SelectedTabIndex { get; set; }
 
         public string ActivityLog { get; private set; }
 
@@ -856,6 +869,17 @@ namespace HandBrakeWPF.ViewModels
             });
         }
 
+        private void SelectedItems_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            this.NotifyOfPropertyChange(() => this.JobInfoVisible);
+
+            if (!this.JobInfoVisible)
+            {
+                this.SelectedTabIndex = 0;
+                this.NotifyOfPropertyChange(() => this.SelectedTabIndex);
+            }
+        }
+        
         /// <summary>
         /// Handle the Queue Changed Event.
         /// </summary>
@@ -880,6 +904,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.CanPerformActionOnSource);
             this.NotifyOfPropertyChange(() => this.CanPlayFile);
             this.NotifyOfPropertyChange(() => this.StatsVisible);
+            this.NotifyOfPropertyChange(() => this.JobInfoVisible);
             this.HandleLogData();
         }
 
@@ -899,6 +924,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedTask);
             this.NotifyOfPropertyChange(() => this.StatsVisible);
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
+            this.NotifyOfPropertyChange(() => this.JobInfoVisible);
 
             this.JobStatus = string.Empty;
         }

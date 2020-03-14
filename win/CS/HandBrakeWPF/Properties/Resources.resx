@@ -2212,4 +2212,7 @@ This will also stop any existing running jobs.</value>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
     <value>Enable Low Power QuickSync Hardware.</value>
   </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Please select a single job to view summary information.</value>
+  </data>
 </root>

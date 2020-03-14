@@ -4544,6 +4544,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a single job to view summary information..
+        /// </summary>
+        public static string QueueView_JobInformationNotAvailable {
+            get {
+                return ResourceManager.GetString("QueueView_JobInformationNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The log will be available after the encode completes..
         /// </summary>
         public static string QueueView_LogNotAvailableYet {
