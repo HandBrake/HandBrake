@@ -151,12 +151,16 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     const char         * ctext;
     const char         * sep;
     GtkWidget          * widget;
-    GhbValue           * uiDict = NULL;
-    GhbValue           * titleDict = NULL;
+    GhbValue           * uiDict     = NULL;
+    GhbValue           * jobDict    = NULL;
+    GhbValue           * sourceDict = NULL;
+    GhbValue           * rangeDict  = NULL;
+    GhbValue           * titleDict  = NULL;
 
     if (queueDict != NULL)
     {
         uiDict    = ghb_dict_get(queueDict, "uiSettings");
+        jobDict   = ghb_dict_get(queueDict, "Job");
         titleDict = ghb_dict_get(queueDict, "Title");
     }
     if (titleDict == NULL)
@@ -202,9 +206,53 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     g_free(text);
 
     // Source
-    ctext = ghb_dict_get_string(titleDict, "Path");
+    sourceDict = ghb_dict_get(jobDict, "Source");
+    ctext = ghb_dict_get_string(sourceDict, "Path");
     widget = GHB_WIDGET(ud->builder, "queue_summary_source");
     gtk_label_set_text(GTK_LABEL(widget), ctext);
+
+    // Title
+    const char * rangeType;
+    int titleID;
+    int64_t rangeStart, rangeEnd;
+
+    titleID       = ghb_dict_get_int(sourceDict, "Title");
+    rangeDict     = ghb_dict_get(sourceDict, "Range");
+    rangeType     = ghb_dict_get_string(rangeDict, "Type");
+    rangeStart    = ghb_dict_get_int(rangeDict, "Start");
+    rangeEnd      = ghb_dict_get_int(rangeDict, "End");
+
+    str = g_string_new("");
+    g_string_append_printf(str, "%-8d", titleID);
+    if (!strcmp(rangeType, "chapter"))
+    {
+        g_string_append_printf(str, "Chapters: %ld to %ld",
+                               rangeStart, rangeEnd);
+    }
+    else if (!strcmp(rangeType, "time"))
+    {
+        int start_hh, start_mm;
+        double start_ss;
+        int end_hh, end_mm;
+        double end_ss;
+
+        ghb_break_pts_duration(rangeStart, &start_hh, &start_mm, &start_ss);
+        ghb_break_pts_duration(rangeEnd, &end_hh, &end_mm, &end_ss);
+        g_string_append_printf(str,
+                               "Time: %02d:%02d:%05.2f to %02d:%02d:%05.2f",
+                                start_hh, start_mm, start_ss,
+                                end_hh, end_mm, end_ss);
+    }
+    else if (!strcmp(rangeType, "frame"))
+    {
+        g_string_append_printf(str, "Frames: %ld to %ld",
+                               rangeStart, rangeEnd);
+    }
+    text = g_string_free(str, FALSE);
+    widget = GHB_WIDGET(ud->builder, "queue_summary_title");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    g_free(text);
+    
 
     // Destination
     ctext = ghb_dict_get_string(uiDict, "destination");

@@ -1388,6 +1388,15 @@ source_dialog_extra_widgets(
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 }
 
+void ghb_break_pts_duration(gint64 ptsDuration, gint *hh, gint *mm, gdouble *ss)
+{
+    *hh = ptsDuration / (90000 * 60 * 60);
+    ptsDuration -= *hh * 90000 * 60 * 60;
+    *mm = ptsDuration / (90000 * 60);
+    ptsDuration -= *mm * 90000 * 60;
+    *ss = (gdouble)ptsDuration / 90000;
+}
+
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
 {
     *hh = duration / (60*60);
