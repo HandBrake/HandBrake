@@ -680,6 +680,42 @@ Resets the queue job to pending and ready to run again.</property>
                                       </object>
                                     </child>
                                     <child>
+                                      <object class="GtkLabel" id="queue_summary_title_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="halign">start</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="label" translatable="yes">Title:</property>
+                                        <layout>
+                                            <property name="top-attach">2</property>
+                                            <property name="left-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="queue_summary_title">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="halign">start</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="label" translatable="yes"></property>
+                                        <property name="width-chars">50</property>
+                                        <property name="lines">2</property>
+                                        <property name="wrap_mode">word-char</property>
+                                        <property name="ellipsize">middle</property>
+                                        <property name="selectable">True</property>
+                                        <layout>
+                                            <property name="top-attach">2</property>
+                                            <property name="left-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
                                       <object class="GtkLabel" id="queue_summary_dest_label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -689,7 +725,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="use_markup">True</property>
                                         <property name="label" translatable="yes">Destination:</property>
                                         <layout>
-                                          <property name="top-attach">2</property>
+                                          <property name="top-attach">3</property>
                                           <property name="left-attach">0</property>
                                         </layout>
                                       </object>
@@ -709,7 +745,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="selectable">True</property>
                                         <property name="margin-bottom">12</property>
                                         <layout>
-                                          <property name="top-attach">2</property>
+                                          <property name="top-attach">3</property>
                                           <property name="left-attach">1</property>
                                         </layout>
                                       </object>
@@ -724,7 +760,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="use_markup">True</property>
                                         <property name="label" translatable="yes">Dimensions:</property>
                                         <layout>
-                                          <property name="top-attach">3</property>
+                                          <property name="top-attach">4</property>
                                           <property name="left-attach">0</property>
                                         </layout>
                                       </object>
@@ -739,7 +775,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="label" translatable="yes"></property>
                                         <property name="width-chars">50</property>
                                         <layout>
-                                          <property name="top-attach">3</property>
+                                          <property name="top-attach">4</property>
                                           <property name="left-attach">1</property>
                                         </layout>
                                       </object>
@@ -754,7 +790,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="use_markup">True</property>
                                         <property name="label" translatable="yes">Video:</property>
                                         <layout>
-                                          <property name="top-attach">4</property>
+                                          <property name="top-attach">5</property>
                                           <property name="left-attach">0</property>
                                         </layout>
                                       </object>
@@ -769,7 +805,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="label" translatable="yes"></property>
                                         <property name="width-chars">50</property>
                                         <layout>
-                                          <property name="top-attach">4</property>
+                                          <property name="top-attach">5</property>
                                           <property name="left-attach">1</property>
                                         </layout>
                                       </object>
@@ -784,7 +820,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="use_markup">True</property>
                                         <property name="label" translatable="yes">Audio:</property>
                                         <layout>
-                                          <property name="top-attach">5</property>
+                                          <property name="top-attach">6</property>
                                           <property name="left-attach">0</property>
                                         </layout>
                                       </object>
@@ -799,7 +835,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="label" translatable="yes"></property>
                                         <property name="width-chars">50</property>
                                         <layout>
-                                          <property name="top-attach">5</property>
+                                          <property name="top-attach">6</property>
                                           <property name="left-attach">1</property>
                                         </layout>
                                       </object>
@@ -814,7 +850,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="use_markup">True</property>
                                         <property name="label" translatable="yes">Subtitles:</property>
                                         <layout>
-                                          <property name="top-attach">6</property>
+                                          <property name="top-attach">7</property>
                                           <property name="left-attach">0</property>
                                         </layout>
                                       </object>
@@ -829,7 +865,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="label" translatable="yes"></property>
                                         <property name="width-chars">50</property>
                                         <layout>
-                                          <property name="top-attach">6</property>
+                                          <property name="top-attach">7</property>
                                           <property name="left-attach">1</property>
                                         </layout>
                                       </object>
