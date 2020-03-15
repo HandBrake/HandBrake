@@ -624,29 +624,29 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     else if (job->pts_to_start != 0 || job->pts_to_stop != 0)
     {
         range_dict = hb_dict_init();
-        hb_dict_set(source_dict, "Type", hb_value_string("time"));
+        hb_dict_set(range_dict, "Type", hb_value_string("time"));
         if (job->pts_to_start > 0)
         {
-            hb_dict_set(source_dict, "Start", hb_value_int(job->pts_to_start));
+            hb_dict_set(range_dict, "Start", hb_value_int(job->pts_to_start));
         }
         if (job->pts_to_stop > 0)
         {
-            hb_dict_set(source_dict, "End",
+            hb_dict_set(range_dict, "End",
                         hb_value_int(job->pts_to_start + job->pts_to_stop));
         }
     }
     else if (job->frame_to_start != 0 || job->frame_to_stop != 0)
     {
         range_dict = hb_dict_init();
-        hb_dict_set(source_dict, "Type", hb_value_string("frame"));
+        hb_dict_set(range_dict, "Type", hb_value_string("frame"));
         if (job->frame_to_start > 0)
         {
-            hb_dict_set(source_dict, "Start",
+            hb_dict_set(range_dict, "Start",
                         hb_value_int(job->frame_to_start + 1));
         }
         if (job->frame_to_stop > 0)
         {
-            hb_dict_set(source_dict, "End",
+            hb_dict_set(range_dict, "End",
                         hb_value_int(job->frame_to_start + job->frame_to_stop));
         }
     }
