@@ -117,7 +117,7 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
     }
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_state_to_dict, json pack failure: %s", error.text);
     }
     return dict;
 }
@@ -143,7 +143,7 @@ hb_dict_t * hb_version_dict()
         "Arch",          hb_value_string(HB_PROJECT_HOST_ARCH));
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_version_dict, json pack failure: %s", error.text);
         return NULL;
     }
 
@@ -185,7 +185,7 @@ hb_dict_t * hb_audio_attributes_to_dict(uint32_t attributes)
         "Default",          hb_value_bool(attributes & HB_AUDIO_ATTR_DEFAULT));
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_audio_attributes_to_dict, json pack failure: %s", error.text);
     }
     return dict;
 }
@@ -211,7 +211,7 @@ hb_dict_t * hb_subtitle_attributes_to_dict(uint32_t attributes)
         "Default",       hb_value_bool(attributes & HB_SUBTITLE_ATTR_DEFAULT));
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_subtitle_attributes_to_dict, json pack failure: %s", error.text);
     }
     return dict;
 }
@@ -280,7 +280,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     );
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_title_to_dict_internal, json pack failure: %s", error.text);
         return NULL;
     }
 
@@ -362,7 +362,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         );
         if (chapter_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_error("hb_title_to_dict_internal, chapter, json pack failure: %s", error.text);
             return NULL;
         }
         hb_value_array_append(chapter_list, chapter_dict);
@@ -407,7 +407,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "LFECount",          hb_value_int(lfe_count));
         if (audio_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_error("hb_title_to_dict_internal, audio, json pack failure: %s", error.text);
             return NULL;
         }
         if (audio->config.in.name != NULL)
@@ -438,7 +438,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "LanguageCode", hb_value_string(subtitle->iso639_2));
         if (subtitle_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_error("hb_title_to_dict_internal, subtitle, json pack failure: %s", error.text);
             return NULL;
         }
         if (subtitle->name != NULL)
@@ -595,7 +595,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     );
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_error("hb_job_to_dict, json pack failure: %s", error.text);
         return NULL;
     }
     hb_dict_t *dest_dict = hb_dict_get(dict, "Destination");
