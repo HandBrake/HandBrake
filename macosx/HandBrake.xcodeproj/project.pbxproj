@@ -34,6 +34,10 @@
 		1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */; };
 		1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
 		1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
+		1CDCF0C3241F28D400FB62C6 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */; };
+		1CDCF0C4241F28D400FB62C6 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */; };
+		1CDCF0C5241F28D400FB62C6 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CDCF0C2241F28D400FB62C6 /* libjpeg.a */; };
+		1CDCF0C6241F28D400FB62C6 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CDCF0C2241F28D400FB62C6 /* libjpeg.a */; };
 		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202514ADB8A40021BE6D /* libz.dylib */; };
@@ -447,6 +451,8 @@
 		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
 		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
 		1CBC683320BE014800A26CC2 /* liblzma.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzma.a; path = external/contrib/lib/liblzma.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libturbojpeg.a; path = external/contrib/lib/libturbojpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CDCF0C2241F28D400FB62C6 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = external/contrib/lib/libjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -934,6 +940,8 @@
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
 				1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */,
+				1CDCF0C5241F28D400FB62C6 /* libjpeg.a in Frameworks */,
+				1CDCF0C3241F28D400FB62C6 /* libturbojpeg.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
@@ -1024,6 +1032,8 @@
 				A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */,
 				D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */,
 				A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */,
+				1CDCF0C6241F28D400FB62C6 /* libjpeg.a in Frameworks */,
+				1CDCF0C4241F28D400FB62C6 /* libturbojpeg.a in Frameworks */,
 				A91CE2BB1C7DABBC0068F46F /* libdvdread.a in Frameworks */,
 				1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */,
 				A91CE2BD1C7DABBC0068F46F /* libfreetype.a in Frameworks */,
@@ -1058,6 +1068,8 @@
 		271BA4C714B1236D00BC1D2C /* Static Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				1CDCF0C2241F28D400FB62C6 /* libjpeg.a */,
+				1CDCF0C1241F28D400FB62C6 /* libturbojpeg.a */,
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1CBC683320BE014800A26CC2 /* liblzma.a */,
 				1C0695AA20BD193D001543DA /* libpostproc.a */,

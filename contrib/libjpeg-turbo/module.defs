@@ -1,0 +1,48 @@
+$(eval $(call import.MODULE.defs,LIBJPEGTURBO,libjpeg-turbo))
+$(eval $(call import.CONTRIB.defs,LIBJPEGTURBO))
+
+LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libjpeg-turbo-2.0.4.tar.gz
+LIBJPEGTURBO.FETCH.url    += https://sourceforge.net/projects/libjpeg-turbo/files/2.0.4/libjpeg-turbo-2.0.4.tar.gz
+LIBJPEGTURBO.FETCH.sha256  = 33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406
+
+LIBJPEGTURBO.build_dir             = build
+LIBJPEGTURBO.CONFIGURE.exe         = cmake
+LIBJPEGTURBO.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBJPEGTURBO.CONFIGURE.prefix)"
+LIBJPEGTURBO.CONFIGURE.deps        =
+LIBJPEGTURBO.CONFIGURE.static      =
+LIBJPEGTURBO.CONFIGURE.shared      = -DENABLE_SHARED=OFF
+
+ifeq (size-aggressive,$(GCC.O))
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_FLAGS_MINSIZEREL="-Oz -DNDEBUG" -DCMAKE_C_FLAGS_MINSIZEREL="-Oz -DNDEBUG"
+endif
+
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
+else
+    ifneq (none,$(LIBJPEGTURBO.GCC.g))
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
+endif
+
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
+        LIBJPEGTURBO.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBJPEGTURBO.GCC.gcc)
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBJPEGTURBO.GCC.gxx)
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    endif
+    LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(LIBJPEGTURBO.CONFIGURE.host)"
+    LIBJPEGTURBO.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.build)"
+else
+    LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
+endif
+
+## find CMakeLists.txt
+LIBJPEGTURBO.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(LIBJPEGTURBO.EXTRACT.dir/))"
