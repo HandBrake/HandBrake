@@ -181,6 +181,21 @@ namespace HandBrakeWPF.Helpers
         {
             int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
 
+
+            hb_rational_t computed_par = new hb_rational_t();
+            switch (job.AnamorphicMode)
+            {
+                case Anamorphic.None:
+                    computed_par = new hb_rational_t { den = 1, num = 1 };
+                    break;
+                case Anamorphic.Custom:
+                    computed_par = new hb_rational_t { den = job.ParH, num = job.ParW };
+                    break;
+                default:
+                    computed_par = new hb_rational_t { den = title.ParH, num = title.ParW };
+                    break;
+            }
+
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
                 crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right },
@@ -190,7 +205,7 @@ namespace HandBrakeWPF.Helpers
                 maxHeight = job.MaxHeight,
                 mode = (int)job.AnamorphicMode,
                 modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
-                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW } }
+                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computed_par }
             };
 
             hb_geometry_s sourceGeometry = new hb_geometry_s
