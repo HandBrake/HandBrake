@@ -33,20 +33,6 @@ hb_filter_object_t hb_filter_crop_scale =
     .settings_template = crop_scale_template,
 };
 
-static const char * color_format_range(enum AVPixelFormat format, int range)
-{
-    switch (format)
-    {
-        case AV_PIX_FMT_YUVJ420P:
-        case AV_PIX_FMT_YUVJ422P:
-        case AV_PIX_FMT_YUVJ444P:
-        case AV_PIX_FMT_YUVJ440P:
-            return "full";
-        default:
-            return range == AVCOL_RANGE_JPEG ? "full" : "limited";
-    }
-}
-
 /* CropScale Settings
  *  mode:parity
  *
@@ -133,8 +119,6 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_dict_set_string(avsettings, "in_color_matrix", matrix);
         hb_dict_set_string(avsettings, "out_color_matrix", matrix);
     }
-    hb_dict_set_string(avsettings, "in_range",
-                       color_format_range(init->pix_fmt, init->color_range));
     hb_dict_set_string(avsettings, "out_range", "limited");
     hb_dict_set(avfilter, "scale", avsettings);
     hb_value_array_append(avfilters, avfilter);
