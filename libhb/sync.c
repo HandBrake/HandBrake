@@ -150,6 +150,7 @@ struct sync_common_s
     int             stream_count;
     sync_stream_t * streams;
     int             found_first_pts;
+    int             flush;
 
     // SCR adjustments
     scr_t           scr[SCR_HASH_SZ];
@@ -193,6 +194,7 @@ static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
 static void SortedQueueBuffer( sync_stream_t * stream, hb_buffer_t * buf );
 static hb_buffer_t * sanitizeSubtitle(sync_stream_t        * stream,
                                       hb_buffer_t          * sub);
+static int OutputBuffer( sync_common_t * common );
 
 static void saveChap( sync_stream_t * stream, hb_buffer_t * buf )
 {
@@ -1170,122 +1172,9 @@ static void streamFlush( sync_stream_t * stream )
     {
         hb_buffer_t * buf;
 
-        if (!stream->common->found_first_pts)
-        {
-            checkFirstPts(stream->common);
-        }
-        if (stream->next_pts == (int64_t)AV_NOPTS_VALUE)
-        {
-            // Initialize next_pts, it is used to make timestamp corrections
-            buf = hb_list_item(stream->in_queue, 0);
-            if (buf != NULL)
-            {
-                stream->next_pts  = buf->s.start;
-            }
-        }
-        fixStreamTimestamps(stream);
         buf = hb_list_item(stream->in_queue, 0);
-        if (buf != NULL)
-        {
-            hb_list_rem(stream->in_queue, buf);
-            if (!stream->first_frame)
-            {
-                if (buf->s.start >= 0)
-                {
-                    switch (stream->type)
-                    {
-                        case SYNC_TYPE_VIDEO:
-                            hb_log("sync: first pts video is %"PRId64,
-                                   buf->s.start);
-                            break;
-                        case SYNC_TYPE_AUDIO:
-                            hb_log("sync: first pts audio 0x%x is %"PRId64,
-                                   stream->audio.audio->id, buf->s.start);
-                            break;
-                        case SYNC_TYPE_SUBTITLE:
-                            hb_log("sync: first pts subtitle 0x%x is %"PRId64,
-                                   stream->subtitle.subtitle->id, buf->s.start);
-                            break;
-                        default:
-                            break;
-                    }
-                    stream->first_frame        = 1;
-                    stream->first_pts          = buf->s.start;
-                    stream->min_frame_duration = buf->s.duration;
-                }
-                stream->next_pts = buf->s.start;
-            }
-            if (stream->type == SYNC_TYPE_AUDIO)
-            {
-                buf = FilterAudioFrame(stream, buf);
-                if (buf == NULL)
-                {
-                    // FilterAudioFrame can consume the buffer with no output
-                    continue;
-                }
-            }
-            int64_t subtitle_last_pts = AV_NOPTS_VALUE;
-            if (stream->type == SYNC_TYPE_SUBTITLE)
-            {
-                buf = sanitizeSubtitle(stream, buf);
-                if (buf == NULL)
-                {
-                    // sanitizeSubtitle can consume the buffer with no output
-                    continue;
-                }
-                // sanitizeSubtitle can return a list of subtitles.
-                // Find the pts of the last subtitle in the list
-                hb_buffer_t * sub = buf;
-                while (sub != NULL)
-                {
-                    subtitle_last_pts = sub->s.start;
-                    sub = sub->next;
-                }
-            }
-            if (stream->type == SYNC_TYPE_AUDIO ||
-                stream->type == SYNC_TYPE_VIDEO)
-            {
-                buf->s.start = stream->next_pts;
-                buf->s.stop  = stream->next_pts + buf->s.duration;
-                stream->last_pts = stream->next_pts;
-                stream->next_pts += buf->s.duration;
-            }
-            else
-            {
-                stream->next_pts =
-                stream->last_pts = subtitle_last_pts;
-            }
-
-            if (buf->s.stop > 0)
-            {
-                stream->current_duration = buf->s.stop - stream->first_pts;
-            }
-            stream->frame_count++;
-            if (buf->s.duration > 0 &&
-                stream->min_frame_duration > buf->s.duration)
-            {
-                stream->min_frame_duration = buf->s.duration;
-            }
-            if (stream->max_frame_duration < buf->s.duration)
-            {
-                stream->max_frame_duration = buf->s.duration;
-            }
-            if (buf->s.start < 0)
-            {
-                // The pipeline can't handle negative timestamps
-                // and it is sometimes not possible to avoid one
-                // at the start of the video.  There can be a
-                // significant delay before we see the first buffers
-                // from all streams.  We can't buffer indefinitely
-                // until we have seen the first PTS for all streams
-                // so sometimes we may start before we have seen
-                // the earliest PTS
-                saveChap(stream, buf);
-                hb_buffer_close(&buf);
-            }
-            restoreChap(stream, buf);
-            fifo_push(stream->fifo_out, buf);
-        }
+        hb_list_rem(stream->in_queue, buf);
+        hb_buffer_close(&buf);
     }
     fifo_push(stream->fifo_out, hb_buffer_eof_init());
 }
@@ -1304,14 +1193,18 @@ static void flushStreams( sync_common_t * common )
         }
     }
 
+    if (!common->found_first_pts)
+    {
+        checkFirstPts(common);
+    }
+
+    common->flush = 1;
+    while (OutputBuffer(common));
+
     // Flush all streams
     for (ii = 0; ii < common->stream_count; ii++)
     {
         sync_stream_t * stream = &common->streams[ii];
-        if (stream->done)
-        {
-            continue;
-        }
         streamFlush(stream);
     }
 }
@@ -1469,7 +1362,6 @@ static void terminateSubtitleStreams( sync_common_t * common )
         {
             continue;
         }
-        fifo_push(stream->fifo_out, hb_buffer_eof_init());
         fifo_push(stream->fifo_in,  hb_buffer_eof_init());
         stream->done = 1;
     }
@@ -1484,16 +1376,17 @@ static void terminateSubtitleStreams( sync_common_t * common )
 // timestamp correction.  In this scenario, we forego lowest PTS and pull
 // the next lowest PTS that has enough buffers in the queue to perform
 // timestamp correction.
-static void OutputBuffer( sync_common_t * common )
+static int OutputBuffer( sync_common_t * common )
 {
-    int             ii, full;
+    int             ii, more;
     int64_t         pts;
     sync_stream_t * out_stream;
     hb_buffer_t   * buf;
+    int             out_count = 0;
 
     do
     {
-        full        = 0;
+        more        = 0;
         out_stream  = NULL;
         pts         = INT64_MAX;
 
@@ -1515,10 +1408,12 @@ static void OutputBuffer( sync_common_t * common )
             // low, do not do normal PTS interleaving with this queue.
             // Except for subtitles which are not processed for gaps
             // and overlaps.
-            if (hb_list_count(stream->in_queue) > min)
+            if ((common->flush && hb_list_count(stream->in_queue) > 0) ||
+                hb_list_count(stream->in_queue) > min)
             {
                 buf = hb_list_item(stream->in_queue, 0);
-                if (buf->s.start < pts)
+                if (buf->s.start < pts &&
+                    !(buf->s.flags & HB_BUF_FLAG_EOF))
                 {
                     pts = buf->s.start;
                     out_stream = stream;
@@ -1526,9 +1421,10 @@ static void OutputBuffer( sync_common_t * common )
             }
             // But continue output of buffers as long as one of the queues
             // is above the maximum queue level.
-            if(hb_list_count(stream->in_queue) > stream->max_len)
+            if ((common->flush && hb_list_count(stream->in_queue) > 0) ||
+                hb_list_count(stream->in_queue) > stream->max_len)
             {
-                full = 1;
+                more = 1;
             }
         }
         if (out_stream == NULL)
@@ -1661,7 +1557,6 @@ static void OutputBuffer( sync_common_t * common )
                     break;
             }
             out_stream->done = 1;
-            fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             flushStreams(common);
             continue;
@@ -1674,7 +1569,6 @@ static void OutputBuffer( sync_common_t * common )
                    out_stream->frame_count);
             common->stop_pts = buf->s.start;
             out_stream->done = 1;
-            fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             flushStreams(common);
             continue;
@@ -1797,20 +1691,10 @@ static void OutputBuffer( sync_common_t * common )
         }
         restoreChap(out_stream, buf);
         fifo_push(out_stream->fifo_out, buf);
-    } while (full);
-}
+        out_count++;
+    } while (more);
 
-static void FlushBuffer( sync_common_t * common )
-{
-    hb_lock(common->mutex);
-
-    if (!common->found_first_pts)
-    {
-        checkFirstPts(common);
-    }
-    OutputBuffer(common);
-
-    hb_unlock(common->mutex);
+    return out_count;
 }
 
 static void Synchronize( sync_stream_t * stream )
@@ -3003,7 +2887,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -3028,7 +2912,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -3094,7 +2978,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -3110,7 +2994,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -3374,7 +3258,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -3399,7 +3283,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
-        FlushBuffer(pv->stream->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
