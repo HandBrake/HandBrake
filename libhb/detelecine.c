@@ -839,10 +839,18 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     ctx->parity = -1;
 
     // "Skip" array [top, bottom, left, right]
-    hb_dict_extract_int(&ctx->junk_top, filter->settings, "skip-top");
-    hb_dict_extract_int(&ctx->junk_bottom, filter->settings, "skip-bottom");
-    hb_dict_extract_int(&ctx->junk_left, filter->settings, "skip-left");
-    hb_dict_extract_int(&ctx->junk_right, filter->settings, "skip-right");
+    int top, bottom, left, right;
+
+    hb_dict_extract_int(&top,    filter->settings, "skip-top");
+    hb_dict_extract_int(&bottom, filter->settings, "skip-bottom");
+    hb_dict_extract_int(&left,   filter->settings, "skip-left");
+    hb_dict_extract_int(&right,  filter->settings, "skip-right");
+    // Enforce safety zones
+    ctx->junk_top    = top    > ctx->junk_top    ? top    : ctx->junk_top;
+    ctx->junk_bottom = bottom > ctx->junk_bottom ? bottom : ctx->junk_bottom;
+    ctx->junk_left   = left   > ctx->junk_left   ? left   : ctx->junk_left;
+    ctx->junk_right  = right  > ctx->junk_right  ? right  : ctx->junk_right;
+
     hb_dict_extract_int(&ctx->strict_breaks, filter->settings, "strict-breaks");
     hb_dict_extract_int(&ctx->metric_plane, filter->settings, "plane");
     hb_dict_extract_int(&ctx->parity, filter->settings, "parity");
