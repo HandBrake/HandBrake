@@ -1553,7 +1553,7 @@ static void do_job(hb_job_t *job)
         init.geometry.height = title->geometry.height;
 
         init.geometry.par = job->par;
-        memcpy(init.crop, title->crop, sizeof(int[4]));
+        memset(init.crop, 0, sizeof(int[4]));
         init.vrate = job->vrate;
         init.cfr = 0;
         init.grayscale = 0;
