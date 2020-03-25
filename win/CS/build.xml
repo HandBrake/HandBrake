@@ -10,6 +10,7 @@
     msbuild build.xml /t:Release
   Example with code signing:
     msbuild build.xml /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build.xml /t:Release /p:PfxFile=file.pfx /p:PfxPwd=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
   Requires: libhb.dll to be in the release folder.
   
@@ -51,11 +52,23 @@
 
   <!-- Code Signing Configuration -->
   <PropertyGroup Condition="'$(SignToolLocation)'==''">
-    <SignToolLocation>C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\SignTool.exe</SignToolLocation>
+    <SignToolLocation>C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64\SignTool.exe</SignToolLocation>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(SignThumbprint)'!=''">
+  <PropertyGroup Condition="'$(SignTimestampServer)'!=''">
     <SignTimestamp  Condition="'$(SignTimestampServer)'!=''" >/t</SignTimestamp>
+    <SignEnabled>true</SignEnabled>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(SignThumbprint)'!=''">
+    <SignType>/sha1</SignType>
+    <SignEnabled>true</SignEnabled>
+  </PropertyGroup>
+  
+   <PropertyGroup Condition="'$(PfxFile)'!=''">
+    <SignType>/f</SignType>
+    <SignPwd Condition="'$(PfxPwd)'!=''">/p</SignPwd>
+    <SignEnabled>true</SignEnabled>
   </PropertyGroup>
 
   <!-- Post Build Events -->
@@ -65,7 +78,8 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\MakeNightly64.nsi" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  
+          Condition="'$(SignEnabled)' == 'true'" />
   </Target>
 
   <Target Name="ReleasePostBuild">
@@ -74,7 +88,7 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\Installer64.nsi" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
-  </Target>
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  
+          Condition="'$(SignEnabled)' == 'true'" />  </Target>
 
 </Project>
