@@ -3,19 +3,9 @@ name: macOS build
 on: [push, pull_request]
 
 jobs:
-  handle_forks:
-    name: Forked Repo
-    runs-on: ubuntu-latest
-    if: github.repository != 'HandBrake/HandBrake'
-    steps:
-    - name: Print Warning
-      run: |
-        echo "Builds are disabled for forked repositories."      
-
   build:
     name: Build on macOS
     runs-on: macOS-latest
-    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
 
@@ -36,3 +26,16 @@ jobs:
         ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
         cd build
         make pkg.create
+    
+    - name: Upload Assets
+      uses: actions/upload-artifact@v1
+      with:
+        name: HandBrake-macos
+        path: ./build/pkg
+        
+    - name: Tidy up past artifacts
+      uses: kolpav/purge-artifacts-action@v1
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 3days
+

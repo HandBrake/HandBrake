@@ -3,19 +3,9 @@ name: Windows Build
 on: [push, pull_request]
 
 jobs:
-  handle_forks:
-    name: Forked Repo
-    runs-on: ubuntu-latest
-    if: github.repository != 'HandBrake/HandBrake'
-    steps:
-    - name: Print Warning
-      run: |
-        echo "Builds are disabled for forked repositories."      
-
   build_mingw:
     name: CLI / LibHB
     runs-on: ubuntu-latest
-    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
     
@@ -51,12 +41,26 @@ jobs:
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
         cd build
         make pkg.create.zip
+    
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v1
+      with:
+        name: HandBrakeCLI
+        path: ./build/HandBrakeCLI.exe
+    
+    - name: Upload LibHB
+      uses: actions/upload-artifact@v1
+      with:
+        name: LibHandBrake
+        path: ./build/libhb/hb.dll
 
   build_gui:
     name: Windows UI
     runs-on: windows-latest
-    if: github.repository == 'HandBrake/HandBrake'
     needs: build_mingw
+    env:
+      SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
+       
     steps:
     - uses: actions/checkout@master
         
@@ -68,15 +72,43 @@ jobs:
         move Inetc.zip plugins
         cd plugins        
         7z x Inetc.zip
-        dir
-  
+          
     - name: NuGet Restore
       run: |
          choco install nuget.commandline
          cd win/CS/
          nuget restore HandBrake.sln
+   
+    - name: Download LibHandBrake
+      uses: actions/download-artifact@v1.0.0
+      with:
+       name: LibHandBrake
+       path: win/CS/HandBrakeWPF/bin/x64/Release
+         
+    - name: Import the Signing Cert
+      if: github.repository == 'HandBrake/HandBrake'
+      run: |
+        $ErrorView = "NormalView"
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
+        $currentDirectory = Get-Location
+        $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
+        $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
+        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+        cp $certificatePath win\cs\
         
     - name: Build Windows GUI
       run: |      
         $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
-        msbuild win\cs\build.xml /t:Nightly
+        msbuild win\cs\build.xml /t:Nightly /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
+
+    - name: Upload Assets
+      uses: actions/upload-artifact@v1
+      with:
+        name: HandBrake-x86_64-Win_GUI
+        path: win/CS/HandBrakeWPF/bin/x64/Release/HandBrake-Nightly_x86_64-Win_GUI.exe
+        
+    - name: Tidy up past artifacts
+      uses: kolpav/purge-artifacts-action@v1
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 3days
