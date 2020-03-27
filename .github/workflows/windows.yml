@@ -89,12 +89,14 @@ jobs:
       if: github.repository == 'HandBrake/HandBrake'
       run: |
         $ErrorView = "NormalView"
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
-        $currentDirectory = Get-Location
-        $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
-        $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
-        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-        cp $certificatePath win\cs\
+        if (-NOT ($env:SigningCertificate -eq '')) {        
+          $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
+          $currentDirectory = Get-Location
+          $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
+          $certPassword = ConvertTo-SecureString -String ${{ secrets.HandBrakeTeam_pfx_pwd }} -Force –AsPlainText
+          [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+          cp $certificatePath win\cs\
+        }
         
     - name: Build Windows GUI
       run: |      
