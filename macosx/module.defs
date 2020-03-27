@@ -33,6 +33,12 @@ MACOSX.map.g.min  = debug
 MACOSX.map.g.std  = debug
 MACOSX.map.g.max  = debug
 
+## mapping from symbolic optimization value to actual level
+MACOSX.map.O.none            = 0
+MACOSX.map.O.size            = s
+MACOSX.map.O.size-aggressive = z
+MACOSX.map.O.speed           = 3
+
 ## xcconfig: must be one of macosx/xcconfig/*.xcconfig
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
 MACOSX.sdk      = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))
@@ -63,6 +69,7 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_DRIVER='$(XCODE.driver)' \
         EXTERNAL_GOALS='$(3)' \
         EXTERNAL_JOBS='$(MACOSX.JOBS)' \
+        EXTERNAL_O='$(MACOSX.map.O.$(MACOSX.GCC.O))' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
         $(MACOSX.extra_cflags) \
@@ -88,6 +95,7 @@ MACOSX.XCODE_ARCHIVE = $(strip \
         EXTERNAL_DRIVER='$(XCODE.driver)' \
         EXTERNAL_GOALS='$(3)' \
         EXTERNAL_JOBS='$(MACOSX.JOBS)' \
+        EXTERNAL_O='$(MACOSX.map.O.$(MACOSX.GCC.O))' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
         $(MACOSX.extra_cflags) \
