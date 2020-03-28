@@ -1004,6 +1004,14 @@ skip_preview:
 
         if( vid_info.geometry.par.num && vid_info.geometry.par.den )
         {
+            if (title->geometry.par.num && title->geometry.par.den &&
+                title->geometry.par.num != vid_info.geometry.par.num &&
+                title->geometry.par.den != vid_info.geometry.par.den)
+            {
+                hb_log("WARNING: Video PAR %d:%d != container PAR %d:%d",
+                    vid_info.geometry.par.num, vid_info.geometry.par.den,
+                    title->geometry.par.num, title->geometry.par.den);
+            }
             title->geometry.par = vid_info.geometry.par;
         }
         title->pix_fmt = vid_info.pix_fmt;
