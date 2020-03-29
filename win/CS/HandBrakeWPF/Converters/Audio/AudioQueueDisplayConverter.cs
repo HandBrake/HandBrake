@@ -11,12 +11,15 @@ namespace HandBrakeWPF.Converters.Audio
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Drawing.Drawing2D;
     using System.Globalization;
     using System.Text;
     using System.Windows.Data;
 
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;
 
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
@@ -47,7 +50,15 @@ namespace HandBrakeWPF.Converters.Audio
                         track.ScannedTrack.TrackNumber,
                         track.ScannedTrack.Language);
 
-                    audioTracks.Append(string.Format("{0} - {1} To {2}{3}", trackName, track.TrackName, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
+                    string quality = string.Empty;
+                    if (!track.IsPassthru)
+                    {
+                        quality = track.EncoderRateType == AudioEncoderRateType.Quality
+                                      ? string.Format("{0} {1}", Resources.VideoView_Quality, track.Quality)
+                                      : track.Bitrate + " kbps";
+                    }
+
+                    audioTracks.Append(string.Format("{0} - {1} To {2} {3}{4}", trackName, track.TrackName, quality, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
                 }
             }
 
