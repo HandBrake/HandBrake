@@ -844,7 +844,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         if( data->store_previews )
         {
-            hb_save_preview( data->h, title->index, i, vid_buf );
+            hb_save_preview( data->h, title->index, i, vid_buf, HB_PREVIEW_FORMAT_JPG );
         }
 
         /* Detect black borders */

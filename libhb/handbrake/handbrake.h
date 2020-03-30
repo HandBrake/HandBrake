@@ -28,6 +28,8 @@ extern "C" {
    etc) */
 #define HB_DEBUG_NONE 0
 #define HB_DEBUG_ALL  1
+#define HB_PREVIEW_FORMAT_YUV 0
+#define HB_PREVIEW_FORMAT_JPG 1
 void          hb_register( hb_work_object_t * );
 void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose );
@@ -68,9 +70,9 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 
 // JJJ: title->job?
 int           hb_save_preview( hb_handle_t * h, int title, int preview,
-                               hb_buffer_t *buf );
+                               hb_buffer_t *buf, int format );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
-                               int preview );
+                               int preview, int format );
 #endif // __LIBHB__
 
 hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <turbojpeg.h>
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
@@ -458,52 +459,117 @@ hb_title_set_t * hb_get_title_set( hb_handle_t * h )
     return &h->title_set;
 }
 
-int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
+int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf, int format )
 {
     FILE * file;
     char * filename;
     char   reason[80];
+    int    format_chars = 4;
+    char   format_string[format_chars];
 
-    filename = hb_get_temporary_filename("%d_%d_%d", hb_get_instance_id(h),
-                                         title, preview );
+    switch (format)
+    {
+        case HB_PREVIEW_FORMAT_YUV:
+            strncpy(format_string, "yuv", format_chars);
+            break;
+        case HB_PREVIEW_FORMAT_JPG:
+            strncpy(format_string, "jpg", format_chars);
+            break;
+        default:
+            hb_error("hb_save_preview: Unsupported preview format %d", format);
+            return -1;
+    }
+
+    filename = hb_get_temporary_filename("%d_%d_%d.%s", hb_get_instance_id(h),
+                                         title, preview, format_string );
 
     file = hb_fopen(filename, "wb");
     if (file == NULL)
     {
         if (strerror_r(errno, reason, 79) != 0)
             strcpy(reason, "unknown -- strerror_r() failed");
-
         hb_error("hb_save_preview: Failed to open %s (reason: %s)",
                  filename, reason);
         free(filename);
         return -1;
     }
 
-    int pp, hh;
-    for( pp = 0; pp <= buf->f.max_plane; pp++ )
+    if (format == HB_PREVIEW_FORMAT_YUV)
     {
-        uint8_t *data = buf->plane[pp].data;
-        int stride = buf->plane[pp].stride;
-        int w = buf->plane[pp].width;
-        int h = buf->plane[pp].height;
-
-        for( hh = 0; hh < h; hh++ )
+        int pp, hh;
+        for( pp = 0; pp <= buf->f.max_plane; pp++ )
         {
-            if (fwrite( data, w, 1, file ) < w)
-            {
-                if (ferror(file))
-                {
-                    if (strerror_r(errno, reason, 79) != 0)
-                        strcpy(reason, "unknown -- strerror_r() failed");
+            uint8_t *data = buf->plane[pp].data;
+            int stride = buf->plane[pp].stride;
+            int w = buf->plane[pp].width;
+            int h = buf->plane[pp].height;
 
-                    hb_error( "hb_save_preview: Failed to write line %d to %s "
-                              "(reason: %s). Preview will be incomplete.",
-                              hh, filename, reason );
-                    goto done;
+            for( hh = 0; hh < h; hh++ )
+            {
+                if (fwrite( data, w, 1, file ) < w)
+                {
+                    if (ferror(file))
+                    {
+                        if (strerror_r(errno, reason, 79) != 0)
+                            strcpy(reason, "unknown -- strerror_r() failed");
+                        hb_error( "hb_save_preview: Failed to write line %d to %s "
+                                  "(reason: %s). Preview will be incomplete.",
+                                  hh, filename, reason );
+                        goto done;
+                    }
                 }
+                data += stride;
             }
-            data += stride;
         }
+    }
+    else if (format == HB_PREVIEW_FORMAT_JPG)
+    {
+        tjhandle        jpeg_compressor = tjInitCompress();
+        const int       jpeg_quality = 90;
+        unsigned long   jpeg_size    = 0;
+        unsigned char * jpeg_data    = NULL;
+        int             planes_max = 3;
+        int             planes_stride[planes_max];
+        unsigned char * planes_data[planes_max];
+        int             pp, compressor_result;
+        for (pp = 0; pp < 3; pp++)
+        {
+            planes_stride[pp] = buf->plane[pp].stride;
+            planes_data[pp]   = buf->plane[pp].data;
+        }
+
+        compressor_result = tjCompressFromYUVPlanes(jpeg_compressor,
+                                                    planes_data,
+                                                    buf->plane[0].width,
+                                                    planes_stride,
+                                                    buf->plane[0].height,
+                                                    TJSAMP_420,
+                                                    &jpeg_data,
+                                                    &jpeg_size,
+                                                    jpeg_quality,
+                                                    TJFLAG_FASTDCT);
+        if (compressor_result == 0)
+        {
+            size_t ret = fwrite(jpeg_data, jpeg_size, 1, file);
+            if ((ret < jpeg_size) && (ferror(file)))
+            {
+                if (strerror_r(errno, reason, 79) != 0)
+                {
+                    strcpy(reason, "unknown -- strerror_r() failed");
+                }
+                hb_error("hb_save_preview: Failed to write to %s "
+                         "(reason: %s).",
+                         filename, reason);
+            }
+        }
+        else
+        {
+            hb_error("hb_save_preview: JPEG compression failed for "
+                     "preview image %s", filename);
+        }
+
+        tjDestroy(jpeg_compressor);
+        tjFree(jpeg_data);
     }
 
 done:
@@ -513,14 +579,36 @@ done:
     return 0;
 }
 
-hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
+hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, int format)
 {
-    FILE * file;
-    char * filename;
+    FILE * file = NULL;
+    char * filename = NULL;
     char   reason[80];
+    int    format_chars = 4;
+    char   format_string[format_chars];
 
-    filename = hb_get_temporary_filename("%d_%d_%d", hb_get_instance_id(h),
-                                         title->index, preview);
+    hb_buffer_t * buf;
+    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
+                               title->geometry.width, title->geometry.height);
+
+    if (!buf)
+        goto done;
+
+    switch (format)
+    {
+        case HB_PREVIEW_FORMAT_YUV:
+            strncpy(format_string, "yuv", format_chars);
+            break;
+        case HB_PREVIEW_FORMAT_JPG:
+            strncpy(format_string, "jpg", format_chars);
+            break;
+        default:
+            hb_error("hb_read_preview: Unsupported preview format %d", format);
+            return buf;
+    }
+
+    filename = hb_get_temporary_filename("%d_%d_%d.%s", hb_get_instance_id(h),
+                                         title->index, preview, format_string);
 
     file = hb_fopen(filename, "rb");
     if (file == NULL)
@@ -534,38 +622,86 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
         return NULL;
     }
 
-    hb_buffer_t * buf;
-    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
-                               title->geometry.width, title->geometry.height);
-
-    if (!buf)
-        goto done;
-
-    int pp, hh;
-    for (pp = 0; pp < 3; pp++)
+    if (format == HB_PREVIEW_FORMAT_YUV)
     {
-        uint8_t *data = buf->plane[pp].data;
-        int stride = buf->plane[pp].stride;
-        int w = buf->plane[pp].width;
-        int h = buf->plane[pp].height;
-
-        for (hh = 0; hh < h; hh++)
+        int pp, hh;
+        for (pp = 0; pp < 3; pp++)
         {
-            if (fread(data, w, 1, file) < w)
-            {
-                if (ferror(file))
-                {
-                    if (strerror_r(errno, reason, 79) != 0)
-                        strcpy(reason, "unknown -- strerror_r() failed");
+            uint8_t *data = buf->plane[pp].data;
+            int stride = buf->plane[pp].stride;
+            int w = buf->plane[pp].width;
+            int h = buf->plane[pp].height;
 
-                    hb_error("hb_read_preview: Failed to read line %d from %s "
-                             "(reason: %s). Preview will be incomplete.",
-                             hh, filename, reason );
-                    goto done;
+            for (hh = 0; hh < h; hh++)
+            {
+                if (fread(data, w, 1, file) < w)
+                {
+                    if (ferror(file))
+                    {
+                        if (strerror_r(errno, reason, 79) != 0)
+                            strcpy(reason, "unknown -- strerror_r() failed");
+
+                        hb_error("hb_read_preview: Failed to read line %d from %s "
+                                 "(reason: %s). Preview will be incomplete.",
+                                 hh, filename, reason );
+                        goto done;
+                    }
                 }
+                data += stride;
             }
-            data += stride;
         }
+    }
+    else if (format == HB_PREVIEW_FORMAT_JPG)
+    {
+        fseek(file, 0, SEEK_END);
+        unsigned long jpeg_size = ftell(file);
+        fseek(file, 0, SEEK_SET);
+        unsigned char * jpeg_data = tjAlloc(jpeg_size + 1);
+        jpeg_data[jpeg_size] = 0;
+
+        size_t ret = fread(jpeg_data, jpeg_size, 1, file);
+        {
+            if ((ret < jpeg_size) && (ferror(file)))
+            {
+                if (strerror_r(errno, reason, 79) != 0)
+                {
+                    strcpy(reason, "unknown -- strerror_r() failed");
+                }
+                hb_error("hb_read_preview: Failed to read from %s "
+                         "(reason: %s).",
+                         filename, reason);
+                tjFree(jpeg_data);
+                goto done;
+            }
+        }
+
+        tjhandle        jpeg_decompressor = tjInitDecompress();
+        int             planes_max = 3;
+        int             planes_stride[planes_max];
+        unsigned char * planes_data[planes_max];
+        int             pp, decompressor_result;
+        for (pp = 0; pp < 3; pp++)
+        {
+            planes_stride[pp] = buf->plane[pp].stride;
+            planes_data[pp]   = buf->plane[pp].data;
+        }
+
+        decompressor_result = tjDecompressToYUVPlanes(jpeg_decompressor,
+                                                      jpeg_data,
+                                                      jpeg_size,
+                                                      planes_data,
+                                                      buf->plane[0].width,
+                                                      planes_stride,
+                                                      buf->plane[0].height,
+                                                      TJFLAG_FASTDCT);
+        if (decompressor_result != 0)
+        {
+            hb_error("hb_read_preview: JPEG decompression failed for "
+                     "preview image %s", filename);
+        }
+
+        tjDestroy(jpeg_decompressor);
+        tjFree(jpeg_data);
     }
 
 done:
@@ -616,7 +752,7 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
         goto fail;
     }
 
-    in_buf = hb_read_preview( h, title, picture );
+    in_buf = hb_read_preview( h, title, picture, HB_PREVIEW_FORMAT_JPG );
     if ( in_buf == NULL )
     {
         goto fail;
