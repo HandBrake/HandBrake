@@ -309,11 +309,15 @@ int decavsubWork( hb_avsub_context_t * ctx,
     avp.data = in->data;
     avp.size = in->size;
     avp.pts  = in->s.start;
-    duration = in->s.duration;
+    if (in->s.duration > 0)
+    {
+        duration = in->s.duration;
+    }
 
     if (duration <= 0 &&
         in->s.start != AV_NOPTS_VALUE &&
-        in->s.stop  != AV_NOPTS_VALUE)
+        in->s.stop  != AV_NOPTS_VALUE &&
+        in->s.stop > in->s.start)
     {
         duration = in->s.stop - in->s.start;
     }
@@ -513,6 +517,9 @@ int decavsubWork( hb_avsub_context_t * ctx,
             {
                 // packets already merged (e.g. MKV sources)
                 out = hb_buffer_list_clear(&ctx->list_pass);
+                out->s.start    = AV_NOPTS_VALUE;
+                out->s.stop     = AV_NOPTS_VALUE;
+                out->s.duration = (int64_t)AV_NOPTS_VALUE;
             }
             else
             {
@@ -528,6 +535,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
                 }
 
                 out = hb_buffer_init( size );
+                out->s.duration = (int64_t)AV_NOPTS_VALUE;
                 data = out->data;
                 b = hb_buffer_list_head(&ctx->list_pass);
                 while (b != NULL)
