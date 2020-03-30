@@ -37,6 +37,8 @@
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
 
+@property (nonatomic, readonly) dispatch_queue_t sendQueue;
+
 @end
 
 @interface HBQueueController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
@@ -104,6 +106,8 @@
         }];
 
         NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
+
+        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue", DISPATCH_QUEUE_SERIAL);
     }
 
     return self;
@@ -486,31 +490,36 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     // This end of encode action is called as each encode rolls off of the queue
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBSendToAppEnabled] == YES)
     {
+        NSURL *outputURL = item.outputURL;
+        NSString *completeOutputPath = item.completeOutputURL.path;
+
+        dispatch_async(_sendQueue, ^{
 #ifdef __SANDBOX_ENABLED__
-        BOOL accessingSecurityScopedResource = [item.outputURL startAccessingSecurityScopedResource];
+            BOOL accessingSecurityScopedResource = [outputURL startAccessingSecurityScopedResource];
 #endif
 
-        NSWorkspace *workspace = NSWorkspace.sharedWorkspace;
-        NSString *app = [workspace fullPathForApplication:[NSUserDefaults.standardUserDefaults objectForKey:HBSendToApp]];
+            NSWorkspace *workspace = NSWorkspace.sharedWorkspace;
+            NSString *app = [workspace fullPathForApplication:[NSUserDefaults.standardUserDefaults objectForKey:HBSendToApp]];
 
-        if (app)
-        {
-            if (![workspace openFile:item.completeOutputURL.path withApplication:app])
+            if (app)
             {
-                [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
+                if (![workspace openFile:completeOutputPath withApplication:app])
+                {
+                    [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
+                }
             }
-        }
-        else
-        {
-            [HBUtilities writeToActivityLog:"Send file to: app not found"];
-        }
+            else
+            {
+                [HBUtilities writeToActivityLog:"Send file to: app not found"];
+            }
 
 #ifdef __SANDBOX_ENABLED__
-        if (accessingSecurityScopedResource)
-        {
-            [item.outputURL stopAccessingSecurityScopedResource];
-        }
+            if (accessingSecurityScopedResource)
+            {
+                [outputURL stopAccessingSecurityScopedResource];
+            }
 #endif
+        });
     }
 }
 
