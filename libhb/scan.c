@@ -1002,8 +1002,21 @@ skip_preview:
         }
         title->video_bitrate = vid_info.bitrate;
 
-        if( vid_info.geometry.par.num && vid_info.geometry.par.den )
+        if (data->dvd || data->bd)
         {
+            // DVD/BD doesn't have a container PAR, but it has container DAR
+            // which can be used to compute container PAR
+            hb_reduce(&title->geometry.par.num, &title->geometry.par.den,
+                      title->geometry.height * title->container_dar.num,
+                      title->geometry.width * title->container_dar.den);
+        }
+        if (vid_info.geometry.par.num && vid_info.geometry.par.den)
+        {
+            // title->geometry.par is initially container PAR, but
+            // the video stream almost always also supplies PAR and
+            // is generally more reliable, so use it.
+            //
+            // Check if container PAR and video stream PAR are in agreement
             if (title->geometry.par.num && title->geometry.par.den &&
                 title->geometry.par.num != vid_info.geometry.par.num &&
                 title->geometry.par.den != vid_info.geometry.par.den)
@@ -1013,6 +1026,11 @@ skip_preview:
                     title->geometry.par.num, title->geometry.par.den);
             }
             title->geometry.par = vid_info.geometry.par;
+        }
+        else if (!title->geometry.par.num || !title->geometry.par.den)
+        {
+            // No video PAR found, assume 1:1
+            title->geometry.par.num = title->geometry.par.den = 1;
         }
         title->pix_fmt = vid_info.pix_fmt;
         title->color_prim = vid_info.color_prim;
