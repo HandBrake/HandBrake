@@ -3690,7 +3690,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t->video_timebase.num = 1;
     t->video_timebase.den = 90000;
     t->angle_count        = 1;
-    t->geometry.par.num   = 1;
+    t->geometry.par.num   = 0;
     t->geometry.par.den   = 1;
 
     return t;
