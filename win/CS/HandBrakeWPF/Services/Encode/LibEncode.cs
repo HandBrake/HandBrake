@@ -108,7 +108,7 @@ namespace HandBrakeWPF.Services.Encode
                     this.TimedLogMessage(string.Format("base preset: {0}", basePresetName));
                 }
 
-                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration);
+                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration, this.log);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                 this.instance.EncodeProgress += this.InstanceEncodeProgress;

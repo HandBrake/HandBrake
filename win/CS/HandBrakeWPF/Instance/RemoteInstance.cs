@@ -11,22 +11,22 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Runtime.CompilerServices;
-    using System.Text;
+    using System.IO;
     using System.Threading.Tasks;
     using System.Timers;
+    using System.Windows.Media.Animation;
+
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
+    using HandBrake.Interop.Model;
+    using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
@@ -42,14 +42,21 @@ namespace HandBrakeWPF.Instance
 
     public class RemoteInstance : HttpRequestBase, IEncodeInstance, IDisposable
     {
-        private const double EncodePollIntervalMs = 1000;
+        private readonly HBConfiguration configuration;
+
+        private readonly ILog logService;
+
+        private const double EncodePollIntervalMs = 250;
 
         private Process workerProcess;
         private Timer encodePollTimer;
+        private int retryCount = 0;
 
-        public RemoteInstance(int port)
+        public RemoteInstance(HBConfiguration configuration, ILog logService)
         {
-            this.port = port;
+            this.configuration = configuration;
+            this.logService = logService;
+            this.port = configuration.RemoteServicePort;
             this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
         }
 
@@ -71,8 +78,20 @@ namespace HandBrakeWPF.Instance
 
         public async void StartEncode(JsonEncodeObject jobToStart)
         {
+            InitCommand initCommand = new InitCommand
+            {
+                EnableDiskLogging = true,
+                AllowDisconnectedWorker = false,
+                DisableLibDvdNav = this.configuration.IsDvdNavDisabled,
+                EnableHardwareAcceleration = true,
+                LogDirectory = DirectoryUtilities.GetLogDirectory(),
+                LogVerbosity = configuration.Verbosity
+            };
+
+            initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
+
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-            string job = JsonConvert.SerializeObject(jobToStart, Formatting.None, settings);
+            string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
 
             await this.MakeHttpJsonPostRequest("StartEncode", job);
 
@@ -82,7 +101,6 @@ namespace HandBrakeWPF.Instance
         public async void StopEncode()
         {
             await this.MakeHttpGetRequest("StopEncode");
-            this.StopPollingProgress();
         }
 
         public JsonState GetEncodeProgress()
@@ -103,32 +121,47 @@ namespace HandBrakeWPF.Instance
 
         public void Initialize(int verbosityLvl, bool noHardwareMode)
         {
-            this.StartServer(verbosityLvl, noHardwareMode);
+            this.StartServer();
         }
 
         public void Dispose()
         {
             this.client?.Dispose();
             this.workerProcess?.Dispose();
-            this.StopEncode();
-            this.StopServer();
         }
 
-        private void StartServer(int verbosityLvl, bool noHardwareMode)
+        private async void StartServer()
         {
             if (this.workerProcess == null || this.workerProcess.HasExited)
             {
-                this.workerProcess = new Process();
-                this.workerProcess.StartInfo =
-                    new ProcessStartInfo("HandBrake.Worker.exe", string.Format("--port={0} --verbosity={1}", this.port, verbosityLvl))
-                    {
-                        WindowStyle = ProcessWindowStyle.Normal
-                    };
+                workerProcess = new Process
+                                {
+                                    StartInfo =
+                                    {
+                                        FileName = "HandBrake.Worker.exe",
+                                        Arguments = string.Format(" --port={0}", this.port),
+                                        UseShellExecute = false,
+                                        RedirectStandardOutput = true,
+                                        RedirectStandardError = true,
+                                        CreateNoWindow = true
+                                    }
+                                };
+                workerProcess.Exited += this.WorkerProcess_Exited;
+                workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
+                workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;
+         
+                workerProcess.Start();
+                workerProcess.BeginOutputReadLine();
+                workerProcess.BeginErrorReadLine();
 
-                this.workerProcess.Start();
-                this.workerProcess.Exited += this.WorkerProcess_Exited;
-                Debug.WriteLine("Worker Process Started. PID = {0}", this.workerProcess.Id);
+
+                this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0}", this.workerProcess.Id));
             }
+        }
+
+        private void WorkerProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            this.logService.LogMessage(e.Data);
         }
 
         private void MonitorEncodeProgress()
@@ -152,13 +185,13 @@ namespace HandBrakeWPF.Instance
 
         private void StopPollingProgress()
         {
-            this.PollEncodeProgress(); // Get the final progress state.
+            this.PollEncodeProgress(); // Get the last progress state.
             this.encodePollTimer?.Stop();
         }
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
         {
-            Debug.WriteLine("Worker Process has exited");
+            this.logService.LogMessage("Worker Process Existed!");
         }
 
         private void StopServer()
@@ -174,18 +207,29 @@ namespace HandBrakeWPF.Instance
             ServerResponse response = null;
             try
             {
+                if (this.retryCount > 5)
+                {
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(true));
+
+                    this.encodePollTimer?.Stop();
+
+                    this.workerProcess?.Kill();
+
+                    return;
+                }
+
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
+
+                this.retryCount = 0; // Reset
             }
             catch (Exception e)
             {
-                if (this.encodePollTimer != null)
-                {
-                    this.encodePollTimer.Stop();
-                }
+                retryCount = this.retryCount + 1;
             }
 
             if (response == null || !response.WasSuccessful)
             {
+                retryCount = this.retryCount + 1;
                 return;
             }
 
@@ -215,8 +259,15 @@ namespace HandBrakeWPF.Instance
             else if (taskState != null && taskState == TaskState.WorkDone)
             {
                 this.encodePollTimer.Stop();
-
+                
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error != 0));
+                this.workerProcess?.Kill();
+            } 
+            else if (taskState == TaskState.Idle)
+            {
+                this.encodePollTimer.Stop();
+                this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error != 0));
+                this.workerProcess?.Kill();
             }
         }
     }

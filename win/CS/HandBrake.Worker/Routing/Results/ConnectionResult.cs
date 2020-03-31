@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Worker.Registration.Model
+namespace HandBrake.Worker.Routing.Results
 {
     public class ConnectionResult
     {

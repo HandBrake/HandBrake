@@ -45,15 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Routing\ApiRouter.cs" />
-    <Compile Include="Registration\ConnectionRegistrar.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="Logging\Interfaces\ILogHandler.cs" />
     <Compile Include="Logging\LogHandler.cs" />
     <Compile Include="Logging\Models\LogMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Registration\Model\ConnectionResult.cs" />
+    <Compile Include="Routing\Commands\EncodeCommand.cs" />
+    <Compile Include="Routing\Results\CommandResult.cs" />
+    <Compile Include="Routing\Results\ConnectionResult.cs" />
+    <Compile Include="Routing\Commands\InitCommand.cs" />
     <Compile Include="Utilities\HttpUtilities.cs" />
+    <Compile Include="Watcher\InstanceWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

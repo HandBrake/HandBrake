@@ -12,22 +12,20 @@ namespace HandBrake.Worker
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
-    using HandBrake.Worker.Registration;
     using HandBrake.Worker.Routing;
 
     public class Program
     {
         private static ApiRouter router;
         private static ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-        private static ConnectionRegistrar registrar = new ConnectionRegistrar();
 
         public static void Main(string[] args)
         {
             int port = 8037; // Default Port;
-            int verbosity = 1;
-
+            
             if (args.Length != 0)
             {
                 foreach (string argument in args)
@@ -40,21 +38,12 @@ namespace HandBrake.Worker
                             port = parsedPort;
                         }
                     }
-
-                    if (argument.StartsWith("--verbosity"))
-                    {
-                        string value = argument.TrimStart("--port=".ToCharArray());
-                        if (int.TryParse(value, out var verbosityVal))
-                        {
-                            verbosity = verbosityVal;
-                        }
-                    }
                 }
             }
 
             Console.WriteLine("Starting HandBrake Engine ...");
             router = new ApiRouter();
-            router.Initialise(verbosity);
+            router.TerminationEvent += Router_TerminationEvent;
 
             Console.WriteLine("Starting Web Server ...");
             Console.WriteLine("Using Port: {0}", port);
@@ -63,21 +52,21 @@ namespace HandBrake.Worker
             webServer.Run();
 
             Console.WriteLine("Web Server Started");
-
+            
             manualResetEvent.WaitOne();
 
             webServer.Stop();
         }
 
-        public static Dictionary<string, Func<HttpListenerRequest, string>> RegisterApiHandlers()
+        private static Dictionary<string, Func<HttpListenerRequest, string>> RegisterApiHandlers()
         {
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers =
                 new Dictionary<string, Func<HttpListenerRequest, string>>();
 
-            // Worker APIs
-            apiHandlers.Add("Pair", registrar.Pair);
-            apiHandlers.Add("GetToken", registrar.GetToken);
+            // Process Handling
             apiHandlers.Add("Shutdown", ShutdownServer);
+            apiHandlers.Add("GetInstanceToken", router.GetInstanceToken);
+            apiHandlers.Add("Version", router.GetVersionInfo);
 
             // Logging
             apiHandlers.Add("GetAllLogMessages", router.GetAllLogMessages);
@@ -85,18 +74,21 @@ namespace HandBrake.Worker
             apiHandlers.Add("ResetLogging", router.ResetLogging);
 
             // HandBrake APIs
-            apiHandlers.Add("Version", router.GetVersionInfo); 
             apiHandlers.Add("StartEncode", router.StartEncode);
             apiHandlers.Add("PauseEncode", router.PauseEncode);
             apiHandlers.Add("ResumeEncode", router.ResumeEncode);
             apiHandlers.Add("StopEncode", router.StopEncode);
             apiHandlers.Add("PollEncodeProgress", router.PollEncodeProgress);
-            apiHandlers.Add("SetConfiguration", router.SetConfiguration);
             
             return apiHandlers;
         }
 
-        public static string ShutdownServer(HttpListenerRequest request)
+        private static void Router_TerminationEvent(object sender, EventArgs e)
+        {
+            ShutdownServer(null);
+        }
+        
+        private static string ShutdownServer(HttpListenerRequest request)
         {
             manualResetEvent.Set();
             return "Server Terminated";

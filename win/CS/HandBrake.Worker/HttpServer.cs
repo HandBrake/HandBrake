@@ -32,15 +32,15 @@ namespace HandBrake.Worker
             // Store the Handlers
             this.apiHandlers = new Dictionary<string, Func<HttpListenerRequest, string>>(apiCalls);
 
-            Console.WriteLine(Environment.NewLine + "Available APIs: ");
+            Debug.WriteLine(Environment.NewLine + "Available APIs: ");
             foreach (KeyValuePair<string, Func<HttpListenerRequest, string>> api in apiCalls)
             {
                 string url = string.Format("http://127.0.0.1:{0}/{1}/", port, api.Key);
                 this.httpListener.Prefixes.Add(url);
-                Console.WriteLine(url);
+                Debug.WriteLine(url);
             }
 
-            Console.WriteLine(Environment.NewLine);
+            Debug.WriteLine(Environment.NewLine);
               
             this.httpListener.Start();
         }
@@ -66,7 +66,7 @@ namespace HandBrake.Worker
                                     {
                                         string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
 
-                                        Console.WriteLine("Handling call to: " + path);
+                                        Debug.WriteLine("Handling call to: " + path);
 
                                         if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
                                         {

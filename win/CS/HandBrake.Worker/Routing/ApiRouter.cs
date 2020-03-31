@@ -20,32 +20,27 @@ namespace HandBrake.Worker.Routing
     using HandBrake.Worker.Logging;
     using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
+    using HandBrake.Worker.Routing.Commands;
+    using HandBrake.Worker.Routing.Results;
     using HandBrake.Worker.Utilities;
+    using HandBrake.Worker.Watcher;
 
     using Newtonsoft.Json;
 
     public class ApiRouter
     {
+        private readonly string token = Guid.NewGuid().ToString();
+
         private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private HandBrakeInstance handbrakeInstance;
         private ILogHandler logHandler;
-        private bool isLoggingConfigured = false;
+        private InstanceWatcher instanceWatcher;
 
-        public string Initialise(int verbosity)
+        public event EventHandler TerminationEvent; 
+
+        public string GetInstanceToken(HttpListenerRequest request)
         {
-            if (this.handbrakeInstance == null)
-            {
-                this.handbrakeInstance = new HandBrakeInstance();
-            }
-
-            if (this.logHandler == null)
-            {
-                this.logHandler = new LogHandler();
-            }
-
-            this.handbrakeInstance.Initialize(verbosity, true);
-
-            return null;
+            return JsonConvert.SerializeObject(token, Formatting.Indented, this.jsonNetSettings);
         }
 
         public string GetVersionInfo(HttpListenerRequest request)
@@ -59,10 +54,18 @@ namespace HandBrake.Worker.Routing
         {
             string requestPostData = HttpUtilities.GetRequestPostData(request);
 
-            Console.WriteLine(requestPostData);
-            this.handbrakeInstance.StartEncode(requestPostData);
+            if (!string.IsNullOrEmpty(requestPostData))
+            {
+                EncodeCommand command = JsonConvert.DeserializeObject<EncodeCommand>(requestPostData);
 
-            return null;
+                this.Initialise(command.InitialiseCommand);
+                
+                this.handbrakeInstance.StartEncode(command.EncodeJob);
+
+                return JsonConvert.SerializeObject(new CommandResult() { WasSuccessful = true }, Formatting.Indented, this.jsonNetSettings);
+            }
+
+            return JsonConvert.SerializeObject(new CommandResult() { WasSuccessful = false, Error = "No POST data" }, Formatting.Indented, this.jsonNetSettings);
         }
 
         public string StopEncode(HttpListenerRequest request)
@@ -99,12 +102,6 @@ namespace HandBrake.Worker.Routing
             return null;
         }
 
-        public string SetConfiguration(HttpListenerRequest request)
-        {
-            return null;
-        }
-
-
         /* Logging API */
         
         // GET
@@ -112,8 +109,7 @@ namespace HandBrake.Worker.Routing
         {
             return JsonConvert.SerializeObject(this.logHandler.GetLogMessages(), Formatting.Indented, this.jsonNetSettings);
         }
-
-
+        
         // POST
         public string GetLogMessagesFromIndex(HttpListenerRequest request)
         {
@@ -132,6 +128,43 @@ namespace HandBrake.Worker.Routing
             this.logHandler.Reset();
 
             return null;
+        }
+
+        public void OnTerminationEvent()
+        {
+            this.TerminationEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void HandbrakeInstance_EncodeCompleted(object sender, Interop.Interop.EventArgs.EncodeCompletedEventArgs e)
+        {
+            this.logHandler.ShutdownFileWriter();
+        }
+
+        private void Initialise(InitCommand command)
+        {
+            if (this.handbrakeInstance == null)
+            {
+                this.handbrakeInstance = new HandBrakeInstance();
+            }
+
+            if (this.logHandler == null)
+            {
+                this.logHandler = new LogHandler(command.LogDirectory, command.LogFile, command.EnableDiskLogging);
+            }
+
+            if (!command.AllowDisconnectedWorker)
+            {
+                this.instanceWatcher = new InstanceWatcher(this);
+                this.instanceWatcher.Start(5000);
+            }
+
+            this.handbrakeInstance.Initialize(command.LogVerbosity, command.EnableHardwareAcceleration);
+            this.handbrakeInstance.EncodeCompleted += this.HandbrakeInstance_EncodeCompleted;
+
+            if (command.DisableLibDvdNav)
+            {
+                HandBrakeUtils.SetDvdNav(true); // TODO check this is correct
+            }
         }
     }
 }

@@ -33,6 +33,9 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="verbosity">
         /// The code for the logging verbosity to use.
         /// </param>
+        /// <param name="noHardware">
+        /// Turn off Hardware Acceleration 
+        /// </param>
         void Initialize(int verbosity, bool noHardware);
 
         /// <summary>

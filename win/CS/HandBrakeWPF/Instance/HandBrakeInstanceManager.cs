@@ -12,11 +12,13 @@ namespace HandBrakeWPF.Instance
     using System;
     using System.Runtime.CompilerServices;
 
+
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Services.Logging.Interfaces;
 
     /// <summary>
     /// The HandBrake Instance manager.
@@ -36,19 +38,7 @@ namespace HandBrakeWPF.Instance
             HandBrakeUtils.EnsureGlobalInit(noHardwareMode);
         }
 
-        /// <summary>
-        /// The get encode instance.
-        /// </summary>
-        /// <param name="verbosity">
-        /// The verbosity.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IHandBrakeInstance"/>.
-        /// </returns>
-        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration)
+        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService)
         {
             if (!HandBrakeUtils.IsInitialised())
             {
@@ -65,7 +55,7 @@ namespace HandBrakeWPF.Instance
 
             if (configuration.RemoteServiceEnabled)
             {
-                newInstance = new RemoteInstance(configuration.RemoteServicePort);
+                newInstance = new RemoteInstance(configuration, logService);
             }
             else
             {

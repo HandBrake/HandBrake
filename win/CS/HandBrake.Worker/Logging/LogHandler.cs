@@ -10,7 +10,10 @@
 
 namespace HandBrake.Worker.Logging
 {
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Text;
 
@@ -21,15 +24,32 @@ namespace HandBrake.Worker.Logging
 
     public class LogHandler : ILogHandler
     {
+        private readonly string logFile;
+
         private readonly object lockObject = new object();
+        private readonly object fileWriterLock = new object();
+
         private readonly StringBuilder logBuilder = new StringBuilder();
         private readonly List<LogMessage> logMessages = new List<LogMessage>();
 
         private bool isLoggingEnabled = true;
+        private bool isDiskLoggingEnabled = false;
         private int messageIndex;
+        private StreamWriter fileWriter;
 
-        public LogHandler()
+        public LogHandler(string logDirectory, string logFileName, bool enableDiskLogging)
         {
+            this.isDiskLoggingEnabled = enableDiskLogging;
+
+            if (this.isDiskLoggingEnabled)
+            {
+                lock (this.fileWriterLock)
+                {
+                    // Todo Handle no log directory.
+                    this.fileWriter = new StreamWriter(logFileName) { AutoFlush = true };
+                }
+            }
+
             HandBrakeUtils.MessageLogged += this.HandBrakeUtils_MessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeUtils_ErrorLogged;
         }
@@ -78,17 +98,20 @@ namespace HandBrake.Worker.Logging
 
         public void LogMessage(string content)
         {
+            Console.WriteLine(content);
+
             if (!this.isLoggingEnabled)
             {
                 return;
             }
 
+            LogMessage msg = new LogMessage(content, this.messageIndex);
             lock (this.lockObject)
             {
-                LogMessage msg = new LogMessage(content, this.messageIndex);
                 this.messageIndex = this.messageIndex + 1;
                 this.logMessages.Add(msg);
                 this.logBuilder.AppendLine(msg.Content);
+                this.LogMessageToDisk(msg);
 
                 if (this.logMessages.Count > 50000)
                 {
@@ -96,6 +119,7 @@ namespace HandBrake.Worker.Logging
                     msg = new LogMessage("Log Service Pausing. Too Many Log messages. This may indicate a problem with your encode.", this.messageIndex);
                     this.logMessages.Add(msg);
                     this.logBuilder.AppendLine(msg.Content);
+                    this.LogMessageToDisk(msg);
 
                     this.isLoggingEnabled = false;
                 }
@@ -109,6 +133,51 @@ namespace HandBrake.Worker.Logging
                 this.logMessages.Clear();
                 this.logBuilder.Clear();
                 this.messageIndex = 0;
+            }
+        }
+
+        public void ShutdownFileWriter()
+        {
+            try
+            {
+                lock (this.fileWriterLock)
+                {
+                    if (this.fileWriter != null)
+                    {
+                        this.fileWriter.Flush();
+                        this.fileWriter.Close();
+                        this.fileWriter.Dispose();
+                    }
+
+                    this.fileWriter = null;
+                }
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc); // This exception doesn't warrant user interaction, but it should be logged
+            }
+        }
+
+        private void LogMessageToDisk(LogMessage msg)
+        {
+            if (!this.isDiskLoggingEnabled)
+            {
+                return;
+            }
+
+            try
+            {
+                lock (this.fileWriterLock)
+                {
+                    if (this.fileWriter != null && this.fileWriter.BaseStream.CanWrite)
+                    {
+                        this.fileWriter.WriteLine(msg.Content);
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc); // This exception doesn't warrant user interaction, but it should be logged
             }
         }
 

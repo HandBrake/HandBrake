@@ -30,5 +30,7 @@ namespace HandBrake.Worker.Logging.Interfaces
         /// Empty the log cache and reset the log handler to defaults.
         /// </summary>
         void Reset();
+
+        void ShutdownFileWriter();
     }
 }

@@ -305,7 +305,7 @@ namespace HandBrakeWPF.Services
 
             // Experimental
             defaults.Add(UserSettingConstants.RemoteServiceEnabled, false);
-            defaults.Add(UserSettingConstants.RemoteServicePort, true);
+            defaults.Add(UserSettingConstants.RemoteServicePort, 8037);
 
             // Misc
             defaults.Add(UserSettingConstants.ShowPresetPanel, false);
