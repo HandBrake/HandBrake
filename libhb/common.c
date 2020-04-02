@@ -4331,7 +4331,7 @@ void hb_register_error_handler( hb_error_handler_t * handler )
     error_handler = handler;
 }
 
-static void hb_update_str( char **dst, const char *src )
+void hb_update_str( char **dst, const char *src )
 {
     if ( dst )
     {
@@ -5576,6 +5576,33 @@ hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
 }
 
 /**********************************************************************
+ * hb_subtitle_config_copy
+ **********************************************************************
+ *
+ *********************************************************************/
+void hb_subtitle_config_copy(hb_subtitle_config_t *dst,
+                             const hb_subtitle_config_t *src)
+{
+    if (dst == NULL || src == NULL)
+    {
+        return;
+    }
+    memcpy(dst, src, sizeof(*src));
+    if (src->name != NULL)
+    {
+        dst->name = strdup(src->name);
+    }
+    if (src->src_filename != NULL)
+    {
+        dst->src_filename = strdup(src->src_filename);
+    }
+    if (src->external_filename != NULL)
+    {
+        dst->external_filename = strdup(src->external_filename);
+    }
+}
+
+/**********************************************************************
  * hb_subtitle_copy
  **********************************************************************
  *
@@ -5671,15 +5698,7 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     // "track" in title->list_audio is an index into the source's tracks.
     // "track" in job->list_audio is an index into title->list_audio
     subtitle->track = track;
-    subtitle->config = *subtitlecfg;
-    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
-    {
-        subtitle->config.name = strdup(subtitlecfg->name);
-    }
-    else
-    {
-        subtitle->config.name = NULL;
-    }
+    hb_subtitle_config_copy(&subtitle->config, subtitlecfg);
     subtitle->config.src_filename = NULL;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
@@ -5723,16 +5742,7 @@ int hb_import_subtitle_add( const hb_job_t * job,
              hb_subsource_name(subtitle->source));
     strcpy(subtitle->iso639_2, lang->iso639_2);
 
-    subtitle->config = *subtitlecfg;
-    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
-    {
-        subtitle->config.name = strdup(subtitlecfg->name);
-    }
-    else
-    {
-        subtitle->config.name = NULL;
-    }
-    subtitle->config.src_filename = strdup(subtitlecfg->src_filename);
+    hb_subtitle_config_copy(&subtitle->config, subtitlecfg);
     hb_list_add(job->list_subtitle, subtitle);
 
     return 1;
@@ -5755,6 +5765,24 @@ int hb_subtitle_can_burn( int source )
     return source == VOBSUB    || source == PGSSUB    || source == SSASUB  ||
            source == CC608SUB  || source == UTF8SUB   || source == TX3GSUB ||
            source == IMPORTSRT || source == IMPORTSSA || source == DVBSUB;
+}
+
+int hb_subtitle_can_export( int source )
+{
+    switch (source)
+    {
+        case CC608SUB:
+        case CC708SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        case SSASUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
+        case PGSSUB:
+            return 1;
+        default:
+            return 0;
+    }
 }
 
 int hb_subtitle_can_pass( int source, int mux )
@@ -5806,6 +5834,14 @@ int hb_subtitle_can_pass( int source, int mux )
             hb_error("internal error.  Bad mux %d\n", mux);
             return 0;
     }
+}
+
+int hb_subtitle_must_burn(hb_subtitle_t *subtitle, int mux)
+{
+    return (subtitle->config.dest == RENDERSUB ||
+             (!(subtitle->config.external_filename != NULL &&
+                hb_subtitle_can_export(subtitle->source)) &&
+              !hb_subtitle_can_pass(subtitle->source, mux)));
 }
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder)
