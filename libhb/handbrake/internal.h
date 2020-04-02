@@ -397,6 +397,7 @@ hb_data_t * hb_data_dup(const hb_data_t *src);
 enum
 {
     WORK_NONE = 0,
+    WORK_PASS,
     WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
     WORK_SYNC_SUBTITLE,

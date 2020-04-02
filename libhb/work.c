@@ -352,8 +352,22 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
     return w;
 }
 
+hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
+{
+    switch (codec)
+    {
+        case HB_SCODEC_PASS: return hb_get_work(h, WORK_PASS);
+        default:             break;
+    }
+    return NULL;
+}
+
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
 {
+    if (codec & HB_ACODEC_PASS_FLAG)
+    {
+        return hb_get_work(h, WORK_PASS);
+    }
     switch (codec)
     {
         case HB_ACODEC_LAME:    return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
@@ -1938,7 +1952,7 @@ static void do_job(hb_job_t *job)
         }
     }
 
-    // Subtitle fifos must be initialized before sync
+    // Subtitle decoder and sync fifos must be initialized before sync
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
         subtitle = hb_list_item( job->list_subtitle, i );
@@ -1967,7 +1981,8 @@ static void do_job(hb_job_t *job)
         if (!job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync
-            subtitle->fifo_out = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
+            subtitle->fifo_sync = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE );
+            subtitle->fifo_out  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_SMALL_WAKE);
         }
 
         w->fifo_in = subtitle->fifo_in;
@@ -2001,28 +2016,44 @@ static void do_job(hb_job_t *job)
             /*
             * Audio Encoder Thread
             */
-            if ( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+            w = hb_audio_encoder( job->h, audio->config.out.codec);
+            if (w == NULL)
             {
-                /*
-                * Add the encoder thread if not doing passthru
-                */
-                w = hb_audio_encoder( job->h, audio->config.out.codec);
-                if (w == NULL)
-                {
-                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
-                    w = NULL;
-                    *job->done_error = HB_ERROR_WRONG_INPUT;
-                    *job->die = 1;
-                    goto cleanup;
-                }
-                w->init_delay = &audio->priv.init_delay;
-                w->extradata  = &audio->priv.extradata;
-                w->fifo_in  = audio->priv.fifo_sync;
-                w->fifo_out = audio->priv.fifo_out;
-                w->audio    = audio;
-
-                hb_list_add( job->list_work, w );
+                hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
             }
+            w->fifo_in    = audio->priv.fifo_sync;
+            w->fifo_out   = audio->priv.fifo_out;
+            w->extradata  = &audio->priv.extradata;
+            w->audio      = audio;
+
+            hb_list_add( job->list_work, w );
+        }
+
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+        {
+            subtitle = hb_list_item(job->list_subtitle, i);
+
+            /*
+            * Subtitle Encoder Thread
+            */
+            w = hb_subtitle_encoder( job->h, subtitle->config.codec);
+            if (w == NULL)
+            {
+                hb_error("Invalid subtitle codec: %#x", subtitle->config.codec);
+                w = NULL;
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
+            }
+            w->fifo_in  = subtitle->fifo_sync;
+            w->fifo_out = subtitle->fifo_out;
+            w->subtitle = subtitle;
+
+            hb_list_add( job->list_work, w );
         }
 
         /* Set up the video filter fifo pipeline */
@@ -2069,7 +2100,6 @@ static void do_job(hb_job_t *job)
         w->extradata  = &job->extradata;
 
         hb_list_add( job->list_work, w );
-
     }
 
     // Add Muxer work object
