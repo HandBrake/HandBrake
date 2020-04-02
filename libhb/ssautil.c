@@ -537,7 +537,7 @@ static int add_style(hb_subtitle_style_context_t *ctx,
     value = field_value(style, field_indices->bold_index);
     if (value == NULL)
     {
-        flag = HB_STYLE_FLAG_BOLD;
+        flag = 0;
     }
     else
     {
@@ -548,7 +548,7 @@ static int add_style(hb_subtitle_style_context_t *ctx,
     value = field_value(style, field_indices->italic_index);
     if (value == NULL)
     {
-        flag = HB_STYLE_FLAG_ITALIC;
+        flag = 0;
     }
     else
     {
@@ -559,7 +559,7 @@ static int add_style(hb_subtitle_style_context_t *ctx,
     value = field_value(style, field_indices->underline_index);
     if (value == NULL)
     {
-        flag = HB_STYLE_FLAG_UNDERLINE;
+        flag = 0;
     }
     else
     {
@@ -592,7 +592,6 @@ hb_subtitle_style_context_t * hb_subtitle_style_init(const char * ssa_header)
             if (pos != NULL)
             {
                 char ** fields;
-                int     next = 7;
                 char  * line = sgetline(pos + 8);
 
                 fields = get_fields(line, 0);
@@ -609,7 +608,7 @@ hb_subtitle_style_context_t * hb_subtitle_style_init(const char * ssa_header)
                     {
                         char ** style;
 
-                        line = sgetline(pos + next);
+                        line = sgetline(pos + 7);
                         style = get_fields(line, 0);
                         free(line);
 
@@ -618,10 +617,8 @@ hb_subtitle_style_context_t * hb_subtitle_style_init(const char * ssa_header)
                             hb_str_vfree(style);
                             break;
                         }
-                        pos = strchr(pos + next, '\n');
-                        next = 1;
-
                         hb_str_vfree(style);
+                        pos = strstr(pos + 7, "\nStyle:");
                     }
 
                     hb_str_vfree(fields);
@@ -698,11 +695,17 @@ static int tx3g_update_style_atoms(hb_tx3g_style_context_t *ctx, int stop)
     style_entry = ctx->style_atoms.buf + pos;
 
     if (ctx->out_style.flags & HB_STYLE_FLAG_BOLD)
+    {
         face |= 1;
+    }
     if (ctx->out_style.flags & HB_STYLE_FLAG_ITALIC)
+    {
         face |= 2;
+    }
     if (ctx->out_style.flags & HB_STYLE_FLAG_UNDERLINE)
+    {
         face |= 4;
+    }
 
     style_entry[0]  = (ctx->style_start >> 8) & 0xff;   // startChar
     style_entry[1]  = ctx->style_start & 0xff;
