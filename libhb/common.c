@@ -5038,11 +5038,69 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
     if (subtitle->extradata == NULL)
     {
         hb_error("hb_subtitle_add_ssa_header: malloc failed");
+        return -1;
+    }
+    subtitle->extradata_size = strlen((char*)subtitle->extradata);
+
+    return 0;
+}
+
+/**********************************************************************
+ * hb_subtitle_extradata_init
+ **********************************************************************
+ * Initializes avcodec format subtitle extradata
+ * Returns:
+ *  0  - no action taken, already set or does not require extradata
+ *  1  - set extradata
+ *  -1 - Error
+ *********************************************************************/
+int hb_subtitle_extradata_init(hb_subtitle_t * subtitle)
+{
+    if (subtitle->extradata != NULL && subtitle->extradata_size != 0)
+    {
+        // Already initialized
         return 0;
     }
-    subtitle->extradata_size = strlen((char*)subtitle->extradata) + 1;
 
-    return 1;
+    if (subtitle->source == VOBSUB)
+    {
+        int        ii;
+        uint32_t   rgb[16];
+        char     * sub_idx;
+
+        for (ii = 0; ii < 16; ii++)
+        {
+            rgb[ii] = hb_yuv2rgb(subtitle->palette[ii]);
+        }
+
+        sub_idx = hb_strdup_printf(
+            "size: %dx%d\n"
+            "org: %d, %d\n"
+            "scale: 100%%, 100%%\n"
+            "alpha: 100%%\n"
+            "smooth: OFF\n"
+            "fadein/out: 50, 50\n"
+            "align: OFF at LEFT TOP\n"
+            "time offset: 0\n"
+            "forced subs: %s\n"
+            "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
+            "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
+            "custom colors: OFF, tridx: 0000, "
+            "colors: 000000, 000000, 000000, 000000\n",
+            subtitle->width, subtitle->height, 0, 0, "OFF",
+            rgb[0],  rgb[1],  rgb[2],  rgb[3],
+            rgb[4],  rgb[5],  rgb[6],  rgb[7],
+            rgb[8],  rgb[9],  rgb[10], rgb[11],
+            rgb[12], rgb[13], rgb[14], rgb[15]);
+        if (sub_idx == NULL)
+        {
+            return -1;
+        }
+        subtitle->extradata = (uint8_t*)sub_idx;
+        subtitle->extradata_size = strlen(sub_idx);
+        return 1;
+    }
+    return 0;
 }
 
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track)
