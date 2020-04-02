@@ -2134,6 +2134,7 @@ int hb_global_init()
     }
 
     /* HB work objects */
+    hb_register(&hb_workpass);
     hb_register(&hb_muxer);
     hb_register(&hb_reader);
     hb_register(&hb_sync_video);

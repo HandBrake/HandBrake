@@ -335,6 +335,14 @@ struct hb_subtitle_config_s
     int          default_track;
     const char * name;
     char       * external_filename;
+    enum subtitle_output_codec {
+        HB_SCODEC_PASS = 0,
+        HB_SCODEC_SSA,
+        HB_SCODEC_TX3G,
+        HB_SCODEC_PGS,
+        HB_SCODEC_DVD,
+        HB_SCODEC_VTT
+    } codec;
 
     /* SRT subtitle tracks only */
     const char * src_filename;
@@ -1171,9 +1179,10 @@ struct hb_subtitle_s
     // Codec private data for subtitles originating from FFMPEG sources
     hb_data_t   * extradata;
 
-    hb_fifo_t     * fifo_in;        /* SPU ES */
-    hb_fifo_t     * fifo_raw;       /* Decoded SPU */
-    hb_fifo_t     * fifo_out;       /* Correct Timestamps, ready to be muxed */
+    hb_fifo_t     * fifo_in;   /* Input to decoder */
+    hb_fifo_t     * fifo_raw;  /* Decoder output, input to sync */
+    hb_fifo_t     * fifo_sync; /* Sync output, input to encoder */
+    hb_fifo_t     * fifo_out;  /* Encoder output, input to mux */
     hb_mux_data_t * mux_data;
 #endif
 };
@@ -1438,6 +1447,7 @@ struct hb_work_object_s
 #endif
 };
 
+extern hb_work_object_t hb_workpass;
 extern hb_work_object_t hb_sync_video;
 extern hb_work_object_t hb_sync_audio;
 extern hb_work_object_t hb_sync_subtitle;
