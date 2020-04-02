@@ -5802,7 +5802,8 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->format = TEXTSUB;
             subtitle->source = TX3GSUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECTX3GSUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_ASS:
             subtitle->format      = TEXTSUB;
