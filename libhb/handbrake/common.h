@@ -177,6 +177,7 @@ int hb_subtitle_can_export( int source );
 int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 int hb_subtitle_must_burn(hb_subtitle_t * subtitle, int mux);
+int hb_subtitle_extradata_init(hb_subtitle_t * subtitle);
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder);
 int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx,

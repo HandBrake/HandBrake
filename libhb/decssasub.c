@@ -108,6 +108,12 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
         goto fail;
     }
 
+    pv->ctx = decavsubInit(w, job);
+    if (pv->ctx == NULL)
+    {
+        goto fail;
+    }
+
     /*
      * Figure out the start and stop times from the chapters being
      * encoded - drop subtitle not in this range.

@@ -848,21 +848,6 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    char * subidx_fmt =
-        "size: %dx%d\n"
-        "org: %d, %d\n"
-        "scale: 100%%, 100%%\n"
-        "alpha: 100%%\n"
-        "smooth: OFF\n"
-        "fadein/out: 50, 50\n"
-        "align: OFF at LEFT TOP\n"
-        "time offset: 0\n"
-        "forced subs: %s\n"
-        "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
-        "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
-        "custom colors: OFF, tridx: 0000, "
-        "colors: 000000, 000000, 000000, 000000\n";
-
     int subtitle_default = -1;
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
@@ -886,9 +871,6 @@ static int avformatInit( hb_mux_object_t * m )
 
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
-        uint32_t        rgb[16];
-        char            subidx[2048];
-        int             len;
         hb_subtitle_t   * subtitle;
         AVFormatContext * oc;
         const char      * subtitle_muxer_name = NULL;
@@ -950,27 +932,19 @@ static int avformatInit( hb_mux_object_t * m )
         {
             case VOBSUB:
             {
-                int jj;
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
 
-                for (jj = 0; jj < 16; jj++)
-                    rgb[jj] = hb_yuv2rgb(subtitle->palette[jj]);
-                len = snprintf(subidx, 2048, subidx_fmt,
-                        subtitle->width, subtitle->height,
-                        0, 0, "OFF",
-                        rgb[0], rgb[1], rgb[2], rgb[3],
-                        rgb[4], rgb[5], rgb[6], rgb[7],
-                        rgb[8], rgb[9], rgb[10], rgb[11],
-                        rgb[12], rgb[13], rgb[14], rgb[15]);
-
-                priv_size = len + 1;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
+                if (subtitle->extradata != NULL && subtitle->extradata->size)
                 {
-                    hb_error("VOBSUB extradata: malloc failure");
-                    goto error;
+                    priv_size = subtitle->extradata->size;
+                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                    if (priv_data == NULL)
+                    {
+                        hb_error("VOBSUB extradata: malloc failure");
+                        goto error;
+                    }
+                    memcpy(priv_data, subtitle->extradata->bytes, priv_size);
                 }
-                memcpy(priv_data, subidx, priv_size);
             } break;
 
             case PGSSUB:
@@ -985,6 +959,11 @@ static int avformatInit( hb_mux_object_t * m )
                 {
                     priv_size = subtitle->extradata->size;
                     priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                    if (priv_data == NULL)
+                    {
+                        hb_error("DVB extradata: malloc failure");
+                        goto error;
+                    }
                     memcpy(priv_data, subtitle->extradata->bytes, priv_size);
                 }
             } break;
