@@ -577,9 +577,17 @@ static int add_style(hb_subtitle_style_context_t *ctx,
     return 0;
 }
 
-hb_subtitle_style_context_t * hb_subtitle_style_init(const char * ssa_header)
+hb_subtitle_style_context_t * hb_subtitle_style_init(const uint8_t * ssa_buf, int size)
 {
     hb_subtitle_style_context_t * ctx;
+    char * ssa_header = malloc(size + 1);
+
+    if (ssa_header == NULL)
+    {
+        return NULL;
+    }
+    memcpy(ssa_header, ssa_buf, size);
+    ssa_header[size] = 0;
 
     ctx = calloc(1, sizeof(*ctx));
     if (ctx == NULL)
@@ -765,7 +773,7 @@ static int tx3g_update_style(hb_tx3g_style_context_t *ctx, int utf8_end_pos)
 }
 
 hb_tx3g_style_context_t *
-hb_tx3g_style_init(int height, const char * ssa_header)
+hb_tx3g_style_init(int height, const uint8_t * ssa_buf, int size)
 {
     hb_tx3g_style_context_t * ctx;
 
@@ -774,7 +782,7 @@ hb_tx3g_style_init(int height, const char * ssa_header)
     {
         return NULL;
     }
-    ctx->in_style = hb_subtitle_style_init(ssa_header);
+    ctx->in_style = hb_subtitle_style_init(ssa_buf, size);
     ctx->height            = height;
     ctx->style_atoms.buf   = NULL;
     ctx->style_atoms.size  = 0;

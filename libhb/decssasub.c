@@ -58,7 +58,7 @@ static int extradataInit( hb_work_private_t * pv )
     }
     if (st->codecpar->extradata != NULL)
     {
-        hb_set_text_extradata(&pv->subtitle->extradata, st->codecpar->extradata, st->codecpar->extradata_size);
+        hb_set_extradata(&pv->subtitle->extradata, st->codecpar->extradata, st->codecpar->extradata_size);
     }
     return 0;
 }
