@@ -980,7 +980,7 @@ static int avformatInit( hb_mux_object_t * m )
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
                     track->tx3g = hb_tx3g_style_init(job->height,
-                        (char*)subtitle->extradata);
+                        subtitle->extradata, subtitle->extradata_size);
                 }
                 else
                 {
