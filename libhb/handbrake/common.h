@@ -143,6 +143,7 @@ void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
 void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
 
+void hb_update_str( char **dst, const char *src );
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
 void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
 void hb_job_set_encoder_options(hb_job_t *job, const char *options);
@@ -159,6 +160,8 @@ hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
 int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
                                int fs, int width, int height);
+void hb_subtitle_config_copy(hb_subtitle_config_t *dst,
+                             const hb_subtitle_config_t *src);
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );
@@ -170,7 +173,9 @@ int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg,
                const char *lang);
 int hb_subtitle_can_force( int source );
 int hb_subtitle_can_burn( int source );
+int hb_subtitle_can_export( int source );
 int hb_subtitle_can_pass( int source, int mux );
+int hb_subtitle_must_burn(hb_subtitle_t * subtitle, int mux);
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder);
 int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx,
@@ -326,6 +331,7 @@ struct hb_subtitle_config_s
     int          force;
     int          default_track;
     const char * name;
+    char       * external_filename;
 
     /* SRT subtitle tracks only */
     const char * src_filename;
