@@ -46,6 +46,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
 
     if (ctx == NULL)
     {
+        hb_error("decavsubInit: calloc ctx failed");
         return NULL;
     }
     ctx->seen_forced_sub       = 0;
@@ -55,6 +56,11 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
 
     const AVCodec  * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
     AVCodecContext * context = avcodec_alloc_context3(codec);
+    if (context == NULL)
+    {
+        hb_error("decavsubInit: avcodec_alloc_context3 failed");
+        goto fail;
+    }
     context->codec = codec;
 
     hb_buffer_list_clear(&ctx->list);
