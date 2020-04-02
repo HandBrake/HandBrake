@@ -26,7 +26,8 @@ struct hb_mux_data_s
         MUX_TYPE_SUBTITLE
     } type;
 
-    AVStream    *st;
+    AVFormatContext * oc;
+    AVStream        * st;
 
     int64_t  duration;
 
@@ -194,6 +195,25 @@ static char* lookup_lang_code(int mux, char *iso639_2)
             break;
     }
     return out;
+}
+
+const char * get_subtitle_muxer(int source)
+{
+    switch (source)
+    {
+        case CC608SUB:
+        case CC708SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        case SSASUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
+            return "ass";
+        case PGSSUB:
+            return "sup";
+    }
+
+    return NULL;
 }
 
 static int set_extradata(hb_data_t *extradata, uint8_t **priv_data, int *priv_size)
@@ -866,10 +886,12 @@ static int avformatInit( hb_mux_object_t * m )
 
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
-        hb_subtitle_t * subtitle;
         uint32_t        rgb[16];
         char            subidx[2048];
         int             len;
+        hb_subtitle_t   * subtitle;
+        AVFormatContext * oc;
+        const char      * subtitle_muxer_name = NULL;
 
         subtitle = hb_list_item( job->list_subtitle, ii );
         if (subtitle->config.dest != PASSTHRUSUB)
@@ -878,8 +900,39 @@ static int avformatInit( hb_mux_object_t * m )
         track = m->tracks[m->ntracks++] = calloc(1, sizeof( hb_mux_data_t ) );
         subtitle->mux_data = track;
 
+        if (subtitle->config.external_filename != NULL)
+        {
+            subtitle_muxer_name = get_subtitle_muxer(subtitle->source);
+            if (subtitle_muxer_name == NULL)
+            {
+                hb_error( "No muxer for subtitle source %d", subtitle->source );
+                goto error;
+            }
+            ret = avformat_alloc_output_context2(&track->oc, NULL,
+                subtitle_muxer_name, subtitle->config.external_filename);
+            if (ret < 0)
+            {
+                hb_error( "Could not initialize subtitle avformat context." );
+                goto error;
+            }
+
+            oc = track->oc;
+            ret = avio_open2(&oc->pb, subtitle->config.external_filename,
+                             AVIO_FLAG_WRITE, &track->oc->interrupt_callback,
+                             NULL);
+            if( ret < 0 )
+            {
+                hb_error( "subtitle avio_open2 failed, errno %d", ret);
+                goto error;
+            }
+        }
+        else
+        {
+            oc = m->oc;
+        }
+
         track->type = MUX_TYPE_SUBTITLE;
-        track->st = avformat_new_stream(m->oc, NULL);
+        track->st = avformat_new_stream(oc, NULL);
         if (track->st == NULL)
         {
             hb_error("Could not initialize subtitle stream");
@@ -944,11 +997,11 @@ static int avformatInit( hb_mux_object_t * m )
             case IMPORTSRT:
             case IMPORTSSA:
             {
-                if (job->mux == HB_MUX_AV_MP4)
+                if (job->mux == HB_MUX_AV_MP4 &&
+                    subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
-                    track->tx3g = hb_tx3g_style_init(
-                                job->height, (char*)subtitle->extradata);
+                    track->tx3g = hb_tx3g_style_init(job->height, (char*)subtitle->extradata);
                 }
                 else
                 {
@@ -1246,6 +1299,19 @@ static int avformatInit( hb_mux_object_t * m )
     }
     av_dict_free( &av_opts );
 
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            ret = avformat_write_header(m->tracks[ii]->oc, NULL);
+            if( ret < 0 )
+            {
+                hb_error( "muxavformat: avformat_write_header external track failed!");
+                goto error;
+            }
+        }
+    }
+
     return 0;
 
 error:
@@ -1253,6 +1319,13 @@ error:
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            avformat_free_context(m->tracks[ii]->oc);
+        }
+    }
     *job->done_error = HB_ERROR_INIT;
     *job->die = 1;
     return -1;
@@ -1298,10 +1371,12 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
-    int64_t    dts, pts, duration = AV_NOPTS_VALUE;
-    hb_job_t * job     = m->job;
-    uint8_t  * sub_out = NULL;
+    int64_t           dts, pts, duration = AV_NOPTS_VALUE;
+    hb_job_t        * job     = m->job;
+    uint8_t         * sub_out = NULL;
+    AVFormatContext * oc;
 
+    oc = track->oc != NULL ? track->oc : m->oc;
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
         // compute dts duration for MP4 files
@@ -1314,7 +1389,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     if (buf == NULL)
     {
-        if (job->mux == HB_MUX_AV_MP4 && track->type == MUX_TYPE_SUBTITLE)
+        if (job->mux == HB_MUX_AV_MP4 &&
+            track->oc == NULL && track->type == MUX_TYPE_SUBTITLE)
         {
             // Write a final "empty" subtitle to terminate the last
             // subtitle that was written
@@ -1468,7 +1544,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
 
         case MUX_TYPE_SUBTITLE:
         {
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 && track->oc == NULL)
             {
                 /* Write an empty sample */
                 if ( track->duration < pts )
@@ -1569,7 +1645,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
 
     m->pkt->stream_index = track->st->index;
-    int ret = av_interleaved_write_frame(m->oc, m->pkt);
+    int ret = av_interleaved_write_frame(oc, m->pkt);
     av_packet_unref(m->pkt);
     if (sub_out != NULL)
     {
@@ -1578,10 +1654,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     // Many avformat muxer functions do not check the error status
     // of the AVIOContext.  So we need to check it ourselves to detect
     // write errors (like disk full condition).
-    if (ret < 0 || m->oc->pb->error != 0)
+    if (ret < 0 || oc->pb->error != 0)
     {
         char errstr[64];
-        av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
+        av_strerror(ret < 0 ? ret : oc->pb->error, errstr, sizeof(errstr));
         hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
                  track->st->index, errstr);
         *job->done_error = HB_ERROR_UNKNOWN;
@@ -1687,6 +1763,18 @@ static int avformatEnd(hb_mux_object_t *m)
     avformat_free_context(m->oc);
     av_packet_free(&m->pkt);
     av_packet_free(&m->empty_pkt);
+    m->oc = NULL;
+
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            av_write_trailer(m->tracks[ii]->oc);
+            avio_close(m->tracks[ii]->oc->pb);
+            avformat_free_context(m->tracks[ii]->oc);
+            m->tracks[ii]->oc = NULL;
+        }
+    }
 
     for (int i = 0; i < m->ntracks; i++)
     {
@@ -1696,7 +1784,6 @@ static int avformatEnd(hb_mux_object_t *m)
     }
 
     free(m->tracks);
-    m->oc = NULL;
 
     return 0;
 }

@@ -45,6 +45,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
     --enable-encoder=libmp3lame \
+    --enable-encoder=movtext \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libspeex \
@@ -109,7 +110,9 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=mov \
     --enable-muxer=mp4 \
     --enable-muxer=psp \
-    --enable-muxer=ipod
+    --enable-muxer=ipod \
+    --enable-muxer=ass \
+    --enable-muxer=sup
 
 ifeq (darwin,$(HOST.system))
     FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage --enable-hwaccel=h264_videotoolbox --enable-hwaccel=hevc_videotoolbox --enable-hwaccel=prores_videotoolbox

@@ -305,8 +305,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
     }
 
     if (!ctx->job->indepth_scan &&
-        ctx->subtitle->config.dest == PASSTHRUSUB &&
-        hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
+        !hb_subtitle_must_burn(ctx->subtitle, ctx->job->mux))
     {
         // Append to buffer list.  It will be sent to fifo after we determine
         // if this is a packet we need.
@@ -518,8 +517,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             }
             hb_buffer_list_close(&ctx->list_pass);
         }
-        else if (ctx->subtitle->config.dest == PASSTHRUSUB &&
-                 hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
+        else if (!hb_subtitle_must_burn(ctx->subtitle, ctx->job->mux))
         {
             // PICTURESUB && PASSTHRUSUB
 

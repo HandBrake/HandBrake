@@ -1084,9 +1084,7 @@ static int sanitize_subtitles( hb_job_t * job )
                 one_burned = 1;
             }
         }
-
-        if (subtitle->config.dest == PASSTHRUSUB &&
-            !hb_subtitle_can_pass(subtitle->source, job->mux))
+        else if (hb_subtitle_must_burn(subtitle, job->mux))
         {
             if (!one_burned)
             {
