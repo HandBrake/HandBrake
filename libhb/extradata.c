@@ -29,24 +29,6 @@ int hb_set_extradata(hb_data_t **extradata, const uint8_t *bytes, size_t length)
     return 0;
 }
 
-int hb_set_text_extradata(hb_data_t **extradata, const uint8_t *bytes, size_t length)
-{
-    hb_data_close(extradata);
-
-    if (length > 0)
-    {
-        *extradata = hb_data_init(length + 1);
-        if (*extradata == NULL)
-        {
-            hb_error("extradata: malloc failure");
-            return 1;
-        }
-        memcpy((*extradata)->bytes, bytes, length);
-        (*extradata)->bytes[length] = 0;
-    }
-    return 0;
-}
-
 int hb_set_ssa_extradata(hb_data_t **extradata, const char *font, int fs, int w, int h)
 {
     hb_data_close(extradata);
@@ -88,7 +70,7 @@ int hb_set_ssa_extradata(hb_data_t **extradata, const char *font, int fs, int w,
         goto fail;
     }
 
-    size_t size = strlen(header) + 1;
+    size_t size = strlen(header);
     *extradata = hb_data_init(size);
     if (*extradata == NULL)
     {
