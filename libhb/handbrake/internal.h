@@ -431,6 +431,7 @@ struct hb_esconfig_s
 enum
 {
     WORK_NONE = 0,
+    WORK_PASS,
     WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
     WORK_SYNC_SUBTITLE,
