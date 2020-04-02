@@ -2203,7 +2203,6 @@ int hb_global_init()
     hb_register(&hb_decavsub);
     hb_register(&hb_decsrtsub);
     hb_register(&hb_decssasub);
-    hb_register(&hb_dectx3gsub);
     hb_register(&hb_encavcodec);
     hb_register(&hb_encavcodeca);
 #ifdef __APPLE__
