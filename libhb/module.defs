@@ -51,9 +51,9 @@ ifneq (,$(filter $(HOST.system),freebsd netbsd))
 else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
 else
-    LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --cflags libxml2)
+    LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml2)
     ifeq (,$(LIBHB.libxml2))
-        LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --cflags libxml-2.0)
+        LIBHB.libxml2 := $(shell $(PKGCONFIG.exe) --silence-errors --cflags libxml-2.0)
     endif
     ifneq (,$(LIBHB.libxml2))
         LIBHB.libxml2 := $(patsubst -I%,%,$(LIBHB.libxml2))
