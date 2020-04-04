@@ -354,12 +354,22 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
 
 hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
 {
+    hb_work_object_t *w = NULL;
+
     switch (codec)
     {
-        case HB_SCODEC_PASS: return hb_get_work(h, WORK_PASS);
-        default:             break;
+        case HB_SCODEC_PASS:
+            w = hb_get_work(h, WORK_PASS);
+            break;
+        case HB_SCODEC_TX3G:
+            w = hb_get_work(h, WORK_ENCAVSUB);
+            w->codec_param = AV_CODEC_ID_MOV_TEXT;
+            break;
+        default:
+            break;
     }
-    return NULL;
+
+    return w;
 }
 
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
@@ -1114,6 +1124,12 @@ static int sanitize_subtitles( hb_job_t * job )
                 free(subtitle);
                 continue;
             }
+        }
+        else if (subtitle->format        == TEXTSUB &&
+                 subtitle->config.codec  == HB_SCODEC_PASS &&
+                 job->mux                == HB_MUX_AV_MP4)
+        {
+            subtitle->config.codec = HB_SCODEC_TX3G;
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.
@@ -2025,6 +2041,7 @@ static void do_job(hb_job_t *job)
                 *job->die = 1;
                 goto cleanup;
             }
+            w->init_delay = &audio->priv.init_delay;
             w->fifo_in    = audio->priv.fifo_sync;
             w->fifo_out   = audio->priv.fifo_out;
             w->extradata  = &audio->priv.extradata;

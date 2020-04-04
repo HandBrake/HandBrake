@@ -42,7 +42,7 @@ typedef struct srt_entry_s {
  */
 struct hb_work_private_s
 {
-    hb_avsub_context_t * ctx;
+    hb_decavsub_context_t * ctx;
     hb_job_t * job;
     FILE     * file;
     char       buf[1024];
