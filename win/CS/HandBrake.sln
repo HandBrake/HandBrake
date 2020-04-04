@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.Interop", "HandBr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "HandBrake.Installer", "HandBrake.Installer\HandBrake.Installer.wixproj", "{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -37,6 +39,8 @@ Global
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Debug|x64.Build.0 = Debug|x64
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Release|x64.ActiveCfg = Release|x64
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Release|x64.Build.0 = Release|x64
+		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Debug|x64.ActiveCfg = Debug|x64
+		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
