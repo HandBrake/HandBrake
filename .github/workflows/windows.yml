@@ -3,9 +3,19 @@ name: Windows Build
 on: [push, pull_request]
 
 jobs:
+  handle_forks:
+    name: Forked Repo
+    runs-on: ubuntu-latest
+    if: github.repository != 'HandBrake/HandBrake'
+    steps:
+    - name: Print Warning
+      run: |
+        echo "Builds are disabled for forked repositories."  
+
   build_mingw:
     name: CLI / LibHB
     runs-on: ubuntu-latest
+    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
     
@@ -57,6 +67,7 @@ jobs:
   build_gui:
     name: Windows UI
     runs-on: windows-latest
+    if: github.repository == 'HandBrake/HandBrake'
     needs: build_mingw
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
