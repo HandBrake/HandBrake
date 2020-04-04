@@ -86,7 +86,6 @@ jobs:
        path: win/CS/HandBrakeWPF/bin/x64/Release
          
     - name: Import the Signing Cert
-      if: github.repository == 'HandBrake/HandBrake'
       run: |
         $ErrorView = "NormalView"
         if (-NOT ($env:SigningCertificate -eq '')) {        

@@ -93,7 +93,8 @@
   </Target>
 
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\$(Configuration)\*Win_GUI.exe&quot;" Condition="'$(SignEnabled)' == 'true'" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\$(Configuration)\*Win_GUI.exe&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\$(Configuration)\*Win_GUI.msi&quot;" />
   </Target>
 
 </Project>
