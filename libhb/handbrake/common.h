@@ -344,6 +344,7 @@ struct hb_subtitle_config_s
         HB_SCODEC_DVD,
         HB_SCODEC_VTT
     } codec;
+    uint32_t     codec_param;    /* Per-codec config info */
 
     /* SRT subtitle tracks only */
     const char * src_filename;
@@ -1458,6 +1459,7 @@ extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
+extern hb_work_object_t hb_encavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encvt;

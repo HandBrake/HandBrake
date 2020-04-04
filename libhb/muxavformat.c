@@ -13,7 +13,6 @@
 #include "libavutil/avstring.h"
 
 #include "handbrake/handbrake.h"
-#include "handbrake/ssautil.h"
 #include "handbrake/lang.h"
 #include "handbrake/hbffmpeg.h"
 
@@ -37,7 +36,6 @@ struct hb_mux_data_s
     int16_t  current_chapter;
 
     AVBSFContext            * bitstream_context;
-    hb_tx3g_style_context_t * tx3g;
 };
 
 struct hb_mux_object_s
@@ -926,25 +924,13 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->width = subtitle->width;
         track->st->codecpar->height = subtitle->height;
 
-        uint8_t *priv_data = NULL;
-        size_t   priv_size = 0;
+        int need_extradata = 0;
         switch (subtitle->source)
         {
             case VOBSUB:
             {
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
-
-                if (subtitle->extradata != NULL && subtitle->extradata->size)
-                {
-                    priv_size = subtitle->extradata->size;
-                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    if (priv_data == NULL)
-                    {
-                        hb_error("VOBSUB extradata: malloc failure");
-                        goto error;
-                    }
-                    memcpy(priv_data, subtitle->extradata->bytes, priv_size);
-                }
+                need_extradata = 1;
             } break;
 
             case PGSSUB:
@@ -955,17 +941,7 @@ static int avformatInit( hb_mux_object_t * m )
             case DVBSUB:
             {
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVB_SUBTITLE;
-                if (subtitle->extradata != NULL && subtitle->extradata->size)
-                {
-                    priv_size = subtitle->extradata->size;
-                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                    if (priv_data == NULL)
-                    {
-                        hb_error("DVB extradata: malloc failure");
-                        goto error;
-                    }
-                    memcpy(priv_data, subtitle->extradata->bytes, priv_size);
-                }
+                need_extradata = 1;
             } break;
 
             case CC608SUB:
@@ -980,89 +956,28 @@ static int avformatInit( hb_mux_object_t * m )
                     subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
-                    track->tx3g = hb_tx3g_style_init(job->height,
-                                                     subtitle->extradata->bytes,
-                                                     subtitle->extradata->size);
                 }
                 else
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_ASS;
                     need_fonts = 1;
-
-                    if (subtitle->extradata && subtitle->extradata->size)
-                    {
-                        priv_size = subtitle->extradata->size;
-                        priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                        if (priv_data == NULL)
-                        {
-                            hb_error("SSA extradata: malloc failure");
-                            goto error;
-                        }
-                        memcpy(priv_data, subtitle->extradata->bytes, priv_size);
-                    }
                 }
+                need_extradata = 1;
             } break;
 
             default:
                 continue;
         }
-        if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
+
+        if (need_extradata)
         {
-            // Build codec extradata for tx3g.
-            // If we were using a libav codec to generate this data
-            // this would (or should) be done for us.
-            uint8_t properties[] = {
-                0x00, 0x00, 0x00, 0x00,     // Display Flags
-                0x01,                       // Horiz. Justification
-                0xff,                       // Vert. Justification
-                0x00, 0x00, 0x00, 0xff,     // Bg color
-                0x00, 0x00, 0x00, 0x00,     // Default text box
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,     // Reserved
-                0x00, 0x01,                 // Font ID
-                0x00,                       // Font face
-                0x18,                       // Font size
-                0xff, 0xff, 0xff, 0xff,     // Fg color
-                // Font table:
-                0x00, 0x00, 0x00, 0x12,     // Font table size
-                'f','t','a','b',            // Tag
-                0x00, 0x01,                 // Count
-                0x00, 0x01,                 // Font ID
-                0x05,                       // Font name length
-                'A','r','i','a','l'         // Font name
-            };
-
-            int width, height, font_size;
-            width     = job->width * job->par.num / job->par.den;
-            font_size = 0.05 * job->height;
-            if (font_size < 12)
+            if (set_extradata(subtitle->extradata,
+                              &track->st->codecpar->extradata,
+                              &track->st->codecpar->extradata_size))
             {
-                font_size = 12;
-            }
-            else if (font_size > 255)
-            {
-                font_size = 255;
-            }
-            properties[25] = font_size;
-            height = 3 * font_size;
-            track->st->codecpar->width  = width;
-            track->st->codecpar->height = height;
-            properties[14] = height >> 8;
-            properties[15] = height & 0xff;
-            properties[16] = width >> 8;
-            properties[17] = width & 0xff;
-
-            priv_size = sizeof(properties);
-            priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-            if (priv_data == NULL)
-            {
-                hb_error("TX3G extradata: malloc failure");
                 goto error;
             }
-            memcpy(priv_data, properties, priv_size);
         }
-        track->st->codecpar->extradata = priv_data;
-        track->st->codecpar->extradata_size = priv_size;
 
         if (ii == subtitle_default)
         {
@@ -1551,41 +1466,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         return -1;
                     }
                 }
-                if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
-                {
-                    uint8_t  * styleatom;
-                    uint16_t   stylesize = 0;
-                    uint8_t  * buffer;
-                    uint16_t   buffersize = 0;
-
-                    /*
-                     * Copy the subtitle into buffer stripping markup and
-                     * creating style atoms for them.
-                     */
-                    hb_muxmp4_process_subtitle_style(
-                        track->tx3g, buf->data, &buffer,
-                        &styleatom, &stylesize);
-
-                    if (buffer != NULL)
-                    {
-                        buffersize = strlen((char*)buffer);
-                        if (styleatom == NULL)
-                        {
-                            stylesize = 0;
-                        }
-                        sub_out = malloc(2 + buffersize + stylesize);
-
-                        /* Write the subtitle sample */
-                        memcpy(sub_out + 2, buffer, buffersize);
-                        memcpy(sub_out + 2 + buffersize, styleatom, stylesize);
-                        sub_out[0] = (buffersize >> 8) & 0xff;
-                        sub_out[1] = buffersize & 0xff;
-                        m->pkt->data = sub_out;
-                        m->pkt->size = buffersize + stylesize + 2;
-                    }
-                    free(buffer);
-                    free(styleatom);
-                }
             }
             if (m->pkt->data == NULL)
             {
@@ -1672,10 +1552,6 @@ static int avformatEnd(hb_mux_object_t *m)
         if (m->tracks[ii]->bitstream_context)
         {
             av_bsf_free(&m->tracks[ii]->bitstream_context);
-        }
-        if (m->tracks[ii]->tx3g)
-        {
-            hb_tx3g_style_close(&m->tracks[ii]->tx3g);
         }
     }
 
