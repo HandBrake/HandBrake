@@ -324,12 +324,21 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
 
 hb_work_object_t* hb_subtitle_encoder(hb_handle_t *h, int codec)
 {
+   hb_work_object_t * w = NULL;
+
     switch (codec)
     {
-        case HB_SCODEC_PASS: return hb_get_work(h, WORK_PASS);
+        case HB_SCODEC_PASS:
+            w = hb_get_work(h, WORK_PASS);
+            break;
+        case HB_SCODEC_TX3G:
+            w = hb_get_work(h, WORK_ENCAVSUB);
+            w->codec_param = AV_CODEC_ID_MOV_TEXT;
+            break;
         default:             break;
     }
-    return NULL;
+
+    return w;
 }
 
 hb_work_object_t* hb_audio_encoder(hb_handle_t *h, int codec)
@@ -992,6 +1001,12 @@ static int sanitize_subtitles( hb_job_t * job )
     for (i = 0; i < hb_list_count(job->list_subtitle);)
     {
         subtitle = hb_list_item(job->list_subtitle, i);
+        if (subtitle->format        == TEXTSUB &&
+            subtitle->config.codec  == HB_SCODEC_PASS &&
+            job->mux                == HB_MUX_AV_MP4)
+        {
+            subtitle->config.codec = HB_SCODEC_TX3G;
+        }
         if (subtitle->config.dest == RENDERSUB)
         {
             if (one_burned)
