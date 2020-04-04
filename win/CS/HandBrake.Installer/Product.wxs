@@ -135,7 +135,7 @@
       <Component Id="AppShortcuts" Win64="yes">
 
         <!-- Shortcuts for the shell -->
-        <Shortcut Id="SCUT_Shortcuts_Shell" Name="HandBrake" Target="[INSTALLFOLDER]HandBrake.exe">
+        <Shortcut Id="SCUT_Shortcuts_Shell" Name="HandBrake" Target="[#HandBrake.exe]" WorkingDirectory="APPLICATIONROOTDIRECTORY">
           <!--AUMID-->
           <ShortcutProperty Key="System.AppUserModel.ID" Value="HandBrakeTeam.HandBrake"/>
           <!--COM CLSID-->
