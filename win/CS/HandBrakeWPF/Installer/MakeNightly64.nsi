@@ -56,7 +56,7 @@ ManifestDPIAware true
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}_x86_64-Win_GUI.exe"
+OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-x86_64-Win_GUI.exe"
 
 !include WordFunc.nsh
 !insertmacro VersionCompare

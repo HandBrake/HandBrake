@@ -28,12 +28,13 @@
   <ItemGroup>
     <ProjectsToBuild Include="HandBrake.Interop\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrakeWPF\*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrake.Installer\*wixproj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
   <!-- Dependencies -->
   <PropertyGroup>
-    <NightlyDependsOn>BuildRelease;NightlyPostBuild</NightlyDependsOn>
-    <InstallDependsOn>BuildRelease;ReleasePostBuild</InstallDependsOn>
+    <NightlyDependsOn>BuildRelease;NightlyPostBuild;CodeSign</NightlyDependsOn>
+    <InstallDependsOn>BuildRelease;ReleasePostBuild;CodeSign</InstallDependsOn>
   </PropertyGroup>
 
   <!-- Builds /t: -->
@@ -77,8 +78,8 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\MakeNightly64.nsi" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  
-          Condition="'$(SignEnabled)' == 'true'" />
+
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" />
   </Target>
 
   <Target Name="ReleasePostBuild">
@@ -87,7 +88,13 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\Installer64.nsi" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  
-          Condition="'$(SignEnabled)' == 'true'" />  </Target>
+
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" />
+  </Target>
+
+  <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\$(Configuration)\*Win_GUI.exe&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\$(Configuration)\*Win_GUI.msi&quot;" />
+  </Target>
 
 </Project>

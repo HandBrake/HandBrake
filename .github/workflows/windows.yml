@@ -3,19 +3,9 @@ name: Windows Build
 on: [push, pull_request]
 
 jobs:
-  handle_forks:
-    name: Forked Repo
-    runs-on: ubuntu-latest
-    if: github.repository != 'HandBrake/HandBrake'
-    steps:
-    - name: Print Warning
-      run: |
-        echo "Builds are disabled for forked repositories."  
-
   build_mingw:
     name: CLI / LibHB
     runs-on: ubuntu-latest
-    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
     
@@ -67,7 +57,6 @@ jobs:
   build_gui:
     name: Windows UI
     runs-on: windows-latest
-    if: github.repository == 'HandBrake/HandBrake'
     needs: build_mingw
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
@@ -97,7 +86,6 @@ jobs:
        path: win/CS/HandBrakeWPF/bin/x64/Release
          
     - name: Import the Signing Cert
-      if: github.repository == 'HandBrake/HandBrake'
       run: |
         $ErrorView = "NormalView"
         if (-NOT ($env:SigningCertificate -eq '')) {        
@@ -114,11 +102,17 @@ jobs:
         $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:Nightly /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
-    - name: Upload Assets
+    - name: Upload HandBrake exe Installer
       uses: actions/upload-artifact@v1
       with:
-        name: HandBrake-x86_64-Win_GUI
-        path: win/CS/HandBrakeWPF/bin/x64/Release/HandBrake-Nightly_x86_64-Win_GUI.exe
+        name: HandBrake-x86_64-Win_GUI-EXE
+        path: win/CS/HandBrakeWPF/bin/x64/Release/HandBrake-Nightly-x86_64-Win_GUI.exe
+    
+    - name: Upload HandBrake msi Installer
+      uses: actions/upload-artifact@v1
+      with:
+        name:  HandBrake-x86_64-Win_GUI-MSI
+        path: win/CS/HandBrakeWPF/bin/x64/Release/HandBrake-Nightly-x86_64-Win_GUI.msi
         
     - name: Tidy up past artifacts
       uses: kolpav/purge-artifacts-action@v1
