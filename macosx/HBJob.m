@@ -453,28 +453,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 #ifdef __SANDBOX_ENABLED__
         decodeObject(_fileURLBookmark, NSData)
-
-        if (_fileURLBookmark)
-        {
-            _fileURL = [HBUtilities URLFromBookmark:_fileURLBookmark];
-        }
-
-        if (!_fileURL)
-        {
-            decodeObjectOrFail(_fileURL, NSURL);
-        }
+        decodeObjectOrFail(_fileURL, NSURL);
 
         decodeObject(_outputURLFolderBookmark, NSData)
-
-        if (_outputURLFolderBookmark)
-        {
-            _outputURL = [HBUtilities URLFromBookmark:_outputURLFolderBookmark];
-        }
-
-        if (!_outputURL)
-        {
-            decodeObject(_outputURL, NSURL);
-        }
+        decodeObject(_outputURL, NSURL);
 #else
         decodeObjectOrFail(_fileURL, NSURL);
         decodeObject(_outputURL, NSURL);

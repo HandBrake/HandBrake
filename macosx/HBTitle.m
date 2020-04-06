@@ -229,12 +229,7 @@ fail:
 
         if (_bookmark)
         {
-            _fileURL =  [HBUtilities URLFromBookmark:_bookmark];
-
-            if (!_fileURL)
-            {
-                decodeObjectOrFail(_fileURL, NSURL);
-            }
+            decodeObjectOrFail(_fileURL, NSURL);
         }
 #else
         decodeObject(_fileURL, NSURL);

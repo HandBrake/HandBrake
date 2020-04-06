@@ -126,7 +126,10 @@
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    if (urls.count)
+    {
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    }
 }
 
 - (IBAction)revealSelectedQueueItemsSources:(id)sender
@@ -141,7 +144,10 @@
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    if (urls.count)
+    {
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    }
 }
 
 - (IBAction)revealSelectedQueueItemsActivityLogs:(id)sender
@@ -159,7 +165,10 @@
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    if (urls.count)
+    {
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+    }
 }
 
 /**
@@ -273,7 +282,7 @@
 
 - (void)revealQueueItem:(nonnull HBQueueItem *)item
 {
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[item.completeOutputURL]];
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[item.completeOutputURL]];
 }
 
 #pragma mark NSTableView delegate

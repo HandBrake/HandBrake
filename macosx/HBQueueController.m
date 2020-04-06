@@ -462,7 +462,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     if ([path isKindOfClass:[NSString class]] && path.length)
     {
         NSURL *fileURL = [NSURL fileURLWithPath:path];
-        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[fileURL]];
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[fileURL]];
     }
 }
 
