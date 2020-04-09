@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode
     using System.IO;
 
     using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Interop.Providers.Interfaces;
@@ -247,16 +248,17 @@ namespace HandBrakeWPF.Services.Encode
         private void InstanceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.IsEncoding = false;
-            this.ServiceLogMessage("Encode Completed ...");
-           
+
+            this.ServiceLogMessage(e.Error != 0 ? string.Format("Encode Failed ({0})", e.Error) : "Encode Completed!");
+
             // Handling Log Data 
             string hbLog = this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
             long filesize = this.GetFilesize(this.currentTask.Destination);
 
             // Raise the Encode Completed Event.
             this.InvokeEncodeCompleted(
-                e.Error
-                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
+                e.Error != 0
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, e.Error.ToString(), this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize));
         }
 

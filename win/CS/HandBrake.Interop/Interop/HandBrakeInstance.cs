@@ -490,7 +490,7 @@ namespace HandBrake.Interop.Interop
                 {
                     this.EncodeCompleted(
                         this,
-                        new EncodeCompletedEventArgs(state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE));
+                        new EncodeCompletedEventArgs(state.WorkDone.Error));
                 }
             }
         }

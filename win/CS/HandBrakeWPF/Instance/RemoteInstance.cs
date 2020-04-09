@@ -209,7 +209,7 @@ namespace HandBrakeWPF.Instance
             {
                 if (this.retryCount > 5)
                 {
-                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(true));
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
 
                     this.encodePollTimer?.Stop();
 
@@ -239,7 +239,7 @@ namespace HandBrakeWPF.Instance
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
 
-            if (taskState != null && (taskState == TaskState.Working || taskState == TaskState.Muxing || taskState == TaskState.Searching))
+            if (taskState != null && (taskState == TaskState.Working || taskState == TaskState.Searching))
             {
                 if (this.EncodeProgress != null)
                 {
@@ -259,15 +259,12 @@ namespace HandBrakeWPF.Instance
             else if (taskState != null && taskState == TaskState.WorkDone)
             {
                 this.encodePollTimer.Stop();
-                
-                this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error != 0));
-                this.workerProcess?.Kill();
-            } 
-            else if (taskState == TaskState.Idle)
-            {
-                this.encodePollTimer.Stop();
-                this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error != 0));
-                this.workerProcess?.Kill();
+                if (!this.workerProcess.HasExited)
+                {
+                    this.workerProcess?.Kill();
+                }
+
+                this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
             }
         }
     }

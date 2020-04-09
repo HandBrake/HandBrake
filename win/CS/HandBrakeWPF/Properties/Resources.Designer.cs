@@ -2925,15 +2925,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Experimental.
-        /// </summary>
-        public static string Options_Experimental {
-            get {
-                return ResourceManager.GetString("Options_Experimental", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
@@ -3213,15 +3204,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show the new experimental queue design..
-        /// </summary>
-        public static string Options_ShowExperimentalQueueDesign {
-            get {
-                return ResourceManager.GetString("Options_ShowExperimentalQueueDesign", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show &apos;Add All to Queue&apos; on the toolbar.
         /// </summary>
         public static string Options_ShowToolbarAddAll {
@@ -3465,6 +3447,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Run each queued job in a separate worker process. (Experimental!  Note, Limited to one instance of HandBrake currently!).
+        /// </summary>
+        public static string OptionsView_EnableWorkerProcesses {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableWorkerProcesses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filename collision behaviour:.
         /// </summary>
         public static string OptionsView_FileCollisionBehaviour {
@@ -3644,6 +3635,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_ShowStatusInTitleBar {
             get {
                 return ResourceManager.GetString("OptionsView_ShowStatusInTitleBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default network port for worker:.
+        /// </summary>
+        public static string OptionsView_WorkerDefaultPort {
+            get {
+                return ResourceManager.GetString("OptionsView_WorkerDefaultPort", resourceCulture);
             }
         }
         

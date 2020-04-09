@@ -30,8 +30,9 @@ namespace HandBrake.Worker.Routing
     public class ApiRouter
     {
         private readonly string token = Guid.NewGuid().ToString();
-
         private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+
+        private JsonState completedState;
         private HandBrakeInstance handbrakeInstance;
         private ILogHandler logHandler;
         private InstanceWatcher instanceWatcher;
@@ -52,6 +53,7 @@ namespace HandBrake.Worker.Routing
 
         public string StartEncode(HttpListenerRequest request)
         {
+            this.completedState = null;
             string requestPostData = HttpUtilities.GetRequestPostData(request);
 
             if (!string.IsNullOrEmpty(requestPostData))
@@ -91,12 +93,18 @@ namespace HandBrake.Worker.Routing
 
         public string PollEncodeProgress(HttpListenerRequest request)
         {
+            if (this.completedState != null)
+            {
+                string json = JsonConvert.SerializeObject(this.completedState, Formatting.Indented, this.jsonNetSettings);
+                return json;
+            }
+
             if (this.handbrakeInstance != null)
             {
                 JsonState statusJson = this.handbrakeInstance.GetEncodeProgress();
-                string versionInfo = JsonConvert.SerializeObject(statusJson, Formatting.Indented, this.jsonNetSettings);
+                string json = JsonConvert.SerializeObject(statusJson, Formatting.Indented, this.jsonNetSettings);
 
-                return versionInfo;
+                return json;
             }
 
             return null;
@@ -137,6 +145,8 @@ namespace HandBrake.Worker.Routing
 
         private void HandbrakeInstance_EncodeCompleted(object sender, Interop.Interop.EventArgs.EncodeCompletedEventArgs e)
         {
+            this.completedState = new JsonState() { WorkDone = new WorkDone() { Error = e.Error } };
+            this.completedState.State = "WORKDONE";
             this.logHandler.ShutdownFileWriter();
         }
 
@@ -157,6 +167,8 @@ namespace HandBrake.Worker.Routing
                 this.instanceWatcher = new InstanceWatcher(this);
                 this.instanceWatcher.Start(5000);
             }
+
+            this.completedState = null;
 
             this.handbrakeInstance.Initialize(command.LogVerbosity, command.EnableHardwareAcceleration);
             this.handbrakeInstance.EncodeCompleted += this.HandbrakeInstance_EncodeCompleted;

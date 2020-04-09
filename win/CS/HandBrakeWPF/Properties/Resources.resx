@@ -1297,9 +1297,6 @@ Would you like to overwrite it?</value>
   <data name="Options_SendFileTo" xml:space="preserve">
     <value>Send file to:</value>
   </data>
-  <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
-    <value>Show the new experimental queue design.</value>
-  </data>
   <data name="Options_TitleCase" xml:space="preserve">
     <value>Change case to Title Case</value>
   </data>
@@ -2180,9 +2177,6 @@ Where supported, any user presets will have been imported.</value>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>Port range must be between 5000 and 32767</value>
   </data>
-  <data name="Options_Experimental" xml:space="preserve">
-    <value>Experimental</value>
-  </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
     <value>Replacement Placeholders: {source} {destination}</value>
     <comment>Note: {source} and {destination} are not translatable. </comment>
@@ -2214,5 +2208,11 @@ This will also stop any existing running jobs.</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Please select a single job to view summary information.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Run each queued job in a separate worker process. (Experimental!  Note, Limited to one instance of HandBrake currently!)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Default network port for worker:</value>
   </data>
 </root>

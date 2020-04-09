@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodeCompletedEventArgs.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="EncodeCompletedEventArgs.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -22,7 +22,7 @@ namespace HandBrake.Interop.Interop.EventArgs
         /// <param name="error">
         /// The error.
         /// </param>
-        public EncodeCompletedEventArgs(bool error)
+        public EncodeCompletedEventArgs(int error)
         {
             this.Error = error;
         }
@@ -30,6 +30,6 @@ namespace HandBrake.Interop.Interop.EventArgs
         /// <summary>
         /// Gets a value indicating whether an error occurred during the encode.
         /// </summary>
-        public bool Error { get; private set; }
+        public int Error { get; private set; }
     }
 }
