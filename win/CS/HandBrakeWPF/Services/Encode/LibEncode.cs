@@ -200,7 +200,7 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="message">Log message content</param>
         protected void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message));
+            this.log.LogMessage(string.Format("{0}# {1}", Environment.NewLine, message));
         }
 
         protected void TimedLogMessage(string message)
@@ -249,7 +249,26 @@ namespace HandBrakeWPF.Services.Encode
         {
             this.IsEncoding = false;
 
-            this.ServiceLogMessage(e.Error != 0 ? string.Format("Encode Failed ({0})", e.Error) : "Encode Completed!");
+            string completeMessage = "Job Completed!";
+            switch (e.Error)
+            {
+                case 0:
+                    break;
+                case 1:
+                    completeMessage = "Job Cancelled!";
+                    break;
+                case 2:
+                    completeMessage = string.Format("Job Failed. Check log and input settings ({0})", e.Error);
+                    break;
+                case 3:
+                    completeMessage = string.Format("Job Failed to Initialise. Check log and input settings ({0})", e.Error);
+                    break;
+                default:
+                    completeMessage = string.Format("Job Failed ({0})", e.Error);
+                    break;
+            }
+            
+            this.ServiceLogMessage(completeMessage);
 
             // Handling Log Data 
             string hbLog = this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);

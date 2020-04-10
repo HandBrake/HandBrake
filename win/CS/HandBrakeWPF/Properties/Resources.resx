@@ -2210,7 +2210,7 @@ This will also stop any existing running jobs.</value>
     <value>Please select a single job to view summary information.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process. (Experimental!  Note, Limited to one instance of HandBrake currently!)</value>
+    <value>Run each queued job in a separate worker process. (Experimental)</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Default network port for worker:</value>

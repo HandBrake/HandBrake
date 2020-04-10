@@ -3447,7 +3447,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Run each queued job in a separate worker process. (Experimental!  Note, Limited to one instance of HandBrake currently!).
+        ///   Looks up a localized string similar to Run each queued job in a separate worker process. (Experimental).
         /// </summary>
         public static string OptionsView_EnableWorkerProcesses {
             get {

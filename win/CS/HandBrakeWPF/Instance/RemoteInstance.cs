@@ -11,8 +11,12 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.NetworkInformation;
     using System.Threading.Tasks;
     using System.Timers;
     using System.Windows.Media.Animation;
@@ -46,7 +50,7 @@ namespace HandBrakeWPF.Instance
 
         private readonly ILog logService;
 
-        private const double EncodePollIntervalMs = 250;
+        private const double EncodePollIntervalMs = 500;
 
         private Process workerProcess;
         private Timer encodePollTimer;
@@ -56,7 +60,7 @@ namespace HandBrakeWPF.Instance
         {
             this.configuration = configuration;
             this.logService = logService;
-            this.port = configuration.RemoteServicePort;
+            this.port = this.GetOpenPort(this.configuration.RemoteServicePort);
             this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
         }
 
@@ -139,7 +143,7 @@ namespace HandBrakeWPF.Instance
                                     StartInfo =
                                     {
                                         FileName = "HandBrake.Worker.exe",
-                                        Arguments = string.Format(" --port={0}", this.port),
+                                        Arguments = string.Format(" --port={0}", port),
                                         UseShellExecute = false,
                                         RedirectStandardOutput = true,
                                         RedirectStandardError = true,
@@ -155,7 +159,7 @@ namespace HandBrakeWPF.Instance
                 workerProcess.BeginErrorReadLine();
 
 
-                this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0}", this.workerProcess.Id));
+                this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
             }
         }
 
@@ -266,6 +270,26 @@ namespace HandBrakeWPF.Instance
 
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
             }
+        }
+
+        private int GetOpenPort(int startPort)
+        {
+            int portStartIndex = startPort;
+
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] tcpEndPoints = properties.GetActiveTcpListeners();
+
+            List<int> usedPorts = tcpEndPoints.Select(p => p.Port).ToList<int>();
+            int unusedPort = 0;
+
+            unusedPort = Enumerable.Range(portStartIndex, 99).FirstOrDefault(p => !usedPorts.Contains(p));
+
+            if (startPort != unusedPort)
+            {
+                this.logService.LogMessage(string.Format("Port {0} in use. Using {1} instead", startPort, unusedPort));
+            }
+
+            return unusedPort;
         }
     }
 }

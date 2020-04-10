@@ -41,17 +41,16 @@ namespace HandBrake.Worker
                 }
             }
 
-            Console.WriteLine("Starting HandBrake Engine ...");
+            Console.WriteLine("Worker: Starting HandBrake Engine ...");
             router = new ApiRouter();
             router.TerminationEvent += Router_TerminationEvent;
 
-            Console.WriteLine("Starting Web Server ...");
-            Console.WriteLine("Using Port: {0}", port);
+            Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port);
             webServer.Run();
 
-            Console.WriteLine("Web Server Started");
+            Console.WriteLine("Worker: Server Started");
             
             manualResetEvent.WaitOne();
 
