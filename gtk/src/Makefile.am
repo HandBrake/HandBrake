@@ -115,7 +115,7 @@ ghb_SOURCES = \
 
 if MINGW
 ghb_LDFLAGS = \
-	-mwindows -Wl,--export-dynamic -Wl,--exclude-libs,ALL
+	-mwindows
 else
 ghb_LDFLAGS = \
 	-Wl,--export-dynamic -Wl,--exclude-libs,ALL
