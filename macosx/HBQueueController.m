@@ -9,12 +9,12 @@
 #import "HBAppDelegate.h"
 
 #import "HBQueue.h"
+#import "HBQueueWorker.h"
 #import "HBQueueTableViewController.h"
 #import "HBQueueDetailsViewController.h"
 #import "HBQueueInfoViewController.h"
 #import "HBQueueMultiSelectionViewController.h"
 
-#import "HBDockTile.h"
 #import "HBPreferencesKeys.h"
 #import "NSArray+HBAdditions.h"
 
@@ -31,8 +31,6 @@
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
-
-@property (nonatomic, readonly) HBDockTile *dockTile;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
@@ -56,11 +54,9 @@
     if (self = [super initWithWindowNibName:@"Queue"])
     {
         _queue = queue;
+        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue", DISPATCH_QUEUE_SERIAL);
 
-        // Load the dockTile and instantiate initial text fields
-        _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
-                                                  image:NSApplication.sharedApplication.applicationIconImage];
-        __block double dockIconProgress;
+        NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
             [self queueLowDiskSpaceAlert];
@@ -70,28 +66,7 @@
             [self queueCompletedAlerts];
         }];
 
-        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-            // Update dock icon
-            double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
-
-#define dockTileUpdateFrequency 0.1f
-
-            if (dockIconProgress < 100.0 * progress)
-            {
-                double hours = [note.userInfo[HBQueueProgressNotificationHoursKey] doubleValue];
-                double minutes = [note.userInfo[HBQueueProgressNotificationMinutesKey] doubleValue];
-                double seconds = [note.userInfo[HBQueueProgressNotificationSecondsKey] doubleValue];
-
-                [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
-                dockIconProgress += dockTileUpdateFrequency;
-            }
-        }];
-
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-            // Restore dock icon
-            [self.dockTile updateDockIcon:-1.0 withETA:@""];
-            dockIconProgress = 0;
-
             // Run the per item notification and actions
             HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
             if (item.state == HBQueueItemStateCompleted)
@@ -104,10 +79,6 @@
                 [self itemCompletedAlerts:item];
             }
         }];
-
-        NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
-
-        _sendQueue = dispatch_queue_create("fr.handbrake.SendToQueue", DISPATCH_QUEUE_SERIAL);
     }
 
     return self;
@@ -158,8 +129,8 @@
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         [self updateUI];
     }];
-    [self updateUI];
 
+    [self updateUI];
     [self tableViewDidSelectItemsAtIndexes:[NSIndexSet indexSet]];
 }
 
@@ -319,36 +290,30 @@
             return item.state == HBQueueItemStateWorking;
         }];
 
-        if ([mutableIndexes containsIndexes:workingIndexes])
+        NSIndexSet *workingSelectedIndexes = [workingIndexes intersectionWith:indexes];
+        [mutableIndexes removeIndexes:workingSelectedIndexes];
+
+        if (workingSelectedIndexes.count)
         {
-            [mutableIndexes removeIndexes:workingIndexes];
-            NSArray<HBQueueItem *> *workingItems = [self.queue.items filteredArrayUsingBlock:^BOOL(HBQueueItem *item) {
-                return item.state == HBQueueItemStateWorking;
+            NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
+
+            // Which window to attach the sheet to?
+            NSWindow *targetWindow = self.window;
+
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:alertTitle];
+            [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
+            [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
+            [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
+            [alert setAlertStyle:NSAlertStyleCritical];
+
+            [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
+                if (returnCode == NSAlertSecondButtonReturn)
+                {
+                    [self.queue cancelItemsAtIndexes:workingSelectedIndexes];
+                    [self.queue removeItemsAtIndexes:workingSelectedIndexes];
+                }
             }];
-
-            if (self.queue.currentItem && [workingItems containsObject:self.queue.currentItem])
-            {
-                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
-
-                // Which window to attach the sheet to?
-                NSWindow *targetWindow = self.window;
-
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setMessageText:alertTitle];
-                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
-                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
-                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
-                [alert setAlertStyle:NSAlertStyleCritical];
-
-                [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
-                    if (returnCode == NSAlertSecondButtonReturn)
-                    {
-                        NSInteger index = [self.queue.items indexOfObject:self.queue.currentItem];
-                        [self.queue cancelCurrentItemAndContinue];
-                        [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
-                    }
-                }];
-            }
         }
 
         // remove the non working items immediately
@@ -360,9 +325,10 @@
 {
     NSParameterAssert(item);
 
-    if (item == self.queue.currentItem)
+    if (item.state == HBQueueItemStateWorking)
     {
-        [self.queue cancelCurrentItemAndContinue];
+        NSUInteger index = [self.queue.items indexOfObject:item];
+        [self.queue cancelItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
     }
     else
     {
@@ -393,7 +359,7 @@
     // if this is a currently encoding item, we need to be sure to alert the user,
     // to let them decide to cancel it first, then if they do, we can come back and
     // remove it
-    if (item == self.queue.currentItem)
+    if (item.state == HBQueueItemStateWorking)
     {
         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", @"Queue Edit Alert -> stop and edit message")];
 
@@ -687,7 +653,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertSecondButtonReturn)
         {
-            [self.queue cancelCurrentItemAndContinue];
+            [self.queue cancelCurrentAndContinue];
         }
         else if (returnCode == NSAlertThirdButtonReturn)
         {
@@ -695,7 +661,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
         }
         else if (returnCode == NSAlertThirdButtonReturn + 1)
         {
-            [self.queue cancelCurrentItemAndStop];
+            [self.queue cancelCurrentAndStop];
         }
     }];
 }

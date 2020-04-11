@@ -6,9 +6,13 @@
 
 #import "HBQueueItemView.h"
 
+@class HBQueueWorker;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HBQueueItemWorkingView : HBQueueItemView
+
+@property (nonatomic) HBQueueWorker *worker;
 
 @end
 

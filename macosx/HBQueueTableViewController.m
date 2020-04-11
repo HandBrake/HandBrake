@@ -6,8 +6,10 @@
 
 #import "HBQueueTableViewController.h"
 
+#import "HBQueue.h"
 #import "HBTableView.h"
 #import "HBQueueItemView.h"
+#import "HBQueueItemWorkingView.h"
 
 // Pasteboard type for or drag operations
 #define HBQueueDragDropPboardType @"HBQueueCustomTableViewPboardType"
@@ -49,12 +51,6 @@
     [self.tableView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
     [self.tableView setVerticalMotionCanBeginDrag:YES];
 
-    // Reloads the queue, this is called
-    // when another HandBrake instances modifies the queue
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueReloadItemsNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        [self.tableView reloadData];
-    }];
-
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidAddItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         NSIndexSet *indexes = note.userInfo[HBQueueItemNotificationIndexesKey];
         [self.tableView insertRowsAtIndexes:indexes withAnimation:NSTableViewAnimationSlideDown];
@@ -86,10 +82,12 @@
 
     typedef void (^HBUpdateHeight)(NSNotification *note);
     HBUpdateHeight updateHeight = ^void(NSNotification *note) {
-        NSIndexSet *indexes = note.userInfo[HBQueueItemNotificationIndexesKey];
-        NSIndexSet *columnIndexes = [NSIndexSet indexSetWithIndex:0];
-        if (indexes.count)
+        HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
+        NSUInteger index = [self.queue.items indexOfObject:item];
+        if (index != NSNotFound)
         {
+            NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:index];
+            NSIndexSet *columnIndexes = [NSIndexSet indexSetWithIndex:0];
             [self.tableView reloadDataForRowIndexes:indexes columnIndexes:columnIndexes];
             [self.tableView noteHeightOfRowsWithIndexesChanged:indexes];
         }
@@ -247,16 +245,27 @@
 
 - (NSView *)tableView:(NSTableView *)tableView
    viewForTableColumn:(NSTableColumn *)tableColumn
-                  row:(NSInteger)row {
+                  row:(NSInteger)row
+{
 
     HBQueueItem *item = self.queue.items[row];
+    HBQueueItemView *view = nil;
 
-    HBQueueItemView *view = item.state == HBQueueItemStateWorking && item == self.queue.currentItem ?
-                            [tableView makeViewWithIdentifier:@"MainWorkingCell" owner:self] :
-                            [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+    if (item.state == HBQueueItemStateWorking)
+    {
+        HBQueueItemWorkingView *workingView = [tableView makeViewWithIdentifier:@"MainWorkingCell" owner:self];
+        HBQueueWorker *worker = [self.queue workerForItem:item];
+        workingView.item = item;
+        workingView.worker = worker;
+        view = workingView;
+    }
+    else
+    {
+        view = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+        view.item = item;
+    }
 
     view.delegate = self;
-    view.item = item;
 
     return view;
 }
@@ -269,7 +278,7 @@
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
     HBQueueItem *item = self.queue.items[row];
-    return item.state == HBQueueItemStateWorking && item == self.queue.currentItem ? 58 : 22;
+    return item.state == HBQueueItemStateWorking ? 58 : 22;
 }
 
 #pragma mark NSQueueItemView delegate
@@ -325,15 +334,6 @@
     if (isOnDropTypeProposal)
     {
         return NSDragOperationNone;
-    }
-
-    // We do not let the user drop a pending item before or *above*
-    // already finished or currently encoding items.
-    NSInteger encodingRow = self.queue.currentItem ? [self.queue.items indexOfObject:self.queue.currentItem] : NSNotFound;
-    if (encodingRow != NSNotFound && row <= encodingRow)
-    {
-        return NSDragOperationNone;
-        row = MAX(row, encodingRow);
     }
 
     return NSDragOperationMove;

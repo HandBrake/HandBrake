@@ -38,6 +38,7 @@ NSString * const HBClearOldLogs                  = @"HBClearOldLogs";
 NSString * const HBQueuePauseIfLowSpace          = @"HBQueuePauseIfLowSpace";
 NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
 NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedItems";
+NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
 
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
@@ -82,7 +83,7 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
-        HBDefaultMpegExtension:             @"Auto",
+        HBDefaultMpegExtension:             @".mp4",
         HBUseDvdNav:                        @YES,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
@@ -99,8 +100,9 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
         HBCqSliderFractional:               @2,
         HBQueuePauseIfLowSpace:             @YES,
         HBQueueMinFreeSpace:                @"2",
-        HBQueueAutoClearCompletedItems:     @NO
-        }];
+        HBQueueAutoClearCompletedItems:     @NO,
+        HBQueueWorkerCounts:                @1
+    }];
 
     // Overwrite the update check interval because previous versions
     // could be set to a daily check.

@@ -10,7 +10,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBDockTextField : NSTextField
 
-@property (nonatomic, copy) NSString *textToDisplay;
 @property (nonatomic, copy) NSColor *startColor;
 @property (nonatomic, copy) NSColor *endColor;
 

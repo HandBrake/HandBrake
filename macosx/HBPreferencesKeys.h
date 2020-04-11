@@ -50,4 +50,6 @@ extern NSString * const HBQueuePauseIfLowSpace;
 extern NSString * const HBQueueMinFreeSpace;
 extern NSString * const HBQueueAutoClearCompletedItems;
 
+extern NSString * const HBQueueWorkerCounts;
+
 #endif /* HBPreferencesKeys_h */

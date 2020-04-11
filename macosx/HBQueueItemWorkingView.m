@@ -7,7 +7,7 @@
 #import "HBQueueItemWorkingView.h"
 
 #import "HBQueueItem.h"
-#import "HBQueue.h"
+#import "HBQueueWorker.h"
 
 #import "HBAttributedStringAdditions.h"
 
@@ -23,29 +23,26 @@
 
 @implementation HBQueueItemWorkingView
 
-- (void)setUpObservers
+- (void)setUpObserversWithWorker:(HBQueueWorker *)worker
 {
     NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
 
-    self.progressToken = [center addObserverForName:HBQueueProgressNotification
-                                             object:nil
+    self.progressToken = [center addObserverForName:HBQueueWorkerProgressNotification
+                                             object:worker
                                               queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
                           {
-                              NSString *progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
-                              double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+                              NSString *progressInfo = note.userInfo[HBQueueWorkerProgressNotificationInfoKey];
+                              double progress = [note.userInfo[HBQueueWorkerProgressNotificationPercentKey] doubleValue];
 
                               self.progressField.stringValue = progressInfo;
                               self.progressBar.doubleValue = progress;
                           }];
 
-    self.completedToken = [center addObserverForName:HBQueueDidCompleteItemNotification
-                                              object:nil
+    self.completedToken = [center addObserverForName:HBQueueWorkerDidCompleteItemNotification
+                                              object:worker
                                                queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
                            {
-                               HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
-                               if (completedItem == self.item) {
-                                   [self removeObservers];
-                               }
+                                [self removeObservers];
                            }];
 
     self.progressField.font = [NSFont monospacedDigitSystemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightRegular];
@@ -70,18 +67,16 @@
     [self removeObservers];
 }
 
+- (void)setWorker:(HBQueueWorker *)worker
+{
+    [self setUpObserversWithWorker:worker];
+}
+
 - (void)setItem:(HBQueueItem *)item
 {
     [self removeObservers];
-
     self.progressField.stringValue = @"";
-
     [super setItem:item];
-
-    if (item.state == HBQueueItemStateWorking)
-    {
-        [self setUpObservers];
-    }
 }
 
 @end

@@ -16,5 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface NSIndexSet (HBAdditions)
+
+- (NSIndexSet *)unionWith:(NSIndexSet *)indexSet;
+- (NSIndexSet *)intersectionWith:(NSIndexSet *)indexSet;
+
+@end
+
 NS_ASSUME_NONNULL_END
 

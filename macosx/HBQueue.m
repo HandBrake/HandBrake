@@ -6,13 +6,12 @@
 
 #import "HBQueue.h"
 #import "HBRemoteCore.h"
+#import "HBQueueWorker.h"
 
 #import "HBPreferencesKeys.h"
 #import "NSArray+HBAdditions.h"
-#import "HBJobOutputFileWriter.h"
 
-static void *HBQueueContext = &HBQueueContext;
-static void *HBQueueLogLevelContext = &HBQueueLogLevelContext;
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 NSString * const HBQueueDidChangeStateNotification = @"HBQueueDidChangeStateNotification";
 
@@ -20,22 +19,13 @@ NSString * const HBQueueDidAddItemNotification = @"HBQueueDidAddItemNotification
 NSString * const HBQueueDidRemoveItemNotification = @"HBQueueDidRemoveItemNotification";
 NSString * const HBQueueDidChangeItemNotification = @"HBQueueDidChangeItemNotification";
 
-NSString * const HBQueueItemNotificationIndexesKey = @"HBQueueReloadItemsNotification";
+NSString * const HBQueueItemNotificationIndexesKey = @"HBQueueItemNotificationIndexesKey";
 
 NSString * const HBQueueDidMoveItemNotification = @"HBQueueDidMoveItemNotification";
 NSString * const HBQueueItemNotificationSourceIndexesKey = @"HBQueueItemNotificationSourceIndexesKey";
 NSString * const HBQueueItemNotificationTargetIndexesKey = @"HBQueueItemNotificationTargetIndexesKey";
 
-NSString * const HBQueueReloadItemsNotification = @"HBQueueReloadItemsNotification";
-
 NSString * const HBQueueLowSpaceAlertNotification = @"HBQueueLowSpaceAlertNotification";
-
-NSString * const HBQueueProgressNotification = @"HBQueueProgressNotification";
-NSString * const HBQueueProgressNotificationPercentKey = @"HBQueueProgressNotificationPercentKey";
-NSString * const HBQueueProgressNotificationHoursKey = @"HBQueueProgressNotificationHoursKey";
-NSString * const HBQueueProgressNotificationMinutesKey = @"HBQueueProgressNotificationMinutesKey";
-NSString * const HBQueueProgressNotificationSecondsKey = @"HBQueueProgressNotificationSecondsKey";
-NSString * const HBQueueProgressNotificationInfoKey = @"HBQueueProgressNotificationInfoKey";
 
 NSString * const HBQueueDidStartNotification = @"HBQueueDidStartNotification";
 NSString * const HBQueueDidCompleteNotification = @"HBQueueDidCompleteNotification";
@@ -46,65 +36,87 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 @interface HBQueue ()
 
-@property (nonatomic, readonly) HBRemoteCore *core;
+@property (nonatomic, readonly) NSURL *fileURL;
+
+@property (nonatomic, readonly) NSMutableArray<HBQueueItem *> *itemsInternal;
+@property (nonatomic, readonly) NSArray<HBQueueWorker *> *workers;
+
+@property (nonatomic) IOPMAssertionID assertionID;
 @property (nonatomic) BOOL stop;
 
-@property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
-
-@property (nonatomic, readonly) NSURL *fileURL;
-@property (nonatomic, readonly) NSMutableArray<HBQueueItem *> *itemsInternal;
+@property (nonatomic) NSUInteger pendingItemsCount;
+@property (nonatomic) NSUInteger failedItemsCount;
+@property (nonatomic) NSUInteger completedItemsCount;
+@property (nonatomic) NSUInteger workingItemsCount;
 
 @end
 
 @implementation HBQueue
+
+- (void)setUpWorkers
+{
+    NSArray<NSString *> *xpcServiceNames = @[@"fr.handbrake.HandBrakeXPCService", @"fr.handbrake.HandBrakeXPCService2",
+                                             @"fr.handbrake.HandBrakeXPCService3", @"fr.handbrake.HandBrakeXPCService4"];
+
+    NSMutableArray<HBQueueWorker *> *workers = [[NSMutableArray alloc] init];
+    for (NSString *xpcServiceName in xpcServiceNames)
+    {
+        HBQueueWorker *worker = [[HBQueueWorker alloc] initWithXPCServiceName:xpcServiceName];
+        [workers addObject:worker];
+    }
+    _workers = [workers copy];
+}
+
+- (void)setUpObservers
+{
+    for (HBQueueWorker *worker in _workers)
+    {
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerDidChangeStateNotification
+                                                        object:worker
+                                                         queue:NSOperationQueue.mainQueue
+                                                    usingBlock:^(NSNotification * _Nonnull note) {
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
+        }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerDidStartItemNotification
+                                                        object:worker
+                                                         queue:NSOperationQueue.mainQueue
+                                                    usingBlock:^(NSNotification * _Nonnull note) {
+            [self updateStats];
+            HBQueueItem *item = note.userInfo[HBQueueWorkerItemNotificationItemKey];
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item}];
+        }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerDidCompleteItemNotification
+                                                        object:worker
+                                                         queue:NSOperationQueue.mainQueue
+                                                    usingBlock:^(NSNotification * _Nonnull note) {
+            [self updateStats];
+            HBQueueItem *item = note.userInfo[HBQueueWorkerItemNotificationItemKey];
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item}];
+            [self completedItem:item];
+        }];
+    }
+}
 
 - (instancetype)initWithURL:(NSURL *)fileURL
 {
     self = [super init];
     if (self)
     {
-        NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
-
-        _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
-        _core.automaticallyPreventSleep = NO;
-
         _fileURL = fileURL;
         _itemsInternal = [self load];
         _undoManager = [[NSUndoManager alloc] init];
+        _assertionID = -1;
 
+        [self setEncodingJobsAsPending];
+        [self removeCompletedAndCancelledItems];
         [self updateStats];
 
-        // Set up observers
-        [self.core addObserver:self forKeyPath:@"state"
-                       options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                       context:HBQueueContext];
-
-        [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.LoggingLevel"
-                                                                   options:0 context:HBQueueLogLevelContext];
+        [self setUpWorkers];
+        [self setUpObservers];
     }
     return self;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context == HBQueueContext)
-    {
-        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
-    }
-    else if (context == HBQueueLogLevelContext)
-    {
-        self.core.logLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-- (void)dealloc
-{
-    [self.core removeObserver:self forKeyPath:@"state"];
-    [self.core invalidate];
 }
 
 #pragma mark - Load and save
@@ -141,12 +153,17 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 }
 
-
 #pragma mark - Public methods
 
-- (NSArray *)items
+- (NSArray<HBQueueItem *> *)items
 {
     return self.itemsInternal;
+}
+
+- (NSUInteger)workersCount
+{
+    NSUInteger count = [NSUserDefaults.standardUserDefaults integerForKey:HBQueueWorkerCounts];
+    return count > 0 && count <= 4 ? count : 1;
 }
 
 - (void)addJob:(HBJob *)item
@@ -441,8 +458,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 
     [self updateStats];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
-
     [self save];
 }
 
@@ -453,40 +468,120 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (BOOL)isEncoding
 {
-    HBState s = self.core.state;
-    return self.currentItem || (s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing) || (s == HBStateSearching);
+    BOOL isEncoding = NO;
+    for (HBQueueWorker *worker in self.workers)
+    {
+        isEncoding |= worker.isEncoding;
+    }
+
+    return isEncoding;
+}
+
+- (NSUInteger)countOfEncodings
+{
+    NSUInteger count = 0;
+    for (HBQueueWorker *worker in self.workers)
+    {
+        count += worker.isEncoding ? 1 : 0;
+    }
+
+    return count;
 }
 
 - (BOOL)canPause
 {
-    HBState s = self.core.state;
-    return (s == HBStateWorking || s == HBStateMuxing);
+    BOOL canPause = NO;
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.isEncoding)
+        {
+            canPause |= worker.canPause;
+        }
+    }
+
+    return canPause;
 }
 
 - (void)pause
 {
-    [self.currentItem pausedAtDate:[NSDate date]];
-    [self.core pause];
-    [self.core allowSleep];
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.canPause)
+        {
+            [worker pause];
+        }
+    }
+    [self allowSleep];
 }
 
 - (BOOL)canResume
 {
-    return self.core.state == HBStatePaused;
+    BOOL canResume = NO;
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.isEncoding)
+        {
+            canResume |= worker.canResume;
+        }
+    }
+
+    return canResume;
 }
 
 - (void)resume
 {
-    [self.currentItem resumedAtDate:[NSDate date]];
-    [self.core resume];
-    [self.core preventSleep];
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.canResume)
+        {
+            [worker resume];
+        }
+    }
+    [self preventSleep];
+}
+
+#pragma mark - Sleep
+
+- (void)preventSleep
+{
+    if (_assertionID != -1)
+    {
+        // nothing to do
+        return;
+    }
+
+    CFStringRef reasonForActivity= CFSTR("HandBrake is currently scanning and/or encoding");
+
+    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
+                                                   kIOPMAssertionLevelOn, reasonForActivity, &_assertionID);
+
+    if (success != kIOReturnSuccess)
+    {
+        [HBUtilities writeToActivityLog:"HBRemoteCore: failed to prevent system sleep"];
+    }
+}
+
+- (void)allowSleep
+{
+    if (_assertionID == -1)
+    {
+        // nothing to do
+        return;
+    }
+
+    IOReturn success = IOPMAssertionRelease(_assertionID);
+
+    if (success == kIOReturnSuccess)
+    {
+        _assertionID = -1;
+    }
 }
 
 #pragma mark - Private queue editing methods
 
 - (void)updateStats
 {
-    NSUInteger pendingCount = 0, failedCount = 0, completedCount = 0;
+    NSUInteger pendingCount = 0, failedCount = 0, completedCount = 0, workingCount = 0;
 
     for (HBQueueItem *item in self.itemsInternal)
     {
@@ -502,11 +597,16 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         {
             failedCount++;
         }
+        else if (item.state == HBQueueItemStateWorking)
+        {
+            workingCount++;
+        }
     }
 
     self.pendingItemsCount = pendingCount;
     self.failedItemsCount = failedCount;
     self.completedItemsCount = completedCount;
+    self.workingItemsCount = workingCount;
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
 }
@@ -542,7 +642,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 /**
  * Used to get the next pending queue item and return it if found
  */
-- (HBQueueItem *)getNextPendingQueueItem
+- (HBQueueItem *)nextPendingQueueItem
 {
     for (HBQueueItem *item in self.itemsInternal)
     {
@@ -554,12 +654,25 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     return nil;
 }
 
+- (HBQueueWorker *)firstAvailableWorker
+{
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.isEncoding == NO)
+        {
+            return worker;
+        }
+    }
+    return nil;
+}
+
 - (void)start
 {
     if (self.canEncode)
     {
+        self.stop = NO;
         [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartNotification object:self];
-        [self.core preventSleep];
+        [self preventSleep];
         [self encodeNextQueueItem];
     }
 }
@@ -572,249 +685,93 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     // since we have completed an encode, we go to the next
     if (self.stop)
     {
-        [HBUtilities writeToActivityLog:"Queue manually stopped"];
-
-        self.stop = NO;
-        [self.core allowSleep];
-
-        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
+        if (self.isEncoding == NO)
+        {
+            [HBUtilities writeToActivityLog:"Queue manually stopped"];
+            [self allowSleep];
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
+        }
     }
     else
     {
         // Check to see if there are any more pending items in the queue
-        HBQueueItem *nextItem = [self getNextPendingQueueItem];
+        HBQueueItem *nextItem = self.nextPendingQueueItem;
+        HBQueueWorker *worker = self.firstAvailableWorker;
 
         if (nextItem && [self isDiskSpaceLowAtURL:nextItem.outputURL])
         {
             // Disk space is low, show an alert
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
-            [self.core allowSleep];
+            [self allowSleep];
+
+            [self pause];
 
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueLowSpaceAlertNotification object:self];
         }
         // If we still have more pending items in our queue, lets go to the next one
-        else if (nextItem)
+        else if (nextItem && worker && self.countOfEncodings < self.workersCount)
         {
-            // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
-            nextItem.startedDate = [NSDate date];
-            nextItem.state = HBQueueItemStateWorking;
+            [worker encodeItem:nextItem];
 
-            // Tell HB to output a new activity log file for this encode
-            self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
-            if (self.currentLog)
-            {
-                nextItem.activityLogURL = self.currentLog.url;
-
-                dispatch_queue_t mainQueue = dispatch_get_main_queue();
-                [self.core.stderrRedirect addListener:self.currentLog queue:mainQueue];
-                [self.core.stdoutRedirect addListener:self.currentLog queue:mainQueue];
-            }
-
-            self.currentItem = nextItem;
-            NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:[self.itemsInternal indexOfObject:nextItem]];
-
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: nextItem,
-                                                                                                                            HBQueueItemNotificationIndexesKey: indexes}];
-
-            // now we can go ahead and scan the new pending queue item
-            [self encodeItem:nextItem];
-
-            // erase undo manager history
+            // Erase undo manager history
             [self.undoManager removeAllActions];
+
+            if (self.firstAvailableWorker)
+            {
+                [self encodeNextQueueItem];
+            }
         }
-        else
+        else if (self.isEncoding == NO)
         {
             [HBUtilities writeToActivityLog:"Queue Done, there are no more pending encodes"];
-            [self.core allowSleep];
+            [self allowSleep];
 
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
         }
     }
 
-    [self updateStats];
-
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
-
     [self save];
 }
 
-- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result
+- (void)completedItem:(HBQueueItem *)item
 {
     NSParameterAssert(item);
-
-    item.endedDate = [NSDate date];
-
-    // Since we are done with this encode, tell output to stop writing to the
-    // individual encode log.
-    [self.core.stderrRedirect removeListener:self.currentLog];
-    [self.core.stdoutRedirect removeListener:self.currentLog];
-
-    self.currentLog = nil;
-
-    // Mark the encode just finished
-    switch (result) {
-        case HBCoreResultDone:
-            item.state = HBQueueItemStateCompleted;
-            break;
-        case HBCoreResultCanceled:
-            item.state = HBQueueItemStateCanceled;
-            break;
-        default:
-            item.state = HBQueueItemStateFailed;
-            break;
-    }
-
-    // Update UI
-    NSString *info = nil;
-    switch (result) {
-        case HBCoreResultDone:
-            info = NSLocalizedString(@"Encode Finished.", @"Queue status");
-            break;
-        case HBCoreResultCanceled:
-            info = NSLocalizedString(@"Encode Canceled.", @"Queue status");
-            break;
-        default:
-            info = NSLocalizedString(@"Encode Failed.", @"Queue status");
-            break;
-    }
-
-    self.currentItem = nil;
-
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification object:self userInfo:@{HBQueueProgressNotificationPercentKey: @1.0,
-                                                                                                                HBQueueProgressNotificationInfoKey: info}];
-
-    NSUInteger index = [self.itemsInternal indexOfObject:item];
-    NSIndexSet *indexes = index != NSNotFound ? [NSIndexSet indexSetWithIndex:index] : [NSIndexSet indexSet];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item,
-                                                                                                                       HBQueueItemNotificationIndexesKey: indexes}];
-
     [self save];
-}
-
-/**
- * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
- */
-- (void)encodeItem:(HBQueueItem *)item
-{
-    NSParameterAssert(item);
-
-    // Progress handler
-    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-    {
-        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification object:self userInfo:@{HBQueueProgressNotificationPercentKey: @0,
-                                                                                                                    HBQueueProgressNotificationInfoKey: info}];
-    };
-
-    // Completion handler
-    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
-    {
-        if (result == HBCoreResultDone)
-        {
-            [self realEncodeItem:item];
-        }
-        else
-        {
-            [self completedItem:item result:result];
-            [self encodeNextQueueItem];
-        }
-    };
-
-    [item.job refreshSecurityScopedResources];
-
-    // Only scan 10 previews before an encode - additional previews are
-    // only useful for autocrop and static previews, which are already taken care of at this point
-    [self.core scanURL:item.fileURL
-            titleIndex:item.job.titleIdx
-              previews:10
-           minDuration:0
-          keepPreviews:NO
-       progressHandler:progressHandler
-     completionHandler:completionHandler];
-}
-
-/**
- * This assumes that we have re-scanned and loaded up a new queue item to send to libhb
- */
-- (void)realEncodeItem:(HBQueueItem *)item
-{
-    NSParameterAssert(item);
-
-    HBJob *job = item.job;
-
-    NSParameterAssert(job);
-
-    // Progress handler
-    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-    {
-        if (state == HBStateMuxing)
-        {
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification
-                                                              object:self
-                                                            userInfo:@{HBQueueProgressNotificationPercentKey: @1,
-                                                                       HBQueueProgressNotificationInfoKey: info}];
-        }
-        else
-        {
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification
-                                                              object:self
-                                                            userInfo:@{HBQueueProgressNotificationPercentKey: @(progress.percent),
-                                                                       HBQueueProgressNotificationHoursKey: @(progress.hours),
-                                                                       HBQueueProgressNotificationMinutesKey: @(progress.minutes),
-                                                                       HBQueueProgressNotificationSecondsKey: @(progress.seconds),
-                                                                       HBQueueProgressNotificationInfoKey: info}];
-        }
-    };
-
-    // Completion handler
-    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
-    {
-        [self completedItem:item result:result];
-
-        if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueueAutoClearCompletedItems])
-        {
-            [self removeCompletedItems];
-        }
-
-        [self encodeNextQueueItem];
-    };
-
-    // We should be all setup so let 'er rip
-    [self.core encodeJob:job progressHandler:progressHandler completionHandler:completionHandler];
+    [self encodeNextQueueItem];
 }
 
 /**
  * Cancels the current job
  */
-- (void)doCancelCurrentItem
+- (void)doCancelAll
 {
-    if (self.core.state == HBStateScanning)
+    for (HBQueueWorker *worker in self.workers)
     {
-        [self.core cancelScan];
-    }
-    else
-    {
-        [self.core cancelEncode];
+        if (worker.isEncoding)
+        {
+            [worker cancel];
+        }
     }
 }
 
 /**
  * Cancels the current job and starts processing the next in queue.
  */
-- (void)cancelCurrentItemAndContinue
+- (void)cancelCurrentAndContinue
 {
-    [self doCancelCurrentItem];
+    [self doCancelAll];
 }
 
 /**
  * Cancels the current job and stops libhb from processing the remaining encodes.
  */
-- (void)cancelCurrentItemAndStop
+- (void)cancelCurrentAndStop
 {
-    if (self.core.state != HBStateIdle)
+    if (self.isEncoding)
     {
         self.stop = YES;
-        [self doCancelCurrentItem];
+        [self doCancelAll];
     }
 }
 
@@ -823,10 +780,35 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)finishCurrentAndStop
 {
-    if (self.core.state != HBStateIdle)
+    if (self.isEncoding)
     {
         self.stop = YES;
     }
+}
+
+- (void)cancelItemsAtIndexes:(NSIndexSet *)indexes
+{
+    NSArray<HBQueueItem *> *items = [self.items objectsAtIndexes:indexes];
+
+    for (HBQueueItem *item in items) {
+        for (HBQueueWorker *worker in self.workers) {
+            if (worker.item == item) {
+                [worker cancel];
+            }
+        }
+    }
+}
+
+- (nullable HBQueueWorker *)workerForItem:(HBQueueItem *)item
+{
+    for (HBQueueWorker *worker in self.workers)
+    {
+        if (worker.item == item)
+        {
+            return worker;
+        }
+    }
+    return nil;
 }
 
 @end

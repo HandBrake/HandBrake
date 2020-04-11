@@ -5,7 +5,6 @@
 #import "HBRemoteCore.h"
 #import "HBRemoteCoreProtocol.h"
 #import "HBPreferencesKeys.h"
-#import <IOKit/pwr_mgt/IOPMLib.h>
 
 @import HandBrakeKit;
 
@@ -18,11 +17,10 @@
 
 @property (nonatomic, readonly) NSInteger level;
 @property (nonatomic, readonly, copy) NSString *name;
+@property (nonatomic, readonly, copy) NSString *serviceName;
 
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
-
-@property (nonatomic, readwrite) IOPMAssertionID assertionID;
 
 @end
 
@@ -36,27 +34,28 @@
         _state = HBStateIdle;
         _stdoutRedirect = HBRedirect.stdoutRedirect;
         _stderrRedirect = HBRedirect.stderrRedirect;
-        _assertionID = -1;
         _level = 1;
         _name = @"HandBrakeXPC";
+        _serviceName = @"fr.handbrake.HandBrakeXPCService";
     }
     return self;
 }
 
-- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
+- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name serviceName:(NSString *)serviceName
 {
     self = [self init];
     if (self)
     {
         _level = level;
-        _name = name;
+        _name = [name copy];
+        _serviceName = [serviceName copy];
     }
     return self;
 }
 
 - (void)connect
 {
-    _connection = [[NSXPCConnection alloc] initWithServiceName:@"fr.handbrake.HandBrakeXPCService"];
+    _connection = [[NSXPCConnection alloc] initWithServiceName:self.serviceName];
     _connection.remoteObjectInterface = [NSXPCInterface interfaceWithProtocol:@protocol(HBRemoteCoreProtocol)];
 
     _connection.exportedInterface = [NSXPCInterface interfaceWithProtocol:@protocol(HBRemoteProgressProtocol)];
@@ -129,55 +128,19 @@
     [_proxy setLogLevel:logLevel];
 }
 
-- (void)preventSleep
+- (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
 {
-    if (_assertionID != -1)
-    {
-        // nothing to do
-        return;
-    }
-
-    CFStringRef reasonForActivity= CFSTR("HandBrake is currently scanning and/or encoding");
-
-    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
-                                                   kIOPMAssertionLevelOn, reasonForActivity, &_assertionID);
-
-    if (success != kIOReturnSuccess)
-    {
-        [HBUtilities writeToActivityLog:"HBRemoteCore: failed to prevent system sleep"];
-    }
+    [_proxy setAutomaticallyPreventSleep:automaticallyPreventSleep];
 }
 
 - (void)allowSleep
 {
-    if (_assertionID == -1)
-    {
-        // nothing to do
-        return;
-    }
-
-    IOReturn success = IOPMAssertionRelease(_assertionID);
-
-    if (success == kIOReturnSuccess)
-    {
-        _assertionID = -1;
-    }
+    [_proxy allowSleep];
 }
 
-- (void)preventAutoSleep
+- (void)preventSleep
 {
-    if (self.automaticallyPreventSleep)
-    {
-        [self preventSleep];
-    }
-}
-
-- (void)allowAutoSleep
-{
-    if (self.automaticallyPreventSleep)
-    {
-        [self allowSleep];
-    }
+    [_proxy preventSleep];
 }
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
@@ -186,8 +149,6 @@
     {
         [self connect];
     }
-
-    [self preventAutoSleep];
 
 #ifdef __SANDBOX_ENABLED__
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
@@ -214,7 +175,6 @@
 #ifdef __SANDBOX_ENABLED__
             token = nil;
 #endif
-            [weakSelf allowAutoSleep];
             handler(result);
         });
     }];
@@ -227,8 +187,6 @@
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
-    [self preventAutoSleep];
-
 #ifdef __SANDBOX_ENABLED__
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:job];
 
@@ -271,7 +229,6 @@
 #ifdef __SANDBOX_ENABLED__
             token = nil;
 #endif
-            [weakSelf allowAutoSleep];
             handler(result);
         });
     }];
@@ -308,13 +265,11 @@
 - (void)pause
 {
     [_proxy pauseEncode];
-    [self allowAutoSleep];
 }
 
 - (void)resume
 {
     [_proxy resumeEncode];
-    [self preventAutoSleep];
 }
 
 @end

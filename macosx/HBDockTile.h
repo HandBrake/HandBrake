@@ -13,12 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithDockTile:(NSDockTile *)dockTile image:(NSImage *)image NS_DESIGNATED_INITIALIZER;
 
+@property (nonatomic, copy) NSString *stringValue;
+
 /**
  *  Updates two DockTextFields on the dockTile,
  *  one with total percentage, the other one with the ETA.
  *  The ETA string is formatted by the callers *
  */
-- (void)updateDockIcon:(double)progress withETA:(NSString *)etaStr;
+- (void)setProgress:(double)progress ETA:(NSString *)etaStr;
 
 
 /**
@@ -30,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  When these conditions doesn't applied (eg. when ETA is undefined)
  *  we show just a tilde (~)
  */
-- (void)updateDockIcon:(double)progress hours:(NSInteger)hours minutes:(NSInteger)minutes seconds:(NSInteger)seconds;
+- (void)setProgress:(double)progress hours:(NSInteger)hours minutes:(NSInteger)minutes seconds:(NSInteger)seconds;
 
 @end
 

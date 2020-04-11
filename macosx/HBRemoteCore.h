@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBRemoteCore : NSObject
 
-- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name;
+- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name serviceName:(NSString *)serviceName;
 - (void)invalidate;
 
 @property (nonatomic, readwrite) NSInteger logLevel;

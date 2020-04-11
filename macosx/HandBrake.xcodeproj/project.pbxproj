@@ -81,6 +81,7 @@
 		A91119A41C7DD614001C463C /* HBSubtitlesDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91485FE1F61296100374C12 /* HBFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91485FD1F61296100374C12 /* HBFiltersViewController.m */; };
 		A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB21BC441C700157917 /* HBPreviewView.m */; };
+		A9150DAE243F7BE200694870 /* HBQueueDockTileController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9150DAD243F7BE200694870 /* HBQueueDockTileController.m */; };
 		A916180E1C845161000556C6 /* NSDictionary+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */; };
 		A916C9921C84498F00C7B560 /* HBDockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* HBDockTextField.m */; };
 		A916C9931C8449A100C7B560 /* HBAddPresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */; };
@@ -185,6 +186,27 @@
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
 		A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		A92B148220CA9F7700146FD8 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B148120CA9F7600146FD8 /* HBHUDView.m */; };
+		A93341B7243E1583003A82C2 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
+		A93341B8243E1583003A82C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39B22FDE8EE00DFCAEA /* main.m */; };
+		A93341B9243E1583003A82C2 /* HandBrakeXPCService.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */; };
+		A93341BA243E1583003A82C2 /* HBRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = A954010222FF397000F83A5F /* HBRedirect.m */; };
+		A93341BC243E1583003A82C2 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
+		A93341C8243E158B003A82C2 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
+		A93341C9243E158B003A82C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39B22FDE8EE00DFCAEA /* main.m */; };
+		A93341CA243E158B003A82C2 /* HandBrakeXPCService.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */; };
+		A93341CB243E158B003A82C2 /* HBRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = A954010222FF397000F83A5F /* HBRedirect.m */; };
+		A93341CD243E158B003A82C2 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
+		A93341CF243E158B003A82C2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A919992A23003CFC0037F526 /* Localizable.strings */; };
+		A93341D9243E158E003A82C2 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
+		A93341DA243E158E003A82C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39B22FDE8EE00DFCAEA /* main.m */; };
+		A93341DB243E158E003A82C2 /* HandBrakeXPCService.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */; };
+		A93341DC243E158E003A82C2 /* HBRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = A954010222FF397000F83A5F /* HBRedirect.m */; };
+		A93341DE243E158E003A82C2 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
+		A93341E0243E158E003A82C2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A919992A23003CFC0037F526 /* Localizable.strings */; };
+		A93341EE243E15BE003A82C2 /* HandBrakeXPCService2.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A93341EF243E15BE003A82C2 /* HandBrakeXPCService3.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A93341F0243E15BE003A82C2 /* HandBrakeXPCService4.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A93341F1243E15CE003A82C2 /* HandBrakeXPCService.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
 		A939854F22315575001DCAEB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A939854D2231556D001DCAEB /* Sparkle.framework */; };
 		A939855022315592001DCAEB /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A939854D2231556D001DCAEB /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -199,6 +221,7 @@
 		A94A98F51C858EFB004BA9BA /* HBDictTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94A98F41C858EFB004BA9BA /* HBDictTests.m */; };
 		A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */; };
 		A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */; };
+		A951D9CA243E5B50002579F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A919992A23003CFC0037F526 /* Localizable.strings */; };
 		A954010022FF240E00F83A5F /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		A954010322FF397000F83A5F /* HBRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = A954010222FF397000F83A5F /* HBRedirect.m */; };
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
@@ -212,7 +235,6 @@
 		A96127E422E09ADD0086E6DC /* HBQueueTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96127E222E09ADD0086E6DC /* HBQueueTableViewController.m */; };
 		A964D39A22FDE8EE00DFCAEA /* HandBrakeXPCService.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */; };
 		A964D39C22FDE8EE00DFCAEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D39B22FDE8EE00DFCAEA /* main.m */; };
-		A964D3A022FDE8EE00DFCAEA /* HandBrakeXPCService.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A964D3A822FDE91B00DFCAEA /* HBRemoteCore.m in Sources */ = {isa = PBXBuildFile; fileRef = A964D3A722FDE91B00DFCAEA /* HBRemoteCore.m */; };
 		A96664B01CCE45BF00DA4A57 /* HBPlayerHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664AE1CCE45BF00DA4A57 /* HBPlayerHUDController.m */; };
 		A96664B51CCE48F700DA4A57 /* HBPictureHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */; };
@@ -241,6 +263,7 @@
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
 		A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
 		A9A25D9D21182753005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
+		A9A5F7D5243DD90100C82EC8 /* HBQueueWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */; };
 		A9A7E27C1FE2A0B5006BE79F /* HBPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */; };
 		A9A96B8220CAD2C200A39AFB /* HBPictureHUDController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96B8420CAD2C200A39AFB /* HBPictureHUDController.xib */; };
 		A9A96B8520CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96B8720CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib */; };
@@ -318,6 +341,27 @@
 			remoteGlobalIDString = 273F203814ADBC200021BE6D;
 			remoteInfo = HandBrake;
 		};
+		A93341E8243E15B2003A82C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A93341B5243E1583003A82C2;
+			remoteInfo = HandBrakeXPCService2;
+		};
+		A93341EA243E15B4003A82C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A93341C6243E158B003A82C2;
+			remoteInfo = HandBrakeXPCService3;
+		};
+		A93341EC243E15B6003A82C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A93341D7243E158E003A82C2;
+			remoteInfo = HandBrakeXPCService4;
+		};
 		A964D39E22FDE8EE00DFCAEA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
@@ -382,9 +426,12 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
+				A93341F1243E15CE003A82C2 /* HandBrakeXPCService.xpc in CopyFiles */,
+				A93341EE243E15BE003A82C2 /* HandBrakeXPCService2.xpc in CopyFiles */,
+				A93341EF243E15BE003A82C2 /* HandBrakeXPCService3.xpc in CopyFiles */,
+				A93341F0243E15BE003A82C2 /* HandBrakeXPCService4.xpc in CopyFiles */,
 				A939855622315638001DCAEB /* org.sparkle-project.InstallerConnection.xpc in CopyFiles */,
 				A939855722315638001DCAEB /* org.sparkle-project.InstallerLauncher.xpc in CopyFiles */,
-				A964D3A022FDE8EE00DFCAEA /* HandBrakeXPCService.xpc in CopyFiles */,
 				A939855822315638001DCAEB /* org.sparkle-project.InstallerStatus.xpc in CopyFiles */,
 				A939855A22315993001DCAEB /* org.sparkle-project.Downloader.xpc in CopyFiles */,
 			);
@@ -504,6 +551,8 @@
 		A91485FD1F61296100374C12 /* HBFiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBFiltersViewController.m; sourceTree = "<group>"; };
 		A914BCB11BC441C700157917 /* HBPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewView.h; sourceTree = "<group>"; };
 		A914BCB21BC441C700157917 /* HBPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewView.m; sourceTree = "<group>"; };
+		A9150DAC243F7BE200694870 /* HBQueueDockTileController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueDockTileController.h; sourceTree = "<group>"; };
+		A9150DAD243F7BE200694870 /* HBQueueDockTileController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueDockTileController.m; sourceTree = "<group>"; };
 		A9160A331AE7A165009A7818 /* HBCodingUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCodingUtilities.h; sourceTree = "<group>"; };
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
@@ -539,6 +588,9 @@
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
 		A932E271198834130047D13E /* HBAudioDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaults.h; sourceTree = "<group>"; };
 		A932E272198834130047D13E /* HBAudioDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaults.m; sourceTree = "<group>"; };
+		A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService2.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService3.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService4.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		A939854D2231556D001DCAEB /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		A939855222315628001DCAEB /* org.sparkle-project.InstallerConnection.xpc */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.xpc-service"; name = "org.sparkle-project.InstallerConnection.xpc"; path = "Sparkle/org.sparkle-project.InstallerConnection.xpc"; sourceTree = SOURCE_ROOT; };
@@ -664,6 +716,9 @@
 		A97ED7FA22EC5E9300AEF29B /* HBQueueDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HBQueueDetailsViewController.xib; sourceTree = "<group>"; };
 		A98036CB1CCA91DD007661AA /* HBAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAVPlayer.h; sourceTree = "<group>"; };
 		A98036CC1CCA91DD007661AA /* HBAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAVPlayer.m; sourceTree = "<group>"; };
+		A9884FA4243E544800B61738 /* HandBrakeXPCService2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HandBrakeXPCService2.plist; sourceTree = "<group>"; };
+		A9884FA6243E544E00B61738 /* HandBrakeXPCService3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HandBrakeXPCService3.plist; sourceTree = "<group>"; };
+		A9884FA8243E545400B61738 /* HandBrakeXPCService4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HandBrakeXPCService4.plist; sourceTree = "<group>"; };
 		A988AF9B1BC7C35F00932543 /* HBChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapter.h; sourceTree = "<group>"; };
 		A988AF9C1BC7C35F00932543 /* HBChapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapter.m; sourceTree = "<group>"; };
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
@@ -682,6 +737,8 @@
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
 		A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPlayerTrack.m; sourceTree = "<group>"; };
 		A9A25D9B21182741005A8A0F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		A9A5F7D3243DD90100C82EC8 /* HBQueueWorker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueWorker.h; sourceTree = "<group>"; };
+		A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueWorker.m; sourceTree = "<group>"; };
 		A9A70DB621FB1A980038085A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A9A7E2791FE2A0B5006BE79F /* HBPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewViewController.h; sourceTree = "<group>"; };
 		A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPreviewViewController.m; sourceTree = "<group>"; };
@@ -804,7 +861,7 @@
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
 		A9E52CD7218DD52A00E17B86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ExceptionAlert.xib; sourceTree = "<group>"; };
-		A9E8F80423003B2F00AA14E9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9E8F80423003B2F00AA14E9 /* HandBrakeXPCService1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HandBrakeXPCService1.plist; sourceTree = "<group>"; };
 		A9EA43661A2210C400785E95 /* HBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableView.h; sourceTree = "<group>"; };
 		A9EA43671A2210C400785E95 /* HBTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableView.m; sourceTree = "<group>"; };
 		A9F217E41E2F897D00C10C6E /* HandBrake.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HandBrake.entitlements; sourceTree = "<group>"; };
@@ -905,6 +962,30 @@
 				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
 				A9736F171C7DA5FE008F1D18 /* HandBrakeKit.framework in Frameworks */,
 				A939854F22315575001DCAEB /* Sparkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341BB243E1583003A82C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341BC243E1583003A82C2 /* HandBrakeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341CC243E158B003A82C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341CD243E158B003A82C2 /* HandBrakeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341DD243E158E003A82C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341DE243E158E003A82C2 /* HandBrakeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1041,6 +1122,9 @@
 				A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */,
 				A9736F0B1C7DA5FE008F1D18 /* HandBrakeKitTests.xctest */,
 				A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */,
+				A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */,
+				A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */,
+				A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1208,6 +1292,8 @@
 				A97ECB8122E1D85500570935 /* HBQueue.m */,
 				A95BA15B220C968500A2F9F9 /* HBQueueItem.h */,
 				A95BA15C220C968500A2F9F9 /* HBQueueItem.m */,
+				A9A5F7D3243DD90100C82EC8 /* HBQueueWorker.h */,
+				A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */,
 				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
 				A9906B2B1A710920001D82D5 /* HBQueueController.m */,
 				A9A96BD220CAD63000A39AFB /* Queue.xib */,
@@ -1227,6 +1313,8 @@
 				A97ED7F822EC5E9300AEF29B /* HBQueueDetailsViewController.h */,
 				A97ED7F922EC5E9300AEF29B /* HBQueueDetailsViewController.m */,
 				A97ED7FA22EC5E9300AEF29B /* HBQueueDetailsViewController.xib */,
+				A9150DAC243F7BE200694870 /* HBQueueDockTileController.h */,
+				A9150DAD243F7BE200694870 /* HBQueueDockTileController.m */,
 			);
 			name = Queue;
 			sourceTree = "<group>";
@@ -1401,7 +1489,10 @@
 				A964D39822FDE8EE00DFCAEA /* HandBrakeXPCService.h */,
 				A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */,
 				A964D39B22FDE8EE00DFCAEA /* main.m */,
-				A9E8F80423003B2F00AA14E9 /* Info.plist */,
+				A9E8F80423003B2F00AA14E9 /* HandBrakeXPCService1.plist */,
+				A9884FA4243E544800B61738 /* HandBrakeXPCService2.plist */,
+				A9884FA6243E544E00B61738 /* HandBrakeXPCService3.plist */,
+				A9884FA8243E545400B61738 /* HandBrakeXPCService4.plist */,
 				A919992A23003CFC0037F526 /* Localizable.strings */,
 			);
 			path = HandBrakeXPCService;
@@ -1702,11 +1793,65 @@
 			dependencies = (
 				A91CE2EF1C7DB40D0068F46F /* PBXTargetDependency */,
 				A964D39F22FDE8EE00DFCAEA /* PBXTargetDependency */,
+				A93341E9243E15B2003A82C2 /* PBXTargetDependency */,
+				A93341EB243E15B4003A82C2 /* PBXTargetDependency */,
+				A93341ED243E15B6003A82C2 /* PBXTargetDependency */,
 			);
 			name = HandBrake;
 			productName = HandBrake;
 			productReference = 273F203914ADBC210021BE6D /* HandBrake.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A93341B5243E1583003A82C2 /* HandBrakeXPCService2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A93341BF243E1583003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService2" */;
+			buildPhases = (
+				A93341B6243E1583003A82C2 /* Sources */,
+				A93341BB243E1583003A82C2 /* Frameworks */,
+				A93341BD243E1583003A82C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HandBrakeXPCService2;
+			productName = HandBrakeXPCService;
+			productReference = A93341C4243E1583003A82C2 /* HandBrakeXPCService2.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
+		A93341C6243E158B003A82C2 /* HandBrakeXPCService3 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A93341D0243E158B003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService3" */;
+			buildPhases = (
+				A93341C7243E158B003A82C2 /* Sources */,
+				A93341CC243E158B003A82C2 /* Frameworks */,
+				A93341CE243E158B003A82C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HandBrakeXPCService3;
+			productName = HandBrakeXPCService;
+			productReference = A93341D5243E158B003A82C2 /* HandBrakeXPCService3.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
+		A93341D7243E158E003A82C2 /* HandBrakeXPCService4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A93341E1243E158E003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService4" */;
+			buildPhases = (
+				A93341D8243E158E003A82C2 /* Sources */,
+				A93341DD243E158E003A82C2 /* Frameworks */,
+				A93341DF243E158E003A82C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HandBrakeXPCService4;
+			productName = HandBrakeXPCService;
+			productReference = A93341E6243E158E003A82C2 /* HandBrakeXPCService4.xpc */;
+			productType = "com.apple.product-type.xpc-service";
 		};
 		A964D39422FDE8EE00DFCAEA /* HandBrakeXPCService */ = {
 			isa = PBXNativeTarget;
@@ -1829,6 +1974,9 @@
 				A9736F0A1C7DA5FE008F1D18 /* HandBrakeKitTests */,
 				273F203814ADBC200021BE6D /* HandBrake */,
 				A964D39422FDE8EE00DFCAEA /* HandBrakeXPCService */,
+				A93341B5243E1583003A82C2 /* HandBrakeXPCService2 */,
+				A93341C6243E158B003A82C2 /* HandBrakeXPCService3 */,
+				A93341D7243E158E003A82C2 /* HandBrakeXPCService4 */,
 			);
 		};
 /* End PBXProject section */
@@ -1881,6 +2029,30 @@
 				A975B02220F7AF29004675CC /* Localizable.strings in Resources */,
 				A9A96BDD20CAD66000A39AFB /* OutputPanel.xib in Resources */,
 				A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341BD243E1583003A82C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A951D9CA243E5B50002579F2 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341CE243E158B003A82C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341CF243E158B003A82C2 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341DF243E158E003A82C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341E0243E158E003A82C2 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2005,12 +2177,47 @@
 				A96127DF22E0994E0086E6DC /* HBQueueInfoViewController.m in Sources */,
 				A97ECB8222E1D85500570935 /* HBQueue.m in Sources */,
 				A92B148220CA9F7700146FD8 /* HBHUDView.m in Sources */,
+				A9150DAE243F7BE200694870 /* HBQueueDockTileController.m in Sources */,
 				A9B3B63922E2EA58001CEB9A /* HBQueueItemWorkingView.m in Sources */,
 				A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
 				273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
+				A9A5F7D5243DD90100C82EC8 /* HBQueueWorker.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341B6243E1583003A82C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341B7243E1583003A82C2 /* HBOutputRedirect.m in Sources */,
+				A93341B8243E1583003A82C2 /* main.m in Sources */,
+				A93341B9243E1583003A82C2 /* HandBrakeXPCService.m in Sources */,
+				A93341BA243E1583003A82C2 /* HBRedirect.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341C7243E158B003A82C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341C8243E158B003A82C2 /* HBOutputRedirect.m in Sources */,
+				A93341C9243E158B003A82C2 /* main.m in Sources */,
+				A93341CA243E158B003A82C2 /* HandBrakeXPCService.m in Sources */,
+				A93341CB243E158B003A82C2 /* HBRedirect.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93341D8243E158E003A82C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93341D9243E158E003A82C2 /* HBOutputRedirect.m in Sources */,
+				A93341DA243E158E003A82C2 /* main.m in Sources */,
+				A93341DB243E158E003A82C2 /* HandBrakeXPCService.m in Sources */,
+				A93341DC243E158E003A82C2 /* HBRedirect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2088,6 +2295,21 @@
 			isa = PBXTargetDependency;
 			target = 273F203814ADBC200021BE6D /* HandBrake */;
 			targetProxy = A91CE2FF1C7DBA2C0068F46F /* PBXContainerItemProxy */;
+		};
+		A93341E9243E15B2003A82C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A93341B5243E1583003A82C2 /* HandBrakeXPCService2 */;
+			targetProxy = A93341E8243E15B2003A82C2 /* PBXContainerItemProxy */;
+		};
+		A93341EB243E15B4003A82C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A93341C6243E158B003A82C2 /* HandBrakeXPCService3 */;
+			targetProxy = A93341EA243E15B4003A82C2 /* PBXContainerItemProxy */;
+		};
+		A93341ED243E15B6003A82C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A93341D7243E158E003A82C2 /* HandBrakeXPCService4 */;
+			targetProxy = A93341EC243E15B6003A82C2 /* PBXContainerItemProxy */;
 		};
 		A964D39F22FDE8EE00DFCAEA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2829,6 +3051,744 @@
 			};
 			name = release;
 		};
+		A93341C0243E1583003A82C2 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService2.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = debug;
+		};
+		A93341C1243E1583003A82C2 /* debug-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService2.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "debug-sandbox";
+		};
+		A93341C2243E1583003A82C2 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService2.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = release;
+		};
+		A93341C3243E1583003A82C2 /* release-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService2.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "release-sandbox";
+		};
+		A93341D1243E158B003A82C2 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService3.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = debug;
+		};
+		A93341D2243E158B003A82C2 /* debug-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService3.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "debug-sandbox";
+		};
+		A93341D3243E158B003A82C2 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService3.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = release;
+		};
+		A93341D4243E158B003A82C2 /* release-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService3.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "release-sandbox";
+		};
+		A93341E2243E158E003A82C2 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService4.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = debug;
+		};
+		A93341E3243E158E003A82C2 /* debug-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService4.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "debug-sandbox";
+		};
+		A93341E4243E158E003A82C2 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService4.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = release;
+		};
+		A93341E5243E158E003A82C2 /* release-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = HandBrakeXPCService/HandBrakeXPCService.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService4.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeXPCService4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = "release-sandbox";
+		};
 		A964D3A122FDE8EE00DFCAEA /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2881,7 +3841,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = HandBrakeXPCService/Info.plist;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService1.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -2946,7 +3906,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = HandBrakeXPCService/Info.plist;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService1.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -3005,7 +3965,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = HandBrakeXPCService/Info.plist;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService1.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -3064,7 +4024,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = HandBrakeXPCService/Info.plist;
+				INFOPLIST_FILE = HandBrakeXPCService/HandBrakeXPCService1.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -3926,6 +4886,39 @@
 				A9A5CD9A1E32072F00947914 /* debug-sandbox */,
 				273F217314ADD2170021BE6D /* release */,
 				A9A5CDA01E32073800947914 /* release-sandbox */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = release;
+		};
+		A93341BF243E1583003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A93341C0243E1583003A82C2 /* debug */,
+				A93341C1243E1583003A82C2 /* debug-sandbox */,
+				A93341C2243E1583003A82C2 /* release */,
+				A93341C3243E1583003A82C2 /* release-sandbox */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = release;
+		};
+		A93341D0243E158B003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A93341D1243E158B003A82C2 /* debug */,
+				A93341D2243E158B003A82C2 /* debug-sandbox */,
+				A93341D3243E158B003A82C2 /* release */,
+				A93341D4243E158B003A82C2 /* release-sandbox */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = release;
+		};
+		A93341E1243E158E003A82C2 /* Build configuration list for PBXNativeTarget "HandBrakeXPCService4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A93341E2243E158E003A82C2 /* debug */,
+				A93341E3243E158E003A82C2 /* debug-sandbox */,
+				A93341E4243E158E003A82C2 /* release */,
+				A93341E5243E158E003A82C2 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = release;

@@ -25,7 +25,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         [[self cell] setBezelStyle:NSBezelStyleRounded];
-        _textToDisplay = @"";
         _textAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE];
         _smallTextAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE - 2];
         [self changeGradientColors:[NSColor grayColor] endColor:[NSColor blackColor]];
@@ -67,7 +66,7 @@
     [self.gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
 
     NSDictionary *attributes = self.textAttributes;
-	NSString *budgetString = _textToDisplay;
+    NSString *budgetString = self.stringValue;
 	NSSize stringSize = [budgetString sizeWithAttributes:attributes];
 
     if (size.width - 4 < stringSize.width)

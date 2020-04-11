@@ -32,11 +32,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-}
-
 /**
  *  Adds the presets list to the menu.
  */

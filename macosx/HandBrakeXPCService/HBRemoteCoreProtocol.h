@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)provideResourceAccessWithBookmarks:(NSArray<NSData *> *)bookmarks;
 
+- (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep;
+
+- (void)preventSleep;
+- (void)allowSleep;
+
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply;
 - (void)cancelScan;
 

@@ -15,6 +15,7 @@
 
 #import "HBPreferencesController.h"
 #import "HBQueueController.h"
+#import "HBQueueDockTileController.h"
 #import "HBOutputPanelController.h"
 #import "HBController.h"
 
@@ -33,6 +34,7 @@
 
 @property (nonatomic, strong) HBQueue *queue;
 @property (nonatomic, strong) HBQueueController *queueController;
+@property (nonatomic, strong) HBQueueDockTileController *queueDockTileController;
 
 @property (nonatomic, strong) HBOutputPanelController *outputPanel;
 
@@ -66,6 +68,7 @@
         _queue = [[HBQueue alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
         _queueController = [[HBQueueController alloc] initWithQueue:_queue];
         _queueController.delegate = self;
+        _queueDockTileController = [[HBQueueDockTileController alloc] initWithQueue:_queue dockTile:NSApplication.sharedApplication.dockTile image:NSApplication.sharedApplication.applicationIconImage];
         _mainController = [[HBController alloc] initWithDelegate:self queue:_queue presetsManager:_presetsManager];
     }
     return self;
@@ -108,9 +111,6 @@
     {
         [self showOutputPanel:nil];
     }
-
-    [self.queue setEncodingJobsAsPending];
-    [self.queue removeCompletedAndCancelledItems];
 
     // Now we re-check the queue array to see if there are
     // any remaining encodes to be done

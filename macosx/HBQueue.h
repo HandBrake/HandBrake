@@ -7,10 +7,9 @@
 #import <Foundation/Foundation.h>
 
 #import "HBQueueItem.h"
+#import "HBQueueWorker.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-extern NSString * const HBQueueDidChangeStateNotification;
 
 extern NSString * const HBQueueDidAddItemNotification;
 extern NSString * const HBQueueDidRemoveItemNotification;
@@ -21,19 +20,11 @@ extern NSString * const HBQueueDidMoveItemNotification;
 extern NSString * const HBQueueItemNotificationSourceIndexesKey;     // NSArray<NSNumber *>
 extern NSString * const HBQueueItemNotificationTargetIndexesKey;     // NSArray<NSNumber *>
 
-extern NSString * const HBQueueReloadItemsNotification;
-
 extern NSString * const HBQueueLowSpaceAlertNotification;
-
-extern NSString * const HBQueueProgressNotification;
-extern NSString * const HBQueueProgressNotificationPercentKey;       // NSNumber - double
-extern NSString * const HBQueueProgressNotificationHoursKey;         // NSNumber - double
-extern NSString * const HBQueueProgressNotificationMinutesKey;       // NSNumber - double
-extern NSString * const HBQueueProgressNotificationSecondsKey;       // NSNumber - double
-extern NSString * const HBQueueProgressNotificationInfoKey;          // NSString
 
 extern NSString * const HBQueueDidStartNotification;
 extern NSString * const HBQueueDidCompleteNotification;
+extern NSString * const HBQueueDidChangeStateNotification;
 
 extern NSString * const HBQueueDidStartItemNotification;
 extern NSString * const HBQueueDidCompleteItemNotification;
@@ -46,11 +37,12 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 
 @property (nonatomic, readonly) NSArray<HBQueueItem *> *items;
 
-@property (nonatomic, nullable) HBQueueItem *currentItem;
+@property (nonatomic, readonly) NSUInteger pendingItemsCount;
+@property (nonatomic, readonly) NSUInteger failedItemsCount;
+@property (nonatomic, readonly) NSUInteger completedItemsCount;
+@property (nonatomic, readonly) NSUInteger workingItemsCount;
 
-@property (nonatomic) NSUInteger pendingItemsCount;
-@property (nonatomic) NSUInteger failedItemsCount;
-@property (nonatomic) NSUInteger completedItemsCount;
+@property (nonatomic, readonly) NSUInteger workersCount;
 
 @property (nonatomic) NSUndoManager *undoManager;
 
@@ -72,21 +64,22 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (void)resetAllItems;
 - (void)resetFailedItems;
 
-- (void)setEncodingJobsAsPending;
-
 @property (nonatomic, readonly) BOOL canEncode;
 @property (nonatomic, readonly) BOOL isEncoding;
 
 - (void)start;
-- (void)cancelCurrentItemAndContinue;
+- (void)cancelCurrentAndContinue;
+- (void)cancelCurrentAndStop;
 - (void)finishCurrentAndStop;
-- (void)cancelCurrentItemAndStop;
+- (void)cancelItemsAtIndexes:(NSIndexSet *)indexes;
 
 @property (nonatomic, readonly) BOOL canPause;
 - (void)pause;
 
 @property (nonatomic, readonly) BOOL canResume;
 - (void)resume;
+
+- (nullable HBQueueWorker *)workerForItem:(HBQueueItem *)item;
 
 @end
 

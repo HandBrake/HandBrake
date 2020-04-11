@@ -5,7 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueInfoViewController.h"
-#import "HBQueue.h"
+
+static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContext;
 
 @interface HBQueueInfoViewController ()
 
@@ -33,50 +34,25 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self updateLabels];
-    [self setUpObservers];
+    [self addObserver:self forKeyPath:@"item.state" options:0 context:HBQueueInfoViewControllerContext];
 }
 
-- (void)setUpObservers
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    // It would be easier to just KVO the item state property,
-    // But we can't because the item is a NSProxy.
-    NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
-
-    [center addObserverForName:HBQueueDidStartItemNotification
-                                              object:nil
-                                               queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
-                           {
-                               HBQueueItem *startedItem = note.userInfo[HBQueueItemNotificationItemKey];
-
-                               if (startedItem == self.item)
-                               {
-                                   [self updateUI];
-                               }
-                           }];
-
-    [center addObserverForName:HBQueueDidCompleteItemNotification
-                        object:nil
-                         queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
-     {
-         HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
-
-         if (completedItem == self.item)
-         {
-             [self updateUI];
-         }
-     }];
-
-    [center addObserverForName:HBQueueDidChangeItemNotification
-                        object:nil
-                         queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
-     {
-         [self updateUI];
-     }];
-
+    if (context == HBQueueInfoViewControllerContext)
+    {
+        [self updateUI];
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
+
 
 - (void)updateUI
 {
@@ -129,7 +105,6 @@
 - (void)setItem:(HBQueueItem *)item
 {
     _item = item;
-    [self updateUI];
 }
 
 - (IBAction)editItem:(id)sender

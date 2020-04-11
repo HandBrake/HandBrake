@@ -13,6 +13,7 @@
 #import "NSWindow+HBAdditions.h"
 
 #import "HBQueue.h"
+#import "HBQueueWorker.h"
 
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
@@ -83,7 +84,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     // Bottom
     IBOutlet NSTextField         * fStatusField;
-    IBOutlet NSProgressIndicator * fRipIndicator;
 
     // User Preset
     HBPresetsManager             * presetManager;
@@ -130,6 +130,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 /// The queue.
 @property (nonatomic, weak) HBQueue *queue;
+@property (nonatomic) id observerToken;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
@@ -156,8 +157,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
 
-#define WINDOW_HEIGHT_OFFSET_INIT 48
-#define WINDOW_HEIGHT_OFFSET      30
+#define WINDOW_HEIGHT_OFFSET_INIT 30
+#define WINDOW_HEIGHT_OFFSET      12
 
 @implementation HBController
 
@@ -222,7 +223,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     // Bottom
     fStatusField.font = [NSFont monospacedDigitSystemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightRegular];
-    fRipIndicator.hidden = YES;
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
@@ -280,40 +280,31 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerScanCoreContext];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification
+                                                    object:_queue queue:NSOperationQueue.mainQueue
+                                                usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = 0;
-        self->fRipIndicator.hidden = NO;
     }];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification
+                                                    object:_queue queue:NSOperationQueue.mainQueue
+                                                usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
-        self->fRipIndicator.hidden = YES;
     }];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        HBQueueItem *item = self.queue.currentItem;
-        NSString *info;
-        if (item)
-        {
-            info = [NSString stringWithFormat:NSLocalizedString(@"Encoding %@\n%@", @""),
-                          self.queue.currentItem.outputFileName,
-                          note.userInfo[HBQueueProgressNotificationInfoKey]];
-        }
-        else
-        {
-            info = note.userInfo[HBQueueProgressNotificationInfoKey];
-        }
-        self.progressInfo = info;
-        self.progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartItemNotification
+                                                    object:_queue queue:NSOperationQueue.mainQueue
+                                                usingBlock:^(NSNotification * _Nonnull note) { [self setUpQueueObservers]; }];
 
-        if (self->_visible)
-        {
-            [self updateProgress];
-        }
-    }];
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification
+                                                    object:_queue queue:NSOperationQueue.mainQueue
+                                                usingBlock:^(NSNotification * _Nonnull note) { [self setUpQueueObservers]; }];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification
+                                                    object:_queue queue:NSOperationQueue.mainQueue
+                                                usingBlock:^(NSNotification * _Nonnull note) {
         [self updateQueueUI];
+        [self setUpQueueObservers];
     }];
 
     [self updateQueueUI];
@@ -334,8 +325,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window recalculateKeyViewLoop];
 }
 
-#pragma mark -
-#pragma mark Drag & drop handling
+#pragma mark - Drag & drop handling
 
 - (nullable NSArray<NSURL *> *)fileURLsFromPasteboard:(NSPasteboard *)pasteboard
 {
@@ -1030,7 +1020,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
 {
-    if ([self.window occlusionState] & NSWindowOcclusionStateVisible)
+    if (self.window.occlusionState & NSWindowOcclusionStateVisible)
     {
         self.visible = YES;
         [self updateProgress];
@@ -1044,7 +1034,76 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)updateProgress
 {
     fStatusField.stringValue = self.progressInfo;
-    fRipIndicator.doubleValue = self.progress;
+}
+
+- (void)setUpQueueObservers
+{
+    [self removeQueueObservers];
+
+    if (self->_queue.workingItemsCount > 1)
+    {
+        [self setUpForMultipleWorkers];
+    }
+    else
+    {
+        [self setUpForSingleWorker];
+    }
+}
+
+- (void)setUpForMultipleWorkers
+{
+    NSString *info = [NSString stringWithFormat:NSLocalizedString(@"Encoding %lu Jobs (%lu remaining)", @""),
+                      self->_queue.workingItemsCount, self->_queue.pendingItemsCount];
+    self.progressInfo = info;
+
+    if (self->_visible)
+    {
+        [self updateProgress];
+    }
+}
+
+- (void)setUpForSingleWorker
+{
+    self.progress = 0;
+    HBQueueItem *firstWorkingItem = nil;
+    for (HBQueueItem *item in self.queue.items)
+    {
+        if (item.state == HBQueueItemStateWorking)
+        {
+            firstWorkingItem = item;
+            break;
+        }
+    }
+
+    if (firstWorkingItem)
+    {
+        HBQueueWorker *worker = [self.queue workerForItem:firstWorkingItem];
+
+        if (worker)
+        {
+            self.observerToken = [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerProgressNotification
+                                                                                 object:worker queue:NSOperationQueue.mainQueue
+                                                                             usingBlock:^(NSNotification * _Nonnull note) {
+                NSString *info = [NSString stringWithFormat:NSLocalizedString(@"Encoding 1 Job (%lu remaining): %@\n%@", @""),
+                        self->_queue.pendingItemsCount,
+                        firstWorkingItem.outputFileName,
+                        note.userInfo[HBQueueWorkerProgressNotificationInfoKey]];
+
+                self.progressInfo = info;
+
+                if (self->_visible)
+                {
+                    [self updateProgress];
+                }
+            }];
+        }
+    }
+}
+
+- (void)removeQueueObservers
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
+    self.observerToken = nil;
 }
 
 #pragma mark - Job Handling

@@ -49,3 +49,39 @@
 }
 
 @end
+
+@implementation NSIndexSet (HBAdditions)
+
+- (NSIndexSet *)unionWith:(NSIndexSet *)indexSet
+{
+    NSMutableIndexSet *result = [self mutableCopy];
+    [result addIndexes:indexSet];
+    return result;
+}
+
+- (NSIndexSet *)intersectionWith:(NSIndexSet *)indexSet
+{
+    NSMutableIndexSet *result = [self mutableCopy];
+    [result addIndexes:indexSet];
+    [result removeIndexes:[self symmetricDifferenceWith:indexSet]];
+    return result;
+}
+
+- (NSIndexSet *)relativeComplementIn:(NSIndexSet *)universe
+{
+    NSMutableIndexSet *complement = [universe mutableCopy];
+    [complement removeIndexes:self];
+    return complement;
+}
+
+- (NSIndexSet *)symmetricDifferenceWith:(NSIndexSet *)indexSet
+{
+    NSMutableIndexSet *a = [self mutableCopy];
+    NSMutableIndexSet *b = [indexSet mutableCopy];
+    [a removeIndexes:indexSet];
+    [b removeIndexes:self];
+    [a addIndexes:b];
+    return a;
+}
+
+@end
