@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Scan
 
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Factories;
     using HandBrakeWPF.Services.Scan.Interfaces;
@@ -40,52 +41,30 @@ namespace HandBrakeWPF.Services.Scan
     /// </summary>
     public class LibScan : IScan, IDisposable
     {
-        #region Private Variables
-
         private readonly ILog log = null;
+        private readonly IUserSettingService userSettingService;
+
         private TitleFactory titleFactory = new TitleFactory();
         private string currentSourceScanPath;
         private IHandBrakeInstance instance;
         private Action<bool, Source> postScanOperation;
         private bool isCancelled = false;
 
-        #endregion
-
-        public LibScan(ILog logService)
+        public LibScan(ILog logService, IUserSettingService userSettingService)
         {
             this.log = logService;
+            this.userSettingService = userSettingService;
             this.IsScanning = false;
         }
 
-        #region Events
 
-        /// <summary>
-        /// Scan has Started
-        /// </summary>
         public event EventHandler ScanStarted;
 
-        /// <summary>
-        /// Scan has completed
-        /// </summary>
         public event ScanCompletedStatus ScanCompleted;
 
-        /// <summary>
-        /// Encode process has progressed
-        /// </summary>
         public event ScanProgessStatus ScanStatusChanged;
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets a value indicating whether IsScanning.
-        /// </summary>
         public bool IsScanning { get; private set; }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Scan a Source Path.
@@ -100,10 +79,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        /// <param name="configuraiton">
-        /// The configuraiton.
-        /// </param>
-        public void Scan(string sourcePath, int title, Action<bool, Source> postAction, HBConfiguration configuraiton)
+        public void Scan(string sourcePath, int title, Action<bool, Source> postAction)
         {
             // Try to cleanup any previous scan instances.
             if (this.instance != null)
@@ -124,12 +100,12 @@ namespace HandBrakeWPF.Services.Scan
             this.postScanOperation = postAction;
 
             // Create a new HandBrake Instance.
-            this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity, configuraiton);
+            this.instance = HandBrakeInstanceManager.GetScanInstance(this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity));
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
-            this.ScanSource(sourcePath, title, configuraiton.PreviewScanCount, configuraiton);
+            this.ScanSource(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
         }
 
         /// <summary>
@@ -182,13 +158,10 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="preview">
         /// The preview.
         /// </param>
-        /// <param name="configuraiton">
-        /// The configuraiton.
-        /// </param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public BitmapImage GetPreview(EncodeTask job, int preview, HBConfiguration configuraiton)
+        public BitmapImage GetPreview(EncodeTask job, int preview)
         {
             if (this.instance == null)
             {
@@ -224,10 +197,6 @@ namespace HandBrakeWPF.Services.Scan
             return bitmapImage;
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
         /// The service log message.
         /// </summary>
@@ -251,10 +220,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        /// <param name="configuraiton">
-        /// The configuration.
-        /// </param>
-        private void ScanSource(object sourcePath, int title, int previewCount, HBConfiguration configuraiton)
+        private void ScanSource(object sourcePath, int title, int previewCount)
         {
             try
             {
@@ -264,9 +230,9 @@ namespace HandBrakeWPF.Services.Scan
 
                 this.IsScanning = true;
 
-                TimeSpan minDuration = TimeSpan.FromSeconds(configuraiton.MinScanDuration);
+                TimeSpan minDuration = TimeSpan.FromSeconds(this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration));
 
-                HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
+                HandBrakeUtils.SetDvdNav(!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
 
                 this.ServiceLogMessage("Starting Scan ...");
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
@@ -279,10 +245,6 @@ namespace HandBrakeWPF.Services.Scan
                 this.Stop();
             }
         }
-
-        #endregion
-
-        #region HandBrakeInstance Event Handlers
         
         /// <summary>
         /// Scan Completed Event Handler
@@ -395,7 +357,6 @@ namespace HandBrakeWPF.Services.Scan
 
             return titleList;
         }
-        #endregion
 
         public void Dispose()
         {

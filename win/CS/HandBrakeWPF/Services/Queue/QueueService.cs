@@ -19,7 +19,11 @@ namespace HandBrakeWPF.Services.Queue
     using System.Windows;
     using System.Windows.Media.Imaging;
 
+    using Caliburn.Micro;
+
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Json.Queue;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -29,7 +33,6 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
@@ -39,6 +42,7 @@ namespace HandBrakeWPF.Services.Queue
     using Execute = Caliburn.Micro.Execute;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
     using LogService = HandBrakeWPF.Services.Logging.LogService;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
@@ -154,7 +158,7 @@ namespace HandBrakeWPF.Services.Queue
             List<EncodeTask> workUnits = jobs.Select(job => job.Task).ToList();
             HBConfiguration config = HBConfigurationFactory.Create(); // Default to current settings for now. These will hopefully go away in the future.
 
-            string json = QueueFactory.GetQueueJson(workUnits, config);
+            string json = this.GetQueueJson(workUnits, config);
 
             using (var strm = new StreamWriter(exportPath, false))
             {
@@ -591,6 +595,38 @@ namespace HandBrakeWPF.Services.Queue
                 // Fire the event to tell connected services.
                 this.OnQueueCompleted(new QueueCompletedEventArgs(false));
             }
+        }
+
+        /// <summary>
+        /// For a given set of tasks, return the Queue JSON that can be used for the CLI.
+        /// </summary>
+        /// <param name="tasks">
+        /// The tasks.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string GetQueueJson(List<EncodeTask> tasks, HBConfiguration configuration)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings
+                                              {
+                                                  NullValueHandling = NullValueHandling.Ignore,
+                                              };
+
+            IHbFunctionsProvider provider = IoC.Get<IHbFunctionsProvider>(); // TODO remove IoC call.
+            IHbFunctions hbFunctions = provider.GetHbFunctionsWrapper();
+
+            List<Task> queueJobs = new List<Task>();
+            foreach (var item in tasks)
+            {
+                Task task = new Task { Job = EncodeTaskFactory.Create(item, configuration, hbFunctions) };
+                queueJobs.Add(task);
+            }
+
+            return JsonConvert.SerializeObject(queueJobs, Formatting.Indented, settings);
         }
     }
 }

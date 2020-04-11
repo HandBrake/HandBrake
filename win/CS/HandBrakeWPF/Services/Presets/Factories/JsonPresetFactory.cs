@@ -658,7 +658,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoQSVDecode = config.EnableQuickSyncDecoding;
             preset.VideoQualitySlider = export.Task.Quality.HasValue ? export.Task.Quality.Value : 0;
             preset.VideoQualityType = (int)export.Task.VideoEncodeRateType;
-            preset.VideoScaler = EnumHelper<VideoScaler>.GetShortName(config.ScalingMode);
+            preset.VideoScaler = EnumHelper<VideoScaler>.GetShortName(VideoScaler.Lanczos);
             preset.VideoTune = export.Task.VideoTunes.Aggregate(string.Empty, (current, item) => !string.IsNullOrEmpty(current) ? string.Format("{0}, {1}", current, item.ShortName) : item.ShortName);
             preset.VideoAvgBitrate = export.Task.VideoBitrate ?? 0;
             preset.VideoColorMatrixCode = 0; // TODO not supported.

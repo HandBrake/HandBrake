@@ -168,8 +168,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public string PictureDenoiseTune { get; set; }
 
         public string PictureSharpenCustom { get; set; }
+
         public string PictureSharpenFilter { get; set; }
+
         public string PictureSharpenPreset { get; set; }
+
         public string PictureSharpenTune { get; set; }
 
         /// <summary>

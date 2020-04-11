@@ -30,6 +30,7 @@ namespace HandBrakeWPF.Instance
     using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
@@ -50,17 +51,20 @@ namespace HandBrakeWPF.Instance
 
         private readonly ILog logService;
 
+        private readonly IUserSettingService userSettingService;
+
         private const double EncodePollIntervalMs = 500;
 
         private Process workerProcess;
         private Timer encodePollTimer;
         private int retryCount = 0;
 
-        public RemoteInstance(HBConfiguration configuration, ILog logService)
+        public RemoteInstance(HBConfiguration configuration, ILog logService, IUserSettingService userSettingService)
         {
             this.configuration = configuration;
             this.logService = logService;
-            this.port = this.GetOpenPort(this.configuration.RemoteServicePort);
+            this.userSettingService = userSettingService;
+            this.port = this.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort));
             this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
         }
 
@@ -86,11 +90,11 @@ namespace HandBrakeWPF.Instance
             {
                 EnableDiskLogging = true,
                 AllowDisconnectedWorker = false,
-                DisableLibDvdNav = this.configuration.IsDvdNavDisabled,
+                DisableLibDvdNav = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
                 EnableHardwareAcceleration = true,
                 LogDirectory = DirectoryUtilities.GetLogDirectory(),
-                LogVerbosity = configuration.Verbosity
-            };
+                LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
+        };
 
             initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 

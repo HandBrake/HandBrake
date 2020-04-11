@@ -10,14 +10,12 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
-    using System.Runtime.CompilerServices;
-
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Model;
 
-    using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
 
     /// <summary>
@@ -38,7 +36,7 @@ namespace HandBrakeWPF.Instance
             HandBrakeUtils.EnsureGlobalInit(noHardwareMode);
         }
 
-        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService)
+        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService)
         {
             if (!HandBrakeUtils.IsInitialised())
             {
@@ -53,9 +51,9 @@ namespace HandBrakeWPF.Instance
 
             IEncodeInstance newInstance;
 
-            if (configuration.RemoteServiceEnabled)
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled))
             {
-                newInstance = new RemoteInstance(configuration, logService);
+                newInstance = new RemoteInstance(configuration, logService, userSettingService);
             }
             else
             {
@@ -66,7 +64,7 @@ namespace HandBrakeWPF.Instance
 
             encodeInstance = newInstance;
 
-            HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
+            HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
 
             return encodeInstance;
         }
@@ -77,13 +75,10 @@ namespace HandBrakeWPF.Instance
         /// <param name="verbosity">
         /// The verbosity.
         /// </param>
-        /// <param name="configuration">
-        ///  HandBrakes config
-        /// </param>
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetScanInstance(int verbosity, HBConfiguration configuration)
+        public static IHandBrakeInstance GetScanInstance(int verbosity)
         {
             if (!HandBrakeUtils.IsInitialised())
             {
@@ -109,13 +104,13 @@ namespace HandBrakeWPF.Instance
         /// <param name="verbosity">
         /// The verbosity.
         /// </param>
-        /// <param name="configuration">
-        /// The configuration.
+        /// <param name="userSettingService">
+        /// The user Setting Service.
         /// </param>
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetPreviewInstance(int verbosity, HBConfiguration configuration)
+        public static IHandBrakeInstance GetPreviewInstance(int verbosity, IUserSettingService userSettingService)
         {
             if (!HandBrakeUtils.IsInitialised())
             {
@@ -132,7 +127,7 @@ namespace HandBrakeWPF.Instance
             newInstance.Initialize(verbosity, noHardware);
             previewInstance = newInstance;
 
-            HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
+            HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
 
             return previewInstance;
         }

@@ -12,8 +12,6 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     using System;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.Interop.Model;
-
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Model;
@@ -78,10 +76,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        /// <param name="configuration">
-        /// The configuraiton.
-        /// </param>
-        void Scan(string sourcePath, int title, Action<bool, Source> postAction, HBConfiguration configuration);
+        void Scan(string sourcePath, int title, Action<bool, Source> postAction);
 
         /// <summary>
         /// Cancel the current scan.
@@ -97,13 +92,10 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <param name="preview">
         /// The preview.
         /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        BitmapImage GetPreview(EncodeTask task, int preview, HBConfiguration configuration);
+        BitmapImage GetPreview(EncodeTask task, int preview);
 
         /// <summary>
         /// Kill the scan

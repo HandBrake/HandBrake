@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Interfaces;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
@@ -36,9 +37,12 @@ namespace HandBrakeWPF.Services.Encode
     {
         private readonly ILog logService;
 
-        public EncodeBase(ILog logService)
+        private readonly IUserSettingService userSettingService;
+
+        public EncodeBase(ILog logService, IUserSettingService userSettingService)
         {
             this.logService = logService;
+            this.userSettingService = userSettingService;
         }
 
         #region Events
@@ -144,15 +148,15 @@ namespace HandBrakeWPF.Services.Encode
                 this.WriteFile(logContent, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (configuration.SaveLogWithVideo)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo))
                 {
                     this.WriteFile(logContent, Path.Combine(encodeDestinationPath, encodeLogFile));
                 }
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(configuration.SaveLogCopyDirectory) && configuration.SaveLogToCopyDirectory)
+                if (Directory.Exists(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory)) && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory))
                 {
-                    this.WriteFile(logContent, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
+                    this.WriteFile(logContent, Path.Combine(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), encodeLogFile));
                 }
 
                 return Path.Combine(logDir, encodeLogFile);

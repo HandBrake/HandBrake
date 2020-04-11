@@ -74,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
-            this.encodeService = new LibEncode(hbFunctionsProvider, logService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new LibEncode(hbFunctionsProvider, logService, userSettingService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
             this.Percentage = "0.00%";
@@ -421,7 +421,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapSource image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, HBConfigurationFactory.Create());
+                image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage);
             }
             catch (Exception exc)
             {

@@ -1650,7 +1650,7 @@ namespace HandBrakeWPF.ViewModels
             EncodeTask task = queueTask.Task;
 
             this.queueEditTask = queueTask;
-            this.scanService.Scan(task.Source, task.Title, QueueEditAction, HBConfigurationFactory.Create());
+            this.scanService.Scan(task.Source, task.Title, QueueEditAction);
         }
 
         /// <summary>
@@ -2132,7 +2132,7 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(filename))
             {
                 ShowSourceSelection = false;
-                this.scanService.Scan(filename, title, null, HBConfigurationFactory.Create());
+                this.scanService.Scan(filename, title, null);
             }
         }
 

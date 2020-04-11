@@ -39,6 +39,7 @@ namespace HandBrakeWPF.Services.Encode
         #region Private Variables
 
         private readonly ILog log;
+        private readonly IUserSettingService userSettingService;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
         private IEncodeInstance instance;
         private DateTime startTime;
@@ -48,9 +49,10 @@ namespace HandBrakeWPF.Services.Encode
 
         #endregion
 
-        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, ILog logService) : base(logService)
+        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, ILog logService, IUserSettingService userSettingService) : base(logService, userSettingService)
         {
             this.log = logService;
+            this.userSettingService = userSettingService;
             this.hbFunctionsProvider = hbFunctionsProvider;
         }
 
@@ -109,7 +111,8 @@ namespace HandBrakeWPF.Services.Encode
                     this.TimedLogMessage(string.Format("base preset: {0}", basePresetName));
                 }
 
-                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration, this.log);
+                int verbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.log, userSettingService);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                 this.instance.EncodeProgress += this.InstanceEncodeProgress;
