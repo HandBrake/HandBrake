@@ -193,6 +193,22 @@ namespace HandBrakeWPF.Utilities
             return true; // Default to On.
         }
 
+        public static bool IsRemoteWorkerProcessEnabled()
+        {
+            if (keyPairs.ContainsKey("remote.worker.enabled"))
+            {
+                string enabled = keyPairs["remote.worker.enabled"];
+                if (!string.IsNullOrEmpty(enabled) && enabled.Trim() == "true")
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true; // Default to On.
+        }
+
         /// <summary>
         /// The get temp directory.
         /// </summary>

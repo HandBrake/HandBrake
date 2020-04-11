@@ -1354,6 +1354,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool IsRemoteWorkedAllowed
+        {
+            get
+            {
+                return Portable.IsRemoteWorkerProcessEnabled();
+            }
+        }
+
         #region Public Methods
 
         /// <summary>

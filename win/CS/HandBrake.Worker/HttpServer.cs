@@ -19,15 +19,19 @@ namespace HandBrake.Worker
 
     public class HttpServer
     {
+        private readonly string uiToken;
+
         private readonly HttpListener httpListener = new HttpListener();
         private readonly Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
 
-        public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port)
+        public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, string token)
         {
             if (!HttpListener.IsSupported)
             {
                 throw new NotSupportedException("HttpListener not supported on this computer.");
             }
+
+            this.uiToken = token;
 
             // Store the Handlers
             this.apiHandlers = new Dictionary<string, Func<HttpListenerRequest, string>>(apiCalls);
@@ -65,15 +69,30 @@ namespace HandBrake.Worker
                                     try
                                     {
                                         string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
+                                        string token = context.Request.Headers.Get("token");
 
+                                        if (!this.IsAuthenticated(token))
+                                        {
+                                            string rstr = "Worker: Access Denied. The token provided in the HTTP header was not valid.";
+                                            Console.WriteLine(rstr);
+                                            byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                            context.Response.ContentLength64 = buf.Length;
+                                            context.Response.OutputStream.Write(buf, 0, buf.Length);
+                                            return;
+                                        }
+                                        
                                         Debug.WriteLine("Handling call to: " + path);
 
                                         if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
                                         {
                                             string rstr = actionToPerform(context.Request);
-                                            byte[] buf = Encoding.UTF8.GetBytes(rstr);
-                                            context.Response.ContentLength64 = buf.Length;
-                                            context.Response.OutputStream.Write(buf, 0, buf.Length);
+                                            if (!string.IsNullOrEmpty(rstr))
+                                            {
+                                                byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                                                context.Response.ContentLength64 = buf.Length;
+                                                context.Response.OutputStream.Write(buf, 0, buf.Length);
+                                            }
                                         }
                                         else
                                         {
@@ -85,7 +104,7 @@ namespace HandBrake.Worker
                                     }
                                     catch (Exception exc)
                                     {
-                                        Debug.WriteLine(exc);
+                                        Console.WriteLine("Worker: Listener Thread: " + exc);
                                     }
                                     finally
                                     {
@@ -97,7 +116,7 @@ namespace HandBrake.Worker
                 }
                 catch (Exception exc)
                 {
-                    Debug.WriteLine(exc);
+                    Console.WriteLine("Worker: " + exc);
                 }
             });
         }
@@ -106,6 +125,21 @@ namespace HandBrake.Worker
         {
             this.httpListener.Stop();
             this.httpListener.Close();
+        }
+
+        public bool IsAuthenticated(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            if (token != this.uiToken)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

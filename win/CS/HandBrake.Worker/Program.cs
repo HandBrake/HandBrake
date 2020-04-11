@@ -25,6 +25,7 @@ namespace HandBrake.Worker
         public static void Main(string[] args)
         {
             int port = 8037; // Default Port;
+            string token = null;
             
             if (args.Length != 0)
             {
@@ -38,6 +39,11 @@ namespace HandBrake.Worker
                             port = parsedPort;
                         }
                     }
+
+                    if (argument.StartsWith("--token"))
+                    {
+                        token = argument.TrimStart("--token=".ToCharArray());
+                    }
                 }
             }
 
@@ -47,7 +53,7 @@ namespace HandBrake.Worker
 
             Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
-            HttpServer webServer = new HttpServer(apiHandlers, port);
+            HttpServer webServer = new HttpServer(apiHandlers, port, token);
             webServer.Run();
 
             Console.WriteLine("Worker: Server Started");

@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Instance
     using System.Linq;
     using System.Net;
     using System.Net.NetworkInformation;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
     using System.Windows.Media.Animation;
@@ -48,9 +49,7 @@ namespace HandBrakeWPF.Instance
     public class RemoteInstance : HttpRequestBase, IEncodeInstance, IDisposable
     {
         private readonly HBConfiguration configuration;
-
         private readonly ILog logService;
-
         private readonly IUserSettingService userSettingService;
 
         private const double EncodePollIntervalMs = 500;
@@ -94,7 +93,7 @@ namespace HandBrakeWPF.Instance
                 EnableHardwareAcceleration = true,
                 LogDirectory = DirectoryUtilities.GetLogDirectory(),
                 LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
-        };
+            };
 
             initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
@@ -134,7 +133,6 @@ namespace HandBrakeWPF.Instance
 
         public void Dispose()
         {
-            this.client?.Dispose();
             this.workerProcess?.Dispose();
         }
 
@@ -142,12 +140,15 @@ namespace HandBrakeWPF.Instance
         {
             if (this.workerProcess == null || this.workerProcess.HasExited)
             {
+                var plainTextBytes = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
+                this.base64Token = Convert.ToBase64String(plainTextBytes);
+
                 workerProcess = new Process
                                 {
                                     StartInfo =
                                     {
                                         FileName = "HandBrake.Worker.exe",
-                                        Arguments = string.Format(" --port={0}", port),
+                                        Arguments = string.Format(" --port={0} --token={1}", port, this.base64Token),
                                         UseShellExecute = false,
                                         RedirectStandardOutput = true,
                                         RedirectStandardError = true,
@@ -227,8 +228,6 @@ namespace HandBrakeWPF.Instance
                 }
 
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
-
-                this.retryCount = 0; // Reset
             }
             catch (Exception e)
             {
@@ -240,6 +239,8 @@ namespace HandBrakeWPF.Instance
                 retryCount = this.retryCount + 1;
                 return;
             }
+
+            this.retryCount = 0; // Reset
 
             string statusJson = response.JsonResponse;
 
@@ -278,6 +279,11 @@ namespace HandBrakeWPF.Instance
 
         private int GetOpenPort(int startPort)
         {
+            if (startPort == 0)
+            {
+                startPort = 8037;
+            }
+
             int portStartIndex = startPort;
 
             IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
