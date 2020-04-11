@@ -138,7 +138,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 /// Queue progress info
 @property (nonatomic, copy) NSString *progressInfo;
-@property (nonatomic) double progress;
 
 @property (nonatomic, readwrite) NSColor *labelColor;
 
@@ -289,7 +288,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification
                                                     object:_queue queue:NSOperationQueue.mainQueue
                                                 usingBlock:^(NSNotification * _Nonnull note) {
-        self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+        self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET_INIT;
+        self.progressInfo = @"";
+        [self updateProgress];
     }];
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartItemNotification
@@ -1064,7 +1065,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)setUpForSingleWorker
 {
-    self.progress = 0;
     HBQueueItem *firstWorkingItem = nil;
     for (HBQueueItem *item in self.queue.items)
     {
