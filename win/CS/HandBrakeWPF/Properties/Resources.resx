@@ -2215,4 +2215,11 @@ This will also stop any existing running jobs.</value>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Default network port for worker:</value>
   </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>The preset you have selected is not available for use on this system.
+
+This is typically an indication that your system does not support the hardware required to utilise it.
+
+Please choose a different preset.</value>
+  </data>
 </root>

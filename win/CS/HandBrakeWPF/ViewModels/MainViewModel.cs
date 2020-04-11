@@ -330,13 +330,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!object.Equals(this.selectedPreset, value))
                 {
-                    this.selectedPreset = value;
-                    this.NotifyOfPropertyChange(() => this.SelectedPreset);
-
                     if (value != null)
                     {
                         this.PresetSelect(value);
                     }
+
+                    this.selectedPreset = value;
+                    this.NotifyOfPropertyChange(() => this.SelectedPreset);
                 }
             }
         }
@@ -347,6 +347,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.isModifiedPreset;
             }
+
             set
             {
                 if (value == this.isModifiedPreset) return;
@@ -2088,6 +2089,16 @@ namespace HandBrakeWPF.ViewModels
             Preset preset = tag as Preset;
             if (preset != null)
             {
+                if (preset.IsPresetDisabled)
+                {
+                    this.errorService.ShowMessageBox(
+                        Resources.Presets_NotAvailableForUse,
+                        Resources.Warning,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
                 if (this.SelectedPresetCategory == null || this.SelectedPresetCategory.Category != preset.Category)
                 {
                     this.SelectedPresetCategory = this.PresetsCategories.FirstOrDefault(c => c.Category == preset.Category);

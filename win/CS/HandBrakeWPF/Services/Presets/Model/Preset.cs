@@ -146,6 +146,8 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// </summary>
         public SubtitleBehaviours SubtitleTrackBehaviours { get; set; }
 
+        public bool IsPresetDisabled { get; set; }
+
         #endregion
 
         #region Public Methods

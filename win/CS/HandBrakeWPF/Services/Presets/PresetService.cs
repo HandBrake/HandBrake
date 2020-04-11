@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Interop.Model;
+    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -41,6 +42,7 @@ namespace HandBrakeWPF.Services.Presets
     using Newtonsoft.Json;
 
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
 
     /// <summary>
     /// The preset service manages HandBrake's presets
@@ -192,6 +194,7 @@ namespace HandBrakeWPF.Services.Presets
                             foreach (HBPreset hbPreset in category.ChildrenArray)
                             {
                                 Preset preset = this.ConvertHbPreset(hbPreset);
+                                preset.IsPresetDisabled = this.IsPresetDisabled(preset);
                                 if (preset != null && !preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
@@ -208,6 +211,7 @@ namespace HandBrakeWPF.Services.Presets
                             if (hbPreset != null)
                             {
                                 Preset preset = this.ConvertHbPreset(hbPreset);
+                                preset.IsPresetDisabled = this.IsPresetDisabled(preset);
                                 if (preset != null && !preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
@@ -751,6 +755,7 @@ namespace HandBrakeWPF.Services.Presets
                         // Migration
                         preset.Category = category.PresetName == "User Presets" ? UserPresetCatgoryName : category.PresetName;
                         preset.IsBuildIn = hbpreset.Type == 0;
+                        preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
                         // IF we are using Source Max, Set the Max Width / Height values.
                         if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
@@ -904,6 +909,46 @@ namespace HandBrakeWPF.Services.Presets
             {
                 this.Add(preset, false);
             }
+        }
+
+        private bool IsPresetDisabled(Preset preset)
+        {
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSync && !SystemInfo.IsQsvAvailable)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 && !SystemInfo.IsQsvAvailableH265)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b && !SystemInfo.IsQsvAvailableH265)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.VceH264 && !SystemInfo.IsVceH264Available)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.VceH265 && !SystemInfo.IsVceH265Available)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.NvencH264 && !SystemInfo.IsNVEncH264Available)
+            {
+                return true;
+            }
+
+            if (preset.Task.VideoEncoder == VideoEncoder.NvencH265 && !SystemInfo.IsNVEncH265Available)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         protected void ServiceLogMessage(string message)

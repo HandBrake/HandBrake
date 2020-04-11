@@ -4097,6 +4097,19 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The preset you have selected is not available for use on this system.
+        ///
+        ///This is typically an indication that your system does not support the hardware required to utilise it.
+        ///
+        ///Please choose a different preset..
+        /// </summary>
+        public static string Presets_NotAvailableForUse {
+            get {
+                return ResourceManager.GetString("Presets_NotAvailableForUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
         ///Your preset file will be archived and new one created. You will need to re-create your own presets..
         /// </summary>
