@@ -193,11 +193,11 @@ namespace HandBrakeWPF.Utilities
             return true; // Default to On.
         }
 
-        public static bool IsRemoteWorkerProcessEnabled()
+        public static bool IsProcessIsolationEnabled()
         {
-            if (keyPairs.ContainsKey("remote.worker.enabled"))
+            if (keyPairs.ContainsKey("process.isolation.enabled"))
             {
-                string enabled = keyPairs["remote.worker.enabled"];
+                string enabled = keyPairs["process.isolation.enabled"];
                 if (!string.IsNullOrEmpty(enabled) && enabled.Trim() == "true")
                 {
                     return true;

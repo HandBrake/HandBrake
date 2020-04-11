@@ -59,8 +59,8 @@ namespace HandBrakeWPF
         public const string PlaySoundWhenDone = "PlaySoundWhenDone";
         public const string PlaySoundWhenQueueDone = "PlaySoundWhenQueueDone";
         public const string WhenDoneAudioFile = "WhenDoneAudioFile";
-        public const string RemoteServiceEnabled = "RemoteServiceEnabled";
-        public const string RemoteServicePort = "RemoteServicePort";
+        public const string ProcessIsolationEnabled = "ProcessIsolationEnabled";
+        public const string ProcessIsolationPort = "ProcessIsolationPort";
         public const string EnableQuickSyncEncoding = "EnableQuickSyncEncoding";
         public const string EnableVceEncoder = "EnableVceEncoder";
         public const string EnableNvencEncoder = "EnableNvencEncoder";

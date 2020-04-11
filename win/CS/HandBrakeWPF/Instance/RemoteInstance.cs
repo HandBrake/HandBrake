@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Instance
             this.configuration = configuration;
             this.logService = logService;
             this.userSettingService = userSettingService;
-            this.port = this.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort));
+            this.port = this.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort));
             this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
         }
 

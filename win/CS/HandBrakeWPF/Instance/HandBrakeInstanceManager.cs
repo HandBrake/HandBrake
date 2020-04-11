@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Instance
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// The HandBrake Instance manager.
@@ -51,7 +52,7 @@ namespace HandBrakeWPF.Instance
 
             IEncodeInstance newInstance;
 
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
             {
                 newInstance = new RemoteInstance(configuration, logService, userSettingService);
             }

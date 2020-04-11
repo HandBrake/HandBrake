@@ -3585,6 +3585,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Process Isolation.
+        /// </summary>
+        public static string OptionsView_ProcessIsolation {
+            get {
+                return ResourceManager.GetString("OptionsView_ProcessIsolation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated..
+        /// </summary>
+        public static string OptionsView_ProcessIsolation_Warning1 {
+            get {
+                return ResourceManager.GetString("OptionsView_ProcessIsolation_Warning1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the set port is in use, it will find the first free port within +100 from the defined port..
+        /// </summary>
+        public static string OptionsView_ProcessIsolation_Warning2 {
+            get {
+                return ResourceManager.GetString("OptionsView_ProcessIsolation_Warning2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Port range must be between 5000 and 32767.
         /// </summary>
         public static string OptionsView_RemotePortLimit {

@@ -1354,11 +1354,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsRemoteWorkedAllowed
+        public bool IsProcessIsolationAllowed
         {
             get
             {
-                return Portable.IsRemoteWorkerProcessEnabled();
+                return Portable.IsProcessIsolationEnabled();
             }
         }
 
@@ -1677,8 +1677,8 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // Experimental
             // #############################
-            this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled);
-            this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort);
+            this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
+            this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
         }
 
         /// <summary>
@@ -1790,8 +1790,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.LowBatteryLevel, this.LowBatteryLevel);
 
             /* Experimental */
-            this.userSettingService.SetUserSetting(UserSettingConstants.RemoteServiceEnabled, this.RemoteServiceEnabled);
-            this.userSettingService.SetUserSetting(UserSettingConstants.RemoteServicePort, this.RemoteServicePort);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
         }
 
         /// <summary>
