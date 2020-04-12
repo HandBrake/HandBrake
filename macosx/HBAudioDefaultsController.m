@@ -41,7 +41,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBAudioDefaultsContext];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:NSKeyValueObservingOptionInitial context:HBAudioDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {

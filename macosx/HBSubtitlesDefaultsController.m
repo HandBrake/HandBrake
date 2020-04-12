@@ -37,7 +37,7 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContext];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:NSKeyValueObservingOptionInitial context:HBSubtitlesDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {
