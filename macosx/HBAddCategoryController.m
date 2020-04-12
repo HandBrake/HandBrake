@@ -36,14 +36,14 @@
 {
     [super windowDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(controlTextDidChange:)
-                                                 name:NSControlTextDidChangeNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(controlTextDidChange:)
+                                               name:NSControlTextDidChangeNotification object:self.name];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSControlTextDidChangeNotification object:nil];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:NSControlTextDidChangeNotification object:self.name];
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {

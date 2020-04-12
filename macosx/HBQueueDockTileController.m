@@ -44,6 +44,10 @@
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification
                                                         object:_queue queue:NSOperationQueue.mainQueue
                                                     usingBlock:^(NSNotification * _Nonnull note) { [self setUpObservers]; }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification
+                                                        object:_queue queue:NSOperationQueue.mainQueue
+                                                    usingBlock:^(NSNotification * _Nonnull note) { self.dockTile.stringValue = @""; }];
     }
     return self;
 }
@@ -109,8 +113,11 @@
 
 - (void)removeObservers
 {
-    [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
-    self.observerToken = nil;
+    if (self.observerToken)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
+        self.observerToken = nil;
+    }
 }
 
 @end

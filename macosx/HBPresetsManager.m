@@ -49,7 +49,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 - (void)nodeDidChange:(HBTreeNode *)node
 {
-    [NSNotificationCenter.defaultCenter postNotificationName:HBPresetsChangedNotification object:nil];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBPresetsChangedNotification object:self];
 }
 
 - (void)treeDidRemoveNode:(HBTreeNode *)node

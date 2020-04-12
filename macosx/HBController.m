@@ -1102,8 +1102,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)removeQueueObservers
 {
-    [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
-    self.observerToken = nil;
+    if (self.observerToken)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
+        self.observerToken = nil;
+    }
 }
 
 #pragma mark - Job Handling

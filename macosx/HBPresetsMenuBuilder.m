@@ -26,7 +26,7 @@
         _manager = manager;
         _action = action;
 
-        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(build) name:HBPresetsChangedNotification object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(build) name:HBPresetsChangedNotification object:manager];
     }
 
     return self;
