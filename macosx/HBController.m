@@ -73,7 +73,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     IBOutlet NSTabViewItem       * fChaptersTitlesTab;
 
     // Picture Preview
-    HBPreviewController           * fPreviewController;
+    HBPreviewController          * fPreviewController;
 
     // Source box
     IBOutlet NSProgressIndicator * fScanIndicator;
@@ -81,9 +81,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
-
-    // Bottom
-    IBOutlet NSTextField         * fStatusField;
 
     // User Preset
     HBPresetsManager             * presetManager;
@@ -94,14 +91,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
-
-@property (nonatomic, strong) IBOutlet NSToolbarItem *presetsItem;
 @property (nonatomic, strong) NSPopover *presetsPopover;
+
+@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
 @property (nonatomic, strong) HBSummaryViewController *summaryController;
 @property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
-
-@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
 @property (nonatomic, weak) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
@@ -132,14 +127,16 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic, weak) HBQueue *queue;
 @property (nonatomic) id observerToken;
 
+/// Queue progress info
+@property (nonatomic) IBOutlet NSTextField *statusField;
+@property (nonatomic) IBOutlet NSTextField *progressField;
+@property (nonatomic, copy) NSString *progress;
+
+@property (nonatomic, readwrite) NSColor *labelColor;
+
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
-
-/// Queue progress info
-@property (nonatomic, copy) NSString *progressInfo;
-
-@property (nonatomic, readwrite) NSColor *labelColor;
 
 // Alerts
 @property (nonatomic) BOOL suppressCopyProtectionWarning;
@@ -147,6 +144,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic) IBOutlet NSToolbarItem *openSourceToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
+@property (nonatomic) IBOutlet NSToolbarItem *presetsItem;
 
 @end
 
@@ -156,8 +154,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
 
-#define WINDOW_HEIGHT_OFFSET_INIT 30
-#define WINDOW_HEIGHT_OFFSET      12
+#define WINDOW_HEIGHT_OFFSET 30
 
 @implementation HBController
 
@@ -182,9 +179,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         _currentPreset = manager.defaultPreset;
 
         _scanSpecificTitleIdx = 1;
-
-        // Progress
-        _progressInfo = @"";
+        _progress = @"";
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
 #ifdef __SANDBOX_ENABLED__
@@ -221,7 +216,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self enableUI:NO];
 
     // Bottom
-    fStatusField.font = [NSFont monospacedDigitSystemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightRegular];
+    self.statusField.stringValue = @"";
+    self.progressField.font = [NSFont monospacedDigitSystemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightRegular];
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
@@ -274,7 +270,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [fFiltersTab setView:[fFiltersViewController view]];
 
     // Add the observers
-
     [self.core addObserver:self forKeyPath:@"state"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerScanCoreContext];
@@ -288,8 +283,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification
                                                     object:_queue queue:NSOperationQueue.mainQueue
                                                 usingBlock:^(NSNotification * _Nonnull note) {
-        self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET_INIT;
-        self.progressInfo = @"";
+        self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+        self.statusField.stringValue = @"";
+        self.progress = @"";
         [self updateProgress];
     }];
 
@@ -305,7 +301,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                                                     object:_queue queue:NSOperationQueue.mainQueue
                                                 usingBlock:^(NSNotification * _Nonnull note) {
         [self updateQueueUI];
-        [self setUpQueueObservers];
     }];
 
     [self updateQueueUI];
@@ -321,7 +316,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.LoggingLevel"
                                                                options:0 context:HBControllerLogLevelContext];
 
-    self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET_INIT;
+    self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET;
 
     [self.window recalculateKeyViewLoop];
 }
@@ -392,11 +387,13 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     [self updateToolbarButtonsState];
     [self.window.toolbar validateVisibleItems];
+
     if (@available(macOS 10.12.2, *))
     {
         [self _touchBar_updateQueueButtonsState];
         [self _touchBar_validateUserInterfaceItems];
     }
+
     NSUInteger count = self.queue.pendingItemsCount;
     self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : @"";
 }
@@ -465,6 +462,90 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if ([key isEqualToString:@"scanSpecificTitleIdx"])
     {
         [self setValue:@0 forKey:key];
+    }
+}
+
+#pragma mark - Queue progress
+
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    if (self.window.occlusionState & NSWindowOcclusionStateVisible)
+    {
+        self.visible = YES;
+        [self updateProgress];
+    }
+    else
+    {
+        self.visible = NO;
+    }
+}
+
+- (void)updateProgress
+{
+    self.progressField.stringValue = self.progress;
+}
+
+- (void)setUpQueueObservers
+{
+    [self removeQueueObservers];
+
+    if (self->_queue.workingItemsCount > 1)
+    {
+        [self setUpForMultipleWorkers];
+    }
+    else if (self->_queue.workingItemsCount == 1)
+    {
+        [self setUpForSingleWorker];
+    }
+}
+
+- (void)setUpForMultipleWorkers
+{
+    self.statusField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"Encoding %lu Jobs", @""), self.queue.workingItemsCount];
+    self.progress = NSLocalizedString(@"Working", @"");
+    [self updateProgress];
+}
+
+- (void)setUpForSingleWorker
+{
+    HBQueueItem *firstWorkingItem = nil;
+    for (HBQueueItem *item in self.queue.items)
+    {
+        if (item.state == HBQueueItemStateWorking)
+        {
+            firstWorkingItem = item;
+            break;
+        }
+    }
+
+    if (firstWorkingItem)
+    {
+        HBQueueWorker *worker = [self.queue workerForItem:firstWorkingItem];
+
+        if (worker)
+        {
+            self.observerToken = [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerProgressNotification
+                                                                                 object:worker queue:NSOperationQueue.mainQueue
+                                                                             usingBlock:^(NSNotification * _Nonnull note) {
+                self.progress = note.userInfo[HBQueueWorkerProgressNotificationInfoKey];
+
+                if (self->_visible)
+                {
+                    [self updateProgress];
+                }
+            }];
+        }
+    }
+
+    self.statusField.stringValue = [NSString stringWithFormat:NSLocalizedString(@"Encoding Job: %@", @""), firstWorkingItem.outputFileName];
+}
+
+- (void)removeQueueObservers
+{
+    if (self.observerToken)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
+        self.observerToken = nil;
     }
 }
 
@@ -1014,98 +1095,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")];
         }
-    }
-}
-
-#pragma mark - Queue progress
-
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-    if (self.window.occlusionState & NSWindowOcclusionStateVisible)
-    {
-        self.visible = YES;
-        [self updateProgress];
-    }
-    else
-    {
-        self.visible = NO;
-    }
-}
-
-- (void)updateProgress
-{
-    fStatusField.stringValue = self.progressInfo;
-}
-
-- (void)setUpQueueObservers
-{
-    [self removeQueueObservers];
-
-    if (self->_queue.workingItemsCount > 1)
-    {
-        [self setUpForMultipleWorkers];
-    }
-    else
-    {
-        [self setUpForSingleWorker];
-    }
-}
-
-- (void)setUpForMultipleWorkers
-{
-    NSString *info = [NSString stringWithFormat:NSLocalizedString(@"Encoding %lu Jobs (%lu remaining)", @""),
-                      self->_queue.workingItemsCount, self->_queue.pendingItemsCount];
-    self.progressInfo = info;
-
-    if (self->_visible)
-    {
-        [self updateProgress];
-    }
-}
-
-- (void)setUpForSingleWorker
-{
-    HBQueueItem *firstWorkingItem = nil;
-    for (HBQueueItem *item in self.queue.items)
-    {
-        if (item.state == HBQueueItemStateWorking)
-        {
-            firstWorkingItem = item;
-            break;
-        }
-    }
-
-    if (firstWorkingItem)
-    {
-        HBQueueWorker *worker = [self.queue workerForItem:firstWorkingItem];
-
-        if (worker)
-        {
-            self.observerToken = [NSNotificationCenter.defaultCenter addObserverForName:HBQueueWorkerProgressNotification
-                                                                                 object:worker queue:NSOperationQueue.mainQueue
-                                                                             usingBlock:^(NSNotification * _Nonnull note) {
-                NSString *info = [NSString stringWithFormat:NSLocalizedString(@"Encoding 1 Job (%lu remaining): %@\n%@", @""),
-                        self->_queue.pendingItemsCount,
-                        firstWorkingItem.outputFileName,
-                        note.userInfo[HBQueueWorkerProgressNotificationInfoKey]];
-
-                self.progressInfo = info;
-
-                if (self->_visible)
-                {
-                    [self updateProgress];
-                }
-            }];
-        }
-    }
-}
-
-- (void)removeQueueObservers
-{
-    if (self.observerToken)
-    {
-        [NSNotificationCenter.defaultCenter removeObserver:self.observerToken];
-        self.observerToken = nil;
     }
 }
 

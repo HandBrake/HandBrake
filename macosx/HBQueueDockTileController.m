@@ -60,7 +60,7 @@
     {
         [self setUpForMultipleWorkers];
     }
-    else
+    else if (self->_queue.workingItemsCount == 1)
     {
         [self setUpForSingleWorker];
     }
@@ -68,7 +68,7 @@
 
 - (void)setUpForMultipleWorkers
 {
-    self.dockTile.stringValue = [NSString stringWithFormat:@"%lu of %lu", self.queue.workingItemsCount, self.queue.pendingItemsCount];
+    self.dockTile.stringValue = [NSString stringWithFormat:@"%lu - %lu", self.queue.workingItemsCount, self.queue.pendingItemsCount];
     self.progress = 0;
 }
 

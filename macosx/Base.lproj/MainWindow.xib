@@ -18,7 +18,6 @@
                 <outlet property="fScanIndicator" destination="3203" id="cG1-SY-gbt"/>
                 <outlet property="fSrcDVD2Field" destination="1539" id="pxg-Wl-Mn7"/>
                 <outlet property="fSrcTitlePopUp" destination="1541" id="glh-1k-i69"/>
-                <outlet property="fStatusField" destination="1123" id="mPD-cg-5dk"/>
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
                 <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
@@ -26,8 +25,10 @@
                 <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
                 <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
                 <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
+                <outlet property="progressField" destination="XL7-L5-bkf" id="DCJ-FQ-VIv"/>
                 <outlet property="ripToolbarItem" destination="byg-kj-sEM" id="C7B-wO-F1Q"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
+                <outlet property="statusField" destination="1123" id="ujy-WJ-FLy"/>
                 <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
             </connections>
@@ -52,7 +53,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="839" height="373"/>
+                                    <rect key="frame" x="10" y="29" width="839" height="369"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -520,12 +521,17 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <rect key="frame" x="3" y="3" width="893" height="46"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="3000" translatesAutoresizingMaskIntoConstraints="NO" id="1123">
-                                    <rect key="frame" x="22" y="8" width="849" height="30"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="30" id="xDK-Ed-GEv"/>
-                                    </constraints>
-                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="DO NOT TRANSLATE THIS NIB FILE" id="4846">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="3000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1123">
+                                    <rect key="frame" x="22" y="24" width="849" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Encoding Job 1: Test.mp4" usesSingleLineMode="YES" id="4846">
+                                        <font key="font" metaFont="systemBold" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="3000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XL7-L5-bkf">
+                                    <rect key="frame" x="22" y="10" width="849" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="Progress" usesSingleLineMode="YES" id="KUR-YZ-Da8">
                                         <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -533,10 +539,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </textField>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="XL7-L5-bkf" firstAttribute="top" secondItem="1123" secondAttribute="bottom" id="4mE-qY-tI5"/>
+                                <constraint firstAttribute="trailing" secondItem="XL7-L5-bkf" secondAttribute="trailing" constant="24" id="9FM-Xe-XF0"/>
                                 <constraint firstItem="1123" firstAttribute="top" secondItem="idQ-Ti-X2a" secondAttribute="top" constant="8" id="SEd-Ur-o24"/>
+                                <constraint firstItem="XL7-L5-bkf" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="SNp-DD-HgR"/>
                                 <constraint firstAttribute="trailing" secondItem="1123" secondAttribute="trailing" constant="24" id="VYX-jz-5IE"/>
                                 <constraint firstItem="1123" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="W5K-34-8HI"/>
-                                <constraint firstAttribute="bottom" secondItem="1123" secondAttribute="bottom" constant="8" id="sqA-HN-ptf"/>
                             </constraints>
                         </view>
                         <constraints>
@@ -821,7 +829,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="2342" y="-745"/>
+            <point key="canvasLocation" x="2088" y="-777"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
