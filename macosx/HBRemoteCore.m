@@ -245,7 +245,6 @@
 
     dispatch_sync(dispatch_get_main_queue(), ^{
         HBProgress progress = {currentProgress , hours, minutes, seconds};
-        weakSelf.state = state;
         weakSelf.progressHandler(state, progress, info);
     });
 }
