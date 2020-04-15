@@ -453,15 +453,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 #ifdef __SANDBOX_ENABLED__
         decodeObject(_fileURLBookmark, NSData)
-        decodeObjectOrFail(_fileURL, NSURL);
-
         decodeObject(_outputURLFolderBookmark, NSData)
-        decodeObject(_outputURL, NSURL);
-#else
+#endif
         decodeObjectOrFail(_fileURL, NSURL);
         decodeObject(_outputURL, NSURL);
-#endif
-
         decodeObject(_outputFileName, NSString);
 
         decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
