@@ -1192,15 +1192,18 @@ int reinit_video_filters(hb_work_private_t * pv)
                 settings = hb_dict_init();
                 hb_dict_set(settings, "dir", hb_value_string("cclock"));
                 hb_avfilter_append_dict(filters, "transpose", settings);
+                hb_log("Auto-Rotating video 90 degrees");
                 break;
             case HB_ROTATION_180:
                 hb_avfilter_append_dict(filters, "hflip", hb_value_null());
                 hb_avfilter_append_dict(filters, "vflip", hb_value_null());
+                hb_log("Auto-Rotating video 180 degrees");
                 break;
             case HB_ROTATION_270:
                 settings = hb_dict_init();
                 hb_dict_set(settings, "dir", hb_value_string("clock"));
                 hb_avfilter_append_dict(filters, "transpose", settings);
+                hb_log("Auto-Rotating video 270 degrees");
                 break;
             default:
                 hb_log("reinit_video_filters: Unknown rotation, failed");
