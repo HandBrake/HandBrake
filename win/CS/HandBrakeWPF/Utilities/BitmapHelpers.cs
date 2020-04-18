@@ -26,7 +26,7 @@ namespace HandBrakeWPF.Utilities
             transformedBitmap.Source = source;
 
             var transformGroup = new TransformGroup();
-            transformGroup.Children.Add(new ScaleTransform(1, flip ? -1 : 1));
+            transformGroup.Children.Add(new ScaleTransform(flip ? -1 : 1, 1));
             transformGroup.Children.Add(new RotateTransform(rotation));
 
             transformedBitmap.Transform = transformGroup;
