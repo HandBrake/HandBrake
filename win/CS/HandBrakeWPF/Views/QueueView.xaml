@@ -225,6 +225,9 @@
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
                                                     <Setter Property="Source" Value="Images/WarningSmall.png" />
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Paused">
+                                                    <Setter Property="Source" Value="Images/pause_small.png" />
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Image.Style>
@@ -246,10 +249,9 @@
                                                    TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"   />
 
                                         <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
-                                                     Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
+                                                     Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
                                                      Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
                                     </StackPanel>
-                           
 
                                     <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
                                             AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
@@ -395,8 +397,8 @@
                                 </StackPanel>
 
 
-                                <TextBlock FontWeight="Bold" Text="Status:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="0,15,10,5" Visibility="{Binding IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}"  />
-                                <TextBlock Text="{Binding JobStatus}" Visibility="{Binding IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}" 
+                                <TextBlock FontWeight="Bold" Text="Status:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="0,15,10,5" Visibility="{Binding SelectedTask.IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}"  />
+                                <TextBlock Text="{Binding SelectedTask.JobProgress.JobStatus}" Visibility="{Binding SelectedTask.IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}" 
                                        TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" Margin="0,0,0,5" />
 
                                 <Grid Style="{StaticResource LongToolTipHolder}" Margin="0,10,0,0" >

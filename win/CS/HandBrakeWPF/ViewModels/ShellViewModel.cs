@@ -190,7 +190,7 @@ namespace HandBrakeWPF.ViewModels
         public bool CanClose()
         {
             IQueueService processor = IoC.Get<IQueueService>();
-            if (processor != null && processor.EncodeService.IsEncoding)
+            if (processor != null && processor.IsEncoding)
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(

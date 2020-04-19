@@ -18,47 +18,30 @@ namespace HandBrakeWPF.Services.Logging
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Timers;
 
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.EventArgs;
-    using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
 
-    using HandBrakeWPF.Instance;
-    using HandBrakeWPF.Instance.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Utilities;
-
-    using Newtonsoft.Json;
 
     using ILog = Interfaces.ILog;
     using LogEventArgs = EventArgs.LogEventArgs;
 
-    public class LogService : ILog
+    public class LogService : ILog, IDisposable
     {
-        // TODO List.
-        // Maybe make the event weak?
-        // Make this class Thread Safe.
-        private static ILog loggerInstance;
         private readonly object lockObject = new object();
         private readonly object fileWriterLock = new object();
         private readonly StringBuilder logBuilder = new StringBuilder();
- 
+        private readonly List<LogMessage> logMessages = new List<LogMessage>();
+
         private bool isLoggingEnabled;
-        private List<LogMessage> logMessages = new List<LogMessage>(); 
         private int messageIndex;
         private string diskLogPath;
-        private bool deleteLogFirst;
         private bool isDiskLoggingEnabled;
         private StreamWriter fileWriter;
         private string logHeader;
 
-        public LogService(IUserSettingService userSettingService)
+        public LogService()
         {
-            HandBrakeUtils.MessageLogged += this.HandBrakeUtils_MessageLogged;
-            HandBrakeUtils.ErrorLogged += this.HandBrakeUtils_ErrorLogged;
         }
 
         public event EventHandler<LogEventArgs> MessageLogged;
@@ -86,7 +69,7 @@ namespace HandBrakeWPF.Services.Logging
             LogMessage msg = new LogMessage(content, this.messageIndex);
             lock (this.lockObject)
             {
-                this.messageIndex = this.messageIndex + 1;   
+                this.messageIndex = this.messageIndex + 1;
                 this.logMessages.Add(msg);
                 this.logBuilder.AppendLine(msg.Content);
                 this.LogMessageToDisk(msg);
@@ -106,22 +89,19 @@ namespace HandBrakeWPF.Services.Logging
             this.OnMessageLogged(msg); // Must be outside lock to be thread safe. 
         }
 
-        public void ConfigureLogging(LogHandlerConfig config)
+        public void ConfigureLogging(string filename)
         {
             this.isLoggingEnabled = true;
 
-            if (config.EnableDiskLogging)
+            if (!string.IsNullOrEmpty(filename) && !Directory.Exists(Path.GetDirectoryName(filename)))
             {
-                if (!string.IsNullOrEmpty(config.LogFile) && !Directory.Exists(Path.GetDirectoryName(config.LogFile)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(config.LogFile));
-                }
-
-                this.EnableLoggingToDisk(config.LogFile, config.DeleteCurrentLogFirst);
+                Directory.CreateDirectory(Path.GetDirectoryName(filename));
             }
 
-            this.logHeader = config.Header;
-            this.LogMessage(config.Header);
+            this.EnableLoggingToDisk(filename);
+
+            this.logHeader = GeneralUtilities.CreateLogHeader().ToString();
+            this.LogMessage(logHeader);
         }
 
         public string GetFullLog()
@@ -155,14 +135,6 @@ namespace HandBrakeWPF.Services.Logging
             return log;
         }
 
-        public long GetLatestLogIndex()
-        {
-            lock (this.lockObject)
-            {
-                return this.messageIndex;
-            }
-        }
-        
         public async void Reset()
         {
             lock (this.lockObject)
@@ -170,30 +142,13 @@ namespace HandBrakeWPF.Services.Logging
                 this.logMessages.Clear();
                 this.logBuilder.Clear();
                 this.messageIndex = 0;
-               
-                try
-                {
-                    lock (this.fileWriterLock)
-                    {
-                        if (this.fileWriter != null)
-                        {
-                            this.fileWriter.Flush();
-                            this.fileWriter.Close();
-                            this.fileWriter.Dispose();
-                        }
 
-                        this.fileWriter = null;
-                    }
-                }
-                catch (Exception exc)
-                {
-                    Debug.WriteLine(exc);
-                }
+                this.ShutdownFileWriter();
 
                 if (this.fileWriter == null)
                 {
                     this.isDiskLoggingEnabled = false;
-                    this.EnableLoggingToDisk(this.diskLogPath, this.deleteLogFirst);
+                    this.EnableLoggingToDisk(this.diskLogPath);
                 }
 
                 if (!string.IsNullOrEmpty(this.logHeader))
@@ -205,16 +160,18 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
+        public void Dispose()
+        {
+            this.ShutdownFileWriter();
+        }
+
         protected virtual void OnMessageLogged(LogMessage msg)
         {
             var onMessageLogged = this.MessageLogged;
-            if (onMessageLogged != null)
-            {
-                onMessageLogged.Invoke(this, new LogEventArgs(msg));
-            }
+            onMessageLogged?.Invoke(this, new LogEventArgs(msg));
         }
 
-        protected void ShutdownFileWriter()
+        private void ShutdownFileWriter()
         {
             try
             {
@@ -241,7 +198,7 @@ namespace HandBrakeWPF.Services.Logging
             this.LogReset?.Invoke(this, System.EventArgs.Empty);
         }
 
-        private void EnableLoggingToDisk(string logFile, bool deleteCurrentLogFirst)
+        private void EnableLoggingToDisk(string logFile)
         {
             if (this.isDiskLoggingEnabled)
             {
@@ -255,14 +212,13 @@ namespace HandBrakeWPF.Services.Logging
                     throw new Exception("Log Directory does not exist. This service will not create it for you!");
                 }
 
-                if (deleteCurrentLogFirst && File.Exists(logFile))
+                if (File.Exists(logFile))
                 {
                     File.Delete(logFile);
                 }
 
                 this.diskLogPath = logFile;
                 this.isDiskLoggingEnabled = true;
-                this.deleteLogFirst = deleteCurrentLogFirst;
 
                 lock (this.fileWriterLock)
                 {
@@ -312,31 +268,6 @@ namespace HandBrakeWPF.Services.Logging
             {
                 Debug.WriteLine(exc); // This exception doesn't warrant user interaction, but it should be logged
             }
-        }
-
-        private void HandBrakeUtils_ErrorLogged(object sender, MessageLoggedEventArgs e)
-        {
-            if (e == null || string.IsNullOrEmpty(e.Message))
-            {
-                return;
-            }
-
-            this.LogMessage(e.Message);
-        }
-
-        private void HandBrakeUtils_MessageLogged(object sender, MessageLoggedEventArgs e)
-        {
-            if (e == null || string.IsNullOrEmpty(e.Message))
-            {
-                return;
-            }
-
-            this.LogMessage(e.Message);
-        }
-
-        void ILogHandler.ShutdownFileWriter()
-        {
-            throw new NotImplementedException();
         }
     }
 }
