@@ -3655,6 +3655,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of simultaneous encodes:.
+        /// </summary>
+        public static string OptionsView_SimultaneousEncodes {
+            get {
+                return ResourceManager.GetString("OptionsView_SimultaneousEncodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default network port for worker:.
         /// </summary>
         public static string OptionsView_WorkerDefaultPort {

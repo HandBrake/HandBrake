@@ -2226,4 +2226,7 @@ Please choose a different preset.</value>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Number of simultaneous encodes:</value>
+  </data>
 </root>
