@@ -706,11 +706,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>请停止当前编码。如果问题依然存在，请重启HandBrake。</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>编码中: Pass {0}/{1},  {2:00.00}%
-FPS: {3:000.0},  平均FPS: {4:000.0}
-剩余时间: {5},  已用时间: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>预览 ({0}% 实际大小)</value>
   </data>

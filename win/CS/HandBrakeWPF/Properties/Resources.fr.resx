@@ -714,11 +714,6 @@ Temps Restant: {4}</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Veuillez arrêter l'encodage en cours. Si le problème persiste, redémarrez HandBrake.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodage : Passage {0} sur {1},  {2:00.00}%
-IPS :  {3:000.0}, Moy IPS :  {4:000.0}
-Temps Restant : {5}, Écoulé : {6:j\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Aperçu ({0}% de la taille réelle)</value>
   </data>

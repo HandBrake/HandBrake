@@ -83,7 +83,6 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ITitleSpecificViewModel, TitleSpecificViewModel>();
             this.container.Singleton<IQueueSelectionViewModel, QueueSelectionViewModel>();
             this.container.Singleton<ICountdownAlertViewModel, CountdownAlertViewModel>();
-            this.container.Singleton<IMiniViewModel, MiniViewModel>();
             this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
             this.container.Singleton<ISystemService, SystemService>();
             this.container.Singleton<IHbFunctionsProvider, HbFunctionsProvider>();
