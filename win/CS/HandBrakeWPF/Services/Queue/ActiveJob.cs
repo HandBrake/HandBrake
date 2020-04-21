@@ -1,0 +1,131 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ActiveJob.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the ActiveJob type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrakeWPF.Services.Queue
+{
+    using System;
+
+    using HandBrake.Interop.Interop.Providers.Interfaces;
+
+    using HandBrakeWPF.Services.Encode;
+    using HandBrakeWPF.Services.Encode.EventArgs;
+    using HandBrakeWPF.Services.Encode.Interfaces;
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Queue.JobEventArgs;
+    using HandBrakeWPF.Services.Queue.Model;
+
+    public class ActiveJob : IDisposable
+    {
+        private readonly QueueTask job;
+        private readonly IEncode encodeService;
+
+        public ActiveJob(QueueTask task, IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int jobId)
+        {
+            this.job = task;
+            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, jobId);
+        }
+
+        public event EventHandler<ActiveJobCompletedEventArgs> JobFinished;
+
+        public event EventHandler<EncodeProgressEventArgs> JobStatusUpdated;
+
+        public QueueTask Job => this.job;
+
+        public bool IsPaused { get; private set; }
+
+        public bool IsEncoding { get; set; }
+        
+        public void Start()
+        {
+            this.IsPaused = false;
+            this.IsEncoding = true;
+
+            if (this.encodeService.IsPasued)
+            {
+                this.encodeService.Resume();
+                this.job.Statistics.SetPaused(false);
+            }
+            else if (!this.encodeService.IsEncoding)
+            {
+                this.job.Status = QueueItemStatus.InProgress;
+                this.job.Statistics.StartTime = DateTime.Now;
+
+                this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
+                this.encodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+                this.encodeService.Start(this.job.Task, this.job.Configuration, this.job.SelectedPresetKey);
+            }
+        }
+
+        public void Pause()
+        {
+            if (this.encodeService.IsEncoding && !this.encodeService.IsPasued)
+            {
+                this.IsPaused = true;
+                this.encodeService.Pause();
+                this.job.Statistics.SetPaused(true);
+                this.job.Status = QueueItemStatus.Paused;
+                this.IsEncoding = false;
+            }
+        }
+
+        public void Stop()
+        {
+            if (this.encodeService.IsEncoding)
+            {
+                this.encodeService.Stop();
+            }
+
+            this.IsEncoding = false;
+            this.IsPaused = false;
+            this.encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
+            this.encodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+        }
+
+        public void Dispose()
+        {
+            this.encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
+            this.encodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+        }
+
+        private void EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
+        {
+            this.job?.JobProgress.Update(e);
+            this.OnJobStatusUpdated(e);
+        }
+
+        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        {
+            this.IsEncoding = false;
+            this.IsPaused = false;
+
+            this.job.Status = !e.Successful ? QueueItemStatus.Error : QueueItemStatus.Completed;
+            this.job.Statistics.EndTime = DateTime.Now;
+            this.job.Statistics.CompletedActivityLogPath = e.ActivityLogPath;
+            this.job.Statistics.FinalFileSize = e.FinalFilesizeInBytes;
+
+            this.job.JobProgress.ClearStatusDisplay();
+            
+            this.encodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+            this.encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
+
+            this.OnJobFinished(e);
+        }
+
+        private void OnJobFinished(EncodeCompletedEventArgs e)
+        {
+            this.JobFinished?.Invoke(this, new ActiveJobCompletedEventArgs(this, e));
+        }
+
+        private void OnJobStatusUpdated(EncodeProgressEventArgs e)
+        {
+            this.JobStatusUpdated?.Invoke(this, e);
+        }
+    }
+}

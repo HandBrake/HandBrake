@@ -60,7 +60,14 @@ namespace HandBrakeWPF.Services
 
         private void StorageCheck()
         {
-            string directory = this.queueService.LastProcessedJob?.Task?.Destination;
+            foreach (string directory in this.queueService.GetActiveJobDestinationDirectories())
+            {
+                this.CheckDiskSpaceForDirectory(directory);
+            }
+        }
+
+        private void CheckDiskSpaceForDirectory(string directory)
+        {
             if (!string.IsNullOrEmpty(directory) && this.queueService.IsEncoding)
             {
                 long lowLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel);

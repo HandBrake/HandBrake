@@ -72,12 +72,6 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         bool IsPaused { get; }
 
         /// <summary>
-        /// Gets or sets Last Processed Job.
-        /// This is set when the job is poped of the queue by GetNextJobForProcessing();
-        /// </summary>
-            QueueTask LastProcessedJob { get; set; }
-
-        /// <summary>
         /// Gets The current queue.
         /// </summary>
         ObservableCollection<QueueTask> Queue { get; }
@@ -221,12 +215,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Pause the queue but allow the current encode to complete.
         /// </summary>
         void Pause();
-
-        /// <summary>
-        /// Pause and Encode and the Queue.
-        /// </summary>
-        void PauseEncode();
-
+        
         /// <summary>
         /// Get the status of all running queue jobs.
         /// </summary>
@@ -234,5 +223,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// A list of QueueProgressStatus items
         /// </returns>
         List<QueueProgressStatus> GetQueueProgressStatus();
+
+        List<string> GetActiveJobDestinationDirectories();
     }
 }

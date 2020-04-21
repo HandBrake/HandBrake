@@ -1020,7 +1020,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.queueProcessor.LastProcessedJob?.Status == QueueItemStatus.Paused)
+                if (this.queueProcessor.IsPaused)
                 {
                     return Resources.Main_ResumeEncode;
                 }
@@ -1598,13 +1598,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.Count != 0 || this.queueProcessor.LastProcessedJob?.Status == QueueItemStatus.Paused)
+            if (this.queueProcessor.Count != 0 || this.queueProcessor.IsPaused)
             {
-                if (this.queueProcessor.LastProcessedJob?.Status == QueueItemStatus.Paused)
-                {
-                    this.IsEncoding = true;
-                }
-
+                this.IsEncoding = true;
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
@@ -1653,7 +1649,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PauseEncode()
         {
-            this.queueProcessor.PauseEncode();
+            this.queueProcessor.Pause();
             this.IsEncoding = false;
         }
 

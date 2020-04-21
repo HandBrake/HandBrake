@@ -46,12 +46,14 @@ namespace HandBrakeWPF.Services.Encode
         private HBConfiguration currentConfiguration;
         private bool isPreviewInstance;
         private bool isLoggingInitialised;
+        private int encodeCounter;
 
-        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager) : base(userSettingService)
+        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter) : base(userSettingService)
         {
             this.userSettingService = userSettingService;
             this.logInstanceManager = logInstanceManager;
             this.hbFunctionsProvider = hbFunctionsProvider;
+            this.encodeCounter = encodeCounter;
         }
 
         public bool IsPasued { get; private set; }
@@ -264,7 +266,7 @@ namespace HandBrakeWPF.Services.Encode
             if (!isLoggingInitialised)
             {
                 string logType = isPreview ? "preview" : "encode";
-                string filename = string.Format("activity_log.{0}.{1}.txt", logType, GeneralUtilities.ProcessId);
+                string filename = string.Format("activity_log.{0}.{1}.{2}.txt", encodeCounter, logType, GeneralUtilities.ProcessId);
                 string logFile = Path.Combine(DirectoryUtilities.GetLogDirectory(), filename);
                 this.encodeLogService = new LogService();
                 this.encodeLogService.ConfigureLogging(logFile);
