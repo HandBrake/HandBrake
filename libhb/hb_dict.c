@@ -92,8 +92,16 @@ hb_value_t * hb_value_json(const char *json)
 
 hb_value_t * hb_value_read_json(const char *path)
 {
+    FILE * fp;
     json_error_t error;
-    hb_value_t *val = json_load_file(path, 0, &error);
+
+    fp = hb_fopen(path, "r");
+    if (fp == NULL)
+    {
+        return NULL;
+    }
+    hb_value_t *val = json_loadf(fp, 0, &error);
+    fclose(fp);
     return val;
 }
 
