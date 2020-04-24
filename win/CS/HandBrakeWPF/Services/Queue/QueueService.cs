@@ -234,7 +234,7 @@ namespace HandBrakeWPF.Services.Queue
                 foreach (QueueTask task in reloadedQueue)
                 {
                     // Reset the imported jobs that were running in a previous session.
-                    if (task.Status == QueueItemStatus.InProgress)
+                    if (task.Status == QueueItemStatus.InProgress || task.Status == QueueItemStatus.Paused)
                     {
                         task.Status = QueueItemStatus.Waiting;
                         task.Statistics.Reset();
@@ -402,7 +402,7 @@ namespace HandBrakeWPF.Services.Queue
                             if (item.Status != QueueItemStatus.Completed)
                             {
                                 // Reset InProgress/Error to Waiting so it can be processed
-                                if (item.Status == QueueItemStatus.InProgress)
+                                if (item.Status == QueueItemStatus.InProgress || item.Status == QueueItemStatus.Paused)
                                 {
                                     item.Status = QueueItemStatus.Error;
                                 }
