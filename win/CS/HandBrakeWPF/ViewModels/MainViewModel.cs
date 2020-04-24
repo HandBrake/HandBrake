@@ -1022,11 +1022,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Flag to indicate if the queue is showing on the main view. (I.e  inline queue display)
-        /// </summary>
-        public bool IsQueueShowingInLine { get; set; } = false;
-
         public bool IsUWP { get; } = UwpDetect.IsUWP();
 
         public string SourceInfo
@@ -1241,9 +1236,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            this.IsQueueShowingInLine = false;
-            this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
-
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
             if (window != null)
             {

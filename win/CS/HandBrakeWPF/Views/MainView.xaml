@@ -23,7 +23,6 @@
         <Converters:BooleanConverter x:Key="booleanConverter" />
         <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
         <Converters:LongToIntConverter x:Key="longToIntConverter" />
-        <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
         <Converters:BooleanConverter x:Key="NotBooleanConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
@@ -130,12 +129,6 @@
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_AddToQueue}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" InputGestureText="Ctrl + Shift + A" />
-                    <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:Resources.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:Resources.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <Separator />
                     <MenuItem x:Name="queueRecoveryMenuItem" Header="{x:Static Properties:Resources.SourceSelection_QueueArchiveRecovery}" cal:Message.Attach="[Event Click] = [Action RecoverQueue]" />
 
@@ -342,9 +335,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition x:Name="tabContentArea" Height="{Binding IsQueueShowingInLine, Converter={StaticResource InlineQueueConverter}}" />
+                <RowDefinition x:Name="tabContentArea" Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="{Binding IsQueueShowingInLine, Converter={StaticResource InlineQueueConverter}, ConverterParameter=true}"/>
             </Grid.RowDefinitions>
 
             <!--  Main Controls  -->
@@ -533,8 +525,7 @@
                         SelectedIndex="{Binding SelectedTab}"
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
-                        SelectionChanged="TabControl_OnSelectionChanged"
-                        Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                        SelectionChanged="TabControl_OnSelectionChanged">
                 <TabItem Name="summaryTab" Header="{x:Static Properties:Resources.MainView_SummaryTab}">
                     <ContentControl x:Name="SummaryViewModel" />
                 </TabItem>
@@ -594,17 +585,6 @@
                     />
                 </Grid>
             </StackPanel>
-
-            <!-- Queue in-line display if enabled -->
-            <Grid  Grid.Row="4" Grid.Column="0" Margin="10,0,10,10" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
-                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
-                <ContentControl cal:View.Model="{Binding QueueViewModel}" cal:View.Context="Embedded" Grid.Row="1" />
-            </Grid>
 
             <!--  Presets  -->
             <GroupBox Grid.Row="0" Grid.RowSpan="5"
