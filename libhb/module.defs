@@ -170,7 +170,7 @@ else
 endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
-LIBHB.GCC.l += bcrypt ws2_32 uuid ole32
+LIBHB.GCC.l += bcrypt ws2_32 uuid ole32 mfplat strmiids
 ifeq ($(HAS.dlfcn),1)
     LIBHB.GCC.l += dl
 endif

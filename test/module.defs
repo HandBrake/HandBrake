@@ -89,7 +89,7 @@ ifeq (1,$(HAS.pthread))
 else
     TEST.GCC.l += pthreadGC2
 endif
-    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32
+    TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32 mfplat strmiids
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.args.extra.exe++ += -static
 endif #   (1-mingw,$(HOST.cross)-$(HOST.system))

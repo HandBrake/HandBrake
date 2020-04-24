@@ -113,7 +113,9 @@ else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
         --arch=$(HOST.machine) \
         --cross-prefix=$(HOST.cross.prefix) \
         --pkg-config=$(PKGCONFIG.exe) \
-        --pkg-config-flags="--static"
+        --pkg-config-flags="--static" \
+        --enable-encoder=h264_mf \
+        --enable-encoder=hevc_mf
     FFMPEG.GCC.args.extra += -fno-common
     FFMPEG.GCC.args.extra-ldflags = -static-libgcc -static-libstdc++ -static
 else ifeq (darwin,$(HOST.system))

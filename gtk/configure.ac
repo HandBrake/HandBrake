@@ -231,7 +231,7 @@ case $host in
 		if test "x$use_libpthread" = "xyes" ; then
 			HB_LIBS="$HB_LIBS -lpthread"
 		fi
-		HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
+		HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32 -lmfplat -lstrmiids"
 		;;
 	*-*-freebsd*)
 		HB_LIBS="$HB_LIBS -lpthread"
