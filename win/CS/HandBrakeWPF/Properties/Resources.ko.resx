@@ -1158,7 +1158,7 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>프로그램 제목 바에 인코딩 상태 보여주기</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>30일이 지난 로그 파일들 제거</value>
   </data>
   <data name="Options_About" xml:space="preserve">

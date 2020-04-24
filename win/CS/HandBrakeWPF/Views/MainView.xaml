@@ -268,7 +268,7 @@
 
                 <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Pause}"
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
-                        Visibility="{Binding CanPause,
+                        Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
                     <StackPanel Orientation="Horizontal">

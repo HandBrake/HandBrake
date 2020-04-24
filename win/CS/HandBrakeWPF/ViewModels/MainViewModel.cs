@@ -80,7 +80,6 @@ namespace HandBrakeWPF.ViewModels
         private Source scannedSource;
         private Title selectedTitle;
         private string duration;
-        private bool isEncoding;
         private bool showStatusWindow;
         private Preset selectedPreset;
         private QueueTask queueEditTask;
@@ -88,7 +87,6 @@ namespace HandBrakeWPF.ViewModels
         private bool isPresetPanelShowing;
         private bool showSourceSelection;
         private BindingList<SourceMenuItem> drives;
-        private bool canPause;
         private bool showAlertWindow;
         private string alertWindowHeader;
         private string alertWindowText;
@@ -380,26 +378,6 @@ namespace HandBrakeWPF.ViewModels
         public int TitleSpecificScan { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the encode service supports pausing.
-        /// </summary>
-        public bool CanPause
-        {
-            get
-            {
-                return this.canPause;
-            }
-            set
-            {
-                if (value.Equals(this.canPause))
-                {
-                    return;
-                }
-                this.canPause = value;
-                this.NotifyOfPropertyChange(() => this.CanPause);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the Source Label
         /// This indicates the status of scans.
         /// </summary>
@@ -538,14 +516,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isEncoding;
-            }
-
-            set
-            {
-                this.isEncoding = value;
-                this.CanPause = value;
-                this.NotifyOfPropertyChange(() => this.IsEncoding);
+                return this.queueProcessor.IsEncoding;
             }
         }
 
@@ -1169,7 +1140,7 @@ namespace HandBrakeWPF.ViewModels
             // Log Cleaning
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
-                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
+                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(7));
                 clearLog.Start();
             }
 
@@ -1593,14 +1564,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.queueProcessor.IsProcessing)
             {
-                this.IsEncoding = true;
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 return;
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
             if (this.queueProcessor.Count != 0 || this.queueProcessor.IsPaused)
             {
-                this.IsEncoding = true;
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
@@ -1616,7 +1587,7 @@ namespace HandBrakeWPF.ViewModels
             var addError = this.AddToQueue(false);
             if (addError == null)
             {
-                this.IsEncoding = true;
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
             }
             else
@@ -1650,7 +1621,7 @@ namespace HandBrakeWPF.ViewModels
         public void PauseEncode()
         {
             this.queueProcessor.Pause();
-            this.IsEncoding = false;
+            this.NotifyOfPropertyChange(() => this.IsEncoding);
         }
 
         /// <summary>
@@ -2516,7 +2487,7 @@ namespace HandBrakeWPF.ViewModels
                () =>
                {
                    this.ProgramStatusLabel = Resources.Main_PreparingToEncode;
-                   this.IsEncoding = true;
+                   this.NotifyOfPropertyChange(() => this.IsEncoding);
                });
         }
 
@@ -2531,7 +2502,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueCompleted(object sender, EventArgs e)
         {
-            this.IsEncoding = false;
+            this.NotifyOfPropertyChange(() => this.IsEncoding);
 
             Execute.OnUIThread(
                 () =>
@@ -2570,6 +2541,7 @@ namespace HandBrakeWPF.ViewModels
                   this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
                   this.NotifyOfPropertyChange(() => this.QueueLabel);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
+                  this.NotifyOfPropertyChange(() => this.IsEncoding);
               });
         }
 
@@ -2623,7 +2595,7 @@ namespace HandBrakeWPF.ViewModels
                     else
                     {
                         this.ProgramStatusLabel = Resources.Main_QueueFinished;
-                        this.IsEncoding = false;
+                        this.NotifyOfPropertyChange(() => this.IsEncoding);
                         this.WindowTitle = Resources.HandBrake_Title;
                         this.notifyIconService.SetTooltip(this.WindowTitle);
 

@@ -1151,7 +1151,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>在应用程序标题栏中显示编码进度。</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>清理30天前的日志文件</value>
   </data>
   <data name="Options_About" xml:space="preserve">

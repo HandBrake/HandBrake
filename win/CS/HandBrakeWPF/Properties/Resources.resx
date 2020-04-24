@@ -1163,8 +1163,8 @@ Would you like to overwrite it?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Show the encode status in the application title bar.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 30 days</value>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Clear Log files older than 7 days</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>About HandBrake</value>

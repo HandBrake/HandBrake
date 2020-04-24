@@ -1159,7 +1159,7 @@ Souhaitez-vous l'écraser ?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Afficher l'état de l'encodage dans la bar de titre du l'application.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Effacer les fichiers du journal de plus de 30 jours</value>
   </data>
   <data name="Options_About" xml:space="preserve">

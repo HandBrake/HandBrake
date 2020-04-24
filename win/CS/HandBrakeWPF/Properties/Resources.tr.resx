@@ -1161,7 +1161,7 @@ Kalan Süre: {4}</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Kodlama durumunu uygulama başlık çubuğunda göster.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>30 günden daha eski olan Günlük dosyalarını temizle</value>
   </data>
   <data name="Options_About" xml:space="preserve">

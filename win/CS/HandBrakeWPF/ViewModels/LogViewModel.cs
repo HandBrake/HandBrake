@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Text;
     using System.Windows.Forms;
 
@@ -211,6 +212,7 @@ namespace HandBrakeWPF.ViewModels
         private void LogInstanceManager_NewLogInstanceRegistered(object sender, EventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.LogFiles);
+            this.SelectedLogFile = this.LogFiles.LastOrDefault();
         }
     }
 }

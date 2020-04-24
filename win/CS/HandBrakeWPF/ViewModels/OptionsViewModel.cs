@@ -46,7 +46,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
-
         private readonly IUserSettingService userSettingService;
         private readonly IUpdateService updateService;
         private readonly IErrorService errorService;

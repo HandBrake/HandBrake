@@ -471,6 +471,7 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = false;
             this.IsPaused = false;
             this.InvokeQueueChanged(EventArgs.Empty);
+            this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
         }
 
         public List<QueueProgressStatus> GetQueueProgressStatus()
@@ -547,16 +548,16 @@ namespace HandBrakeWPF.Services.Queue
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.BackupQueue(string.Empty);
+
+                this.ProcessNextJob();
             }
             else
             {
                 this.BackupQueue(string.Empty);
 
                 // Fire the event to tell connected services.
-                this.OnQueueCompleted(new QueueCompletedEventArgs(false));
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
             }
-
-            this.ProcessNextJob(); 
         }
 
         private void ActiveJob_JobStatusUpdated(object sender, Encode.EventArgs.EncodeProgressEventArgs e)
@@ -572,7 +573,7 @@ namespace HandBrakeWPF.Services.Queue
             this.ProcessNextJob();
         }
 
-        private void OnQueueCompleted(QueueCompletedEventArgs e)
+        private void InvokeQueueCompleted(QueueCompletedEventArgs e)
         {
             this.IsProcessing = false;
             this.QueueCompleted?.Invoke(this, e);

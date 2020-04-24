@@ -2695,11 +2695,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear Log files older than 30 days.
+        ///   Looks up a localized string similar to Clear Log files older than 7 days.
         /// </summary>
-        public static string Options_30DayLogClear {
+        public static string Options_7DayLogClear {
             get {
-                return ResourceManager.GetString("Options_30DayLogClear", resourceCulture);
+                return ResourceManager.GetString("Options_7DayLogClear", resourceCulture);
             }
         }
         

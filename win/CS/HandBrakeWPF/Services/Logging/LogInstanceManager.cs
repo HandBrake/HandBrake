@@ -12,14 +12,20 @@ namespace HandBrakeWPF.Services.Logging
     using System.Collections.Generic;
     using System.Linq;
 
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
+
+    using Microsoft.Win32.SafeHandles;
 
     public class LogInstanceManager : ILogInstanceManager
     {
         private Dictionary<string, ILog> logInstances = new Dictionary<string, ILog>();
 
-        public LogInstanceManager()
+        private int maxInstances;
+
+        public LogInstanceManager(IUserSettingService userSettingService)
         {
+            this.maxInstances = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
         }
 
         public event EventHandler NewLogInstanceRegistered;
@@ -35,6 +41,9 @@ namespace HandBrakeWPF.Services.Logging
             }
 
             this.logInstances.Add(filename, log);
+
+            this.CleanupInstance();
+
             this.OnNewLogInstanceRegistered();
         }
 
@@ -62,6 +71,16 @@ namespace HandBrakeWPF.Services.Logging
         protected virtual void OnNewLogInstanceRegistered()
         {
             this.NewLogInstanceRegistered?.Invoke(this, System.EventArgs.Empty);
+        }
+
+        private void CleanupInstance()
+        {
+            List<string> encodeLogs = this.logInstances.Keys.Where(f => f.Contains(".encode.")).ToList();
+            string removalKey = this.logInstances.Keys.OrderBy(k => k).FirstOrDefault(w => w.Contains(".encode."));
+            if (encodeLogs.Count > this.maxInstances)
+            {
+                this.logInstances.Remove(removalKey);
+            }   
         }
     }
 }

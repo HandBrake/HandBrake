@@ -1161,7 +1161,7 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>タイトルバーにエンコードの状態を表示する</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>30日を過ぎたログファイルをクリアする</value>
   </data>
   <data name="Options_About" xml:space="preserve">

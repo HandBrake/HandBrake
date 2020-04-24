@@ -1161,7 +1161,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Показывать состояние кодирования в заголовке окна приложения.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Очистить логи, существующие более 30 дней</value>
   </data>
   <data name="Options_About" xml:space="preserve">

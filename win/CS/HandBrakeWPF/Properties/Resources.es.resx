@@ -1156,7 +1156,7 @@ Tiempo restante: {4}</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Mostrar el estado de codificación en la barra de título de la aplicación.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Borrar archivos de registro de más de 30 días</value>
   </data>
   <data name="Options_About" xml:space="preserve">

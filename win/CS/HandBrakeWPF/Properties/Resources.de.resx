@@ -1165,7 +1165,7 @@ Soll sie überschrieben werden?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Den Encodierungsstatus in der Titelleiste des Programms anzeigen</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Alte Aktivitätsprotokolle nach 30 Tagen löschen</value>
   </data>
   <data name="Options_About" xml:space="preserve">

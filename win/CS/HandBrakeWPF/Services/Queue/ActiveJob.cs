@@ -51,6 +51,7 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.encodeService.Resume();
                 this.job.Statistics.SetPaused(false);
+                this.job.Status = QueueItemStatus.InProgress;
             }
             else if (!this.encodeService.IsEncoding)
             {
@@ -84,7 +85,6 @@ namespace HandBrakeWPF.Services.Queue
 
             this.IsEncoding = false;
             this.IsPaused = false;
-            this.encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
 
