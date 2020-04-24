@@ -414,9 +414,10 @@
                             <TextBox Text="{Binding RemoteServicePort}" Width="100" IsEnabled="{Binding RemoteServiceEnabled}"  />
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousEncodes}" />
-                            <ComboBox ItemsSource="{Binding SimultaneousEncodesList}" SelectedItem="{Binding SimultaneousEncodes}" IsEnabled="{Binding RemoteServiceEnabled}" />
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" >
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousEncodes}" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding SimultaneousEncodesList}" SelectedItem="{Binding SimultaneousEncodes}" IsEnabled="false" /> <!--IsEnabled="{Binding RemoteServiceEnabled}"-->
+                            <TextBlock Text="(Coming Soon!)" Margin="10,0,0,0" FontWeight="Bold" VerticalAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
 
