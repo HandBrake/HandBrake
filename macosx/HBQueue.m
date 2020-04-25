@@ -13,6 +13,8 @@
 
 #import <IOKit/pwr_mgt/IOPMLib.h>
 
+static void *HBQueueContext = &HBQueueContext;
+
 NSString * const HBQueueDidChangeStateNotification = @"HBQueueDidChangeStateNotification";
 
 NSString * const HBQueueDidAddItemNotification = @"HBQueueDidAddItemNotification";
@@ -96,6 +98,21 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item}];
             [self completedItem:item];
         }];
+    }
+
+    [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.HBQueueWorkerCounts"
+                                                                options:0 context:HBQueueContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBQueueContext && self.isEncoding)
+    {
+        [self encodeNextQueueItem];
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
@@ -700,13 +717,18 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
         if (nextItem && [self isDiskSpaceLowAtURL:nextItem.outputURL])
         {
-            // Disk space is low, show an alert
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
             [self allowSleep];
 
-            [self pause];
+            if (self.isEncoding == NO)
+            {
+                [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
+            }
+            else
+            {
+                [self pause];
+            }
 
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueLowSpaceAlertNotification object:self];
         }
         // If we still have more pending items in our queue, lets go to the next one
