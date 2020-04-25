@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Helpers
             string logFile = Path.Combine(logDir, filename);
             generalAppLogger.ConfigureLogging(logFile);
 
-            IoC.Get<ILogInstanceManager>().RegisterLoggerInstance(filename, generalAppLogger);
+            IoC.Get<ILogInstanceManager>().RegisterLoggerInstance(filename, generalAppLogger, true);
             
 
             HandBrakeUtils.MessageLogged += HandBrakeUtils_MessageLogged;

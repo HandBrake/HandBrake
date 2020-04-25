@@ -32,7 +32,9 @@ namespace HandBrakeWPF.Services.Logging
 
         public string ApplicationAndScanLog { get; private set; }
 
-        public void RegisterLoggerInstance(string filename, ILog log)
+        public ILog MasterLogInstance { get; private set; }
+
+        public void RegisterLoggerInstance(string filename, ILog log, bool isMaster)
         {
             if (string.IsNullOrEmpty(this.ApplicationAndScanLog))
             {
@@ -43,6 +45,11 @@ namespace HandBrakeWPF.Services.Logging
             this.logInstances.Add(filename, log);
 
             this.CleanupInstance();
+
+            if (isMaster)
+            {
+                this.MasterLogInstance = log;
+            }
 
             this.OnNewLogInstanceRegistered();
         }

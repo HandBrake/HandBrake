@@ -569,8 +569,11 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.activeJobs.Remove(e.Job);
             this.OnEncodeCompleted(e.EncodeEventArgs);
-            
-            this.ProcessNextJob();
+
+            if (!this.IsPaused && this.IsProcessing)
+            {
+                this.ProcessNextJob();
+            }
         }
 
         private void InvokeQueueCompleted(QueueCompletedEventArgs e)

@@ -18,12 +18,21 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         
         string ApplicationAndScanLog { get; }
 
+        ILog MasterLogInstance { get; }
+
         /// <summary>
         /// Register an ILog instance.
         /// </summary>
-        /// <param name="filename">This is the key associated with the log instance.</param>
-        /// <param name="log">The ILog instance</param>
-        void RegisterLoggerInstance(string filename, ILog log);
+        /// <param name="filename">
+        /// This is the key associated with the log instance.
+        /// </param>
+        /// <param name="log">
+        /// The ILog instance
+        /// </param>
+        /// <param name="isMaster">
+        /// True indicates it's the log instance for the parent handbrake process.
+        /// </param>
+        void RegisterLoggerInstance(string filename, ILog log, bool isMaster);
 
         /// <summary>
         /// Gets a list of files without their associated ILog instances.

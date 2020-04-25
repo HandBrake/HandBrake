@@ -73,12 +73,17 @@ namespace HandBrakeWPF.Services.Encode
                 this.currentTask = task;
                 this.currentConfiguration = configuration;
 
-                this.InitLogging(task.IsPreviewEncode);
 
-                // Create a new HandBrake instance
-                // Setup the HandBrake Instance
-                this.encodeLogService.Reset(); // Reset so we have a clean log for the start of the encode.
-
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
+                {
+                    this.InitLogging(task.IsPreviewEncode);
+                }
+                else
+                {
+                    this.encodeLogService = this.logInstanceManager.MasterLogInstance;
+                    this.encodeLogService.Reset();
+                }
+                
                 if (this.instance != null)
                 {
                     // Cleanup
@@ -270,7 +275,7 @@ namespace HandBrakeWPF.Services.Encode
                 string logFile = Path.Combine(DirectoryUtilities.GetLogDirectory(), filename);
                 this.encodeLogService = new LogService();
                 this.encodeLogService.ConfigureLogging(logFile);
-                this.logInstanceManager.RegisterLoggerInstance(filename, this.encodeLogService);
+                this.logInstanceManager.RegisterLoggerInstance(filename, this.encodeLogService, false);
                 isLoggingInitialised = true;
             }
         }
