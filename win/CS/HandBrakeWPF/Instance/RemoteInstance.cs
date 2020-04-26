@@ -31,6 +31,8 @@ namespace HandBrakeWPF.Instance
     using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -62,6 +64,8 @@ namespace HandBrakeWPF.Instance
 
         public event EventHandler<EncodeProgressEventArgs> EncodeProgress;
 
+        public bool IsRemoteInstance => true;
+
         public async void PauseEncode()
         {
             await this.MakeHttpGetRequest("PauseEncode");
@@ -80,7 +84,7 @@ namespace HandBrakeWPF.Instance
             {
                 EnableDiskLogging = false,
                 AllowDisconnectedWorker = false,
-                DisableLibDvdNav = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
                 EnableHardwareAcceleration = true,
                 LogDirectory = DirectoryUtilities.GetLogDirectory(),
                 LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
@@ -149,11 +153,30 @@ namespace HandBrakeWPF.Instance
                 workerProcess.Exited += this.WorkerProcess_Exited;
                 workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
                 workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;
-         
+
                 workerProcess.Start();
                 workerProcess.BeginOutputReadLine();
                 workerProcess.BeginErrorReadLine();
 
+                // Set Process Priority
+                switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
+                {
+                    case ProcessPriority.High:
+                        workerProcess.PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case ProcessPriority.AboveNormal:
+                        workerProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case ProcessPriority.Normal:
+                        workerProcess.PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case ProcessPriority.Low:
+                        workerProcess.PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        workerProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
 
                 this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
             }
@@ -213,7 +236,10 @@ namespace HandBrakeWPF.Instance
 
                     this.encodePollTimer?.Stop();
 
-                    this.workerProcess?.Kill();
+                    if (this.workerProcess != null && !this.workerProcess.HasExited)
+                    {
+                        this.workerProcess?.Kill();
+                    }
 
                     return;
                 }
@@ -259,7 +285,7 @@ namespace HandBrakeWPF.Instance
             else if (taskState != null && taskState == TaskState.WorkDone)
             {
                 this.encodePollTimer.Stop();
-                if (!this.workerProcess.HasExited)
+                if (this.workerProcess != null && !this.workerProcess.HasExited)
                 {
                     this.workerProcess?.Kill();
                 }

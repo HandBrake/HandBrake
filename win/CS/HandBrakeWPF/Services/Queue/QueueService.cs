@@ -59,9 +59,12 @@ namespace HandBrakeWPF.Services.Queue
 
         private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
+        private readonly object queueFileLock = new object();
+
         private bool clearCompleted;
         private int allowedInstances;
         private int jobIdCounter = 0;
+        private bool processIsolationEnabled;
 
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider)
         {
@@ -75,6 +78,7 @@ namespace HandBrakeWPF.Services.Queue
             this.queueFile = string.Format("{0}{1}.json", QueueRecoveryHelper.QueueFileName, GeneralUtilities.ProcessId);
 
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+            this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
         }
 
         public event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
@@ -130,33 +134,31 @@ namespace HandBrakeWPF.Services.Queue
 
         public void BackupQueue(string exportPath)
         {
-            Stopwatch watch = Stopwatch.StartNew();
-
-            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
-            string tempPath = !string.IsNullOrEmpty(exportPath)
-                                  ? exportPath
-                                  : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
-
-            // Make a copy of the file before we replace it. This way, if we crash we can recover.
-            if (File.Exists(tempPath))
+            lock (this.queueFileLock)
             {
-                File.Copy(tempPath, tempPath + ".last");
-            }
+                string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+                string tempPath = !string.IsNullOrEmpty(exportPath)
+                                      ? exportPath
+                                      : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
 
-            using (StreamWriter writer = new StreamWriter(tempPath))
-            {
-                List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
-                string queueJson = JsonConvert.SerializeObject(tasks, Formatting.Indented);
-                writer.Write(queueJson);
-            }
+                // Make a copy of the file before we replace it. This way, if we crash we can recover.
+                if (File.Exists(tempPath))
+                {
+                    File.Copy(tempPath, tempPath + ".last");
+                }
 
-            if (File.Exists(tempPath + ".last"))
-            {
-                File.Delete(tempPath + ".last");
-            }
+                using (StreamWriter writer = new StreamWriter(tempPath))
+                {
+                    List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
+                    string queueJson = JsonConvert.SerializeObject(tasks, Formatting.Indented);
+                    writer.Write(queueJson);
+                }
 
-            watch.Stop();
-            Debug.WriteLine("Queue Save (ms): " + watch.ElapsedMilliseconds);
+                if (File.Exists(tempPath + ".last"))
+                {
+                    File.Delete(tempPath + ".last");
+                }
+            }
         }
 
         public void ExportCliJson(string exportPath)
@@ -447,6 +449,9 @@ namespace HandBrakeWPF.Services.Queue
             this.IsPaused = false;
             this.clearCompleted = isClearCompleted;
 
+            this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+            this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
+
             // Unpause all active jobs.
             foreach (ActiveJob job in this.activeJobs)
             {
@@ -523,6 +528,11 @@ namespace HandBrakeWPF.Services.Queue
         
         private void ProcessNextJob()
         {
+            if (!this.processIsolationEnabled)
+            {
+                this.allowedInstances = 1;
+            }
+
             if (this.activeJobs.Count >= this.allowedInstances)
             {
                 return;

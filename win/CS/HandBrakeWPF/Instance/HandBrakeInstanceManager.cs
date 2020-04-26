@@ -44,12 +44,6 @@ namespace HandBrakeWPF.Instance
                 throw new Exception("Please call Init before Using!");
             }
 
-            if (encodeInstance != null)
-            {
-                encodeInstance.Dispose();
-                encodeInstance = null;
-            }
-
             IEncodeInstance newInstance;
 
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
@@ -58,16 +52,19 @@ namespace HandBrakeWPF.Instance
             }
             else
             {
+                if (encodeInstance != null && !encodeInstance.IsRemoteInstance)
+                {
+                    encodeInstance.Dispose();
+                    encodeInstance = null;
+                }
+
                 newInstance = new HandBrakeInstance();
+                HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
+                encodeInstance = newInstance;
             }
 
             newInstance.Initialize(verbosity, noHardware);
-
-            encodeInstance = newInstance;
-
-            HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
-
-            return encodeInstance;
+            return newInstance;
         }
 
         /// <summary>
