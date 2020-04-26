@@ -9,27 +9,12 @@
     "appstream-compose": false,
     "modules": [
         {
-            "name": "libdrm",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://dri.freedesktop.org/libdrm/libdrm-2.4.99.tar.gz",
-                    "sha256": "597fb879e2f45193431a0d352d10cd79ef61a24ab31f44320168583e10cb6302"
-                }
-            ],
-            "no-autogen": true,
-            "config-opts": [],
-            "build-options": {
-                "prefix" : "/app/extensions/IntelMediaSDK"
-            }
-        },
-        {
             "name": "intel-gmmlib",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-19.2.3.tar.gz",
-                    "sha256": "60944d54a4992553f92d71ba9f8f4191d297407b564b0f24e9912b415689582e"
+                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-20.1.1.tar.gz",
+                    "sha256": "821755657cf51f59d8f3f443c99e3ec9f28d897ff65c219c6a119e4acb5a2ac7"
                 }
             ],
             "buildsystem": "cmake",
@@ -52,8 +37,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2",
-                    "sha256": "3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878"
+                    "url": "https://github.com/intel/libva/releases/download/2.7.1/libva-2.7.1.tar.bz2",
+                    "sha256": "a00ff19d9f969259b9784172adad7788dbf3de827d985c5d27c230efd5d98a04"
                 }
             ],
             "no-autogen": true,
@@ -67,8 +52,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/releases/download/2.5.0/libva-utils-2.5.0.tar.bz2",
-                    "sha256": "9238c9d5110d60f935683390b8383fdac3507346384cd5f117a23c6db1d72a17"
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.7.1/libva-utils-2.7.1.tar.bz2",
+                    "sha256": "ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a"
                 }
             ],
             "no-autogen": true,
@@ -82,12 +67,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/intel-media-19.2.1.tar.gz",
-                    "sha256": "79279c991d918deaa52239dac55787b9c7562e520cd58744171b468d28b8af40"
-                },
-                {
-                    "type": "patch",
-                    "path": "patch/intel-media-driver-implicit-function-decl-error.patch"
+                    "url": "https://github.com/intel/media-driver/archive/intel-media-20.1.1.tar.gz",
+                    "sha256": "dbca37ba8383cd4d1f3e15fa906f03457ebdb5a118d2459d8f9cd477e0f3d4d4"
                 }
             ],
             "buildsystem": "cmake",
@@ -106,8 +87,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-19.2.1.tar.gz",
-                    "sha256": "03c11a0379b61e292e789fa3dc9308ce45f36d68b4ebf437806c0e2c32357970"
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-20.1.1.tar.gz",
+                    "sha256": "44300c0f068f6d018d182455dd9c2f48db1e85fe0b38fcd60d0353bd145923dc"
                 }
             ],
             "buildsystem": "cmake",
