@@ -497,9 +497,6 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>대기열 일시 중지</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>대기열이 일시 중지되었습니다. 현재 실행 중인 작업은 완료될 때까지 실행되며 추가 작업은 실행되지 않습니다.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>선택된 작업을 삭제하시겠습니까?</value>
   </data>

@@ -41,9 +41,6 @@ namespace HandBrakeWPF.ViewModels
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
 
-    /// <summary>
-    ///     The Static Preview View Model
-    /// </summary>
     public class StaticPreviewViewModel : ViewModelBase, IStaticPreviewViewModel
     {
         private readonly IScan scanService;
@@ -60,8 +57,6 @@ namespace HandBrakeWPF.ViewModels
         private bool isEncoding;
         private bool useSystemDefaultPlayer;
         private bool previewRotateFlip;
-
-        #region Constructors and Destructors
 
         public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider, ILog logService, ILogInstanceManager logInstanceManager)
         {
@@ -86,11 +81,7 @@ namespace HandBrakeWPF.ViewModels
             this.previewRotateFlip = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewRotationFlip);
             this.NotifyOfPropertyChange(() => this.previewRotateFlip); // Don't want to trigger an Update, so setting the backing variable. 
         }
-
-        #endregion
-
-        #region Public Properties
-
+        
         /// <summary>
         ///     Gets or sets the height.
         /// </summary>
@@ -233,10 +224,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
-
-        #region LivePreviewProperties
-
         /// <summary>
         /// Gets AvailableDurations.
         /// </summary>
@@ -350,9 +337,8 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets a value indicating whether can play.
         /// </summary>
         public bool CanPlay { get; set; }
-        #endregion
 
-        #region Public Methods and Operators
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// The update preview frame.
@@ -371,11 +357,6 @@ namespace HandBrakeWPF.ViewModels
             this.Title = Resources.Preview;
             this.ScannedSource = scannedSource;
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is open.
-        /// </summary>
-        public bool IsOpen { get; set; }
 
         public void NextPreview()
         {
@@ -442,12 +423,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The preview size changed.
-        /// </summary>
-        /// <param name="ea">
-        /// The ea.
-        /// </param>
         public int FixWidth(int width)
         {
             Rect workArea = SystemParameters.WorkArea;
@@ -469,12 +444,6 @@ namespace HandBrakeWPF.ViewModels
 
             return height;
         }
-
-        #endregion
-
-        #region Public Method - Live Preview 
-
-        #region Public Methods
 
         /// <summary>
         /// Close this window.
@@ -500,19 +469,19 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IsEncoding = true;
                 if (File.Exists(this.CurrentlyPlaying))
+                {
                     File.Delete(this.CurrentlyPlaying);
+                }
             }
             catch (Exception)
             {
                 this.IsEncoding = false;
-                this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
             {
-                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_ScanFirst, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_ScanFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -540,6 +509,7 @@ namespace HandBrakeWPF.ViewModels
                         formatExtension = "mkv";
                         break;
                 }
+
                 string filename = Path.ChangeExtension(Path.GetTempFileName(), formatExtension);
                 encodeTask.Destination = filename;
                 this.CurrentlyPlaying = filename;
@@ -579,9 +549,14 @@ namespace HandBrakeWPF.ViewModels
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
-        #endregion
+        public void CancelEncode()
+        {
+            if (this.encodeService.IsEncoding)
+            {
+                this.encodeService.Stop();
+            }
+        }
 
-        #region Private Methods
 
         /// <summary>
         /// Play the Encoded file
@@ -665,10 +640,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
 
-        #endregion
-
-        #region Event Handlers
-
         /// <summary>
         /// Handle Encode Progress Events
         /// </summary>
@@ -702,9 +673,10 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted -= this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
 
-            this.PlayFile();
+            if (e.ErrorInformation != "1")
+            {
+                this.PlayFile();
+            }
         }
-        #endregion
-        #endregion
     }
 }

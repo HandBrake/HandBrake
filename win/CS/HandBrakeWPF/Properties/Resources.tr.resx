@@ -500,9 +500,6 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>Sıra Duraklatıldı</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>Sıra duraklatıldı. Halen çalışmakta olan iş tamamlanmaya devam eder ve başka iş başlatılmaz.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Seçilen işleri silmek istediğinizden emin misiniz?</value>
   </data>

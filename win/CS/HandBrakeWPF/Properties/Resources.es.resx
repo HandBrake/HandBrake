@@ -497,9 +497,6 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>Cola pausada</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>La cola ha sido pausada. El trabajo activo terminará pero no se iniciaran nuevos.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea borrar los trabajos seleccionados?</value>
   </data>

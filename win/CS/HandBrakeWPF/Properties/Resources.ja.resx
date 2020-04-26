@@ -497,9 +497,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>キュー一時停止</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>キューが一時停止されました。現在のジョブは完了まで実行され、それ以降のジョブは開始しません。</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>選択したジョブを本当に削除しますか？</value>
   </data>
