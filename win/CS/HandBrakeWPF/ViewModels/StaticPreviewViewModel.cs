@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Windows;
@@ -64,7 +63,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region Constructors and Destructors
 
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider, ILog logService)
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider, ILog logService, ILogInstanceManager logInstanceManager)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
@@ -74,7 +73,7 @@ namespace HandBrakeWPF.ViewModels
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
-            this.encodeService = new LibEncode(hbFunctionsProvider, logService, userSettingService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, 0); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
             this.Percentage = "0.00%";

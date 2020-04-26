@@ -411,9 +411,14 @@
 
                         <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_WorkerDefaultPort}" />
-                            <TextBox Text="{Binding RemoteServicePort}" Width="100" />
+                            <TextBox Text="{Binding RemoteServicePort}" Width="100" IsEnabled="{Binding RemoteServiceEnabled}"  />
                         </StackPanel>
-                        
+
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" >
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousEncodes}" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding SimultaneousEncodesList}" SelectedItem="{Binding SimultaneousEncodes}" IsEnabled="false" /> <!--IsEnabled="{Binding RemoteServiceEnabled}"-->
+                            <TextBlock Text="(Coming Soon!)" Margin="10,0,0,0" FontWeight="Bold" VerticalAlignment="Center" />
+                        </StackPanel>
                     </StackPanel>
 
 
@@ -439,7 +444,7 @@
                                 <Button Content="{x:Static Properties:Resources.Options_ClearLogs}" cal:Message.Attach="[Event Click] = [Action ClearLogHistory]" />
                             </StackPanel>
 
-                            <CheckBox Content="{x:Static Properties:Resources.Options_30DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldOlgs}" />
+                            <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldOlgs}" />
                         </StackPanel>
 
                     </StackPanel>

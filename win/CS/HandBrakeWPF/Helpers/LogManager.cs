@@ -13,21 +13,51 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrake.Worker.Logging.Models;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.EventArgs;
 
-    using HandBrakeWPF.Services.Logging.Model;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
 
     public static class LogManager
     {
+        private static ILog generalAppLogger;
+
         public static void Init()
         {
-            ILog log = IoC.Get<ILog>();
+            generalAppLogger = IoC.Get<ILog>();
             string logDir = DirectoryUtilities.GetLogDirectory();
-            string logFile = Path.Combine(logDir, string.Format("activity_log{0}.txt", GeneralUtilities.ProcessId));
-            log.ConfigureLogging(new LogHandlerConfig(true, logFile, true, GeneralUtilities.CreateLogHeader().ToString()));
+            string filename = string.Format("activity_log.{0}.txt", GeneralUtilities.ProcessId);
+            string logFile = Path.Combine(logDir, filename);
+            generalAppLogger.ConfigureLogging(logFile);
+
+            IoC.Get<ILogInstanceManager>().RegisterLoggerInstance(filename, generalAppLogger, true);
+            
+
+            HandBrakeUtils.MessageLogged += HandBrakeUtils_MessageLogged;
+            HandBrakeUtils.ErrorLogged += HandBrakeUtils_ErrorLogged;
+        }
+
+        private static void HandBrakeUtils_ErrorLogged(object sender, MessageLoggedEventArgs e)
+        {
+            if (e == null || string.IsNullOrEmpty(e.Message))
+            {
+                return;
+            }
+
+            generalAppLogger?.LogMessage(e.Message);
+        }
+
+        private static void HandBrakeUtils_MessageLogged(object sender, MessageLoggedEventArgs e)
+        {
+            if (e == null || string.IsNullOrEmpty(e.Message))
+            {
+                return;
+            }
+
+            generalAppLogger?.LogMessage(e.Message);
         }
     }
 }

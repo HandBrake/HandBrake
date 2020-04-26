@@ -22,9 +22,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
-
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
@@ -35,7 +32,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services.Encode.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -58,8 +54,6 @@ namespace HandBrakeWPF.ViewModels
     using DataFormats = System.Windows.DataFormats;
     using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
-    using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
-    using LogManager = Helpers.LogManager;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -86,7 +80,6 @@ namespace HandBrakeWPF.ViewModels
         private Source scannedSource;
         private Title selectedTitle;
         private string duration;
-        private bool isEncoding;
         private bool showStatusWindow;
         private Preset selectedPreset;
         private QueueTask queueEditTask;
@@ -94,7 +87,6 @@ namespace HandBrakeWPF.ViewModels
         private bool isPresetPanelShowing;
         private bool showSourceSelection;
         private BindingList<SourceMenuItem> drives;
-        private bool canPause;
         private bool showAlertWindow;
         private string alertWindowHeader;
         private string alertWindowText;
@@ -167,7 +159,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueChanged;
             this.queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
-            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+            this.queueProcessor.QueueJobStatusChanged += this.QueueProcessor_QueueJobStatusChanged;
             this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
             this.PresetsCategories = new BindingList<IPresetObject>();
@@ -199,6 +191,7 @@ namespace HandBrakeWPF.ViewModels
             // Monitor the system.
             systemService.Start();
         }
+
 
         #region View Model Properties
 
@@ -385,26 +378,6 @@ namespace HandBrakeWPF.ViewModels
         public int TitleSpecificScan { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the encode service supports pausing.
-        /// </summary>
-        public bool CanPause
-        {
-            get
-            {
-                return this.canPause;
-            }
-            set
-            {
-                if (value.Equals(this.canPause))
-                {
-                    return;
-                }
-                this.canPause = value;
-                this.NotifyOfPropertyChange(() => this.CanPause);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the Source Label
         /// This indicates the status of scans.
         /// </summary>
@@ -543,14 +516,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isEncoding;
-            }
-
-            set
-            {
-                this.isEncoding = value;
-                this.CanPause = value;
-                this.NotifyOfPropertyChange(() => this.IsEncoding);
+                return this.queueProcessor.IsEncoding;
             }
         }
 
@@ -1025,7 +991,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.queueProcessor.EncodeService.IsPasued)
+                if (this.queueProcessor.IsPaused)
                 {
                     return Resources.Main_ResumeEncode;
                 }
@@ -1055,11 +1021,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.HasSource);
             }
         }
-
-        /// <summary>
-        /// Flag to indicate if the queue is showing on the main view. (I.e  inline queue display)
-        /// </summary>
-        public bool IsQueueShowingInLine { get; set; } = false;
 
         public bool IsUWP { get; } = UwpDetect.IsUWP();
 
@@ -1174,7 +1135,7 @@ namespace HandBrakeWPF.ViewModels
             // Log Cleaning
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
-                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
+                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(7));
                 clearLog.Start();
             }
 
@@ -1215,7 +1176,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged -= this.QueueChanged;
           
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
-            this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
 
             this.SummaryViewModel.OutputFormatChanged -= this.SummaryViewModel_OutputFormatChanged;
@@ -1276,9 +1236,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            this.IsQueueShowingInLine = false;
-            this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
-
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
             if (window != null)
             {
@@ -1599,18 +1556,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.queueProcessor.IsProcessing)
             {
-                this.IsEncoding = true;
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 return;
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.Count != 0 || this.queueProcessor.EncodeService.IsPasued)
+            if (this.queueProcessor.Count != 0 || this.queueProcessor.IsPaused)
             {
-                if (this.queueProcessor.EncodeService.IsPasued)
-                {
-                    this.IsEncoding = true;
-                }
-
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
@@ -1626,7 +1579,7 @@ namespace HandBrakeWPF.ViewModels
             var addError = this.AddToQueue(false);
             if (addError == null)
             {
-                this.IsEncoding = true;
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
             }
             else
@@ -1659,8 +1612,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PauseEncode()
         {
-            this.queueProcessor.PauseEncode();
-            this.IsEncoding = false;
+            this.queueProcessor.Pause();
+            this.NotifyOfPropertyChange(() => this.IsEncoding);
         }
 
         /// <summary>
@@ -2512,94 +2465,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The Encode Status has changed Handler
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The Encode Progress Event Args
-        /// </param>
-        private void EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
-        {
-            int percent;
-            int.TryParse(
-                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture), 
-                out percent);
-
-            Execute.OnUIThread(
-                () =>
-                {
-                    if (this.queueProcessor.EncodeService.IsEncoding)
-                    {
-                        string totalHrsLeft = e.EstimatedTimeLeft.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", e.EstimatedTimeLeft) : string.Format(@"{0:hh\:mm\:ss}", e.EstimatedTimeLeft);
-                        string elapsedTimeHrs = e.ElapsedTime.Days >= 1 ? string.Format(@"{0:d\:hh\:mm\:ss}", e.ElapsedTime) : string.Format(@"{0:hh\:mm\:ss}", e.ElapsedTime);
-                        string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
-
-                        if (e.IsSubtitleScan)
-                        {
-                            this.ProgramStatusLabel = string.Format(
-                                Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
-                                e.Task,
-                                e.TaskCount,
-                                e.PercentComplete,
-                                totalHrsLeft,
-                                elapsedTimeHrs,
-                                jobsPending);
-                        }
-                        else if (e.IsMuxing)
-                        {
-                            this.ProgramStatusLabel = Resources.MainView_Muxing;
-                        }
-                        else if (e.IsSearching)
-                        {
-                            this.ProgramStatusLabel = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, totalHrsLeft, jobsPending);
-                        }
-                        else
-                        {
-                            this.ProgramStatusLabel = string.Format(
-                                Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
-                                e.Task,
-                                e.TaskCount,
-                                e.PercentComplete,
-                                e.CurrentFrameRate,
-                                e.AverageFrameRate,
-                                totalHrsLeft,
-                                elapsedTimeHrs,
-                                jobsPending);
-                        }
-
-                        if (this.lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
-                        {
-                            this.windowsSeven.SetTaskBarProgress(percent);
-                        }
-
-                        this.lastEncodePercentage = percent;
-                        this.ProgressPercentage = percent;
-                        this.NotifyOfPropertyChange(() => this.ProgressPercentage);
-
-                        if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar))
-                        {
-                            this.WindowTitle = string.Format(Resources.WindowTitleStatus, Resources.HandBrake_Title, this.ProgressPercentage, e.Task, e.TaskCount);
-                            this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title, this.ProgressPercentage, e.Task, e.TaskCount, e.EstimatedTimeLeft));
-                        }
-                    }
-                    else
-                    {
-                        this.ProgramStatusLabel = Resources.Main_QueueFinished;
-                        this.IsEncoding = false;
-                        this.WindowTitle = Resources.HandBrake_Title;
-                        this.notifyIconService.SetTooltip(this.WindowTitle);
-
-                        if (this.windowsSeven.IsWindowsSeven)
-                        {
-                            this.windowsSeven.SetTaskBarProgressToNoProgress();
-                        }
-                    }
-                });
-        }
-
-        /// <summary>
         /// Handle the Queue Starting Event
         /// </summary>
         /// <param name="sender">
@@ -2614,7 +2479,7 @@ namespace HandBrakeWPF.ViewModels
                () =>
                {
                    this.ProgramStatusLabel = Resources.Main_PreparingToEncode;
-                   this.IsEncoding = true;
+                   this.NotifyOfPropertyChange(() => this.IsEncoding);
                });
         }
 
@@ -2629,7 +2494,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueCompleted(object sender, EventArgs e)
         {
-            this.IsEncoding = false;
+            this.NotifyOfPropertyChange(() => this.IsEncoding);
 
             Execute.OnUIThread(
                 () =>
@@ -2668,6 +2533,7 @@ namespace HandBrakeWPF.ViewModels
                   this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
                   this.NotifyOfPropertyChange(() => this.QueueLabel);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
+                  this.NotifyOfPropertyChange(() => this.IsEncoding);
               });
         }
 
@@ -2679,6 +2545,57 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = Resources.Main_QueuePaused;
                     this.NotifyOfPropertyChange(() => this.QueueLabel);
                     this.NotifyOfPropertyChange(() => this.StartLabel);
+                });
+        }
+
+
+        private void QueueProcessor_QueueJobStatusChanged(object sender, EventArgs e)
+        {
+            List<QueueProgressStatus> queueJobStatuses = this.queueProcessor.GetQueueProgressStatus();
+            string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+
+            Execute.OnUIThread(
+                () =>
+                {
+                    if (queueJobStatuses.Count == 1)
+                    {
+                        QueueProgressStatus status = queueJobStatuses.First();
+                        this.ProgramStatusLabel = status.JobStatus.Replace(Environment.NewLine, " ") + jobsPending;
+
+                        int percent;
+                        int.TryParse(Math.Round(status.ProgressValue).ToString(CultureInfo.InvariantCulture), out percent);
+
+                        if (this.lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
+                        {
+                            this.windowsSeven.SetTaskBarProgress(percent);
+                        }
+
+                        this.lastEncodePercentage = percent;
+                        this.ProgressPercentage = percent;
+                        this.NotifyOfPropertyChange(() => this.ProgressPercentage);
+
+                        if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar))
+                        {
+                            this.WindowTitle = string.Format(Resources.WindowTitleStatus, Resources.HandBrake_Title, this.ProgressPercentage, status.Task, status.TaskCount);
+                            this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title, this.ProgressPercentage, status.Task, status.TaskCount, status.EstimatedTimeLeft));
+                        }
+                    }
+                    else if (queueJobStatuses.Count > 1)
+                    {
+                        this.ProgramStatusLabel = "Multiple Jobs Running."; // TODO Implement later. 
+                    }
+                    else
+                    {
+                        this.ProgramStatusLabel = Resources.Main_QueueFinished;
+                        this.NotifyOfPropertyChange(() => this.IsEncoding);
+                        this.WindowTitle = Resources.HandBrake_Title;
+                        this.notifyIconService.SetTooltip(this.WindowTitle);
+
+                        if (this.windowsSeven.IsWindowsSeven)
+                        {
+                            this.windowsSeven.SetTaskBarProgressToNoProgress();
+                        }
+                    }
                 });
         }
 

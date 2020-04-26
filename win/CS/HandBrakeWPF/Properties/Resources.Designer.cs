@@ -2650,17 +2650,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%
-        ///FPS: {3:000.0},  Avg FPS: {4:000.0}
-        ///Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}.
-        /// </summary>
-        public static string MiniViewModel_EncodeStatusChanged_StatusLabel {
-            get {
-                return ResourceManager.GetString("MiniViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
         public static string Mp4Behaviour_Auto {
@@ -2706,11 +2695,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear Log files older than 30 days.
+        ///   Looks up a localized string similar to Clear Log files older than 7 days.
         /// </summary>
-        public static string Options_30DayLogClear {
+        public static string Options_7DayLogClear {
             get {
-                return ResourceManager.GetString("Options_30DayLogClear", resourceCulture);
+                return ResourceManager.GetString("Options_7DayLogClear", resourceCulture);
             }
         }
         
@@ -3662,6 +3651,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_ShowStatusInTitleBar {
             get {
                 return ResourceManager.GetString("OptionsView_ShowStatusInTitleBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of simultaneous encodes:.
+        /// </summary>
+        public static string OptionsView_SimultaneousEncodes {
+            get {
+                return ResourceManager.GetString("OptionsView_SimultaneousEncodes", resourceCulture);
             }
         }
         

@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Services
     using System.Timers;
 
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
@@ -22,23 +21,20 @@ namespace HandBrakeWPF.Services
     public class SystemService : ISystemService
     {
         private readonly IUserSettingService userSettingService;
-        private readonly IEncode encodeService;
-        private readonly ILog log = null;
         private readonly IQueueService queueService;
+        private readonly ILog log;
 
         private Timer pollTimer;
 
-        private bool criticalStateHit = false;
         private bool lowStateHit = false;
         private bool lowPowerPause = false;
         private bool storageLowPause = false;
 
-        public SystemService(IUserSettingService userSettingService, IEncode encodeService, ILog logService, IQueueService queueService)
+        public SystemService(IUserSettingService userSettingService, ILog logService, IQueueService queueService)
         {
             this.log = logService;
             this.queueService = queueService;
             this.userSettingService = userSettingService;
-            this.encodeService = encodeService;
         }
 
         public void Start()
@@ -64,8 +60,15 @@ namespace HandBrakeWPF.Services
 
         private void StorageCheck()
         {
-            string directory = this.encodeService.GetActiveJob()?.Destination;
-            if (!string.IsNullOrEmpty(directory) && this.encodeService.IsEncoding)
+            foreach (string directory in this.queueService.GetActiveJobDestinationDirectories())
+            {
+                this.CheckDiskSpaceForDirectory(directory);
+            }
+        }
+
+        private void CheckDiskSpaceForDirectory(string directory)
+        {
+            if (!string.IsNullOrEmpty(directory) && this.queueService.IsEncoding)
             {
                 long lowLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel);
                 if (!this.storageLowPause && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(directory, lowLevel))
@@ -98,7 +101,7 @@ namespace HandBrakeWPF.Services
 
             if (state.ACLineStatus == Win32.ACLineStatus.Offline && state.BatteryLifePercent <= lowBatteryLevel && !this.lowStateHit)
             {
-                if (this.encodeService.IsEncoding && !this.encodeService.IsPasued)
+                if (this.queueService.IsEncoding && !this.queueService.IsPaused)
                 {
                     this.lowPowerPause = true;
                     this.queueService.Pause();
@@ -113,14 +116,13 @@ namespace HandBrakeWPF.Services
             // Reset the flags when we start charging. 
             if (state.ACLineStatus == Win32.ACLineStatus.Online)
             {
-                if (this.lowPowerPause && this.encodeService.IsPasued)
+                if (this.lowPowerPause && this.queueService.IsPaused)
                 {
                     this.queueService.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                     this.ServiceLogMessage(string.Format(Resources.SystemService_ACMains, state.BatteryLifePercent));
                 }
 
                 this.lowPowerPause = false;
-                this.criticalStateHit = false;
                 this.lowStateHit = false;
             }
         }

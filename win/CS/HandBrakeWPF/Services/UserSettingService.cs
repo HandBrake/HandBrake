@@ -306,6 +306,7 @@ namespace HandBrakeWPF.Services
             // Experimental
             defaults.Add(UserSettingConstants.ProcessIsolationEnabled, true);
             defaults.Add(UserSettingConstants.ProcessIsolationPort, 8037);
+            defaults.Add(UserSettingConstants.SimultaneousEncodes, 1);
 
             // Misc
             defaults.Add(UserSettingConstants.ShowPresetPanel, false);

@@ -718,11 +718,6 @@ Do you wish to continue? </value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Please stop the current encode. If the problem persists, please restart HandBrake.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%
-FPS: {3:000.0},  Avg FPS: {4:000.0}
-Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Preview ({0}% actual size)</value>
   </data>
@@ -1168,8 +1163,8 @@ Would you like to overwrite it?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Show the encode status in the application title bar.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 30 days</value>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Clear Log files older than 7 days</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>About HandBrake</value>
@@ -2230,5 +2225,8 @@ Please choose a different preset.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Number of simultaneous encodes:</value>
   </data>
 </root>

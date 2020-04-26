@@ -716,11 +716,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Пожалуйста, остановите кодирование. Если проблема сохранится, перезапустите HandBrake.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Кодирование: Проход {0} из {1},  {2:00.00}%
-FPS: {3:000.0},  Сред FPS: {4:000.0}
-Осталось: {5},  Прошло: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Предпросмотр ({0}% от настоящего размера)</value>
   </data>
@@ -1166,7 +1161,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Показывать состояние кодирования в заголовке окна приложения.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Очистить логи, существующие более 30 дней</value>
   </data>
   <data name="Options_About" xml:space="preserve">

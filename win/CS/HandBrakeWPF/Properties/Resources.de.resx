@@ -720,11 +720,6 @@ Soll fortgefahren werden?</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Bitte das momentane Encodieren stoppen. Falls das Problem anhält, bitte HandBrake neu starten.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %
-BpS: {3:000.0}, mittlere BpS: {4:000.0}
-verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Vorschau ({0} % tatsächliche Größe)</value>
   </data>
@@ -1170,7 +1165,7 @@ Soll sie überschrieben werden?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Den Encodierungsstatus in der Titelleiste des Programms anzeigen</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Alte Aktivitätsprotokolle nach 30 Tagen löschen</value>
   </data>
   <data name="Options_About" xml:space="preserve">

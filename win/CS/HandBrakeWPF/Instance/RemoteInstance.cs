@@ -37,15 +37,6 @@ namespace HandBrakeWPF.Instance
 
     using Newtonsoft.Json;
 
-    /*
-     * TODO:
-     *  - Handle Worker Shutdown.
-     *  - Worker Registration Process
-     *  - Port in Use Handling
-     *  - Setting Configuration (libdvdnav)
-     *  - Setting No Hardware mode
-     */
-
     public class RemoteInstance : HttpRequestBase, IEncodeInstance, IDisposable
     {
         private readonly HBConfiguration configuration;
@@ -87,7 +78,7 @@ namespace HandBrakeWPF.Instance
         {
             InitCommand initCommand = new InitCommand
             {
-                EnableDiskLogging = true,
+                EnableDiskLogging = false,
                 AllowDisconnectedWorker = false,
                 DisableLibDvdNav = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
                 EnableHardwareAcceleration = true,

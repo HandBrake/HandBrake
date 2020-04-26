@@ -27,5 +27,8 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         [DisplayName("Error")]
         Error,
+
+        [DisplayName("Paused")]
+        Paused,
     }
 }

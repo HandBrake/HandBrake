@@ -38,6 +38,7 @@
     <None Remove="handbrakepineapple.ico" />
     <None Remove="Views\Images\Dark\Reorder.png" />
     <None Remove="Views\Images\Light\Reorder.png" />
+    <None Remove="Views\Images\pause_small.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -109,6 +110,7 @@
     <Resource Include="Views\Images\logo128.png" />
     <Resource Include="Views\Images\logo64.png" />
     <Resource Include="Views\Images\Pause.png" />
+    <Resource Include="Views\Images\pause_small.png" />
     <Resource Include="Views\Images\Play.png" />
     <Resource Include="Views\Images\Play_small.png" />
     <Resource Include="Views\Images\question.png" />

@@ -10,24 +10,29 @@
 namespace HandBrakeWPF.Services.Queue.Interfaces
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
 
+
+    using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Services.Encode.EventArgs;
+    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
-
-    using IEncode = Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The Queue Processor
     /// </summary>
     public interface IQueueService
     {
-        #region Events
-
         /// <summary>
         /// Fires when the Queue has started
         /// </summary>
-        event QueueService.QueueProgressStatus JobProcessingStarted;
+        event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
+
+        /// <summary>
+        /// Fires when the status of any running job changes on the queue. Including progress.
+        /// </summary>
+        event EventHandler QueueJobStatusChanged;
 
         /// <summary>
         /// Fires when a job is Added, Removed or Re-Ordered.
@@ -38,16 +43,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// <summary>
         /// Fires when the entire encode queue has completed.
         /// </summary>
-        event QueueService.QueueCompletedEventDelegate QueueCompleted;
+        event EventHandler<QueueCompletedEventArgs> QueueCompleted;
 
         /// <summary>
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         event EventHandler QueuePaused;
 
-        #endregion
-
-        #region Properties
+        event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
         /// <summary>
         /// Gets the number of jobs in the queue
@@ -60,29 +63,18 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         int ErrorCount { get; }
 
         /// <summary>
-        /// Gets the IEncodeService instance.
-        /// </summary>
-        IEncode EncodeService { get; }
-
-        /// <summary>
         /// Gets a value indicating whether IsProcessing.
         /// </summary>
         bool IsProcessing { get; }
 
-        /// <summary>
-        /// Gets or sets Last Processed Job.
-        /// This is set when the job is poped of the queue by GetNextJobForProcessing();
-        /// </summary>
-        QueueTask LastProcessedJob { get; set; }
+        bool IsEncoding { get; }
+
+        bool IsPaused { get; }
 
         /// <summary>
         /// Gets The current queue.
         /// </summary>
         ObservableCollection<QueueTask> Queue { get; }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Add a job to the Queue. 
@@ -223,12 +215,15 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Pause the queue but allow the current encode to complete.
         /// </summary>
         void Pause();
-
+        
         /// <summary>
-        /// Pause and Encode and the Queue.
+        /// Get the status of all running queue jobs.
         /// </summary>
-        void PauseEncode();
+        /// <returns>
+        /// A list of QueueProgressStatus items
+        /// </returns>
+        List<QueueProgressStatus> GetQueueProgressStatus();
 
-        #endregion
+        List<string> GetActiveJobDestinationDirectories();
     }
 }

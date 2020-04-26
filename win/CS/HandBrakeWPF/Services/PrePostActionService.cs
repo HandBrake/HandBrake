@@ -34,7 +34,6 @@ namespace HandBrakeWPF.Services
     public class PrePostActionService : IPrePostActionService
     {
         private readonly ILog log;
-        private readonly IQueueService queueProcessor;
         private readonly IUserSettingService userSettingService;
         private readonly IWindowManager windowManager;
         private readonly IScan scanService;
@@ -42,14 +41,26 @@ namespace HandBrakeWPF.Services
         public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService, ILog logService)
         {
             this.log = logService;
-            this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
             this.windowManager = windowManager;
             this.scanService = scanService;
 
-            this.queueProcessor.QueueCompleted += this.QueueProcessorQueueCompleted;
-            this.queueProcessor.EncodeService.EncodeCompleted += this.EncodeService_EncodeCompleted;
-            this.queueProcessor.EncodeService.EncodeStarted += this.EncodeService_EncodeStarted;
+            queueProcessor.QueueCompleted += this.QueueProcessorQueueCompleted;
+            queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
+            queueProcessor.EncodeCompleted += this.EncodeService_EncodeCompleted;
+            queueProcessor.JobProcessingStarted += this.EncodeService_EncodeStarted;
+        }
+
+        private void QueueProcessor_QueuePaused(object sender, EventArgs e)
+        {
+            // Allow the system to sleep again.
+            Execute.OnUIThread(() =>
+            {
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+                {
+                    Win32.AllowSleep();
+                }
+            });
         }
 
         /// <summary>
@@ -90,15 +101,6 @@ namespace HandBrakeWPF.Services
             {
                 this.PlayWhenDoneSound();
             }
-
-            // Allow the system to sleep again.
-            Execute.OnUIThread(() =>
-            {
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
-                {
-                    Win32.AllowSleep();
-                }
-            });
         }
 
         /// <summary>
@@ -172,6 +174,15 @@ namespace HandBrakeWPF.Services
                         break;
                 }
             }
+
+            // Allow the system to sleep again.
+            Execute.OnUIThread(() =>
+            {
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+                {
+                    Win32.AllowSleep();
+                }
+            });
         }
 
         private void SendToApplication(string source, string destination)

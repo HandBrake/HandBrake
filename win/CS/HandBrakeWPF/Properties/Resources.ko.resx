@@ -713,11 +713,6 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>현재 진행 중인 인코딩을 멈추십시오. 문제가 계속되는 경우, HandBrake를 다시 시작하십시오.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}의 {0} 통과, {2:00.00}%
-FPS: {3:000.0}, 평균 FPS: {4:000.0}
-남은 시간: {5}, 경과 시간: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>미리보기 (실제 사이즈 {0}%)</value>
   </data>
@@ -1163,7 +1158,7 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>프로그램 제목 바에 인코딩 상태 보여주기</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>30일이 지난 로그 파일들 제거</value>
   </data>
   <data name="Options_About" xml:space="preserve">

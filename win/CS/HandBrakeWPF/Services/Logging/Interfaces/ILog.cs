@@ -12,17 +12,14 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
     using System;
     using System.Collections.Generic;
 
-    using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
-
-    using HandBrakeWPF.Services.Logging.Model;
 
     using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
 
     /// <summary>
     /// The Log interface.
     /// </summary>
-    public interface ILog : ILogHandler
+    public interface ILog
     {
         /// <summary>
         /// The message logged.
@@ -37,13 +34,13 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// <summary>
         /// Enable logging for this worker process.
         /// </summary>
-        /// <param name="config">
-        /// Configuration for the logger.
+        /// <param name="filename">
+        /// The filename.
         /// </param>
         /// <remarks>
         /// If this is not called, all log messages from libhb will be ignored.
         /// </remarks>
-        void ConfigureLogging(LogHandlerConfig config);
+        void ConfigureLogging(string filename);
 
         /// <summary>
         /// Log a message.
@@ -52,5 +49,14 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// The content of the log message,
         /// </param>
         void LogMessage(string content);
+
+        string GetFullLog();
+
+        List<LogMessage> GetLogMessages();
+
+        /// <summary>
+        /// Empty the log cache and reset the log handler to defaults.
+        /// </summary>
+        void Reset();
     }
 }

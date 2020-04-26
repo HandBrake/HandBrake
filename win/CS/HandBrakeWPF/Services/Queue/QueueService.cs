@@ -12,12 +12,10 @@ namespace HandBrakeWPF.Services.Queue
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
 
@@ -33,6 +31,9 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Queue.Interfaces;
+    using HandBrakeWPF.Services.Queue.JobEventArgs;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
@@ -41,45 +42,52 @@ namespace HandBrakeWPF.Services.Queue
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
-    using LogService = HandBrakeWPF.Services.Logging.LogService;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
-    public class QueueService : Interfaces.IQueueService
+    public class QueueService : IQueueService
     {
         private static readonly object QueueLock = new object();
+
+        private readonly List<ActiveJob> activeJobs = new List<ActiveJob>();
         private readonly IUserSettingService userSettingService;
         private readonly ILog logService;
         private readonly IErrorService errorService;
+        private readonly ILogInstanceManager logInstanceManager;
+        private readonly IHbFunctionsProvider hbFunctionsProvider;
 
         private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
         private bool clearCompleted;
+        private int allowedInstances;
+        private int jobIdCounter = 0;
 
-        public QueueService(IEncode encodeService, IUserSettingService userSettingService, ILog logService, IErrorService errorService)
+        public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider)
         {
             this.userSettingService = userSettingService;
             this.logService = logService;
             this.errorService = errorService;
-            this.EncodeService = encodeService;
+            this.logInstanceManager = logInstanceManager;
+            this.hbFunctionsProvider = hbFunctionsProvider;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
             this.queueFile = string.Format("{0}{1}.json", QueueRecoveryHelper.QueueFileName, GeneralUtilities.ProcessId);
+
+            this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
         }
 
-        public delegate void QueueProgressStatus(object sender, QueueProgressEventArgs e);
-
-        public delegate void QueueCompletedEventDelegate(object sender, QueueCompletedEventArgs e);
-
-        public event QueueProgressStatus JobProcessingStarted;
+        public event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
 
         public event EventHandler QueueChanged;
 
-        public event QueueCompletedEventDelegate QueueCompleted;
+        public event EventHandler<QueueCompletedEventArgs> QueueCompleted;
 
         public event EventHandler QueuePaused;
+
+        public event EventHandler QueueJobStatusChanged;
+
+        public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
         public int Count
         {
@@ -97,11 +105,11 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        public IEncode EncodeService { get; private set; }
+        public bool IsPaused { get; private set; }
 
         public bool IsProcessing { get; private set; }
 
-        public QueueTask LastProcessedJob { get; set; }
+        public bool IsEncoding => this.activeJobs.Any(service => service.IsEncoding);
 
         public ObservableCollection<QueueTask> Queue
         {
@@ -110,8 +118,7 @@ namespace HandBrakeWPF.Services.Queue
                 return this.queue;
             }
         }
-
-
+        
         public void Add(QueueTask job)
         {
             lock (QueueLock)
@@ -227,7 +234,7 @@ namespace HandBrakeWPF.Services.Queue
                 foreach (QueueTask task in reloadedQueue)
                 {
                     // Reset the imported jobs that were running in a previous session.
-                    if (task.Status == QueueItemStatus.InProgress)
+                    if (task.Status == QueueItemStatus.InProgress || task.Status == QueueItemStatus.Paused)
                     {
                         task.Status = QueueItemStatus.Waiting;
                         task.Statistics.Reset();
@@ -249,8 +256,7 @@ namespace HandBrakeWPF.Services.Queue
                 }
             }
         }
-
-
+        
         public bool CheckForDestinationPathDuplicates(string destination)
         {
             foreach (QueueTask job in this.queue)
@@ -396,7 +402,7 @@ namespace HandBrakeWPF.Services.Queue
                             if (item.Status != QueueItemStatus.Completed)
                             {
                                 // Reset InProgress/Error to Waiting so it can be processed
-                                if (item.Status == QueueItemStatus.InProgress)
+                                if (item.Status == QueueItemStatus.InProgress || item.Status == QueueItemStatus.Paused)
                                 {
                                     item.Status = QueueItemStatus.Error;
                                 }
@@ -418,19 +424,17 @@ namespace HandBrakeWPF.Services.Queue
 
         public void Pause()
         {
-            this.IsProcessing = false;
-            this.InvokeQueuePaused(EventArgs.Empty);
-        }
-
-        public void PauseEncode()
-        {
-            if (this.EncodeService.IsEncoding && !this.EncodeService.IsPasued)
+            foreach (ActiveJob job in this.activeJobs)
             {
-                this.EncodeService.Pause();
-                this.LastProcessedJob.Statistics.SetPaused(true);
+                if (job.IsEncoding && !job.IsPaused)
+                {
+                    job.Pause();
+                }
             }
-
-            this.Pause();
+            
+            this.IsProcessing = false;
+            this.IsPaused = true;
+            this.InvokeQueuePaused(EventArgs.Empty);
         }
 
         public void Start(bool isClearCompleted)
@@ -440,89 +444,63 @@ namespace HandBrakeWPF.Services.Queue
                 return;
             }
 
+            this.IsPaused = false;
             this.clearCompleted = isClearCompleted;
 
-            this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
-            this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
-
-            if (this.EncodeService.IsPasued)
+            // Unpause all active jobs.
+            foreach (ActiveJob job in this.activeJobs)
             {
-                this.EncodeService.Resume();
-                this.IsProcessing = true;
-                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(this.LastProcessedJob));
-                this.LastProcessedJob.Statistics.SetPaused(false);
+                job.Start();
+                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job.Job));
             }
 
-            if (!this.EncodeService.IsEncoding)
-            {
-                this.ProcessNextJob();
-            }
-            else
-            {
-                this.IsProcessing = true;
-            }
+            this.ProcessNextJob();
+            this.IsProcessing = true;
         }
 
         public void Stop()
         {
-            if (this.EncodeService.IsEncoding)
+            foreach (ActiveJob job in this.activeJobs)
             {
-                this.EncodeService.Stop();
+                if (job.IsEncoding || job.IsPaused)
+                {
+                    job.Stop();
+                }
             }
 
             this.IsProcessing = false;
-            this.InvokeQueuePaused(EventArgs.Empty);
+            this.IsPaused = false;
+            this.InvokeQueueChanged(EventArgs.Empty);
+            this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
         }
 
-        protected virtual void OnQueueCompleted(QueueCompletedEventArgs e)
+        public List<QueueProgressStatus> GetQueueProgressStatus()
         {
-            QueueCompletedEventDelegate handler = this.QueueCompleted;
-            if (handler != null)
+            // TODO make thread safe. 
+            List<QueueProgressStatus> statuses = new List<QueueProgressStatus>();
+            foreach (ActiveJob job in this.activeJobs)
             {
-                handler(this, e);
+                statuses.Add(job.Job.JobProgress);
             }
 
-            this.IsProcessing = false;
+            return statuses;
         }
 
-        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        public List<string> GetActiveJobDestinationDirectories()
         {
-            this.LastProcessedJob.Status = QueueItemStatus.Completed;
-            this.LastProcessedJob.Statistics.EndTime = DateTime.Now;
-            this.LastProcessedJob.Statistics.CompletedActivityLogPath = e.ActivityLogPath;
-            this.LastProcessedJob.Statistics.FinalFileSize = e.FinalFilesizeInBytes;
-
-            // Clear the completed item of the queue if the setting is set.
-            if (this.clearCompleted)
+            // TODO need to make thread safe.
+            List<string> directories = new List<string>();
+            foreach (ActiveJob job in this.activeJobs)
             {
-                this.ClearCompleted();
+                directories.Add(job.Job.Task.Destination);
             }
 
-            if (!e.Successful)
-            {
-                this.LastProcessedJob.Status = QueueItemStatus.Error;
-            }
-
-            // Move onto the next job.
-            if (this.IsProcessing)
-            {
-                this.ProcessNextJob();
-            }
-            else
-            {
-                this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
-                this.BackupQueue(string.Empty);
-                this.OnQueueCompleted(new QueueCompletedEventArgs(true));
-            }
+            return directories;
         }
 
         private void InvokeJobProcessingStarted(QueueProgressEventArgs e)
         {
-            QueueProgressStatus handler = this.JobProcessingStarted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.JobProcessingStarted?.Invoke(this, e);
         }
 
         private void InvokeQueueChanged(EventArgs e)
@@ -542,11 +520,83 @@ namespace HandBrakeWPF.Services.Queue
                 handler(this, e);
             }
         }
+        
+        private void ProcessNextJob()
+        {
+            if (this.activeJobs.Count >= this.allowedInstances)
+            {
+                return;
+            }
+
+            QueueTask job = this.GetNextJobForProcessing();
+            if (job != null)
+            {
+                if (CheckDiskSpace(job))
+                {
+                    return; // Don't start the next job.
+                }
+
+                this.jobIdCounter = this.jobIdCounter + 1;
+                ActiveJob activeJob = new ActiveJob(job, this.hbFunctionsProvider, this.userSettingService, this.logInstanceManager, this.jobIdCounter);
+                activeJob.JobFinished += this.ActiveJob_JobFinished;
+                activeJob.JobStatusUpdated += this.ActiveJob_JobStatusUpdated;
+                this.activeJobs.Add(activeJob);
+                
+                activeJob.Start();
+
+                this.IsProcessing = true;
+                this.InvokeQueueChanged(EventArgs.Empty);
+                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
+                this.BackupQueue(string.Empty);
+
+                this.ProcessNextJob();
+            }
+            else
+            {
+                this.BackupQueue(string.Empty);
+
+                // Fire the event to tell connected services.
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+            }
+        }
+
+        private void ActiveJob_JobStatusUpdated(object sender, Encode.EventArgs.EncodeProgressEventArgs e)
+        {
+            this.OnQueueJobStatusChanged();
+        }
+
+        private void ActiveJob_JobFinished(object sender, ActiveJobCompletedEventArgs e)
+        {
+            this.activeJobs.Remove(e.Job);
+            this.OnEncodeCompleted(e.EncodeEventArgs);
+
+            if (!this.IsPaused && this.IsProcessing)
+            {
+                this.ProcessNextJob();
+            }
+        }
+
+        private void InvokeQueueCompleted(QueueCompletedEventArgs e)
+        {
+            this.IsProcessing = false;
+            this.QueueCompleted?.Invoke(this, e);
+        }
+
+        private void OnQueueJobStatusChanged()
+        {
+            // TODO add support for delayed notificaitons here to avoid overloading the UI when we run multiple encodes. 
+            this.QueueJobStatusChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnEncodeCompleted(EncodeCompletedEventArgs e)
+        {
+            this.EncodeCompleted?.Invoke(this, e);
+        }
 
         private void InvokeQueuePaused(EventArgs e)
         {
             this.IsProcessing = false;
-
+            
             EventHandler handler = this.QueuePaused;
             if (handler != null)
             {
@@ -554,61 +604,6 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        private void ProcessNextJob()
-        {
-            QueueTask job = this.GetNextJobForProcessing();
-            if (job != null)
-            {
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(job.Task.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
-                {
-                    this.logService.LogMessage(Resources.PauseOnLowDiskspace);
-                    job.Status = QueueItemStatus.Waiting;
-                    this.Pause();
-                    this.BackupQueue(string.Empty);
-                    return; // Don't start the next job.
-                }
-
-                job.Status = QueueItemStatus.InProgress;
-                job.Statistics.StartTime = DateTime.Now;
-                this.LastProcessedJob = job;
-                this.IsProcessing = true;
-                this.InvokeQueueChanged(EventArgs.Empty);
-                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
-
-                if (!Directory.Exists(Path.GetDirectoryName(job.Task.Destination)))
-                {
-                    this.EncodeServiceEncodeCompleted(null, new EncodeCompletedEventArgs(false, null, "Destination Directory Missing", null, null, null, 0));
-                    this.BackupQueue(string.Empty);
-                    return;
-                }
-
-                this.EncodeService.Start(job.Task, job.Configuration, job.SelectedPresetKey);
-                this.BackupQueue(string.Empty);
-            }
-            else
-            {
-                // No more jobs to process, so unsubscribe the event
-                this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
-
-                this.BackupQueue(string.Empty);
-
-                // Fire the event to tell connected services.
-                this.OnQueueCompleted(new QueueCompletedEventArgs(false));
-            }
-        }
-
-        /// <summary>
-        /// For a given set of tasks, return the Queue JSON that can be used for the CLI.
-        /// </summary>
-        /// <param name="tasks">
-        /// The tasks.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         private string GetQueueJson(List<EncodeTask> tasks, HBConfiguration configuration)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
@@ -627,6 +622,20 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             return JsonConvert.SerializeObject(queueJobs, Formatting.Indented, settings);
+        }
+
+        private bool CheckDiskSpace(QueueTask job)
+        {
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(job.Task.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
+            {
+                this.logService.LogMessage(Resources.PauseOnLowDiskspace);
+                job.Status = QueueItemStatus.Waiting;
+                this.Pause();
+                this.BackupQueue(string.Empty);
+                return true; // Don't start the next job.
+            }
+
+            return false;
         }
     }
 }

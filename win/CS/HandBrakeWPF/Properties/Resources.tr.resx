@@ -716,11 +716,6 @@ Kalan Süre: {4}</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Lütfen şu anki kodlamayı durdur. Sorun devam ederse, lütfen HandBrake'yi yeniden başlatın.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%
-FPS: {3:000.0},  Avg FPS: {4:000.0}
-Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Önizleme ({0}% gerçek boyut)</value>
   </data>
@@ -1166,7 +1161,7 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Kodlama durumunu uygulama başlık çubuğunda göster.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>30 günden daha eski olan Günlük dosyalarını temizle</value>
   </data>
   <data name="Options_About" xml:space="preserve">

@@ -14,10 +14,8 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
-    using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Model;
 
-    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
@@ -28,20 +26,18 @@ namespace HandBrakeWPF.Services.Encode
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
-    using LogService = HandBrakeWPF.Services.Logging.LogService;
 
     /// <summary>
     /// A Base Class for the Encode Services.
     /// </summary>
     public class EncodeBase
     {
-        private readonly ILog logService;
+        protected ILog encodeLogService;
 
         private readonly IUserSettingService userSettingService;
-
-        public EncodeBase(ILog logService, IUserSettingService userSettingService)
+        
+        public EncodeBase(IUserSettingService userSettingService)
         {
-            this.logService = logService;
             this.userSettingService = userSettingService;
         }
 
@@ -136,7 +132,7 @@ namespace HandBrakeWPF.Services.Encode
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
                 string encodeLogFile = destinationFile + " " + DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
-                string logContent = this.logService.GetFullLog();
+                string logContent = this.encodeLogService.GetFullLog();
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))

@@ -10,12 +10,14 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Documents;
     using System.Windows.Media;
 
     using Caliburn.Micro;
@@ -44,8 +46,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
-        #region Constants and Fields
-
         private readonly IUserSettingService userSettingService;
         private readonly IUpdateService updateService;
         private readonly IErrorService errorService;
@@ -118,10 +118,6 @@ namespace HandBrakeWPF.ViewModels
 
         private bool enableQuickSyncLowPower;
 
-        #endregion
-
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsViewModel"/> class.
         /// </summary>
@@ -150,10 +146,7 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
         }
 
-        #endregion
-
-        #region Window Properties
-
+        
         /// <summary>
         /// Gets or sets SelectedTab.
         /// </summary>
@@ -175,10 +168,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the about view model.
         /// </summary>
         public IAboutViewModel AboutViewModel { get; set; }
-
-        #endregion
-
-        #region Properties
 
         public bool IsUWP
         {
@@ -1248,8 +1237,6 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        #endregion
-
         #region About HandBrake
 
         /// <summary>
@@ -1361,6 +1348,17 @@ namespace HandBrakeWPF.ViewModels
                 return Portable.IsProcessIsolationEnabled();
             }
         }
+
+        public int SimultaneousEncodes { get; set; }
+
+        public BindingList<int> SimultaneousEncodesList
+        {
+            get
+            {
+                return new BindingList<int>() { 1, 2, 3, 4 };
+            }
+        }
+
 
         #region Public Methods
 
@@ -1679,6 +1677,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
             this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
+            this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
         }
 
         /// <summary>
@@ -1792,6 +1791,7 @@ namespace HandBrakeWPF.ViewModels
             /* Experimental */
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
         }
 
         /// <summary>

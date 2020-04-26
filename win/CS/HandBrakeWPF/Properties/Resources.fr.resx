@@ -714,11 +714,6 @@ Temps Restant: {4}</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Veuillez arrêter l'encodage en cours. Si le problème persiste, redémarrez HandBrake.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodage : Passage {0} sur {1},  {2:00.00}%
-IPS :  {3:000.0}, Moy IPS :  {4:000.0}
-Temps Restant : {5}, Écoulé : {6:j\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Aperçu ({0}% de la taille réelle)</value>
   </data>
@@ -1164,7 +1159,7 @@ Souhaitez-vous l'écraser ?</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Afficher l'état de l'encodage dans la bar de titre du l'application.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Effacer les fichiers du journal de plus de 30 jours</value>
   </data>
   <data name="Options_About" xml:space="preserve">

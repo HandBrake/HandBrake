@@ -10,9 +10,11 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Text;
-    using System.Windows;
+    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -20,34 +22,37 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using Clipboard = System.Windows.Clipboard;
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
     using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
     using LogService = HandBrakeWPF.Services.Logging.LogService;
 
-    /// <summary>
-    /// The Log View Model
-    /// </summary>
     public class LogViewModel : ViewModelBase, ILogViewModel
     {
         private readonly IErrorService errorService;
 
-        private readonly ILog logService;
+        private readonly ILogInstanceManager logInstanceManager;
+
+        private ILog logService;
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
 
-        public LogViewModel(IErrorService errorService, ILog logService)
+        private string selectedLogFile;
+
+        public LogViewModel(IErrorService errorService, ILogInstanceManager logInstanceManager)
         {
             this.errorService = errorService;
-            this.logService = logService;
+            this.logInstanceManager = logInstanceManager;
             this.Title = Resources.LogViewModel_Title;
+            this.selectedLogFile = logInstanceManager.ApplicationAndScanLog;
         }
 
-        /// <summary>
-        /// Gets Log.
-        /// </summary>
+        public event EventHandler<LogEventArgs> LogMessageReceived;
+
         public string ActivityLog
         {
             get
@@ -56,14 +61,27 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The log message received.
-        /// </summary>
-        public event EventHandler<LogEventArgs> LogMessageReceived;
-    
-        /// <summary>
-        /// Open the Log file directory
-        /// </summary>
+        public BindingList<string> LogFiles
+        {
+            get
+            {
+                return new BindingList<string>(this.logInstanceManager.GetLogFiles());
+            }
+        }
+
+        public string SelectedLogFile
+        {
+            get => this.selectedLogFile;
+            set
+            {
+                if (value == this.selectedLogFile) return;
+                this.selectedLogFile = value;
+                this.NotifyOfPropertyChange(() => this.SelectedLogFile);
+
+                this.ChangeLogFileView();
+            }
+        }
+
         public void OpenLogDirectory()
         {
             string logDir = DirectoryUtilities.GetLogDirectory();
@@ -72,9 +90,6 @@ namespace HandBrakeWPF.ViewModels
             prc.Start();
         }
 
-        /// <summary>
-        /// Copy the log file to the system clipboard
-        /// </summary>
         public void CopyLog()
         {
             try
@@ -87,11 +102,23 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Handle the OnActivate Caliburn Event
-        /// </summary>
         protected override void OnActivate()
         {
+            this.logInstanceManager.NewLogInstanceRegistered += this.LogInstanceManager_NewLogInstanceRegistered;
+
+            if (string.IsNullOrEmpty(this.SelectedLogFile))
+            {
+                base.OnActivate();
+                return;
+            }
+
+            if (this.logService == null)
+            {
+                this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
+            }
+
+            this.NotifyOfPropertyChange(() => this.LogFiles);
+
             this.logService.MessageLogged += this.LogService_MessageLogged;
             this.logService.LogReset += LogService_LogReset;
 
@@ -114,12 +141,6 @@ namespace HandBrakeWPF.ViewModels
             base.OnActivate();
         }
 
-        /// <summary>
-        /// Trigger a faster / smoother way of updating the log window.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         protected virtual void OnLogMessageReceived(LogEventArgs e)
         {
             var onLogMessageReceived = this.LogMessageReceived;
@@ -129,29 +150,31 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Handle the OnDeactivate Caliburn Event
-        /// </summary>
-        /// <param name="close">
-        /// The close.
-        /// </param>
         protected override void OnDeactivate(bool close)
         {
             this.logService.MessageLogged -= this.LogService_MessageLogged;
             this.logService.LogReset -= this.LogService_LogReset;
+            this.logInstanceManager.NewLogInstanceRegistered -= this.LogInstanceManager_NewLogInstanceRegistered;
 
             base.OnDeactivate(close);
         }
 
-        /// <summary>
-        /// The log service_ log reset.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
+        private void ChangeLogFileView()
+        {
+            if (this.logService != null)
+            {
+                this.logService.MessageLogged -= this.LogService_MessageLogged;
+                this.logService.LogReset -= this.LogService_LogReset;
+            }
+
+            this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
+
+            if (this.logService != null)
+            {
+                OnActivate();
+            }
+        }
+
         private void LogService_LogReset(object sender, EventArgs e)
         {
             this.log.Clear();
@@ -172,15 +195,6 @@ namespace HandBrakeWPF.ViewModels
             this.OnLogMessageReceived(null);
         }
 
-        /// <summary>
-        /// The log service_ message logged.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void LogService_MessageLogged(object sender, LogEventArgs e)
         {
             if (this.lastReadIndex < e.Log.MessageIndex)
@@ -193,6 +207,12 @@ namespace HandBrakeWPF.ViewModels
                             this.NotifyOfPropertyChange(() => this.ActivityLog);
                         });
             }
+        }
+
+        private void LogInstanceManager_NewLogInstanceRegistered(object sender, EventArgs e)
+        {
+            this.NotifyOfPropertyChange(() => this.LogFiles);
+            this.SelectedLogFile = this.LogFiles.LastOrDefault();
         }
     }
 }

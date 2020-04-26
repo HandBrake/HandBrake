@@ -20,6 +20,7 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Queue;
@@ -82,10 +83,10 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ITitleSpecificViewModel, TitleSpecificViewModel>();
             this.container.Singleton<IQueueSelectionViewModel, QueueSelectionViewModel>();
             this.container.Singleton<ICountdownAlertViewModel, CountdownAlertViewModel>();
-            this.container.Singleton<IMiniViewModel, MiniViewModel>();
             this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
             this.container.Singleton<ISystemService, SystemService>();
             this.container.Singleton<IHbFunctionsProvider, HbFunctionsProvider>();
+            this.container.Singleton<ILogInstanceManager, LogInstanceManager>();
             
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();

@@ -711,11 +711,6 @@ Tiempo restante: {4}</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Por favor detenga la codificación actual. Si el problema persiste, por favor reinicie HandBrake.</value>
   </data>
-  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Codificando: Pasada {0} de {1},  {2:00.00}%
-FPS: {3:000.0},  Avg FPS: {4:000.0}
-Tiempo restante: {5},  Transcurrido: {6:d\:hh\:mm\:ss}</value>
-  </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Vista previa ({0}% tamaño actual)</value>
   </data>
@@ -1161,7 +1156,7 @@ Tiempo restante: {5},  Transcurrido: {6:d\:hh\:mm\:ss}</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Mostrar el estado de codificación en la barra de título de la aplicación.</value>
   </data>
-  <data name="Options_30DayLogClear" xml:space="preserve">
+  <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Borrar archivos de registro de más de 30 días</value>
   </data>
   <data name="Options_About" xml:space="preserve">
