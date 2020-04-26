@@ -106,9 +106,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBQueueContext && self.isEncoding)
+    if (context == HBQueueContext)
     {
-        [self encodeNextQueueItem];
+        if (self.isEncoding)
+        {
+            [self encodeNextQueueItem];
+        }
     }
     else
     {
