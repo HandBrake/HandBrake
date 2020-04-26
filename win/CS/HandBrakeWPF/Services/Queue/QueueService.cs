@@ -109,6 +109,8 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
+        public int CompletedCount => this.queue.Count(item => item.Status == QueueItemStatus.Completed);
+
         public bool IsPaused { get; private set; }
 
         public bool IsProcessing { get; private set; }
@@ -565,8 +567,11 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.BackupQueue(string.Empty);
 
-                // Fire the event to tell connected services.
-                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+                if (!this.activeJobs.Any(a => a.IsEncoding))
+                {
+                    // Fire the event to tell connected services.
+                    this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
+                }
             }
         }
 
