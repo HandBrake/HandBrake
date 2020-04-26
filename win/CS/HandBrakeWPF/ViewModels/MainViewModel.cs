@@ -2543,6 +2543,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = Resources.Main_QueuePaused;
                     this.NotifyOfPropertyChange(() => this.QueueLabel);
                     this.NotifyOfPropertyChange(() => this.StartLabel);
+                    this.NotifyOfPropertyChange(() => this.IsEncoding);
                 });
         }
         
@@ -2550,6 +2551,11 @@ namespace HandBrakeWPF.ViewModels
         {
             List<QueueProgressStatus> queueJobStatuses = this.queueProcessor.GetQueueProgressStatus();
             string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+
+            if (this.queueProcessor.IsPaused)
+            {
+                return;
+            }
 
             Execute.OnUIThread(
                 () =>

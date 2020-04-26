@@ -231,9 +231,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
-
-            this.errorService.ShowMessageBox(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
-                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void PauseQueueToolbar()
