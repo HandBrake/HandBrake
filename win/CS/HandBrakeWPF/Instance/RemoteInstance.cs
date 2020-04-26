@@ -78,7 +78,7 @@ namespace HandBrakeWPF.Instance
             this.MonitorEncodeProgress();
         }
 
-        public async void StartEncode(JsonEncodeObject jobToStart)
+        public void StartEncode(JsonEncodeObject jobToStart)
         {
             InitCommand initCommand = new InitCommand
             {
@@ -95,7 +95,8 @@ namespace HandBrakeWPF.Instance
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
 
-            await this.MakeHttpJsonPostRequest("StartEncode", job);
+            var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
+            task.Wait();
 
             this.MonitorEncodeProgress();
         }
@@ -123,24 +124,14 @@ namespace HandBrakeWPF.Instance
 
         public void Initialize(int verbosityLvl, bool noHardwareMode)
         {
-            this.StartServer();
-        }
-
-        public void Dispose()
-        {
-            this.workerProcess?.Dispose();
-        }
-
-        private async void StartServer()
-        {
             if (this.workerProcess == null || this.workerProcess.HasExited)
             {
                 var plainTextBytes = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
                 this.base64Token = Convert.ToBase64String(plainTextBytes);
 
                 workerProcess = new Process
-                                {
-                                    StartInfo =
+                {
+                    StartInfo =
                                     {
                                         FileName = "HandBrake.Worker.exe",
                                         Arguments = string.Format(" --port={0} --token={1}", port, this.base64Token),
@@ -149,7 +140,7 @@ namespace HandBrakeWPF.Instance
                                         RedirectStandardError = true,
                                         CreateNoWindow = true
                                     }
-                                };
+                };
                 workerProcess.Exited += this.WorkerProcess_Exited;
                 workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
                 workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;
@@ -180,6 +171,11 @@ namespace HandBrakeWPF.Instance
 
                 this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
             }
+        }
+
+        public void Dispose()
+        {
+            this.workerProcess?.Dispose();
         }
 
         private void WorkerProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
