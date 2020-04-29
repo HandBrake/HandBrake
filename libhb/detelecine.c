@@ -832,14 +832,14 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     pv->input      = *init;
     pv->pullup_ctx = ctx = pullup_alloc_context();
 
-    ctx->junk_left = ctx->junk_right  = 1;
-    ctx->junk_top  = ctx->junk_bottom = 4;
+    // "Skip" array [top, bottom, left, right]
+    int top, bottom, left, right;
+
+    left = right = ctx->junk_left = ctx->junk_right  = 1;
+    top = bottom = ctx->junk_top  = ctx->junk_bottom = 4;
     ctx->strict_breaks = -1;
     ctx->metric_plane  = 0;
     ctx->parity = -1;
-
-    // "Skip" array [top, bottom, left, right]
-    int top, bottom, left, right;
 
     hb_dict_extract_int(&top,    filter->settings, "skip-top");
     hb_dict_extract_int(&bottom, filter->settings, "skip-bottom");
