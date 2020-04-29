@@ -2401,18 +2401,32 @@ G_MODULE_EXPORT void
 preset_remove_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
-    int                 type;
-    const char        * fullname;
     hb_preset_index_t * path;
+    GhbValue          * preset;
 
-    type     = ghb_dict_get_int(ud->settings, "Type");
-    fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
-    if (fullname == NULL)
+    path = get_selected_path(ud);
+    if (path != NULL)
     {
-        return;
+        preset = hb_preset_get(path);
     }
-    path = hb_preset_search_index(fullname, 0, type);
-    if (path == NULL)
+    if (path == NULL || preset == NULL)
+    {
+        const char * fullname;
+        int          type;
+
+        fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
+        if (fullname == NULL)
+        {
+            return;
+        }
+        type     = ghb_dict_get_int(ud->settings, "Type");
+        path = hb_preset_search_index(fullname, 0, type);
+        if (path != NULL)
+        {
+            preset = hb_preset_get(path);
+        }
+    }
+    if (path == NULL || preset == NULL)
     {
         return;
     }
@@ -2423,7 +2437,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
     GtkResponseType   response;
     const char      * name;
 
-    name  = ghb_dict_get_string(ud->settings, "PresetName");
+    name  = ghb_dict_get_string(preset, "PresetName");
     is_folder = preset_is_folder(path);
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
@@ -2435,42 +2449,81 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
     gtk_widget_destroy(dialog);
     if (response == GTK_RESPONSE_YES)
     {
-        GtkTreeView      * treeview;
-        GtkTreeSelection * selection;
-        gboolean           valid = TRUE;
-        hb_value_t       * preset;
-
+        int depth = path->depth;
 
         // Determine which preset to highlight after deletion done
         hb_preset_index_t new_path = *path;
+        // Always select a preset, not a folder
+        if (depth == 1)
+        {
+            new_path.depth = 2;
+        }
         // Try next
-        new_path.index[path->depth - 1] = path->index[path->depth - 1] + 1;
+        new_path.index[depth - 1] = path->index[depth - 1] + 1;
         preset = hb_preset_get(&new_path);
-        if (preset == NULL)
+        // After deletion, index of new selected item is one less
+        new_path.index[depth - 1]--;
+        if (preset == NULL && path->index[depth - 1] > 0)
         {
             // Try previous
-            new_path.index[path->depth - 1] =
-                path->index[path->depth - 1] - 1;
+            new_path.index[depth - 1] = path->index[depth - 1] - 1;
             preset = hb_preset_get(&new_path);
-            if (preset == NULL)
+        }
+        if (preset == NULL)
+        {
+            // perhaps we are deleting the last item in a folder
+            // Try first item in next and previous folders
+            depth = 1;
+            new_path.index[1] = 0;
+            // Try next
+            new_path.index[depth - 1] = path->index[depth - 1] + 1;
+            preset = hb_preset_get(&new_path);
+            // After deletion, index of new selected item is one less
+            new_path.index[depth - 1]--;
+            if (preset == NULL && path->index[depth - 1] > 0)
             {
-                valid = FALSE;
+                // Try previous
+                new_path.index[depth - 1] = path->index[depth - 1] - 1;
+                preset = hb_preset_get(&new_path);
             }
         }
 
-        // Remove the selected item
-        // First unselect it so that selecting the new item works properly
+        GtkTreeView      * treeview;
+        GtkTreeSelection * selection;
+
+        // unselect item to be deleted
         treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
         selection = gtk_tree_view_get_selection(treeview);
         gtk_tree_selection_unselect_all(selection);
 
+        // Remove the item
         if (hb_preset_delete(path) >= 0)
         {
-            store_presets();
             presets_list_remove(ud, path);
+            if (path->depth == 2)
+            {
+                // If deleting this item resulted in an empty folder
+                // delete the folder
+                int count = 0;
+                hb_value_t * folder;
+
+                path->depth = 1;
+                folder = hb_presets_get_folder_children(path);
+                if (folder != NULL)
+                {
+                    count = ghb_array_len(folder);
+                }
+                if (count == 0)
+                {
+                    // delete the folder
+                    hb_preset_delete(path);
+                    presets_list_remove(ud, path);
+                }
+            }
+            store_presets();
             ghb_presets_menu_reinit(ud);
         }
-        if (valid)
+        if (preset != NULL)
         {
             select_preset2(ud, &new_path);
         }
