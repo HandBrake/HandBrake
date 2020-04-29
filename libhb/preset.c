@@ -50,6 +50,7 @@ enum
     PRESET_DO_PARTIAL,
     PRESET_DO_NEXT,
     PRESET_DO_SKIP,
+    PRESET_DO_SKIP_LEVEL,
     PRESET_DO_DELETE,
     PRESET_DO_DONE
 };
@@ -94,7 +95,7 @@ static int preset_cmp_idx(hb_value_t *preset, int idx,
     if (type != HB_PRESET_TYPE_ALL &&
         type != hb_value_get_int(hb_dict_get(preset, "Type")))
     {
-        return PRESET_DO_NEXT;
+        return PRESET_DO_SKIP;
     }
 
     // Strip leading '/'
@@ -106,7 +107,7 @@ static int preset_cmp_idx(hb_value_t *preset, int idx,
     {
         next = strchr(name, '/');
         if (next == NULL)
-            return PRESET_DO_SKIP;
+            return PRESET_DO_SKIP_LEVEL;
         next++;
         name = next;
     }
@@ -118,7 +119,7 @@ static int preset_cmp_idx(hb_value_t *preset, int idx,
     else
         len = strlen(name);
     if (len <= 0)
-        return PRESET_DO_SKIP;
+        return PRESET_DO_SKIP_LEVEL;
 
     preset_name = hb_value_get_string(hb_dict_get(preset, "PresetName"));
     if (strlen(preset_name) > len)
@@ -132,7 +133,7 @@ static int preset_cmp_idx(hb_value_t *preset, int idx,
         else
             return PRESET_DO_PARTIAL;
     }
-    return PRESET_DO_NEXT;
+    return PRESET_DO_SKIP;
 }
 
 static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
@@ -148,7 +149,7 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
     }
 
     result = preset_cmp_idx(preset, idx, ctx->name, ctx->type);
-    if (ctx->recurse && result == PRESET_DO_SKIP)
+    if (ctx->recurse && result == PRESET_DO_SKIP_LEVEL)
     {
         result = preset_cmp_idx(preset, 0, ctx->name, ctx->type);
         ctx->last_match_idx = idx;
@@ -230,9 +231,9 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
                 continue;
             }
             ii++;
-            if (result == PRESET_DO_SKIP)
+            if (result == PRESET_DO_SKIP_LEVEL)
                 return PRESET_DO_NEXT;
-            if (result != PRESET_DO_NEXT)
+            if (result != PRESET_DO_NEXT && result != PRESET_DO_SKIP)
                 return result;
         }
         return PRESET_DO_NEXT;
