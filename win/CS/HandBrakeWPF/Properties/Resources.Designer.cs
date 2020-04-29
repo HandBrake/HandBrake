@@ -4916,15 +4916,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Queue has been paused. The currently running job will run to completion and no further jobs will start..
-        /// </summary>
-        public static string QueueViewModel_QueuePauseNotice {
-            get {
-                return ResourceManager.GetString("QueueViewModel_QueuePauseNotice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Queue Paused.
         /// </summary>
         public static string QueueViewModel_QueuePending {
@@ -5246,6 +5237,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreview_UnableToDeletePreview {
             get {
                 return ResourceManager.GetString("StaticPreview_UnableToDeletePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string StaticPreviewView_CancelPreview {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_CancelPreview", resourceCulture);
             }
         }
         

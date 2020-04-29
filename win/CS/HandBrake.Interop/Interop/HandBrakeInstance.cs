@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Timers;
@@ -73,10 +74,6 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
-        /// <summary>
-        /// Gets the handle.
-        /// </summary>
-        internal IntPtr Handle { get; private set; }
 
         /// <summary>
         /// Gets the number of previews created during scan.
@@ -107,6 +104,13 @@ namespace HandBrake.Interop.Interop
         /// Gets the HandBrake build number.
         /// </summary>
         public int Build => hbFunctions.hb_get_build(this.Handle);
+
+        public bool IsRemoteInstance => false;
+
+        /// <summary>
+        /// Gets the handle.
+        /// </summary>
+        internal IntPtr Handle { get; private set; }
 
         /// <summary>
         /// Initializes this instance.

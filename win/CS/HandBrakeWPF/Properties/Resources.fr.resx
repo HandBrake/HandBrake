@@ -498,9 +498,6 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>File mise en pause</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>La file a été mise en pause. Le travail en cours sera exécuté en totalité et aucun autre travail ne commencera.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?</value>
   </data>

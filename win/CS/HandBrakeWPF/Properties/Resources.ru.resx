@@ -500,9 +500,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>Очередь приостановлена</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>Очередь была приостановлена. Текущее задание будет выполнено, а будущие - не начнутся.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Вы уверены, что хотите удалить выбранные задания?</value>
   </data>

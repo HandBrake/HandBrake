@@ -62,8 +62,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
-        #region Private Variables and Services
-
         private readonly IQueueService queueProcessor;
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
@@ -96,13 +94,6 @@ namespace HandBrakeWPF.ViewModels
         private bool isModifiedPreset;
         private bool updateAvailable;
 
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
-        /// The viewmodel for HandBrakes main window.
-        /// </summary>
-        /// <remarks>whenDoneService must be a serivce here!</remarks>
         public MainViewModel(
             IUserSettingService userSettingService,
             IScan scanService,
@@ -1069,6 +1060,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.UpdateAvailable);
             }
         }
+
+        public bool IsMultiProcess { get; set; }
 
         #endregion
 
@@ -2495,6 +2488,7 @@ namespace HandBrakeWPF.ViewModels
         private void QueueCompleted(object sender, EventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.IsEncoding);
+            this.NotifyOfPropertyChange(() => this.StartLabel);
 
             Execute.OnUIThread(
                 () =>
@@ -2530,7 +2524,11 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
               () =>
               {
-                  this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
+                  if (!this.queueProcessor.IsEncoding)
+                  {
+                      this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
+                  }
+
                   this.NotifyOfPropertyChange(() => this.QueueLabel);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
                   this.NotifyOfPropertyChange(() => this.IsEncoding);
@@ -2545,14 +2543,19 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = Resources.Main_QueuePaused;
                     this.NotifyOfPropertyChange(() => this.QueueLabel);
                     this.NotifyOfPropertyChange(() => this.StartLabel);
+                    this.NotifyOfPropertyChange(() => this.IsEncoding);
                 });
         }
-
-
+        
         private void QueueProcessor_QueueJobStatusChanged(object sender, EventArgs e)
         {
             List<QueueProgressStatus> queueJobStatuses = this.queueProcessor.GetQueueProgressStatus();
             string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+
+            if (this.queueProcessor.IsPaused)
+            {
+                return;
+            }
 
             Execute.OnUIThread(
                 () =>
@@ -2579,10 +2582,15 @@ namespace HandBrakeWPF.ViewModels
                             this.WindowTitle = string.Format(Resources.WindowTitleStatus, Resources.HandBrake_Title, this.ProgressPercentage, status.Task, status.TaskCount);
                             this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title, this.ProgressPercentage, status.Task, status.TaskCount, status.EstimatedTimeLeft));
                         }
+
+                        this.IsMultiProcess = false;
+                        this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }
                     else if (queueJobStatuses.Count > 1)
                     {
-                        this.ProgramStatusLabel = "Multiple Jobs Running."; // TODO Implement later. 
+                        this.ProgramStatusLabel = string.Format("{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.", this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
+                        this.IsMultiProcess = true;
+                        this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }
                     else
                     {
@@ -2590,6 +2598,9 @@ namespace HandBrakeWPF.ViewModels
                         this.NotifyOfPropertyChange(() => this.IsEncoding);
                         this.WindowTitle = Resources.HandBrake_Title;
                         this.notifyIconService.SetTooltip(this.WindowTitle);
+
+                        this.IsMultiProcess = false;
+                        this.NotifyOfPropertyChange(() => this.IsMultiProcess);
 
                         if (this.windowsSeven.IsWindowsSeven)
                         {

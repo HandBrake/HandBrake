@@ -493,9 +493,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>列队已暂停</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>队列已暂停。当前正在运行的作业将运行完成，不会再启动其他作业。</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>您确定要删除所选作业吗？</value>
   </data>

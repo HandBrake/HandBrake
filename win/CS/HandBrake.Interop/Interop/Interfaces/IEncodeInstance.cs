@@ -27,6 +27,8 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// </summary>
         event EventHandler<EncodeProgressEventArgs> EncodeProgress;
 
+        bool IsRemoteInstance { get; }
+
         /// <summary>
         /// Initializes this instance.
         /// </summary>

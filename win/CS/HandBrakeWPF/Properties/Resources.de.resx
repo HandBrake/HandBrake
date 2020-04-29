@@ -501,9 +501,6 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>Warteschlange angehalten</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>Die Warteschlange wurde angehalten. Die aktuelle Aufgabe wird noch fertig gestellt und danach keine weiteren Aufgaben gestartet.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Sollen die ausgewählten Aufgaben wirklich gelöscht werden?</value>
   </data>

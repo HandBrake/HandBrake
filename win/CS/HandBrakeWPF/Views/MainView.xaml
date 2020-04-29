@@ -797,10 +797,10 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-        <StatusBar Name="statusBar1" Height="32" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
 
             <StatusBarItem>
-                <ProgressBar Value="{Binding ProgressPercentage}" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
+                <ProgressBar Value="{Binding ProgressPercentage}" IsIndeterminate="{Binding IsMultiProcess}"  Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
                              Width="100" Height="18" VerticalAlignment="Center" />
             </StatusBarItem>
             <StatusBarItem>

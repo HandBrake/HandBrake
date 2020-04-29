@@ -498,9 +498,6 @@ The Activity log may have further information.</value>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>Queue Paused</value>
   </data>
-  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>The Queue has been paused. The currently running job will run to completion and no further jobs will start.</value>
-  </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Are you sure you want to delete the selected jobs?</value>
   </data>
@@ -2228,5 +2225,8 @@ Please choose a different preset.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
     <value>Number of simultaneous encodes:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

@@ -40,6 +40,7 @@ namespace HandBrakeWPF.Services.Encode
         private readonly IUserSettingService userSettingService;
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
+        private readonly object portLock = new object();
         private IEncodeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
@@ -107,19 +108,24 @@ namespace HandBrakeWPF.Services.Encode
                 }
 
                 int verbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
-                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, userSettingService);
-                
-                this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
-                this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
-                this.IsEncoding = true;
-                this.isPreviewInstance = task.IsPreviewEncode;
+                // Prevent port stealing if multiple jobs start at the same time.
+                lock (portLock) 
+                {
+                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, userSettingService);
 
-                // Verify the Destination Path Exists, and if not, create it.
-                this.VerifyEncodeDestinationPath(task);
+                    this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
+                    this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
-                // Get an EncodeJob object for the Interop Library
-                this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration, hbFunctionsProvider.GetHbFunctionsWrapper()));
+                    this.IsEncoding = true;
+                    this.isPreviewInstance = task.IsPreviewEncode;
+
+                    // Verify the Destination Path Exists, and if not, create it.
+                    this.VerifyEncodeDestinationPath(task);
+
+                    // Get an EncodeJob object for the Interop Library
+                    this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration, hbFunctionsProvider.GetHbFunctionsWrapper()));
+                }
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);

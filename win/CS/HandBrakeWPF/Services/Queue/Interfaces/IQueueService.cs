@@ -63,6 +63,11 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         int ErrorCount { get; }
 
         /// <summary>
+        /// Gets the number of completed jobs.
+        /// </summary>
+        int CompletedCount { get; }
+
+        /// <summary>
         /// Gets a value indicating whether IsProcessing.
         /// </summary>
         bool IsProcessing { get; }
