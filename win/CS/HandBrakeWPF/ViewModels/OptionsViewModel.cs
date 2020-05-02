@@ -1761,7 +1761,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);
 
             /* System and Logging */
-            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriorityInt, this.SelectedPriority);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriorityInt, (int)this.SelectedPriority);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
