@@ -184,6 +184,7 @@
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
                                         <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="ScannedTrack" />
                                     </MultiBinding>
                                 </ComboBox.ItemsSource>
                             </ComboBox>

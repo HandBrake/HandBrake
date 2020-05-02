@@ -45,10 +45,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private AudioEncoderRateType encoderRateType;
         private double? quality;
         private string trackName;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref = "AudioTrack" /> class.
-        /// </summary>
+        
         public AudioTrack()
         {
             // Default Values
@@ -70,16 +67,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SetupLimits();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
-        /// Copy Constructor
-        /// </summary>
-        /// <param name="track">
-        /// The track.
-        /// </param>
-        /// <param name="setScannedTrack">
-        /// The set Scanned Track.
-        /// </param>
         public AudioTrack(AudioTrack track, bool setScannedTrack)
         {
             this.bitrate = track.Bitrate;
@@ -110,19 +97,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SetupLimits();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
-        /// Create a track from a behaviour track.
-        /// </summary>
-        /// <param name="track">
-        /// The Behavior track
-        /// </param>
-        /// <param name="sourceTrack">
-        /// The source track we are dealing with.
-        /// </param>
-        /// <param name="fallback">
-        /// An encoder to fall back to.
-        /// </param>
         public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, AllowedPassthru fallback, OutputFormat container)
         {
             AudioEncoder chosenEncoder = track.Encoder;
@@ -186,11 +160,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SetupLimits();
         }
 
-        #region Track Properties
+        /* Audio Track Properties */
 
-        /// <summary>
-        ///   Gets or sets Dynamic Range Compression
-        /// </summary>
         public double DRC
         {
             get
@@ -208,9 +179,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets the Gain for the audio track
-        /// </summary>
         public int Gain
         {
             get
@@ -228,9 +196,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets Audio Mixdown (ShortName)
-        /// </summary>
         public string MixDown
         {
             get
@@ -249,9 +214,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets Audio Encoder
-        /// </summary>
         public AudioEncoder Encoder
         {
             get
@@ -285,9 +247,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets Audio SampleRate
-        /// </summary>
         public double SampleRate
         {
             get
@@ -303,9 +262,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the encoder rate type.
-        /// </summary>
         public AudioEncoderRateType EncoderRateType
         {
             get
@@ -329,9 +285,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets Audio Bitrate
-        /// </summary>
         public int Bitrate
         {
             get
@@ -346,9 +299,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets Audio quality
-        /// </summary>
         public double? Quality
         {
             get
@@ -363,9 +313,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the track name.
-        /// </summary>
         public string TrackName
         {
             get => this.trackName;
@@ -377,11 +324,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        #endregion
+        /* UI Only Properties */ 
 
-        /// <summary>
-        ///   Gets AudioEncoderDisplayValue.
-        /// </summary>
         [JsonIgnore]
         public string AudioEncoderDisplayValue
         {
@@ -391,9 +335,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets the The UI display value for bit rate
-        /// </summary>
         [JsonIgnore]
         public string BitRateDisplayValue
         {
@@ -409,10 +350,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is default.
-        /// TODO - Can this be removed? May have been added as a quick fix for a styling quirk.
-        /// </summary>
         [JsonIgnore]
         public bool IsDefault
         {
@@ -426,9 +363,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///  Gets or sets the The UI display value for sample rate
-        /// </summary>
         [JsonIgnore]
         public string SampleRateDisplayValue
         {
@@ -451,9 +385,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets or sets the Scanned Audio Tracks
-        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Audio ScannedTrack
         {
@@ -474,9 +405,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        ///   Gets the Audio Track Name
-        /// </summary>
         [JsonIgnore]
         public int? Track
         {
@@ -491,9 +419,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether IsPassthru.
-        /// </summary>
         [JsonIgnore]
         public bool IsPassthru
         {
@@ -511,9 +436,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets the bitrates.
-        /// </summary>
         [JsonIgnore]
         public IEnumerable<int> Bitrates
         {
@@ -523,9 +445,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets the quality compression values.
-        /// </summary>
         [JsonIgnore]
         public IEnumerable<double> EncoderQualityValues
         {
@@ -535,9 +454,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets the audio encoder rate types.
-        /// </summary>
         [JsonIgnore]
         public IEnumerable<AudioEncoderRateType> AudioEncoderRateTypes
         {
@@ -554,9 +470,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether can set bitrate.
-        /// </summary>
         [JsonIgnore]
         public bool IsBitrateVisible
         {
@@ -571,9 +484,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is quality visible.
-        /// </summary>
         [JsonIgnore]
         public bool IsQualityVisible
         {
@@ -588,9 +498,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is rate type visible.
-        /// </summary>
         [JsonIgnore]
         public bool IsRateTypeVisible
         {
@@ -605,9 +512,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether IsLossless.
-        /// </summary>
         [JsonIgnore]
         public bool IsLossless
         {
@@ -617,20 +521,14 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// Gets TrackReference.
-        /// </summary>
         [JsonIgnore]
         public AudioTrack TrackReference
         {
             get { return this; }
         }
 
-        #region Handler Methods
+        /* Helper Methods */ 
 
-        /// <summary>
-        /// The setup limits.
-        /// </summary>
         private void SetupLimits()
         {
             this.SetupBitrateLimits();
@@ -638,9 +536,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.GetDefaultMixdownIfNull();
         }
 
-        /// <summary>
-        /// The calculate bitrate limits.
-        /// </summary>
         private void SetupBitrateLimits()
         {
             // Base set of bitrates available.
@@ -674,9 +569,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
         }
 
-        /// <summary>
-        /// The setup quality compression limits.
-        /// </summary>
         private void SetupQualityCompressionLimits()
         {
             HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
@@ -735,9 +627,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.NotifyOfPropertyChange(() => this.EncoderQualityValues);
         }
 
-        /// <summary>
-        /// Set the default mixdown when the mixdown is null or "none"
-        /// </summary>
         private void GetDefaultMixdownIfNull()
         {
             if (this.ScannedTrack == null)
@@ -759,8 +648,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.MixDown = sanitisedMixdown.ShortName;
             }
         }
-
-        #endregion
 
         public override string ToString()
         {

@@ -17,8 +17,11 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Windows.Data;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
@@ -51,7 +54,7 @@ namespace HandBrakeWPF.Converters.Audio
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             // TODO -> Be smarter and only show the available Passthru options.
-            if (values.Count() == 2)
+            if (values.Count() >= 2)
             {
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
@@ -95,6 +98,21 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Add(AudioEncoder.None);
                 }
 
+                if (values.Length == 3)
+                {
+                    encoders.Remove(AudioEncoder.Passthrough); // Auto passthru doesn't make sense on the main window. instead only show supported passthrus. 
+
+                    Audio sourceTrack = values[2] as Audio;
+                    RemoveIfNotSupported(AudioEncoder.DtsHDPassthrough, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.DtsPassthrough, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.EAc3Passthrough, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.AacPassthru, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.Ac3Passthrough, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.Mp3Passthru, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.TrueHDPassthrough, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.FlacPassthru, sourceTrack, encoders);
+                }
+
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 
@@ -133,6 +151,20 @@ namespace HandBrakeWPF.Converters.Audio
             }
 
             return null;
+        }
+
+        private void RemoveIfNotSupported(AudioEncoder encoder, Audio sourceTrack, List<AudioEncoder> encoders)
+        {
+            if (sourceTrack == null)
+            {
+                return;
+            }
+
+            HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(encoder));
+            if ((sourceTrack.Codec & encoderInfo.Id) == 0)
+            {
+                encoders.Remove(encoder);
+            }
         }
     }
 }
