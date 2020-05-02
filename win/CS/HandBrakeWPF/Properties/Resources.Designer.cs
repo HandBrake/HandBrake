@@ -2110,7 +2110,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preset:.
+        ///   Looks up a localized string similar to Presets.
         /// </summary>
         public static string MainView_Presets {
             get {
@@ -2218,11 +2218,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected Preset:.
+        ///   Looks up a localized string similar to Preset:.
         /// </summary>
-        public static string MainView_SelectedPreset {
+        public static string MainView_SelectedPresets {
             get {
-                return ResourceManager.GetString("MainView_SelectedPreset", resourceCulture);
+                return ResourceManager.GetString("MainView_SelectedPresets", resourceCulture);
             }
         }
         
@@ -5611,6 +5611,15 @@ namespace HandBrakeWPF.Properties {
         public static string SummaryView_Rotation {
             get {
                 return ResourceManager.GetString("SummaryView_Rotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same as source.
+        /// </summary>
+        public static string SummaryView_SameAsSource {
+            get {
+                return ResourceManager.GetString("SummaryView_SameAsSource", resourceCulture);
             }
         }
         

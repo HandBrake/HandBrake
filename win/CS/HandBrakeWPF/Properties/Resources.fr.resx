@@ -1078,9 +1078,6 @@ Souhaitez-vous l'écraser ?</value>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Recherche de l'heure de démarage</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Pré-réglage sélectionné :</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Définir la valeur par défaut</value>
   </data>

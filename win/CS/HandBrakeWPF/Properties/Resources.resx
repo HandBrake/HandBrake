@@ -1054,7 +1054,7 @@ Would you like to overwrite it?</value>
     <value>Delete Preset</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Preset:</value>
+    <value>Presets</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Preview</value>
@@ -1079,9 +1079,6 @@ Would you like to overwrite it?</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Searching for start time</value>
-  </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Selected Preset:</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Set Default</value>
@@ -2181,5 +2178,11 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Always use the default path for each new name generated.</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Preset:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
   </data>
 </root>

@@ -1072,9 +1072,6 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
   <data name="MainView_Searching" xml:space="preserve">
     <value>시작 시간 검색</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>선택된 환경 설정:</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>기본값 설정</value>
   </data>
