@@ -1,5 +1,61 @@
 # HandBrake News
 
+## HandBrake 1.3.2
+
+### All platforms
+
+#### General
+- Improvement: logging on the JSON API to help debug issues that have appeared for a few users. 
+- Improvement: Log a warning when we detect video par != container par to make it easier to see when a user has a problematic source. 
+- Improvement: Log when Auto-rotation is applied. 
+- Fixed: an issue with Point-to-point end detection. (#2603)
+- Fixed: an issue with color range conversion. (#2561)
+
+#### Video
+- Fixed: an issue with QSV mis-reporting HEVC hardware support on older Intel CPU's
+
+#### Filters
+- Fixed: an issue with nlmeans that could cause video corruption
+- Fixed: a crash in the detelecine filter if invalid values are configured. (#2560, #2804)
+
+#### Subtitles
+- Fixed: an issue with subtitle position when burn-in is used. (#2449)
+
+#### Command line interface
+- Fixed: subtitle selection with empty language list With HandBrakeCLI --all-subtitles and *no* --subtitle-lang-list, no subtitles were added
+
+#### Build system
+- Improvement: Flatpak script is now compatible with Python 3.
+- Improvement: build system dependencies. pkgconfig now 0.27.0,  automake 0.13.0 
+- Fixed: an issue when compiling libdavid on FreeBSD (#2662)
+
+### Linux
+- Improvement: Allow deletion of preset categories
+- Improvement: Add Title and Chapter range to the queue summary tab. 
+- Fixed: Point-to-Point controls to allow fractional seconds.
+- Fixed: an issue building on MinGW. Linking against ole32
+
+### Mac
+- Fixed: The default audio mixdown is now stereo. (Was DPL2)
+- Fixed: security scoping when dealing with external drives. (#2566)
+
+### Windows
+- Improvement: Minor improvement to the queue UI when handling long filenames. (#2570)
+- Improvement: Changed the way the Audio and Subtitle Language selection is handled. When "(Any)" is used, make sure to honour the order of any languages that are also selected as a priority. Fixes (#2611)
+- Improvement: Minor UX improvements to the queue (#2632)
+- Improvement: Minor Cosmetic improvements and fixes around the UI (#2645, #2646)
+- Improvement: Improved error handling when importing presets. (#2638)
+- Fixed: the clear queue options to prevent them from clearing active jobs. (#2587)
+- Fixed: an issue with the main window status label not always reflecting the true count of queue jobs. (#2538)
+- Fixed: an issue that would cause default settings to fail to load which would cause various failures in the UI. (#2549)
+- Fixed: various issues around handling of AutoPassthru. This is now also reflected on the main audio tab. (#2619 , #2627 , #2611)
+- Fixed: a preset export issue that impacted the mac UI's ability to import presets. (#2531)
+- Fixed: Handling of timestamps where time > 24 hours. (Estimated Time Renaming, Paused Duration) (#2582, #2649)
+- Fixed: an issue where tooltips would not render correctly in some cases (#2630)
+- Fixed: an issue where Pause/Resume could break due to underlying errors. (#2647)
+- Fixed: incorrect rendering of the static preview under certain circumstances. Anamorphic None and HFlip (e9675bb9da88b73269fd26620e6a95922433fb0e, #2764)
+
+
 ## HandBrake 1.3.1
 
 ### All platforms
