@@ -70,7 +70,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const h26x_nvenc_preset_names[] =
 {
-    "hq", "hp", "fast", "medium", "slow", "default", NULL  // No Lossless "losslesshp", "lossless", "llhp", "llhq", "ll", "bd". We don't need them.
+    "fast", "medium", "slow", NULL
 };
 
 static const char * const h264_nvenc_profile_names[] =
