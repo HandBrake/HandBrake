@@ -5,55 +5,72 @@
 ### All platforms
 
 #### General
-- Improvement: logging on the JSON API to help debug issues that have appeared for a few users. 
-- Improvement: Log a warning when we detect video par != container par to make it easier to see when a user has a problematic source. 
-- Improvement: Log when Auto-rotation is applied. 
-- Fixed: an issue with Point-to-point end detection. (#2603)
-- Fixed: an issue with color range conversion. (#2561)
+
+- Fixed point to point end detection in certain scenarios (#2603)
+- Improved support for H.265 video in AVI container produced by some security cameras (#2622)
+- Added logging to identify problematic sources where container and video track pixel aspect ratios differ
+- Added logging to help debug potential JSON API issues
 
 #### Video
-- Fixed: an issue with QSV mis-reporting HEVC hardware support on older Intel CPU's
+
+- Fixed color range conversion being applied twice when scaling video (#2561)
+- Fixed incorrect identification of support for QSV HEVC encoder on older Intel hardware (#2558)
+- Added logging to identify automatic picture rotation
+- Miscellaneous bug fixes and improvements
 
 #### Filters
-- Fixed: an issue with nlmeans that could cause video corruption
-- Fixed: a crash in the detelecine filter if invalid values are configured. (#2560, #2804)
+
+- Fixed uninitialized memory in NLMeans prefilter leading to video corruption at bottom of picture (only affects custom settings) (#2576)
+- Fixed a crash in the Detelecine filter with out of bounds parameters (only affects custom settings) (#2560, #2804)
 
 #### Subtitles
-- Fixed: an issue with subtitle position when burn-in is used. (#2449)
+
+- Fixed burned in subtitles position offset where cropscale filter is not used (#2449)
 
 #### Command line interface
-- Fixed: subtitle selection with empty language list With HandBrakeCLI --all-subtitles and *no* --subtitle-lang-list, no subtitles were added
+
+- Fixed subtitles not being selected when specifying --all-subtitles without also specifying a non-empty --subtitle-lang-list
 
 #### Build system
-- Improvement: Flatpak script is now compatible with Python 3.
-- Improvement: build system dependencies. pkgconfig now 0.27.0,  automake 0.13.0 
-- Fixed: an issue when compiling libdavid on FreeBSD (#2662)
+
+- Fixed building the GTK graphical interface for use on Windows (link ole32)
+- Updated Flatpak manifest creation script for compatibility with Python 3
+- Updated Flatpak runtime and numactl library versions, QSV plugin
+- Improved minimum version dependencies to facilitate building on systems with older automake and pkg-config
+- Added a workaround for an upstream libdav1d issue affecting installation on FreeBSD (#2662)
+- Miscellaneous bug fixes and improvements
 
 ### Linux
-- Improvement: Allow deletion of preset categories
-- Improvement: Add Title and Chapter range to the queue summary tab. 
-- Fixed: Point-to-Point controls to allow fractional seconds.
-- Fixed: an issue building on MinGW. Linking against ole32
+
+- Fixed point to point controls not accepting fractional seconds
+- Fixed updating presets with identical names in different categories
+- Improved parity with other platforms by allowing removal of preset categories (automatic after last preset in category is removed)
+- Improved parity with other platforms by showing title and chapter range on the queue summary tab
 
 ### Mac
-- Fixed: The default audio mixdown is now stereo. (Was DPL2)
-- Fixed: security scoping when dealing with external drives. (#2566)
+
+- Fixed selection behavior new track audio mixdown set to DPL2 instead of stereo (#2641)
+- Fixed queued job failures related to removable drives by resolving security scoped resources as needed (#2566)
 
 ### Windows
-- Improvement: Minor improvement to the queue UI when handling long filenames. (#2570)
-- Improvement: Changed the way the Audio and Subtitle Language selection is handled. When "(Any)" is used, make sure to honour the order of any languages that are also selected as a priority. Fixes (#2611)
-- Improvement: Minor UX improvements to the queue (#2632)
-- Improvement: Minor Cosmetic improvements and fixes around the UI (#2645, #2646)
-- Improvement: Improved error handling when importing presets. (#2638)
-- Fixed: the clear queue options to prevent them from clearing active jobs. (#2587)
-- Fixed: an issue with the main window status label not always reflecting the true count of queue jobs. (#2538)
-- Fixed: an issue that would cause default settings to fail to load which would cause various failures in the UI. (#2549)
-- Fixed: various issues around handling of AutoPassthru. This is now also reflected on the main audio tab. (#2619 , #2627 , #2611)
-- Fixed: a preset export issue that impacted the mac UI's ability to import presets. (#2531)
-- Fixed: Handling of timestamps where time > 24 hours. (Estimated Time Renaming, Paused Duration) (#2582, #2649)
-- Fixed: an issue where tooltips would not render correctly in some cases (#2630)
-- Fixed: an issue where Pause/Resume could break due to underlying errors. (#2647)
-- Fixed: incorrect rendering of the static preview under certain circumstances. Anamorphic None and HFlip (e9675bb9da88b73269fd26620e6a95922433fb0e, #2764)
+
+- Fixed loading preset files with Unicode characters in path (#2427)
+- Fixed clear queue options to prevent them clearing active jobs (#2587)
+- Fixed main window status label not always reflecting the true count of queue jobs (#2538)
+- Fixed failure loading default settings which could cause various issues in the graphical interface (#2549)
+- Fixed preview images displaying incorrectly in some cases (anamorphic none, flip horizontal) (e9675bb, #2764)
+- Fixed various issues related to Auto Passthru, including fallback settings (#2619, #2627, #2611)
+- Fixed exported presets not importing correctly using the Mac graphical interface (#2531)
+- Fixed pause and resume not working correctly in some cases (#2647)
+- Fixed display of times greater than 24 hours (estimated time renaming, paused duration) (#2582, #2649)
+- Fixed various cosmetic issues in the graphical interface (#2645, #2646)
+- Improved display of long filenames in the queue (#2570)
+- Improved some UX stress cases related to the queue (#2632)
+- Improved error message when importing a preset specifying a nonexistent audio encoder (#2638)
+- Improved audio and subtitle languages behavior to preserve selected languages order where "any" is also selected (#2611)
+- Improved low disk space preferences and alerts (#2648)
+- Added a workaround for an upstream .NET issue causing tooltips to not render correctly in some cases (#2630)
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.3.1
