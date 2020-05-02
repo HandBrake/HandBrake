@@ -1068,9 +1068,6 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
   <data name="MainView_Searching" xml:space="preserve">
     <value>開始時間を検索中</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>選択中のプリセット</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>既定に設定</value>
   </data>

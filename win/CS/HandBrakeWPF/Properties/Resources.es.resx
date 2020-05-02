@@ -1063,9 +1063,6 @@ Tiempo restante: {4}</value>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Buscando la hora de inicio</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Ajuste preestablecido seleccionado:</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Establecer predeterminado</value>
   </data>

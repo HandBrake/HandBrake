@@ -1068,9 +1068,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="MainView_Searching" xml:space="preserve">
     <value>Поиск начального времени</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Выбранный пресет:</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Установить по умолчанию</value>
   </data>

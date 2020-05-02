@@ -1068,9 +1068,6 @@ Kalan Süre: {4}</value>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Başlangıç ​​zamanı aranıyor</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Seçilen Ön Ayar:</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Varsayılana Ayarla</value>
   </data>

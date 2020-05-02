@@ -1058,9 +1058,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="MainView_Searching" xml:space="preserve">
     <value>正在寻找开始时间</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>选中的预设：</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>设置为默认</value>
   </data>

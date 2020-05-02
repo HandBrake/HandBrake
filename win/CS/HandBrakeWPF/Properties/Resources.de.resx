@@ -1072,9 +1072,6 @@ Soll sie überschrieben werden?</value>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Nach der Startzeit suchen</value>
   </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Ausgewählte Voreinstellung:</value>
-  </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Standard definieren</value>
   </data>

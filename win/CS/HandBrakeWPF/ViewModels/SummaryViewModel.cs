@@ -521,7 +521,10 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Dimension Section
-            this.VideoTrackInfo = string.Format("{0}, {1} FPS {2}", EnumHelper<VideoEncoder>.GetDisplay(this.Task.VideoEncoder), this.Task.Framerate, this.Task.FramerateMode);
+            this.VideoTrackInfo = this.Task.Framerate == null 
+                                      ? string.Format("{0}, {1} FPS {2}", EnumHelper<VideoEncoder>.GetDisplay(this.Task.VideoEncoder), Resources.SummaryView_SameAsSource, this.Task.FramerateMode) 
+                                      : string.Format("{0}, {1} FPS {2}", EnumHelper<VideoEncoder>.GetDisplay(this.Task.VideoEncoder), this.Task.Framerate, this.Task.FramerateMode);
+            
             this.NotifyOfPropertyChange(() => this.VideoTrackInfo);
 
             this.AudioTrackInfo = this.GetAudioDescription();

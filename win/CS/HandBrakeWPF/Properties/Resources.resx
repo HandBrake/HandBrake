@@ -1044,7 +1044,7 @@ Would you like to overwrite it?</value>
     <value>Delete Preset</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Preset:</value>
+    <value>Presets</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Preview</value>
@@ -1069,9 +1069,6 @@ Would you like to overwrite it?</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Searching for start time</value>
-  </data>
-  <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Selected Preset:</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Set Default</value>
@@ -2228,5 +2225,11 @@ Please choose a different preset.</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Preset:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
   </data>
 </root>
