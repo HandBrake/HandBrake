@@ -863,7 +863,11 @@ class RepoProbe( ShellProbe ):
 
             elif name == 'HASH':
                 self.hash = value
-                self.shorthash = value[:7]
+            elif name == 'SHORTHASH':
+                if value != '':
+                    self.shorthash = value
+                else:
+                    self.shorthash = self.hash
 
         # type-classification via repository URL
         if self.url == project.url_repo_ssh:
