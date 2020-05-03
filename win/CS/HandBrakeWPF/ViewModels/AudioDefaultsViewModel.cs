@@ -515,9 +515,31 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
 
             if (this.Task.OutputFormat == OutputFormat.Mp4 && 
-                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
+                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis || this.AudioEncoderFallback == AudioEncoder.Opus))
             {
                     this.AudioEncoderFallback = AudioEncoder.ffaac;
+            }
+
+            if (this.Task.OutputFormat == OutputFormat.WebM &&
+                (this.AudioEncoderFallback != AudioEncoder.Opus && this.AudioEncoderFallback != AudioEncoder.Vorbis))
+            {
+                this.AudioEncoderFallback = AudioEncoder.Vorbis;
+            }
+            
+            if (this.Task.OutputFormat == OutputFormat.Mp4)
+            {
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.ffflac24 || track.Encoder == AudioEncoder.Opus || track.Encoder == AudioEncoder.Vorbis))
+                {
+                    track.Encoder = AudioEncoder.ffaac;
+                }
+            }
+
+            if (this.Task.OutputFormat == OutputFormat.WebM)
+            {
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                {
+                    track.Encoder = AudioEncoder.Vorbis;
+                }
             }
         }
 

@@ -490,6 +490,7 @@ namespace HandBrakeWPF.Services.Presets
                     preset.IsBuildIn = true;
                     preset.Category = category.PresetName;
                     preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
+                    preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
                     this.Add(preset, true);
                 }
@@ -776,6 +777,7 @@ namespace HandBrakeWPF.Services.Presets
                     Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
                     preset.Category = UserPresetCatgoryName;
                     preset.IsBuildIn = hbPreset.Type == 1;
+                    preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
                     // IF we are using Source Max, Set the Max Width / Height values.
                     if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
