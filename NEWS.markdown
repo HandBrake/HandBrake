@@ -18,6 +18,10 @@
 - Added logging to identify automatic picture rotation
 - Miscellaneous bug fixes and improvements
 
+#### Audio
+
+- Fixed an upstream FFmpeg issue where passing through AAC ADTS audio could produce invalid MKV output in rare cases (error instead) (#2809)
+
 #### Filters
 
 - Fixed uninitialized memory in NLMeans prefilter leading to video corruption at bottom of picture (only affects custom settings) (#2576)
