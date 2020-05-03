@@ -333,7 +333,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = true;
 
-            this.queueProcessor.Start(userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+            this.queueProcessor.Start();
         }
 
         public void ExportCli()

@@ -118,7 +118,7 @@ namespace HandBrakeWPF.Services
             {
                 if (this.lowPowerPause && this.queueService.IsPaused)
                 {
-                    this.queueService.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                    this.queueService.Start();
                     this.ServiceLogMessage(string.Format(Resources.SystemService_ACMains, state.BatteryLifePercent));
                 }
 

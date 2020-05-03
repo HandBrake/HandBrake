@@ -61,7 +61,6 @@ namespace HandBrakeWPF.Services.Queue
         private readonly string queueFile;
         private readonly object queueFileLock = new object();
 
-        private bool clearCompleted;
         private int allowedInstances;
         private int jobIdCounter = 0;
         private bool processIsolationEnabled;
@@ -441,7 +440,7 @@ namespace HandBrakeWPF.Services.Queue
             this.InvokeQueuePaused(EventArgs.Empty);
         }
 
-        public void Start(bool isClearCompleted)
+        public void Start()
         {
             if (this.IsProcessing)
             {
@@ -449,7 +448,6 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             this.IsPaused = false;
-            this.clearCompleted = isClearCompleted;
 
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
             this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
@@ -538,6 +536,11 @@ namespace HandBrakeWPF.Services.Queue
             if (this.activeJobs.Count >= this.allowedInstances)
             {
                 return;
+            }
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue))
+            {
+                this.ClearCompleted();
             }
 
             QueueTask job = this.GetNextJobForProcessing();

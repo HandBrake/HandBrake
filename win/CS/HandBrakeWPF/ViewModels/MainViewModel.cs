@@ -1113,7 +1113,7 @@ namespace HandBrakeWPF.ViewModels
             // If the user has enabled --auto-start-queue, start the queue.
             if (StartupOptions.AutoRestartQueue && !this.queueProcessor.IsProcessing && this.queueProcessor.Count > 0)
             {
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                this.queueProcessor.Start();
             }
 
             // Preset Selection
@@ -1557,7 +1557,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.queueProcessor.Count != 0 || this.queueProcessor.IsPaused)
             {
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                this.queueProcessor.Start();
                 return;
             }
 
@@ -1573,7 +1573,7 @@ namespace HandBrakeWPF.ViewModels
             if (addError == null)
             {
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
+                this.queueProcessor.Start();               
             }
             else
             {
