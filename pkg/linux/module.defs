@@ -14,7 +14,7 @@ endif
 ifeq ($(HB.repo.type),release)
     PKG.rpm.hb.version = $(tag)
 else ifeq ($(HB.repo.branch),)
-    PKG.rpm.hb.version = $(tab).$(HB.repo.shorthash)
+    PKG.rpm.hb.version = $(tag).$(HB.repo.shorthash)
 else
     PKG.rpm.hb.version = $(tag).$(HB.repo.shorthash).$(HB.repo.branch)
 endif
