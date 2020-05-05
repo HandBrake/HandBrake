@@ -162,6 +162,10 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
     {
         ctx->last_match_idx = -1;
     }
+    if (ctx->recurse && result == PRESET_DO_SKIP)
+    {
+        return PRESET_DO_NEXT;
+    }
 
     return result;
 }
