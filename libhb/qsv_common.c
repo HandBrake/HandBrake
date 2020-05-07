@@ -2849,11 +2849,6 @@ static int qsv_init(AVCodecContext *s)
         hb_error("qsv_init: av_hwframe_ctx_init failed %d", ret);
         return ret;
     }
-
-    enc_hw_frames_ctx = av_hwframe_ctx_alloc(hb_hw_device_ctx);
-    if (!enc_hw_frames_ctx)
-        return AVERROR(ENOMEM);
-
     /* allocate the memory ids for the external frames */
     av_buffer_unref(&hb_enc_qsv_frames_ctx.mids_buf);
     hb_enc_qsv_frames_ctx.mids_buf = hb_qsv_create_mids(hb_enc_qsv_frames_ctx.hw_frames_ctx);
