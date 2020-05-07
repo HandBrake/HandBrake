@@ -325,11 +325,11 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 if (configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
                 {
-                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=1" : ":lowpower=1";
+                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=1" : string.Concat(video.Options, ":lowpower=1");
                 }
                 else if(!configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
                 {
-                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=0" : ":lowpower=0";
+                    video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=0" : string.Concat(video.Options, ":lowpower=0");
                 }
             }
 
