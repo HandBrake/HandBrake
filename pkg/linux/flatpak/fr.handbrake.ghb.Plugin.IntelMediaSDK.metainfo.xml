@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>fr.handbrake.ghb.Plugin.IntelMediaSDK</id>
+  <extends>fr.handbrake.ghb</extends>
+  <name>IntelMediaSDK plugin for HandBrake</name>
+  <summary>Provides Intel QSV encoding options.</summary>
+  <description>
+    <p>
+    QSV uses dedicated media processing features embedded in Intel graphics 
+    hardware to accelerate encoding of video.  Encoder codecs supported
+    by HandBrake are h.264 (8 bit) and h.265 (8 and 10 bit).
+    </p>
+</description>
+  <url type="homepage">https://github.com/Intel-Media-SDK/MediaSDK</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer_name>Intel</developer_name>
+</component>

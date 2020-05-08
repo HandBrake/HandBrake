@@ -21,7 +21,7 @@
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules"
     ],
     "add-extensions": {
-        "fr.handbrake.plugin": {
+        "fr.handbrake.ghb.Plugin": {
             "version": "1",
             "directory": "extensions",
             "add-ld-path": "lib",
