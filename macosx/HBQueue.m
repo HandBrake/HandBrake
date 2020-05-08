@@ -260,6 +260,23 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self save];
 }
 
+- (void)prepareItemForEditingAtIndex:(NSUInteger)index
+{
+    HBQueueItem *item = self.itemsInternal[index];
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:index];
+
+    if (item.state == HBQueueItemStateWorking)
+    {
+        [self cancelItemsAtIndexes:indexes];
+    }
+
+    item.state = HBQueueItemStateRescanning;
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification
+                                                      object:self
+                                                    userInfo:@{HBQueueItemNotificationIndexesKey: [NSIndexSet indexSetWithIndex:index]}];
+    [self updateStats];
+}
+
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes
 {
     NSParameterAssert(indexes);
@@ -408,7 +425,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 - (void)removeNotWorkingItems
 {
     NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-        return (item.state != HBQueueItemStateWorking);
+        return (item.state != HBQueueItemStateWorking && item.state != HBQueueItemStateRescanning);
     }];
     [self removeItemsAtIndexes:indexes];
 }
@@ -429,7 +446,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     while (currentIndex != NSNotFound) {
         HBQueueItem *item = self.itemsInternal[currentIndex];
 
-        if (item.state == HBQueueItemStateCanceled || item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
+        if (item.state == HBQueueItemStateCanceled || item.state == HBQueueItemStateCompleted ||
+            item.state == HBQueueItemStateFailed || item.state ==HBQueueItemStateRescanning)
         {
             item.state = HBQueueItemStateReady;
             [updatedIndexes addIndex:currentIndex];
@@ -445,7 +463,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 - (void)resetAllItems
 {
     NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-        return (item.state != HBQueueItemStateWorking);
+        return (item.state != HBQueueItemStateWorking && item.state != HBQueueItemStateRescanning);
     }];
     [self resetItemsAtIndexes:indexes];
 }
@@ -469,7 +487,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     for (HBQueueItem *item in self.itemsInternal)
     {
         // We want to keep any queue item that is pending or was previously being encoded
-        if (item.state == HBQueueItemStateWorking)
+        if (item.state == HBQueueItemStateWorking || item.state == HBQueueItemStateRescanning)
         {
             item.state = HBQueueItemStateReady;
             [indexes addIndex:idx];

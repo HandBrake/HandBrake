@@ -323,29 +323,18 @@
 
 - (void)doEditQueueItem:(HBQueueItem *)item
 {
-    NSParameterAssert(item);
-
-    if (item.state == HBQueueItemStateWorking)
-    {
-        NSUInteger index = [self.queue.items indexOfObject:item];
-        [self.queue cancelItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
-    }
-    else
-    {
-        item.state = HBQueueItemStateWorking;
-    }
+    [self.queue prepareItemForEditingAtIndex:[self.queue.items indexOfObject:item]];
 
     [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
+        NSInteger index = [self.queue.items indexOfObject:item];
+        [self.queue resetItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
         if (result)
         {
             // Now that source is loaded and settings applied, delete the queue item from the queue
-            NSInteger index = [self.queue.items indexOfObject:item];
-            item.state = HBQueueItemStateReady;
             [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
         }
         else
         {
-            item.state = HBQueueItemStateFailed;
             NSBeep();
         }
     }];
@@ -380,7 +369,7 @@
             }
         }];
     }
-    else if (item.state != HBQueueItemStateWorking)
+    else if (item.state != HBQueueItemStateWorking && item.state != HBQueueItemStateRescanning)
     {
         [self doEditQueueItem:item];
     }

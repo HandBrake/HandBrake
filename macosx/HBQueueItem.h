@@ -18,7 +18,8 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
     HBQueueItemStateWorking,
     HBQueueItemStateCompleted,
     HBQueueItemStateCanceled,
-    HBQueueItemStateFailed
+    HBQueueItemStateFailed,
+    HBQueueItemStateRescanning
 };
 
 @interface HBQueueItem : NSObject<NSSecureCoding>

@@ -56,6 +56,10 @@
             state = [NSImage imageNamed:@"EncodeFailed"];
             label = NSLocalizedString(@"Encode failed", @"HBQueueItemView -> Encode state accessibility label");
             break;
+        case HBQueueItemStateRescanning:
+            state = [NSImage imageNamed:@"EncodeWorking0"];
+            label = NSLocalizedString(@"Rescanning for editing", @"HBQueueItemView -> Encode state accessibility label");
+            break;
         default:
             state = [NSImage imageNamed:@"JobSmall"];
             NSLocalizedString(@"Encode ready", @"HBQueueItemView -> Encode state accessibility label");

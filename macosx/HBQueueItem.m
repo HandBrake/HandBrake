@@ -247,7 +247,7 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
     if (version == 1 && (self = [super init]))
     {
-        decodeInteger(_state); if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed) { goto fail; }
+        decodeInteger(_state); if (_state < HBQueueItemStateReady || _state > HBQueueItemStateRescanning) { goto fail; }
         decodeObjectOrFail(_job, HBJob);
 
         decodeObject(_activityLogURL, NSURL);

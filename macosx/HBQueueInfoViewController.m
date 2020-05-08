@@ -65,7 +65,8 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
 
 - (void)updateReset
 {
-    self.canReset = self.item && (self.item.state != HBQueueItemStateWorking && self.item.state != HBQueueItemStateReady);
+    self.canReset = self.item && (self.item.state != HBQueueItemStateWorking &&
+                                  self.item.state != HBQueueItemStateRescanning && self.item.state != HBQueueItemStateReady);
 }
 
 - (void)updateLabels

@@ -55,6 +55,8 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 
 - (BOOL)itemExistAtURL:(NSURL *)url;
 
+- (void)prepareItemForEditingAtIndex:(NSUInteger)index;
+
 - (void)removeAllItems;
 - (void)removeCompletedAndCancelledItems;
 - (void)removeNotWorkingItems;
