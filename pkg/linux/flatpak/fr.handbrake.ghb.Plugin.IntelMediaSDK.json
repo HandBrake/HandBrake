@@ -17,7 +17,7 @@
                     "sha256": "821755657cf51f59d8f3f443c99e3ec9f28d897ff65c219c6a119e4acb5a2ac7"
                 }
             ],
-            "buildsystem": "cmake",
+            "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release"
@@ -25,10 +25,10 @@
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
                 "make-args": [
-                    "VERBOSE=1"
+                    "-v"
                 ],
                 "make-install-args": [
-                    "VERBOSE=1"
+                    "-v"
                 ]
             }
         },
@@ -71,7 +71,7 @@
                     "sha256": "dbca37ba8383cd4d1f3e15fa906f03457ebdb5a118d2459d8f9cd477e0f3d4d4"
                 }
             ],
-            "buildsystem": "cmake",
+            "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
@@ -84,7 +84,7 @@
         },
         {
             "name": "mediasdk",
-            "buildsystem": "cmake",
+            "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
