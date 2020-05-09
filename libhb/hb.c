@@ -1665,6 +1665,7 @@ void hb_close( hb_handle_t ** _h )
 int hb_global_init_no_hardware()
 {
     disable_hardware = 1;
+    hb_log( "Init: Hardware encoders are disabled." );
     return hb_global_init();
 }
 
