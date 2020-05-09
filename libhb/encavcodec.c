@@ -250,6 +250,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->time_base.den = fps.num;
     context->time_base.num = fps.den;
+    context->framerate     = fps;
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
     if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265))
