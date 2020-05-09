@@ -2232,4 +2232,10 @@ Please choose a different preset.</value>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
     <value>Same as source</value>
   </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Reset Settings</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+  </data>
 </root>

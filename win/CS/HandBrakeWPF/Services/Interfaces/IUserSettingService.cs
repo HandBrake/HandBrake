@@ -58,5 +58,10 @@ namespace HandBrakeWPF.Services.Interfaces
         /// The user setting
         /// </returns>
         T GetUserSetting<T>(string name);
+
+        /// <summary>
+        /// Reset all HandBrake settings to defaults.
+        /// </summary>
+        void ResetSettingsToDefaults();
     }
 }

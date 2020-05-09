@@ -28,10 +28,10 @@ namespace HandBrakeWPF.Utilities
         {
             string appDataFolder = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             DeleteFile(Path.Combine(appDataFolder, "presets.json"));
-            DeleteFile(Path.Combine(appDataFolder, "settings.xml"));
+            DeleteFile(Path.Combine(appDataFolder, "settings.json"));
 
             DirectoryInfo info = new DirectoryInfo(appDataFolder);
-            IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+            IEnumerable<FileInfo> logFiles = info.GetFiles("*.json").Where(f => f.Name.StartsWith("hb_queue_recovery"));
             foreach (FileInfo file in logFiles)
             {
                 DeleteFile(Path.Combine(appDataFolder, file.Name));

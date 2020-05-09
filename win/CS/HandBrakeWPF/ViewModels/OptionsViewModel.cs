@@ -1699,6 +1699,21 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedTab = tab;
         }
 
+        public void ResetHandBrake()
+        {
+            MessageBoxResult result = this.errorService.ShowMessageBox(
+                Resources.OptionsViewModel_ResetHandBrakeQuestion,
+                Resources.OptionsViewModel_ResetHandBrake,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                this.userSettingService.ResetSettingsToDefaults();
+                this.OnLoad();
+            }
+        }
+
         /// <summary>
         /// Load / Update the user settings.
         /// </summary>

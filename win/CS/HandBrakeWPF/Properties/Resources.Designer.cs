@@ -3710,6 +3710,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Settings.
+        /// </summary>
+        public static string OptionsViewModel_ResetHandBrake {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_ResetHandBrake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to reset HandBrake to default settings?.
+        /// </summary>
+        public static string OptionsViewModel_ResetHandBrakeQuestion {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_ResetHandBrakeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Downloaded.
         /// </summary>
         public static string OptionsViewModel_UpdateDownloaded {

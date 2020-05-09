@@ -113,6 +113,19 @@ namespace HandBrakeWPF.Services
             return default(T);
         }
 
+        public void ResetSettingsToDefaults()
+        {
+            this.userSettings.Clear();
+
+            // Set Defaults
+            Dictionary<string, object> defaults = this.GetDefaults();
+            foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
+            {
+                this.userSettings.Add(item.Key, item.Value);
+                this.Save();
+            }
+        }
+
         /// <summary>
         /// The on setting changed.
         /// </summary>
@@ -227,7 +240,7 @@ namespace HandBrakeWPF.Services
                 }
             }
         }
-
+        
         /// <summary>
         /// Load Default Settings
         /// </summary>
