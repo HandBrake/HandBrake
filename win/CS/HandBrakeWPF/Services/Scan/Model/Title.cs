@@ -127,6 +127,19 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// </summary>
         public string SourceName { get; set; }
 
+        public string DisplaySourceName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(this.SourceName))
+                {
+                    return Path.GetFileNameWithoutExtension(this.SourceName);
+                }
+
+                return null;
+            }
+        }
+
         public string SourceDisplayName
         {
             get

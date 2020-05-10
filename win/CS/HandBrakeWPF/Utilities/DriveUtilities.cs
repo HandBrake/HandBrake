@@ -40,7 +40,7 @@ namespace HandBrakeWPF.Utilities
                             {
                                 Id = id, 
                                 VolumeLabel = curDrive.VolumeLabel, 
-                                RootDirectory = curDrive.RootDirectory.ToString()
+                                RootDirectory = curDrive.RootDirectory?.ToString()
                             });
                         id++;
                     }

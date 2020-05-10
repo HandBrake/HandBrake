@@ -235,16 +235,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="scannedSource">
         /// The scanned source.
         /// </param>
-        /// <param name="srcName">
-        /// The src Name.
-        /// </param>
         /// <param name="addAction">
         /// The add Action.
         /// </param>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void Setup(Source scannedSource, string srcName, Action<IEnumerable<SelectionTitle>> addAction, Preset preset)
+        public void Setup(Source scannedSource, Action<IEnumerable<SelectionTitle>> addAction, Preset preset)
         {
             this.TitleList.Clear();
             this.addToQueue = addAction;
@@ -257,6 +254,7 @@ namespace HandBrakeWPF.ViewModels
 
                 foreach (Title item in titles)
                 {
+                    string srcName = scannedSource?.SourceName ?? item.DisplaySourceName;
                     SelectionTitle title = new SelectionTitle(item, srcName) { IsSelected = true };
                     TitleList.Add(title);
                 }

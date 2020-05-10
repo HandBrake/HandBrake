@@ -390,50 +390,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets SourceName.
-        /// </summary>
-        public string SourceName
-        {
-            get
-            {
-                // Sanity Check
-                if (this.ScannedSource == null || this.ScannedSource.ScanPath == null || this.selectedTitle == null)
-                {
-                    return string.Empty;
-                }
-
-                if (File.Exists(this.ScannedSource.ScanPath)) // Scan Path is a File.
-                {
-                    return Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath);
-                }
-
-                if (Directory.Exists(this.ScannedSource.ScanPath)) // Scan Path is a folder.
-                {
-                    // Check to see if it's a Drive. If yes, use the volume label.
-                    foreach (DriveInformation item in DriveUtilities.GetDrives())
-                    {
-                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath.Replace("\\\\", "\\")))
-                        {
-                            return item.VolumeLabel;
-                        }
-                    }
-
-                    // Otherwise, it may be a path of files.
-                    if (!string.IsNullOrEmpty(this.selectedTitle.SourceName) && File.Exists(this.selectedTitle.SourceName)) // Selected Title is a file
-                    {
-                        return Path.GetFileNameWithoutExtension(this.selectedTitle.SourceName);
-                    }
-                    else if (Directory.Exists(this.selectedTitle.SourceName)) // Selected Title is a structured source.
-                    {
-                        return Path.GetFileName(this.ScannedSource.ScanPath);
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Gets RangeMode.
         /// </summary>
         public BindingList<PointToPointMode> RangeMode
@@ -606,6 +562,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.selectedTitle;
             }
+
             set
             {
                 if (!Equals(this.selectedTitle, value))
@@ -618,7 +575,7 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     // Use the Path on the Title, or the Source Scan path if one doesn't exist.
-                    this.SourceLabel = this.SourceName;
+                    this.SourceLabel = this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName;
                     this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
                     this.CurrentTask.Title = value.TitleNumber;
                     this.NotifyOfPropertyChange(() => this.StartEndRangeItems);
@@ -640,7 +597,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                         {
-                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset);
+                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
                         }
                     }
 
@@ -697,7 +654,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                     {
-                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset);
+                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
                     }
                 }
 
@@ -727,7 +684,7 @@ namespace HandBrakeWPF.ViewModels
                 if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
                     this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
-                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset);
+                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
                 }
 
                 if (this.SelectedStartPoint > this.SelectedEndPoint && this.SelectedPointToPoint == PointToPointMode.Chapters)
@@ -1468,23 +1425,26 @@ namespace HandBrakeWPF.ViewModels
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
-            viewModel.Setup(this.ScannedSource, this.SourceName, (tasks) =>
-            {
-                foreach (SelectionTitle title in tasks)
+            viewModel.Setup(
+                this.ScannedSource,
+                (tasks) =>
                 {
-                    this.SelectedTitle = title.Title;
-                    var addError = this.AddToQueue(true);
-                    if (addError != null)
+                    foreach (SelectionTitle title in tasks)
                     {
-                        MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
-
-                        if (result == MessageBoxResult.No)
+                        this.SelectedTitle = title.Title;
+                        var addError = this.AddToQueue(true);
+                        if (addError != null)
                         {
-                            break;
+                            MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
+
+                            if (result == MessageBoxResult.No)
+                            {
+                                break;
+                            }
                         }
                     }
-                }
-            }, this.selectedPreset);
+                }, 
+                this.selectedPreset);
 
             if (window != null)
             {
@@ -2205,7 +2165,7 @@ namespace HandBrakeWPF.ViewModels
               
                 // Cleanup
                 this.ShowStatusWindow = false;
-                this.SourceLabel = this.SourceName;
+                this.SourceLabel = this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName;
                 this.StatusLabel = Resources.Main_ScanCompleted;
             });
         }
@@ -2422,7 +2382,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (e.Successful)
                 {
-                    this.SourceLabel = this.SourceName;
+                    this.SourceLabel = this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName;
                     this.StatusLabel = Resources.Main_ScanCompleted;
                 }
                 else if (e.Cancelled)

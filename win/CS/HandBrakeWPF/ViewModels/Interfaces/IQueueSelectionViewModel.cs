@@ -33,15 +33,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="scannedSource">
         /// The scanned source.
         /// </param>
-        /// <param name="sourceName">
-        /// The source Name.
-        /// </param>
         /// <param name="addAction">
         /// The add To Queue action
         /// </param>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        void Setup(Source scannedSource, string sourceName, Action<IEnumerable<SelectionTitle>> addAction, Preset preset);
+        void Setup(Source scannedSource, Action<IEnumerable<SelectionTitle>> addAction, Preset preset);
     }
 }
