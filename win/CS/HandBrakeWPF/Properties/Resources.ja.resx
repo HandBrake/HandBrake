@@ -1042,7 +1042,7 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
     <value>プリセットを削除</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>プリセット:</value>
+    <value>プリセット</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>プレビュー</value>
@@ -1156,7 +1156,7 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
     <value>タイトルバーにエンコードの状態を表示する</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>30日を過ぎたログファイルをクリアする</value>
+    <value>7日前より古いログファイルをクリアする</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>HandBrakeについて</value>
@@ -2190,5 +2190,51 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>重複を検出しました</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Low Power QuickSyncハードウェアを有効にする。</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>概要を見るにはジョブを一つ選択してください。</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>それぞれのジョブを別のワーカープロセスで実行する(実験的機能)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>既定のネットワークポート:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>選択されたプリセットはこのシステムでは利用できません。
+
+これは典型的にはシステムのハードウェアが必要な機能をサポートしていないことに起因します。
+
+違うプリセットを選択してください。</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>プロセス分離</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>この機能を利用すると、HTTPサーバーを127.0.0.1の指定されたポートで開始することに留意してください。</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>設定したポートが使用中であれば、そこから大きいほうに100以内の空きポートを見つけて使用します。</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>同時エンコード数:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>プリセット:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>ソースと同じ</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Reset Settings</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset HandBrake to default settings?</value>
   </data>
 </root>
