@@ -1046,7 +1046,7 @@ Soll sie überschrieben werden?</value>
     <value>Voreinstellung löschen</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Voreinstellung:</value>
+    <value>Voreinstellungen</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Vorschau</value>
@@ -1160,7 +1160,7 @@ Soll sie überschrieben werden?</value>
     <value>Den Encodierungsstatus in der Titelleiste des Programms anzeigen</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Alte Aktivitätsprotokolle nach 30 Tagen löschen</value>
+    <value>Log-Dateien die älter als 7 Tage sind löschen </value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>Über HandBrake</value>
@@ -2193,5 +2193,51 @@ Dadurch werden auch alle bereits laufenden Aufgaben gestoppt.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>Duplikate erkannt</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Low Power QuickSync-Hardware aktivieren.</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Bitte nur eine Aufgabe auswählen um die Übersichtsinformationen anzuzeigen.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Führe jede Aufgabe in der Warteschlange in einem separaten Worker-Prozess aus. (Experimentell)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Standard-Netzwerkport für Worker:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Die ausgewählte Voreinstellung ist für dieses System nicht verfügbar.
+
+Dies deutet typischerweise darauf hin, dass das System die hierfür benötigte Hardware nicht unterstützt.
+
+Bitte eine andere Voreinstellung auswählen.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Prozessisolation</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Bitte beachten Sie, dass bei Verwendung dieser Funktion ein an 127.0.0.1 gebundener HTTP-Server mit dem angegebenen Port gestartet wird.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Wenn der eingestellte Port verwendet wird, findet er den ersten freien Port innerhalb von +100 vom definierten Port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Anzahl gleichzeitiger Encodierungen:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Voreinstellung:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Wie die Quelle</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Einstellungen zurücksetzen</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Soll HandBrake wirklich auf die Standardeinstellungen zurückgesetzt werden?</value>
   </data>
 </root>

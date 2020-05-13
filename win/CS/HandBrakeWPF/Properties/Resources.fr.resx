@@ -402,7 +402,7 @@ Le journal d'activité peut contenir des informations supplémentaires.</value>
     <value>Êtes-vous sûr de vouloir supprimer le préréglage :</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodage : Passage {0} sur {1},  {2:00.00}%, IPS :  {3:000.0}, Moy IPS :  {4:000.0},  Temps Restant : {5}, Écoulé : {6:j\:hh\:mm\:ss} {7}</value>
+    <value>Encodage : Passage {0} sur {1}, {2:00.00}%, IPS : {3:000.0}, Moy IPS : {4:000.0}, Temps restant : {5}, Écoulé : {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Un préréglage doit avoir un nom. Veuillez remplir le champ nom du préréglage.</value>
@@ -672,7 +672,7 @@ Votre fichier de préréglage sera archivé et un nouveau sera créé. Vous devr
     <value>Veuillez vérifier que vous avez un répertoire de destination valide.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Opération {0} sur {1}, (Analyse des sous-titres)  {2:00.00}%, Durée d'analyse restante : {3}, Écoulé : {4:j\:hh\:mm\:ss}</value>
+    <value>Opération {0} sur {1}, (Analyse des sous-titres) {2:00.00}%, Temps d'analyse restant : {3},  Écoulé : {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Aucune information supplémentaire</value>
@@ -694,7 +694,11 @@ Temps Restant: {4}</value>
     <value>File mise en Pause</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Votre répertoire de destination manque d’espace disque. Veuillez libérer de l’espace sur votre lecteur de destination. Vous pouvez également modifier le niveau auquel cette alerte est déclenchée dans Options.</value>
+    <value>Votre répertoire de destination manque d'espace disque. 
+
+Vous pouvez configurer le niveau auquel cette alerte apparaît dans les préférences. 
+
+Souhaitez-vous continuer ?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>Impossible de réinitialiser l'état du travail car il ne s'agit pas d'un état "Erreur" ou "Terminé"</value>
@@ -1154,7 +1158,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Afficher l'état de l'encodage dans la bar de titre du l'application.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Effacer les fichiers du journal de plus de 30 jours</value>
+    <value>Effacer les fichiers du journal de plus de 7 jours</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>À propos d'Handbrake</value>
@@ -1226,7 +1230,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Chemin d'accès des journaux :</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Suspendre la file d'attente si l'espace disque est inférieur à :</value>
+    <value>Suspendre la file d'attente si l'espace disque est faible</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Réduire dans la barre d'état système (redémarrage requis)</value>
@@ -1867,8 +1871,8 @@ Cela n'aura aucun impact sur les encodeurs logiciels.</value>
     <value>Importer une file d'attente</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodage : Passage {0} sur {1},  {2:00.00}%, FPS : {3:000.0}, FPS Moy : {4:000.0}
-Temps Restant : {5:hh\:mm\:ss}, Écoulé : {6:hh\:mm\:ss} {7}</value>
+    <value>Encodage : Passage {0} sur {1}, {2:00.00}%, IPS : {3:000.0}, Moy IPS : {4:000.0}
+Temps restant : {5}, Écoulé : {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Supprimer la sélection</value>
@@ -1989,7 +1993,7 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>Niveau de batterie critique ! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Niveau de batterie faible ! ({0} %). Votre encodage a été mis en pause pour protéger le système. La mise en veille du système est autorisée !</value>
+    <value>Niveau de batterie faible ! ({0} %). Votre encodage a été mis en pause.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>La capacité de stockage restante est tombée sous les {0} GB sur le disque de destination. Interruption de l'encodage...</value>
@@ -2171,5 +2175,67 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Niveau de batterie faible :</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Suspendre tout travail en cours lorsque la batterie est faible.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Ajouter tous les sous-titres restants</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Des doublons ont été détectés dans la file d'attente que vous essayez d'importer. Souhaitez-vous écraser les fichiers existants ?
+Cela mettra également fin à tout travail en cours.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Doublons détectés</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Activer le QuickSync basse consommation.</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Veuillez sélectionner un seul travail pour voir les informations de synthèse.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Exécutez chaque travail en file d'attente dans un processus de travail distinct. (Expérimental)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Port réseau par défaut pour le travailleur :</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Le préréglage que vous avez sélectionné n'est pas disponible sur ce système.
+
+Cela indique généralement que votre système ne prend pas en charge le hardware nécessaire pour l'utiliser.
+
+Veuillez choisir un autre préréglage.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Isolement des processus</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Veuillez noter que l'utilisation de cette fonctionnalité démarrera un serveur HTTP lié à 127.0.0.1 sur le port indiqué.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Si le port défini est utilisé, il trouvera le premier port libre dans un intervalle maximum de 100 à partir du port défini.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Nombre d'encodages simultanés :</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Préréglage :</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Identique à la source</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Réinitialisation des paramètres</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir réinitialiser HandBrake à ses paramètres par défaut ?</value>
   </data>
 </root>

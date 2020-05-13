@@ -189,6 +189,10 @@ Section "HandBrake" SEC01
   SetOverwrite ifnewer
   File "ja\*.*"
 
+  SetOutPath "$INSTDIR\pt-BR"
+  SetOverwrite ifnewer
+  File "pt-BR\*.*"
+
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -247,6 +251,8 @@ Section Uninstall
   RMDir  "$INSTDIR\tr"
   Delete "$INSTDIR\ja\*.*"
   RMDir  "$INSTDIR\ja"
+  Delete "$INSTDIR\pt-BR\*.*"
+  RMDir  "$INSTDIR\pt-BR"
 
   RMDir  "$INSTDIR"
 

@@ -693,7 +693,11 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
     <value>대기열 중지</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>경로 디렉토리의 디스크 공간이 부족합니다. 경로 드라이브의 디스크 공간을 확보해주십시오. 또는 옵션에서 이 경고가 발생하게 되는 수준을 변경할 수 있습니다. </value>
+    <value>경로 디렉토리의 디스크 공간이 부족합니다.
+
+이 경고가 설정에 표시되는 수준을 설정할 수 있습니다.
+
+계속하시겠습니까?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>오류나 완료 상태가 아니므로 작업 상태를 재설정할 수 없습니다</value>
@@ -1153,7 +1157,7 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
     <value>프로그램 제목 바에 인코딩 상태 보여주기</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>30일이 지난 로그 파일들 제거</value>
+    <value>Clear Log files older than 7 days</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>HandBrake에 대해서</value>
@@ -1225,7 +1229,7 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
     <value>로그 경로: </value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>디스크 공간이 해당 공간보다 작다면 대기열 정지:</value>
+    <value>디스크 공간이 작으면 대기열을 정지합니다.</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>시스템 트레이 최소화 (재시작 필요)</value>
@@ -2186,5 +2190,51 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>중복 감지</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>저전력 QuickSync Hardware을 실행합니다.</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Please select a single job to view summary information.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Run each queued job in a separate worker process. (Experimental)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Default network port for worker:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>The preset you have selected is not available for use on this system.
+
+This is typically an indication that your system does not support the hardware required to utilise it.
+
+Please choose a different preset.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Process Isolation</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Number of simultaneous encodes:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>환경 설정:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Reset Settings</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset HandBrake to default settings?</value>
   </data>
 </root>
