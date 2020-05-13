@@ -106,7 +106,7 @@ void hb_buffer_pool_init( void )
     for (i = 1; i < HB_BUFFER_POOL_NUM_SIZES; ++i)
     {
         buffers.pool[i] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS_PER_SIZE, 1);
-        buffers.pool[i]->buffer_size = buffers.pool[i-1]->buffer_size * HB_BUFFER_POOL_SIZE_MULTIPLIER;
+        buffers.pool[i]->buffer_size = (uint32_t)(buffers.pool[i-1]->buffer_size * HB_BUFFER_POOL_SIZE_MULTIPLIER);
     }
 #endif
 }
