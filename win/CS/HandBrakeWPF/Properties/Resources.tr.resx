@@ -147,9 +147,7 @@ Yok: Resim ayarları önceden ayarlanmış durumda değildir. Bir kaynak yükler
 Maksimum Kaynak: Her zaman mümkün olduğunda kaynakların çözünürlüğünde kodlayın.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Telif Hakkı (C) 2003-2019 HanBrake Takımı
-
-Bu program ücretsiz bir yazılımdır; lisansın 2 sürümünü veya
+    <value>Bu program ücretsiz bir yazılımdır; lisansın 2 sürümünü veya
 (sizin seçeceğiniz) herhangi bir sonraki sürümünü Özgür Yazılım Vakfı
 tarafından yayınlanan GNU Genel Kamu Lisansı koşulları altında
 yeniden dağıtabilir ve/veya değiştirebilirsiniz.
@@ -285,7 +283,7 @@ Devam etmek istiyor musun?</value>
     <value>Devam etmek için 'Kaynak'ı seçin</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Bekleyen Kodlar</value>
+    <value>{0} Bekleyen İşler</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Bildirim</value>
@@ -404,7 +402,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
     <value>Ön ayarı silmek istediğinizden emin misiniz: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Bir Ön Ayarın bir Adı olmalı. Lütfen Ön Ayar Adı alanını doldurun.</value>
@@ -525,7 +523,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
     <value>Son Sıraya Alınan İş Bitti</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>Sıra Başladı</value>
+    <value>Sıra Başlatıldı</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
     <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
@@ -674,7 +672,7 @@ Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
     <value>Lütfen geçerli bir hedef dizininin olduğunu kontrol edin.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>İşlenen {0} / {1}, (Altyazı Taraması)  {2:00.00}%, Kalan Tarama Süresi: {3},  Geçen: {4:d\:hh\:mm\:ss}</value>
+    <value>İşleme Geçişi {0} of {1}, (Altyazı Taraması)  {2:00.00}%, Kalan Tarama Süresi: {3},  Geçen: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Ek Bilgi Yok</value>
@@ -696,7 +694,11 @@ Kalan Süre: {4}</value>
     <value>Sıra Duraklatıldı</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Hedef dizininizde disk alanı az. Lütfen hedef sürücünüzde biraz disk alanı boşaltın. Alternatif olarak, bu uyarının Seçenekler'deki tetikleme seviyesini değiştirebilirsiniz. </value>
+    <value>Hedef dizininizde disk alanı az. 
+
+Bu uyarının tercihlerde görünme düzeyini yapılandırabilirsiniz. 
+
+Devam etmek istiyor musunuz? </value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>Hata veya Tamamlanma durumu olmadığından iş durumu sıfırlanamıyor</value>
@@ -835,10 +837,10 @@ Kalan Süre: {4}</value>
     <value>İçe Aktar</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>İsimleri Dışa Aktar</value>
+    <value>Adları Dışa Aktar</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>İsimleri İçe Aktar</value>
+    <value>Adları İçe Aktar</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
     <value>Bölüm Adlarını Sıfırla</value>
@@ -1075,7 +1077,7 @@ Kalan Süre: {4}</value>
     <value>Önizleme</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>Kuyruk</value>
+    <value>Sıra</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
     <value>Kaynak:</value>
@@ -1087,7 +1089,7 @@ Kalan Süre: {4}</value>
     <value>Kodlamaya Başla</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>Kuyruğu Başlat</value>
+    <value>Sırayı Başlat</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
     <value>Durdur</value>
@@ -1156,7 +1158,7 @@ Kalan Süre: {4}</value>
     <value>Kodlama durumunu uygulama başlık çubuğunda göster.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>30 günden daha eski olan Günlük dosyalarını temizle</value>
+    <value>7 günden daha eski olan Günlük dosyalarını temizle</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>HandBrake Hakkında</value>
@@ -1228,7 +1230,7 @@ Kalan Süre: {4}</value>
     <value>Günlük Yolu:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Disk alanı aşağıdakilerden düşükse sırayı duraklatın:</value>
+    <value>Disk alanı azsa sırayı duraklatın</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Sistem tepsisine simge durumuna küçültme (Yeniden başlatma gerektirir)</value>
@@ -1869,8 +1871,8 @@ Bu, yazılım kodlayıcılarının hiçbirini etkilemeyecektir.</value>
     <value>Sırayı İçe Aktar</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
-Kalan Süre: {5:hh\:mm\:ss},  Geçen: {6:hh\:mm\:ss} {7}</value>
+    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},
+Kalan Süre: {5},  Geçen: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Seçileni Sil</value>
@@ -1991,7 +1993,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Sistem Pili Kritik! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Sistem Pili Düşük! ({0} %). Kodlama sisteminizi korumak için duraklatıldı. Sistem uykusuna izin verildi!</value>
+    <value>Sistem Pili Düşük! ({0} %). Kodlamanız duraklatıldı.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Kalan sürücü depolaması, hedef sürücüde {0} GB altına düştü. Kodlama duraklatılıyor...</value>
@@ -2117,7 +2119,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Ses Yok</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>Böüm {0}</value>
+    <value>Bölüm {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
     <value>Otomatik</value>
@@ -2160,5 +2162,80 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Üretilen her yeni ad için her zaman varsayılan yolu kullanın.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Bağlantı noktası aralığı 5000 ile 32767 arasında olmalıdır</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Değiştirme Yer tutucuları: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>HandBrake'in yeni bir sürümü var!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Telif hakkı (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Düşük pil seviyesi:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pil azaldığında çalışan işleri duraklatın.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Kalan Tüm Kapalı Başlıkları Ekle</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>İçe aktarmaya çalıştığınız sıra dosyasında yinelenen işler algılandı. Mevcut kayıtların üzerine yazmak ister misiniz? 
+Bu, mevcut çalışan işleri de durduracaktır.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Yinelenenler Algılandı</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Düşük Güçlü QuickSync Donanımını etkinleştirin.</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Özet bilgileri görüntülemek için lütfen tek bir iş seçin.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Her sıraya alınmış işi ayrı bir alt işlemde çalıştırın. (Deneysel)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Çalışan için varsayılan ağ bağlantı noktası:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Seçtiğiniz ön ayar bu sistemde kullanılamıyor.
+
+Bu genellikle sisteminizin onu kullanmak için gerekli donanımı desteklemediğinin bir göstergesidir.
+
+Lütfen farklı bir ön ayar seçin.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>İşleyiş İzolasyonu</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Bu özelliğin kullanılmasının belirtilen bağlantı noktasında 127.0.0.1'e bağlı bir HTTP sunucusu başlatacağını lütfen unutmayın.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Ayarlanan bağlantı noktası kullanımdaysa, tanımlanan bağlantı noktasından +100 içinde ilk boş bağlantı noktasını bulur.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Eşzamanlı kodlama sayısı:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Ön Ayar:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Kaynakla aynı</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Ayarları Sıfırla</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>HandBrake'i varsayılan ayarlara sıfırlamak istediğinizden emin misiniz?</value>
   </data>
 </root>
