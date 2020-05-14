@@ -40,6 +40,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [ShortName("ac3")]
         Ac3,
 
+        [DisplayName("E-AC3")]
+        [ShortName("eac3")]
+        EAc3,
+
         [DisplayName("Auto Passthru")]
         [ShortName("copy")]
         Passthrough,
