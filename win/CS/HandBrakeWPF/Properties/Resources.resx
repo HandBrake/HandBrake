@@ -2259,4 +2259,13 @@ Please choose a different preset.</value>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
     <value>Padding Colour:</value>
   </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Borders</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolution and Scaling</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Rotate and Crop</value>
+  </data>
 </root>
