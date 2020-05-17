@@ -3782,6 +3782,51 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom (Not Limited).
+        /// </summary>
+        public static string PaddingMode_Custom {
+            get {
+                return ResourceManager.GetString("PaddingMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill (pad to resolution limit).
+        /// </summary>
+        public static string PaddingMode_Fill {
+            get {
+                return ResourceManager.GetString("PaddingMode_Fill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height (pad up to res limit).
+        /// </summary>
+        public static string PaddingMode_Height {
+            get {
+                return ResourceManager.GetString("PaddingMode_Height", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string PaddingMode_None {
+            get {
+                return ResourceManager.GetString("PaddingMode_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width (pad up to res limit).
+        /// </summary>
+        public static string PaddingMode_Width {
+            get {
+                return ResourceManager.GetString("PaddingMode_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queue Paused.  Warning, the drive you are encoding to is low on disk space. Please free up some space and press start to continue. You can also adjust the minimum space level in preferences..
         /// </summary>
         public static string PauseOnLowDiskspace {
@@ -3818,6 +3863,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Borders.
+        /// </summary>
+        public static string PictureSettingsView_Borders {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Borders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bottom.
         /// </summary>
         public static string PictureSettingsView_Bottom {
@@ -3827,7 +3881,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cropping.
+        ///   Looks up a localized string similar to Cropping:.
         /// </summary>
         public static string PictureSettingsView_Cropping {
             get {
@@ -3899,6 +3953,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Padding:.
+        /// </summary>
+        public static string PictureSettingsView_Padding {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Padding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Padding Colour:.
+        /// </summary>
+        public static string PictureSettingsView_PaddingColour {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_PaddingColour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PAR:.
         /// </summary>
         public static string PictureSettingsView_PAR {
@@ -3908,11 +3980,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolution and Scaling.
+        /// </summary>
+        public static string PictureSettingsView_ResAndScaling {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_ResAndScaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Right.
         /// </summary>
         public static string PictureSettingsView_Right {
             get {
                 return ResourceManager.GetString("PictureSettingsView_Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotate and Crop.
+        /// </summary>
+        public static string PictureSettingsView_RotateAndCrop {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_RotateAndCrop", resourceCulture);
             }
         }
         

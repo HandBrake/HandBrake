@@ -14,177 +14,290 @@
         </Style>
     </UserControl.Resources>
 
-    <Border Background="Transparent">
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+
+        <!-- Size Panel-->
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResAndScaling}" FontSize="12" FontWeight="Bold"  Grid.Row="0" Grid.Column="0" Margin="10,5,0,15" />
+        <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Margin="5,0,0,0" Grid.Row="1" Grid.Column="0">
+            <!-- Row 1-->
+            <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Source}" />
+                <Label Content="{Binding SourceInfo}" Name="sourceResolution"/>
+            </StackPanel>
+
+            <!-- Row 2-->
+            <Grid Margin="0,5,5,0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Width}" Grid.Row="0" Grid.Column="0" />
+                <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" Grid.Row="0" Grid.Column="1"
+                                        Modulus="{Binding SelectedModulus, Mode=OneWay}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Width}" />
+
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Height}" Grid.Row="0" Grid.Column="2" />
+                <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True"  Grid.Row="0" Grid.Column="3"
+                                        Modulus="{Binding SelectedModulus, Mode=OneWay}" 
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
+                <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
+                          Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
+                          VerticalAlignment="Center" Margin="0,5,0,0" />
+
+            </Grid>
+
+            <!-- Row 3-->
+            <Grid Margin="0,15,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" Grid.Row="0" Grid.Column="0" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Modulus}" Grid.Row="1" Grid.Column="0" 
+                       Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
+
+                <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}"
+                              AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" />
+                <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" 
+                              Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Modulus}"
+                              Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
+                              AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Modulus}"/>
+            </Grid>
+
+            <!-- Custom Anamoprhic -->
+            <Grid Margin="0,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" Grid.Row="0" Grid.Column="0" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_PAR}" Grid.Row="1" Grid.Column="0" />
+
+                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
+                                        AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" />
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                    <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
+                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
+                    <TextBlock Text="X" Margin="10,0,10,0" />
+                    <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}"  HorizontalAlignment="Left" AllowEmpty="False"
+                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+
+        <!-- Crop Panel -->
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_RotateAndCrop}" FontSize="12" FontWeight="Bold" Grid.Row="0" Grid.Column="1" Margin="50,5,0,15" />
+        <Grid Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Size Panel-->
-            <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Margin="5,0,0,0"  Grid.Column="0" Grid.Row="0">
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Size}"  FontWeight="Bold" />
 
-                <!-- Row 1-->
-                <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Source}" />
-                    <Label Content="{Binding SourceInfo}" Name="sourceResolution"/>
-                </StackPanel>
+            <TextBlock Text="{x:Static Properties:Resources.FiltersView_Rotate}" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" />
+                <ComboBox Width="120" ItemsSource="{Binding RotateFlipFilter.RotationOptions}" Grid.Row="0" Grid.Column="1"
+                              SelectedItem="{Binding RotateFlipFilter.SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
+                              AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Rotate}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <!-- Row 2-->
-                <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Width}" />
-                    <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
-                                        Modulus="{Binding SelectedModulus, Mode=OneWay}"
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"
-                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Width}" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Height}" />
-                    <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True" 
-                                        Modulus="{Binding SelectedModulus, Mode=OneWay}" 
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"
-                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
-                    <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}"
-                          Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
-                          VerticalAlignment="Center" Margin="5,0,0,0" />
-                </StackPanel>
+                <CheckBox Content="{x:Static Properties:Resources.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding RotateFlipFilter.FlipVideo, UpdateSourceTrigger=PropertyChanged}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}" Grid.Row="0" Grid.Column="2" />
 
-                <!-- Row 3-->
-                <Grid Margin="0,15,5,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" Grid.Row="0" Grid.Column="0" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Modulus}" Grid.Row="1" Grid.Column="0" 
-                       Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
-
-                    <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}"
-                              AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Anamorphic}" />
-                    <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" 
-                              Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Modulus}"
-                              Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
-                              AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Modulus}"/>
-                </Grid>
-
-                <!-- Custom Anamoprhic -->
-                <Grid Margin="0,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" Grid.Row="0" Grid.Column="0" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_PAR}" Grid.Row="1" Grid.Column="0" />
-
-                    <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
-                                        AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" />
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                        <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
-                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
-                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
-                        <TextBlock Text="X" Margin="10,0,10,0" />
-                        <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}"  HorizontalAlignment="Left" AllowEmpty="False"
-                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
-                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
-                    </StackPanel>
-                </Grid>
-
-            </StackPanel>
-
-            <!-- Crop Panel -->
-            <StackPanel Name="CropPanel" Margin="15,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Cropping}" FontWeight="Bold" />
-                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"
-                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}"  />
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="1" Grid.Column="0" Margin="0,20,0,0" />
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,20,0,0">
+                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}" Margin="0,5,0,0" />
                 <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0"
                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_ManualCrop}"  />
+            </StackPanel>
 
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+            <Grid Margin="0,10,0,0" Grid.Row="2" Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
-                    <Label Content="{x:Static Properties:Resources.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                    <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Top}" />
 
-                    <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Bottom}" />
 
-                    <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
                                     Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                       ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Left}"/>
 
-                    <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
                                     Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Right}"/>
 
-                </Grid>
+            </Grid>
 
-            </StackPanel>
-
-            <!-- Preview Panel -->
-            <StackPanel Name="PreviewPanel" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
-                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Output}" FontWeight="Bold" />
-
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,5"
-                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
-                </Grid>
-                
-            </StackPanel>
         </Grid>
-    </Border>
+
+        <!-- Padding Panel -->
+        <!--<TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Borders}" FontSize="12" FontWeight="Bold" Grid.Row="0" Grid.Column="2" Margin="20,10,0,15" />
+        <Grid Name="PaddingPanel" Margin="20,0,0,0" Grid.Row="1" Grid.Column="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Padding}" Grid.Row="0" Grid.Column="0" />
+            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingModes}" SelectedItem="{Binding PaddingFilter.Mode}" Grid.Row="0" Grid.Column="1" />
+
+            <Grid Margin="0,10,0,10" Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
+                                    Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Top}" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
+                                    Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Bottom}" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
+                                    Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                      ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Left}"/>
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                                    Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Right}"/>
+
+            </Grid>
+
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingColour}" Grid.Row="2" Grid.Column="0" />
+            <ComboBox ItemsSource="{Binding PaddingFilter.PaddingColours}" SelectedItem="{Binding PaddingFilter.Colour}" Grid.Row="2" Grid.Column="1" />
+
+        </Grid>-->
+
+        <!-- Output Panel -->
+        <StackPanel Name="PreviewPanel" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="4">
+            <Label Content="{x:Static Properties:Resources.PictureSettingsView_Output}" FontSize="12" FontWeight="Bold" />
+
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,5"
+                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+
 </UserControl>

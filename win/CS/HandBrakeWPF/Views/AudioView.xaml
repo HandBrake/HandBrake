@@ -43,7 +43,7 @@
         <!-- Row 0 -->
         <TextBlock Grid.Row="0"
                    Margin="10,5,0,0"
-                   FontWeight="Bold"
+                   FontSize="12" FontWeight="Bold"
                    VerticalAlignment="Top"
                    Text="{Binding PanelTitle}" />
 

@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json.Linq;
@@ -558,6 +559,25 @@ namespace HandBrakeWPF.Services.Encode.Factories
                                            Settings = cropSettingsJson
                                        };
                 filter.FilterList.Add(cropScale);
+            }
+
+            // Padding Filter
+            if (job.Padding.Enabled)
+            { 
+                string padSettings = string.Format("width={0}:height={1}:color={2}:x={3}:y={4}", job.Width, job.Height, job.Padding.Color, job.Padding.X, job.Padding.Y);
+                IntPtr padSettingsPtr = hbFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_PAD, null, null, padSettings);
+                string unparsedPadSettingsJson = Marshal.PtrToStringAnsi(padSettingsPtr);
+                if (!string.IsNullOrEmpty(unparsedPadSettingsJson))
+                {
+                    JToken PadSettingsJson = JObject.Parse(unparsedPadSettingsJson);
+
+                    Filter padding = new Filter
+                                       {
+                                           ID = (int)hb_filter_ids.HB_FILTER_PAD,
+                                           Settings = PadSettingsJson
+                    };
+                    filter.FilterList.Add(padding);
+                }
             }
 
             // Grayscale

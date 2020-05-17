@@ -27,7 +27,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.FiltersView_Filters}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
+        <TextBlock Text="{x:Static Properties:Resources.FiltersView_Filters}" FontSize="12" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <Grid>
@@ -195,15 +195,6 @@
                 <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,10,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
 
-                <!-- Rotation -->
-                <TextBlock Text="{x:Static Properties:Resources.FiltersView_Rotate}" Grid.Row="7" Grid.Column="0" Margin="0,0,0,0"/>
-                <ComboBox Width="120" ItemsSource="{Binding RotateFlipFilter.RotationOptions}" Grid.Row="7" Grid.Column="1"
-                              SelectedItem="{Binding RotateFlipFilter.SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
-                          AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Rotate}"
-                              HorizontalAlignment="Left" VerticalAlignment="Center" />
-
-                <CheckBox Content="{x:Static Properties:Resources.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsChecked="{Binding RotateFlipFilter.FlipVideo, UpdateSourceTrigger=PropertyChanged}"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}"/>
             </Grid>
 
         </StackPanel>

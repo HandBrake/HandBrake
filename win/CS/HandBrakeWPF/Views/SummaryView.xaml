@@ -55,7 +55,7 @@
             </Grid.Resources>
 
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" FontSize="12" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
             <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
@@ -77,18 +77,18 @@
                               IsChecked="{Binding Path=IPod5GSupport}"
                               Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" FontSize="12" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
             <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" FontSize="12" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
 
 
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" FontWeight="Bold" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" FontSize="12" FontWeight="Bold" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
 
             <TextBlock Text="{x:Static Properties:Resources.MainView_Aspect}" FontSize="14" Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />

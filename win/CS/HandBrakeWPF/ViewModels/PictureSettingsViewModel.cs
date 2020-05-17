@@ -23,147 +23,56 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
-    /// <summary>
-    /// The Picture Settings View Model
-    /// </summary>
     public class PictureSettingsViewModel : ViewModelBase, IPictureSettingsViewModel
     {
-        /*
-         * TODO:
-         * - We are not handling cropping correctly within the UI.
-         * - The Height is not correctly set when using no Anamorphic
-         * - Maintain Aspect ratio needs corrected.
-         * - Custom Anamorphic.
-         * 
-         */
-        #region Constants and Fields
-
-        /// <summary>
-        /// The display size.
-        /// </summary>
         private string displaySize;
-
-        /// <summary>
-        ///  Backing field for for height control enabled
-        /// </summary>
         private bool heightControlEnabled = true;
-
-        /// <summary>
-        ///  Backing field for show custom anamorphic controls
-        /// </summary>
         private bool showCustomAnamorphicControls;
-
-        /// <summary>
-        /// The source info.
-        /// </summary>
         private string sourceInfo;
-
-        /// <summary>
-        /// Source Par Values
-        /// </summary>
         private Size sourceParValues;
-
-        /// <summary>
-        /// Source Resolution
-        /// </summary>
         private Size sourceResolution;
-
-        /// <summary>
-        /// Backing field for width control enabled.
-        /// </summary>
         private bool widthControlEnabled = true;
-
-        /// <summary>
-        /// Backing field for the show modulus field
-        /// </summary>
         private bool showModulus;
-
-        /// <summary>
-        /// Backing field for showing display size.
-        /// </summary>
         private bool showDisplaySize;
-
-        /// <summary>
-        /// Backing field for max height
-        /// </summary>
         private int maxHeight;
-
-        /// <summary>
-        /// Backing field for max width
-        /// </summary>
         private int maxWidth;
-
-        /// <summary>
-        /// The show keep ar backing field.
-        /// </summary>
         private bool showKeepAr = true;
 
-        /// <summary>
-        /// The delayed previewprocessor.
-        /// </summary>
         private DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
-
-        /// <summary>
-        /// The current title.
-        /// </summary>
         private Title currentTitle;
-
-        /// <summary>
-        /// The scanned source.
-        /// </summary>
         private Source scannedSource;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.PictureSettingsViewModel"/> class.
-        /// </summary>
         public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel)
         {
             this.StaticPreviewViewModel = staticPreviewViewModel;
             this.sourceResolution = new Size(0, 0);
             this.Task = new EncodeTask();
+            this.PaddingFilter = new PadFilter(this.Task, () => this.OnTabStatusChanged(null));
+            this.RotateFlipFilter = new RotateFlipFilter(this.Task, () => this.OnTabStatusChanged(null));
             this.Init();
         }
 
-        #endregion
-
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
-        #region Properties
+        /* Properties */
 
-        /// <summary>
-        /// Gets or sets the static preview view model.
-        /// </summary>
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
-        /// <summary>
-        /// Gets AnamorphicModes.
-        /// </summary>
-        public IEnumerable<Anamorphic> AnamorphicModes
-        {
-            get
-            {
-                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
-            }
-        }
+        public IEnumerable<Anamorphic> AnamorphicModes { get; } = new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
 
-        /// <summary>
-        /// Gets or sets DisplaySize.
-        /// </summary>
+        public PadFilter PaddingFilter { get; set; }
+
+        public RotateFlipFilter RotateFlipFilter { get; set; }
+
         public string DisplaySize
         {
-            get
-            {
-                return this.displaySize;
-            }
+            get => this.displaySize;
 
             set
             {
@@ -172,15 +81,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether HeightControlEnabled.
-        /// </summary>
         public bool HeightControlEnabled
         {
-            get
-            {
-                return this.heightControlEnabled;
-            }
+            get => this.heightControlEnabled;
 
             set
             {
@@ -189,26 +92,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets ModulusValues.
-        /// </summary>
-        public IEnumerable<int> ModulusValues
-        {
-            get
-            {
-                return new List<int> { 16, 8, 4, 2 };
-            }
-        }
+        public IEnumerable<int> ModulusValues { get; } = new List<int> { 16, 8, 4, 2 };
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowCustomAnamorphicControls.
-        /// </summary>
         public bool ShowCustomAnamorphicControls
         {
-            get
-            {
-                return this.showCustomAnamorphicControls;
-            }
+            get => this.showCustomAnamorphicControls;
 
             set
             {
@@ -217,15 +105,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SourceInfo.
-        /// </summary>
         public string SourceInfo
         {
-            get
-            {
-                return this.sourceInfo;
-            }
+            get => this.sourceInfo;
 
             set
             {
@@ -234,20 +116,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Task.
-        /// </summary>
         public EncodeTask Task { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether WidthControlEnabled.
-        /// </summary>
         public bool WidthControlEnabled
         {
-            get
-            {
-                return this.widthControlEnabled;
-            }
+            get => this.widthControlEnabled;
 
             set
             {
@@ -256,15 +129,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowModulus.
-        /// </summary>
         public bool ShowModulus
         {
-            get
-            {
-                return this.showModulus;
-            }
+            get => this.showModulus;
             set
             {
                 this.showModulus = value;
@@ -272,15 +139,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowDisplaySize.
-        /// </summary>
         public bool ShowDisplaySize
         {
-            get
-            {
-                return this.showDisplaySize;
-            }
+            get => this.showDisplaySize;
             set
             {
                 this.showDisplaySize = value;
@@ -288,15 +149,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets MaxHeight.
-        /// </summary>
         public int MaxHeight
         {
-            get
-            {
-                return this.maxHeight;
-            }
+            get => this.maxHeight;
             set
             {
                 this.maxHeight = value;
@@ -304,15 +159,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets MinHeight.
-        /// </summary>
         public int MaxWidth
         {
-            get
-            {
-                return this.maxWidth;
-            }
+            get => this.maxWidth;
             set
             {
                 this.maxWidth = value;
@@ -320,15 +169,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show keep ar.
-        /// </summary>
         public bool ShowKeepAR
         {
-            get
-            {
-                return this.showKeepAr;
-            }
+            get => this.showKeepAr;
             set
             {
                 this.showKeepAr = value;
@@ -336,19 +179,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        /* Task Properties */
 
-        #region Task Properties
-
-        /// <summary>
-        /// Gets or sets CropBottom.
-        /// </summary>
         public int CropBottom
         {
-            get
-            {
-                return this.Task.Cropping.Bottom;
-            }
+            get => this.Task.Cropping.Bottom;
 
             set
             {
@@ -358,15 +193,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets CropLeft.
-        /// </summary>
         public int CropLeft
         {
-            get
-            {
-                return this.Task.Cropping.Left;
-            }
+            get => this.Task.Cropping.Left;
 
             set
             {
@@ -376,15 +205,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets CropRight.
-        /// </summary>
         public int CropRight
         {
-            get
-            {
-                return this.Task.Cropping.Right;
-            }
+            get => this.Task.Cropping.Right;
 
             set
             {
@@ -394,15 +217,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets CropTop.
-        /// </summary>
         public int CropTop
         {
-            get
-            {
-                return this.Task.Cropping.Top;
-            }
+            get => this.Task.Cropping.Top;
 
             set
             {
@@ -412,15 +229,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether IsCustomCrop.
-        /// </summary>
         public bool IsCustomCrop
         {
-            get
-            {
-                return this.Task.HasCropping;
-            }
+            get => this.Task.HasCropping;
 
             set
             {
@@ -437,17 +248,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets DisplayWidth.
-        /// </summary>
         public long DisplayWidth
         {
-            get
-            {
-                return this.Task.DisplayWidth.HasValue
-                           ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture))
-                           : 0;
-            }
+            get => this.Task.DisplayWidth.HasValue ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture)) : 0;
 
             set
             {
@@ -460,15 +263,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Width.
-        /// </summary>
         public int Width
         {
-            get
-            {
-                return this.Task.Width.HasValue ? this.Task.Width.Value : 0;
-            }
+            get => this.Task.Width.HasValue ? this.Task.Width.Value : 0;
 
             set
             {
@@ -481,15 +278,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Height.
-        /// </summary>
         public int Height
         {
-            get
-            {
-                return this.Task.Height.HasValue ? this.Task.Height.Value : 0;
-            }
+            get => this.Task.Height.HasValue ? this.Task.Height.Value : 0;
 
             set
             {
@@ -502,15 +293,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether MaintainAspectRatio.
-        /// </summary>
         public bool MaintainAspectRatio
         {
-            get
-            {
-                return this.Task.KeepDisplayAspect;
-            }
+            get => this.Task.KeepDisplayAspect;
 
             set
             {
@@ -520,15 +305,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets ParHeight.
-        /// </summary>
         public int ParHeight
         {
-            get
-            {
-                return this.Task.PixelAspectY;
-            }
+            get => this.Task.PixelAspectY;
 
             set
             {
@@ -541,15 +320,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets ParWidth.
-        /// </summary>
         public int ParWidth
         {
-            get
-            {
-                return this.Task.PixelAspectX;
-            }
+            get => this.Task.PixelAspectX;
 
             set
             {
@@ -562,15 +335,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedAnamorphicMode.
-        /// </summary>
         public Anamorphic SelectedAnamorphicMode
         {
-            get
-            {
-                return this.Task.Anamorphic;
-            }
+            get => this.Task.Anamorphic;
 
             set
             {
@@ -584,15 +351,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedModulus.
-        /// </summary>
         public int? SelectedModulus
         {
-            get
-            {
-                return this.Task.Modulus;
-            }
+            get => this.Task.Modulus;
 
             set
             {
@@ -603,19 +364,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        /* Public Tab API Implementation */
 
-        #region Public Methods
-
-        /// <summary>
-        /// Setup this tab for the specified preset.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
@@ -645,7 +395,10 @@ namespace HandBrakeWPF.ViewModels
                 this.IsCustomCrop = false;
             }
 
-
+            // Padding
+            this.PaddingFilter.SetPreset(preset, task);
+            this.RotateFlipFilter?.SetPreset(preset, task);
+            
             // Setup the Picture Sizes
             switch (preset.PictureSettingsMode)
             {
@@ -673,7 +426,6 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-
                         int presetWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
                         int presetHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
 
@@ -726,15 +478,12 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateVisibileControls();
         }
 
-        /// <summary>
-        /// Update all the UI controls based on the encode task passed in.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void UpdateTask(EncodeTask task)
         {
             this.Task = task;
+            this.PaddingFilter.UpdateTask(task);
+            this.RotateFlipFilter?.UpdateTask(task);
+
             this.NotifyOfPropertyChange(() => this.Width);
             this.NotifyOfPropertyChange(() => this.Height);
             this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
@@ -752,25 +501,12 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateVisibileControls();
         }
 
-        /// <summary>
-        /// Setup this window for a new source
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.currentTitle = title;
             this.Task = task;
+            this.PaddingFilter.SetSource(source, title, preset, task);
+            this.RotateFlipFilter?.SetSource(source, title, preset, task);
 
             this.scannedSource = source;
 
@@ -863,21 +599,26 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (!PaddingFilter.MatchesPreset(preset))
+            {
+                return false;
+            }
+
+            if (!RotateFlipFilter.MatchesPreset(preset))
+            {
+                return false;
+            }
+
             return true;
         }
 
-        #endregion
-
-        #region Methods
+         /* Protected and Private Methods */
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
             this.TabStatusChanged?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// The init.
-        /// </summary>
         private void Init()
         {
             this.Task.Modulus = 16;
@@ -891,12 +632,6 @@ namespace HandBrakeWPF.ViewModels
             this.MaxWidth = 1920;
         }
 
-        /// <summary>
-        /// The get picture title info.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="PictureSize.PictureSettingsTitle"/>.
-        /// </returns>
         private PictureSize.PictureSettingsTitle GetPictureTitleInfo()
         {
             PictureSize.PictureSettingsTitle title = new PictureSize.PictureSettingsTitle
@@ -910,12 +645,6 @@ namespace HandBrakeWPF.ViewModels
             return title;
         }
 
-        /// <summary>
-        /// The get picture settings.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="PictureSize.PictureSettingsJob"/>.
-        /// </returns>
         private PictureSize.PictureSettingsJob GetPictureSettings(ChangedPictureField changedField)
         {
             PictureSize.PictureSettingsJob job = new PictureSize.PictureSettingsJob
@@ -1032,9 +761,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The update visible controls.
-        /// </summary>
         private void UpdateVisibileControls()
         {
             this.ShowDisplaySize = true;
@@ -1080,9 +806,6 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// For a given value, correct so that it matches the users currently selected modulus value
         /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
         /// <returns>
         /// Value corrected so that value % selected modulus == 0
         /// </returns>
@@ -1107,29 +830,12 @@ namespace HandBrakeWPF.ViewModels
             return (int)Math.Abs(result);
         }
 
-        /// <summary>
-        /// The get res.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="max">
-        /// The max.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
         private int GetRes(int value, int? max)
         {
             return max.HasValue ? (value > max.Value ? max.Value : value) : value;
         }
-
-        #endregion
     }
 
-    /// <summary>
-    /// The changed picture field.
-    /// </summary>
     public enum ChangedPictureField
     {
         Width,

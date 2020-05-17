@@ -1413,4 +1413,5 @@
 	<s:String x:Key="/Default/Housekeeping/VsSavedAutocompletionValue/OverrideParameterInfo/=Xaml/@EntryIndexedValue">NotOverridden</s:String>
 	<s:Int64 x:Key="/Default/OptionsGeneral/AutoDeleteWorkspaceOlderNDays/@EntryValue">10</s:Int64>
 	<s:String x:Key="/Default/SnapshotsStore/CurrentStore/@EntryValue">C:\Users\Scott\AppData\Local\JetBrains\Shared\vAny\Sessions</s:String>
-	<s:Int64 x:Key="/Default/StyleCopOptions/ParsingPerformance/@EntryValue">8</s:Int64></wpf:ResourceDictionary>
+	<s:Int64 x:Key="/Default/StyleCopOptions/ParsingPerformance/@EntryValue">8</s:Int64>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Colours/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
