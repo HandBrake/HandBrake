@@ -315,12 +315,12 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     }
 
     /* need more space for 10bits */
-    int bpp12 = 3;
-    if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010)
+    if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010 ||
+        pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
     {
          hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
-         bpp12 = 6;
     }
+    int bpp12 = (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010) ? 6 : 3;
     bitstream.Data      = bitstream_buf->data;
     bitstream.MaxLength = bitstream_buf->alloc;
 
