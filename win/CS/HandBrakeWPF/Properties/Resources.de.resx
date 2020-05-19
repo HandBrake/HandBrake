@@ -1328,7 +1328,7 @@ Soll sie überschrieben werden?</value>
     <value>Unten</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Beschneiden</value>
+    <value>Beschnitt:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Eigene</value>
@@ -2239,5 +2239,35 @@ Bitte eine andere Voreinstellung auswählen.</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
     <value>Soll HandBrake wirklich auf die Standardeinstellungen zurückgesetzt werden?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Eigene (unbegrenzt)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Füllen (bis zur Auflösungsgrenze füllen)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Höhe (bis zur Auflösungsgrenze füllen)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Breite (bis zur Auflösungsgrenze füllen)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Padding:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Padding-Farbe:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Ränder</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Auflösung und Skalierung</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Drehen und Beschneiden</value>
   </data>
 </root>

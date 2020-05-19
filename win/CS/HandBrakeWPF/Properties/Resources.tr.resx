@@ -1326,7 +1326,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Alt</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Kırpma</value>
+    <value>Kırpma:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Özel</value>
@@ -2237,5 +2237,35 @@ Lütfen farklı bir ön ayar seçin.</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
     <value>HandBrake'i varsayılan ayarlara sıfırlamak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Özel (Sınırlı Değil)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Dolgu (çözünürlük sınırına ped)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Yükseklik (res sınırına kadar ped)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Genişlik (res sınırına kadar ped)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Dolgu:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Dolgu Rengi:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Kenarlık</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Çözünürlük ve Ölçeklendirme</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Döndür ve Kırp</value>
   </data>
 </root>
