@@ -14,7 +14,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="Source.svg">
+   sodipodi:docname="AddQueue.svg">
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -169,7 +169,7 @@
          ry="0.26458332" />
     </clipPath>
     <linearGradient
-       gradientTransform="translate(0.21431408,-0.03778667)"
+       gradientTransform="translate(-21.247927,-0.03778667)"
        inkscape:collect="always"
        xlink:href="#linearGradient979"
        id="linearGradient981"
@@ -192,7 +192,7 @@
          ry="0.26458332" />
     </clipPath>
     <linearGradient
-       gradientTransform="translate(0.21431408,-0.03778667)"
+       gradientTransform="translate(-21.247927,-0.03778667)"
        inkscape:collect="always"
        xlink:href="#linearGradient1037"
        id="linearGradient1039"
@@ -202,7 +202,7 @@
        y2="292.76733"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="translate(0.21431408,-0.03778667)"
+       gradientTransform="translate(-21.247927,-0.03778667)"
        inkscape:collect="always"
        xlink:href="#linearGradient1089"
        id="linearGradient1091"
@@ -212,7 +212,7 @@
        y2="285.68951"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="translate(0.21431408,-0.03778667)"
+       gradientTransform="translate(-21.247927,-0.03778667)"
        inkscape:collect="always"
        xlink:href="#linearGradient1101"
        id="linearGradient1103"
@@ -255,7 +255,7 @@
          ry="0.26458332" />
     </clipPath>
     <linearGradient
-       gradientTransform="translate(22.403313)"
+       gradientTransform="translate(-0.05413646)"
        gradientUnits="userSpaceOnUse"
        y2="286.51489"
        x2="9.9889688"
@@ -274,7 +274,7 @@
        xlink:href="#linearGradient960-3"
        inkscape:collect="always" />
     <linearGradient
-       gradientTransform="translate(26.324145,0.39272382)"
+       gradientTransform="translate(3.8666956,0.39272382)"
        gradientUnits="userSpaceOnUse"
        y2="289.9393"
        x2="8.10254"
@@ -386,7 +386,7 @@
        id="rect918"
        width="12.157629"
        height="9.6913519"
-       x="23.618603"
+       x="1.1611539"
        y="283.51147"
        rx="0.26458332"
        ry="0.26458332" />
@@ -394,7 +394,7 @@
        ry="0.26458332"
        rx="0.26458332"
        y="283.51147"
-       x="23.618603"
+       x="1.1611539"
        height="9.6913519"
        width="12.157629"
        id="rect928"
@@ -403,7 +403,7 @@
        ry="0.26458332"
        rx="0.26458332"
        y="285.01318"
-       x="24.846813"
+       x="2.3893635"
        height="9.6913519"
        width="12.157629"
        id="rect988"
@@ -413,7 +413,7 @@
        id="rect848"
        width="14.266221"
        height="9.6913567"
-       x="1.5396127"
+       x="-19.922628"
        y="286.51489"
        rx="0.26458332"
        ry="0.26458329" />
@@ -422,7 +422,7 @@
        id="rect995"
        width="14.266221"
        height="2.5783157"
-       x="1.5396127"
+       x="-19.922628"
        y="287.01489"
        rx="0.26458332"
        ry="0.26458332" />
@@ -430,34 +430,34 @@
        ry="0.26458332"
        rx="0.26458332"
        y="286.51489"
-       x="1.5396127"
+       x="-19.922628"
        height="2.5783157"
        width="14.266221"
        id="rect852"
        style="fill:url(#linearGradient1039);fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round" />
     <path
        style="fill:#f6f5f4;fill-opacity:1;stroke:#f6f5f4;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 14.139411,290.74343 H 3.2060341"
+       d="M -7.3228304,290.74343 H -18.256207"
        id="path983" />
     <path
        id="path985"
-       d="M 14.139411,293.01129 H 3.2060341"
+       d="M -7.3228304,293.01129 H -18.256207"
        style="fill:#f6f5f4;fill-opacity:1;stroke:#f6f5f4;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        style="fill:#f6f5f4;fill-opacity:1;stroke:#f6f5f4;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 6.3545491,294.94338 v -1.93209"
+       d="m -15.107692,294.94338 v -1.93209"
        id="path989" />
     <use
        x="0"
        y="0"
        xlink:href="#path989"
        id="use993"
-       transform="translate(4.6363472)"
+       transform="translate(4.6363476)"
        width="100%"
        height="100%" />
     <g
        id="g1025"
-       transform="translate(-18.99385,1.9249595)"
+       transform="translate(-40.456091,1.9249595)"
        clip-path="url(#clipPath1029)">
       <path
          id="path1005"
@@ -509,7 +509,7 @@
        id="rect1083"
        width="14.266221"
        height="2.5783157"
-       x="1.5396127"
+       x="-19.922628"
        y="286.51489"
        rx="0.26458332"
        ry="0.26458332" />
@@ -517,7 +517,7 @@
        ry="0.26458329"
        rx="0.26458332"
        y="286.51489"
-       x="1.5396127"
+       x="-19.922628"
        height="9.6913567"
        width="14.266221"
        id="rect1095"
@@ -526,7 +526,7 @@
        ry="0.26458332"
        rx="0.26458332"
        y="286.51489"
-       x="1.5396127"
+       x="-19.922628"
        height="2.5783157"
        width="14.266221"
        id="rect1129"
@@ -535,7 +535,7 @@
        ry="0.26458329"
        rx="0.26458332"
        y="286.51489"
-       x="1.5396127"
+       x="-19.922628"
        height="9.6913567"
        width="14.266221"
        id="rect1131"
@@ -544,7 +544,7 @@
        id="g1167"
        inkscape:transform-center-x="-6.9279897"
        inkscape:transform-center-y="-2.6095156"
-       transform="rotate(-9.569589,-1.0422235,284.94414)">
+       transform="rotate(-9.569589,-11.773344,413.14566)">
       <rect
          ry="0.26458332"
          rx="0.26458332"
@@ -627,7 +627,7 @@
        id="rect1394"
        width="12.157629"
        height="9.6913519"
-       x="24.846813"
+       x="2.3893635"
        y="285.01318"
        rx="0.26458332"
        ry="0.26458332" />
@@ -635,13 +635,13 @@
        ry="0.26458332"
        rx="0.26458332"
        y="286.51489"
-       x="26.071999"
+       x="3.6145494"
        height="9.6913519"
        width="12.157629"
        id="rect894"
        style="fill:url(#linearGradient944);fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round" />
     <path
-       transform="matrix(-1,0,0,1,63.102235,0)"
+       transform="matrix(-1,0,0,1,40.644786,0)"
        clip-path="url(#clipPath908)"
        sodipodi:nodetypes="ccccccc"
        id="path902"
@@ -650,17 +650,17 @@
     <circle
        r="1.2695302"
        cy="289.0625"
-       cx="34.426685"
+       cx="11.969235"
        id="path904"
        style="fill:url(#linearGradient980);fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round" />
     <circle
        style="fill:none;fill-opacity:1;stroke:#e5a50a;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round"
        id="circle912"
-       cx="34.426685"
+       cx="11.969235"
        cy="289.0625"
        r="1.2695302" />
     <path
-       transform="matrix(-1,0,0,1,63.102235,0)"
+       transform="matrix(-1,0,0,1,40.644786,0)"
        style="fill:none;fill-opacity:1;stroke:#715344;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 37.78523,296.58238 -3.64605,-6.30542 -3.315848,4.42758 -2.909325,-2.76596 -3.45541,3.49388 -0.705018,2.87047 z"
        id="path914"
@@ -671,7 +671,7 @@
        id="rect916"
        width="12.157629"
        height="9.6913519"
-       x="26.071999"
+       x="3.6145494"
        y="286.51489"
        rx="0.26458332"
        ry="0.26458332" />
@@ -717,20 +717,20 @@
     <use
        height="100%"
        width="100%"
-       transform="rotate(90,42.067034,293.43212)"
+       transform="rotate(90,19.609584,293.43212)"
        id="use1413"
        xlink:href="#rect1404"
        y="0"
        x="0" />
     <rect
        y="291.31122"
-       x="41.2118"
+       x="18.754351"
        height="4.2418098"
        width="1.7104666"
        id="rect1404"
        style="fill:#68b723;fill-opacity:1;stroke:none;stroke-width:0.264582;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <g
-       transform="translate(18.101024,-6.9904765)"
+       transform="translate(-4.3564249,-6.9904765)"
        id="g1440">
       <path
          id="use1415"
