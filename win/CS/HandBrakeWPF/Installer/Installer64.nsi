@@ -17,13 +17,13 @@
 SetCompressor lzma
 ManifestDPIAware true
 
-; MUI 1.67 compatible ------
-!include "MUI.nsh"
-!include WinVer.nsh
-
 ; Required for Github Actions (or local builds were inetc is not part of the installed NSIS)
 ; Extract inetc.zip to the HandBrake root directory into a folder called plugins.
 !addplugindir /x86-ansi "..\..\..\..\..\..\plugins\Plugins\x86-ansi"
+
+; MUI 1.67 compatible ------
+!include "MUI.nsh"
+!include WinVer.nsh
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -32,13 +32,15 @@ ManifestDPIAware true
 ; GPL is not an EULA, no need to agree to it.
 !define MUI_LICENSEPAGE_BUTTON $(^NextBtn)
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click Next to continue."
-
 !define MUI_WELCOMEFINISHPAGE_BITMAP "InstallerBackground.bmp"
+!define MUI_COMPONENTSPAGE_SMALLDESC
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "doc\COPYING"
+; Components page
+!insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -56,7 +58,7 @@ ManifestDPIAware true
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI.exe"
+OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-x86_64-Win_GUI.exe"
 
 !include WordFunc.nsh
 !insertmacro VersionCompare
@@ -117,9 +119,10 @@ Function .onInit
   done:
 FunctionEnd
 
-Section "HandBrake" SEC01
+Section "HandBrake" SectionApp
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
+  SectionIn RO ; Read only, always installed
 
   ; Begin Check .NET version
   StrCpy $InstallDotNET "No"
@@ -147,10 +150,7 @@ Section "HandBrake" SEC01
   ${EndIf}
   
   ; Install Files
-  File "HandBrake.exe"
-  CreateDirectory "$SMPROGRAMS\HandBrake"
-  CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
-  CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+  File "*.exe"
   File "*.dll"
   File "*.template"
   File "*.config"
@@ -198,6 +198,22 @@ Section "HandBrake" SEC01
   SetOverwrite ifnewer
   File "doc\*.*"
   
+  ; Start Menu Shortcut for All users.   
+  SetShellVarContext all
+  CreateDirectory "$SMPROGRAMS\HandBrake"
+  CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+SectionEnd
+
+Section /o "Desktop shortcut " SectionDesktop
+    SetShellVarContext current
+    CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+    CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+SectionEnd
+
+Section "Desktop shortcut (all users)" SectionDesktopAll
+    SetShellVarContext all
+    CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+    CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
 SectionEnd
 
 Section -AdditionalIcons
@@ -212,6 +228,13 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\HandBrake.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
 SectionEnd
+
+; User Interface
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionApp} "The HandBrake Applicaiton"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} "Add a shortcut for the current user only."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktopAll} "Add a shortcut for all users."
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 Function un.onUninstSuccess
@@ -264,6 +287,13 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  
+  SetShellVarContext all
+  Delete "$SMPROGRAMS\HandBrake Nightly\Uninstall.lnk"
+  Delete "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk"
+  RMDir  "$SMPROGRAMS\HandBrake Nightly"
+  Delete "$DESKTOP\HandBrake Nightly.lnk"
+  
   SetAutoClose true
 SectionEnd
 

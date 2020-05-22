@@ -32,13 +32,15 @@ ManifestDPIAware true
 ; GPL is not an EULA, no need to agree to it.
 !define MUI_LICENSEPAGE_BUTTON $(^NextBtn)
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click Next to continue."
-
 !define MUI_WELCOMEFINISHPAGE_BITMAP "InstallerBackground.bmp"
+!define MUI_COMPONENTSPAGE_SMALLDESC
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "doc\COPYING"
+; Components page
+!insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -116,9 +118,10 @@ Function .onInit
   done:
 FunctionEnd
 
-Section "HandBrake" SEC01
+Section "HandBrake" SectionApp
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
+  SectionIn RO ; Read only, always installed
 
   ; Begin Check .NET version
   StrCpy $InstallDotNET "No"
@@ -147,9 +150,6 @@ Section "HandBrake" SEC01
   
   ; Install Files
   File "*.exe"
-  CreateDirectory "$SMPROGRAMS\HandBrake Nightly"
-  CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
-  CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
   File "*.dll"
   File "*.template"
   File "*.config"
@@ -196,6 +196,23 @@ Section "HandBrake" SEC01
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\*.*"
+  
+  ; Start Menu Shortcut for All users.   
+  SetShellVarContext all
+  CreateDirectory "$SMPROGRAMS\HandBrake Nightly"
+  CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
+SectionEnd
+
+Section /o "Desktop shortcut " SectionDesktop
+    SetShellVarContext current
+    CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
+    CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
+SectionEnd
+
+Section "Desktop shortcut (all users)" SectionDesktopAll
+    SetShellVarContext all
+    CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
+    CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
 SectionEnd
 
 Section -AdditionalIcons
@@ -211,6 +228,12 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
 SectionEnd
 
+; User Interface
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionApp} "The HandBrake Applicaiton"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} "Add a shortcut for the current user only."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktopAll} "Add a shortcut for all users."
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess
   HideWindow
@@ -259,6 +282,13 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  
+  SetShellVarContext all
+  Delete "$SMPROGRAMS\HandBrake Nightly\Uninstall.lnk"
+  Delete "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk"
+  RMDir  "$SMPROGRAMS\HandBrake Nightly"
+  Delete "$DESKTOP\HandBrake Nightly.lnk"
+  
   SetAutoClose true
 SectionEnd
 
