@@ -22,6 +22,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.Interop.Utilities;
+
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
@@ -47,6 +49,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
+    using Newtonsoft.Json;
+
     using Ookii.Dialogs.Wpf;
 
     using Action = System.Action;
@@ -57,9 +61,6 @@ namespace HandBrakeWPF.ViewModels
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-    /// <summary>
-    /// HandBrakes Main Window
-    /// </summary>
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
         private readonly IQueueService queueProcessor;
@@ -184,24 +185,32 @@ namespace HandBrakeWPF.ViewModels
         }
 
 
-        #region View Model Properties
+        /* View Model Properties */
 
         public IPictureSettingsViewModel PictureSettingsViewModel { get; set; }
+
         public IAudioViewModel AudioViewModel { get; set; }
+
         public ISubtitlesViewModel SubtitleViewModel { get; set; }
+
         public IChaptersViewModel ChaptersViewModel { get; set; }
+
         public IVideoViewModel VideoViewModel { get; set; }
+
         public IFiltersViewModel FiltersViewModel { get; set; }
+
         public IQueueViewModel QueueViewModel { get; set; }
+
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
+
         public IMetaDataViewModel MetaDataViewModel { get; set; }
+
         public ISummaryViewModel SummaryViewModel { get; set; }
 
         public int SelectedTab { get; set; }
 
-        #endregion
 
-        #region Properties
+        /* Properties */
 
         public string WindowTitle
         {
@@ -220,10 +229,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the Program Status Toolbar Label
-        /// This indicates the status of HandBrake
-        /// </summary>
         public string ProgramStatusLabel
         {
             get
@@ -241,10 +246,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the Program Status Toolbar Label
-        /// This indicates the status of HandBrake
-        /// </summary>
         public string StatusLabel
         {
             get
@@ -340,21 +341,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets The Current Encode Task that the user is building
-        /// </summary>
         public EncodeTask CurrentTask { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Last Scanned Source
-        /// This object contains information about the scanned source.
-        /// </summary>
         public Source ScannedSource
         {
-            get
-            {
-                return this.scannedSource;
-            }
+            get => this.scannedSource;
 
             set
             {
@@ -363,15 +354,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the title specific scan.
-        /// </summary>
         public int TitleSpecificScan { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Source Label
-        /// This indicates the status of scans.
-        /// </summary>
         public string SourceLabel
         {
             get
@@ -389,9 +373,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets RangeMode.
-        /// </summary>
         public BindingList<PointToPointMode> RangeMode
         {
             get
@@ -403,14 +384,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether ShowTextEntryForPointToPointMode.
-        /// </summary>
         public bool ShowTextEntryForPointToPointMode => this.SelectedPointToPoint != PointToPointMode.Chapters;
 
-        /// <summary>
-        /// Gets StartEndRangeItems.
-        /// </summary>
         public IEnumerable<int> StartEndRangeItems
         {
             get
@@ -419,9 +394,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets Angles.
-        /// </summary>
         public IEnumerable<int> Angles
         {
             get
@@ -440,9 +412,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Duration.
-        /// </summary>
         public string Duration
         {
             get
@@ -456,9 +425,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether IsEncoding.
-        /// </summary>
         public bool IsEncoding
         {
             get
@@ -467,9 +433,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowStatusWindow.
-        /// </summary>
         public bool ShowStatusWindow
         {
             get
@@ -484,14 +447,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets RangeMode.
-        /// </summary>
         public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.WebM };
 
-        /// <summary>
-        /// Gets or sets Destination.
-        /// </summary>
         public string Destination
         {
             get
@@ -553,9 +510,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedTitle.
-        /// </summary>
         public Title SelectedTitle
         {
             get
@@ -611,9 +565,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedAngle.
-        /// </summary>
         public int SelectedAngle
         {
             get
@@ -628,14 +579,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is timespan range.
-        /// </summary>
         public bool IsTimespanRange { get; set; }
 
-        /// <summary>
-        /// Gets or sets SelectedStartPoint.
-        /// </summary>
         public long SelectedStartPoint
         {
             get
@@ -665,9 +610,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedEndPoint.
-        /// </summary>
         public long SelectedEndPoint
         {
             get
@@ -694,9 +636,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedPointToPoint.
-        /// </summary>
         public PointToPointMode SelectedPointToPoint
         {
             get
@@ -760,9 +699,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether is preset panel showing.
-        /// </summary>
         public bool IsPresetPanelShowing
         {
             get
@@ -785,14 +721,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating progress percentage.
-        /// </summary>
         public int ProgressPercentage { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show source selection.
-        /// </summary>
         public bool ShowSourceSelection
         {
             get
@@ -831,9 +761,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the drives.
-        /// </summary>
         public BindingList<SourceMenuItem> Drives
         {
             get
@@ -852,19 +779,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets the cancel action.
-        /// </summary>
         public Action CancelAction => this.CancelScan;
 
-        /// <summary>
-        /// Action for the status window.
-        /// </summary>
         public Action OpenLogWindowAction => this.OpenLogWindow;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show alert window.
-        /// </summary>
         public bool ShowAlertWindow
         {
             get
@@ -882,9 +800,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether alert window header.
-        /// </summary>
         public string AlertWindowHeader
         {
             get
@@ -902,9 +817,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether alert window text.
-        /// </summary>
         public string AlertWindowText
         {
             get
@@ -922,19 +834,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets the alert window close.
-        /// </summary>
         public Action AlertWindowClose => this.CloseAlertWindow;
 
-        /// <summary>
-        /// Gets the add to queue label.
-        /// </summary>
         public string QueueLabel => string.Format(Resources.Main_QueueLabel, this.queueProcessor.Count > 0 ? string.Format(" ({0})", this.queueProcessor.Count) : string.Empty);
 
-        /// <summary>
-        /// Gets the start label.
-        /// </summary>
         public string StartLabel
         {
             get
@@ -948,9 +851,6 @@ namespace HandBrakeWPF.ViewModels
             } 
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether has source.
-        /// </summary>
         public bool HasSource
         {
             get
@@ -999,6 +899,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public bool ShowAddAllToQueue => this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
+
         public bool ShowAddSelectionToQueue => this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
 
         public string ShowAddAllMenuName =>
@@ -1020,22 +921,14 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsMultiProcess { get; set; }
 
-        #endregion
+        public bool IsNightly => VersionHelper.IsNightly();
 
-        #region Commands 
+        /* Commands */
 
-        /// <summary>
-        /// Gets or sets the queue command.
-        /// </summary>
         public ICommand QueueCommand { get; set; }
 
-        #endregion
-
-        #region Load and Shutdown Handling
-
-        /// <summary>
-        /// Initialise this view model.
-        /// </summary>
+        /* Load and Shutdown Handling */
+        
         public override void OnLoad()
         {
             // Perform an update check if required
@@ -1099,18 +992,6 @@ namespace HandBrakeWPF.ViewModels
             this.SummaryViewModel.TabStatusChanged += this.TabStatusChanged;
         }
 
-        private void SummaryViewModel_OutputFormatChanged(object sender, OutputFormatChangedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Extension))
-            {
-                this.Destination = Path.ChangeExtension(this.Destination, e.Extension);
-            }
-
-            this.VideoViewModel.RefreshTask();
-            this.AudioViewModel.RefreshTask();
-            this.SubtitleViewModel.RefreshTask();
-        }
-
         public void Shutdown()
         {
             // Shutdown Service
@@ -1141,31 +1022,20 @@ namespace HandBrakeWPF.ViewModels
             this.SummaryViewModel.TabStatusChanged -= this.TabStatusChanged;
         }
 
-        #endregion
+        /* Menu and Toolbar */
 
-        #region Menu and Taskbar
-
-        /// <summary>
-        /// Open the About Window
-        /// </summary>
         public void OpenAboutApplication()
         {
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
             command.Execute(OptionsTab.About);
         }
 
-        /// <summary>
-        /// Open the Options Window
-        /// </summary>
         public void OpenOptionsWindow()
         {
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
             command.Execute(null);
         }
 
-        /// <summary>
-        /// Open the Log Window
-        /// </summary>
         public void OpenLogWindow()
         {
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(LogView));
@@ -1181,9 +1051,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Open the Queue Window.
-        /// </summary>
         public void OpenQueueWindow()
         {
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
@@ -1202,9 +1069,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Open the Queue Window.
-        /// </summary>
         public void OpenPreviewWindow()
         {
             if (!string.IsNullOrEmpty(this.CurrentTask.Source) && !this.StaticPreviewViewModel.IsOpen)
@@ -1225,9 +1089,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsPresetPanelShowing = !this.IsPresetPanelShowing;
         }
 
-        /// <summary>
-        /// Launch the Help pages.
-        /// </summary>
         public void LaunchHelp()
         {
             try
@@ -1240,9 +1101,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Check for Updates.
-        /// </summary>
         public void CheckForUpdates()
         {
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
@@ -1336,9 +1194,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Add all Items to the queue
-        /// </summary>
         public void AddAllToQueue()
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
@@ -1396,9 +1251,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The add selection to queue.
-        /// </summary>
         public void AddSelectionToQueue()
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
@@ -1456,9 +1308,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Folder Scan
-        /// </summary>
         public void FolderScan()
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.Main_PleaseSelectFolder, UseDescriptionForTitle = true };
@@ -1470,9 +1319,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// File Scan
-        /// </summary>
         public void FileScan()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
@@ -1493,18 +1339,12 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Cancel a Scan
-        /// </summary>
         public void CancelScan()
         {
             this.ShowStatusWindow = false;
             this.scanService.Cancel();
         }
 
-        /// <summary>
-        /// Start an Encode
-        /// </summary>
         public void StartEncode()
         {
             if (this.queueProcessor.IsProcessing)
@@ -1545,12 +1385,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Edit a Queue Task
-        /// </summary>
-        /// <param name="queueTask">
-        /// The task.
-        /// </param>
         public void EditQueueJob(QueueTask queueTask)
         {
             // Rescan the source to make sure it's still valid
@@ -1560,18 +1394,12 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.Scan(task.Source, task.Title, QueueEditAction);
         }
 
-        /// <summary>
-        /// Pause an Encode
-        /// </summary>
         public void PauseEncode()
         {
             this.queueProcessor.Pause();
             this.NotifyOfPropertyChange(() => this.IsEncoding);
         }
 
-        /// <summary>
-        /// Stop an Encode.
-        /// </summary>
         public void StopEncode()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
@@ -1586,33 +1414,21 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Shutdown the Application
-        /// </summary>
         public void ExitApplication()
         {
             Application.Current.Shutdown();
         }
 
-        /// <summary>
-        /// The select source window.
-        /// </summary>
         public void SelectSourceWindow()
         {
             ShowSourceSelection = !ShowSourceSelection;
         }
 
-        /// <summary>
-        /// The close source selection.
-        /// </summary>
         public void CloseSourceSelection()
         {
             this.ShowSourceSelection = false;
         }
 
-        /// <summary>
-        /// The close alert window.
-        /// </summary>
         public void CloseAlertWindow()
         {
             this.ShowAlertWindow = false;
@@ -1620,25 +1436,64 @@ namespace HandBrakeWPF.ViewModels
             this.AlertWindowHeader = string.Empty;
         }
 
-        /// <summary>
-        /// Pass on the "When Done" Action to the queue view model. 
-        /// </summary>
-        /// <param name="action">action</param>
         public void WhenDone(int action)
         {
             this.QueueViewModel?.WhenDone(action, true);
         }
 
-        #endregion
+        public void ExportSourceData()
+        {
+            if (this.ScannedSource == null)
+            {
+                return; 
+            }
 
-        #region Main Window Public Methods
+            string json = JsonConvert.SerializeObject(this.ScannedSource, Formatting.Indented);
 
-        /// <summary>
-        /// Support dropping a file onto the main window to scan.
-        /// </summary>
-        /// <param name="e">
-        /// The DragEventArgs.
-        /// </param>
+            SaveFileDialog savefiledialog = new SaveFileDialog
+                                            {
+                                                Filter = "json|*.json",
+                                                CheckPathExists = true,
+                                                AddExtension = true,
+                                                DefaultExt = ".json",
+                                                OverwritePrompt = true,
+                                                FilterIndex = 0,
+                                                FileName = "debug.scan_output.json"
+            };
+
+            savefiledialog.ShowDialog();
+
+            if (!string.IsNullOrEmpty(savefiledialog.FileName))
+            {
+                using (StreamWriter writer = new StreamWriter(savefiledialog.FileName))
+                {
+                    writer.Write(json);
+                }
+            }
+        }
+
+        public void ImportSourceData()
+        {
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Debug Files|*.json", CheckFileExists = true };
+            bool? dialogResult = dialog.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                using (StreamReader reader = new StreamReader(dialog.FileName))
+                {
+                    string json = reader.ReadToEnd();
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                       Source source = JsonConvert.DeserializeObject<Source>(json);
+                       this.ScannedSource = source;
+                       this.HasSource = true;
+                       this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
+                    }
+                }
+            }
+        }
+
+        /* Main Window Public Methods*/
+
         public void FilesDroppedOnWindow(DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -1682,9 +1537,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedTab);
         }
 
-        /// <summary>
-        /// The Destination Path
-        /// </summary>
         public void BrowseDestination()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -1753,9 +1605,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The open destination directory.
-        /// </summary>
         public void OpenDestinationDirectory()
         {
             if (!string.IsNullOrEmpty(this.Destination))
@@ -1789,9 +1638,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Add a Preset
-        /// </summary>
         public void PresetAdd()
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
@@ -1802,9 +1648,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.CategoryPresets);
         }
 
-        /// <summary>
-        /// Update a selected preset.
-        /// </summary>
         public void PresetUpdate()
         {
             if (this.SelectedPreset == null)
@@ -1833,9 +1676,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Manage the current Preset
-        /// </summary>
         public void PresetManage()
         {
             if (this.SelectedPreset == null)
@@ -1863,9 +1703,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedPreset);
         }
 
-        /// <summary>
-        /// Remove a Preset
-        /// </summary>
         public void PresetRemove()
         {
             if (this.selectedPreset != null)
@@ -1903,9 +1740,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Set a default preset
-        /// </summary>
         public void PresetSetDefault()
         {
             if (this.selectedPreset != null)
@@ -1919,9 +1753,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Import a Preset
-        /// </summary>
         public void PresetImport()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Preset Files|*.json;*.plist", CheckFileExists = true };
@@ -1933,9 +1764,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Export a Preset
-        /// </summary>
         public void PresetExport()
         {
             if (this.selectedPreset != null && !this.selectedPreset.IsBuildIn)
@@ -1964,9 +1792,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Reset built-in presets
-        /// </summary>
         public void PresetReset()
         {
             this.presetService.UpdateBuiltInPresets();
@@ -1984,12 +1809,6 @@ namespace HandBrakeWPF.ViewModels
             this.PresetSelect(this.SelectedPreset);
         }
 
-        /// <summary>
-        /// The preset select.
-        /// </summary>
-        /// <param name="tag">
-        /// The tag.
-        /// </param>
         public void PresetSelect(object tag)
         {
             Preset preset = tag as Preset;
@@ -2035,15 +1854,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Start a Scan
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
         public void StartScan(string filename, int title)
         {
             if (!string.IsNullOrEmpty(filename))
@@ -2053,12 +1863,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The process drive.
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
         public void ProcessDrive(object item)
         {
             if (item != null)
@@ -2105,19 +1909,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, value);
         }
 
-        #endregion
+        /* Private Methods*/
 
-        #region Private Methods
-
-        /// <summary>
-        /// Update all the UI Components to allow the user to edit their previous settings.
-        /// </summary>
-        /// <param name="successful">
-        /// The successful.
-        /// </param>
-        /// <param name="scannedSource">
-        /// The scanned Source.
-        /// </param>
         private void QueueEditAction(bool successful, Source scannedSource)
         {
             /* TODO Fix this. */
@@ -2170,9 +1963,6 @@ namespace HandBrakeWPF.ViewModels
             });
         }
 
-        /// <summary>
-        /// Setup the UI tabs. Passes in any relevant models for setup.
-        /// </summary>
         private void SetupTabs()
         {
             // Setup the Tabs
@@ -2243,12 +2033,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsModifiedPreset = !matchesPreset;
         }
 
-        /// <summary>
-        /// Calculate the duration between the end and start point
-        /// </summary>
-        /// <returns>
-        /// The duration calculation.
-        /// </returns>
         private string DurationCalculation()
         {
             if (this.selectedTitle == null)
@@ -2276,12 +2060,6 @@ namespace HandBrakeWPF.ViewModels
             return "--:--:--";
         }
 
-        /// <summary>
-        /// Handle Update Check Results
-        /// </summary>
-        /// <param name="information">
-        /// The information.
-        /// </param>
         private void HandleUpdateCheckResults(UpdateCheckInformation information)
         {
             if (information.NewVersionAvailable)
@@ -2291,15 +2069,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The open alert window.
-        /// </summary>
-        /// <param name="header">
-        /// The header.
-        /// </param>
-        /// <param name="message">
-        /// The message.
-        /// </param>
         private void OpenAlertWindow(string header, string message)
         {
             this.ShowAlertWindow = true;
@@ -2321,34 +2090,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        /* Event Handlers */
 
-        #region Event Handlers
-
-        /// <summary>
-        /// Handle the Scan Status Changed Event.
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs
-        /// </param>
         private void ScanStatusChanged(object sender, ScanProgressEventArgs e)
         {
             this.SourceLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
             this.StatusLabel = string.Format(Resources.Main_ScanningTitleXOfY, e.CurrentTitle, e.Titles, e.Percentage);
         }
 
-        /// <summary>
-        /// Handle the Scan Completed Event
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs
-        /// </param>
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
             this.ShowStatusWindow = false;
@@ -2398,15 +2147,6 @@ namespace HandBrakeWPF.ViewModels
             });
         }
 
-        /// <summary>
-        /// Handle the Scan Started Event
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs
-        /// </param>
         private void ScanStared(object sender, EventArgs e)
         {
             Execute.OnUIThread(
@@ -2417,15 +2157,6 @@ namespace HandBrakeWPF.ViewModels
                 });
         }
 
-        /// <summary>
-        /// Handle the Queue Starting Event
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
         {
             Execute.OnUIThread(
@@ -2436,15 +2167,6 @@ namespace HandBrakeWPF.ViewModels
                });
         }
 
-        /// <summary>
-        /// The Queue has completed handler
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs
-        /// </param>
         private void QueueCompleted(object sender, EventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.IsEncoding);
@@ -2470,15 +2192,6 @@ namespace HandBrakeWPF.ViewModels
                 });
         }
 
-        /// <summary>
-        /// The queue changed.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs.
-        /// </param>
         private void QueueChanged(object sender, EventArgs e)
         {
             Execute.OnUIThread(
@@ -2570,15 +2283,6 @@ namespace HandBrakeWPF.ViewModels
                 });
         }
 
-        /// <summary>
-        /// Allows the main window to respond to setting changes.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
         {
             switch (e.Key)
@@ -2596,6 +2300,17 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
         }
-        #endregion
+
+        private void SummaryViewModel_OutputFormatChanged(object sender, OutputFormatChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Extension))
+            {
+                this.Destination = Path.ChangeExtension(this.Destination, e.Extension);
+            }
+
+            this.VideoViewModel.RefreshTask();
+            this.AudioViewModel.RefreshTask();
+            this.SubtitleViewModel.RefreshTask();
+        }
     }
 }
