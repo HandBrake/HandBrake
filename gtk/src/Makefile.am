@@ -41,8 +41,10 @@ hb_menu = fr.handbrake.ghb.desktop
 
 metainfodir = $(datarootdir)/metainfo
 metainfo_in_files = fr.handbrake.ghb.metainfo.xml.in
+if ! MINGW
 metainfo_DATA = $(metainfo_in_files:.xml.in=.xml)
 dist_metainfo_DATA = $(metainfo_files)
+endif
 
 EXTRA_DIST = \
 	$(metainfo_in_files)
