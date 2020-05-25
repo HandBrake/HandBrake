@@ -14,7 +14,7 @@ LIBDAV1D.CONFIGURE.host   =
 LIBDAV1D.CONFIGURE.build  =
 LIBDAV1D.CONFIGURE.static = -Ddefault_library=static
 LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ \
-                            -Denable_tools=false -Denable_tests=false
+                            -Denable_tools=false -Denable_tests=false -Denable_avx512=false
 LIBDAV1D.CONFIGURE.env    =
 
 ifneq (none,$(LIBDAV1D.GCC.g))
