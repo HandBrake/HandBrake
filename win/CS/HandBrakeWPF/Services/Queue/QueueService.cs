@@ -358,6 +358,21 @@ namespace HandBrakeWPF.Services.Queue
         {
             lock (QueueLock)
             {
+                ActiveJob activeJob = null;
+                foreach (ActiveJob ajob in this.activeJobs)
+                {
+                    if (Equals(ajob.Job, job))
+                    {
+                        activeJob = ajob;
+                        ajob.Stop();
+                    }
+                }
+
+                if (activeJob != null)
+                {
+                    this.activeJobs.Remove(activeJob);
+                }
+
                 this.queue.Remove(job);
                 this.InvokeQueueChanged(EventArgs.Empty);
             }
