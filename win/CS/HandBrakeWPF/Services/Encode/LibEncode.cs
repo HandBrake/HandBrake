@@ -194,7 +194,7 @@ namespace HandBrakeWPF.Services.Encode
 
         protected void TimedLogMessage(string message)
         {
-            this.encodeLogService.LogMessage(string.Format("[{0}] {1}", DateTime.Now.ToString("hh:mm:ss"), message));
+            this.encodeLogService.LogMessage(string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss"), message));
         }
 
         private void InstanceEncodeProgress(object sender, EncodeProgressEventArgs e)
