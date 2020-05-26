@@ -33,14 +33,15 @@ ManifestDPIAware true
 !define MUI_LICENSEPAGE_BUTTON $(^NextBtn)
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click Next to continue."
 !define MUI_WELCOMEFINISHPAGE_BITMAP "InstallerBackground.bmp"
-!define MUI_COMPONENTSPAGE_SMALLDESC
+
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_TEXT "Create desktop shortcut (all users)"
+!define MUI_FINISHPAGE_RUN_FUNCTION "desktopShortcut"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "doc\COPYING"
-; Components page
-!insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -204,18 +205,6 @@ Section "HandBrake" SectionApp
   CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
 SectionEnd
 
-Section /o "Desktop shortcut " SectionDesktop
-    SetShellVarContext current
-    CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
-    CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
-SectionEnd
-
-Section "Desktop shortcut (all users)" SectionDesktopAll
-    SetShellVarContext all
-    CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
-    CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
-SectionEnd
-
 Section -AdditionalIcons
   CreateShortCut "$SMPROGRAMS\HandBrake\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
@@ -228,14 +217,6 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\HandBrake.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
 SectionEnd
-
-; User Interface
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionApp} "The HandBrake Applicaiton"
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop} "Add a shortcut for the current user only."
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktopAll} "Add a shortcut for all users."
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
 
 Function un.onUninstSuccess
   HideWindow
@@ -296,6 +277,11 @@ Section Uninstall
   
   SetAutoClose true
 SectionEnd
+
+Function "desktopShortcut"
+    SetShellVarContext all
+    CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+FunctionEnd
 
 ;Check for .NET framework
 Function CheckFrameWork
