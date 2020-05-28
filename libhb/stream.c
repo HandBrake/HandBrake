@@ -5778,10 +5778,14 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecParameters *codecpar = st->codecpar;
-            if ( codecpar->format != AV_PIX_FMT_YUV420P &&
+            // Check for unsupported color space.
+            // Exclude 'NONE' from check since we may not know this
+            // information yet.
+            if ( codecpar->format != AV_PIX_FMT_NONE &&
                  !sws_isSupportedInput( codecpar->format ) )
             {
-                hb_log( "ffmpeg_title_scan: Unsupported color space" );
+                hb_log( "ffmpeg_title_scan: Unsupported color space (%d)",
+                        codecpar->format );
                 continue;
             }
             title->video_id = i;
