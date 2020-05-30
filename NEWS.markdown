@@ -1,5 +1,47 @@
 # HandBrake News
 
+## HandBrake 1.3.3
+
+### All platforms
+
+#### General
+
+- Improved support for sources where pixel format cannot be quickly identified, e.g. due to delayed video track start (#2893)
+- Added logging to identify where hardware support is disabled
+
+#### Video
+
+- Improved Intel QSV H.265 memory buffer size as required by newer Intel Media SDK (#2862)
+- Fixed full range video being not being identified as limited range after conversion where filters are used (#2859)
+
+#### Command line interface
+
+- Fixed --preset failure unless full path is specified, e.g. --preset="Category Name/Preset Name" (#2838)
+
+#### Build system
+
+- Improved Flatpak to better conform to freedesktop metainfo standards
+- Improved Intel QSV Flatpak plugin build effiency using cmake-ninja
+- Added a patch to fix cross compiling libdav1d using GCC 10.x (quality of life improvement)
+  - Official HandBrake 1.3.3 Windows release is built using GCC 9.x and is not directly affected by this issue
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 4.2.3 (decoding and filters)
+
+### Mac
+
+- Fixed preview layout not displaying properly on OS X 10.11 El Capitan
+- Fixed incorrect copyright year on About dialog (#2830)
+
+### Windows
+
+- Fixed a crash related to the dark theme (#2816)
+- Fixed a potential crash related to preview image memory allocation (#2871)
+- Fixed missing E-AC-3 encoder option (#2855)
+
+
 ## HandBrake 1.3.2
 
 ### All platforms
