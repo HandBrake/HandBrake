@@ -40,6 +40,7 @@
 - Fixed a crash related to the dark theme (#2816)
 - Fixed a potential crash related to preview image memory allocation (#2871)
 - Fixed missing E-AC-3 encoder option (#2855)
+- Fixed hardware encoder support unavailable in portable build (#2832)
 
 
 ## HandBrake 1.3.2
