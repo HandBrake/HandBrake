@@ -2305,8 +2305,8 @@ AVBufferRef *enc_hw_frames_ctx = NULL;
 extern EncQSVFramesContext hb_enc_qsv_frames_ctx;
 AVBufferRef *hb_hw_device_ctx = NULL;
 char *qsv_device = NULL;
-mfxHDL device_manager_handle = NULL;
-mfxIMPL device_impl;
+static mfxHDL device_manager_handle = NULL;
+static mfxHandleType device_manager_handle_type;
 
 #if defined(_WIN32) || defined(__MINGW32__)
 // Direct X
@@ -2319,6 +2319,8 @@ mfxIMPL device_impl;
 #if HAVE_DXGIDEBUG_H
 #include <dxgidebug.h>
 #endif
+
+static ID3D11DeviceContext *device_context = NULL;
 
 typedef IDirect3D9* WINAPI pDirect3DCreate9(UINT);
 typedef HRESULT WINAPI pDirect3DCreate9Ex(UINT, IDirect3D9Ex **);
@@ -2537,12 +2539,10 @@ static int hb_qsv_find_surface_idx(const QSVMid *mids, const int nb_mids, const 
     if(mids)
     {
         const QSVMid *m = &mids[0];
-        if (m->texture != mid->texture)
-            return -1;
         int i;
         for (i = 0; i < nb_mids; i++) {
             m = &mids[i];
-            if ( m->handle == mid->handle )
+            if ( (m->texture == mid->texture) && (m->handle == mid->handle) )
                 return i;
         }
     }
@@ -2617,6 +2617,111 @@ void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_inde
     }
 }
 
+static int hb_qsv_allocate_dx11_encoder_pool(ID3D11Device *device, ID3D11Texture2D* input_texture)
+{
+    D3D11_TEXTURE2D_DESC desc = { 0 };
+    ID3D11Texture2D_GetDesc(input_texture, &desc);
+    desc.ArraySize = 1;
+    desc.BindFlags = D3D10_BIND_RENDER_TARGET;
+
+    for (size_t i = 0; i < hb_enc_qsv_frames_ctx.nb_mids; i++)
+    {
+        ID3D11Texture2D* texture;
+        HRESULT hr = ID3D11Device_CreateTexture2D(device, &desc, NULL, &texture);
+        if (hr != S_OK)
+        {
+            hb_error("hb_qsv_allocate_dx11_encoder_pool: ID3D11Device_CreateTexture2D error");
+            return -1;
+        }
+
+        QSVMid *mid = &hb_enc_qsv_frames_ctx.mids[i];
+        mid->handle = 0;
+        mid->texture = texture;
+    }
+    return 0;
+}
+
+static int hb_qsv_deallocate_dx11_encoder_pool()
+{
+    if (device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
+    {
+        for (size_t i = 0; i < hb_enc_qsv_frames_ctx.nb_mids; i++)
+        {
+            QSVMid *mid = &hb_enc_qsv_frames_ctx.mids[i];
+            ID3D11Texture2D* texture = mid->texture;
+            if (texture)
+            {
+                HRESULT hr = ID3D11Texture2D_Release(texture);
+                mid->texture = NULL;
+                if (hr != S_OK)
+                {
+                    hb_error("hb_qsv_deallocate_dx11_encoder_pool: ID3D11Device_ReleaseTexture2D error");
+                    return -1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+static int hb_qsv_get_dx_device()
+{
+    AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
+    AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;
+    mfxSession        parent_session = device_hwctx->session;
+
+    if (device_manager_handle == NULL)
+    {
+        mfxIMPL device_impl;
+        int err = MFXQueryIMPL(parent_session, &device_impl);
+        if (err != MFX_ERR_NONE)
+        {
+            hb_error("hb_qsv_get_dx_device: no impl could be retrieved");
+            return -1;
+        }
+
+        if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(device_impl))
+        {
+            device_manager_handle_type = MFX_HANDLE_D3D11_DEVICE;
+        }
+        else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
+        {
+            device_manager_handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
+        }
+        else
+        {
+            hb_error("hb_qsv_get_dx_device: unsupported impl");
+            return -1;
+        }
+
+        err = MFXVideoCORE_GetHandle(parent_session, device_manager_handle_type, &device_manager_handle);
+        if (err != MFX_ERR_NONE)
+        {
+            hb_error("hb_qsv_get_dx_device: no supported hw handle could be retrieved "
+                "from the session\n");
+            return -1;
+        }
+        if (device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
+        {
+            ID3D11Device *device = (ID3D11Device *)device_manager_handle;
+            ID3D11Texture2D* input_texture = hb_enc_qsv_frames_ctx.input_texture;
+            err = hb_qsv_allocate_dx11_encoder_pool(device, input_texture);
+            if (err < 0)
+            {
+                hb_error("hb_qsv_get_dx_device: hb_qsv_allocate_dx11_encoder_pool failed");
+                return -1;
+            }
+            if (device_context == NULL)
+            {
+                ID3D11Device_GetImmediateContext(device, &device_context);
+                if (!device_context)
+                    return -1;
+            }
+        }
+    }
+    return 0;
+}
+
 hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
 {
     hb_buffer_t *out;
@@ -2636,48 +2741,17 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
 
     QSVMid *mid = NULL;
     mfxFrameSurface1* output_surface = NULL;
-
     hb_qsv_get_free_surface_from_pool(0, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, &mid, &output_surface);
 
-    AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
-    AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;
-    mfxSession        parent_session = device_hwctx->session;
-
-    if (device_manager_handle == NULL)
+    if (device_manager_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
     {
-        mfxHandleType handle_type;
-        int err = MFXQueryIMPL(parent_session, &device_impl);
-        if (err != MFX_ERR_NONE)
-        {
-            hb_error("hb_qsv_copy_frame: no impl could be retrieved");
-            return out;
-        }
+        mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
 
-        if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(device_impl))
-        {
-            handle_type = MFX_HANDLE_D3D11_DEVICE;
-        }
-        else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
-        {
-            handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
-        }
-        else
-        {
-            hb_error("hb_qsv_copy_frame: unsupported impl");
-            return out;
-        }
-
-        err = MFXVideoCORE_GetHandle(parent_session, handle_type, &device_manager_handle);
-        if (err != MFX_ERR_NONE)
-        {
-            hb_error("hb_qsv_copy_frame: no supported hw handle could be retrieved "
-                "from the session\n");
-            return out;
-        }
-    }
-
-    if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(device_impl))
-    {
+        // copy all surface fields
+        *output_surface = *input_surface;
+        // replace the mem id to mem id from the pool
+        output_surface->Data.MemId = mid;
+        // copy input sufrace to sufrace from the pool
         IDirect3DDevice9 *pDevice = NULL;
         HANDLE handle;
 
@@ -2687,14 +2761,6 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
             hb_error("hb_qsv_copy_frame: lock_device failded %d", result);
             return out;
         }
-
-        mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
-
-        // copy all surface fields
-        *output_surface = *input_surface;
-        // replace the mem id to mem id from the pool
-        output_surface->Data.MemId = mid;
-        // copy input sufrace to sufrace from the pool
         result = IDirect3DDevice9_StretchRect(pDevice, input_surface->Data.MemId, 0, mid->handle, 0, D3DTEXF_LINEAR);
         if (FAILED(result))
         {
@@ -2707,15 +2773,9 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
             hb_error("hb_qsv_copy_frame: unlock_device failded %d", result);
             return out;
         }
-    } 
-    else if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(device_impl))
+    }
+    else if (device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
     {
-        ID3D11DeviceContext *device_context = NULL;
-        ID3D11Device *device = (ID3D11Device *)device_manager_handle;
-        ID3D11Device_GetImmediateContext(device, &device_context);
-        if (!device_context)
-            return out;
-
         mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
 
         // copy all surface fields
@@ -2724,13 +2784,13 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         output_surface->Data.MemId = mid;
         // copy input sufrace to sufrace from the pool
         ID3D11DeviceContext_CopySubresourceRegion(device_context, mid->texture, (uint64_t)mid->handle, 0, 0, 0, hb_enc_qsv_frames_ctx.input_texture, (uint64_t)input_surface->Data.MemId, NULL);
+        ID3D11DeviceContext_Flush(device_context);
     }
-    else 
+    else
     {
         hb_error("hb_qsv_copy_frame: incorrect mfx impl");
         return out;
     }
-
     out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
     out->qsv_details.qsv_atom = 0;
     out->qsv_details.ctx      = qsv_ctx;
@@ -2762,6 +2822,12 @@ void hb_qsv_uninit_enc()
     hb_hw_device_ctx = NULL;
     qsv_device = NULL;
     device_manager_handle = NULL;
+    hb_qsv_deallocate_dx11_encoder_pool();
+    if (device_context)
+    {
+        ID3D11DeviceContext_Release(device_context);
+        device_context = NULL;
+    }
 }
 
 static int qsv_device_init(AVCodecContext *s)
@@ -2857,6 +2923,11 @@ static int qsv_init(AVCodecContext *s)
     hb_enc_qsv_frames_ctx.mids    = (QSVMid*)hb_enc_qsv_frames_ctx.mids_buf->data;
     hb_enc_qsv_frames_ctx.nb_mids = frames_hwctx->nb_surfaces;
     memset(hb_enc_qsv_frames_ctx.pool, 0, hb_enc_qsv_frames_ctx.nb_mids * sizeof(hb_enc_qsv_frames_ctx.pool[0]));
+    ret = hb_qsv_get_dx_device();
+    if (ret < 0) {
+        hb_error("qsv_init: hb_qsv_get_dx_device failed %d", ret);
+        return ret;
+    }
     return 0;
 }
 
