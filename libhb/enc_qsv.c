@@ -2081,11 +2081,6 @@ static int qsv_enc_work(hb_work_private_t *pv,
 
             if (sts == MFX_ERR_MORE_DATA)
             {
-                if(!pv->is_sys_mem && surface)
-                {
-                    hb_qsv_release_surface_from_pool(surface->Data.MemId);
-                }
-
                 if (qsv_atom != NULL)
                 {
                     hb_list_add(pv->delayed_processing, qsv_atom);
