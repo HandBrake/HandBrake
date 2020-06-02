@@ -11,7 +11,9 @@
 
 #### Video
 
+- Improved Intel QSV memory footprint by eliminating a buffer pool (#2675)
 - Improved Intel QSV H.265 memory buffer size as required by newer Intel Media SDK (#2862)
+- Fixed and improved Intel QSV in various situations, especially hardware decoding (#873, #2660, #2661, #2829)
 - Fixed full range video being not being identified as limited range after conversion where filters are used (#2859)
 
 #### Command line interface
