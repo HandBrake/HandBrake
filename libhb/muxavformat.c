@@ -104,7 +104,8 @@ static char* lookup_lang_code(int mux, char *iso639_2)
             // MKV lang codes should be ISO-639-2B if it exists,
             // else ISO-639-2
             lang =  lang_for_code2( iso639_2 );
-            out = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
+            out = lang->iso639_2b && *lang->iso639_2b ? lang->iso639_2b :
+                                                        lang->iso639_2;
             break;
         default:
             break;
