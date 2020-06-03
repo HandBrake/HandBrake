@@ -996,14 +996,14 @@ index 59e4ed9157..270ef976d7 100644
 +#if CONFIG_D3D11VA
 +    case AV_HWDEVICE_TYPE_D3D11VA:
 +        {
-+            printf("AV_HWDEVICE_TYPE_D3D11VA has been selected\n");
++            av_log(ctx, AV_LOG_VERBOSE,"AV_HWDEVICE_TYPE_D3D11VA has been selected\n");
 +        }
 +        break;
 +#endif
 +#if CONFIG_DXVA2
 +    case AV_HWDEVICE_TYPE_DXVA2:
 +        {
-+            printf("AV_HWDEVICE_TYPE_DXVA2 has been selected\n");
++            av_log(ctx, AV_LOG_VERBOSE,"AV_HWDEVICE_TYPE_DXVA2 has been selected\n");
 +        }
 +        break;
 +#endif
