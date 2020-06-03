@@ -641,7 +641,7 @@
                     <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
                               VerticalAlignment="Stretch" BorderThickness="0,0,0,1" BorderBrush="LightGray"
                               ItemsSource="{Binding PresetsCategories}" MaxWidth="265"
-                              helpers:TreeViewHelper.TreeViewSelectedItem="{Binding Path=SelectedPreset, Mode=TwoWay}"
+                              SelectedItemChanged="PresetListTree_OnSelectedItemChanged"
                               PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
 
                         <TreeView.ItemContainerStyle>

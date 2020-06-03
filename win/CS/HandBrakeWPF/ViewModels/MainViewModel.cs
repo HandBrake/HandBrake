@@ -315,6 +315,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!object.Equals(this.selectedPreset, value))
                 {
+                    if (value == null)
+                    {
+                        this.errorService.ShowError("Null Preset", null, Environment.StackTrace.ToString());
+                    }
+
                     if (value != null)
                     {
                         this.PresetSelect(value);
@@ -1732,7 +1737,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.presetService.Remove(this.selectedPreset);
                 this.NotifyOfPropertyChange(() => this.CategoryPresets);
-                this.SelectedPreset = this.CategoryPresets.FirstOrDefault();
+                this.SelectedPreset = this.presetService.DefaultPreset;
             }
             else
             {

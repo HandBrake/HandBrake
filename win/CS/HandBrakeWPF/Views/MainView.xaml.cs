@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -112,16 +113,6 @@ namespace HandBrakeWPF.Views
                 }
             }
         }
-
-        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
-        {
-            if (e.Source.GetType() == typeof(TreeViewItem))
-            {
-                TreeViewItem item = e.Source as TreeViewItem;
-                if (item != null) item.IsSelected = false;
-            }
-        }
-
         private void PresetListTree_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
@@ -139,6 +130,29 @@ namespace HandBrakeWPF.Views
                 source = VisualTreeHelper.GetParent(source);
 
             return source as TreeViewItem;
+        }
+
+        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
+        {
+            if (e.Source.GetType() == typeof(TreeViewItem))
+            {
+                TreeViewItem item = e.Source as TreeViewItem;
+                if (item != null && item.GetType() == typeof(PresetDisplayCategory))
+                {
+                    item.IsSelected = false;
+                }
+            }
+        }
+
+        private void PresetListTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.Source.GetType() == typeof(TreeView))
+            {
+                if (e.NewValue != null && e.NewValue.GetType() == typeof(Preset))
+                {
+                    ((MainViewModel)this.DataContext).SelectedPreset = (Preset)e.NewValue;
+                }
+            }
         }
     }
 }
