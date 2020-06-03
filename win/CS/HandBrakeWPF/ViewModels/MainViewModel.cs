@@ -1988,7 +1988,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.presetService.Remove(this.selectedPreset);
                 this.NotifyOfPropertyChange(() => this.CategoryPresets);
-                this.SelectedPreset = this.CategoryPresets.FirstOrDefault();
+                this.SelectedPreset = this.presetService.DefaultPreset;
             }
             else
             {
