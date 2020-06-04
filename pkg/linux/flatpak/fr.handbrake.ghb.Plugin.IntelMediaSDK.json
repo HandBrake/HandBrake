@@ -106,7 +106,7 @@
                 {
                     "type": "archive",
                     "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-20.1.1.tar.gz",
-                    "sha256": "44300c0f068f6d018d182455dd9c2f48db1e85fe0b38fcd60d0353bd145923dc"
+                    "sha256": "fd7fc5c85481c951b56a986357e382b4e8b65f81bf552620ca4631a1ffd07fa5"
                 },
                 {
                     "type": "file",
