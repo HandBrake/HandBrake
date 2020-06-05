@@ -133,6 +133,11 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.queue.Add(job);
                 this.InvokeQueueChanged(EventArgs.Empty);
+
+                if (this.IsEncoding)
+                {
+                    this.ProcessNextJob();
+                }
             }
         }
 
