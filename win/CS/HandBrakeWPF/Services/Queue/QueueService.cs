@@ -57,6 +57,8 @@ namespace HandBrakeWPF.Services.Queue
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
 
+        private readonly IPortService portService;
+
         private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
         private readonly object queueFileLock = new object();
@@ -65,13 +67,14 @@ namespace HandBrakeWPF.Services.Queue
         private int jobIdCounter = 0;
         private bool processIsolationEnabled;
 
-        public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider)
+        public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider, IPortService portService)
         {
             this.userSettingService = userSettingService;
             this.logService = logService;
             this.errorService = errorService;
             this.logInstanceManager = logInstanceManager;
             this.hbFunctionsProvider = hbFunctionsProvider;
+            this.portService = portService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
             this.queueFile = string.Format("{0}{1}.json", QueueRecoveryHelper.QueueFileName, GeneralUtilities.ProcessId);
@@ -567,7 +570,7 @@ namespace HandBrakeWPF.Services.Queue
                 }
 
                 this.jobIdCounter = this.jobIdCounter + 1;
-                ActiveJob activeJob = new ActiveJob(job, this.hbFunctionsProvider, this.userSettingService, this.logInstanceManager, this.jobIdCounter);
+                ActiveJob activeJob = new ActiveJob(job, this.hbFunctionsProvider, this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
                 activeJob.JobFinished += this.ActiveJob_JobFinished;
                 activeJob.JobStatusUpdated += this.ActiveJob_JobStatusUpdated;
                 this.activeJobs.Add(activeJob);

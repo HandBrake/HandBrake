@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Queue
 {
     using System;
+    using System.Diagnostics;
 
     using HandBrake.Interop.Interop.Providers.Interfaces;
 
@@ -26,10 +27,10 @@ namespace HandBrakeWPF.Services.Queue
         private readonly QueueTask job;
         private readonly IEncode encodeService;
 
-        public ActiveJob(QueueTask task, IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int jobId)
+        public ActiveJob(QueueTask task, IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int jobId, IPortService portService)
         {
             this.job = task;
-            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, jobId);
+            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, jobId, portService);
         }
 
         public event EventHandler<ActiveJobCompletedEventArgs> JobFinished;
@@ -60,6 +61,7 @@ namespace HandBrakeWPF.Services.Queue
 
                 this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
                 this.encodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+                
                 this.encodeService.Start(this.job.Task, this.job.Configuration, this.job.SelectedPresetKey);
             }
         }

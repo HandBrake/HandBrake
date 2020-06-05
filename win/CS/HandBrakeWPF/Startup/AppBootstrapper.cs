@@ -87,6 +87,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ISystemService, SystemService>();
             this.container.Singleton<IHbFunctionsProvider, HbFunctionsProvider>();
             this.container.Singleton<ILogInstanceManager, LogInstanceManager>();
+            this.container.Singleton<IPortService, PortService>();
             
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();

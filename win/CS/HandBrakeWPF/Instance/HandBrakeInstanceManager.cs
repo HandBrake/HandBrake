@@ -37,7 +37,7 @@ namespace HandBrakeWPF.Instance
             HandBrakeUtils.EnsureGlobalInit(noHardwareMode);
         }
 
-        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService)
+        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
             if (!HandBrakeUtils.IsInitialised())
             {
@@ -48,7 +48,7 @@ namespace HandBrakeWPF.Instance
 
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
             {
-                newInstance = new RemoteInstance(configuration, logService, userSettingService);
+                newInstance = new RemoteInstance(logService, userSettingService, portService);
             }
             else
             {

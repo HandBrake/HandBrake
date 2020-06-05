@@ -11,39 +11,33 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Net.NetworkInformation;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
-    using System.Timers;
-    using System.Windows.Media.Animation;
-
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Model;
     using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;
     using HandBrakeWPF.Model.Options;
-    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
 
+    using Timer = System.Timers.Timer;
+
     public class RemoteInstance : HttpRequestBase, IEncodeInstance, IDisposable
     {
-        private readonly HBConfiguration configuration;
         private readonly ILog logService;
         private readonly IUserSettingService userSettingService;
+        private readonly IPortService portService;
 
         private const double EncodePollIntervalMs = 500;
 
@@ -51,13 +45,11 @@ namespace HandBrakeWPF.Instance
         private Timer encodePollTimer;
         private int retryCount = 0;
 
-        public RemoteInstance(HBConfiguration configuration, ILog logService, IUserSettingService userSettingService)
+        public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
-            this.configuration = configuration;
             this.logService = logService;
             this.userSettingService = userSettingService;
-            this.port = this.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort));
-            this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
+            this.portService = portService;
         }
 
         public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
@@ -80,24 +72,30 @@ namespace HandBrakeWPF.Instance
 
         public void StartEncode(JsonEncodeObject jobToStart)
         {
+           Thread thread1 = new Thread(() => RunEncodeInitProcess(jobToStart));
+           thread1.Start();
+        }
+
+        private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
+        {
             InitCommand initCommand = new InitCommand
-            {
-                EnableDiskLogging = false,
-                AllowDisconnectedWorker = false,
-                DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                EnableHardwareAcceleration = true,
-                LogDirectory = DirectoryUtilities.GetLogDirectory(),
-                LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
-            };
+                                      {
+                                          EnableDiskLogging = false,
+                                          AllowDisconnectedWorker = false,
+                                          DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                                          EnableHardwareAcceleration = true,
+                                          LogDirectory = DirectoryUtilities.GetLogDirectory(),
+                                          LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
+                                      };
 
             initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+
             string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
 
             var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
             task.Wait();
-
             this.MonitorEncodeProgress();
         }
 
@@ -128,6 +126,8 @@ namespace HandBrakeWPF.Instance
             {
                 var plainTextBytes = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
                 this.base64Token = Convert.ToBase64String(plainTextBytes);
+                this.port = this.portService.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort));
+                this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
 
                 workerProcess = new Process
                 {
@@ -287,32 +287,8 @@ namespace HandBrakeWPF.Instance
                 }
 
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
+                this.portService.FreePort(this.port);
             }
-        }
-
-        private int GetOpenPort(int startPort)
-        {
-            if (startPort == 0)
-            {
-                startPort = 8037;
-            }
-
-            int portStartIndex = startPort;
-
-            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
-            IPEndPoint[] tcpEndPoints = properties.GetActiveTcpListeners();
-
-            List<int> usedPorts = tcpEndPoints.Select(p => p.Port).ToList<int>();
-            int unusedPort = 0;
-
-            unusedPort = Enumerable.Range(portStartIndex, 99).FirstOrDefault(p => !usedPorts.Contains(p));
-
-            if (startPort != unusedPort)
-            {
-                this.logService.LogMessage(string.Format("Port {0} in use. Using {1} instead", startPort, unusedPort));
-            }
-
-            return unusedPort;
         }
     }
 }

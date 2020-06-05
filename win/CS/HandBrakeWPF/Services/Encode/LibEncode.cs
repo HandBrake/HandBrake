@@ -12,10 +12,10 @@ namespace HandBrakeWPF.Services.Encode
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Windows.Forms.VisualStyles;
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
@@ -49,12 +49,15 @@ namespace HandBrakeWPF.Services.Encode
         private bool isLoggingInitialised;
         private int encodeCounter;
 
-        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter) : base(userSettingService)
+        private readonly IPortService portService;
+
+        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter, IPortService portService) : base(userSettingService)
         {
             this.userSettingService = userSettingService;
             this.logInstanceManager = logInstanceManager;
             this.hbFunctionsProvider = hbFunctionsProvider;
             this.encodeCounter = encodeCounter;
+            this.portService = portService;
         }
 
         public bool IsPasued { get; private set; }
@@ -112,7 +115,7 @@ namespace HandBrakeWPF.Services.Encode
                 // Prevent port stealing if multiple jobs start at the same time.
                 lock (portLock) 
                 {
-                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, userSettingService);
+                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, userSettingService, this.portService);
 
                     this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                     this.instance.EncodeProgress += this.InstanceEncodeProgress;
@@ -124,7 +127,12 @@ namespace HandBrakeWPF.Services.Encode
                     this.VerifyEncodeDestinationPath(task);
 
                     // Get an EncodeJob object for the Interop Library
-                    this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration, hbFunctionsProvider.GetHbFunctionsWrapper()));
+                    JsonEncodeObject work = EncodeTaskFactory.Create(
+                        task,
+                        configuration,
+                        hbFunctionsProvider.GetHbFunctionsWrapper());
+
+                    this.instance.StartEncode(work);
                 }
 
                 // Fire the Encode Started Event

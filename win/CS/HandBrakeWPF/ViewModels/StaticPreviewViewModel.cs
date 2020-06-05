@@ -58,7 +58,7 @@ namespace HandBrakeWPF.ViewModels
         private bool useSystemDefaultPlayer;
         private bool previewRotateFlip;
 
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider, ILog logService, ILogInstanceManager logInstanceManager)
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider, ILog logService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
@@ -68,7 +68,7 @@ namespace HandBrakeWPF.ViewModels
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
-            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, 0); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, 0, portService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
             this.Percentage = "0.00%";
