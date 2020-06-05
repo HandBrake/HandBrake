@@ -727,9 +727,9 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
     int longest = 0;
     int ii;
     uint64_t longest_duration = 0;
-    int highest_rank = 0;
+    int highest_rank = 0, rank;
     int most_chapters = 0;
-    int rank[8] = {0, 1, 3, 2, 6, 5, 7, 4};
+    int ranks[9] = {0, 1, 3, 2, 6, 5, 7, 4, 8};
     BLURAY_TITLE_INFO * ti;
 
     for ( ii = 0; ii < hb_list_count( list_title ); ii++ )
@@ -741,16 +741,21 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
             BLURAY_STREAM_INFO * bdvideo = &ti->clips[0].video_streams[0];
             if ( title->duration > longest_duration * 0.7 && bdvideo->format < 8 )
             {
-                if (highest_rank < rank[bdvideo->format] ||
+                rank = 0;
+                if (bdvideo->format <= 8)
+                {
+                    rank = ranks[bdvideo->format];
+                }
+                if (highest_rank < rank ||
                     ( title->duration > longest_duration &&
-                          highest_rank == rank[bdvideo->format]))
+                      highest_rank == rank))
                 {
                     longest = title->index;
                     longest_duration = title->duration;
-                    highest_rank = rank[bdvideo->format];
+                    highest_rank = rank;
                     most_chapters = ti->chapter_count;
                 }
-                else if (highest_rank == rank[bdvideo->format] &&
+                else if (highest_rank == rank &&
                          title->duration == longest_duration &&
                          ti->chapter_count > most_chapters)
                 {
