@@ -137,7 +137,7 @@ namespace HandBrakeWPF.Views
             if (e.Source.GetType() == typeof(TreeViewItem))
             {
                 TreeViewItem item = e.Source as TreeViewItem;
-                if (item != null && item.GetType() == typeof(PresetDisplayCategory))
+                if (item != null && item.DataContext?.GetType() == typeof(PresetDisplayCategory))
                 {
                     item.IsSelected = false;
                 }
