@@ -160,7 +160,6 @@
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="Helpers\LogManager.cs" />
     <Compile Include="Helpers\MP4Helper.cs" />
     <Compile Include="Helpers\TimeSpanHelper.cs" />
