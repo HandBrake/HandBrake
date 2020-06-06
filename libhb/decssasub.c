@@ -23,92 +23,45 @@
  *
  * @author David Foster (davidfstr)
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include "handbrake/handbrake.h"
 
-#include <ass/ass.h>
+#include "handbrake/handbrake.h"
 #include "handbrake/decavsub.h"
-#include "handbrake/colormap.h"
+#include "libavformat/avformat.h"
 
 struct hb_work_private_s
 {
+    AVFormatContext    * ic;
     hb_avsub_context_t * ctx;
-    hb_job_t      * job;
-    hb_subtitle_t * subtitle;
-
-    // SSA Import
-    FILE          * file;
-    int             readOrder;
+    AVPacket             avpkt;
+    hb_subtitle_t      * subtitle;
 
     // Time of first desired subtitle adjusted by reader_pts_offset
     uint64_t start_time;
     uint64_t stop_time;
 };
 
-#define SSA_VERBOSE_PACKETS 0
-
 static int extradataInit( hb_work_private_t * pv )
 {
-    int    events = 0;
-    char * events_tag = "[Events]";
-    char * format_tag = "Format:";
-    int    events_len = strlen(events_tag);;
-    int    format_len = strlen(format_tag);;
-    char * header = NULL;
-
-    while (1)
+    if (pv->ic->nb_streams < 1)
     {
-        char    * line = NULL;
-        ssize_t   len;
-        size_t    size = 0;
-
-        len = hb_getline(&line, &size, pv->file);
-        if (len < 0)
-        {
-            // Incomplete SSA header
-            free(header);
-            return 1;
-        }
-        if (len > 0 && line != NULL)
-        {
-            if (header != NULL)
-            {
-                char * tmp = header;
-                header = hb_strdup_printf("%s%s", header, line);
-                free(tmp);
-            }
-            else
-            {
-                header = strdup(line);
-            }
-            if (!events)
-            {
-                if (len >= events_len &&
-                    !strncasecmp(line, events_tag, events_len))
-                {
-                    events = 1;
-                }
-            }
-            else
-            {
-                if (len >= format_len &&
-                    !strncasecmp(line, format_tag, format_len))
-                {
-                    free(line);
-                    break;
-                }
-                // Improperly formatted SSA header
-                free(header);
-                return 1;
-            }
-        }
-        free(line);
+        hb_error("SSA demux found no streams");
+        return 1;
     }
-    pv->subtitle->extradata = (uint8_t*)header;
-    pv->subtitle->extradata_size = strlen(header) + 1;
 
+    AVStream * st = pv->ic->streams[0];
+    if (st->codecpar->codec_id != AV_CODEC_ID_ASS)
+    {
+        hb_error("SSA demux found wrong codec_id %x", st->codecpar->codec_id);
+        return 1;
+    }
+    if (st->codecpar->extradata != NULL)
+    {
+        pv->subtitle->extradata = malloc(st->codecpar->extradata_size + 1);
+        memcpy(pv->subtitle->extradata,
+               st->codecpar->extradata, st->codecpar->extradata_size);
+        pv->subtitle->extradata[st->codecpar->extradata_size] = 0;
+        pv->subtitle->extradata_size = st->codecpar->extradata_size + 1;
+    }
     return 0;
 }
 
@@ -117,35 +70,33 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv;
     int                 ii;
 
-    pv              = calloc( 1, sizeof( hb_work_private_t ) );
-    if (pv == NULL)
-    {
-        goto fail;
-    }
-    w->private_data = pv;
-    pv->ctx = decavsubInit(w, job);
-    if (pv->ctx == NULL)
-    {
-        goto fail;
-    }
-    pv->job         = job;
-    pv->subtitle    = w->subtitle;
-
-    if (pv->subtitle->config.src_filename == NULL)
+    if (w->subtitle->config.src_filename == NULL)
     {
         hb_error("No SSA subtitle file specified");
         goto fail;
     }
 
-    pv->file = hb_fopen(pv->subtitle->config.src_filename, "r");
-    if(pv->file == NULL)
+    pv = calloc( 1, sizeof( hb_work_private_t ) );
+    if (pv == NULL)
+    {
+        goto fail;
+    }
+    w->private_data = pv;
+    pv->subtitle    = w->subtitle;
+    av_init_packet(&pv->avpkt);
+    if (avformat_open_input(&pv->ic, pv->subtitle->config.src_filename,
+        NULL, NULL ) < 0 )
     {
         hb_error("Could not open the SSA subtitle file '%s'\n",
                  pv->subtitle->config.src_filename);
         goto fail;
     }
+    pv->ctx = decavsubInit(w, job);
+    if (pv->ctx == NULL)
+    {
+        goto fail;
+    }
 
-    // Read SSA header and store in subtitle extradata
     if (extradataInit(pv))
     {
         goto fail;
@@ -192,10 +143,11 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 fail:
     if (pv != NULL)
     {
+        av_packet_unref(&pv->avpkt);
         decavsubClose(pv->ctx);
-        if (pv->file != NULL)
+        if (pv->ic)
         {
-            fclose(pv->file);
+            avformat_close_input(&pv->ic);
         }
         free(pv);
         w->private_data = NULL;
@@ -203,146 +155,67 @@ fail:
     return 1;
 }
 
-#define SSA_2_HB_TIME(hr,min,sec,centi) \
-    ( 90LL * ( hr    * 1000LL * 60 * 60 +\
-              min   * 1000LL * 60 +\
-              sec   * 1000LL +\
-              centi * 10LL ) )
-
-/*
- * Parses the start and stop time from the specified SSA packet.
- *
- * Returns true if parsing failed; false otherwise.
- */
-static int parse_timing( char *line, int64_t *start, int64_t *stop )
+static hb_buffer_t * ssa_read( hb_work_private_t * pv )
 {
-    /*
-     * Parse Start and End fields for timing information
-     */
-    int start_hr, start_min, start_sec, start_centi;
-    int   end_hr,   end_min,   end_sec,   end_centi;
-    // SSA subtitles have an empty layer field (bare ',').  The scanf
-    // format specifier "%*128[^,]" will not match on a bare ','.  There
-    // must be at least one non ',' character in the match.  So the format
-    // specifier is placed directly next to the ':' so that the next
-    // expected ' ' after the ':' will be the character it matches on
-    // when there is no layer field.
-    int numPartsRead = sscanf(line, "Dialogue:%*128[^,],"
-        "%d:%d:%d.%d,"  // Start
-        "%d:%d:%d.%d,", // End
-        &start_hr, &start_min, &start_sec, &start_centi,
-          &end_hr,   &end_min,   &end_sec,   &end_centi );
-    if ( numPartsRead != 8 )
-        return 1;
-
-    *start = SSA_2_HB_TIME(start_hr, start_min, start_sec, start_centi);
-    *stop  = SSA_2_HB_TIME(  end_hr,   end_min,   end_sec,   end_centi);
-
-    return 0;
-}
-
-static char * find_field( char * pos, char * end, int fieldNum )
-{
-    int curFieldID = 1;
-    while (pos < end)
-    {
-        if ( *pos++ == ',' )
-        {
-            curFieldID++;
-            if ( curFieldID == fieldNum )
-                return pos;
-        }
-    }
-    return NULL;
-}
-
-/*
- * SSA line format:
- *   Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
- *             1      2     3   4     5    6       7       8       9      10
- *
- * MKV-SSA packet format:
- *   ReadOrder,Marked,          Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
- *   1         2                3     4    5       6       7       8      9
- */
-static hb_buffer_t *
-decode_line_to_mkv_ssa( hb_work_private_t * pv, char * line, int size )
-{
+    int           err;
     hb_buffer_t * out;
 
-    // Trim trailing CR/LF
-    while (size > 0 && (line[size - 1] == '\n' || line[size - 1] == '\r'))
+    if ((err = av_read_frame(pv->ic, &pv->avpkt)) < 0)
     {
-        line[--size] = 0;
+        if (err != AVERROR_EOF)
+        {
+            hb_error("SSA demux read error %d", err);
+        }
+        return hb_buffer_eof_init();
     }
+    AVStream * st = pv->ic->streams[pv->avpkt.stream_index];
 
-    int64_t start, stop;
-    if (parse_timing(line, &start, &stop))
+    out = hb_buffer_init(pv->avpkt.size + 1);
+    memcpy(out->data, pv->avpkt.data, pv->avpkt.size);
+    out->data[pv->avpkt.size] = 0;
+    out->size = pv->avpkt.size;
+
+    double tsconv = (double)90000. * st->time_base.num / st->time_base.den;
+    if (pv->avpkt.pts != AV_NOPTS_VALUE)
     {
-        goto fail;
+        out->s.start = pv->avpkt.pts * tsconv;
     }
-
-    // Convert the SSA packet to MKV-SSA format, which is what libass expects
-    char * mkvSSA;
-    int    numPartsRead;
-    char * styleToTextFields;
-    char * layerField = malloc(size);
-
-    // SSA subtitles have an empty layer field (bare ',').  The scanf
-    // format specifier "%*128[^,]" will not match on a bare ','.  There
-    // must be at least one non ',' character in the match.  So the format
-    // specifier is placed directly next to the ':' so that the next
-    // expected ' ' after the ':' will be the character it matches on
-    // when there is no layer field.
-    numPartsRead = sscanf( (char *)line, "Dialogue:%128[^,],", layerField );
-    if ( numPartsRead != 1 )
+    if (pv->avpkt.dts != AV_NOPTS_VALUE)
     {
-        free(layerField);
-        goto fail;
+        out->s.renderOffset = pv->avpkt.dts * tsconv;
     }
-
-    styleToTextFields = find_field( line, line + size, 4 );
-    if ( styleToTextFields == NULL ) {
-        free( layerField );
-        goto fail;
-    }
-
-    // The sscanf conversion above will result in an extra space
-    // before the layerField.  Strip the space.
-    char *stripLayerField = layerField;
-    for(; *stripLayerField == ' '; stripLayerField++);
-
-    out = hb_buffer_init( size + 1 );
-    mkvSSA = (char*)out->data;
-
-    mkvSSA[0] = '\0';
-    sprintf(mkvSSA, "%d", pv->readOrder++);
-    strcat( mkvSSA, "," );
-    strcat( mkvSSA, stripLayerField );
-    strcat( mkvSSA, "," );
-    strcat( mkvSSA, (char *)styleToTextFields );
-
-    out->size           = strlen(mkvSSA) + 1;
-    out->s.frametype    = HB_FRAME_SUBTITLE;
-    out->s.start        = start + pv->subtitle->config.offset * 90;
-    out->s.duration     = stop - start;
-    out->s.stop         = stop + pv->subtitle->config.offset * 90;
-
-    if (out->size == 0)
+    if (out->s.renderOffset >= 0 && out->s.start == AV_NOPTS_VALUE)
     {
-        hb_buffer_close(&out);
+        out->s.start = out->s.renderOffset;
     }
-    else if (out->s.stop  <= pv->start_time ||
-             out->s.start >= pv->stop_time)
+    else if (out->s.renderOffset == AV_NOPTS_VALUE && out->s.start >= 0)
     {
-        // Drop subtitles that end before the start time
-        // or start after the stop time
+        out->s.renderOffset = out->s.start;
+    }
+    int64_t pkt_duration = pv->avpkt.duration;
+    if (pkt_duration != AV_NOPTS_VALUE)
+    {
+        out->s.duration = pkt_duration * tsconv;
+        out->s.stop = out->s.start + out->s.duration;
+    }
+    else
+    {
+        out->s.duration = (int64_t)AV_NOPTS_VALUE;
+    }
+    out->s.type = SUBTITLE_BUF;
+    av_packet_unref(&pv->avpkt);
+
+    if (out->s.stop  <= pv->start_time || out->s.start >= pv->stop_time)
+    {
+        // Drop subtitles that end before the PtoP start time
+        // or start after the PtoP stop time
         hb_deep_log(3, "Discarding SSA at time start %"PRId64", stop %"PRId64,
                     out->s.start, out->s.stop);
         hb_buffer_close(&out);
     }
     else
     {
+        // Adjust start/stop for subtitles that span PtoP start/stop
         if (out->s.start < pv->start_time)
         {
             out->s.start = pv->start_time;
@@ -354,69 +227,6 @@ decode_line_to_mkv_ssa( hb_work_private_t * pv, char * line, int size )
         out->s.start -= pv->start_time;
         out->s.stop  -= pv->start_time;
     }
-
-
-    free( layerField );
-
-    return out;
-
-fail:
-    hb_log( "decssasub: malformed SSA subtitle packet: %.*s\n", size, line );
-    return NULL;
-}
-
-/*
- * Read the SSA file and put the entries into the subtitle fifo for all to read
- */
-static hb_buffer_t * ssa_read( hb_work_private_t * pv )
-{
-    hb_buffer_t * out;
-
-    if (!pv->file)
-    {
-        return hb_buffer_eof_init();
-    }
-
-    if (pv->job->reader_pts_offset == AV_NOPTS_VALUE)
-    {
-        // We need to wait for reader to initialize it's pts offset so that
-        // we know where to start reading SSA.
-        return NULL;
-    }
-    if (pv->start_time == AV_NOPTS_VALUE)
-    {
-        pv->start_time = pv->job->reader_pts_offset;
-        if (pv->job->pts_to_stop > 0)
-        {
-            pv->stop_time = pv->job->pts_to_start + pv->job->pts_to_stop;
-        }
-    }
-    while (!feof(pv->file))
-    {
-        char    * line = NULL;
-        ssize_t   len;
-        size_t    size = 0;
-
-        len = hb_getline(&line, &size, pv->file);
-        if (len > 0 && line != NULL)
-        {
-            out = decode_line_to_mkv_ssa(pv, line, len);
-            if (out != NULL)
-            {
-                free(line);
-                return out;
-            }
-        }
-        free(line);
-        if (len < 0)
-        {
-            // Error or EOF
-            out = hb_buffer_eof_init();
-            return out;
-        }
-    }
-    out = hb_buffer_eof_init();
-
     return out;
 }
 
@@ -447,7 +257,8 @@ static void decssaClose( hb_work_object_t * w )
     if (pv != NULL)
     {
         decavsubClose(pv->ctx);
-        fclose(pv->file);
+        av_packet_unref(&pv->avpkt);
+        avformat_close_input(&pv->ic);
         free(pv);
     }
     w->private_data = NULL;
