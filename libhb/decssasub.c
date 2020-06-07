@@ -33,6 +33,7 @@ struct hb_work_private_s
     AVFormatContext    * ic;
     hb_avsub_context_t * ctx;
     AVPacket             avpkt;
+    hb_job_t           * job;
     hb_subtitle_t      * subtitle;
 
     // Time of first desired subtitle adjusted by reader_pts_offset
@@ -82,6 +83,7 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
         goto fail;
     }
     w->private_data = pv;
+    pv->job         = job;
     pv->subtitle    = w->subtitle;
     av_init_packet(&pv->avpkt);
     if (avformat_open_input(&pv->ic, pv->subtitle->config.src_filename,
@@ -160,6 +162,21 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
     int           err;
     hb_buffer_t * out;
 
+    if (pv->job->reader_pts_offset == AV_NOPTS_VALUE)
+    {
+        // We need to wait for reader to initialize it's pts offset so that
+        // we know where to start reading SSA.
+        return NULL;
+    }
+    if (pv->start_time == AV_NOPTS_VALUE)
+    {
+        pv->start_time = pv->job->reader_pts_offset;
+        if (pv->job->pts_to_stop > 0)
+        {
+            pv->stop_time = pv->job->pts_to_start + pv->job->pts_to_stop;
+        }
+    }
+
     if ((err = av_read_frame(pv->ic, &pv->avpkt)) < 0)
     {
         if (err != AVERROR_EOF)
@@ -178,11 +195,13 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
     double tsconv = (double)90000. * st->time_base.num / st->time_base.den;
     if (pv->avpkt.pts != AV_NOPTS_VALUE)
     {
-        out->s.start = pv->avpkt.pts * tsconv;
+        out->s.start = pv->avpkt.pts * tsconv +
+                       pv->subtitle->config.offset * 90;
     }
     if (pv->avpkt.dts != AV_NOPTS_VALUE)
     {
-        out->s.renderOffset = pv->avpkt.dts * tsconv;
+        out->s.renderOffset = pv->avpkt.dts * tsconv +
+                              pv->subtitle->config.offset * 90;
     }
     if (out->s.renderOffset >= 0 && out->s.start == AV_NOPTS_VALUE)
     {
