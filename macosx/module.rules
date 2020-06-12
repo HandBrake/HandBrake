@@ -1,7 +1,6 @@
 $(eval $(call import.MODULE.rules,MACOSX))
 
 build: macosx.build
-archive: macosx.archive
 install: macosx.install
 uninstall: macosx.uninstall
 clean: macosx.clean
@@ -29,15 +28,11 @@ test.xclean: test.clean
 macosx.build: $(MACOSX.m4.out)
 macosx.build: $(MACOSX.osl.filelist)
 
-macosx.archive: $(MACOSX.m4.out)
-macosx.archive: $(MACOSX.osl.filelist)
-
 macosx.install: test.install
 macosx.uninstall: test.uninstall
 
 macosx.clean:
 	$(RM.exe) -rf $(MACOSX.xroot/)HandBrake/
-	$(RM.exe) -rf $(MACOSX.xroot/)HandBrake.xcarchive
 	$(RM.exe) -rf $(MACOSX.xroot/)HandBrake.app
 	$(RM.exe) -f $(MACOSX.xroot/)HandBrakeCLI
 	$(RM.exe) -f $(MACOSX.xroot/)hbsign.log

@@ -4,7 +4,6 @@ $(eval $(call import.GCC,MACOSX))
 MACOSX.src/   = $(SRC/)macosx/
 MACOSX.build/ = $(BUILD/)macosx/
 MACOSX.xroot/ = $(BUILD/)xroot/
-MACOSX.xarchive/ = $(BUILD/)xroot/HandBrake/
 
 MACOSX.m4.in  = $(wildcard $(MACOSX.src/)*.m4)
 MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
@@ -75,37 +74,6 @@ MACOSX.XCODE = $(strip \
         $(MACOSX.extra_cflags) \
         \
         $(2) )
-
-MACOSX.XCODE_ARCHIVE = $(strip \
-    $(XCODEBUILD.exe) \
-        $(MACOSX.project) \
-        $(foreach t,$(1),-scheme $t) \
-        $(MACOSX.configuration) \
-        $(MACOSX.xcconfig) \
-        \
-        SYMROOT='$(XCODE.symroot)' \
-        CONFIGURATION_BUILD_DIR='$(XCODE.symroot)' \
-        CONFIGURATION_TEMP_DIR='$(XCODE.symroot)' \
-        \
-        -derivedDataPath '$(MACOSX.xarchive/)' \
-        -archivePath '$(MACOSX.xarchive/)' \
-        \
-        EXTERNAL_BUILD='$(abspath $(BUILD))' \
-        EXTERNAL_CONF_ARGS='$(CONF.args)' \
-        EXTERNAL_DRIVER='$(XCODE.driver)' \
-        EXTERNAL_GOALS='$(3)' \
-        EXTERNAL_JOBS='$(MACOSX.JOBS)' \
-        EXTERNAL_O='$(MACOSX.map.O.$(MACOSX.GCC.O))' \
-        EXTERNAL_VARS='$(-*-command-variables-*-)' \
-        \
-        $(MACOSX.extra_cflags) \
-        \
-        $(2) ) ; $(strip \
-    $(XCODEBUILD.exe) \
-        -exportArchive \
-        -exportOptionsPlist '$(MACOSX.src/)archive.plist' \
-        -exportPath '$(MACOSX.xarchive/)' \
-        -archivePath '$(MACOSX.xarchive/)' )
 
 ifeq (1,$(SECURITY.sandbox))
     MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign -sr '$(ID)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
