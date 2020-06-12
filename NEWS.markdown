@@ -6,8 +6,10 @@
 
 #### General
 
+- Fixed ISO 639-2/B language codes not set correctly in MKV (affects Hebrew, Indonesian, Javanese, and Yiddish) (#2903)
 - Improved support for sources where pixel format cannot be quickly identified, e.g. due to delayed video track start (#2893)
 - Added logging to identify where hardware support is disabled
+- Miscellaneous bug fixes and improvements
 
 #### Video
 
@@ -15,6 +17,11 @@
 - Improved Intel QSV H.265 memory buffer size as required by newer Intel Media SDK (#2862)
 - Fixed and improved Intel QSV in various situations, especially hardware decoding (#873, #2660, #2661, #2829)
 - Fixed full range video being not being identified as limited range after conversion where filters are used (#2859)
+
+#### Subtitles
+
+- Fixed handling of overlapping SSA import subtitles (791adbac)
+- Improved support for out-of-order SSA subtitles as allowed by specification (#2906)
 
 #### Command line interface
 
@@ -41,8 +48,10 @@
 
 - Fixed a crash related to the dark theme (#2816)
 - Fixed a potential crash related to preview image memory allocation (#2871)
+- Fixed a potential crash due to certain actions causing no preset being selected (#2875)
 - Fixed missing E-AC-3 encoder option (#2855)
 - Fixed hardware encoder support unavailable in portable build (#2832)
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.3.2
