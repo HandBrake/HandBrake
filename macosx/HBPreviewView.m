@@ -191,7 +191,7 @@
 - (void)layout
 {
     [super layout];
-    // Set the picture size display fields below the Preview Picture
+
     NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
 
     if (imageSize.width > 0 && imageSize.height > 0)
