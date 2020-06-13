@@ -210,7 +210,7 @@ namespace HandBrakeWPF.Instance
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
         {
-            this.logService.LogMessage("Worker Process Existed!");
+            this.logService.LogMessage("Worker Process Exited!");
         }
 
         private void StopServer()
