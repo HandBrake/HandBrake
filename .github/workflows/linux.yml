@@ -6,7 +6,7 @@ jobs:
 
   handle_forks:
     name: Forked Repo
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.repository != 'HandBrake/HandBrake'
     steps:
     - name: Print Warning

@@ -39,13 +39,14 @@ jobs:
         make pkg.create
     
     - name: Upload Assets
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: HandBrake-macos
         path: ./build/pkg
         
     - name: Tidy up past artifacts
       uses: kolpav/purge-artifacts-action@v1
+      if: github.repository == 'HandBrake/HandBrake'
       with:
           token: ${{ secrets.GITHUB_TOKEN }}
           expire-in: 3days
