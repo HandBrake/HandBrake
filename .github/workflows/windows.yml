@@ -29,6 +29,9 @@ jobs:
             mv mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz toolchains
             cd toolchains
             tar xvf mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
+            pwd
+            cd mingw-w64-toolchain-9.1.0-linux-x86_64/mingw-w64-x86_64/
+            pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
