@@ -16,28 +16,27 @@ jobs:
         sudo apt-get install python3-pip
         sudo apt-get install python3-setuptools
         sudo pip3 install meson
-        
-    - name: Toolchain Cache
-      id: mingw-toolchain
-      uses: actions/cache@v1
-      with:
-        path: /home/runner/toolchains/
-        key: mingw-toolchain
-    
-    - name: Compile Toolchain
-      if: steps.mingw-toolchain.outputs.cache-hit != 'true'
+           
+    - name: Setup Toolchain
       run: |
-        ./scripts/mingw-w64-build --disable-gdb x86_64 ~/toolchains
-        ./scripts/mingw-w64-build x86_64.clean
-        ./scripts/mingw-w64-build pkgclean
-        cd /home/runner/toolchains/
-        rm -rf build-mingw-w64-x86_64.noindex
-        rm -rf source.noindex
-        rm -rf pkg
+        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.1.0/mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz)
+        EXPECTED="4c0fadeaaa0c72ed7107bf49ebddf5c8a35abd92  mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz"
+        if [ "$SHA" == "$EXPECTED" ];
+        then
+            echo "Toolchain Verified. Extracting ..."
+            mkdir toolchains
+            mv mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz toolchains
+            cd toolchains
+            tar xvf mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
+        else
+            echo "Toolchain Verification FAILED. Exiting!"
+            return -1
+        fi
           
     - name: Build CLI and LibHB
       run: |
-        export PATH="/home/runner/toolchains/mingw-w64-x86_64/bin:${PATH}"
+        export PATH="/home/runner/toolchains/mingw-w64-toolchain-9.1.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
         cd build
         make pkg.create.zip
