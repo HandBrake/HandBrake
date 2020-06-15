@@ -40,7 +40,7 @@ icons_dep =	\
 hb_menu = fr.handbrake.ghb.desktop
 
 metainfodir = $(datarootdir)/metainfo
-metainfo_in_files = fr.handbrake.ghb.metainfo.xml.in
+metainfo_in_files = fr.handbrake.ghb.appdata.xml.in
 metainfo_DATA = $(metainfo_in_files:.xml.in=.xml)
 dist_metainfo_DATA = $(metainfo_files)
 
@@ -172,10 +172,10 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	$(HB_PYTHON) $(srcdir)/makedeps.py
 
-fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
+fr.handbrake.ghb.appdata.xml: fr.handbrake.ghb.appdata.xml.in
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.template.xml
+fr.handbrake.ghb.appdata.xml.in: fr.handbrake.ghb.appdata.template.xml
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
 
 $(srcdir)/marshalers.h: marshalers.list
