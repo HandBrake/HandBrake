@@ -974,7 +974,10 @@ class Project( Action ):
             if not m:
                 # Regular release
                 self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
-                self.debversion = '%d.%d.%d' % (self.vmajor, self.vminor, self.vpoint)
+                if self.suffix:
+                    self.debversion = '%d.%d.%d.%s' % (self.vmajor, self.vminor, self.vpoint, self.suffix)
+                else:
+                    self.debversion = '%d.%d.%d' % (self.vmajor, self.vminor, self.vpoint)
                 url_ctype = ''
                 url_ntype = 'stable'
             else:
