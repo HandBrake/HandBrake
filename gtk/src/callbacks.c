@@ -4542,7 +4542,8 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
                                 HB_PROJECT_URL_WEBSITE);
     gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(widget),
                                         HB_PROJECT_URL_WEBSITE);
-    gtk_widget_show (widget);
+    gtk_dialog_run(GTK_DIALOG(widget));
+    gtk_widget_hide(widget);
 }
 
 #define HB_DOCS "https://handbrake.fr/docs/"
