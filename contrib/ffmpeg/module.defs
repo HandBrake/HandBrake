@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-4.2.3.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-4.2.3.tar.bz2
-FFMPEG.FETCH.sha256 = 217eb211c33303b37c5521a5abe1f0140854d6810c6a6ee399456cc96356795e
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-4.3.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-4.3.tar.bz2
+FFMPEG.FETCH.sha256 = a7e87112fc49ad5b59e26726e3a7cae0ffae511cba5376c579ba3cb04483d6e2
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -137,7 +137,7 @@ endif
 
 ifeq (1,$(FEATURE.nvenc))
 FFMPEG.CONFIGURE.extra += \
-     --enable-nvenc \
+     --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
      --enable-encoder=hevc_nvenc
 endif
