@@ -4690,6 +4690,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters:.
+        /// </summary>
+        public static string QueueView_FilterSettings {
+            get {
+                return ResourceManager.GetString("QueueView_FilterSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Queue.
         /// </summary>
         public static string QueueView_Import {
@@ -5771,6 +5780,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string SummaryView_Default {
+            get {
+                return ResourceManager.GetString("SummaryView_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detelecine.
         /// </summary>
         public static string SummaryView_Detelecine {
@@ -5785,6 +5803,15 @@ namespace HandBrakeWPF.Properties {
         public static string SummaryView_display {
             get {
                 return ResourceManager.GetString("SummaryView_display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forced.
+        /// </summary>
+        public static string SummaryView_Forced {
+            get {
+                return ResourceManager.GetString("SummaryView_Forced", resourceCulture);
             }
         }
         

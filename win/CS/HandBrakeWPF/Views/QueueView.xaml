@@ -29,13 +29,13 @@
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
-        <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
         <Converters:InverseBooleanConverter x:Key="notBooleanConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
         <queue:PictureSettingsDescConveter x:Key="pictureSettingsDescConverter" />
+        <queue:FilterSettingsDescConverter x:Key="filterSettingsDescConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
 
@@ -417,6 +417,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
@@ -446,19 +447,22 @@
                                     <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
                                     <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource pictureSettingsDescConverter}}" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1"  />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Video}" Grid.Row="4" Grid.Column="0" />
-                                    <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap"  />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_FilterSettings}" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0" />
+                                    <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource filterSettingsDescConverter}}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="1"  />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="5" Grid.Column="0" VerticalAlignment="Top"/>
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Video}" Grid.Row="5" Grid.Column="0" />
+                                    <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap"  />
+
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="6" Grid.Column="0" VerticalAlignment="Top"/>
                                     <TextBlock Text="{Binding SelectedTask.Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
-                                           Grid.Row="5" Grid.Column="1" />
-
-                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="6" Grid.Column="0"   />
-                                    <TextBlock Text="{Binding SelectedTask.Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
                                            Grid.Row="6" Grid.Column="1" />
 
-                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="7" Grid.Column="0"  Text="{x:Static Properties:Resources.QueueView_Advanced}" />
-                                    <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap"  />
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="7" Grid.Column="0"   />
+                                    <TextBlock Text="{Binding SelectedTask.Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
+                                           Grid.Row="7" Grid.Column="1" />
+
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="8" Grid.Column="0"  Text="{x:Static Properties:Resources.QueueView_Advanced}" />
+                                    <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="8" Grid.Column="1" TextWrapping="Wrap"  />
                                 </Grid>
 
                             </StackPanel>

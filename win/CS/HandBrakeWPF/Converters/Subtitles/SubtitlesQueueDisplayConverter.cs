@@ -53,6 +53,16 @@ namespace HandBrakeWPF.Converters.Subtitles
                     {
                         text = text + string.Format(", {0}", Resources.SummaryView_Burned);
                     }
+
+                    if (track.Forced)
+                    {
+                        text = text + string.Format(", {0}", Resources.SummaryView_Forced);
+                    }
+
+                    if (track.Default)
+                    {
+                        text = text + string.Format(", {0}", Resources.SummaryView_Forced);
+                    }
                     
                     sutitleTracks.AppendLine(text);
                 }

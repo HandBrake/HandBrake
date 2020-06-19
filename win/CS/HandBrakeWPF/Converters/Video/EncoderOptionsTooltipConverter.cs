@@ -49,7 +49,8 @@ namespace HandBrakeWPF.Converters.Video
             {
                 VideoTune tune = task.VideoTunes.FirstOrDefault();
 
-                return string.Format("Preset: {0}{5}Tune: {1}{5}Profile: {2}{5}Level: {3}{5}Extra Arguments: {4}{5}",
+                return string.Format(
+                    "Preset: {0}, Tune: {1}{5}Profile: {2}, Level: {3}{5}Extra Arguments: {4}{5}",
                     task.VideoPreset != null ? task.VideoPreset.ShortName : VideoPreset.None.DisplayName,
                     tune != null ? tune.ShortName : VideoTune.None.DisplayName,
                     task.VideoProfile != null ? task.VideoProfile.ShortName : VideoProfile.Auto.DisplayName,
