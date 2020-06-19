@@ -76,29 +76,6 @@ namespace HandBrakeWPF.Instance
            thread1.Start();
         }
 
-        private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
-        {
-            InitCommand initCommand = new InitCommand
-                                      {
-                                          EnableDiskLogging = false,
-                                          AllowDisconnectedWorker = false,
-                                          DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                                          EnableHardwareAcceleration = true,
-                                          LogDirectory = DirectoryUtilities.GetLogDirectory(),
-                                          LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
-                                      };
-
-            initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
-
-            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-
-            string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
-
-            var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
-            task.Wait();
-            this.MonitorEncodeProgress();
-        }
-
         public async void StopEncode()
         {
             await this.MakeHttpGetRequest("StopEncode");
@@ -122,54 +99,64 @@ namespace HandBrakeWPF.Instance
 
         public void Initialize(int verbosityLvl, bool noHardwareMode)
         {
-            if (this.workerProcess == null || this.workerProcess.HasExited)
+            try
             {
-                var plainTextBytes = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
-                this.base64Token = Convert.ToBase64String(plainTextBytes);
-                this.port = this.portService.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort));
-                this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
-
-                workerProcess = new Process
+                if (this.workerProcess == null || this.workerProcess.HasExited)
                 {
-                    StartInfo =
+                    var plainTextBytes = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
+                    this.base64Token = Convert.ToBase64String(plainTextBytes);
+                    this.port = this.portService.GetOpenPort(userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort));
+                    this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
+
+                    workerProcess = new Process
                                     {
-                                        FileName = "HandBrake.Worker.exe",
-                                        Arguments = string.Format(" --port={0} --token={1}", port, this.base64Token),
-                                        UseShellExecute = false,
-                                        RedirectStandardOutput = true,
-                                        RedirectStandardError = true,
-                                        CreateNoWindow = true
-                                    }
-                };
-                workerProcess.Exited += this.WorkerProcess_Exited;
-                workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
-                workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;
+                                        StartInfo =
+                                        {
+                                            FileName = "HandBrake.Worker.exe",
+                                            Arguments =
+                                                string.Format(" --port={0} --token={1}", port, this.base64Token),
+                                            UseShellExecute = false,
+                                            RedirectStandardOutput = true,
+                                            RedirectStandardError = true,
+                                            CreateNoWindow = true
+                                        }
+                                    };
+                    workerProcess.Exited += this.WorkerProcess_Exited;
+                    workerProcess.OutputDataReceived += this.WorkerProcess_OutputDataReceived;
+                    workerProcess.ErrorDataReceived += this.WorkerProcess_OutputDataReceived;
 
-                workerProcess.Start();
-                workerProcess.BeginOutputReadLine();
-                workerProcess.BeginErrorReadLine();
+                    workerProcess.Start();
+                    workerProcess.BeginOutputReadLine();
+                    workerProcess.BeginErrorReadLine();
 
-                // Set Process Priority
-                switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
-                {
-                    case ProcessPriority.High:
-                        workerProcess.PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case ProcessPriority.AboveNormal:
-                        workerProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case ProcessPriority.Normal:
-                        workerProcess.PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case ProcessPriority.Low:
-                        workerProcess.PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        workerProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
+                    // Set Process Priority
+                    switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(
+                        UserSettingConstants.ProcessPriorityInt))
+                    {
+                        case ProcessPriority.High:
+                            workerProcess.PriorityClass = ProcessPriorityClass.High;
+                            break;
+                        case ProcessPriority.AboveNormal:
+                            workerProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
+                            break;
+                        case ProcessPriority.Normal:
+                            workerProcess.PriorityClass = ProcessPriorityClass.Normal;
+                            break;
+                        case ProcessPriority.Low:
+                            workerProcess.PriorityClass = ProcessPriorityClass.Idle;
+                            break;
+                        default:
+                            workerProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                            break;
+                    }
+                    
+                    this.logService.LogMessage(string.Format("Remote Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
                 }
-
-                this.logService.LogMessage(string.Format("Worker Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
+            }
+            catch (Exception e)
+            {
+                this.logService.LogMessage("Unable to start worker process.");
+                this.logService.LogMessage(e.ToString());
             }
         }
 
@@ -204,7 +191,15 @@ namespace HandBrakeWPF.Instance
 
         private void StopPollingProgress()
         {
-            this.PollEncodeProgress(); // Get the last progress state.
+            try
+            {
+                this.PollEncodeProgress(); // Get the last progress state.
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc);
+            }
+           
             this.encodePollTimer?.Stop();
         }
 
@@ -289,6 +284,29 @@ namespace HandBrakeWPF.Instance
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));
                 this.portService.FreePort(this.port);
             }
+        }
+
+        private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
+        {
+            InitCommand initCommand = new InitCommand
+                                      {
+                                          EnableDiskLogging = false,
+                                          AllowDisconnectedWorker = false,
+                                          DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                                          EnableHardwareAcceleration = true,
+                                          LogDirectory = DirectoryUtilities.GetLogDirectory(),
+                                          LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
+                                      };
+
+            initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
+
+            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+
+            string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
+
+            var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
+            task.Wait();
+            this.MonitorEncodeProgress();
         }
     }
 }

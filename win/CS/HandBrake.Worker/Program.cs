@@ -12,7 +12,6 @@ namespace HandBrake.Worker
     using System;
     using System.Collections.Generic;
     using System.Net;
-    using System.Runtime.CompilerServices;
     using System.Threading;
 
     using HandBrake.Worker.Routing;
@@ -54,13 +53,16 @@ namespace HandBrake.Worker
             Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port, token);
-            webServer.Run();
-
-            Console.WriteLine("Worker: Server Started");
-            
-            manualResetEvent.WaitOne();
-
-            webServer.Stop();
+            if (webServer.Run())
+            {
+                Console.WriteLine("Worker: Server Started");
+                manualResetEvent.WaitOne();webServer.Stop();
+                webServer.Stop();
+            }
+            else
+            {
+                Console.WriteLine("Worker: Failed to start. Exiting ...");
+            }
         }
 
         private static Dictionary<string, Func<HttpListenerRequest, string>> RegisterApiHandlers()

@@ -20,9 +20,10 @@ namespace HandBrake.Worker
     public class HttpServer
     {
         private readonly string uiToken;
-
         private readonly HttpListener httpListener = new HttpListener();
         private readonly Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
+        
+        private bool failedStart = false;
 
         public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, string token)
         {
@@ -45,13 +46,27 @@ namespace HandBrake.Worker
             }
 
             Debug.WriteLine(Environment.NewLine);
-              
-            this.httpListener.Start();
+
+            try
+            {
+                this.httpListener.Start();
+            }
+            catch (Exception e)
+            {
+                failedStart = true;
+                Console.WriteLine(string.Format("Worker: Unable to start HTTP Server. Mabye the port {0} is in use?", port));
+                Console.WriteLine("Worker Exception: " + e);
+            }
         }
 
-        public void Run()
+        public bool Run()
         {
-            ThreadPool.QueueUserWorkItem((o) =>
+            if (this.failedStart)
+            {
+                return false;
+            }
+
+            ThreadPool.QueueUserWorkItem(o =>
             {
                 try
                 {
@@ -119,6 +134,8 @@ namespace HandBrake.Worker
                     Console.WriteLine("Worker: " + exc);
                 }
             });
+
+            return true;
         }
 
         public void Stop()

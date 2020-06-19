@@ -3664,6 +3664,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ( Windows 10 Only! ).
+        /// </summary>
+        public static string OptionsView_Win10Only {
+            get {
+                return ResourceManager.GetString("OptionsView_Win10Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default network port for worker:.
         /// </summary>
         public static string OptionsView_WorkerDefaultPort {
