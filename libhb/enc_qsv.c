@@ -1765,7 +1765,7 @@ void encqsvClose(hb_work_object_t *w)
             }
 
             /* QSV context cleanup and MFXClose */
-            hb_qsv_context_clean(qsv_ctx);
+            hb_qsv_context_clean(qsv_ctx,hb_qsv_full_path_is_enabled(pv->job));
 
             hb_display_close(&pv->display);
 

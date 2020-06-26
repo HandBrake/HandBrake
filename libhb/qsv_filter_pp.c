@@ -36,7 +36,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "handbrake/qsv_filter.h"
 #include "handbrake/qsv_libav.h"
 #include "handbrake/qsv_memory.h"
-
+#include "handbrake/qsv_common.h"
 
 static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init );
@@ -520,7 +520,7 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
         qsv_filter_close(qsv,HB_QSV_VPP_USER);
 
         // closing the commong stuff
-        hb_qsv_context_clean(qsv);
+        hb_qsv_context_clean(qsv,hb_qsv_full_path_is_enabled(pv->job));
     }
     hb_cond_close(&pv->pre.frame_completed);
     hb_lock_close(&pv->pre.frame_completed_lock);

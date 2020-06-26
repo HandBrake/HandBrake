@@ -207,7 +207,7 @@ void hb_qsv_add_context_usage(hb_qsv_context * qsv, int is_threaded)
     }
 }
 
-int hb_qsv_context_clean(hb_qsv_context * qsv)
+int hb_qsv_context_clean(hb_qsv_context * qsv, int full_job)
 {
     int is_active = 0;
     mfxStatus sts = MFX_ERR_NONE;
@@ -235,10 +235,9 @@ int hb_qsv_context_clean(hb_qsv_context * qsv)
         if (qsv->pipes)
             hb_qsv_pipe_list_clean(&qsv->pipes);
 
-        if (qsv->mfx_session) {
-            // Intentionally leave it because the decode session closed first and encoder session hangs
-            //sts = MFXClose(qsv->mfx_session);
-            //HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+        if (qsv->mfx_session && !full_job) {
+            sts = MFXClose(qsv->mfx_session);
+            HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
             qsv->mfx_session = 0;
         }
     }
