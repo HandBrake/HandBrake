@@ -46,7 +46,7 @@ jobs:
         
     - name: Tidy up past artifacts
       uses: kolpav/purge-artifacts-action@v1
-      if: github.repository == 'HandBrake/HandBrake'
+      if: github.event_name != 'pull_request'
       with:
           token: ${{ secrets.GITHUB_TOKEN }}
           expire-in: 3days
