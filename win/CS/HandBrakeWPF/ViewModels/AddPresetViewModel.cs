@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop.Model.Encoding;
-
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
@@ -25,12 +23,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// The Add Preset View Model
@@ -40,15 +36,14 @@ namespace HandBrakeWPF.ViewModels
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
         private readonly IWindowManager windowManager;
-        private PresetPictureSettingsMode selectedPictureSettingMode;
+        private readonly PresetDisplayCategory addNewCategory = new PresetDisplayCategory(Resources.AddPresetView_AddNewCategory, true, null);
+
         private bool showCustomInputs;
-        private Title selectedTitle;
 
         private IAudioDefaultsViewModel audioDefaultsViewModel;
         private ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel;
 
         private PresetDisplayCategory selectedPresetCategory;
-        private readonly PresetDisplayCategory addNewCategory = new PresetDisplayCategory(Resources.AddPresetView_AddNewCategory, true, null);
         private bool canAddNewPresetCategory;
 
         /// <summary>
@@ -70,40 +65,15 @@ namespace HandBrakeWPF.ViewModels
             this.windowManager = windowManager;
             this.Title = Resources.AddPresetView_AddPreset;
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
-            this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
             this.PresetCategories = presetService.GetPresetCategories(true).Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
             this.SelectedPresetCategory = this.PresetCategories.FirstOrDefault(n => n.Category == PresetService.UserPresetCatgoryName);
         }
 
-        /// <summary>
-        /// Gets the Preset
-        /// </summary>
-        public Preset Preset { get; private set; }
+        public Preset Preset { get; }
 
-        /// <summary>
-        /// Gets or sets PictureSettingsModes.
-        /// </summary>
-        public IEnumerable<PresetPictureSettingsMode> PictureSettingsModes { get; set; }
-
-        /// <summary>
-        /// Gets or sets CustomWidth.
-        /// </summary>
-        public int? CustomWidth { get; set; }
-
-        /// <summary>
-        /// Gets or sets CustomHeight.
-        /// </summary>
-        public int? CustomHeight { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowCustomInputs.
-        /// </summary>
         public bool ShowCustomInputs
         {
-            get
-            {
-                return this.showCustomInputs;
-            }
+            get => this.showCustomInputs;
             set
             {
                 this.showCustomInputs = value;
@@ -115,10 +85,7 @@ namespace HandBrakeWPF.ViewModels
 
         public PresetDisplayCategory SelectedPresetCategory
         {
-            get
-            {
-                return this.selectedPresetCategory;
-            }
+            get => this.selectedPresetCategory;
             set
             {
                 this.selectedPresetCategory = value;
@@ -138,10 +105,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string PresetCategory
         {
-            get
-            {
-                return this.Preset.Category;
-            }
+            get => this.Preset.Category;
             set
             {
                 this.Preset.Category = value;
@@ -151,49 +115,19 @@ namespace HandBrakeWPF.ViewModels
 
         public bool CanAddNewPresetCategory
         {
-            get
-            {
-                return this.canAddNewPresetCategory;
-            }
+            get => this.canAddNewPresetCategory;
             set
             {
-                if (value == this.canAddNewPresetCategory) return;
+                if (value == this.canAddNewPresetCategory)
+                {
+                    return;
+                }
+
                 this.canAddNewPresetCategory = value;
                 this.NotifyOfPropertyChange();
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedPictureSettingMode.
-        /// </summary>
-        public PresetPictureSettingsMode SelectedPictureSettingMode
-        {
-            get
-            {
-                return this.selectedPictureSettingMode;
-            }
-            set
-            {
-                this.selectedPictureSettingMode = value;
-                this.ShowCustomInputs = value == PresetPictureSettingsMode.Custom;
-            }
-        }
-
-        /// <summary>
-        /// Prepare the Preset window to create a Preset Object later.
-        /// </summary>
-        /// <param name="task">
-        /// The Encode Task.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="audioBehaviours">
-        /// The audio Behaviours.
-        /// </param>
-        /// <param name="subtitleBehaviours">
-        /// The subtitle Behaviours.
-        /// </param>
         public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
             this.Preset.Task = new EncodeTask(task);
@@ -205,28 +139,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
             this.subtitlesDefaultsViewModel.SetupLanguages(subtitleBehaviours);
-
-            this.selectedTitle = title;
-
-            switch (task.Anamorphic)
-            {
-                default:
-                    this.SelectedPictureSettingMode = PresetPictureSettingsMode.Custom;
-                    if (title != null && title.Resolution != null)
-                    {
-                        this.CustomWidth = title.Resolution.Width;
-                        this.CustomHeight = title.Resolution.Height;
-                    }
-                    break;
-                case Anamorphic.Automatic:
-                    this.SelectedPictureSettingMode = PresetPictureSettingsMode.SourceMaximum;
-                    break;
-            }
         }
 
-        /// <summary>
-        /// Add a Preset
-        /// </summary>
         public void Add()
         {
             if (string.IsNullOrEmpty(this.Preset.Name))
@@ -250,42 +164,7 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
             }
-
-            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)
-            {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_YouMustFirstScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (this.CustomWidth == null && this.CustomHeight == null && this.SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
-            {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_CustomWidthHeightFieldsRequired, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            this.Preset.PictureSettingsMode = this.SelectedPictureSettingMode;
-
-            // Setting W, H, MW and MH
-            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.None)
-            {
-                this.Preset.Task.MaxHeight = null;
-                this.Preset.Task.MaxWidth = null;
-            }
-
-            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
-            {
-                this.Preset.Task.MaxWidth = this.CustomWidth;
-                this.Preset.Task.MaxHeight = this.CustomHeight;
-                this.Preset.Task.Width = null;
-                this.Preset.Task.Height = null;
-            }
-
-            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
-            {
-                this.Preset.Task.MaxHeight = null;
-                this.Preset.Task.MaxWidth = null;
-            }
-
+            
             // Add the Preset
             bool added = this.presetService.Add(this.Preset);
             if (!added)
@@ -308,7 +187,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditAudioDefaults()
         {
             this.audioDefaultsViewModel.ResetApplied();
-            bool? result = this.windowManager.ShowDialog(this.audioDefaultsViewModel);
+            this.windowManager.ShowDialog(this.audioDefaultsViewModel);
             if (audioDefaultsViewModel.IsApplied)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();

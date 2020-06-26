@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Model.Picture
     /// <summary>
     /// Picture Settings Mode when adding presets
     /// </summary>
-    public enum PresetPictureSettingsMode
+    public enum PresetPictureSettingsMode2
     {
         [DisplayName(typeof(Resources), "PresetPictureSettingsMode_None")]
         None = 0,

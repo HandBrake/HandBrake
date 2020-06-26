@@ -75,7 +75,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.AlignAVStart = importedPreset.AlignAVStart;
 
             /* Picture Settings */
-            preset.PictureSettingsMode = (PresetPictureSettingsMode)importedPreset.UsesPictureSettings;
+            // preset.PictureSettingsMode = (PresetPictureSettingsMode)importedPreset.UsesPictureSettings;
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
@@ -544,7 +544,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PresetDescription = export.Description;
             preset.PresetName = export.Name;
             preset.Type = export.IsBuildIn ? 0 : 1;
-            preset.UsesPictureSettings = (int)export.PictureSettingsMode;
+            // preset.UsesPictureSettings = (int)export.PictureSettingsMode;
             preset.Default = export.IsDefault;
 
             // Audio

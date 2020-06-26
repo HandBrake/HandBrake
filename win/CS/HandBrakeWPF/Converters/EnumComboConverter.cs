@@ -20,7 +20,6 @@ namespace HandBrakeWPF.Converters
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// Enum Combo Converter
@@ -38,11 +37,6 @@ namespace HandBrakeWPF.Converters
             if (value is IEnumerable<VideoEncoder>)
             {
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValues(typeof(VideoEncoder));
-            }
-
-            if (value is IEnumerable<PresetPictureSettingsMode>)
-            {
-                return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
             }
 
             if (value is IEnumerable<Detelecine>)
@@ -99,11 +93,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)value);
-            }
-
-            if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
-            {
-                return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
             }
 
             if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
@@ -174,11 +163,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetValue(value.ToString());
-            }
-
-            if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
-            {
-                return EnumHelper<PresetPictureSettingsMode>.GetValue(value.ToString());
             }
 
             if (targetType == typeof(Denoise) || value.GetType() == typeof(Denoise))

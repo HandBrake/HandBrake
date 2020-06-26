@@ -14,11 +14,9 @@ namespace HandBrakeWPF.Services.Presets
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Documents;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Presets;
@@ -28,11 +26,9 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Logging;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
@@ -44,9 +40,6 @@ namespace HandBrakeWPF.Services.Presets
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
 
-    /// <summary>
-    /// The preset service manages HandBrake's presets
-    /// </summary>
     public class PresetService : IPresetService
     {
         public const int ForcePresetReset = 3;
@@ -66,9 +59,6 @@ namespace HandBrakeWPF.Services.Presets
             this.userSettingService = userSettingService;
         }
 
-        /// <summary>
-        /// Gets a Collection of presets.
-        /// </summary>
         public ObservableCollection<IPresetObject> Presets
         {
             get
@@ -77,9 +67,6 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// Gets the DefaultPreset.
-        /// </summary>
         public Preset DefaultPreset
         {
             get
@@ -88,9 +75,6 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// The load.
-        /// </summary>
         public void Load()
         {
             // Load the presets from file
@@ -102,20 +86,6 @@ namespace HandBrakeWPF.Services.Presets
             return this.Add(preset, false);
         }
 
-        /// <summary>
-        /// Add a new preset to the system.
-        /// Performs an Update if it already exists
-        /// </summary>
-        /// <param name="preset">
-        /// A Preset to add
-        /// </param>
-        /// <param name="isLoading">
-        /// Prevents Saving of presets.
-        /// </param>
-        /// <returns>
-        /// True if added,
-        /// False if name already exists
-        /// </returns>
         public bool Add(Preset preset, bool isLoading)
         {
             if (!this.CheckIfPresetExists(preset.Name))
@@ -155,12 +125,6 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
         public void Import(string filename)
         {
             if (!string.IsNullOrEmpty(filename))
@@ -236,18 +200,6 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// The export.
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
         public void Export(string filename, Preset preset, HBConfiguration configuration)
         {
             // TODO Add support for multiple export
@@ -255,19 +207,12 @@ namespace HandBrakeWPF.Services.Presets
             HandBrakePresetService.ExportPreset(filename, container);
         }
 
-        /// <summary>
-        /// Update a preset
-        /// </summary>
-        /// <param name="update">
-        /// The updated preset
-        /// </param>
         public void Update(Preset update)
         {
             Preset preset;
             if (this.flatPresetDict.TryGetValue(update.Name, out preset))
             {
                 preset.Task = update.Task;
-                preset.PictureSettingsMode = update.PictureSettingsMode;
                 preset.Category = update.Category;
                 preset.Description = update.Description;
                 preset.AudioTrackBehaviours = update.AudioTrackBehaviours;
@@ -278,28 +223,12 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// Replace an existing preset with a modified one.
-        /// </summary>
-        /// <param name="existing">
-        /// The existing.
-        /// </param>
-        /// <param name="replacement">
-        /// The replacement.
-        /// </param>
         public void Replace(Preset existing, Preset replacement)
         {
             this.Remove(existing);
             this.Add(replacement, false);
         }
 
-        /// <summary>
-        /// Remove a preset with a given name from either the built in or user preset list.
-        /// </summary>
-        /// <param name="preset">
-        /// The Preset to remove
-        /// </param>
-        /// <returns>True if successfully removed, false otherwise.</returns>
         public bool Remove(Preset preset)
         {
             if (preset == null || preset.IsDefault)
@@ -331,12 +260,6 @@ namespace HandBrakeWPF.Services.Presets
             return true;
         }
 
-        /// <summary>
-        /// Remove a group of presets by category
-        /// </summary>
-        /// <param name="categoryName">
-        /// The Category to remove
-        /// </param>
         public void RemoveGroup(string categoryName)
         {
             PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == categoryName) as PresetDisplayCategory;
@@ -365,12 +288,6 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// Set Default Preset
-        /// </summary>
-        /// <param name="preset">
-        /// The name.
-        /// </param>
         public void SetDefault(Preset preset)
         {
             // Set IsDefault false for everything.
@@ -385,15 +302,6 @@ namespace HandBrakeWPF.Services.Presets
             this.SavePresetFiles();
         }
 
-        /// <summary>
-        /// Get a Preset
-        /// </summary>
-        /// <param name="name">
-        /// The name of the preset to get
-        /// </param>
-        /// <returns>
-        /// A Preset or null object
-        /// </returns>
         public Preset GetPreset(string name)
         {
             Preset preset;
@@ -405,9 +313,6 @@ namespace HandBrakeWPF.Services.Presets
             return null;
         }
 
-        /// <summary>
-        /// Clear Built-in Presets
-        /// </summary>
         public void ClearBuiltIn()
         {
             List<IPresetObject> topLevel = new List<IPresetObject>();
@@ -463,18 +368,12 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        /// <summary>
-        /// Clear all presets
-        /// </summary>
         public void ClearAll()
         {
             this.presets.Clear();
             this.flatPresetList.Clear();
         }
 
-        /// <summary>
-        /// Reads the CLI's CLI output format and load's them into the preset List Preset
-        /// </summary>
         public void UpdateBuiltInPresets()
         {
             // Clear the current built in Presets and now parse the temporary Presets file.
@@ -507,15 +406,6 @@ namespace HandBrakeWPF.Services.Presets
             this.SavePresetFiles();
         }
 
-        /// <summary>
-        /// Check if the preset "name" exists in either Presets or UserPresets lists.
-        /// </summary>
-        /// <param name="name">
-        /// Name of the preset
-        /// </param>
-        /// <returns>
-        /// True if found
-        /// </returns>
         public bool CheckIfPresetExists(string name)
         {
             if (this.flatPresetDict.ContainsKey(name))
@@ -526,15 +416,6 @@ namespace HandBrakeWPF.Services.Presets
             return false;
         }
 
-        /// <summary>
-        /// Returns a value if the preset can be updated / resaved
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <returns>
-        /// True if it's not a built-in preset, false otherwise.
-        /// </returns>
         public bool CanUpdatePreset(string name)
         {
             Preset preset;
@@ -546,10 +427,6 @@ namespace HandBrakeWPF.Services.Presets
             return true;
         }
 
-        /// <summary>
-        /// Set the selected preset
-        /// </summary>
-        /// <param name="selectedPreset">The preset we want to select.</param>
         public void SetSelected(Preset selectedPreset)
         {
             foreach (var item in this.flatPresetList)
@@ -614,18 +491,6 @@ namespace HandBrakeWPF.Services.Presets
             return categoriesList;
         }
 
-        /// <summary>
-        /// Archive the presets file without deleting it.
-        /// </summary>
-        /// <param name="file">
-        /// The filename to archive
-        /// </param>
-        /// <param name="delete">
-        /// True will delete the current presets file.
-        /// </param>
-        /// <returns>
-        /// The archived filename
-        /// </returns>
         private string ArchivePresetFile(string file, bool delete)
         {
             try
@@ -661,9 +526,6 @@ namespace HandBrakeWPF.Services.Presets
             return "Sorry, the archiving failed.";
         }
 
-        /// <summary>
-        /// Load in the Built-in and User presets into the collection
-        /// </summary>
         private void LoadPresets()
         {
             // First clear the Presets arraylists
@@ -758,13 +620,6 @@ namespace HandBrakeWPF.Services.Presets
                         preset.IsBuildIn = hbpreset.Type == 0;
                         preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
-                        // IF we are using Source Max, Set the Max Width / Height values.
-                        if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
-                        {
-                            preset.Task.MaxWidth = preset.Task.Height;
-                            preset.Task.MaxHeight = preset.Task.Width;
-                        }
-
                         this.Add(preset, true);
                     }
                 }
@@ -779,21 +634,11 @@ namespace HandBrakeWPF.Services.Presets
                     preset.IsBuildIn = hbPreset.Type == 1;
                     preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
-                    // IF we are using Source Max, Set the Max Width / Height values.
-                    if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
-                    {
-                        preset.Task.MaxWidth = preset.Task.Height;
-                        preset.Task.MaxHeight = preset.Task.Width;
-                    }
-
                     this.Add(preset, true);
                 }
             }
         }
 
-        /// <summary>
-        /// Update the preset files
-        /// </summary>
         private void SavePresetFiles()
         {
             try
@@ -870,17 +715,8 @@ namespace HandBrakeWPF.Services.Presets
 
         private Preset ConvertHbPreset(HBPreset hbPreset)
         {
-            Preset preset = null;
-
-            preset = JsonPresetFactory.ImportPreset(hbPreset);
+            Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
             preset.Category = UserPresetCatgoryName; // TODO can we get this from the preset?
-
-            // IF we are using Source Max, Set the Max Width / Height values.
-            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
-            {
-                preset.Task.MaxWidth = preset.Task.Height;
-                preset.Task.MaxHeight = preset.Task.Width;
-            }
 
             return preset;
         }

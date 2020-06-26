@@ -3854,6 +3854,69 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1080p HD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_1080p {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_1080p", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 480p NTSC SD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_480p {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_480p", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2160p 4K Ultra HD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_4K {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_4K", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 576p PAL SD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_576p {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_576p", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 720p HD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_720p {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_720p", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4320p 8K Ultra HD.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_8K {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_8K", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_custom {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {
@@ -3944,6 +4007,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Height:.
+        /// </summary>
+        public static string PictureSettingsView_MaxHeight {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_MaxHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Width:.
+        /// </summary>
+        public static string PictureSettingsView_MaxWidth {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_MaxWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modulus:.
         /// </summary>
         public static string PictureSettingsView_Modulus {
@@ -3994,6 +4075,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_ResAndScaling {
             get {
                 return ResourceManager.GetString("PictureSettingsView_ResAndScaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolution Limit:.
+        /// </summary>
+        public static string PictureSettingsView_ResLimit {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_ResLimit", resourceCulture);
             }
         }
         

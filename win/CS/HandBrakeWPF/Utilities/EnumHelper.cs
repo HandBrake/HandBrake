@@ -143,6 +143,23 @@ namespace HandBrakeWPF.Utilities
             return string.Empty;
         }
 
+        public static T GetAttribute<T, TK>(TK value) where T : Attribute
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            if (fieldInfo != null)
+            {
+                T[] attributes = (T[])fieldInfo.GetCustomAttributes(typeof(T), false);
+                return (attributes.Length > 0) ? attributes[0] : null;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Return a list of all the enum values.
         /// </summary>
