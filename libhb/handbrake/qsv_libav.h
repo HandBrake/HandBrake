@@ -460,7 +460,7 @@ void hb_qsv_dts_pop(hb_qsv_context *);
 
 hb_qsv_stage *hb_qsv_stage_init(void);
 void hb_qsv_stage_clean(hb_qsv_stage **);
-int hb_qsv_context_clean(hb_qsv_context *);
+int hb_qsv_context_clean(hb_qsv_context *, int);
 
 int ff_qsv_is_sync_in_pipe(mfxSyncPoint *, hb_qsv_context *);
 int ff_qsv_is_surface_in_pipe(mfxFrameSurface1 *, hb_qsv_context *);
