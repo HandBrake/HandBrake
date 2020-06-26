@@ -12,6 +12,9 @@ namespace HandBrakeWPF.Model.Picture
 
     public enum PictureSettingsResLimitModes
     {
+        [DisplayName(typeof(Resources), "PictureSettingsResLimitModes_none")]
+        None,
+
         [DisplayName(typeof(Resources), "PictureSettingsResLimitModes_8K")]
         [ResLimit(7680, 4320)]
         Size8K,

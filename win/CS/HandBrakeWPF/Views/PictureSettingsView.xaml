@@ -73,12 +73,12 @@
 
                 <!-- MAX Width and MAX Height -->
                 <Label Content="{x:Static Properties:Resources.PictureSettingsView_MaxWidth}" Grid.Row="1" Grid.Column="0" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
-                <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" Grid.Row="1" Grid.Column="1"
+                <controls:NumberBox Number="{Binding MaxWidth, Mode=TwoWay}" UpdateBindingOnTextChange="True" Grid.Row="1" Grid.Column="1"
                                     Modulus="{Binding SelectedModulus, Mode=OneWay}" Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_MaxWidth}" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" />
 
                 <Label Content="{x:Static Properties:Resources.PictureSettingsView_MaxHeight}" Grid.Row="1" Grid.Column="2" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
-                <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True"  Grid.Row="1" Grid.Column="3"
+                <controls:NumberBox Number="{Binding MaxHeight, Mode=TwoWay}" UpdateBindingOnTextChange="True"  Grid.Row="1" Grid.Column="3"
                                     Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                     Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_MaxHeight}" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" />

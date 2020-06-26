@@ -41,8 +41,6 @@ namespace HandBrakeWPF.ViewModels
         private bool widthControlEnabled = true;
         private bool showModulus;
         private bool showDisplaySize;
-        private int maxHeight;
-        private int maxWidth;
         private bool showKeepAr = true;
 
         private DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
@@ -152,25 +150,29 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public int MaxHeight
+        public int? MaxHeight
         {
-            get => this.maxHeight;
+            get => this.Task.MaxHeight;
             set
             {
-                this.maxHeight = value;
-                this.NotifyOfPropertyChange(() => this.MaxHeight);
-                this.SetSelectedPictureSettingsResLimitMode();
+                if (value != this.Task.MaxHeight)
+                {
+                    this.Task.MaxHeight = value;
+                    this.NotifyOfPropertyChange(() => this.MaxHeight);
+                }
             }
         }
 
-        public int MaxWidth
+        public int? MaxWidth
         {
-            get => this.maxWidth;
+            get => this.Task.MaxWidth;
             set
             {
-                this.maxWidth = value;
-                this.NotifyOfPropertyChange(() => this.MaxWidth);
-                this.SetSelectedPictureSettingsResLimitMode();
+                if (value != this.Task.MaxWidth)
+                {
+                    this.Task.MaxWidth = value;
+                    this.NotifyOfPropertyChange(() => this.MaxWidth);
+                }
             }
         }
 
@@ -210,26 +212,41 @@ namespace HandBrakeWPF.ViewModels
 
                 this.IsCustomMaxRes = value == PictureSettingsResLimitModes.Custom;
                 this.NotifyOfPropertyChange(() => this.IsCustomMaxRes);
-                
+
                 // Enforce the new limit
                 ResLimit limit = EnumHelper<PictureSettingsResLimitModes>.GetAttribute<ResLimit, PictureSettingsResLimitModes>(value);
+
+                if (value == PictureSettingsResLimitModes.Custom && this.Task.MaxWidth == null && this.Task.MaxHeight == null)
+                {
+                    // Default to 4K if null!
+                    limit = EnumHelper<PictureSettingsResLimitModes>.GetAttribute<ResLimit, PictureSettingsResLimitModes>(PictureSettingsResLimitModes.Size4K);
+                }
+                
                 if (limit != null)
                 {
-                    this.maxWidth = limit.Width;
-                    this.maxHeight = limit.Height;
-                    this.NotifyOfPropertyChange(() => this.MaxWidth);
-                    this.NotifyOfPropertyChange(() => this.Height);
+                    this.Task.MaxWidth = limit.Width;
+                    this.Task.MaxHeight = limit.Height;
 
-                    if (this.Width > this.MaxWidth)
+                    if (this.MaxWidth.HasValue && this.Width > this.MaxWidth)
                     {
-                        this.Width = this.MaxWidth;
+                        this.Width = this.MaxWidth.Value;
                     }
 
-                    if (this.Height > this.MaxWidth)
+                    if (this.MaxHeight.HasValue && this.Height > this.MaxHeight)
                     {
-                        this.Height = this.MaxHeight;
+                        this.Height = this.MaxHeight.Value;
                     }
                 }
+
+
+                if (value == PictureSettingsResLimitModes.None)
+                {
+                    this.Task.MaxWidth = null;
+                    this.Task.MaxHeight = null;
+                }
+
+                this.NotifyOfPropertyChange(() => this.MaxWidth);
+                this.NotifyOfPropertyChange(() => this.MaxHeight);
             }
         }
 
@@ -464,6 +481,7 @@ namespace HandBrakeWPF.ViewModels
             // Setup the Maximum Width / Height with sane 4K fallback.
             this.MaxWidth = preset.Task.MaxWidth ?? 3840;
             this.MaxHeight = preset.Task.MaxHeight ?? 2160;
+            this.SetSelectedPictureSettingsResLimitMode();
 
             // Set the width, then check the height doesn't breach the max height and correct if necessary.
             int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), this.MaxWidth));
@@ -497,6 +515,8 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateTask(EncodeTask task)
         {
             this.Task = task;
+            this.SetSelectedPictureSettingsResLimitMode();
+
             this.PaddingFilter.UpdateTask(task);
             this.RotateFlipFilter?.UpdateTask(task);
 
@@ -513,6 +533,8 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.DisplayWidth);
             this.NotifyOfPropertyChange(() => this.ParWidth);
             this.NotifyOfPropertyChange(() => this.ParHeight);
+            this.NotifyOfPropertyChange(() => this.MaxWidth);
+            this.NotifyOfPropertyChange(() => this.MaxHeight);
 
             this.UpdateVisibileControls();
         }
@@ -553,6 +575,7 @@ namespace HandBrakeWPF.ViewModels
                 // Setup the Maximum Width / Height with sane 4K fallback.
                 this.MaxWidth = preset.Task.MaxWidth ?? 3840;
                 this.MaxHeight = preset.Task.MaxHeight ?? 2160;
+                this.SetSelectedPictureSettingsResLimitMode();
 
                 // Set the W/H
                 // Set the width, then check the height doesn't breach the max height and correct if necessary.
@@ -618,6 +641,7 @@ namespace HandBrakeWPF.ViewModels
             // Default the Max Width / Height to 4K format
             this.MaxHeight = 2160;
             this.MaxWidth = 3480;
+            this.SetSelectedPictureSettingsResLimitMode();
         }
 
         private PictureSize.PictureSettingsTitle GetPictureTitleInfo()
@@ -643,8 +667,8 @@ namespace HandBrakeWPF.ViewModels
                 Modulus = this.SelectedModulus,
                 ParW = this.SelectedAnamorphicMode == Anamorphic.None ? 1 : this.ParWidth,
                 ParH = this.SelectedAnamorphicMode == Anamorphic.None ? 1 : this.ParHeight,
-                MaxWidth = this.MaxWidth,
-                MaxHeight = this.MaxHeight,
+                MaxWidth = this.MaxWidth.HasValue ? this.MaxWidth.Value : 0,
+                MaxHeight = this.MaxHeight.HasValue ? this.MaxHeight.Value : 0,
                 KeepDisplayAspect = this.MaintainAspectRatio,
                 AnamorphicMode = this.SelectedAnamorphicMode,
                 Crop = new Cropping(this.CropTop, this.CropBottom, this.CropLeft, this.CropRight),
@@ -837,6 +861,11 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
                 }
+            }
+
+            if (this.MaxWidth.HasValue || this.MaxHeight.HasValue)
+            {
+                this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.Custom;
             }
         }
     }

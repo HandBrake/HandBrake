@@ -3917,6 +3917,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string PictureSettingsResLimitModes_none {
+            get {
+                return ResourceManager.GetString("PictureSettingsResLimitModes_none", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {

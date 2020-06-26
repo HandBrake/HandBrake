@@ -10,12 +10,14 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
 
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -23,14 +25,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
-    /// <summary>
-    /// The Add Preset View Model
-    /// </summary>
     public class AddPresetViewModel : ViewModelBase, IAddPresetViewModel
     {
         private readonly IPresetService presetService;
@@ -39,25 +39,13 @@ namespace HandBrakeWPF.ViewModels
         private readonly PresetDisplayCategory addNewCategory = new PresetDisplayCategory(Resources.AddPresetView_AddNewCategory, true, null);
 
         private bool showCustomInputs;
-
         private IAudioDefaultsViewModel audioDefaultsViewModel;
         private ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel;
-
         private PresetDisplayCategory selectedPresetCategory;
         private bool canAddNewPresetCategory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddPresetViewModel"/> class.
-        /// </summary>
-        /// <param name="presetService">
-        /// The Preset Service
-        /// </param>
-        /// <param name="errorService">
-        /// The Error Service
-        /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
-        /// </param>
+        private PictureSettingsResLimitModes selectedPictureSettingsResLimitMode;
+
         public AddPresetViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager)
         {
             this.presetService = presetService;
@@ -67,6 +55,9 @@ namespace HandBrakeWPF.ViewModels
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
             this.PresetCategories = presetService.GetPresetCategories(true).Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
             this.SelectedPresetCategory = this.PresetCategories.FirstOrDefault(n => n.Category == PresetService.UserPresetCatgoryName);
+
+            this.CustomHeight = 0;
+            this.CustomWidth = 0;
         }
 
         public Preset Preset { get; }
@@ -128,6 +119,58 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<PictureSettingsResLimitModes> ResolutionLimitModes => new BindingList<PictureSettingsResLimitModes>
+                                                                                 {
+                                                                                     PictureSettingsResLimitModes.None,
+                                                                                     PictureSettingsResLimitModes.Size8K,
+                                                                                     PictureSettingsResLimitModes.Size4K,
+                                                                                     PictureSettingsResLimitModes.Size1080p,
+                                                                                     PictureSettingsResLimitModes.Size720p,
+                                                                                     PictureSettingsResLimitModes.Size576p,
+                                                                                     PictureSettingsResLimitModes.Size480p,
+                                                                                     PictureSettingsResLimitModes.Custom,
+                                                                                 };
+
+        public PictureSettingsResLimitModes SelectedPictureSettingsResLimitMode
+        {
+            get => this.selectedPictureSettingsResLimitMode;
+            set
+            {
+                if (value == this.selectedPictureSettingsResLimitMode)
+                {
+                    return;
+                }
+
+                this.selectedPictureSettingsResLimitMode = value;
+                this.NotifyOfPropertyChange(() => this.SelectedPictureSettingsResLimitMode);
+
+                this.IsCustomMaxRes = value == PictureSettingsResLimitModes.Custom;
+                this.NotifyOfPropertyChange(() => this.IsCustomMaxRes);
+
+                // Enforce the new limit
+                ResLimit limit = EnumHelper<PictureSettingsResLimitModes>.GetAttribute<ResLimit, PictureSettingsResLimitModes>(value);
+                if (limit != null)
+                {
+                    this.CustomWidth = limit.Width;
+                    this.CustomHeight = limit.Height;
+                    this.NotifyOfPropertyChange(() => this.CustomWidth);
+                    this.NotifyOfPropertyChange(() => this.CustomHeight);
+                }
+                
+                if (value == PictureSettingsResLimitModes.None)
+                {
+                    this.CustomWidth = null;
+                    this.CustomHeight = null;
+                }
+            }
+        }
+
+        public bool IsCustomMaxRes { get; private set; }
+
+        public int? CustomWidth { get; set; }
+
+        public int? CustomHeight { get; set; }
+
         public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
             this.Preset.Task = new EncodeTask(task);
@@ -139,6 +182,14 @@ namespace HandBrakeWPF.ViewModels
 
             this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
             this.subtitlesDefaultsViewModel.SetupLanguages(subtitleBehaviours);
+
+            // Resolution Limits
+            this.CustomWidth = task.MaxWidth;
+            this.CustomHeight = task.MaxHeight;
+            this.NotifyOfPropertyChange(() => this.CustomWidth);
+            this.NotifyOfPropertyChange(() => this.CustomHeight);
+
+            this.SetSelectedPictureSettingsResLimitMode();
         }
 
         public void Add()
@@ -164,7 +215,20 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
             }
-            
+
+            if (this.SelectedPictureSettingsResLimitMode != PictureSettingsResLimitModes.None)
+            {
+                if (this.CustomWidth != null)
+                {
+                    this.Preset.Task.MaxWidth = this.CustomWidth;
+                }
+
+                if (this.CustomHeight != null)
+                {
+                    this.Preset.Task.MaxHeight = this.CustomHeight;
+                }
+            }
+
             // Add the Preset
             bool added = this.presetService.Add(this.Preset);
             if (!added)
@@ -181,9 +245,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The edit audio defaults.
-        /// </summary>
         public void EditAudioDefaults()
         {
             this.audioDefaultsViewModel.ResetApplied();
@@ -194,9 +255,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// The edit subtitle defaults.
-        /// </summary>
         public void EditSubtitleDefaults()
         {
             this.subtitlesDefaultsViewModel.ResetApplied();
@@ -210,20 +268,40 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Cancel adding a preset
-        /// </summary>
         public void Cancel()
         {
             this.Close();
         }
 
-        /// <summary>
-        /// Close this window.
-        /// </summary>
         public void Close()
         {
             this.TryClose();
+        }
+
+        private void SetSelectedPictureSettingsResLimitMode()
+        {
+            // Look for a matching resolution.
+            foreach (PictureSettingsResLimitModes limit in EnumHelper<PictureSettingsResLimitModes>.GetEnumList())
+            {
+                ResLimit resLimit = EnumHelper<PictureSettingsResLimitModes>.GetAttribute<ResLimit, PictureSettingsResLimitModes>(limit);
+                if (resLimit != null)
+                {
+                    if (resLimit.Width == this.CustomWidth && resLimit.Height == this.CustomHeight)
+                    {
+                        this.SelectedPictureSettingsResLimitMode = limit;
+                        return;
+                    }
+                }
+            }
+
+            if (this.CustomWidth.HasValue || this.CustomHeight.HasValue)
+            {
+                this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.Custom;
+            }
+            else
+            {
+                this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.None;
+            }
         }
     }
 }

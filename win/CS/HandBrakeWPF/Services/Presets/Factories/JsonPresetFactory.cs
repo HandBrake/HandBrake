@@ -71,11 +71,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Output Settings */
             preset.Task.OptimizeMP4 = importedPreset.Mp4HttpOptimize;
             preset.Task.IPod5GSupport = importedPreset.Mp4iPodCompatible;
-            preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim()); // TOOD null check.
+            preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim());
             preset.Task.AlignAVStart = importedPreset.AlignAVStart;
 
             /* Picture Settings */
-            // preset.PictureSettingsMode = (PresetPictureSettingsMode)importedPreset.UsesPictureSettings;
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
@@ -544,7 +543,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PresetDescription = export.Description;
             preset.PresetName = export.Name;
             preset.Type = export.IsBuildIn ? 0 : 1;
-            // preset.UsesPictureSettings = (int)export.PictureSettingsMode;
+            preset.UsesPictureSettings = 1; // Set to Custom, Always for the new UI.
             preset.Default = export.IsDefault;
 
             // Audio
@@ -595,7 +594,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // Picture Settings
             preset.PictureForceHeight = 0; // TODO
             preset.PictureForceWidth = 0; // TODO
-            preset.PictureHeight = preset.UsesPictureSettings >= 1 ? export.Task.MaxHeight : 0; // TODO; // TODO
+            preset.PictureHeight = preset.UsesPictureSettings >= 1 ? export.Task.MaxHeight : 0;
             preset.PictureItuPAR = false; // TODO Not supported Yet
             preset.PictureKeepRatio = export.Task.KeepDisplayAspect;
             preset.PictureLeftCrop = export.Task.Cropping.Left;
@@ -612,7 +611,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             preset.PictureTopCrop = export.Task.Cropping.Top;
-            preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0; // TODO
+            preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0;
             preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
             preset.PictureAutoCrop = !export.Task.HasCropping;
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;

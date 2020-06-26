@@ -2310,4 +2310,7 @@ Please choose a different preset.</value>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
   </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>
