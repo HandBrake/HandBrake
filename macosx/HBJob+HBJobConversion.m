@@ -16,6 +16,13 @@
 #import "HBTitle+Private.h"
 #import "HBMutablePreset.h"
 
+#import "HBRange.h"
+#import "HBVideo.h"
+#import "HBPicture.h"
+#import "HBFilters.h"
+#import "HBAudio.h"
+#import "HBSubtitles.h"
+
 @implementation HBJob (HBJobConversion)
 
 - (NSDictionary *)jobDict

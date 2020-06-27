@@ -5,8 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBPresetCoding.h"
-#import "HBSecurityAccessToken.h"
+#import <HandBrakeKit/HBPresetCoding.h>
+#import <HandBrakeKit/HBSecurityAccessToken.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

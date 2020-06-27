@@ -6,11 +6,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@import HandBrakeKit;
+
 @class HBAppDelegate;
 @class HBQueue;
-@class HBPresetsManager;
-
-@class HBJob;
 
 NS_ASSUME_NONNULL_BEGIN
 

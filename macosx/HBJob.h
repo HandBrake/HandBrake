@@ -6,20 +6,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class HBPreset;
-@class HBMutablePreset;
+@class HBPreset, HBMutablePreset;
 @class HBTitle;
+@class HBVideo;
+@class HBRange;
+@class HBPicture;
+@class HBFilters;
+@class HBAudio;
+@class HBSubtitles;
+@class HBChapter;
 
-#import "HBRange.h"
-#import "HBVideo.h"
-#import "HBPicture.h"
-#import "HBFilters.h"
-
-#import "HBAudio.h"
-#import "HBSubtitles.h"
-#import "HBChapter.h"
-
-#import "HBSecurityAccessToken.h"
+#import <HandBrakeKit/HBPresetCoding.h>
+#import <HandBrakeKit/HBSecurityAccessToken.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

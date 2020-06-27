@@ -6,9 +6,6 @@
 
 #import "HBAddCategoryController.h"
 
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
-
 @interface HBAddCategoryController () <NSTextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet NSTextField *name;

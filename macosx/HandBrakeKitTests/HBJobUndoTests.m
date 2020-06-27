@@ -6,15 +6,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "HBCore.h"
-#import "HBTitle.h"
-#import "HBJob.h"
-#import "HBChapter.h"
-#import "HBAudioTrack.h"
-#import "HBSubtitlesTrack.h"
-#import "HBPicture.h"
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
+@import HandBrakeKit;
 
 @interface HBJobUndoTests : XCTestCase
 

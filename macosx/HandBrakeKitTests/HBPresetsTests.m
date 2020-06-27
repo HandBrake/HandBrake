@@ -7,8 +7,7 @@
 #import <Cocoa/Cocoa.h>
 #import <XCTest/XCTest.h>
 
-#import "HBPreset.h"
-#import "HBPresetsManager.h"
+@import HandBrakeKit;
 
 @interface HBPresetsTests : XCTestCase
 

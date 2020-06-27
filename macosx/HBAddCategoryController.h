@@ -6,8 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBPresetsManager;
-@class HBPreset;
+@import HandBrakeKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

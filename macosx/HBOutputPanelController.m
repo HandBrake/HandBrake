@@ -7,7 +7,8 @@
 #import "HBOutputPanelController.h"
 #import "HBOutputRedirect.h"
 #import "HBOutputFileWriter.h"
-#import "HBUtilities.h"
+
+@import HandBrakeKit.HBUtilities;
 
 /// Maximum amount of characters that can be shown in the view.
 #define TextStorageUpperSizeLimit 125000

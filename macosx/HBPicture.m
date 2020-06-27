@@ -743,19 +743,19 @@ fail:
 
         if ([preset[@"PicturePAR"] isEqualToString:@"off"])
         {
-            self.anamorphicMode = HB_ANAMORPHIC_NONE;
+            self.anamorphicMode = (HBPictureAnarmophicMode)HB_ANAMORPHIC_NONE;
         }
         else if ([preset[@"PicturePAR"] isEqualToString:@"auto"])
         {
-            self.anamorphicMode = HB_ANAMORPHIC_AUTO;
+            self.anamorphicMode = (HBPictureAnarmophicMode)HB_ANAMORPHIC_AUTO;
         }
         else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
         {
-            self.anamorphicMode = HB_ANAMORPHIC_CUSTOM;
+            self.anamorphicMode = (HBPictureAnarmophicMode)HB_ANAMORPHIC_CUSTOM;
         }
         else
         {
-            self.anamorphicMode = HB_ANAMORPHIC_LOOSE;
+            self.anamorphicMode = (HBPictureAnarmophicMode)HB_ANAMORPHIC_LOOSE;
         }
 
         self.parWidth = [par[@"Num"] intValue];

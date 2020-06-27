@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBPreset.h"
+#import <HandBrakeKit/HBPreset.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

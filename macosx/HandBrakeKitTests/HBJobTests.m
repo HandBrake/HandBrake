@@ -7,14 +7,7 @@
 #import <Cocoa/Cocoa.h>
 #import <XCTest/XCTest.h>
 
-#import "HBCore.h"
-#import "HBTitle.h"
-#import "HBJob.h"
-#import "HBPicture.h"
-#import "HBJob+UIAdditions.h"
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
-#import "HBMutablePreset.h"
+@import HandBrakeKit;
 
 @interface HBJobTests : XCTestCase
 

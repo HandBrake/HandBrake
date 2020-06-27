@@ -6,9 +6,9 @@
 
 #import "HBOutputFileWriter.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@import HandBrakeKit;
 
-@class HBJob;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * Redirects the output to a new file based on the job destination

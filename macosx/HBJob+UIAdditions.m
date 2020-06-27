@@ -21,6 +21,13 @@
 #import "HBAudioTransformers.h"
 #import "HBLocalizationUtilities.h"
 
+#import "HBRange.h"
+#import "HBVideo.h"
+#import "HBPicture.h"
+#import "HBFilters.h"
+#import "HBAudio.h"
+#import "HBSubtitles.h"
+
 #include "handbrake/handbrake.h"
 
 // Text Styles

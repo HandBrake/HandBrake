@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-#import "HBJob.h"
+#import <HandBrakeKit/HBJob.h>
 
 @interface HBJob (UIAdditions)
 

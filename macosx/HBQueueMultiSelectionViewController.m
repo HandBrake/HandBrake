@@ -28,7 +28,7 @@
     }
     else
     {
-        self.label.stringValue = [NSString stringWithFormat:NSLocalizedString(@"%llu jobs selected", @""), self.count];
+        self.label.stringValue = [NSString stringWithFormat:NSLocalizedString(@"%lu jobs selected", @""), (unsigned long)self.count];
     }
 }
 

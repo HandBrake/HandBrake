@@ -8,8 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class HBPreset;
-@class HBPresetsManager;
+@import HandBrakeKit;
 
 @interface HBRenamePresetController : NSWindowController
 

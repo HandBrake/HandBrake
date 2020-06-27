@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBVideo.h"
+#import <HandBrakeKit/HBVideo.h>
 
 @interface HBVideo (UIAdditions)
 

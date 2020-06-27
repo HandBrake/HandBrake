@@ -15,9 +15,6 @@
 #import "HBQueue.h"
 #import "HBQueueWorker.h"
 
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
-#import "HBMutablePreset.h"
 #import "HBPresetsMenuBuilder.h"
 
 #import "HBSummaryViewController.h"
@@ -212,6 +209,13 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         self.window.tabbingMode = NSWindowTabbingModeDisallowed;
     }
+
+#if defined(NSAppKitVersionNumber10_15)
+    if (@available (macOS 10.16, *))
+    {
+        self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
+    }
+#endif
 
     [self enableUI:NO];
 

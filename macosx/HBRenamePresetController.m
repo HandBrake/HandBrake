@@ -6,11 +6,6 @@
 
 #import "HBRenamePresetController.h"
 
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
-
-@import HandBrakeKit;
-
 @interface HBRenamePresetController () <NSTextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet NSTextField *name;

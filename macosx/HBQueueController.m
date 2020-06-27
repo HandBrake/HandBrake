@@ -96,6 +96,13 @@
         self.window.tabbingMode = NSWindowTabbingModeDisallowed;
     }
 
+#if defined(NSAppKitVersionNumber10_15)
+    if (@available (macOS 10.16, *))
+    {
+        self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
+    }
+#endif
+
     // Set up the child view controllers
     _splitViewController = [[NSSplitViewController alloc] init];
     _splitViewController.view.wantsLayer = YES;
@@ -154,11 +161,11 @@
     {
         if (self.queue.pendingItemsCount == 1)
         {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
+            string = [NSString stringWithFormat: NSLocalizedString(@"%lu encode pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
         }
         else
         {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
+            string = [NSString stringWithFormat: NSLocalizedString(@"%lu encodes pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
         }
 
         self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
@@ -305,6 +312,12 @@
             [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
             [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
             [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
+#if defined(NSAppKitVersionNumber10_15)
+            if (@available(macOS 10.16, *))
+            {
+                alert.buttons.lastObject.hasDestructiveAction = true;
+            }
+#endif
             [alert setAlertStyle:NSAlertStyleCritical];
 
             [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
@@ -360,6 +373,12 @@
         [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
+#if defined(NSAppKitVersionNumber10_15)
+        if (@available(macOS 10.16, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
+#endif
         [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {

@@ -11,11 +11,6 @@
 #import "HBAudioDefaultsController.h"
 #import "HBSubtitlesDefaultsController.h"
 
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
-
-@import HandBrakeKit;
-
 typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     HBAddPresetControllerModeNone,
     HBAddPresetControllerModeCustom,

@@ -6,7 +6,6 @@
 
 #import "HBAutoNamer.h"
 
-#import "HBJob.h"
 #import "HBJob+HBAdditions.h"
 #import "HBPreferencesKeys.h"
 

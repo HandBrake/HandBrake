@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBFilters.h"
+#import <HandBrakeKit/HBFilters.h>
 
 @interface HBFilters (UIAdditions)
 

@@ -6,11 +6,11 @@
 
 #import "HBAppDelegate.h"
 
+@import HandBrakeKit;
+
 #import "HBQueue.h"
 
 #import "HBUtilities.h"
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
 #import "HBPresetsMenuBuilder.h"
 
 #import "HBPreferencesController.h"
@@ -18,8 +18,6 @@
 #import "HBQueueDockTileController.h"
 #import "HBOutputPanelController.h"
 #import "HBController.h"
-
-@import HandBrakeKit;
 
 #define PRESET_FILE @"UserPresets.json"
 #define QUEUE_FILE @"Queue.hbqueue"

@@ -5,7 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBOutputFileWriter.h"
-#import "HBUtilities.h"
+
+@import HandBrakeKit.HBUtilities;
 
 @implementation HBOutputFileWriter
 {
