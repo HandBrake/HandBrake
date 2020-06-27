@@ -68,7 +68,7 @@ static int extradataInit( hb_work_private_t * pv )
 
 static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_private_t * pv;
+    hb_work_private_t * pv = NULL;
     int                 ii;
 
     if (w->subtitle->config.src_filename == NULL)
