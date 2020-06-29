@@ -163,6 +163,9 @@ for TARGET in "${@}"; do
 
         echo "  Signing XPC Services"
         sign "xpc"     "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc
+        sign "xpc"     "${TARGET}"/Contents/XPCServices/HandBrakeXPCService2.xpc
+        sign "xpc"     "${TARGET}"/Contents/XPCServices/HandBrakeXPCService3.xpc
+        sign "xpc"     "${TARGET}"/Contents/XPCServices/HandBrakeXPCService4.xpc
         sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc
         sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc
         sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc
@@ -186,6 +189,9 @@ for TARGET in "${@}"; do
 
         echo "  Validating XPC Services"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService2.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService3.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService4.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
