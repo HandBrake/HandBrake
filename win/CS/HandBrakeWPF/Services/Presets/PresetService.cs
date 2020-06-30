@@ -67,6 +67,8 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
+        public List<Preset> FlatPresetList => this.flatPresetList.ToList();
+
         public Preset DefaultPreset
         {
             get
@@ -491,6 +493,11 @@ namespace HandBrakeWPF.Services.Presets
             return categoriesList;
         }
 
+        public void Save()
+        {
+            this.SavePresetFiles();
+        }
+        
         private string ArchivePresetFile(string file, bool delete)
         {
             try

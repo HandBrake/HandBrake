@@ -26,6 +26,8 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </summary>
         ObservableCollection<IPresetObject> Presets { get; }
 
+        List<Preset> FlatPresetList { get; }
+
         /// <summary>
         /// Gets DefaultPreset.
         /// </summary>
@@ -35,6 +37,12 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The load.
         /// </summary>
         void Load();
+
+
+        /// <summary>
+        /// Force save updates to the preset files. Rarely should need to be called. Only used by the preset manager.
+        /// </summary>
+        void Save();
 
         /// <summary>
         /// Save the state of the Preset Treview

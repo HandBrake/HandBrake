@@ -100,59 +100,5 @@ namespace HandBrakeWPF.Views
                 button.ContextMenu.IsOpen = true;
             }
         }
-
-        private void ToolBarLoaded(object sender, RoutedEventArgs e)
-        {
-            ToolBar toolBar = sender as ToolBar;
-            if (toolBar != null)
-            {
-                var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-                if (overflowGrid != null)
-                {
-                    overflowGrid.Visibility = Visibility.Collapsed;
-                }
-            }
-        }
-        private void PresetListTree_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-
-            if (treeViewItem != null)
-            {
-                treeViewItem.Focus();
-                e.Handled = true;
-            }
-        }
-
-        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
-        {
-            while (source != null && !(source is TreeViewItem))
-                source = VisualTreeHelper.GetParent(source);
-
-            return source as TreeViewItem;
-        }
-
-        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
-        {
-            if (e.Source.GetType() == typeof(TreeViewItem))
-            {
-                TreeViewItem item = e.Source as TreeViewItem;
-                if (item != null && item.DataContext?.GetType() == typeof(PresetDisplayCategory))
-                {
-                    item.IsSelected = false;
-                }
-            }
-        }
-
-        private void PresetListTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (e.Source.GetType() == typeof(TreeView))
-            {
-                if (e.NewValue != null && e.NewValue.GetType() == typeof(Preset))
-                {
-                    ((MainViewModel)this.DataContext).SelectedPreset = (Preset)e.NewValue;
-                }
-            }
-        }
     }
 }

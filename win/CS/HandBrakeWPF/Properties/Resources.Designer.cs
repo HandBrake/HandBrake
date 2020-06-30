@@ -2560,11 +2560,65 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Preset.
+        ///   Looks up a localized string similar to Delete Built-in Presets.
+        /// </summary>
+        public static string ManagePresetView_DeleteBuiltIn {
+            get {
+                return ResourceManager.GetString("ManagePresetView_DeleteBuiltIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected preset.
+        /// </summary>
+        public static string ManagePresetView_Export {
+            get {
+                return ResourceManager.GetString("ManagePresetView_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Preset(s) from file.
+        /// </summary>
+        public static string ManagePresetView_Import {
+            get {
+                return ResourceManager.GetString("ManagePresetView_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Presets.
         /// </summary>
         public static string ManagePresetView_ManagePreset {
             get {
                 return ResourceManager.GetString("ManagePresetView_ManagePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preset Information:.
+        /// </summary>
+        public static string ManagePresetView_PresetInfo {
+            get {
+                return ResourceManager.GetString("ManagePresetView_PresetInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build in presets can not be modified..
+        /// </summary>
+        public static string ManagePresetView_RestrictedPreset {
+            get {
+                return ResourceManager.GetString("ManagePresetView_RestrictedPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set selected preset as default.
+        /// </summary>
+        public static string ManagePresetView_SetDefault {
+            get {
+                return ResourceManager.GetString("ManagePresetView_SetDefault", resourceCulture);
             }
         }
         
@@ -4307,6 +4361,24 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_UnableToImport_Message {
             get {
                 return ResourceManager.GetString("Preset_UnableToImport_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Preset.
+        /// </summary>
+        public static string PresetManagerView_Delete {
+            get {
+                return ResourceManager.GetString("PresetManagerView_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Presets.
+        /// </summary>
+        public static string PresetManger_Title {
+            get {
+                return ResourceManager.GetString("PresetManger_Title", resourceCulture);
             }
         }
         

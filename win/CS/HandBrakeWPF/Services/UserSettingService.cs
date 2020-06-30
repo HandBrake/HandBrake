@@ -327,7 +327,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.SimultaneousEncodes, 1);
 
             // Misc
-            defaults.Add(UserSettingConstants.ShowPresetPanel, false);
             defaults.Add(UserSettingConstants.ScalingMode, 0);
             defaults.Add(UserSettingConstants.ForcePresetReset, 3);
 

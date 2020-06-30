@@ -83,7 +83,6 @@ namespace HandBrakeWPF.ViewModels
         private Preset selectedPreset;
         private QueueTask queueEditTask;
         private int lastEncodePercentage;
-        private bool isPresetPanelShowing;
         private bool showSourceSelection;
         private BindingList<SourceMenuItem> drives;
         private bool showAlertWindow;
@@ -113,6 +112,7 @@ namespace HandBrakeWPF.ViewModels
             IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel,
             IMetaDataViewModel metaDataViewModel,
+            IPresetManagerViewModel presetManagerViewModel,
             INotifyIconService notifyIconService,
             ISystemService systemService)
             : base(userSettingService)
@@ -136,6 +136,7 @@ namespace HandBrakeWPF.ViewModels
             this.SubtitleViewModel = subtitlesViewModel;
             this.ChaptersViewModel = chaptersViewModel;
             this.StaticPreviewViewModel = staticPreviewViewModel;
+            this.PresetManagerViewModel = presetManagerViewModel;
 
             // Setup Properties
             this.WindowTitle = Resources.HandBrake_Title;
@@ -206,6 +207,8 @@ namespace HandBrakeWPF.ViewModels
         public IMetaDataViewModel MetaDataViewModel { get; set; }
 
         public ISummaryViewModel SummaryViewModel { get; set; }
+
+        public IPresetManagerViewModel PresetManagerViewModel { get; set; }
 
         public int SelectedTab { get; set; }
 
@@ -704,28 +707,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsPresetPanelShowing
-        {
-            get
-            {
-                return this.isPresetPanelShowing;
-            }
-            set
-            {
-                if (!Equals(this.isPresetPanelShowing, value))
-                {
-                    this.isPresetPanelShowing = value;
-                    this.NotifyOfPropertyChange(() => this.IsPresetPanelShowing);
-
-                    // Save the setting if it has changed.
-                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel) != value)
-                    {
-                        this.userSettingService.SetUserSetting(UserSettingConstants.ShowPresetPanel, value);
-                    }
-                }
-            }
-        }
-
         public int ProgressPercentage { get; set; }
 
         public bool ShowSourceSelection
@@ -939,9 +920,6 @@ namespace HandBrakeWPF.ViewModels
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
-            // Show or Hide the Preset Panel.
-            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
-
             // Setup the presets.
             this.presetService.Load();
             this.PresetsCategories = this.presetService.Presets;
@@ -1089,9 +1067,18 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public void ShowPresetPane()
+        public void OpenPresetWindow()
         {
-            this.IsPresetPanelShowing = !this.IsPresetPanelShowing;
+            if (!this.PresetManagerViewModel.IsOpen)
+            {
+                this.PresetManagerViewModel.IsOpen = true;
+                this.windowManager.ShowWindow(this.PresetManagerViewModel);
+            }
+            else if (this.PresetManagerViewModel.IsOpen)
+            {
+                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PresetManagerView));
+                window?.Focus();
+            }
         }
 
         public void LaunchHelp()
