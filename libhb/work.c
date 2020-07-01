@@ -703,7 +703,8 @@ void hb_display_job_info(hb_job_t *job)
                 {
                     hb_log( "   + dynamic range compression: %f", audio->config.out.dynamic_range_compression );
                 }
-                if (hb_audio_dither_is_supported(audio->config.out.codec))
+                if (hb_audio_dither_is_supported(audio->config.out.codec,
+                                            audio->config.in.sample_bit_depth))
                 {
                     hb_log("   + dither: %s",
                            hb_audio_dither_get_description(audio->config.out.dither_method));
@@ -1203,7 +1204,8 @@ static int sanitize_audio(hb_job_t *job)
         }
 
         /* sense-check the requested dither */
-        if (hb_audio_dither_is_supported(audio->config.out.codec))
+        if (hb_audio_dither_is_supported(audio->config.out.codec,
+                                         audio->config.in.sample_bit_depth))
         {
             if (audio->config.out.dither_method ==
                 hb_audio_dither_get_default())
