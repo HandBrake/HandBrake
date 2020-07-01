@@ -15,6 +15,11 @@ namespace HandBrake.Interop.Interop.Json.Scan
     public class SourceAudioTrack
     {
         /// <summary>
+        /// Gets or sets the track number (1-based).
+        /// </summary>
+        public int TrackNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the bit rate.
         /// </summary>
         public int BitRate { get; set; }

@@ -3,17 +3,22 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The subtitle list.
+//   A subtitle track from the source video.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Interop.Interop.Json.Scan
 {
     /// <summary>
-    /// The subtitle list.
+    /// A subtitle track from the source video.
     /// </summary>
     public class SourceSubtitleTrack
     {
+        /// <summary>
+        /// Gets or sets the track number (1-based).
+        /// </summary>
+        public int TrackNumber { get; set; }
+
         /// <summary>
         /// Gets or sets the format.
         /// </summary>
