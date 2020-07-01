@@ -385,7 +385,7 @@ float hb_audio_compression_get_default(uint32_t codec);
 
 int                hb_audio_dither_get_default(void);
 int                hb_audio_dither_get_default_method(void); // default method, if enabled && supported
-int                hb_audio_dither_is_supported(uint32_t codec);
+int                hb_audio_dither_is_supported(uint32_t codec, int depth);
 int                hb_audio_dither_get_from_name(const char *name);
 const char*        hb_audio_dither_get_description(int method);
 const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);

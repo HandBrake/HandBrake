@@ -1775,10 +1775,16 @@ int hb_audio_dither_get_default_method()
     return SWR_DITHER_TRIANGULAR;
 }
 
-int hb_audio_dither_is_supported(uint32_t codec)
+int hb_audio_dither_is_supported(uint32_t codec, int depth)
 {
     // Since dithering is performed by swresample, all codecs are supported
-    return 1;
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+            if (depth == 0 || depth > 16)
+                return 1;
+    }
+    return 0;
 }
 
 int hb_audio_dither_get_from_name(const char *name)

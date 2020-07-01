@@ -1613,7 +1613,7 @@ static void ShowHelp()
     encoder = NULL;
     while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
-        if (hb_audio_dither_is_supported(encoder->codec))
+        if (hb_audio_dither_is_supported(encoder->codec, 0))
         {
             fprintf(out, "                               %s\n", encoder->short_name);
         }
@@ -5021,7 +5021,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             int codec;
             audio_dict = hb_value_array_get(audio_array, ii);
             codec = hb_value_get_int(hb_dict_get(audio_dict, "Encoder"));
-            if (hb_audio_dither_is_supported(codec))
+            if (hb_audio_dither_is_supported(codec, 0))
             {
                 hb_dict_set(audio_dict, "DitherMethod",
                             hb_value_double(dither));
