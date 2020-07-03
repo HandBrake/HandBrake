@@ -2337,4 +2337,7 @@ Please choose a different preset.</value>
   <data name="PresetManagerView_Delete" xml:space="preserve">
     <value>Delete Preset</value>
   </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Not supported on this system)</value>
+  </data>
 </root>

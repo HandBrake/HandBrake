@@ -1355,10 +1355,26 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new BindingList<int>() { 1, 2, 3, 4 };
+                if (Utilities.SystemInfo.GetCpuCoreCount > 8)
+                {
+                    return new BindingList<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+                }
+
+                if (Utilities.SystemInfo.GetCpuCoreCount > 4 && Utilities.SystemInfo.GetCpuCoreCount <= 8)
+                {
+                    return new BindingList<int> { 1, 2, 3, 4 };
+                }
+
+                if (Utilities.SystemInfo.GetCpuCoreCount >= 4)
+                {
+                    return new BindingList<int> { 1, 2 };
+                }
+                
+                return new BindingList<int> { 1 };
             }
         }
 
+        public bool IsSimultaneousEncodesSupported => Utilities.SystemInfo.GetCpuCoreCount >= 4;
 
         #region Public Methods
 

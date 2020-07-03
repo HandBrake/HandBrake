@@ -14,8 +14,6 @@ namespace HandBrakeWPF.Utilities
     using System.Management;
     using System.Windows.Forms;
 
-    using HandBrake.Interop.Interop.HbLib;
-
     using Microsoft.Win32;
 
     /// <summary>
@@ -39,17 +37,27 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets the number of CPU Cores
-        /// </summary>
-        /// <returns>Object</returns>
-        public static object GetCpuCount
+        public static object GetCpu
         {
             get
             {
                 RegistryKey regKey = Registry.LocalMachine;
                 regKey = regKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
                 return regKey == null ? 0 : regKey.GetValue("ProcessorNameString");
+            }
+        }
+
+        public static int GetCpuCoreCount
+        {
+            get
+            {
+                int coreCount = 0;
+                foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+                {
+                    coreCount += int.Parse(item["NumberOfCores"].ToString());
+                }
+
+                return coreCount;
             }
         }
 

@@ -3583,6 +3583,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Not supported on this system).
+        /// </summary>
+        public static string OptionsView_NotSupported {
+            get {
+                return ResourceManager.GetString("OptionsView_NotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name} {source}.
         /// </summary>
         public static string OptionsView_PathOptions {
