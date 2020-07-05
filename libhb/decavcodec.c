@@ -1462,7 +1462,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 #endif
 
-        // Set encoder opts
+        // Set decoder opts
         AVDictionary * av_opts = NULL;
         av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
