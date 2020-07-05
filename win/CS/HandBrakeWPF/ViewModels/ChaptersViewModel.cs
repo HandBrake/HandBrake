@@ -221,8 +221,10 @@ namespace HandBrakeWPF.ViewModels
                 return;
 
             // Validate the chaptermap against the current chapter list extracted from the source
+            bool hasTimestamps = importedChapters.Select(importedChapter => importedChapter.Value.Item2).Any(t => t != TimeSpan.Zero);
+
             string validationErrorMessage;
-            if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
+            if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage, hasTimestamps))
             {
                 if (!string.IsNullOrEmpty(validationErrorMessage))
                 {
@@ -373,7 +375,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="validationErrorMessage">In case of a validation error this variable will hold 
         ///                                      a detailed message that can be presented to the user</param>
         /// <returns>True if there are no errors with imported chapters, false otherwise</returns>
-        private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage)
+        private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage, bool hasTimestamps)
         {
             validationErrorMessage = null;
 
@@ -396,17 +398,19 @@ namespace HandBrakeWPF.ViewModels
             //      (I chose 15sec based on empirical evidence from testing a few DVDs and comparing to chapter-marker files I downloaded)
             //      => This check will not be performed for the first and last chapter as they're very likely to differ significantly due to language and region
             //         differences (e.g. longer title sequences and different distributor credits)
-            var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
-            if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
+            if (hasTimestamps)
             {
-                if (this.errorService.ShowMessageBox(
-                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
-                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question) !=
-                    MessageBoxResult.Yes)
+                var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
+                if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
                 {
-                    return false;
+                    if (this.errorService.ShowMessageBox(
+                            Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
+                            Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question) != MessageBoxResult.Yes)
+                    {
+                        return false;
+                    }
                 }
             }
 
