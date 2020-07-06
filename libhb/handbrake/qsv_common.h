@@ -85,6 +85,7 @@ int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
 void           hb_qsv_info_print();
 hb_qsv_info_t* hb_qsv_info_get(int encoder);
+int qsv_hardware_generation(int cpu_platform);
 
 /* Automatically load and unload any required MFX plug-ins */
 hb_list_t* hb_qsv_load_plugins  (hb_qsv_info_t *info, mfxSession session, mfxVersion version);
@@ -108,6 +109,24 @@ enum
     HB_QSV_PARAM_BAD_NAME,
     HB_QSV_PARAM_BAD_VALUE,
     HB_QSV_PARAM_UNSUPPORTED,
+};
+
+/*
+ *  * Determine the "generation" of QSV hardware based on the CPU microarchitecture.
+ *   * Anything unknown is assumed to be more recent than the latest known generation.
+ *    * This avoids having to order the hb_cpu_platform enum depending on QSV hardware.
+ *     */
+enum
+{
+    QSV_G0, // third party hardware
+    QSV_G1, // Sandy Bridge or equivalent
+    QSV_G2, // Ivy Bridge or equivalent
+    QSV_G3, // Haswell or equivalent
+    QSV_G4, // Broadwell or equivalent
+    QSV_G5, // Skylake or equivalent
+    QSV_G6, // Kaby Lake or equivalent
+    QSV_G7, // Ice Lake or equivalent
+    QSV_FU, // always last (future processors)
 };
 
 typedef struct

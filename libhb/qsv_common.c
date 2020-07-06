@@ -106,24 +106,7 @@ static hb_triplet_t hb_qsv_h265_levels[] =
 #define HB_CHECK_MFX_VERSION(MFX_VERSION, MAJOR, MINOR) \
     (MFX_VERSION.Major == MAJOR  && MFX_VERSION.Minor >= MINOR)
 
-/*
- * Determine the "generation" of QSV hardware based on the CPU microarchitecture.
- * Anything unknown is assumed to be more recent than the latest known generation.
- * This avoids having to order the hb_cpu_platform enum depending on QSV hardware.
- */
-enum
-{
-    QSV_G0, // third party hardware
-    QSV_G1, // Sandy Bridge or equivalent
-    QSV_G2, // Ivy Bridge or equivalent
-    QSV_G3, // Haswell or equivalent
-    QSV_G4, // Broadwell or equivalent
-    QSV_G5, // Skylake or equivalent
-    QSV_G6, // Kaby Lake or equivalent
-    QSV_G7, // Ice Lake or equivalent
-    QSV_FU, // always last (future processors)
-};
-static int qsv_hardware_generation(int cpu_platform)
+int qsv_hardware_generation(int cpu_platform)
 {
     switch (cpu_platform)
     {
@@ -2034,7 +2017,14 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
         param->videoParam->mfx.LowPower     = MFX_CODINGOPTION_OFF; // use Media SDK default
         // introduced in API 1.1
-        param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
+        if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
+        {
+            param->videoParam->AsyncDepth = 6;
+        }
+        else
+        {
+            param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
+        }
         // introduced in API 1.3
         param->videoParam->mfx.BRCParamMultiplier = 0; // no multiplier
 

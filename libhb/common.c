@@ -3814,7 +3814,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
 #if HB_PROJECT_FEATURE_QSV
     job->qsv.enc_info.is_init_done = 0;
-    job->qsv.async_depth           = HB_QSV_ASYNC_DEPTH_DEFAULT;
+    job->qsv.async_depth           = qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7 ? 6 : HB_QSV_ASYNC_DEPTH_DEFAULT;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif

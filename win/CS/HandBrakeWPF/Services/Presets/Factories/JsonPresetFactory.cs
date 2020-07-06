@@ -653,7 +653,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
             preset.VideoPreset = export.Task.VideoPreset != null ? export.Task.VideoPreset.ShortName : null;
             preset.VideoProfile = export.Task.VideoProfile != null ? export.Task.VideoProfile.ShortName : null;
-            preset.VideoQSVAsyncDepth = 4; // Defaulted to 4 for now.
             preset.VideoQSVDecode = config.EnableQuickSyncDecoding;
             preset.VideoQualitySlider = export.Task.Quality.HasValue ? export.Task.Quality.Value : 0;
             preset.VideoQualityType = (int)export.Task.VideoEncodeRateType;
