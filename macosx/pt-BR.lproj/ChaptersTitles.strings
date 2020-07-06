@@ -1,0 +1,57 @@
+/* Class = "NSTableColumn"; headerCell.title = "Index"; ObjectID = "0iF-eL-NOC"; */
+"0iF-eL-NOC.headerCell.title" = "Índice";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Export the list of chapter names to a CSV file."; ObjectID = "3SP-6e-RPS"; */
+"3SP-6e-RPS.ibShadowedToolTip" = "Exporte a lista de nomes de capítulos para um arquivo CSV.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
+"7Xf-c0-jsr.ibShadowedToolTip" = "Adicione uma faixa de marcadores de capítulo ao vídeo.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
+"All-Bz-NLv.title" = "Célula de Texto";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "FyM-2X-9xs"; */
+"FyM-2X-9xs.title" = "Célula de Texto";
+
+/* Class = "NSTextFieldCell"; title = "1"; ObjectID = "G9p-Cg-wyC"; */
+"G9p-Cg-wyC.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Export Chapters…"; ObjectID = "h0O-zg-OF9"; */
+"h0O-zg-OF9.title" = "Capítulos de exportação...";
+
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
+"InF-gR-Lia.ibExternalAccessibilityDescription" = "Títulos de capítulos";
+
+/* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
+"lJL-wX-DVP.title" = "Criar marcadores de capítulos";
+
+/* Class = "NSTableColumn"; headerCell.title = "Start"; ObjectID = "NlF-th-Cg9"; */
+"NlF-th-Cg9.headerCell.title" = "Começo";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "ozt-ED-g1M"; */
+"ozt-ED-g1M.title" = "Célula de Texto";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "pAo-XM-bvP"; */
+"pAo-XM-bvP.title" = "Célula de Texto";
+
+/* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
+"PM3-Ue-0kW.title" = "Capítulos de importação...";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
+"QVB-Cw-DJD.headerCell.title" = "Duração";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Import a list of chapter names from a CSV file."; ObjectID = "Ron-3B-rYg"; */
+"Ron-3B-rYg.ibShadowedToolTip" = "Importe uma lista de nomes de capítulos de um arquivo CSV.";
+
+/* Class = "NSTextFieldCell"; title = "Title"; ObjectID = "UjY-nz-uSt"; */
+"UjY-nz-uSt.title" = "Título";
+
+/* Class = "NSTextFieldCell"; title = "Duration"; ObjectID = "Vmq-zJ-NEA"; */
+"Vmq-zJ-NEA.title" = "Duração";
+
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "Z6H-lJ-ipr"; */
+"Z6H-lJ-ipr.headerCell.title" = "Título";
+
+/* Class = "NSTextFieldCell"; title = "Timestamp"; ObjectID = "zaN-qY-tke"; */
+"zaN-qY-tke.title" = "Data/Hora";
+

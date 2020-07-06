@@ -1,0 +1,96 @@
+/* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Adicionar closed caption quando disponível";
+
+/* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
+"69Q-xB-Vyq.title" = "Legendas de DVD";
+
+/* Class = "NSTextFieldCell"; title = "Burn-In Behavior:"; ObjectID = "640-NB-Uby"; */
+"640-NB-Uby.title" = "Comportamento de Queimar-Em:";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Idiomas de Faixas de Legendas";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Selecione os idiomas a serem usados com a configuração Comportamento de seleção de faixas.";
+
+/* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
+"bfV-9D-6dh.title" = "Legendas Blu-ray";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
+"ceZ-On-t5S.ibShadowedToolTip" = "Grave na primeira faixa de legendas do DVD selecionada. Todas as outras faixas de legendas do DVD serão descartadas. Use esta opção se o software de reprodução ou dispositivo não tiver suporte a legendas de DVD.\n\nApenas uma faixa de legendas pode ser queimada.";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
+"d79-2j-fhc.title" = "Áudio estrangeiro, em seguida, primeira faixa selecionada";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "ego-rt-a64"; */
+"ego-rt-a64.title" = "Cancelar";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "ej8-4k-1vd"; */
+"ej8-4k-1vd.title" = "Nenhum";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Comportamento de Seleção de Faixa:";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Todos os Idiomas Selecionados Correspondentes";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
+"iLI-Nb-D7t.title" = "OK";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Primeiros idiomas selecionados correspondentes";
+
+/* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Comportamento da Seleção de Legendas";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "OutrosViews";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
+"Lsa-kB-2BP.ibShadowedToolTip" = "Comportamento de burn-in. Selecione quais legendas tornar permanentes sobrepondo-as à faixa de vídeo.\n\nApenas uma faixa de legendas pode ser queimada.";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Idioma:";
+
+/* Class = "NSMenuItem"; title = "First Selected Track"; ObjectID = "mnl-P8-dtK"; */
+"mnl-P8-dtK.title" = "Primeira faixa selecionada";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Nenhum";
+
+/* Class = "NSTextFieldCell"; title = "Only one subtitles burn-in option will be applied, starting with the first (top)."; ObjectID = "N4s-K9-RwM"; */
+"N4s-K9-RwM.title" = "Apenas uma opção de burn-in de legendas será aplicada, começando pela primeira (topo).";
+
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
+"NJl-q3-zXL.title" = "Opções:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Track Selection Behavior.\n\nNenhum deles selecionará nenhuma faixa de áudio por padrão.\n\nFirst Matching Selected Languages adiciona a primeira faixa de áudio que corresponde a cada um dos idiomas selecionados presentes na fonte.\n\nTodos os Idiomas Selecionados Correspondentes adicionam todas as faixas de áudio que correspondem a cada um dos idiomas selecionados presentes na fonte.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
+"OOC-GZ-OFA.ibShadowedToolTip" = "A Pesquisa de Áudio Estrangeira verifica a fonte para sequências curtas de áudio estrangeiro ou alienígena que são exibidas por padrão.";
+
+/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
+"PiQ-bA-7P1.title" = "Mostrar Todos";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
+"Px8-G6-NVX.ibShadowedToolTip" = "Grave na primeira faixa de legenda blu-ray selecionada. Todas as outras faixas de legenda blu-ray serão descartadas. Use esta opção se o software ou dispositivo de reprodução não tiver suporte a legendas Blu-ray.\n\nApenas uma faixa de legendas pode ser queimada.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Mostre todos os idiomas das legendas";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show all subtitles languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibShadowedToolTip" = "Mostrar todos os idiomas de legendas na lista Idiomas.";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
+"QRd-XH-6TH.title" = "Faixa de legendas de áudio estrangeiras";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
+"qVQ-fS-w1S.title" = "Célula de Exibição da Tabela";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Adicione legendas closed caption como uma faixa de legenda leve (não gravadas).";
+
+/* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
+"vNY-OC-hTJ.title" = "Adicionar Pesquisa de Áudio Estrangeira";
+
