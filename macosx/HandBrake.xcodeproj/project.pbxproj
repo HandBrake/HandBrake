@@ -323,7 +323,6 @@
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
-		D0DA2AB024B384AD003ACA30 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0DA2AAE24B384AD003ACA30 /* InfoPlist.strings */; };
 		D0DA2AB524B384AD003ACA30 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0DA2AB324B384AD003ACA30 /* Localizable.strings */; };
 		D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
@@ -806,6 +805,7 @@
 		A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFocusRingView.h; sourceTree = "<group>"; };
 		A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFocusRingView.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
+		A9D2DDE524B3B1C2009C92DA /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A9D3634F2209C08500D8EFEA /* HBQueueItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQueueItemView.h; sourceTree = "<group>"; };
 		A9D363502209C08500D8EFEA /* HBQueueItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueItemView.m; sourceTree = "<group>"; };
 		A9D3E2F3234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
@@ -908,7 +908,6 @@
 		D062DF6422FAE05700A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
 		D062DF6522FAE06000A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
 		D0DA2AAD24B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		D0DA2AAF24B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		D0DA2AB124B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HBPictureHUDController.strings"; sourceTree = "<group>"; };
 		D0DA2AB224B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		D0DA2AB424B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1533,7 +1532,6 @@
 				A964D39B22FDE8EE00DFCAEA /* main.m */,
 				A9E8F80423003B2F00AA14E9 /* HandBrakeXPCService1.plist */,
 				A9884FA4243E544800B61738 /* HandBrakeXPCService2.plist */,
-				D0DA2AAE24B384AD003ACA30 /* InfoPlist.strings */,
 				A9884FA6243E544E00B61738 /* HandBrakeXPCService3.plist */,
 				A9884FA8243E545400B61738 /* HandBrakeXPCService4.plist */,
 				A919992A23003CFC0037F526 /* Localizable.strings */,
@@ -2004,7 +2002,7 @@
 				it,
 				fr,
 				ru,
-				pt-BR,
+				"pt-BR",
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			productRefGroup = 273F200014ADAE950021BE6D /* Products */;
@@ -2082,7 +2080,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A951D9CA243E5B50002579F2 /* Localizable.strings in Resources */,
-				D0DA2AB024B384AD003ACA30 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2427,6 +2424,7 @@
 				A919992C23003D720037F526 /* fr */,
 				A919992D23003D730037F526 /* de */,
 				A9D3E315234A11E600F39385 /* ru */,
+				A9D2DDE524B3B1C2009C92DA /* pt-BR */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2815,14 +2813,6 @@
 				D0DA2ACE24B384AD003ACA30 /* pt-BR */,
 			);
 			name = ExceptionAlert.xib;
-			sourceTree = "<group>";
-		};
-		D0DA2AAE24B384AD003ACA30 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D0DA2AAF24B384AD003ACA30 /* pt-BR */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		D0DA2AB324B384AD003ACA30 /* Localizable.strings */ = {
