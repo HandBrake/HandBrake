@@ -1,0 +1,219 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "0HY-xB-cvO"; */
+"0HY-xB-cvO.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar o FLAC. Isso permite que o passthru FLAC seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "0kT-0J-3k2"; */
+"0kT-0J-3k2.headerCell.title" = "Mixagem";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "1XC-VS-X3g"; */
+"1XC-VS-X3g.title" = "Célula de Texto";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "3o5-Gn-Vao"; */
+"3o5-Gn-Vao.title" = "Célula de Texto";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibExternalAccessibilityDescription" = "Codec";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
+"6lx-af-rBL.ibShadowedToolTip" = "Codificador de áudio.";
+
+/* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
+"007-WM-RmC.title" = "Configurações de codificador de áudio para cada faixa selecionada:";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
+"7sl-o7-pUh.title" = "Célula de Texto";
+
+/* Class = "NSButtonCell"; title = "DTS"; ObjectID = "8mC-Wx-myL"; */
+"8mC-Wx-myL.title" = "Dts";
+
+/* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Use apenas o primeiro codificador para áudio secundário";
+
+/* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
+"AQe-Sg-Qgh.title" = "Passthru Fallback:";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Audio Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Linguagens de Faixa de Áudio";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Selecione os idiomas a serem usados com a configuração Comportamento de seleção de faixas.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibExternalAccessibilityDescription" = "Rdc";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
+"BaY-Lo-8xn.ibShadowedToolTip" = "Compressão dinâmica de alcance. Reduz a diferença de volume entre sons altos e silenciosos. Só se aplica às faixas de origem AC-3 ao codificar para outro formato.\n\n0: Não aplique RDC.\n1: Aplique RDC de acordo com as dicas de compressão incorporadas na faixa de origem.\n\nValores maiores que 1 aumentam ainda mais o volume de sons silenciosos. Valores superiores a 2,5 são tipicamente desnecessários e podem introduzir distorção audível.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
+"BK7-c4-kkk.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar o E-AC3. Isso permite que o E-AC3 passthru seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSButtonCell"; title = "AAC"; ObjectID = "cUX-iP-UAs"; */
+"cUX-iP-UAs.title" = "AAC";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibExternalAccessibilityDescription" = "Ganho";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
+"DbI-6O-BzA.ibShadowedToolTip" = "Ganho de áudio em decibéis (dB). Aumenta ou diminui o volume de áudio.";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibExternalAccessibilityDescription" = "Rdc";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
+"DGi-Dl-5nh.ibShadowedToolTip" = "Compressão dinâmica de alcance. Reduz a diferença de volume entre sons altos e silenciosos. Só se aplica às faixas de origem AC-3 ao codificar para outro formato.\n\n0: Não aplique RDC.\n1: Aplique RDC de acordo com as dicas de compressão incorporadas na faixa de origem.\n\nValores maiores que 1 aumentam ainda mais o volume de sons silenciosos. Valores superiores a 2,5 são tipicamente desnecessários e podem introduzir distorção audível.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
+"dpw-He-8eZ.title" = "Célula de Texto";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "DxT-bF-prJ"; */
+"DxT-bF-prJ.ibShadowedIsNilPlaceholder" = "Auto";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "E93-Md-aWa"; */
+"E93-Md-aWa.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar ODTs. Isso permite que o DTS passthru seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fgl-Ev-ELt"; */
+"fgl-Ev-ELt.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar o AC3. Isso permite que o AC3 passthru seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "fH9-oV-QdJ"; */
+"fH9-oV-QdJ.title" = "Célula de Texto";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "fzd-MO-xaB"; */
+"fzd-MO-xaB.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar o AAC. Isso permite que o passthru AAC seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Comportamento de Seleção de Faixa:";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Todos os Idiomas Selecionados Correspondentes";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "Bitrate";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
+"hHP-dw-nba.ibShadowedToolTip" = "Taxa de bits de áudio em kilobits por segundo (kbps). Valores menores reduzem a qualidade do áudio. Valores maiores usam mais dados e podem ser menos compatíveis.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibExternalAccessibilityDescription" = "Mixagem";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "igm-hS-rrD"; */
+"igm-hS-rrD.ibShadowedToolTip" = "Tipo de mistura. Controla como o áudio multicanal é misturado em menos canais ou se os canais originais são preservados.\n\nDolby Surround e Dolby Pro Logic II convertem áudio multicanal em canais estéreo e matriz codificam canais adicionais para reprodução surround em equipamentos compatíveis, mantendo a compatibilidade estéreo.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
+"IxI-o9-jMs.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar o DTS-HD. Isso permite que o passthru DTS-HD seja selecionado quando o passthru automático está ativado.";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Primeiros idiomas selecionados correspondentes";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
+"Jn4-1L-J1g.title" = "Cancelar";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
+"kDe-1L-VkD.title" = "OK";
+
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Comportamento de Seleção de Áudio";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "OutrosViews";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Codificador de áudio para usar quando uma faixa adequada para passthru não estiver disponível.";
+
+/* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
+"LX6-kc-5vq.title" = "DTS-HD";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "LxC-Qx-psh"; */
+"LxC-Qx-psh.headerCell.title" = "Taxa de amostragem";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Idioma:";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "MiI-OV-waZ"; */
+"MiI-OV-waZ.title" = "0";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Nenhum";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "N7h-CJ-quV"; */
+"N7h-CJ-quV.headerCell.title" = "Ganho";
+
+/* Class = "NSButtonCell"; title = "FLAC"; ObjectID = "naS-No-CdV"; */
+"naS-No-CdV.title" = "FLAC";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Track Selection Behavior.\n\nNenhum deles selecionará nenhuma faixa de áudio por padrão.\n\nFirst Matching Selected Languages adiciona a primeira faixa de áudio que corresponde a cada um dos idiomas selecionados presentes na fonte.\n\nTodos os Idiomas Selecionados Correspondentes adicionam todas as faixas de áudio que correspondem a cada um dos idiomas selecionados presentes na fonte.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "os0-Jl-OXF"; */
+"os0-Jl-OXF.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar TrueHD. Isso permite que o TrueHD passthru seja selecionado quando o passthru automático selecion estiver ativado.";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[0] = "Add Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[0]" = "Adicionar Faixa de Áudio";
+
+/* Class = "NSSegmentedCell"; otA-K4-TxM.ibShadowedToolTips[1] = "Remove Selected Audio Track"; ObjectID = "otA-K4-TxM"; */
+"otA-K4-TxM.ibShadowedToolTips[1]" = "Remover faixa de áudio selecionada";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
+"OVr-Jm-VrK.title" = "0";
+
+/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
+"PiQ-bA-7P1.title" = "Mostrar Todos";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
+"pR9-d4-SNf.headerCell.title" = "Codec";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
+"PtB-Wp-B9X.title" = "OutrosViews";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all audio languages"; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Mostrar todas as linguagens de áudio";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show all audio languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibShadowedToolTip" = "Mostrar todas as linguagens de áudio na lista Idiomas.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibExternalAccessibilityDescription" = "Taxa de amostragem";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
+"r80-yv-59n.ibShadowedToolTip" = "Taxa de amostra de áudio em kilohertz (kHz). Auto é recomendado.";
+
+/* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
+"s6s-EH-5CB.title" = "Auto Passthru:";
+
+/* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
+"sdZ-Rx-JoG.title" = "MP3";
+
+/* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
+"u9h-dn-wcK.title" = "E-AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Apenas a faixa de áudio principal será codificada com a lista completa de codificadores. Todas as faixas de áudio adicionais serão codificadas apenas com o primeiro codificador.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
+"uFK-z7-8Yj.title" = "Célula de Texto";
+
+/* Class = "NSMenuItem"; title = "Item"; ObjectID = "UJy-A2-Bb1"; */
+"UJy-A2-Bb1.title" = "Item";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
+"vhn-7C-4aZ.headerCell.title" = "Bitrate";
+
+/* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
+"VnE-3R-bUf.title" = "AC3";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
+"vUx-OV-W5T.ibShadowedToolTip" = "Habilite isso se o dispositivo de reprodução suportar MP3. Isso permite que o MP3 passthru seja selecionado quando o passthru automático estiver ativado.";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
+"XKL-2e-Dlv.title" = "Célula de Exibição da Tabela";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibExternalAccessibilityDescription" = "Ganho";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
+"xnA-03-Bul.ibShadowedToolTip" = "Ganho de áudio em decibéis (dB). Aumenta ou diminui o volume de áudio.";
+
+/* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
+"z9d-P3-6UP.title" = "TrueHD";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "zX9-T9-wKy"; */
+"zX9-T9-wKy.headerCell.title" = "Rdc";
+
