@@ -81,7 +81,7 @@ jobs:
          nuget restore HandBrake.sln
    
     - name: Download LibHandBrake
-      uses: actions/download-artifact@v1.0.0
+      uses: actions/download-artifact@v2
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/x64/Release
