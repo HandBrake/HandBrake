@@ -2023,7 +2023,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->Protected        = 0; // reserved, must be 0
         param->videoParam->NumExtParam      = 0;
         param->videoParam->IOPattern        = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
-        param->videoParam->mfx.TargetUsage  = MFX_TARGETUSAGE_2;
+        param->videoParam->mfx.TargetUsage  = MFX_TARGETUSAGE_BALANCED;
         param->videoParam->mfx.GopOptFlag   = MFX_GOP_CLOSED;
         param->videoParam->mfx.NumThread    = 0; // deprecated, must be 0
         param->videoParam->mfx.EncodedOrder = 0; // input is in display order
