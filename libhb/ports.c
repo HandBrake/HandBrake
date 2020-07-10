@@ -852,7 +852,7 @@ static uint64_t hb_thread_to_integer( const hb_thread_t* t )
  * hb_thread_func()
  ************************************************************************
  * We use it as the root routine for any thread, for two reasons:
- *  + To set the thread priority on OS X (pthread_setschedparam() could
+ *  + To set the thread priority on macOS (pthread_setschedparam() could
  *    be called from hb_thread_init(), but it's nicer to do it as we
  *    are sure it is done before the real routine starts)
  *  + Get informed when the thread exits, so we know whether
@@ -862,8 +862,9 @@ static void attribute_align_thread hb_thread_func( void * _t )
 {
     hb_thread_t * t = (hb_thread_t *) _t;
 
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
-    /* Set the thread priority */
+#if (defined( SYS_DARWIN ) && !defined(__aarch64__)) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
+    /* Set the thread priority
+       Do not change priority on Darwin arm systems */
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
     param.sched_priority = t->priority;
