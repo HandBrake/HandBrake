@@ -245,15 +245,16 @@ typedef struct QSVFrame {
     struct QSVFrame *next;
 } QSVFrame;
 
+#define HB_POOL_FFMPEG_SURFACE_SIZE (64)
 #define HB_POOL_SURFACE_SIZE (64)
 #define HB_POOL_ENCODER_SIZE (8)
 
-typedef struct EncQSVFramesContext {
+typedef struct HBQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
     //void *logctx;
 
     /* The memory ids for the external frames.
-     * Refcounted, since we need one reference owned by the QSVFramesContext
+     * Refcounted, since we need one reference owned by the HBQSVFramesContext
      * (i.e. by the encoder/decoder) and another one given to the MFX session
      * from the frame allocator. */
     AVBufferRef *mids_buf;
@@ -261,15 +262,20 @@ typedef struct EncQSVFramesContext {
     int  nb_mids;
     int pool[HB_POOL_SURFACE_SIZE];
     void *input_texture;
-} EncQSVFramesContext;
+} HBQSVFramesContext;
 
 /* Full QSV pipeline helpers */
+int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
+int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
 AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref);
-hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx);
-void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_index, QSVMid **out_mid, mfxFrameSurface1 **out_surface);
-int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface);
-int hb_qsv_release_surface_from_pool(const QSVMid *mid);
+hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *frame, hb_qsv_context *qsv_ctx, int is_vpp);
+int hb_qsv_get_free_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, AVFrame* frame, QSVMid** out_mid);
+void hb_qsv_get_free_surface_from_pool_with_range(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const int start_index, const int end_index, QSVMid** out_mid, mfxFrameSurface1** out_surface);
+void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid);
+int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid, mfxFrameSurface1 *surface);
+int hb_qsv_release_surface_from_pool(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid);
+int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface);
 int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
