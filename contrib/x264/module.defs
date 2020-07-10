@@ -19,6 +19,12 @@ ifeq (1,$(HOST.cross))
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
 endif
 
+ifeq (darwin,$(HOST.system))
+    ifeq (arm64,$(HOST.machine))
+        X264.CONFIGURE.extra += --host=arm64-apple-darwin
+    endif
+endif
+
 ifeq (1,$(FEATURE.flatpak))
     X264.CONFIGURE.extra += --enable-pic
 endif
