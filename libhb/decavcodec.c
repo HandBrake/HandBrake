@@ -52,6 +52,7 @@
 #include "libavutil/hwcontext_qsv.h"
 #include "handbrake/qsv_common.h"
 #include "handbrake/qsv_libav.h"
+extern HBQSVFramesContext hb_dec_qsv_frames_ctx;
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );
@@ -954,7 +955,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
-        out = hb_qsv_copy_frame(pv->frame, pv->job->qsv.ctx);
+        out = hb_qsv_copy_frame(&hb_dec_qsv_frames_ctx, pv->frame, pv->job->qsv.ctx, 0);
     }
     else
 #endif
@@ -1173,16 +1174,27 @@ int reinit_video_filters(hb_work_private_t * pv)
         orig_width         != pv->frame->width  ||
         orig_height        != pv->frame->height)
     {
-
         settings = hb_dict_init();
-        hb_dict_set(settings, "w", hb_value_int(orig_width));
-        hb_dict_set(settings, "h", hb_value_int(orig_height));
-        hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
-        hb_avfilter_append_dict(filters, "scale", settings);
+#if HB_PROJECT_FEATURE_QSV
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_avfilter_append_dict(filters, "scale_qsv", settings);
+        }
+        else
+#endif
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
+            hb_avfilter_append_dict(filters, "scale", settings);
 
-        settings = hb_dict_init();
-        hb_dict_set(settings, "pix_fmts", hb_value_string("yuv420p"));
-        hb_avfilter_append_dict(filters, "format", settings);
+            settings = hb_dict_init();
+            hb_dict_set(settings, "pix_fmts", hb_value_string("yuv420p"));
+            hb_avfilter_append_dict(filters, "format", settings);
+        }
     }
     if (pv->title->rotation != HB_ROTATION_0)
     {

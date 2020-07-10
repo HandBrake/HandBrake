@@ -1226,172 +1226,49 @@ static int sanitize_audio(hb_job_t *job)
     return 0;
 }
 
+#if HB_PROJECT_FEATURE_QSV
+int num_cpu_filters = 0;
+int qsv_filters_are_enabled = 0;
+#endif
+
 static int sanitize_qsv( hb_job_t * job )
 {
 #if HB_PROJECT_FEATURE_QSV
-#if 0 // TODO: re-implement QSV VPP filtering and QSV zerocopy path
-    int i;
-
-    /*
-     * XXX: mfxCoreInterface's CopyFrame doesn't work in old drivers, and our
-     *      workaround is really slow. If we have validated CPU-based filters in
-     *      the list and we can't use CopyFrame, disable QSV decoding until a
-     *      better solution is implemented.
-     */
-    if (hb_qsv_copyframe_is_slow(job->vcodec))
-    {
-        if (job->list_filter != NULL)
-        {
-            int encode_only = 0;
-            for (i = 0; i < hb_list_count(job->list_filter) && !encode_only; i++)
-            {
-                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
-                switch (filter->id)
-                {
-                    // validated, CPU-based filters
-                    case HB_FILTER_ROTATE:
-                    case HB_FILTER_RENDER_SUB:
-                    case HB_FILTER_AVFILTER:
-                        encode_only = 1;
-                        break;
-
-                    // CPU-based deinterlace (validated)
-                    case HB_FILTER_DEINTERLACE:
-                    {
-                        int mode = hb_dict_get_int(filter->settings, "mode");
-                        if (!(mode & MODE_DEINTERLACE_QSV))
-                        {
-                            encode_only = 1;
-                        }
-                    } break;
-
-                    // other filters will be removed
-                    default:
-                        break;
-                }
-            }
-            if (encode_only)
-            {
-                hb_log("do_job: QSV: possible CopyFrame bug, using encode-only path");
-                if (hb_get_cpu_platform() >= HB_CPU_PLATFORM_INTEL_IVB)
-                {
-                    hb_log("do_job: QSV: please update your Intel graphics driver to version 9.18.10.3257 or later");
-                }
-                job->qsv.decode = 0;
-            }
-        }
-    }
-
     /*
      * When QSV's VPP is used for filtering, not all CPU filters
      * are supported, so we need to do a little extra setup here.
      */
+    int i = 0;
+    qsv_filters_are_enabled = 0;
+    num_cpu_filters = 0;
     if (job->vcodec & HB_VCODEC_QSV_MASK)
     {
-        int vpp_settings[7];
-        int num_cpu_filters = 0;
-        hb_filter_object_t *filter;
-        // default values for VPP filter
-        vpp_settings[0] = job->title->geometry.width;
-        vpp_settings[1] = job->title->geometry.height;
-        vpp_settings[2] = job->title->crop[0];
-        vpp_settings[3] = job->title->crop[1];
-        vpp_settings[4] = job->title->crop[2];
-        vpp_settings[5] = job->title->crop[3];
-        vpp_settings[6] = 0; // deinterlace: off
         if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
         {
-            while (hb_list_count(job->list_filter) > num_cpu_filters)
+            for (i = 0; i < hb_list_count(job->list_filter); i++)
             {
-                filter = hb_list_item(job->list_filter, num_cpu_filters);
+                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+
                 switch (filter->id)
                 {
                     // cropping and scaling always done via VPP filter
                     case HB_FILTER_CROP_SCALE:
-                        hb_dict_extract_int(&vpp_settings[0], filter->settings,
-                                            "width");
-                        hb_dict_extract_int(&vpp_settings[1], filter->settings,
-                                            "height");
-                        hb_dict_extract_int(&vpp_settings[2], filter->settings,
-                                            "crop-top");
-                        hb_dict_extract_int(&vpp_settings[3], filter->settings,
-                                            "crop-bottom");
-                        hb_dict_extract_int(&vpp_settings[4], filter->settings,
-                                            "crop-left");
-                        hb_dict_extract_int(&vpp_settings[5], filter->settings,
-                                            "crop-right");
-
-                        hb_list_rem(job->list_filter, filter);
-                        hb_filter_close(&filter);
                         break;
 
-                    // pick VPP or CPU deinterlace depending on settings
                     case HB_FILTER_DEINTERLACE:
-                    {
-                        int mode = hb_dict_get_int(filter->settings, "mode");
-                        if (mode & MODE_DEINTERLACE_QSV)
-                        {
-                            // deinterlacing via VPP filter
-                            vpp_settings[6] = 1;
-                            hb_list_rem(job->list_filter, filter);
-                            hb_filter_close(&filter);
-                        }
-                        else
-                        {
-                            // validated
-                            num_cpu_filters++;
-                        }
-                    } break;
-
-                    // then, validated filters
-                    case HB_FILTER_ROTATE: // TODO: use Media SDK for this
+                    case HB_FILTER_ROTATE:
                     case HB_FILTER_RENDER_SUB:
                     case HB_FILTER_AVFILTER:
                         num_cpu_filters++;
                         break;
-
-                    // finally, drop all unsupported filters
                     default:
-                        hb_log("do_job: QSV: full path, removing unsupported filter '%s'",
-                               filter->name);
-                        hb_list_rem(job->list_filter, filter);
-                        hb_filter_close(&filter);
+                        num_cpu_filters++;
                         break;
                 }
             }
-            if (num_cpu_filters > 0)
-            {
-                // we need filters to copy to system memory and back
-                filter = hb_filter_init(HB_FILTER_QSV_PRE);
-                hb_add_filter_dict(job, filter, NULL);
-                filter = hb_filter_init(HB_FILTER_QSV_POST);
-                hb_add_filter_dict(job, filter, NULL);
-            }
-            if (vpp_settings[0] != job->title->geometry.width  ||
-                vpp_settings[1] != job->title->geometry.height ||
-                vpp_settings[2] >= 1 /* crop */       ||
-                vpp_settings[3] >= 1 /* crop */       ||
-                vpp_settings[4] >= 1 /* crop */       ||
-                vpp_settings[5] >= 1 /* crop */       ||
-                vpp_settings[6] >= 1 /* deinterlace */)
-            {
-                // we need the VPP filter
-                hb_dict_t * dict = hb_dict_init();
-                hb_dict_set(dict, "width", hb_value_int(vpp_settings[0]));
-                hb_dict_set(dict, "height", hb_value_int(vpp_settings[1]));
-                hb_dict_set(dict, "crop-top", hb_value_int(vpp_settings[2]));
-                hb_dict_set(dict, "crop-bottom", hb_value_int(vpp_settings[3]));
-                hb_dict_set(dict, "crop-left", hb_value_int(vpp_settings[4]));
-                hb_dict_set(dict, "crop-right", hb_value_int(vpp_settings[5]));
-                hb_dict_set(dict, "deinterlace", hb_value_int(vpp_settings[6]));
-
-                filter = hb_filter_init(HB_FILTER_QSV);
-                hb_add_filter_dict(job, filter, dict);
-                hb_value_free(&dict);
-            }
         }
+        qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
     }
-#endif // QSV VPP filtering and QSV zerocopy path
 #endif // HB_PROJECT_FEATURE_QSV
 
     return 0;
@@ -1521,15 +1398,7 @@ static void do_job(hb_job_t *job)
         goto cleanup;
     }
 
-    // sanitize_qsv looks for subtitle render filter, so must happen after
-    // sanitize_subtitle
-    result = sanitize_qsv(job);
-    if (result)
-    {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
-        *job->die = 1;
-        goto cleanup;
-    }
+
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if (job->list_filter && hb_list_count(job->list_filter))
@@ -1538,6 +1407,16 @@ static void do_job(hb_job_t *job)
 
         sanitize_filter_list(job->list_filter, title->geometry);
 
+        // sanitize_qsv looks for subtitle render filter, so must happen after
+        // sanitize_subtitle
+        result = sanitize_qsv(job);
+        if (result)
+        {
+            *job->done_error = HB_ERROR_WRONG_INPUT;
+            *job->die = 1;
+            goto cleanup;
+        }
+        
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
         init.time_base.den = 90000;

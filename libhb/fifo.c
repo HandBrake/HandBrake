@@ -715,6 +715,12 @@ void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
     src->alloc = alloc;
 }
 
+#if HB_PROJECT_FEATURE_QSV
+extern HBQSVFramesContext hb_dec_qsv_frames_ctx;
+extern HBQSVFramesContext hb_vpp_qsv_frames_ctx;
+extern int qsv_filters_are_enabled;
+#endif
+
 // Frees the specified buffer list.
 void hb_buffer_close( hb_buffer_t ** _b )
 {
@@ -730,9 +736,17 @@ void hb_buffer_close( hb_buffer_t ** _b )
             mfxFrameSurface1 *surface = (mfxFrameSurface1*)b->qsv_details.frame->data[3];
             if(surface)
             {
-                hb_qsv_release_surface_from_pool(surface->Data.MemId);
+                if(qsv_filters_are_enabled)
+                {
+                    hb_qsv_release_surface_from_pool_by_surface_pointer(&hb_dec_qsv_frames_ctx, surface);
+                }
+                else
+                {
+                    hb_qsv_release_surface_from_pool(&hb_dec_qsv_frames_ctx, surface->Data.MemId);
+                }
                 b->qsv_details.frame->data[3] = 0;
             }
+            av_frame_unref(b->qsv_details.frame);
         }
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
         {

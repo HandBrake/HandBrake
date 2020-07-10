@@ -42,8 +42,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "libavutil/hwcontext.h"
 #include <mfx/mfxvideo.h>
 
+extern int qsv_filters_are_enabled;
 extern AVBufferRef *hb_hw_device_ctx;
-EncQSVFramesContext hb_enc_qsv_frames_ctx;
+HBQSVFramesContext hb_dec_qsv_frames_ctx;
+extern HBQSVFramesContext hb_vpp_qsv_frames_ctx;
 
 /*
  * The frame info struct remembers information about each frame across calls to
@@ -554,7 +556,7 @@ static int qsv_setup_mids(mfxFrameAllocResponse *resp, AVBufferRef *hw_frames_re
 static mfxStatus hb_qsv_frame_alloc(mfxHDL pthis, mfxFrameAllocRequest *req,
                                  mfxFrameAllocResponse *resp)
 {
-    EncQSVFramesContext *ctx = pthis;
+    HBQSVFramesContext *ctx = pthis;
     int ret;
 
     /* this should only be called from an encoder or decoder and
@@ -795,13 +797,18 @@ int qsv_enc_init(hb_work_private_t *pv)
             // reuse parent session
             qsv->mfx_session = parent_session;
             mfxFrameAllocator frame_allocator = {
-                .pthis  = &hb_enc_qsv_frames_ctx,
+                .pthis  = &hb_dec_qsv_frames_ctx,
                 .Alloc  = hb_qsv_frame_alloc,
                 .Lock   = hb_qsv_frame_lock,
                 .Unlock = hb_qsv_frame_unlock,
                 .GetHDL = hb_qsv_frame_get_hdl,
                 .Free   = hb_qsv_frame_free,
             };
+
+            if (qsv_filters_are_enabled)
+            {
+                frame_allocator.pthis = &hb_vpp_qsv_frames_ctx;
+            }
 
             err = MFXVideoCORE_SetFrameAllocator(qsv->mfx_session, &frame_allocator);
             if (err != MFX_ERR_NONE)
@@ -2155,7 +2162,14 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 mfxFrameSurface1 *surface = task->stage->in.p_surface;
                 if(!pv->is_sys_mem && surface)
                 {
-                    hb_qsv_release_surface_from_pool(surface->Data.MemId);
+                    if (qsv_filters_are_enabled)
+                    {
+                        hb_qsv_release_surface_from_pool(&hb_vpp_qsv_frames_ctx, surface->Data.MemId);
+                    }
+                    else
+                    {
+                        hb_qsv_release_surface_from_pool(&hb_dec_qsv_frames_ctx, surface->Data.MemId);
+                    }
                 }
 
                 if (task->bs->DataLength > 0)
@@ -2238,21 +2252,28 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         if(in->qsv_details.frame)
         {
             surface = ((mfxFrameSurface1*)in->qsv_details.frame->data[3]);
-            mid = surface->Data.MemId;
+            if (qsv_filters_are_enabled)
+            {
+                hb_qsv_get_mid_by_surface_from_pool(&hb_vpp_qsv_frames_ctx, surface, &mid);
+            }
+            else
+            {
+                hb_qsv_get_mid_by_surface_from_pool(&hb_dec_qsv_frames_ctx, surface, &mid);
+            }
         }
         else
         {
             // Create black buffer in the begining of the encoding, usually first 2 frames
-            hb_qsv_get_free_surface_from_pool(HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, HB_POOL_SURFACE_SIZE, &mid, &surface);
+            hb_qsv_get_free_surface_from_pool_with_range(&hb_dec_qsv_frames_ctx, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, HB_POOL_SURFACE_SIZE, &mid, &surface);
         }
 
-        if(surface)
+        if (qsv_filters_are_enabled) 
         {
-            hb_qsv_replace_surface_mid(mid, surface);
+            hb_qsv_replace_surface_mid(&hb_vpp_qsv_frames_ctx, mid, surface);
         }
         else
         {
-            goto fail;
+            hb_qsv_replace_surface_mid(&hb_dec_qsv_frames_ctx, mid, surface);
         }
 #endif
         // At this point, enc_qsv takes ownership of the QSV resources

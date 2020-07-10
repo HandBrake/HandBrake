@@ -11,6 +11,12 @@
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
 
+#if HB_PROJECT_FEATURE_QSV
+#include "handbrake/qsv_common.h"
+extern int qsv_filters_are_enabled;
+extern HBQSVFramesContext hb_dec_qsv_frames_ctx;
+#endif
+
 static int  avfilter_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 static int  avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job );
 static void avfilter_close( hb_filter_object_t * filter );
@@ -232,7 +238,14 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     hb_buffer_list_t   list;
     hb_buffer_t      * buf, * next;
-
+#if HB_PROJECT_FEATURE_QSV
+    mfxFrameSurface1 *surface = NULL;
+    // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
+    if (qsv_filters_are_enabled && in && in->qsv_details.frame)
+    {
+        surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
+    }
+#endif
     hb_avfilter_add_buf(pv->graph, in);
     buf = hb_avfilter_get_buf(pv->graph);
     while (buf != NULL)
@@ -240,7 +253,12 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
         hb_buffer_list_append(&pv->list, buf);
         buf = hb_avfilter_get_buf(pv->graph);
     }
-
+#if HB_PROJECT_FEATURE_QSV
+    if (qsv_filters_are_enabled && surface)
+    {
+        hb_qsv_release_surface_from_pool_by_surface_pointer(&hb_dec_qsv_frames_ctx, surface);
+    }
+#endif
     // Delay one frame so we can set the stop time of the output buffer
     hb_buffer_list_clear(&list);
     while (hb_buffer_list_count(&pv->list) > 1)

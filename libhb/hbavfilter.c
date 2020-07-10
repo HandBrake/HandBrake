@@ -15,6 +15,12 @@
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
 
+#if HB_PROJECT_FEATURE_QSV
+#include "handbrake/qsv_common.h"
+extern int qsv_filters_are_enabled;
+extern HBQSVFramesContext hb_vpp_qsv_frames_ctx;
+#endif
+
 struct hb_avfilter_graph_s
 {
     AVFilterGraph    * avgraph;
@@ -27,7 +33,7 @@ struct hb_avfilter_graph_s
 };
 
 static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
-                                        const char * name, const char * args)
+                                        const char * name, const char * args, AVBufferSrcParameters *par)
 {
     AVFilterContext * filter;
     int               result;
@@ -38,6 +44,16 @@ static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
     {
         return NULL;
     }
+
+    if (par)
+    {
+        result = av_buffersrc_parameters_set(filter, par);
+        if (result < 0)
+        {
+            return NULL;
+        }
+    }
+
     if (graph->last != NULL)
     {
         result = avfilter_link(graph->last, 0, filter, 0);
@@ -82,9 +98,12 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         hb_error("hb_avfilter_graph_init: avfilter_graph_alloc failed");
         goto fail;
     }
-
-    av_opt_set(graph->avgraph, "scale_sws_opts", "lanczos+accurate_rnd", 0);
-
+#if HB_PROJECT_FEATURE_QSV
+    if (!qsv_filters_are_enabled)
+#endif
+    {
+        av_opt_set(graph->avgraph, "scale_sws_opts", "lanczos+accurate_rnd", 0);
+    }
     result = avfilter_graph_parse2(graph->avgraph, settings_str, &in, &out);
     if (result < 0 || in == NULL || out == NULL)
     {
@@ -93,16 +112,42 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 
+    AVBufferSrcParameters *par = 0;
     // Build filter input
-    filter_args = hb_strdup_printf(
-                "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
+#if HB_PROJECT_FEATURE_QSV
+    if (qsv_filters_are_enabled)
+    {
+        par = av_buffersrc_parameters_alloc();
+        init->pix_fmt = AV_PIX_FMT_QSV;
+        filter_args = hb_strdup_printf(
+                "video_size=%dx%d:pix_fmt=%d:sar=%d/%d:"
                 "time_base=%d/%d:frame_rate=%d/%d",
                 init->geometry.width, init->geometry.height, init->pix_fmt,
                 init->geometry.par.num, init->geometry.par.den,
                 init->time_base.num, init->time_base.den,
                 init->vrate.num, init->vrate.den);
 
-    avfilter = append_filter(graph, "buffer", filter_args);
+        AVBufferRef *hb_hw_frames_ctx = NULL;
+        result = hb_create_ffmpeg_pool(init->geometry.width, init->geometry.height, AV_PIX_FMT_NV12, 32, 0, &hb_hw_frames_ctx);
+        if (result < 0)
+        {
+            hb_error("hb_create_ffmpeg_pool failed");
+            goto fail;
+        }
+        par->hw_frames_ctx = hb_hw_frames_ctx;
+    }
+    else
+#endif
+    {
+        filter_args = hb_strdup_printf(
+                    "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
+                    "time_base=%d/%d:frame_rate=%d/%d",
+                    init->geometry.width, init->geometry.height, init->pix_fmt,
+                    init->geometry.par.num, init->geometry.par.den,
+                    init->time_base.num, init->time_base.den,
+                    init->vrate.num, init->vrate.den);
+    }
+    avfilter = append_filter(graph, "buffer", filter_args, par);
     free(filter_args);
     if (avfilter == NULL)
     {
@@ -120,7 +165,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     graph->last = out->filter_ctx;
 
     // Build filter output
-    avfilter = append_filter(graph, "buffersink", NULL);
+    avfilter = append_filter(graph, "buffersink", NULL, 0);
     if (avfilter == NULL)
     {
         hb_error("hb_avfilter_graph_init: failed to create buffer output filter");
@@ -224,8 +269,18 @@ int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in)
 {
     if (in != NULL)
     {
-        hb_video_buffer_to_avframe(graph->frame, in);
-        return av_buffersrc_add_frame(graph->input, graph->frame);
+#if HB_PROJECT_FEATURE_QSV
+        if (qsv_filters_are_enabled)
+        {
+            hb_video_buffer_to_avframe(in->qsv_details.frame, in);
+            return hb_avfilter_add_frame(graph, in->qsv_details.frame);
+        }
+        else
+#endif
+        {
+            hb_video_buffer_to_avframe(graph->frame, in);
+            return av_buffersrc_add_frame(graph->input, graph->frame);
+        }
     }
     else
     {
@@ -241,7 +296,17 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     if (result >= 0)
     {
         hb_buffer_t * buf;
-        buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+#if HB_PROJECT_FEATURE_QSV
+        if (qsv_filters_are_enabled)
+        {
+            buf = hb_qsv_copy_frame(&hb_vpp_qsv_frames_ctx, graph->frame, 0, 1);
+            hb_avframe_set_video_buffer_flags(buf, graph->frame, graph->out_time_base);
+        }
+        else
+#endif
+        {
+            buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+        }
         av_frame_unref(graph->frame);
         return buf;
     }
