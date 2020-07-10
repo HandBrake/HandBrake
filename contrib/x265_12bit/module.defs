@@ -57,6 +57,12 @@ else
     X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
 endif
 
+ifeq (darwin,$(HOST.system))
+    ifeq (arm64,$(HOST.machine))
+        X265_12.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=arm64
+    endif
+endif
+
 ## find CMakeLists.txt
 X265_12.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(X265_12.EXTRACT.dir/)source/)"
 
