@@ -96,10 +96,10 @@
         self.window.tabbingMode = NSWindowTabbingModeDisallowed;
     }
 
-#if defined(NSAppKitVersionNumber10_15)
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
     if (@available (macOS 10.16, *))
     {
-        self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
+        self.window.toolbarStyle = NSWindowToolbarStyleUnified;
     }
 #endif
 
@@ -152,24 +152,39 @@
         [self _touchBar_validateUserInterfaceItems];
     }
 
-    NSString *string;
+    NSString *subtitle;
     if (self.queue.pendingItemsCount == 0)
     {
         self.window.title = NSLocalizedString(@"Queue", @"Queue window title");
+        subtitle = NSLocalizedString(@"No encode pending", @"Queue status");
     }
     else
     {
         if (self.queue.pendingItemsCount == 1)
         {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%lu encode pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
+            subtitle = [NSString stringWithFormat: NSLocalizedString(@"%lu encode pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
         }
         else
         {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%lu encodes pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
+            subtitle = [NSString stringWithFormat: NSLocalizedString(@"%lu encodes pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
         }
 
-        self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
+        if (@available(macOS 10.16, *)) {} else
+        {
+#endif
+            self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), subtitle];
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
+        }
+#endif
     }
+
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
+    if (@available(macOS 10.16, *))
+    {
+        self.window.subtitle = subtitle;
+    }
+#endif
 }
 
 #pragma mark Toolbar
@@ -312,7 +327,7 @@
             [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
             [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
             [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
-#if defined(NSAppKitVersionNumber10_15)
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
             if (@available(macOS 10.16, *))
             {
                 alert.buttons.lastObject.hasDestructiveAction = true;
@@ -373,7 +388,7 @@
         [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
-#if defined(NSAppKitVersionNumber10_15)
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
         if (@available(macOS 10.16, *))
         {
             alert.buttons.lastObject.hasDestructiveAction = true;
@@ -654,8 +669,20 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     [alert setInformativeText:NSLocalizedString(@"Select Continue Encoding to dismiss this dialog without making changes.", @"Queue Alert -> cancel rip informative text")];
     [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", @"Queue Alert -> cancel rip first button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Skip Current Job", @"Queue Alert -> cancel rip second button")];
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
+    if (@available(macOS 10.16, *))
+    {
+        alert.buttons.lastObject.hasDestructiveAction = true;
+    }
+#endif
     [alert addButtonWithTitle:NSLocalizedString(@"Stop After Current Job", @"Queue Alert -> cancel rip third button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Stop All", @"Queue Alert -> cancel rip fourth button")];
+#if defined(__MAC_11_0) || defined(__MAC_10_16)
+    if (@available(macOS 10.16, *))
+    {
+        alert.buttons.lastObject.hasDestructiveAction = true;
+    }
+#endif
     [alert setAlertStyle:NSAlertStyleCritical];
 
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {

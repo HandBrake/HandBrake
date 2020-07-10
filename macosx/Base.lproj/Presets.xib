@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17132.0.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <development version="11000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17132.0.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,12 +16,12 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="230" height="325"/>
+        <customView misplaced="YES" id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="230" height="341"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uad-bt-uKD">
-                    <rect key="frame" x="3" y="33" width="224" height="266"/>
+                    <rect key="frame" x="3" y="37" width="224" height="266"/>
                     <string key="toolTip">Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
 
 Overrides all encode settings. Settings may be further adjusted after selecting a preset.</string>
@@ -35,9 +36,8 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="name" width="219" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
+                                    <tableColumn identifier="name" width="210" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                            <font key="font" metaFont="menu" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableHeaderCell>
@@ -97,7 +97,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="RAh-Ad-miy">
-                        <rect key="frame" x="-100" y="-100" width="222" height="16"/>
+                        <rect key="frame" x="1" y="250" width="222" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="xU9-j2-UAo">
@@ -107,7 +107,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     <accessibility description="Presets"/>
                 </scrollView>
                 <button toolTip="Create a new custom preset based on the currently selected settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kfi-wq-mgV">
-                    <rect key="frame" x="3" y="3" width="24" height="23"/>
+                    <rect key="frame" x="3" y="7" width="24" height="23"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="CJg-Q0-O5t"/>
                         <constraint firstAttribute="width" constant="24" id="p55-di-frd"/>
@@ -123,13 +123,14 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </connections>
                 </button>
                 <popUpButton toolTip="Show additional options." translatesAutoresizingMaskIntoConstraints="NO" id="Ybq-Zt-sta">
-                    <rect key="frame" x="58" y="4" width="35" height="22"/>
+                    <rect key="frame" x="58" y="7" width="35" height="23"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="35" id="ROP-Ic-SbK"/>
+                        <constraint firstAttribute="height" constant="21" id="nJ2-eJ-MTY"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" title="Presets Action Menu" id="LQk-kD-5sj">
                             <items>
                                 <menuItem state="on" image="NSActionTemplate" hidden="YES" id="KPx-Ep-mb4"/>
@@ -166,7 +167,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     <accessibility description="Additional Options"/>
                 </popUpButton>
                 <button toolTip="Delete the selected preset." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3V-8w-euU">
-                    <rect key="frame" x="26" y="3" width="24" height="23"/>
+                    <rect key="frame" x="26" y="7" width="24" height="23"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="24" id="B0h-bJ-KtI"/>
                     </constraints>
@@ -181,7 +182,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
-                    <rect key="frame" x="92" y="305" width="47" height="14"/>
+                    <rect key="frame" x="92" y="309" width="47" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="r4V-6L-SO8">
                         <font key="font" metaFont="smallSystemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -195,7 +196,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="3" id="Awe-NX-Pxq"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="20" id="MTA-L0-QDh"/>
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="NYS-NA-dEh"/>
-                <constraint firstAttribute="bottom" secondItem="kfi-wq-mgV" secondAttribute="bottom" constant="4" id="Rsn-71-jKi"/>
+                <constraint firstAttribute="bottom" secondItem="kfi-wq-mgV" secondAttribute="bottom" constant="8" id="Rsn-71-jKi"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="UV6-xv-JfW"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="b3V-8w-euU" secondAttribute="top" id="Vji-my-7O6"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="VuV-22-Ur9"/>
@@ -220,8 +221,8 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
         </treeController>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="NSActionTemplate" width="17" height="15"/>
+        <image name="NSAddTemplate" width="15" height="11"/>
+        <image name="NSRemoveTemplate" width="15" height="2"/>
     </resources>
 </document>
