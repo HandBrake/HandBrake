@@ -401,6 +401,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
             hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
         }
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 )
+        {
+            context->flags |= AV_CODEC_FLAG_QSCALE;
+            context->global_quality = job->vquality;
+
+            hb_log( "encavcodec: encoding at constant quality %d",
+                    context->global_quality );
+        }
         else
         {
             // These settings produce better image quality than

@@ -1394,10 +1394,10 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
         case HB_VCODEC_FFMPEG_VT_H264:
         case HB_VCODEC_FFMPEG_VT_H265:
-            *direction   = 1;
-            *granularity = 0.1;
+            *direction   = 0;
+            *granularity = 1;
             *low         = 0.;
-            *high        = 0.;
+            *high        = 100.;
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:

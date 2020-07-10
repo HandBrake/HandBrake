@@ -32,6 +32,9 @@ static void toggle_vt_gva_stats(bool state)
 static const CFStringRef encoder_id_h264 = CFSTR("com.apple.videotoolbox.videoencoder.h264.gva");
 static const CFStringRef encoder_id_h265 = CFSTR("com.apple.videotoolbox.videoencoder.hevc.gva");
 
+static const CFStringRef encoder_id_h264_apple = CFSTR("com.apple.videotoolbox.videoencoder.ave.avc");
+static const CFStringRef encoder_id_h265_apple = CFSTR("com.apple.videotoolbox.videoencoder.ave.hevc");
+
 int encvt_available(CFStringRef encoder)
 {
     CFArrayRef encoder_list;
@@ -54,10 +57,10 @@ int encvt_available(CFStringRef encoder)
 
 int hb_vt_h264_is_available()
 {
-    return encvt_available(encoder_id_h264);
+    return encvt_available(encoder_id_h264) || encvt_available(encoder_id_h264_apple);
 }
 
 int hb_vt_h265_is_available()
 {
-    return encvt_available(encoder_id_h265);
+    return encvt_available(encoder_id_h265) || encvt_available(encoder_id_h265_apple);
 }
