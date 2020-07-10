@@ -9,11 +9,7 @@
 #ifndef SUUPDATER_H
 #define SUUPDATER_H
 
-#if __has_feature(modules)
-@import Cocoa;
-#else
 #import <Cocoa/Cocoa.h>
-#endif
 #import <Sparkle/SUExport.h>
 #import <Sparkle/SUVersionComparisonProtocol.h>
 #import <Sparkle/SUVersionDisplayProtocol.h>

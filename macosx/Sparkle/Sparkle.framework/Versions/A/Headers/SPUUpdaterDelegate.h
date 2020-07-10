@@ -6,12 +6,7 @@
 //  Copyright © 2016 Sparkle Project. All rights reserved.
 //
 
-#if __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
-
 #import <Sparkle/SUExport.h>
 
 @protocol SUVersionComparison;
@@ -299,6 +294,14 @@ typedef NS_ENUM(NSInteger, SPUUpdateCheck)
  \param error The error that caused the abort
  */
 - (void)updater:(SPUUpdater *)updater didAbortWithError:(NSError *)error;
+
+/*!
+ Called after an update is aborted due to an error during an scheduled update check.
+  
+ \param updater The updater instance.
+ \param error The error that caused the abort
+ */
+- (void)updater:(SPUUpdater *)updater scheduledUpdateCheckDidAbortWithError:(NSError *)error;
 
 @end
 

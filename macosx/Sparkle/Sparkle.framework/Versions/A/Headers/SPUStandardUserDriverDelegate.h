@@ -6,12 +6,7 @@
 //  Copyright © 2016 Sparkle Project. All rights reserved.
 //
 
-#if __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
-
 #import <Sparkle/SUExport.h>
 
 @protocol SUVersionDisplay;

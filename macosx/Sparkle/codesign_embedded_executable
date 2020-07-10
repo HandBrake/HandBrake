@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import os, sys, subprocess
+
+def log_message(message):
+    sys.stderr.write(message + "\n")
+
+#Surround a token with double quotes if it has a space in it
+def sanitize(argument):
+    return ('"' + argument + '"' if ' ' in argument else argument)
+
+def _codesign_service(identity, path, entitlements_path=None):
+    command = ["codesign", "-o", "runtime", "-fs", identity, path] + ([] if entitlements_path is None else ["--entitlements", entitlements_path])
+    log_message(" ".join(map(sanitize, command)))
+
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    process.communicate()
+    if process.returncode != 0:
+        log_message("Error: Failed to codesign %s" % (path))
+        sys.exit(1)
+
+def codesign_service(service_name, identity, path, entitlements_path=None):
+    #Sign the auxiliary executables (if any)
+    executables_path = os.path.join(path, "Contents/MacOS/")
+    if os.path.exists(executables_path):
+        for executable in os.listdir(executables_path):
+            if executable != service_name:
+                _codesign_service(identity, os.path.join(executables_path, executable), entitlements_path)
+
+    #Sign the service bundle
+    _codesign_service(identity, path, entitlements_path)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        log_message("Usage:\n\t%s code-signing-identity executable1 executable1 ..." % (sys.argv[0]))
+        log_message("Example:\n\t%s \"Developer ID Application\" ./XPCServices/*.xpc" % (sys.argv[0]))
+        sys.exit(1)
+
+    signing_identity = sys.argv[1]
+    executables = sys.argv[2:]
+
+    for executable in executables:
+        parent, child = os.path.split(executable)
+        service_name = os.path.splitext(child)[0]
+        entitlements_path = os.path.join(parent, service_name + ".entitlements")
+        codesign_service(service_name, signing_identity, executable, None if not os.path.exists(entitlements_path) else entitlements_path)

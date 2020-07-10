@@ -9,11 +9,7 @@
 #ifndef SPUStatusCompletionResults_h
 #define SPUStatusCompletionResults_h
 
-#if __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
 
 typedef NS_ENUM(NSUInteger, SPUUserInitiatedCheckStatus) {
     SPUUserInitiatedCheckDone,

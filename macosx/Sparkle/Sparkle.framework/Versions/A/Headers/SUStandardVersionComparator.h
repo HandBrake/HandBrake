@@ -9,11 +9,7 @@
 #ifndef SUSTANDARDVERSIONCOMPARATOR_H
 #define SUSTANDARDVERSIONCOMPARATOR_H
 
-#if __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
 #import <Sparkle/SUExport.h>
 #import <Sparkle/SUVersionComparisonProtocol.h>
 

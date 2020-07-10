@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>18E205e</string>
+	<string>20A5299w</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.20.0</string>
+	<string>2.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -25,21 +25,25 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.20.0</string>
+	<string>2.0.0</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>10B61</string>
+	<string>12A8158a</string>
+	<key>DTPlatformName</key>
+	<string>macosx</string>
 	<key>DTPlatformVersion</key>
-	<string>GM</string>
+	<string>11.0</string>
 	<key>DTSDKBuild</key>
-	<string>18B71</string>
+	<string>20A5299v</string>
 	<key>DTSDKName</key>
-	<string>macosx10.14</string>
+	<string>macosx11.0</string>
 	<key>DTXcode</key>
-	<string>1010</string>
+	<string>1200</string>
 	<key>DTXcodeBuild</key>
-	<string>10B61</string>
+	<string>12A8158a</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.9</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Sparkle Project. All rights reserved.</string>
 	<key>XPCService</key>
