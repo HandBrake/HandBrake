@@ -1393,11 +1393,25 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             break;
 
         case HB_VCODEC_FFMPEG_VT_H264:
+            *direction   = 0;
+            *granularity = 1;
+            *low         = 0.;
+#ifdef __APPLE__
+            *high        = hb_vt_h264_is_costant_quality_available() ? 100. : 0.;
+#else
+            *high        = 100.;
+#endif
+            break;
+
         case HB_VCODEC_FFMPEG_VT_H265:
             *direction   = 0;
             *granularity = 1;
             *low         = 0.;
+#ifdef __APPLE__
+            *high        = hb_vt_h265_is_costant_quality_available() ? 100. : 0.;
+#else
             *high        = 100.;
+#endif
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:
