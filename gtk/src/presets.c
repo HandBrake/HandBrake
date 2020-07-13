@@ -1768,14 +1768,18 @@ ghb_settings_to_preset(GhbValue *settings)
         g_string_append_printf(str, "%s", tune);
         sep = ",";
     }
-    if (ghb_dict_get_bool(preset, "x264FastDecode"))
+    int encoder = ghb_get_video_encoder(settings);
+    if (encoder & HB_VCODEC_X264_MASK)
     {
-        g_string_append_printf(str, "%s%s", sep, "fastdecode");
-        sep = ",";
-    }
-    if (ghb_dict_get_bool(preset, "x264ZeroLatency"))
-    {
-        g_string_append_printf(str, "%s%s", sep, "zerolatency");
+        if (ghb_dict_get_bool(preset, "x264FastDecode"))
+        {
+            g_string_append_printf(str, "%s%s", sep, "fastdecode");
+            sep = ",";
+        }
+        if (ghb_dict_get_bool(preset, "x264ZeroLatency"))
+        {
+            g_string_append_printf(str, "%s%s", sep, "zerolatency");
+        }
     }
     char *tunes;
     tunes = g_string_free(str, FALSE);
