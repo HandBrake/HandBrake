@@ -237,7 +237,8 @@ void hb_avfilter_alias_close( hb_filter_object_t * filter )
 static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     hb_buffer_list_t   list;
-    hb_buffer_t      * buf, * next;
+    hb_buffer_t      * buf = NULL, * next = NULL;
+    int av_frame_is_not_null = 1; // TODO: find the reason for emply input av_frame for ffmpeg filters
 #if HB_PROJECT_FEATURE_QSV
     mfxFrameSurface1 *surface = NULL;
     // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
@@ -245,9 +246,16 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
     {
         surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
     }
+    else
+    {
+        av_frame_is_not_null= 0;
+    }
 #endif
-    hb_avfilter_add_buf(pv->graph, in);
-    buf = hb_avfilter_get_buf(pv->graph);
+    if (av_frame_is_not_null)
+    {
+        hb_avfilter_add_buf(pv->graph, in);
+        buf = hb_avfilter_get_buf(pv->graph);
+    }
     while (buf != NULL)
     {
         hb_buffer_list_append(&pv->list, buf);
