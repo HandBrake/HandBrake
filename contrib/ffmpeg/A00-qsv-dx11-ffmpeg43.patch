@@ -1,0 +1,611 @@
+diff -ur ffmpeg-4.3.orig/fftools/ffmpeg_opt.c ffmpeg-4.3/fftools/ffmpeg_opt.c
+--- ffmpeg-4.3.orig/fftools/ffmpeg_opt.c	2020-06-15 14:54:23.000000000 -0400
++++ ffmpeg-4.3/fftools/ffmpeg_opt.c	2020-07-14 09:17:52.000000000 -0400
+@@ -559,7 +559,17 @@
+         printf("\n");
+         exit_program(0);
+     } else {
+-        return hw_device_init_from_string(arg, NULL);
++        HWDevice *dev;
++        int err;
++        if (!arg)
++            return AVERROR(ENOMEM);
++        err = hw_device_init_from_string(arg, &dev);
++        if (err < 0)
++            return err;
++        hw_device_ctx = av_buffer_ref(dev->device_ref);
++        if (!hw_device_ctx)
++            return AVERROR(ENOMEM);
++        return 0;
+     }
+ }
+ 
+Only in ffmpeg-4.3/fftools: ffmpeg_opt.c.orig
+diff -ur ffmpeg-4.3.orig/libavcodec/qsv_internal.h ffmpeg-4.3/libavcodec/qsv_internal.h
+--- ffmpeg-4.3.orig/libavcodec/qsv_internal.h	2020-06-15 14:54:24.000000000 -0400
++++ ffmpeg-4.3/libavcodec/qsv_internal.h	2020-07-14 09:17:52.000000000 -0400
+@@ -65,6 +65,11 @@
+     AVFrame *locked_frame;
+     AVFrame *hw_frame;
+     mfxFrameSurface1 surf;
++    /**
++     * ID3D11Texture2D texture in which the frame is located for D3D11VA device. 
++     * Null in case of DXVA2 device.
++     */
++    void *texture;
+ } QSVMid;
+ 
+ typedef struct QSVFrame {
+Only in ffmpeg-4.3/libavcodec: qsv_internal.h.orig
+diff -ur ffmpeg-4.3.orig/libavfilter/qsvvpp.c ffmpeg-4.3/libavfilter/qsvvpp.c
+--- ffmpeg-4.3.orig/libavfilter/qsvvpp.c	2020-05-21 11:55:31.000000000 -0400
++++ ffmpeg-4.3/libavfilter/qsvvpp.c	2020-07-14 09:17:52.000000000 -0400
+@@ -32,10 +32,11 @@
+ #include "qsvvpp.h"
+ #include "video.h"
+ 
+-#define IS_VIDEO_MEMORY(mode)  (mode & (MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET | \
++#define IS_VIDEO_MEMORY(mode)   (mode & (MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET | \
+                                         MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET))
+-#define IS_OPAQUE_MEMORY(mode) (mode & MFX_MEMTYPE_OPAQUE_FRAME)
+-#define IS_SYSTEM_MEMORY(mode) (mode & MFX_MEMTYPE_SYSTEM_MEMORY)
++#define IS_OPAQUE_MEMORY(mode)  (mode & MFX_MEMTYPE_OPAQUE_FRAME)
++#define IS_SYSTEM_MEMORY(mode)  (mode & MFX_MEMTYPE_SYSTEM_MEMORY)
++#define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+ 
+ typedef struct QSVFrame {
+     AVFrame          *frame;
+@@ -405,12 +406,12 @@
+     AVFilterLink                *outlink = avctx->outputs[0];
+     AVQSVFramesContext  *in_frames_hwctx = NULL;
+     AVQSVFramesContext *out_frames_hwctx = NULL;
++    mfxHandleType            handle_type = MFX_IMPL_AUTO;
+ 
+     AVBufferRef *device_ref;
+     AVHWDeviceContext *device_ctx;
+     AVQSVDeviceContext *device_hwctx;
+     mfxHDL handle;
+-    mfxHandleType handle_type;
+     mfxVersion ver;
+     mfxIMPL impl;
+     int ret, i;
+@@ -497,15 +498,30 @@
+         return AVERROR_UNKNOWN;
+     }
+ 
++    if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(impl))
++    {
++        handle_type = MFX_HANDLE_D3D11_DEVICE;
++    }
++    else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(impl))
++    {
++        handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
++    }
++    else if (MFX_IMPL_VIA_VAAPI == MFX_IMPL_VIA_MASK(impl))
++    {
++        handle_type = MFX_HANDLE_VA_DISPLAY;
++    }
++
+     for (i = 0; i < FF_ARRAY_ELEMS(handle_types); i++) {
+-        ret = MFXVideoCORE_GetHandle(device_hwctx->session, handle_types[i], &handle);
+-        if (ret == MFX_ERR_NONE) {
+-            handle_type = handle_types[i];
+-            break;
++        if (handle_types[i] == handle_type)
++        {
++            ret = MFXVideoCORE_GetHandle(device_hwctx->session, handle_types[i], &handle);
++            if (ret == MFX_ERR_NONE) {
++                break;
++            }
+         }
++        handle = NULL;
+     }
+-
+-    if (ret != MFX_ERR_NONE) {
++    if (!handle) {
+         av_log(avctx, AV_LOG_ERROR, "Error getting the session handle\n");
+         return AVERROR_UNKNOWN;
+     }
+diff -ur ffmpeg-4.3.orig/libavutil/hwcontext_d3d11va.c ffmpeg-4.3/libavutil/hwcontext_d3d11va.c
+--- ffmpeg-4.3.orig/libavutil/hwcontext_d3d11va.c	2020-06-15 14:54:24.000000000 -0400
++++ ffmpeg-4.3/libavutil/hwcontext_d3d11va.c	2020-07-14 09:17:52.000000000 -0400
+@@ -511,15 +511,57 @@
+     }
+ }
+ 
++static int d3d11va_device_find_adapter_by_vendor_id(AVHWDeviceContext *ctx, UINT creationFlags, char *vendor)
++{
++    HRESULT hr;
++    IDXGIAdapter *adapter = NULL;
++    int adapter_id = 0;
++    IDXGIFactory2 *factory;
++    long int vendor_id = strtol(vendor, NULL, 0);
++    hr = mCreateDXGIFactory(&IID_IDXGIFactory2, (void **)&factory);
++    while (IDXGIFactory2_EnumAdapters(factory, adapter_id++, &adapter) != DXGI_ERROR_NOT_FOUND)
++    {
++        ID3D11Device* device = NULL;
++        DXGI_ADAPTER_DESC adapter_desc;
++
++        hr = mD3D11CreateDevice(adapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, creationFlags, NULL, 0, D3D11_SDK_VERSION, &device, NULL, NULL);
++        if (FAILED(hr)) {
++            av_log(ctx, AV_LOG_ERROR, "D3D11CreateDevice returned error\n");
++            continue;
++        }
++
++        hr = IDXGIAdapter2_GetDesc(adapter, &adapter_desc);
++        if (FAILED(hr)) {
++            av_log(ctx, AV_LOG_ERROR, "IDXGIAdapter2_GetDesc returned error\n");
++            continue;
++        }
++
++        if (device)
++            ID3D11Device_Release(device);
++
++        if (adapter)
++            IDXGIAdapter_Release(adapter);
++
++        if (adapter_desc.VendorId == vendor_id) {
++            IDXGIFactory2_Release(factory);
++            return adapter_id - 1;
++        }
++    }
++    IDXGIFactory2_Release(factory);
++    return -1;
++}
++
+ static int d3d11va_device_create(AVHWDeviceContext *ctx, const char *device,
+                                  AVDictionary *opts, int flags)
+ {
+     AVD3D11VADeviceContext *device_hwctx = ctx->hwctx;
+ 
+     HRESULT hr;
++    AVDictionaryEntry *e;
+     IDXGIAdapter           *pAdapter = NULL;
+     ID3D10Multithread      *pMultithread;
+     UINT creationFlags = D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
++    int adapter = -1;
+     int is_debug       = !!av_dict_get(opts, "debug", NULL, 0);
+     int ret;
+ 
+@@ -539,11 +581,23 @@
+         return AVERROR_UNKNOWN;
+     }
+ 
++    e = av_dict_get(opts, "vendor", NULL, 0);
++    if (e) {
++        adapter = d3d11va_device_find_adapter_by_vendor_id(ctx, creationFlags, e ? e->value : NULL);
++        if (adapter < 0) {
++            av_log(ctx, AV_LOG_ERROR, "Failed to find d3d11va adapter by vendor id\n");
++            return AVERROR_UNKNOWN;
++        }
++    }
++
+     if (device) {
++        adapter = atoi(device);
++    }
++
++    if (adapter >= 0) {
+         IDXGIFactory2 *pDXGIFactory;
+         hr = mCreateDXGIFactory(&IID_IDXGIFactory2, (void **)&pDXGIFactory);
+         if (SUCCEEDED(hr)) {
+-            int adapter = atoi(device);
+             if (FAILED(IDXGIFactory2_EnumAdapters(pDXGIFactory, adapter, &pAdapter)))
+                 pAdapter = NULL;
+             IDXGIFactory2_Release(pDXGIFactory);
+Only in ffmpeg-4.3/libavutil: hwcontext_d3d11va.c.orig
+diff -ur ffmpeg-4.3.orig/libavutil/hwcontext_qsv.c ffmpeg-4.3/libavutil/hwcontext_qsv.c
+--- ffmpeg-4.3.orig/libavutil/hwcontext_qsv.c	2020-06-15 14:54:24.000000000 -0400
++++ ffmpeg-4.3/libavutil/hwcontext_qsv.c	2020-07-14 09:17:52.000000000 -0400
+@@ -27,9 +27,13 @@
+ #include <pthread.h>
+ #endif
+ 
++#define COBJMACROS
+ #if CONFIG_VAAPI
+ #include "hwcontext_vaapi.h"
+ #endif
++#if CONFIG_D3D11VA
++#include "hwcontext_d3d11va.h"
++#endif
+ #if CONFIG_DXVA2
+ #include "hwcontext_dxva2.h"
+ #endif
+@@ -48,6 +52,8 @@
+     (MFX_VERSION_MAJOR > (MAJOR) ||         \
+      MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
+ 
++#define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
++
+ typedef struct QSVDevicePriv {
+     AVBufferRef *child_device_ctx;
+ } QSVDevicePriv;
+@@ -93,6 +99,9 @@
+ #if CONFIG_VAAPI
+     { MFX_HANDLE_VA_DISPLAY,          AV_HWDEVICE_TYPE_VAAPI, AV_PIX_FMT_VAAPI },
+ #endif
++#if CONFIG_D3D11VA
++    { MFX_HANDLE_D3D11_DEVICE,        AV_HWDEVICE_TYPE_D3D11VA, AV_PIX_FMT_D3D11 },
++#endif
+ #if CONFIG_DXVA2
+     { MFX_HANDLE_D3D9_DEVICE_MANAGER, AV_HWDEVICE_TYPE_DXVA2, AV_PIX_FMT_DXVA2_VLD },
+ #endif
+@@ -131,25 +140,11 @@
+ {
+     AVQSVDeviceContext *hwctx = ctx->hwctx;
+     QSVDeviceContext       *s = ctx->internal->priv;
++    mfxHandleType handle_type = MFX_IMPL_AUTO;
+ 
+     mfxStatus err;
+     int i;
+ 
+-    for (i = 0; supported_handle_types[i].handle_type; i++) {
+-        err = MFXVideoCORE_GetHandle(hwctx->session, supported_handle_types[i].handle_type,
+-                                     &s->handle);
+-        if (err == MFX_ERR_NONE) {
+-            s->handle_type       = supported_handle_types[i].handle_type;
+-            s->child_device_type = supported_handle_types[i].device_type;
+-            s->child_pix_fmt     = supported_handle_types[i].pix_fmt;
+-            break;
+-        }
+-    }
+-    if (!s->handle) {
+-        av_log(ctx, AV_LOG_VERBOSE, "No supported hw handle could be retrieved "
+-               "from the session\n");
+-    }
+-
+     err = MFXQueryIMPL(hwctx->session, &s->impl);
+     if (err == MFX_ERR_NONE)
+         err = MFXQueryVersion(hwctx->session, &s->ver);
+@@ -158,6 +153,36 @@
+         return AVERROR_UNKNOWN;
+     }
+ 
++    if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(s->impl))
++    {
++        handle_type = MFX_HANDLE_D3D11_DEVICE;
++    }
++    else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(s->impl))
++    {
++        handle_type = MFX_HANDLE_D3D9_DEVICE_MANAGER;
++    }
++    else if (MFX_IMPL_VIA_VAAPI == MFX_IMPL_VIA_MASK(s->impl))
++    {
++        handle_type = MFX_HANDLE_VA_DISPLAY;
++    }
++
++    for (i = 0; supported_handle_types[i].handle_type; i++) {
++        if (supported_handle_types[i].handle_type == handle_type) {
++            err = MFXVideoCORE_GetHandle(hwctx->session, supported_handle_types[i].handle_type,
++                                        &s->handle);
++            if (err == MFX_ERR_NONE) {
++                s->handle_type       = supported_handle_types[i].handle_type;
++                s->child_device_type = supported_handle_types[i].device_type;
++                s->child_pix_fmt     = supported_handle_types[i].pix_fmt;
++                break;
++            }
++        }
++    }
++    if (!s->handle) {
++        av_log(ctx, AV_LOG_VERBOSE, "No supported hw handle could be retrieved "
++               "from the session\n");
++    }
++
+     return 0;
+ }
+ 
+@@ -234,13 +259,19 @@
+     if (!child_device_ref)
+         return AVERROR(ENOMEM);
+     child_device_ctx   = (AVHWDeviceContext*)child_device_ref->data;
+-
+ #if CONFIG_VAAPI
+     if (child_device_ctx->type == AV_HWDEVICE_TYPE_VAAPI) {
+         AVVAAPIDeviceContext *child_device_hwctx = child_device_ctx->hwctx;
+         child_device_hwctx->display = (VADisplay)device_priv->handle;
+     }
+ #endif
++#if CONFIG_D3D11VA
++    if (child_device_ctx->type == AV_HWDEVICE_TYPE_D3D11VA) {
++        AVD3D11VADeviceContext *child_device_hwctx = child_device_ctx->hwctx;
++        ID3D11Device_AddRef((ID3D11Device*)device_priv->handle);
++        child_device_hwctx->device = (ID3D11Device*)device_priv->handle;
++    }
++#endif
+ #if CONFIG_DXVA2
+     if (child_device_ctx->type == AV_HWDEVICE_TYPE_DXVA2) {
+         AVDXVA2DeviceContext *child_device_hwctx = child_device_ctx->hwctx;
+@@ -267,6 +298,16 @@
+     child_frames_ctx->width             = FFALIGN(ctx->width, 16);
+     child_frames_ctx->height            = FFALIGN(ctx->height, 16);
+ 
++#if CONFIG_D3D11VA
++    if (child_device_ctx->type == AV_HWDEVICE_TYPE_D3D11VA) {
++        AVD3D11VAFramesContext *child_frames_hwctx = child_frames_ctx->hwctx;
++        child_frames_hwctx->MiscFlags |= D3D11_RESOURCE_MISC_SHARED;
++        if (hwctx->frame_type & MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET)
++            child_frames_hwctx->BindFlags = D3D11_BIND_RENDER_TARGET ;
++        else
++            child_frames_hwctx->BindFlags = D3D11_BIND_DECODER;
++    }
++#endif
+ #if CONFIG_DXVA2
+     if (child_device_ctx->type == AV_HWDEVICE_TYPE_DXVA2) {
+         AVDXVA2FramesContext *child_frames_hwctx = child_frames_ctx->hwctx;
+@@ -291,6 +332,18 @@
+         hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
+     }
+ #endif
++#if CONFIG_D3D11VA
++    if (child_device_ctx->type == AV_HWDEVICE_TYPE_D3D11VA) {
++        AVD3D11VAFramesContext *child_frames_hwctx = child_frames_ctx->hwctx;
++        hwctx->texture = child_frames_hwctx->texture;
++        for (i = 0; i < ctx->initial_pool_size; i++)
++            s->surfaces_internal[i].Data.MemId = (mfxMemId)(int64_t)i;
++        if (child_frames_hwctx->BindFlags == D3D11_BIND_DECODER)
++            hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
++        else
++            hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET;
++    }
++#endif
+ #if CONFIG_DXVA2
+     if (child_device_ctx->type == AV_HWDEVICE_TYPE_DXVA2) {
+         AVDXVA2FramesContext *child_frames_hwctx = child_frames_ctx->hwctx;
+@@ -433,7 +486,16 @@
+ 
+ static mfxStatus frame_get_hdl(mfxHDL pthis, mfxMemId mid, mfxHDL *hdl)
+ {
+-    *hdl = mid;
++    AVHWFramesContext    *ctx = pthis;
++    AVQSVFramesContext *hwctx = ctx->hwctx;
++
++    if (hwctx->texture) {
++        mfxHDLPair *pair  =  (mfxHDLPair*)hdl;
++        pair->first  = hwctx->texture;
++        pair->second = mid;
++    } else {
++        *hdl = mid;
++    }
+     return MFX_ERR_NONE;
+ }
+ 
+@@ -680,6 +742,11 @@
+         child_data = (uint8_t*)(intptr_t)*(VASurfaceID*)surf->Data.MemId;
+         break;
+ #endif
++#if CONFIG_D3D11VA
++    case AV_HWDEVICE_TYPE_D3D11VA:
++        child_data = surf->Data.MemId;
++        break;
++#endif
+ #if CONFIG_DXVA2
+     case AV_HWDEVICE_TYPE_DXVA2:
+         child_data = surf->Data.MemId;
+@@ -996,6 +1063,27 @@
+         }
+         break;
+ #endif
++#if CONFIG_D3D11VA
++    case AV_HWDEVICE_TYPE_D3D11VA:
++        {
++            AVD3D11VAFramesContext *src_hwctx = src_ctx->hwctx;
++            s->surfaces_internal = av_mallocz_array(src_ctx->initial_pool_size,
++                                                    sizeof(*s->surfaces_internal));
++            if (!s->surfaces_internal)
++                return AVERROR(ENOMEM);
++            dst_hwctx->texture = src_hwctx->texture;
++            for (i = 0; i < src_ctx->initial_pool_size; i++) {
++                qsv_init_surface(dst_ctx, &s->surfaces_internal[i]);
++                s->surfaces_internal[i].Data.MemId = (mfxMemId)(int64_t)i;
++            }
++            dst_hwctx->nb_surfaces = src_ctx->initial_pool_size;
++            if (src_hwctx->BindFlags == D3D11_BIND_DECODER)
++                dst_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
++            else
++                dst_hwctx->frame_type = MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET;
++        }
++        break;
++#endif
+ #if CONFIG_DXVA2
+     case AV_HWDEVICE_TYPE_DXVA2:
+         {
+@@ -1033,14 +1121,26 @@
+ 
+     for (i = 0; i < hwctx->nb_surfaces; i++) {
+ #if CONFIG_VAAPI
+-        if (*(VASurfaceID*)hwctx->surfaces[i].Data.MemId ==
+-            (VASurfaceID)(uintptr_t)src->data[3])
+-            break;
++        if (AV_PIX_FMT_VAAPI == src->format) {
++            if (*(VASurfaceID*)hwctx->surfaces[i].Data.MemId ==
++                (VASurfaceID)(uintptr_t)src->data[3])
++                break;
++        }
++#endif
++#if CONFIG_D3D11VA
++        if (AV_PIX_FMT_D3D11 == src->format) {
++            if ((hwctx->texture == (ID3D11Texture2D*)(uintptr_t)src->data[0]) &&
++                ((ID3D11Texture2D*)hwctx->surfaces[i].Data.MemId ==
++                (ID3D11Texture2D*)(uintptr_t)src->data[1]))
++                break;
++        }
+ #endif
+ #if CONFIG_DXVA2
+-        if ((IDirect3DSurface9*)hwctx->surfaces[i].Data.MemId ==
+-            (IDirect3DSurface9*)(uintptr_t)src->data[3])
+-            break;
++        if (AV_PIX_FMT_DXVA2_VLD == src->format) {
++            if ((IDirect3DSurface9*)hwctx->surfaces[i].Data.MemId ==
++                (IDirect3DSurface9*)(uintptr_t)src->data[3])
++                break;
++        }
+ #endif
+     }
+     if (i >= hwctx->nb_surfaces) {
+@@ -1098,7 +1198,7 @@
+     av_freep(&priv);
+ }
+ 
+-static mfxIMPL choose_implementation(const char *device)
++static mfxIMPL choose_implementation(const char *device, enum AVHWDeviceType child_device_type)
+ {
+     static const struct {
+         const char *name;
+@@ -1127,6 +1227,10 @@
+             impl = strtol(device, NULL, 0);
+     }
+ 
++    if ( (child_device_type == AV_HWDEVICE_TYPE_D3D11VA) && (impl != MFX_IMPL_SOFTWARE) ) {
++        impl |= MFX_IMPL_VIA_D3D11;
++    }
++
+     return impl;
+ }
+ 
+@@ -1153,6 +1257,15 @@
+         }
+         break;
+ #endif
++#if CONFIG_D3D11VA
++    case AV_HWDEVICE_TYPE_D3D11VA:
++        {
++            AVD3D11VADeviceContext *child_device_hwctx = child_device_ctx->hwctx;
++            handle_type = MFX_HANDLE_D3D11_DEVICE;
++            handle = (mfxHDL)child_device_hwctx->device;
++        }
++        break;
++#endif
+ #if CONFIG_DXVA2
+     case AV_HWDEVICE_TYPE_DXVA2:
+         {
+@@ -1216,8 +1329,10 @@
+                              AVHWDeviceContext *child_device_ctx,
+                              AVDictionary *opts, int flags)
+ {
+-    return qsv_device_derive_from_child(ctx, MFX_IMPL_HARDWARE_ANY,
+-                                        child_device_ctx, flags);
++    mfxIMPL impl;
++    impl = choose_implementation("hw_any", child_device_ctx->type);
++    return qsv_device_derive_from_child(ctx, impl,
++                                         child_device_ctx, flags);
+ }
+ 
+ static int qsv_device_create(AVHWDeviceContext *ctx, const char *device,
+@@ -1239,25 +1354,63 @@
+     ctx->user_opaque = priv;
+     ctx->free        = qsv_device_free;
+ 
+-    e = av_dict_get(opts, "child_device", NULL, 0);
+-
+-    child_device_opts = NULL;
+-    if (CONFIG_VAAPI) {
++    e = av_dict_get(opts, "child_device_type", NULL, 0);
++    if (e) {
++        child_device_type = av_hwdevice_find_type_by_name(e ? e->value : NULL);
++        if (child_device_type == AV_HWDEVICE_TYPE_NONE) {
++            av_log(ctx, AV_LOG_ERROR, "Unknown child device type "
++                   "\"%s\".\n", e ? e->value : NULL);
++            return AVERROR(EINVAL);
++        }
++    } else if (CONFIG_VAAPI) {
+         child_device_type = AV_HWDEVICE_TYPE_VAAPI;
+-        // libmfx does not actually implement VAAPI properly, rather it
+-        // depends on the specific behaviour of a matching iHD driver when
+-        // used on recent Intel hardware.  Set options to the VAAPI device
+-        // creation so that we should pick a usable setup by default if
+-        // possible, even when multiple devices and drivers are available.
+-        av_dict_set(&child_device_opts, "kernel_driver", "i915", 0);
+-        av_dict_set(&child_device_opts, "driver",        "iHD",  0);
+-    } else if (CONFIG_DXVA2)
++    } else if (CONFIG_DXVA2) {
+         child_device_type = AV_HWDEVICE_TYPE_DXVA2;
+-    else {
++    } else if (CONFIG_D3D11VA) {
++        child_device_type = AV_HWDEVICE_TYPE_D3D11VA;
++    } else {
+         av_log(ctx, AV_LOG_ERROR, "No supported child device type is enabled\n");
+         return AVERROR(ENOSYS);
+     }
+ 
++    child_device_opts = NULL;
++    switch (child_device_type) {
++#if CONFIG_VAAPI
++    case AV_HWDEVICE_TYPE_VAAPI:
++        {
++            // libmfx does not actually implement VAAPI properly, rather it
++            // depends on the specific behaviour of a matching iHD driver when
++            // used on recent Intel hardware.  Set options to the VAAPI device
++            // creation so that we should pick a usable setup by default if
++            // possible, even when multiple devices and drivers are available.
++            av_dict_set(&child_device_opts, "kernel_driver", "i915", 0);
++            av_dict_set(&child_device_opts, "driver",        "iHD",  0);
++        }
++        break;
++#endif
++#if CONFIG_D3D11VA
++    case AV_HWDEVICE_TYPE_D3D11VA:
++        {
++            av_log(ctx, AV_LOG_VERBOSE,"AV_HWDEVICE_TYPE_D3D11VA has been selected\n");
++        }
++        break;
++#endif
++#if CONFIG_DXVA2
++    case AV_HWDEVICE_TYPE_DXVA2:
++        {
++            av_log(ctx, AV_LOG_VERBOSE,"AV_HWDEVICE_TYPE_DXVA2 has been selected\n");
++        }
++        break;
++#endif
++    default:
++        {
++            av_log(ctx, AV_LOG_ERROR, "No supported child device type is enabled\n");
++            return AVERROR(ENOSYS);
++        }
++        break;
++    }
++
++    e = av_dict_get(opts, "child_device", NULL, 0);
+     ret = av_hwdevice_ctx_create(&priv->child_device_ctx, child_device_type,
+                                  e ? e->value : NULL, child_device_opts, 0);
+ 
+@@ -1267,7 +1420,7 @@
+ 
+     child_device = (AVHWDeviceContext*)priv->child_device_ctx->data;
+ 
+-    impl = choose_implementation(device);
++    impl = choose_implementation(device, child_device_type);
+ 
+     return qsv_device_derive_from_child(ctx, impl, child_device, 0);
+ }
+Only in ffmpeg-4.3/libavutil: hwcontext_qsv.c.orig
+diff -ur ffmpeg-4.3.orig/libavutil/hwcontext_qsv.h ffmpeg-4.3/libavutil/hwcontext_qsv.h
+--- ffmpeg-4.3.orig/libavutil/hwcontext_qsv.h	2020-05-21 11:55:31.000000000 -0400
++++ ffmpeg-4.3/libavutil/hwcontext_qsv.h	2020-07-14 09:17:52.000000000 -0400
+@@ -34,6 +34,15 @@
+  */
+ typedef struct AVQSVDeviceContext {
+     mfxSession session;
++    /**
++     * Need to store actual handle type that session uses
++     * MFXVideoCORE_GetHandle() function returns mfxHandleType
++     * always equal to MFX_HANDLE_D3D9_DEVICE_MANAGER
++     * even when MFX_HANDLE_D3D11_DEVICE was set as handle before by
++     * MFXVideoCORE_SetHandle() to mfx session.
++     * Fixed already but will be available only with latest driver.
++     */
++    //mfxHandleType handle_type;
+ } AVQSVDeviceContext;
+ 
+ /**
+@@ -42,11 +51,11 @@
+ typedef struct AVQSVFramesContext {
+     mfxFrameSurface1 *surfaces;
+     int            nb_surfaces;
+-
+     /**
+      * A combination of MFX_MEMTYPE_* describing the frame pool.
+      */
+     int frame_type;
++    void              *texture;
+ } AVQSVFramesContext;
+ 
+ #endif /* AVUTIL_HWCONTEXT_QSV_H */
