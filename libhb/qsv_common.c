@@ -29,7 +29,8 @@
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
 
-extern HBQSVFramesContext hb_dec_qsv_frames_ctx;
+static HBQSVFramesContext *hb_dec_qsv_frames_ctx = NULL;
+static int qsv_filters_are_enabled = 0;
 
 // QSV info for each codec
 static hb_qsv_info_t *hb_qsv_info_avc       = NULL;
@@ -989,8 +990,12 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
 
 static int hb_dxva2_device_check();
 static int hb_d3d11va_device_check();
-extern int qsv_filters_are_enabled;
-extern int num_cpu_filters;
+
+void hb_qsv_update_frames_context(hb_job_t *job)
+{
+    qsv_filters_are_enabled = job->qsv.ctx->qsv_filters_are_enabled;
+    hb_dec_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
+}
 
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
@@ -1007,7 +1012,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         hb_qsv_info_get(job->vcodec) &&
-        device_check_succeded && !num_cpu_filters);
+        device_check_succeded && !job->qsv.ctx->num_cpu_filters);
     return qsv_full_path_is_enabled;
 }
 
@@ -2710,29 +2715,6 @@ static int hb_qsv_allocate_dx11_encoder_pool(HBQSVFramesContext* hb_enc_qsv_fram
     return 0;
 }
 
-static int hb_qsv_deallocate_dx11_encoder_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx)
-{
-    if (device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
-    {
-        for (size_t i = 0; i < hb_enc_qsv_frames_ctx->nb_mids; i++)
-        {
-            QSVMid *mid = &hb_enc_qsv_frames_ctx->mids[i];
-            ID3D11Texture2D* texture = mid->texture;
-            if (texture)
-            {
-                HRESULT hr = ID3D11Texture2D_Release(texture);
-                mid->texture = NULL;
-                if (hr != S_OK)
-                {
-                    hb_error("hb_qsv_deallocate_dx11_encoder_pool: ID3D11Device_ReleaseTexture2D error");
-                    return -1;
-                }
-            }
-        }
-    }
-    return 0;
-}
-
 static int hb_qsv_get_dx_device(HBQSVFramesContext* hb_enc_qsv_frames_ctx)
 {
     AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
@@ -2825,7 +2807,7 @@ void hb_qsv_get_free_surface_from_pool_with_range(HBQSVFramesContext* hb_enc_qsv
     }
 }
 
-hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *frame, hb_qsv_context *qsv_ctx, int is_vpp)
+hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
 {
     hb_buffer_t *out;
     out = hb_frame_buffer_init(frame->format, frame->width, frame->height);
@@ -2858,8 +2840,18 @@ hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *f
 
     QSVMid *mid = NULL;
     mfxFrameSurface1* output_surface = NULL;
-   
-    if (!is_vpp && qsv_filters_are_enabled)
+    HBQSVFramesContext* hb_qsv_frames_ctx = NULL;
+
+    if (is_vpp)
+    {
+        hb_qsv_frames_ctx = job->qsv.ctx->hb_vpp_qsv_frames_ctx;
+    }
+    else
+    {
+        hb_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
+    }
+
+    if (!is_vpp && job->qsv.ctx->qsv_filters_are_enabled)
     {
         ret = hb_qsv_get_free_surface_from_pool(hb_qsv_frames_ctx, out->qsv_details.frame, &mid);
         if (ret < 0)
@@ -2875,7 +2867,7 @@ hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *f
     {
         mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
         // copy all surface fields
-        if (qsv_filters_are_enabled)
+        if (job->qsv.ctx->qsv_filters_are_enabled)
         {
             mfxMemId mem = output_surface->Data.MemId; 
             *output_surface = *input_surface; 
@@ -2928,7 +2920,7 @@ hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *f
     }
     out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
     out->qsv_details.qsv_atom = 0;
-    out->qsv_details.ctx      = qsv_ctx;
+    out->qsv_details.ctx      = job->qsv.ctx;
     return out;
 }
 
@@ -2948,27 +2940,30 @@ void hb_qsv_uninit_dec(AVCodecContext *s)
         av_buffer_unref(&s->hw_frames_ctx);
 }
 
-extern HBQSVFramesContext hb_vpp_qsv_frames_ctx;
-
-void hb_qsv_uninit_enc()
+void hb_qsv_uninit_enc(hb_job_t *job)
 {
-    if(hb_dec_qsv_frames_ctx.hw_frames_ctx)
-        av_buffer_unref(&hb_dec_qsv_frames_ctx.hw_frames_ctx);
-
-    if(hb_vpp_qsv_frames_ctx.hw_frames_ctx)
-        av_buffer_unref(&hb_vpp_qsv_frames_ctx.hw_frames_ctx);
-
-    hb_dec_qsv_frames_ctx.hw_frames_ctx = NULL;
-    hb_vpp_qsv_frames_ctx.hw_frames_ctx = NULL;
-    hb_hw_device_ctx = NULL;
-    qsv_device = NULL;
-    device_manager_handle = NULL;
-    hb_qsv_deallocate_dx11_encoder_pool(&hb_dec_qsv_frames_ctx);
+    if(job->qsv.ctx->hb_dec_qsv_frames_ctx)
+    {
+        av_buffer_unref(&job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx);
+        job->qsv.ctx->hb_dec_qsv_frames_ctx->hw_frames_ctx = NULL;
+        av_free(job->qsv.ctx->hb_dec_qsv_frames_ctx);
+        job->qsv.ctx->hb_dec_qsv_frames_ctx = NULL;
+    }
+    if(job->qsv.ctx->hb_vpp_qsv_frames_ctx)
+    {
+        av_buffer_unref(&job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx = NULL;
+        av_free(job->qsv.ctx->hb_vpp_qsv_frames_ctx);
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx = NULL;
+    }
     if (device_context)
     {
         ID3D11DeviceContext_Release(device_context);
         device_context = NULL;
     }
+    hb_hw_device_ctx = NULL;
+    qsv_device = NULL;
+    device_manager_handle = NULL;
 }
 
 static int qsv_device_init()
@@ -3054,7 +3049,7 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
     AVBufferRef *hw_frames_ctx;
 
     int ret;
-    
+
     ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_POOL_FFMPEG_SURFACE_SIZE, extra_hw_frames, out_hw_frames_ctx);
     if (ret < 0) {
         hb_error("hb_qsv_init: hb_create_ffmpeg_pool decoder failed %d", ret);
@@ -3064,24 +3059,24 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
     hw_frames_ctx = *out_hw_frames_ctx;
     frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
     frames_hwctx = frames_ctx->hwctx;
-    hb_dec_qsv_frames_ctx.input_texture = frames_hwctx->texture;
+    hb_dec_qsv_frames_ctx->input_texture = frames_hwctx->texture;
 
-    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx.hw_frames_ctx);
+    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
     if (ret < 0) {
         hb_error("hb_qsv_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
         return ret;
     }
 
     /* allocate the memory ids for the external frames */
-    av_buffer_unref(&hb_dec_qsv_frames_ctx.mids_buf);
-    hb_dec_qsv_frames_ctx.mids_buf = hb_qsv_create_mids(hb_dec_qsv_frames_ctx.hw_frames_ctx);
-    if (!hb_dec_qsv_frames_ctx.mids_buf)
+    av_buffer_unref(&hb_dec_qsv_frames_ctx->mids_buf);
+    hb_dec_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(hb_dec_qsv_frames_ctx->hw_frames_ctx);
+    if (!hb_dec_qsv_frames_ctx->mids_buf)
         return AVERROR(ENOMEM);
-    hb_dec_qsv_frames_ctx.mids    = (QSVMid*)hb_dec_qsv_frames_ctx.mids_buf->data;
-    hb_dec_qsv_frames_ctx.nb_mids = frames_hwctx->nb_surfaces;
-    memset(hb_dec_qsv_frames_ctx.pool, 0, hb_dec_qsv_frames_ctx.nb_mids * sizeof(hb_dec_qsv_frames_ctx.pool[0]));
+    hb_dec_qsv_frames_ctx->mids    = (QSVMid*)hb_dec_qsv_frames_ctx->mids_buf->data;
+    hb_dec_qsv_frames_ctx->nb_mids = frames_hwctx->nb_surfaces;
+    memset(hb_dec_qsv_frames_ctx->pool, 0, hb_dec_qsv_frames_ctx->nb_mids * sizeof(hb_dec_qsv_frames_ctx->pool[0]));
 
-    ret = hb_qsv_get_dx_device(&hb_dec_qsv_frames_ctx);
+    ret = hb_qsv_get_dx_device(hb_dec_qsv_frames_ctx);
     if (ret < 0) {
         hb_error("qsv_init: hb_qsv_get_dx_device failed %d", ret);
         return ret;
@@ -3209,7 +3204,7 @@ void hb_qsv_uninit_dec(AVCodecContext *s)
 {
 }
 
-void hb_qsv_uninit_enc()
+void hb_qsv_uninit_enc(hb_job_t *job)
 {
 }
 

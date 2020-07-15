@@ -17,8 +17,6 @@
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
-extern int qsv_filters_are_enabled;
-extern HBQSVFramesContext hb_vpp_qsv_frames_ctx;
 #endif
 
 struct hb_avfilter_graph_s
@@ -30,6 +28,7 @@ struct hb_avfilter_graph_s
     char             * settings;
     AVFrame          * frame;
     AVRational         out_time_base;
+    hb_job_t         * job;
 };
 
 static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
@@ -91,6 +90,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 
+    graph->job = init->job;
     graph->settings = settings_str;
     graph->avgraph = avfilter_graph_alloc();
     if (graph->avgraph == NULL)
@@ -99,7 +99,8 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 #if HB_PROJECT_FEATURE_QSV
-    if (!qsv_filters_are_enabled)
+    int use_qsv_filters = (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled) ? 1 : 0;
+    if (!use_qsv_filters)
 #endif
     {
         av_opt_set(graph->avgraph, "scale_sws_opts", "lanczos+accurate_rnd", 0);
@@ -115,7 +116,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     AVBufferSrcParameters *par = 0;
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
-    if (qsv_filters_are_enabled)
+    if (use_qsv_filters)
     {
         par = av_buffersrc_parameters_alloc();
         init->pix_fmt = AV_PIX_FMT_QSV;
@@ -270,7 +271,7 @@ int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in)
     if (in != NULL)
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (qsv_filters_are_enabled)
+        if (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled)
         {
             hb_video_buffer_to_avframe(in->qsv_details.frame, in);
             return hb_avfilter_add_frame(graph, in->qsv_details.frame);
@@ -297,9 +298,9 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     {
         hb_buffer_t * buf;
 #if HB_PROJECT_FEATURE_QSV
-        if (qsv_filters_are_enabled)
+        if (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled)
         {
-            buf = hb_qsv_copy_frame(&hb_vpp_qsv_frames_ctx, graph->frame, 0, 1);
+            buf = hb_qsv_copy_frame(graph->job, graph->frame, 1);
             hb_avframe_set_video_buffer_flags(buf, graph->frame, graph->out_time_base);
         }
         else

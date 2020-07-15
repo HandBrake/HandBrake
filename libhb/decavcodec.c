@@ -955,7 +955,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
-        out = hb_qsv_copy_frame(&hb_dec_qsv_frames_ctx, pv->frame, pv->job->qsv.ctx, 0);
+        out = hb_qsv_copy_frame(pv->job, pv->frame, 0);
     }
     else
 #endif
@@ -1176,8 +1176,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
+        if (pv->job && pv->job->qsv.ctx && pv->job->qsv.ctx->qsv_filters_are_enabled)
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
@@ -1222,6 +1221,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         }
     }
 
+    filter_init.job               = pv->job;
     filter_init.pix_fmt           = pv->frame->format;
     filter_init.geometry.width    = pv->frame->width;
     filter_init.geometry.height   = pv->frame->height;
@@ -1416,7 +1416,17 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                         hb_error( "decavcodecvInit: qsv ctx alloc failed" );
                         return 1;
                     }
-                    hb_qsv_add_context_usage(pv->job->qsv.ctx, 0);
+                    pv->job->qsv.ctx->hb_dec_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
+                    if(!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
+                    {
+                        hb_error( "sanitize_qsv: HBQSVFramesContext dec alloc failed" );
+                        return 1;
+                    }
+                }
+                hb_qsv_add_context_usage(pv->job->qsv.ctx, 0);
+
+                if (!pv->job->qsv.ctx->dec_space)
+                {
                     pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));
                     if(!pv->job->qsv.ctx->dec_space)
                     {
