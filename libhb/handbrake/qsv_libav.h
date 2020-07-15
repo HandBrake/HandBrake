@@ -260,6 +260,8 @@ typedef struct hb_qsv_space {
     mfxMemId *mids;
 } hb_qsv_space;
 
+typedef struct HBQSVFramesContext HBQSVFramesContext;
+
 typedef struct hb_qsv_context {
     volatile int is_context_active;
 
@@ -288,6 +290,10 @@ typedef struct hb_qsv_context {
 
     void *qsv_config;
 
+    int num_cpu_filters;
+    int qsv_filters_are_enabled;
+    HBQSVFramesContext *hb_dec_qsv_frames_ctx;
+    HBQSVFramesContext *hb_vpp_qsv_frames_ctx;
 } hb_qsv_context;
 
 typedef enum {

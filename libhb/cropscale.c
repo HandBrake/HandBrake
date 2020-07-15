@@ -13,9 +13,6 @@
 #include "handbrake/qsv_common.h"
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
-extern int qsv_filters_are_enabled;
-extern int num_cpu_filters;
-HBQSVFramesContext hb_vpp_qsv_frames_ctx;
 #endif
 
 static int crop_scale_init(hb_filter_object_t * filter,
@@ -95,12 +92,13 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV
-    if (qsv_filters_are_enabled)
+    int use_qsv_filters = (init->job && init->job->qsv.ctx && init->job->qsv.ctx->qsv_filters_are_enabled) ? 1 : 0;
+    if (use_qsv_filters)
     {
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
         hb_dict_set(avfilter, "scale_qsv", avsettings);
-        int result = hb_create_ffmpeg_pool(width, height, AV_PIX_FMT_NV12, HB_POOL_SURFACE_SIZE, 0, &hb_vpp_qsv_frames_ctx.hw_frames_ctx);
+        int result = hb_create_ffmpeg_pool(width, height, AV_PIX_FMT_NV12, HB_POOL_SURFACE_SIZE, 0, &init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
         if (result < 0)
         {
             hb_error("hb_create_ffmpeg_pool vpp allocation failed");
@@ -111,19 +109,19 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         AVQSVFramesContext *frames_hwctx;
         AVBufferRef *hw_frames_ctx;
 
-        hw_frames_ctx = hb_vpp_qsv_frames_ctx.hw_frames_ctx;
+        hw_frames_ctx = init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx;
         frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
         frames_hwctx = frames_ctx->hwctx;
-        hb_vpp_qsv_frames_ctx.input_texture = frames_hwctx->texture;
+        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->input_texture = frames_hwctx->texture;
         
         /* allocate the memory ids for the external frames */
-        av_buffer_unref(&hb_vpp_qsv_frames_ctx.mids_buf);
-        hb_vpp_qsv_frames_ctx.mids_buf = hb_qsv_create_mids(hb_vpp_qsv_frames_ctx.hw_frames_ctx);
-        if (!hb_vpp_qsv_frames_ctx.mids_buf)
+        av_buffer_unref(&init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
+        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
+        if (!init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf)
             return AVERROR(ENOMEM);
-        hb_vpp_qsv_frames_ctx.mids    = (QSVMid*)hb_vpp_qsv_frames_ctx.mids_buf->data;
-        hb_vpp_qsv_frames_ctx.nb_mids = frames_hwctx->nb_surfaces;
-        memset(hb_vpp_qsv_frames_ctx.pool, 0, hb_vpp_qsv_frames_ctx.nb_mids * sizeof(hb_vpp_qsv_frames_ctx.pool[0]));
+        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids    = (QSVMid*)init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf->data;
+        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->nb_mids = frames_hwctx->nb_surfaces;
+        memset(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->pool, 0, init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->nb_mids * sizeof(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->pool[0]));
     }
     else
 #endif
@@ -171,7 +169,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!qsv_filters_are_enabled)
+    if (!use_qsv_filters)
 #endif
     {
         // TODO: Support other pix formats

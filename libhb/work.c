@@ -1226,11 +1226,6 @@ static int sanitize_audio(hb_job_t *job)
     return 0;
 }
 
-#if HB_PROJECT_FEATURE_QSV
-int num_cpu_filters = 0;
-int qsv_filters_are_enabled = 0;
-#endif
-
 static int sanitize_qsv( hb_job_t * job )
 {
 #if HB_PROJECT_FEATURE_QSV
@@ -1238,9 +1233,26 @@ static int sanitize_qsv( hb_job_t * job )
      * When QSV's VPP is used for filtering, not all CPU filters
      * are supported, so we need to do a little extra setup here.
      */
+
+    if(!job->qsv.ctx)
+    {
+        job->qsv.ctx = av_mallocz(sizeof(hb_qsv_context));
+        if(!job->qsv.ctx)
+        {
+            hb_error( "sanitize_qsv: qsv ctx alloc failed" );
+            return 1;
+        }
+        job->qsv.ctx->hb_dec_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
+        if(!job->qsv.ctx->hb_dec_qsv_frames_ctx)
+        {
+            hb_error( "sanitize_qsv: HBQSVFramesContext dec alloc failed" );
+            return 1;
+        }
+        hb_qsv_add_context_usage(job->qsv.ctx, 0);
+    }
+
     int i = 0;
-    qsv_filters_are_enabled = 0;
-    num_cpu_filters = 0;
+    int num_cpu_filters = 0;
     if (job->vcodec & HB_VCODEC_QSV_MASK)
     {
         if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
@@ -1267,8 +1279,19 @@ static int sanitize_qsv( hb_job_t * job )
                 }
             }
         }
-        qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
     }
+    job->qsv.ctx->num_cpu_filters = num_cpu_filters;
+    job->qsv.ctx->qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
+    if (job->qsv.ctx->qsv_filters_are_enabled)
+    {
+        job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
+        if(!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
+        {
+            hb_error( "sanitize_qsv: HBQSVFramesContext vpp alloc failed" );
+            return 1;
+        }
+    }
+    hb_qsv_update_frames_context(job);
 #endif // HB_PROJECT_FEATURE_QSV
 
     return 0;
