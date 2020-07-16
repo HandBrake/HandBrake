@@ -728,7 +728,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
         if(b->qsv_details.frame)
         {
             mfxFrameSurface1 *surface = (mfxFrameSurface1*)b->qsv_details.frame->data[3];
-            if(surface)
+            if(surface && b->qsv_details.ctx)
             {
                 if(b->qsv_details.ctx->qsv_filters_are_enabled)
                 {

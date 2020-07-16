@@ -240,9 +240,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 #if HB_PROJECT_FEATURE_QSV
     mfxFrameSurface1 *surface = NULL;
     // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
-    int use_qsv_filters = (pv->input.job && pv->input.job->qsv.ctx &&
-        pv->input.job->qsv.ctx->qsv_filters_are_enabled && in && in->qsv_details.frame) ? 1 : 0;
-    if (use_qsv_filters)
+    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && in && in->qsv_details.frame)
     {
         surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
     }
@@ -262,7 +260,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
         buf = hb_avfilter_get_buf(pv->graph);
     }
 #if HB_PROJECT_FEATURE_QSV
-    if (use_qsv_filters && surface)
+    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && surface)
     {
         hb_qsv_release_surface_from_pool_by_surface_pointer(pv->input.job->qsv.ctx->hb_dec_qsv_frames_ctx, surface);
     }

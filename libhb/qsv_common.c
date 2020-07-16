@@ -991,6 +991,11 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
 static int hb_dxva2_device_check();
 static int hb_d3d11va_device_check();
 
+int hb_qsv_hw_filters_are_enabled(hb_job_t *job)
+{
+    return job && job->qsv.ctx && job->qsv.ctx->qsv_filters_are_enabled;
+}
+
 void hb_qsv_update_frames_context(hb_job_t *job)
 {
     qsv_filters_are_enabled = job->qsv.ctx->qsv_filters_are_enabled;
@@ -2851,7 +2856,7 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
         hb_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
     }
 
-    if (!is_vpp && job->qsv.ctx->qsv_filters_are_enabled)
+    if (!is_vpp && hb_qsv_hw_filters_are_enabled(job))
     {
         ret = hb_qsv_get_free_surface_from_pool(hb_qsv_frames_ctx, out->qsv_details.frame, &mid);
         if (ret < 0)
@@ -2867,7 +2872,7 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
     {
         mfxFrameSurface1* input_surface = (mfxFrameSurface1*)frame->data[3];
         // copy all surface fields
-        if (job->qsv.ctx->qsv_filters_are_enabled)
+        if (hb_qsv_hw_filters_are_enabled(job))
         {
             mfxMemId mem = output_surface->Data.MemId; 
             *output_surface = *input_surface; 
