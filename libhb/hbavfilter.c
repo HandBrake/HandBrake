@@ -99,8 +99,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 #if HB_PROJECT_FEATURE_QSV
-    int use_qsv_filters = (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled) ? 1 : 0;
-    if (!use_qsv_filters)
+    if (!hb_qsv_hw_filters_are_enabled(graph->job))
 #endif
     {
         av_opt_set(graph->avgraph, "scale_sws_opts", "lanczos+accurate_rnd", 0);
@@ -116,7 +115,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     AVBufferSrcParameters *par = 0;
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
-    if (use_qsv_filters)
+    if (hb_qsv_hw_filters_are_enabled(graph->job))
     {
         par = av_buffersrc_parameters_alloc();
         init->pix_fmt = AV_PIX_FMT_QSV;
@@ -271,7 +270,7 @@ int hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in)
     if (in != NULL)
     {
 #if HB_PROJECT_FEATURE_QSV
-        if (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled)
+        if (hb_qsv_hw_filters_are_enabled(graph->job))
         {
             hb_video_buffer_to_avframe(in->qsv_details.frame, in);
             return hb_avfilter_add_frame(graph, in->qsv_details.frame);
@@ -298,7 +297,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     {
         hb_buffer_t * buf;
 #if HB_PROJECT_FEATURE_QSV
-        if (graph->job && graph->job->qsv.ctx && graph->job->qsv.ctx->qsv_filters_are_enabled)
+        if (hb_qsv_hw_filters_are_enabled(graph->job))
         {
             buf = hb_qsv_copy_frame(graph->job, graph->frame, 1);
             hb_avframe_set_video_buffer_flags(buf, graph->frame, graph->out_time_base);

@@ -92,8 +92,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV
-    int use_qsv_filters = (init->job && init->job->qsv.ctx && init->job->qsv.ctx->qsv_filters_are_enabled) ? 1 : 0;
-    if (use_qsv_filters)
+    if (hb_qsv_hw_filters_are_enabled(init->job))
     {
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
@@ -169,7 +168,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     avsettings = hb_dict_init();
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!use_qsv_filters)
+    if (!hb_qsv_hw_filters_are_enabled(init->job))
 #endif
     {
         // TODO: Support other pix formats

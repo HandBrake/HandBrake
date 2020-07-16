@@ -1176,7 +1176,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV
-        if (pv->job && pv->job->qsv.ctx && pv->job->qsv.ctx->qsv_filters_are_enabled)
+        if (hb_qsv_hw_filters_are_enabled(pv->job))
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));

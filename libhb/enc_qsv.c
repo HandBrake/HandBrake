@@ -802,7 +802,7 @@ int qsv_enc_init(hb_work_private_t *pv)
                 .Free   = hb_qsv_frame_free,
             };
 
-            if (pv->job->qsv.ctx->qsv_filters_are_enabled)
+            if (hb_qsv_hw_filters_are_enabled(pv->job))
             {
                 frame_allocator.pthis = pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx;
             }
@@ -2159,7 +2159,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 mfxFrameSurface1 *surface = task->stage->in.p_surface;
                 if(!pv->is_sys_mem && surface)
                 {
-                    if (pv->job->qsv.ctx->qsv_filters_are_enabled)
+                    if (hb_qsv_hw_filters_are_enabled(pv->job))
                     {
                         hb_qsv_release_surface_from_pool(pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx, surface->Data.MemId);
                     }
@@ -2264,7 +2264,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, HB_POOL_SURFACE_SIZE, &mid, &surface);
         }
 
-        if (pv->job->qsv.ctx->qsv_filters_are_enabled)
+        if (hb_qsv_hw_filters_are_enabled(pv->job))
         {
             hb_qsv_replace_surface_mid(pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx, mid, surface);
         }
