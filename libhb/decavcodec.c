@@ -52,7 +52,6 @@
 #include "libavutil/hwcontext_qsv.h"
 #include "handbrake/qsv_common.h"
 #include "handbrake/qsv_libav.h"
-extern HBQSVFramesContext hb_dec_qsv_frames_ctx;
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );
@@ -1408,23 +1407,21 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                     // more surfaces may be needed for the lookahead
                     pv->qsv.config.additional_buffers = 160;
                 }
-                if(!pv->job->qsv.ctx)
+                if (!pv->job->qsv.ctx)
                 {
-                    pv->job->qsv.ctx = av_mallocz(sizeof(hb_qsv_context));
-                    if(!pv->job->qsv.ctx)
-                    {
-                        hb_error( "decavcodecvInit: qsv ctx alloc failed" );
-                        return 1;
-                    }
+                    hb_error( "decavcodecvInit: no context" );
+                    return 1;
+                }
+                if (!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
+                {
                     pv->job->qsv.ctx->hb_dec_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
                     if(!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
                     {
-                        hb_error( "sanitize_qsv: HBQSVFramesContext dec alloc failed" );
+                        hb_error( "decavcodecvInit: HBQSVFramesContext dec alloc failed" );
                         return 1;
                     }
                 }
-                hb_qsv_add_context_usage(pv->job->qsv.ctx, 0);
-
+                hb_qsv_update_frames_context(pv->job);
                 if (!pv->job->qsv.ctx->dec_space)
                 {
                     pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));

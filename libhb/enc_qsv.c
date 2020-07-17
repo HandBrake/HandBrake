@@ -746,12 +746,8 @@ int qsv_enc_init(hb_work_private_t *pv)
 
     if (qsv == NULL)
     {
-        if (!pv->is_sys_mem)
-        {
-            hb_error("qsv_enc_init: decode enabled but no context!");
-            return 3;
-        }
-        job->qsv.ctx = qsv = av_mallocz(sizeof(hb_qsv_context));
+        hb_error("qsv_enc_init: no context!");
+        return 3;
     }
 
     hb_qsv_space *qsv_encode = qsv->enc_space;
@@ -1815,11 +1811,6 @@ void encqsvClose(hb_work_object_t *w)
                 }
                 qsv_enc_space->is_init_done = 0;
             }
-
-            if (pv->is_sys_mem)
-            {
-                av_freep(&qsv_ctx);
-            }
         }
     }
 
@@ -2261,7 +2252,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         else
         {
             // Create black buffer in the begining of the encoding, usually first 2 frames
-            hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, HB_POOL_SURFACE_SIZE, &mid, &surface);
+            hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, HB_QSV_POOL_SURFACE_SIZE - HB_QSV_POOL_ENCODER_SIZE, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
         }
 
         if (hb_qsv_hw_filters_are_enabled(pv->job))

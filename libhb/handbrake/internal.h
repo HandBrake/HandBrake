@@ -12,12 +12,7 @@
 
 #include "libavutil/imgutils.h"
 #include "libavutil/pixdesc.h"
-
 #include "handbrake/project.h"
-#if HB_PROJECT_FEATURE_QSV
-#include "handbrake/qsv_libav.h"
-#include "libavcodec/avcodec.h"
-#endif
 
 /***********************************************************************
  * common.c
@@ -63,6 +58,10 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
  * that are conditionally used depending on the type of packet.
  */
 typedef struct hb_buffer_s hb_buffer_t;
+
+#if HB_PROJECT_FEATURE_QSV
+#include "handbrake/qsv_libav.h"
+#endif
 
 struct hb_buffer_settings_s
 {

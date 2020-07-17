@@ -2865,7 +2865,7 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
     }
     else
     {
-        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, &mid, &output_surface);
+        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE - HB_QSV_POOL_ENCODER_SIZE, &mid, &output_surface);
     }
 
     if (device_manager_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
@@ -3055,7 +3055,7 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
 
     int ret;
 
-    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_POOL_FFMPEG_SURFACE_SIZE, extra_hw_frames, out_hw_frames_ctx);
+    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_FFMPEG_SURFACE_SIZE, extra_hw_frames, out_hw_frames_ctx);
     if (ret < 0) {
         hb_error("hb_qsv_init: hb_create_ffmpeg_pool decoder failed %d", ret);
         return ret;
@@ -3066,7 +3066,7 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
     frames_hwctx = frames_ctx->hwctx;
     hb_dec_qsv_frames_ctx->input_texture = frames_hwctx->texture;
 
-    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
+    ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
     if (ret < 0) {
         hb_error("hb_qsv_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
         return ret;

@@ -25,8 +25,8 @@ void hb_qsv_force_workarounds(); // for developers only
 
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
-#include "libavcodec/avcodec.h"
 #include "handbrake/hb_dict.h"
+#include "handbrake/qsv_libav.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
@@ -219,50 +219,6 @@ uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
-
-
-typedef struct QSVMid {
-    AVBufferRef *hw_frames_ref;
-    mfxHDL handle;
-
-    void *texture;
-
-    AVFrame *locked_frame;
-    AVFrame *hw_frame;
-    mfxFrameSurface1 surf;
-} QSVMid;
-
-typedef struct QSVFrame {
-    AVFrame *frame;
-    mfxFrameSurface1 surface;
-    mfxEncodeCtrl enc_ctrl;
-    mfxExtDecodedFrameInfo dec_info;
-    mfxExtBuffer *ext_param;
-
-    int queued;
-    int used;
-
-    struct QSVFrame *next;
-} QSVFrame;
-
-#define HB_POOL_FFMPEG_SURFACE_SIZE (64)
-#define HB_POOL_SURFACE_SIZE (64)
-#define HB_POOL_ENCODER_SIZE (8)
-
-typedef struct HBQSVFramesContext {
-    AVBufferRef *hw_frames_ctx;
-    //void *logctx;
-
-    /* The memory ids for the external frames.
-     * Refcounted, since we need one reference owned by the HBQSVFramesContext
-     * (i.e. by the encoder/decoder) and another one given to the MFX session
-     * from the frame allocator. */
-    AVBufferRef *mids_buf;
-    QSVMid *mids;
-    int  nb_mids;
-    int pool[HB_POOL_SURFACE_SIZE];
-    void *input_texture;
-} HBQSVFramesContext;
 
 /* Full QSV pipeline helpers */
 int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
