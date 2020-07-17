@@ -119,6 +119,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mfx/mfxvideo.h"
 #include "libavutil/mem.h"
 #include "libavutil/time.h"
+#include "libavcodec/avcodec.h"
 
 #if defined (__GNUC__)
 #include <pthread.h>
@@ -187,6 +188,48 @@ typedef enum HB_QSV_STAGE_TYPE {
 #define HB_QSV_ANY_MASK      0xFFF
 } HB_QSV_STAGE_TYPE;
 
+typedef struct QSVMid {
+    AVBufferRef *hw_frames_ref;
+    mfxHDL handle;
+
+    void *texture;
+
+    AVFrame *locked_frame;
+    AVFrame *hw_frame;
+    mfxFrameSurface1 surf;
+} QSVMid;
+
+typedef struct QSVFrame {
+    AVFrame *frame;
+    mfxFrameSurface1 surface;
+    mfxEncodeCtrl enc_ctrl;
+    mfxExtDecodedFrameInfo dec_info;
+    mfxExtBuffer *ext_param;
+
+    int queued;
+    int used;
+
+    struct QSVFrame *next;
+} QSVFrame;
+
+#define HB_QSV_POOL_FFMPEG_SURFACE_SIZE (64)
+#define HB_QSV_POOL_SURFACE_SIZE (64)
+#define HB_QSV_POOL_ENCODER_SIZE (8)
+
+typedef struct HBQSVFramesContext {
+    AVBufferRef *hw_frames_ctx;
+    //void *logctx;
+
+    /* The memory ids for the external frames.
+     * Refcounted, since we need one reference owned by the HBQSVFramesContext
+     * (i.e. by the encoder/decoder) and another one given to the MFX session
+     * from the frame allocator. */
+    AVBufferRef *mids_buf;
+    QSVMid *mids;
+    int  nb_mids;
+    int pool[HB_QSV_POOL_SURFACE_SIZE];
+    void *input_texture;
+} HBQSVFramesContext;
 
 typedef struct hb_qsv_list {
     // practically pthread_mutex_t
@@ -259,8 +302,6 @@ typedef struct hb_qsv_space {
     // storage for allocations/mfxMemId*
     mfxMemId *mids;
 } hb_qsv_space;
-
-typedef struct HBQSVFramesContext HBQSVFramesContext;
 
 typedef struct hb_qsv_context {
     volatile int is_context_active;

@@ -70,12 +70,13 @@ static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
 hb_avfilter_graph_t *
 hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 {
-    hb_avfilter_graph_t * graph;
-    AVFilterInOut       * in = NULL, * out = NULL;
-    AVFilterContext     * avfilter;
-    char                * settings_str;
-    int                   result;
-    char                * filter_args;
+    hb_avfilter_graph_t   * graph;
+    AVFilterInOut         * in = NULL, * out = NULL;
+    AVBufferSrcParameters * par = NULL;
+    AVFilterContext       * avfilter;
+    char                  * settings_str;
+    int                     result;
+    char                  * filter_args;
 
     graph = calloc(1, sizeof(hb_avfilter_graph_t));
     if (graph == NULL)
@@ -112,7 +113,6 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         goto fail;
     }
 
-    AVBufferSrcParameters *par = 0;
     // Build filter input
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_hw_filters_are_enabled(graph->job))
@@ -148,6 +148,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
                     init->vrate.num, init->vrate.den);
     }
     avfilter = append_filter(graph, "buffer", filter_args, par);
+    av_free(par);
     free(filter_args);
     if (avfilter == NULL)
     {
@@ -206,6 +207,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     return graph;
 
 fail:
+    av_free(par);
     avfilter_inout_free(&in);
     avfilter_inout_free(&out);
     hb_avfilter_graph_close(&graph);
