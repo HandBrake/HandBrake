@@ -211,5 +211,9 @@ namespace HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces
         IntPtr hb_filter_get_presets_json(int filter_id);
 
         IntPtr hb_filter_get_tunes_json(int filter_id);
+        
+        int hb_get_cpu_platform();
+
+        int qsv_hardware_generation(int cpu_platform);
     }
 }

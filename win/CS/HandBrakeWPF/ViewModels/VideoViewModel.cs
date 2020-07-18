@@ -1435,14 +1435,9 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     this.VideoPresetMaxValue = encoder.Presets.Count - 1;
-                    int middlePreset = (int)Math.Round((decimal)(this.VideoPresetMaxValue / 2), 0);
+                    
 
-                    if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265)
-                    {
-                        middlePreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "slow"));
-                    }
-
-                    this.VideoPresetValue = middlePreset;
+                    this.VideoPresetValue = GetDefaultEncoderPreset(selectedEncoder);
                 }
                 else
                 {
@@ -1531,6 +1526,46 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.SetRF(displayRF);
+        }
+
+        private int GetDefaultEncoderPreset(VideoEncoder selectedEncoder)
+        {
+            int defaultPreset = (int)Math.Round((decimal)(this.VideoPresetMaxValue / 2), 0);
+
+            // Override for NVEnc
+            if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265)
+            {
+                // TODO -> is the RTX good enough to default to a more balanced preset?
+                defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "slow"));
+            }
+
+            // Override for QuickSync
+            if (selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
+            {
+                if (HandBrake.Interop.Utilities.SystemInfo.QsvHardwareGeneration > 6) 
+                {
+                    defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "speed")); // TGL
+                }
+                else
+                {
+                    defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "balanced")); // ICL and Earlier.
+                }
+            }
+
+            if (selectedEncoder == VideoEncoder.QuickSync)
+            {
+                // h264 encoder hasn't changed much in recent years, so stick to balanced. 
+                defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "balanced")); 
+            }
+
+            // Override for VCE
+            if (selectedEncoder == VideoEncoder.VceH264 || selectedEncoder == VideoEncoder.VceH265)
+            {
+                // TODO Would be good to have VCE version detection.
+                defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "balanced"));
+            }
+
+            return defaultPreset;
         }
     }
 }

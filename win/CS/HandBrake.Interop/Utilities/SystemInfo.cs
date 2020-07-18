@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.Utilities
 {
     using System;
+    using System.Diagnostics;
 
     using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Providers;
@@ -17,9 +18,6 @@ namespace HandBrake.Interop.Utilities
 
     using Interop.HbLib;
 
-    /// <summary>
-    /// The System Information.
-    /// </summary>
     public class SystemInfo
     {
         private static bool? isNvencH264Available;  // Local cache to prevent log spam.
@@ -33,9 +31,9 @@ namespace HandBrake.Interop.Utilities
             hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is qsv available.
-        /// </summary>
+
+        /* QuickSync Support */
+
         public static bool IsQsvAvailable
         {
             get
@@ -52,9 +50,6 @@ namespace HandBrake.Interop.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is qsv available.
-        /// </summary>
         public static bool IsQsvAvailableH264
         {
             get
@@ -71,9 +66,6 @@ namespace HandBrake.Interop.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is qsv available.
-        /// </summary>
         public static bool IsQsvAvailableH265
         {
             get
@@ -90,6 +82,26 @@ namespace HandBrake.Interop.Utilities
             }
         }
 
+        public static int QsvHardwareGeneration
+        {
+            get
+            {
+                try
+                {
+                    int cpu_platform = hbFunctions.hb_get_cpu_platform();
+                    int hardware = hbFunctions.qsv_hardware_generation(cpu_platform);
+                    return hardware;
+                }
+                catch (Exception exc)
+                {
+                    // Silent failure. -1 means unsupported.
+                    Debug.WriteLine(exc);
+                    return -1;
+                }
+            }
+        }
+
+
         public static bool IsQsvAvailableH26510bit
         {
             get
@@ -105,6 +117,9 @@ namespace HandBrake.Interop.Utilities
                 }
             }
         }
+
+
+        /* AMD VCE Support */
 
         public static bool IsVceH264Available
         {
@@ -137,6 +152,8 @@ namespace HandBrake.Interop.Utilities
                 }
             }
         }
+
+        /* Nvidia NVEnc Support */
 
         public static bool IsNVEncH264Available
         {

@@ -400,7 +400,19 @@ namespace HandBrakeWPF.ViewModels
             //         differences (e.g. longer title sequences and different distributor credits)
             if (hasTimestamps)
             {
-                var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
+                List<TimeSpan> diffs = new List<TimeSpan>();
+                foreach (KeyValuePair<int, Tuple<string, TimeSpan>> import in importedChapters)
+                {
+                    ChapterMarker sourceMarker = this.Chapters[import.Key - 1];
+                    TimeSpan source = sourceMarker.Duration;
+
+                    TimeSpan diff = source - import.Value.Item2;
+                    diffs.Add(diff);
+
+                }
+
+
+               // var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
                 if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
                 {
                     if (this.errorService.ShowMessageBox(

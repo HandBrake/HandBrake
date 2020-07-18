@@ -497,5 +497,15 @@ namespace HandBrake.Interop.Interop.HbLib.Wrappers
         {
             return HBFunctions.hb_filter_get_tunes_json(filter_id);
         }
+
+        public int hb_get_cpu_platform()
+        {
+            return HBFunctions.hb_get_cpu_platform();
+        }
+
+        public int qsv_hardware_generation(int cpu_platform)
+        {
+            return HBFunctions.qsv_hardware_generation(cpu_platform);
+        }
     }
 }

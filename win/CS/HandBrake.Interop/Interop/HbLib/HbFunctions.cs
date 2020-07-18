@@ -301,5 +301,11 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "hb_filter_get_tunes_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_filter_get_tunes_json(int filter_id);
+
+        [DllImport("hb", EntryPoint = "hb_get_cpu_platform", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_get_cpu_platform();
+
+        [DllImport("hb", EntryPoint = "qsv_hardware_generation", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int qsv_hardware_generation(int cpu_platform);
     }
 }
