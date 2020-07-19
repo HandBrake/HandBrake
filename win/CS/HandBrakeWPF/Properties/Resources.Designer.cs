@@ -3472,7 +3472,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Low Power QuickSync Hardware..
+        ///   Looks up a localized string similar to Enable Low Power QuickSync Hardware (where supported)..
         /// </summary>
         public static string OptionsView_EnableQuicksyncLowPower {
             get {

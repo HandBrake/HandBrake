@@ -2193,7 +2193,7 @@ This will also stop any existing running jobs.</value>
     <value>Duplicates Detected</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware.</value>
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Please select a single job to view summary information.</value>
