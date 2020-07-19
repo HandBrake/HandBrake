@@ -29,6 +29,8 @@
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
 
+// TODO: Moving globals to pv->context->opaque = job in decavcodecvInit where get_format is assigned and then retrieve the job where these are used in hb_qsv_get_format
+// (which calls hb_qsv_hw_frames_init which calls hb_create_ffmpeg_pool), then remove function hb_qsv_update_frames_context
 static HBQSVFramesContext *hb_dec_qsv_frames_ctx = NULL;
 static int qsv_filters_are_enabled = 0;
 
@@ -2312,6 +2314,7 @@ void hb_qsv_force_workarounds()
 #undef FORCE_WORKAROUNDS
 }
 
+// TODO: Moving globals to pv->context->opaque = job in decavcodecvInit where get_format is assigned
 AVBufferRef *hb_hw_device_ctx = NULL;
 char *qsv_device = NULL;
 static mfxHDL device_manager_handle = NULL;
