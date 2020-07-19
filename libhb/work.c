@@ -1226,59 +1226,6 @@ static int sanitize_audio(hb_job_t *job)
     return 0;
 }
 
-static int sanitize_qsv( hb_job_t * job )
-{
-#if HB_PROJECT_FEATURE_QSV
-    /*
-     * When QSV's VPP is used for filtering, not all CPU filters
-     * are supported, so we need to do a little extra setup here.
-     */
-    if (job->vcodec & HB_VCODEC_QSV_MASK)
-    {
-        int i = 0;
-        int num_cpu_filters = 0;
-        if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
-        {
-            for (i = 0; i < hb_list_count(job->list_filter); i++)
-            {
-                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
-
-                switch (filter->id)
-                {
-                    // cropping and scaling always done via VPP filter
-                    case HB_FILTER_CROP_SCALE:
-                        break;
-
-                    case HB_FILTER_DEINTERLACE:
-                    case HB_FILTER_ROTATE:
-                    case HB_FILTER_RENDER_SUB:
-                    case HB_FILTER_AVFILTER:
-                        num_cpu_filters++;
-                        break;
-                    default:
-                        num_cpu_filters++;
-                        break;
-                }
-            }
-        }
-        job->qsv.ctx->num_cpu_filters = num_cpu_filters;
-        job->qsv.ctx->qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
-        if (job->qsv.ctx->qsv_filters_are_enabled)
-        {
-            job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
-            if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
-            {
-                hb_error( "sanitize_qsv: HBQSVFramesContext vpp alloc failed" );
-                return 1;
-            }
-            hb_qsv_update_frames_context(job);
-        }
-    }
-#endif // HB_PROJECT_FEATURE_QSV
-
-    return 0;
-}
-
 static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
 {
     // Add selective deinterlacing mode if comb detection is enabled
@@ -1404,17 +1351,10 @@ static void do_job(hb_job_t *job)
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!job->qsv.ctx)
-    {
-        job->qsv.ctx = av_mallocz(sizeof(hb_qsv_context));
-        if (!job->qsv.ctx)
-        {
-            hb_error( "qsv ctx alloc failed" );
-            return;
-        }
-        hb_qsv_add_context_usage(job->qsv.ctx, 0);
-    }
+    if(hb_qsv_is_enabled(job))
+        job->qsv.ctx = hb_qsv_context_init();
 #endif
+
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if (job->list_filter && hb_list_count(job->list_filter))
@@ -1423,16 +1363,20 @@ static void do_job(hb_job_t *job)
 
         sanitize_filter_list(job->list_filter, title->geometry);
 
+#if HB_PROJECT_FEATURE_QSV
         // sanitize_qsv looks for subtitle render filter, so must happen after
         // sanitize_subtitle
-        result = sanitize_qsv(job);
-        if (result)
+        if(hb_qsv_is_enabled(job))
         {
-            *job->done_error = HB_ERROR_WRONG_INPUT;
-            *job->die = 1;
-            goto cleanup;
+            result = hb_qsv_sanitize_filter_list(job);
+            if (result)
+            {
+                *job->done_error = HB_ERROR_WRONG_INPUT;
+                *job->die = 1;
+                goto cleanup;
+            }
         }
-        
+#endif
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
         init.time_base.den = 90000;
@@ -1879,7 +1823,7 @@ cleanup:
     }
     hb_buffer_pool_free();
 #if HB_PROJECT_FEATURE_QSV
-    av_free(job->qsv.ctx);
+    hb_qsv_context_uninit(&job->qsv.ctx);
 #endif
 }
 
