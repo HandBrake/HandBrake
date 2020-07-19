@@ -221,7 +221,11 @@ const char* hb_qsv_impl_get_name(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
 
 /* Full QSV pipeline helpers */
-int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
+int hb_qsv_is_enabled(hb_job_t *job);
+hb_qsv_context* hb_qsv_context_init();
+void hb_qsv_context_uninit();
+int hb_qsv_sanitize_filter_list(hb_job_t *job);
+int hb_qsv_hw_frames_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
 int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
 int hb_qsv_hw_filters_are_enabled(hb_job_t *job);
 void hb_qsv_update_frames_context(hb_job_t *job);

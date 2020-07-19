@@ -1002,6 +1002,11 @@ void hb_qsv_update_frames_context(hb_job_t *job)
     hb_dec_qsv_frames_ctx = job->qsv.ctx->hb_dec_qsv_frames_ctx;
 }
 
+int hb_qsv_is_enabled(hb_job_t *job)
+{
+    return hb_qsv_decode_is_enabled(job) || hb_qsv_info_get(job->vcodec);
+}
+
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     static int device_check_completed = 0;
@@ -3047,7 +3052,7 @@ int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat 
     return 0;
 }
 
-int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
+int hb_qsv_hw_frames_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
 {
     AVHWFramesContext *frames_ctx;
     AVQSVFramesContext *frames_hwctx;
@@ -3057,7 +3062,7 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
 
     ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_FFMPEG_SURFACE_SIZE, extra_hw_frames, out_hw_frames_ctx);
     if (ret < 0) {
-        hb_error("hb_qsv_init: hb_create_ffmpeg_pool decoder failed %d", ret);
+        hb_error("hb_qsv_hw_frames_init: hb_create_ffmpeg_pool decoder failed %d", ret);
         return ret;
     }
 
@@ -3068,7 +3073,7 @@ int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt
 
     ret = hb_create_ffmpeg_pool(coded_width, coded_height, sw_pix_fmt, HB_QSV_POOL_SURFACE_SIZE, extra_hw_frames, &hb_dec_qsv_frames_ctx->hw_frames_ctx);
     if (ret < 0) {
-        hb_error("hb_qsv_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
+        hb_error("hb_qsv_hw_frames_init: hb_create_ffmpeg_pool qsv surface allocation failed %d", ret);
         return ret;
     }
 
@@ -3101,7 +3106,7 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
 {
     while (*pix_fmts != AV_PIX_FMT_NONE) {
         if (*pix_fmts == AV_PIX_FMT_QSV) {
-                int ret = hb_qsv_init(s->coded_width, s->coded_height, s->sw_pix_fmt, s->extra_hw_frames, &s->hw_frames_ctx);
+                int ret = hb_qsv_hw_frames_init(s->coded_width, s->coded_height, s->sw_pix_fmt, s->extra_hw_frames, &s->hw_frames_ctx);
                 if (ret < 0) {
                     hb_error("hb_qsv_get_format: QSV hwaccel initialization failed");
                     return AV_PIX_FMT_NONE;
@@ -3158,6 +3163,81 @@ int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
     return (qsv_encoder_enabled && qsv_decoder_enabled);
 }
 
+hb_qsv_context* hb_qsv_context_init()
+{
+    hb_qsv_context *ctx;
+    ctx = av_mallocz(sizeof(hb_qsv_context));
+    if (!ctx)
+    {
+        hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
+        return NULL;
+    }
+    hb_qsv_add_context_usage(ctx, 0);
+    return ctx;
+}
+
+void hb_qsv_context_uninit(hb_qsv_context ** _ctx)
+{
+    hb_qsv_context *ctx = *_ctx;
+    if ( ctx == NULL )
+    {
+        hb_error( "hb_qsv_context_uninit: ctx is NULL" );
+        return;
+    }
+    av_free(ctx);
+    *_ctx = NULL;
+}
+
+int hb_qsv_sanitize_filter_list(hb_job_t *job)
+{
+    /*
+     * When QSV's VPP is used for filtering, not all CPU filters
+     * are supported, so we need to do a little extra setup here.
+     */
+    if (job->vcodec & HB_VCODEC_QSV_MASK)
+    {
+        int i = 0;
+        int num_cpu_filters = 0;
+        if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
+        {
+            for (i = 0; i < hb_list_count(job->list_filter); i++)
+            {
+                hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+
+                switch (filter->id)
+                {
+                    // cropping and scaling always done via VPP filter
+                    case HB_FILTER_CROP_SCALE:
+                        break;
+
+                    case HB_FILTER_DEINTERLACE:
+                    case HB_FILTER_ROTATE:
+                    case HB_FILTER_RENDER_SUB:
+                    case HB_FILTER_AVFILTER:
+                        num_cpu_filters++;
+                        break;
+                    default:
+                        num_cpu_filters++;
+                        break;
+                }
+            }
+        }
+        job->qsv.ctx->num_cpu_filters = num_cpu_filters;
+        job->qsv.ctx->qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
+        if (job->qsv.ctx->qsv_filters_are_enabled)
+        {
+            job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
+            if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
+            {
+                hb_error( "sanitize_qsv: HBQSVFramesContext vpp alloc failed" );
+                return 1;
+            }
+            hb_qsv_update_frames_context(job);
+        }
+    }
+    return 0;
+}
+
 #else // other OS
 
 int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
@@ -3165,7 +3245,7 @@ int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat 
     return -1;
 }
 
-int hb_qsv_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
+int hb_qsv_hw_frames_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
 {
     return -1;
 }
