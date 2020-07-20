@@ -1033,6 +1033,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     const char       * video_profile = NULL, * video_level = NULL;
     const char       * video_options = NULL;
     int                subtitle_search_burn = 0;
+    hb_dict_t        * meta_dict = NULL;
     const char       * meta_name = NULL, * meta_artist = NULL;
     const char       * meta_album_artist = NULL, * meta_release = NULL;
     const char       * meta_comment = NULL, * meta_genre = NULL;
@@ -1070,9 +1071,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s?{s?o, s?o, s?o},"
     // Subtitle {Search {Enable, Forced, Default, Burn}, SubtitleList}
     "s?{s?{s:b, s?b, s?b, s?b}, s?o},"
-    // Metadata {Name, Artist, Composer, AlbumArtist, ReleaseDate,
-    //           Comment, Genre, Description, LongDescription}
-    "s?{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s},"
+    // Metadata
+    "s?o,"
     // Filters {FilterList}
     "s?{s?o}"
     "}",
@@ -1130,16 +1130,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "Default",          unpack_b(&job->select_subtitle_config.default_track),
                 "Burn",             unpack_b(&subtitle_search_burn),
             "SubtitleList",         unpack_o(&subtitle_list),
-        "Metadata",
-            "Name",                 unpack_s(&meta_name),
-            "Artist",               unpack_s(&meta_artist),
-            "Composer",             unpack_s(&meta_composer),
-            "AlbumArtist",          unpack_s(&meta_album_artist),
-            "ReleaseDate",          unpack_s(&meta_release),
-            "Comment",              unpack_s(&meta_comment),
-            "Genre",                unpack_s(&meta_genre),
-            "Description",          unpack_s(&meta_desc),
-            "LongDescription",      unpack_s(&meta_long_desc),
+        "Metadata",                 unpack_o(&meta_dict),
         "Filters",
             "FilterList",           unpack_o(&filter_list)
     );
@@ -1240,6 +1231,37 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
+    if (meta_dict != NULL)
+    {
+        // By default, the job is populated with the metadata
+        // from the source title.
+        //
+        // If the metadata dict is present, assume any fields not
+        // present are to be removed from the job's metadata
+        meta_name = meta_artist = meta_composer = meta_album_artist =
+        meta_release = meta_comment = meta_genre = meta_desc =
+        meta_long_desc = "";
+
+        result = json_unpack_ex(meta_dict, &error, 0,
+        // {Name, Artist, Composer, AlbumArtist, ReleaseDate,
+        //  Comment, Genre, Description, LongDescription}
+        "{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s}",
+            "Name",                 unpack_s(&meta_name),
+            "Artist",               unpack_s(&meta_artist),
+            "Composer",             unpack_s(&meta_composer),
+            "AlbumArtist",          unpack_s(&meta_album_artist),
+            "ReleaseDate",          unpack_s(&meta_release),
+            "Comment",              unpack_s(&meta_comment),
+            "Genre",                unpack_s(&meta_genre),
+            "Description",          unpack_s(&meta_desc),
+            "LongDescription",      unpack_s(&meta_long_desc)
+        );
+        if (result < 0)
+        {
+            hb_error("hb_dict_to_job: failed to parse meta_dict: %s", error.text);
+            goto fail;
+        }
+    }
     if (meta_name != NULL)
     {
         if (meta_name[0] != 0)
