@@ -954,6 +954,22 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         free(filename);
     }
 
+    if( 3 <= global_verbosity_level ) {
+        // Allow user to see av_opts in log file and see ffmpeg verbosity
+        int av_log_level = av_log_get_level();
+        char * av_opts_string = NULL;
+        hb_log( "encavcodec: verbosity enabled: %d", global_verbosity_level);
+        if( 0 <= av_dict_get_string(av_opts, &av_opts_string, '=', ',') && NULL != av_opts_string ) {
+            hb_log( "encavcodec: avcodec_open options: %s", av_opts_string);
+            free(av_opts_string);
+        } else {
+            hb_log( "encavcodec: Error gathering avcodec_open options");
+        }
+        if( AV_LOG_VERBOSE > av_log_level ) {
+            av_log_set_level(AV_LOG_VERBOSE);
+        }
+    }
+
     if (hb_avcodec_open(context, codec, &av_opts, HB_FFMPEG_THREADS_AUTO))
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
