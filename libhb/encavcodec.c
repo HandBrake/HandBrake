@@ -312,8 +312,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
         if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ) {
-            av_dict_set( &av_opts, "rc", "cbr_hq", 0 );
-            hb_log( "encavcodec: encoding at rc=cbr_hq Bitrate %d", job->vbitrate );
+            av_dict_set( &av_opts, "rc", "vbr_hq", 0 );
+            hb_log( "encavcodec: encoding at rc=vbr_hq Bitrate %d", job->vbitrate );
         }
         
         if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 ) {
@@ -375,7 +375,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
-            hb_log( "encavcodec: encoding at rc=vbr %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr_hq %.2f", job->vquality );
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
