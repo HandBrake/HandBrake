@@ -69,7 +69,10 @@ ifneq (,$(filter $(FEATURE.qsv)-$(HOST.system),1-linux 1-freebsd))
     FFMPEG.CONFIGURE.extra += --enable-vaapi
     FFMPEG.CONFIGURE.extra += --disable-xlib
 else
-    FFMPEG.CONFIGURE.extra += --disable-vaapi
+    FFMPEG.CONFIGURE.extra += --enable-encoder=h264_vaapi
+    FFMPEG.CONFIGURE.extra += --enable-encoder=hevc_vaapi
+    FFMPEG.CONFIGURE.extra += --enable-encoder=vp8_vaapi
+    FFMPEG.CONFIGURE.extra += --enable-encoder=vp9_vaapi
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))

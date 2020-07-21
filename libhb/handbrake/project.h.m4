@@ -49,6 +49,7 @@ dnl
 <<#>>define HB_PROJECT_FEATURE_GST               __FEATURE_gst
 <<#>>define HB_PROJECT_FEATURE_MF                __FEATURE_mf
 <<#>>define HB_PROJECT_FEATURE_NVENC             __FEATURE_nvenc
+<<#>>define HB_PROJECT_FEATURE_VAAPI             __FEATURE_vaapi
 <<#>>define HB_PROJECT_FEATURE_QSV               __FEATURE_qsv
 <<#>>define HB_PROJECT_FEATURE_VCE               __FEATURE_vce
 <<#>>define HB_PROJECT_FEATURE_X265              __FEATURE_x265

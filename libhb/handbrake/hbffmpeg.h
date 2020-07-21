@@ -20,6 +20,7 @@
 #include "libavutil/downmix_info.h"
 #include "libavutil/display.h"
 #include "libavutil/mastering_display_metadata.h"
+#include "libavutil/hwcontext.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "handbrake/common.h"
@@ -62,5 +63,8 @@ void            hb_avframe_set_video_buffer_flags(hb_buffer_t * buf,
 int hb_av_encoder_present(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);
+
+int hb_avcodec_test_encoder(AVCodec *codec, enum AVPixelFormat fmt);
+int hb_avcodec_test_encoder_available(int encoder);
 
 #endif // HANDBRAKE_FFMPEG_H

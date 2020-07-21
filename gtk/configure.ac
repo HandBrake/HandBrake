@@ -250,9 +250,10 @@ case $host in
 		HB_LIBS="$HB_LIBS -pthread"
 		;;
 	*-*-linux*)
-		if test "x$use_qsv" = "xyes" ; then
-			HB_LIBS="$HB_LIBS -lva -lva-drm"
-		fi
+        HB_LIBS="$HB_LIBS -lX11 -lva -lva-drm -lva-x11"
+		dnl if test "x$use_qsv" = "xyes" ; then
+		dnl 	HB_LIBS="$HB_LIBS -lva -lva-drm"
+		dnl fi
 		if test "x$use_x265" = "xyes" ; then
 			if test "x$use_numa" = "xyes" ; then
 				HB_LIBS="$HB_LIBS -lnuma"

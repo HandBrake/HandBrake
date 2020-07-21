@@ -1,0 +1,44 @@
+From 5e10db6f3f22a7d687ad7eeded3bbf0866978628 Mon Sep 17 00:00:00 2001
+From: Sven Gothel <sgothel@jausoft.com>
+Date: Tue, 21 Jul 2020 06:43:51 +0200
+Subject: gallium/va/encpackedheader 01: Boldly claim VA_ENC_PACKED_HEADER_*
+ SEQUENCE|SLICE|MISC capabilties (ffmpeg -> matroska)
+
+Return config for VAConfigAttribEncPackedHeaders:
++            value = VA_ENC_PACKED_HEADER_SEQUENCE | // SPS and PPS.
++                    VA_ENC_PACKED_HEADER_SLICE    | // Slice headers.
++                    VA_ENC_PACKED_HEADER_MISC;      // SEI.
+
+This enables h264 encoding having conforming frame header and hence
+allows validating muxer like Matroska (e.g. ffmpeg).
+
+See <https://trac.ffmpeg.org/ticket/8042>
+
+FIXME: Query whether VA driver actually supports
+writing/consuming these packed header!
+Seems to work on
+  VAAPI driver: Mesa Gallium driver 20.2.0-devel for AMD Radeon RX 5700 XT (NAVI10, DRM 3.37.0, 5.7.0-1-amd64, LLVM 9.0.1)
+
+diff --git a/src/gallium/frontends/va/config.c b/src/gallium/frontends/va/config.c
+index 294cbcc6418..568dd226ae8 100644
+--- a/src/gallium/frontends/va/config.c
++++ b/src/gallium/frontends/va/config.c
+@@ -157,7 +157,17 @@ vlVaGetConfigAttributes(VADriverContextP ctx, VAProfile profile, VAEntrypoint en
+             value = VA_RC_CQP | VA_RC_CBR | VA_RC_VBR;
+             break;
+          case VAConfigAttribEncPackedHeaders:
+-            value = 0;
++            // FIXME: Query whether VA driver actually supports 
++            // writing/consuming these packed header!
++            // Seems to work on 
++            //   VAAPI driver: Mesa Gallium driver 20.2.0-devel for AMD Radeon RX 5700 XT (NAVI10, DRM 3.37.0, 5.7.0-1-amd64, LLVM 9.0.1)
++            // using h264_vaapi, dunno which VCN radeon code hook is being used here.
++            // This enables h264 encoding having conforming frame header and hence 
++            // allows validating muxer like Matroska (e.g. ffmpeg).
++            // See <https://trac.ffmpeg.org/ticket/8042>
++            value = VA_ENC_PACKED_HEADER_SEQUENCE | // SPS and PPS.
++                    VA_ENC_PACKED_HEADER_SLICE    | // Slice headers.
++                    VA_ENC_PACKED_HEADER_MISC;      // SEI.
+             break;
+          case VAConfigAttribEncMaxRefFrames:
+             value = 1;
