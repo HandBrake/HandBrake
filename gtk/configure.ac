@@ -38,12 +38,12 @@ AC_ARG_WITH(hb,
 	AC_HELP_STRING(
 		[--with-hb=prefix],
 		[try this for the hb-library prefix install directory]
-	  ),
-	  hb_PATHSET=1,
-	  hb_PATHSET=0
+	),
+	hb_PATHSET=1,
+	hb_PATHSET=0
 )
 
-if test  $hb_PATHSET = 1 ; then
+if test $hb_PATHSET = 1 ; then
 	case ${with_hb} in
 	/*)
 		HBINC="-I$with_hb/libhb -I$with_hb/contrib/include"
@@ -120,18 +120,18 @@ AM_PROG_LIBTOOL
 AC_SYS_LARGEFILE
 
 case $host in
-  *-*-mingw*)
-	GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
-	mingw_flag=yes
-	;;
-  *)
-	case "$host_os" in
-	linux*)
-	  ;;
-	esac
-	GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
-	mingw_flag=no
-	;;
+	*-*-mingw*)
+		GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
+		mingw_flag=yes
+		;;
+	*)
+		case "$host_os" in
+			linux*)
+				;;
+		esac
+		GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
+		mingw_flag=no
+		;;
 esac
 
 PKG_PROG_PKG_CONFIG
@@ -224,38 +224,38 @@ if test "x$use_qsv" = "xyes" ; then
 fi
 
 case $host in
-  *-*-mingw*)
-	if test "x$use_libdl" = "xyes" ; then
-		HB_LIBS="$HB_LIBS -ldl"
-	fi
-	if test "x$use_libpthread" = "xyes" ; then
+	*-*-mingw*)
+		if test "x$use_libdl" = "xyes" ; then
+			HB_LIBS="$HB_LIBS -ldl"
+		fi
+		if test "x$use_libpthread" = "xyes" ; then
+			HB_LIBS="$HB_LIBS -lpthread"
+		fi
+		HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
+		;;
+	*-*-freebsd*)
 		HB_LIBS="$HB_LIBS -lpthread"
-	fi
-	HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
-	;;
-  *-*-freebsd*)
-	HB_LIBS="$HB_LIBS -lpthread"
-	if test "x$use_qsv" = "xyes" ; then
-		HB_LIBS="$HB_LIBS -lva -lva-drm"
-	fi
-	;;
-  *-*-netbsd*)
-	HB_LIBS="$HB_LIBS -pthread"
-	;;
-  *-*-linux*)
-	if test "x$use_qsv" = "xyes" ; then
-		HB_LIBS="$HB_LIBS -lva -lva-drm"
-	fi
-	if test "x$use_x265" = "xyes" ; then
-	if test "x$use_numa" = "xyes" ; then
-		HB_LIBS="$HB_LIBS -lnuma"
-	fi
-	fi
-	HB_LIBS="$HB_LIBS -ldl -lpthread"
-	;;
-  *)
-	HB_LIBS="$HB_LIBS -ldl -lpthread"
-	;;
+		if test "x$use_qsv" = "xyes" ; then
+			HB_LIBS="$HB_LIBS -lva -lva-drm"
+		fi
+		;;
+	*-*-netbsd*)
+		HB_LIBS="$HB_LIBS -pthread"
+		;;
+	*-*-linux*)
+		if test "x$use_qsv" = "xyes" ; then
+			HB_LIBS="$HB_LIBS -lva -lva-drm"
+		fi
+		if test "x$use_x265" = "xyes" ; then
+			if test "x$use_numa" = "xyes" ; then
+				HB_LIBS="$HB_LIBS -lnuma"
+			fi
+		fi
+		HB_LIBS="$HB_LIBS -ldl -lpthread"
+		;;
+	*)
+		HB_LIBS="$HB_LIBS -ldl -lpthread"
+		;;
 esac
 
 AM_CONDITIONAL([GHB_FLATPAK], [test "$use_flatpak" = "yes"])
