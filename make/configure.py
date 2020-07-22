@@ -2029,7 +2029,7 @@ int main()
         doc.addBlank()
         if not dlfcn.fail:
             doc.add( 'HAS.dlfcn', 1 )
-        elif not pthread.fail:
+        if not pthread.fail:
             doc.add( 'HAS.pthread', 1 )
         if not bz2.fail:
             doc.add( 'HAS.bz2', 1 )
