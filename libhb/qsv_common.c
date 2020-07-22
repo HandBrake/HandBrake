@@ -2317,8 +2317,6 @@ void hb_qsv_force_workarounds()
 // TODO: Moving globals to pv->context->opaque = job in decavcodecvInit where get_format is assigned
 AVBufferRef *hb_hw_device_ctx = NULL;
 char *qsv_device = NULL;
-static mfxHDL device_manager_handle = NULL;
-static mfxHandleType device_manager_handle_type;
 
 #if defined(_WIN32) || defined(__MINGW32__)
 // Direct X
@@ -2331,6 +2329,9 @@ static mfxHandleType device_manager_handle_type;
 #if HAVE_DXGIDEBUG_H
 #include <dxgidebug.h>
 #endif
+
+static mfxHDL device_manager_handle = NULL;
+static mfxHandleType device_manager_handle_type;
 
 static ID3D11DeviceContext *device_context = NULL;
 
@@ -3166,31 +3167,6 @@ int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
     return (qsv_encoder_enabled && qsv_decoder_enabled);
 }
 
-hb_qsv_context* hb_qsv_context_init()
-{
-    hb_qsv_context *ctx;
-    ctx = av_mallocz(sizeof(hb_qsv_context));
-    if (!ctx)
-    {
-        hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
-        return NULL;
-    }
-    hb_qsv_add_context_usage(ctx, 0);
-    return ctx;
-}
-
-void hb_qsv_context_uninit(hb_qsv_context ** _ctx)
-{
-    hb_qsv_context *ctx = *_ctx;
-    if ( ctx == NULL )
-    {
-        hb_error( "hb_qsv_context_uninit: ctx is NULL" );
-        return;
-    }
-    av_free(ctx);
-    *_ctx = NULL;
-}
-
 int hb_qsv_sanitize_filter_list(hb_job_t *job)
 {
     /*
@@ -3253,7 +3229,7 @@ int hb_qsv_hw_frames_init(int coded_width, int coded_height, enum AVPixelFormat 
     return -1;
 }
 
-hb_buffer_t* hb_qsv_copy_frame(HBQSVFramesContext* hb_qsv_frames_ctx, AVFrame *frame, hb_qsv_context *qsv_ctx, int is_vpp)
+hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
 {
     return NULL;
 }
@@ -3268,12 +3244,12 @@ void hb_qsv_get_free_surface_from_pool_with_range(HBQSVFramesContext* hb_enc_qsv
     return;
 }
 
-int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface)
+int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid, mfxFrameSurface1 *surface)
 {
     return -1;
 }
 
-int hb_qsv_release_surface_from_pool(const QSVMid *mid)
+int hb_qsv_release_surface_from_pool(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid)
 {
     return -1;
 }
@@ -3310,7 +3286,42 @@ static int hb_d3d11va_device_check()
 {
     return -1;
 }
+
+void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
+{
+}
+
+int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface)
+{
+    return -1;
+}
+
 #endif
+
+hb_qsv_context* hb_qsv_context_init()
+{
+    hb_qsv_context *ctx;
+    ctx = av_mallocz(sizeof(hb_qsv_context));
+    if (!ctx)
+    {
+        hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
+        return NULL;
+    }
+    hb_qsv_add_context_usage(ctx, 0);
+    return ctx;
+}
+
+void hb_qsv_context_uninit(hb_qsv_context ** _ctx)
+{
+    hb_qsv_context *ctx = *_ctx;
+    if ( ctx == NULL )
+    {
+        hb_error( "hb_qsv_context_uninit: ctx is NULL" );
+        return;
+    }
+    av_free(ctx);
+    *_ctx = NULL;
+}
 
 #else
 

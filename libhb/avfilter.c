@@ -11,7 +11,7 @@
 #include "handbrake/hbavfilter.h"
 #include "handbrake/avfilter_priv.h"
 
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
 #endif
 
@@ -237,7 +237,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
     hb_buffer_list_t   list;
     hb_buffer_t      * buf = NULL, * next = NULL;
     int av_frame_is_not_null = 1; // TODO: find the reason for emply input av_frame for ffmpeg filters
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
     // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
     if (hb_qsv_hw_filters_are_enabled(pv->input.job) && in && in->qsv_details.frame)
@@ -259,7 +259,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
         hb_buffer_list_append(&pv->list, buf);
         buf = hb_avfilter_get_buf(pv->graph);
     }
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     if (hb_qsv_hw_filters_are_enabled(pv->input.job) && surface)
     {
         hb_qsv_release_surface_from_pool_by_surface_pointer(pv->input.job->qsv.ctx->hb_dec_qsv_frames_ctx, surface);
