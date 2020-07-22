@@ -1363,7 +1363,7 @@ static void do_job(hb_job_t *job)
 
         sanitize_filter_list(job->list_filter, title->geometry);
 
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         // sanitize_qsv looks for subtitle render filter, so must happen after
         // sanitize_subtitle
         if(hb_qsv_is_enabled(job))

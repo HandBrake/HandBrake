@@ -9,7 +9,7 @@
 
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
 #include "handbrake/qsv_common.h"
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
@@ -91,7 +91,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t * avfilter   = hb_dict_init();
     hb_dict_t * avsettings = hb_dict_init();
 
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     if (hb_qsv_hw_filters_are_enabled(init->job))
     {
         hb_dict_set_int(avsettings, "w", width);
@@ -167,7 +167,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     avfilter   = hb_dict_init();
     avsettings = hb_dict_init();
 
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     if (!hb_qsv_hw_filters_are_enabled(init->job))
 #endif
     {

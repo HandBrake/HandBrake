@@ -1174,7 +1174,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         orig_height        != pv->frame->height)
     {
         settings = hb_dict_init();
-#if HB_PROJECT_FEATURE_QSV
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         if (hb_qsv_hw_filters_are_enabled(pv->job))
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
