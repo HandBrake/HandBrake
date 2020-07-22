@@ -230,8 +230,6 @@ case $host in
 	fi
 	if test "x$use_libpthread" = "xyes" ; then
 		HB_LIBS="$HB_LIBS -lpthread"
-	else
-		HB_LIBS="$HB_LIBS -lpthreadGC2"
 	fi
 	HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
 	;;
