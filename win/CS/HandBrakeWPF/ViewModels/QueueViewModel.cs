@@ -233,14 +233,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsQueueRunning = false;
         }
 
-        public void PauseJob(QueueTask task)
-        {
-            if (task != null)
-            {
-                this.queueProcessor.Pause(task);
-            }
-        }
-
         public void PauseQueueToolbar()
         {
             this.PauseQueue();

@@ -172,7 +172,6 @@
                         <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
                             <Separator />
-                            <!--<MenuItem x:Name="PauseJobMenuItem" Header="{x:Static Properties:Resources.QueueView_Pause}" Click="QueueItem_PauseJobs" />-->
                             <MenuItem x:Name="ResetMenuItem" Header="{x:Static Properties:Resources.QueueView_Reset}" Click="QueueItem_Retry" />
                             <MenuItem x:Name="DeleteMenuItem" Header="{x:Static Properties:Resources.QueueView_Delete}" Click="QueueItem_Delete" />
                             <Separator />
