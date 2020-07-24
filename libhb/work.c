@@ -1351,7 +1351,7 @@ static void do_job(hb_job_t *job)
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if(hb_qsv_is_enabled(job))
+    if (hb_qsv_is_enabled(job))
         job->qsv.ctx = hb_qsv_context_init();
 #endif
 
@@ -1366,7 +1366,7 @@ static void do_job(hb_job_t *job)
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         // sanitize_qsv looks for subtitle render filter, so must happen after
         // sanitize_subtitle
-        if(hb_qsv_is_enabled(job))
+        if (hb_qsv_is_enabled(job))
         {
             result = hb_qsv_sanitize_filter_list(job);
             if (result)
@@ -1823,7 +1823,8 @@ cleanup:
     }
     hb_buffer_pool_free();
 #if HB_PROJECT_FEATURE_QSV
-    hb_qsv_context_uninit(&job->qsv.ctx);
+    if (hb_qsv_is_enabled(job))
+        hb_qsv_context_uninit(job);
 #endif
 }
 

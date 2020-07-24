@@ -2564,6 +2564,9 @@ static int hb_qsv_find_surface_idx(const QSVMid *mids, const int nb_mids, const 
 
 int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const QSVMid *mid, mfxFrameSurface1 *surface)
 {
+    if (!hb_enc_qsv_frames_ctx || !surface)
+        return -1;
+
     int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx->mids, hb_enc_qsv_frames_ctx->nb_mids, mid);
     if (ret < 0)
     {
@@ -2577,57 +2580,31 @@ int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const 
     return 0;
 }
 
-int hb_qsv_release_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const QSVMid *mid)
-{
-    int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx->mids, hb_enc_qsv_frames_ctx->nb_mids, mid);
-    if (ret < 0)
-    {
-        hb_error("hb_qsv_release_surface_from_pool: Surface with MemId=%p has not been found in the pool", mid);
-        return -1;
-    }
-    else if(hb_enc_qsv_frames_ctx->pool[ret] == 1)
-    {
-        ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx->pool[ret]);
-    }
-    else
-    {
-        hb_error("hb_qsv_release_surface_from_pool: Surface with index=%d and MemId=%p is used more than once", ret, mid);
-        return -1;
-    }
-    return 0;
-}
-
 int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_enc_qsv_frames_ctx, const mfxFrameSurface1 *surface)
 {
-    int count = 0;
+    if (!hb_enc_qsv_frames_ctx || !surface)
+        return -1;
 
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx->hw_frames_ctx->data;
     AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
 
-    while(1)
+    for(int i = 0; i < hb_enc_qsv_frames_ctx->nb_mids; i++)
     {
-        if(count > 30)
+        mfxFrameSurface1 *pool_surface = &frames_hwctx->surfaces[i];
+        if(surface == pool_surface)
         {
-            hb_error("hb_qsv_release_surface_from_pool_by_surface: surface=%p has not been found or busy", surface);
-            hb_qsv_sleep(10); // prevent hang when all surfaces all used
-            count = 0;
+            ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx->pool[i]);
+            return 0;
         }
-
-        for(int i = 0; i < hb_enc_qsv_frames_ctx->nb_mids; i++)
-        {
-            mfxFrameSurface1 *pool_surface = &frames_hwctx->surfaces[i];
-            if( (pool_surface->Data.Locked == 0) && (surface == pool_surface))
-            {
-                ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx->pool[i]);
-                return 0;
-            }
-        }
-        count++;
     }
+    return -1;
 }
 
-void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
+int hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
 {
+    if (!hb_enc_qsv_frames_ctx || !surface)
+        return -1;
+
     QSVMid *mid = NULL;
     
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx->hw_frames_ctx->data;
@@ -2650,7 +2627,7 @@ void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_c
             if( (pool_surface->Data.Locked == 0) && (surface == pool_surface))
             {
                 *out_mid = mid;
-                return;
+                return 0;
             }
         }
         count++;
@@ -2659,6 +2636,9 @@ void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_c
 
 int hb_qsv_get_free_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, AVFrame* frame, QSVMid** out_mid)
 {
+    if (!hb_enc_qsv_frames_ctx || !frame)
+        return -1;
+
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx->hw_frames_ctx->data;
     AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
 
@@ -2846,12 +2826,6 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
         hb_error("hb_qsv_copy_frame: av_frame_copy_props error %d", ret);
     }
     
-    // copy content of input frame
-    ret = av_frame_copy(out->qsv_details.frame, frame);
-    if (ret < 0) {
-        hb_error("hb_qsv_copy_frame: av_frame_copy error %d", ret);
-    }
-
     QSVMid *mid = NULL;
     mfxFrameSurface1* output_surface = NULL;
     HBQSVFramesContext* hb_qsv_frames_ctx = NULL;
@@ -3249,11 +3223,6 @@ int hb_qsv_replace_surface_mid(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVM
     return -1;
 }
 
-int hb_qsv_release_surface_from_pool(HBQSVFramesContext* hb_qsv_frames_ctx, const QSVMid *mid)
-{
-    return -1;
-}
-
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)
 {
     return AV_PIX_FMT_NONE;
@@ -3287,7 +3256,7 @@ static int hb_d3d11va_device_check()
     return -1;
 }
 
-void hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
+int hb_qsv_get_mid_by_surface_from_pool(HBQSVFramesContext* hb_enc_qsv_frames_ctx, mfxFrameSurface1 *surface, QSVMid **out_mid)
 {
 }
 
@@ -3311,16 +3280,18 @@ hb_qsv_context* hb_qsv_context_init()
     return ctx;
 }
 
-void hb_qsv_context_uninit(hb_qsv_context ** _ctx)
+void hb_qsv_context_uninit(hb_job_t *job)
 {
-    hb_qsv_context *ctx = *_ctx;
+    hb_qsv_context *ctx = job->qsv.ctx;
     if ( ctx == NULL )
     {
         hb_error( "hb_qsv_context_uninit: ctx is NULL" );
         return;
     }
+    /* QSV context cleanup and MFXClose */
+    hb_qsv_context_clean(ctx, hb_qsv_full_path_is_enabled(job));
     av_free(ctx);
-    *_ctx = NULL;
+    job->qsv.ctx = NULL;
 }
 
 #else

@@ -756,9 +756,6 @@ int qsv_enc_init(hb_work_private_t *pv)
         // if only for encode
         if (pv->is_sys_mem)
         {
-            // no need to use additional sync as encode only -> single thread
-            hb_qsv_add_context_usage(qsv, 0);
-
             // re-use the session from encqsvInit
             qsv->mfx_session = pv->mfx_session;
         }
@@ -1766,9 +1763,6 @@ void encqsvClose(hb_work_object_t *w)
 
             hb_qsv_uninit_enc(pv->job);
 
-            /* QSV context cleanup and MFXClose */
-            hb_qsv_context_clean(qsv_ctx,hb_qsv_full_path_is_enabled(pv->job));
-
             hb_display_close(&pv->display);
 
             if (qsv_enc_space != NULL)
@@ -2152,11 +2146,11 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 {
                     if (hb_qsv_hw_filters_are_enabled(pv->job))
                     {
-                        hb_qsv_release_surface_from_pool(pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx, surface->Data.MemId);
+                        hb_qsv_release_surface_from_pool_by_surface_pointer(pv->job->qsv.ctx->hb_vpp_qsv_frames_ctx, surface);
                     }
                     else
                     {
-                        hb_qsv_release_surface_from_pool(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, surface->Data.MemId);
+                        hb_qsv_release_surface_from_pool_by_surface_pointer(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, surface);
                     }
                 }
 
