@@ -211,13 +211,19 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// <summary>
         /// Stop the current encode and pause the queue.
         /// </summary>
-        void Stop();
+        /// <param name="stopExistingJobs">
+        /// Set to false to allow existing jobs to complete.
+        /// </param>
+        void Stop(bool stopExistingJobs);
 
         /// <summary>
         /// Pause the queue but allow the current encode to complete.
         /// </summary>
-        void Pause();
-        
+        /// <param name="pauseJobs">
+        /// Also pause the active jobs
+        /// </param>
+        void Pause(bool pauseJobs);
+
         /// <summary>
         /// Get the status of all running queue jobs.
         /// </summary>

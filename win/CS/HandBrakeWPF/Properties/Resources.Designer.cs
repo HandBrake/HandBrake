@@ -4942,7 +4942,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pause Queue.
+        ///   Looks up a localized string similar to Pause.
         /// </summary>
         public static string QueueView_Pause {
             get {
@@ -5055,6 +5055,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_StatsNotAvailableYet {
             get {
                 return ResourceManager.GetString("QueueView_StatsNotAvailableYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string QueueView_Stop {
+            get {
+                return ResourceManager.GetString("QueueView_Stop", resourceCulture);
             }
         }
         

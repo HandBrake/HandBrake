@@ -233,7 +233,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        this.Stop();
+                        this.Stop(true);
 
                         foreach (QueueTask task in duplicates)
                         {
@@ -455,13 +455,16 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        public void Pause()
+        public void Pause(bool pauseJobs)
         {
-            foreach (ActiveJob job in this.activeJobs)
+            if (pauseJobs)
             {
-                if (job.IsEncoding && !job.IsPaused)
+                foreach (ActiveJob job in this.activeJobs)
                 {
-                    job.Pause();
+                    if (job.IsEncoding && !job.IsPaused)
+                    {
+                        job.Pause();
+                    }
                 }
             }
             
@@ -493,20 +496,27 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = true;
         }
 
-        public void Stop()
+        public void Stop(bool stopExistingJobs)
         {
-            foreach (ActiveJob job in this.activeJobs)
+            if (stopExistingJobs)
             {
-                if (job.IsEncoding || job.IsPaused)
+                foreach (ActiveJob job in this.activeJobs)
                 {
-                    job.Stop();
+                    if (job.IsEncoding || job.IsPaused)
+                    {
+                        job.Stop();
+                    }
                 }
             }
 
             this.IsProcessing = false;
             this.IsPaused = false;
-            this.InvokeQueueChanged(EventArgs.Empty);
-            this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
+
+            if (stopExistingJobs || this.activeJobs.Count == 0)
+            {
+                this.InvokeQueueChanged(EventArgs.Empty);
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
+            }
         }
 
         public List<QueueProgressStatus> GetQueueProgressStatus()
@@ -630,6 +640,11 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.ProcessNextJob();
             }
+            else
+            {
+                this.InvokeQueueChanged(EventArgs.Empty);
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
+            }
         }
 
         private void InvokeQueueCompleted(QueueCompletedEventArgs e)
@@ -686,7 +701,7 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.logService.LogMessage(Resources.PauseOnLowDiskspace);
                 job.Status = QueueItemStatus.Waiting;
-                this.Pause();
+                this.Pause(true);
                 this.BackupQueue(string.Empty);
                 return true; // Don't start the next job.
             }

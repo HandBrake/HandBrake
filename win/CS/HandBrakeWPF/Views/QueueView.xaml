@@ -100,13 +100,24 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Name="Pause" AutomationProperties.Name="Pause Queue" cal:Message.Attach="[Event Click] = [Action PauseQueueToolbar]" Grid.Column="1"
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Pause}" cal:Message.Attach="[Event Click] = [Action PauseQueueToolbar]"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Pause.png" />
-                            <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Pause}" />
-                        </StackPanel>
-                    </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Pause.png" />
+                                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Pause}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Stop}" cal:Message.Attach="[Event Click] = [Action StopQueue]"
+                                Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                                Margin="5,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/stop.png" />
+                                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.QueueView_Stop}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
 
                     <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="3" Margin="0,0,0,0" >
                         <MenuItem>
@@ -161,6 +172,7 @@
                         <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
                             <Separator />
+                            <!--<MenuItem x:Name="PauseJobMenuItem" Header="{x:Static Properties:Resources.QueueView_Pause}" Click="QueueItem_PauseJobs" />-->
                             <MenuItem x:Name="ResetMenuItem" Header="{x:Static Properties:Resources.QueueView_Reset}" Click="QueueItem_Retry" />
                             <MenuItem x:Name="DeleteMenuItem" Header="{x:Static Properties:Resources.QueueView_Delete}" Click="QueueItem_Delete" />
                             <Separator />

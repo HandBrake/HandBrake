@@ -227,15 +227,55 @@ namespace HandBrakeWPF.ViewModels
 
         public void PauseQueue()
         {
-            this.queueProcessor.Pause();
+            this.queueProcessor.Pause(true);
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
         }
 
+        public void PauseJob(QueueTask task)
+        {
+            if (task != null)
+            {
+                this.queueProcessor.Pause(task);
+            }
+        }
+
         public void PauseQueueToolbar()
         {
             this.PauseQueue();
+        }
+
+        public void StopQueue()
+        {
+            if (this.queueProcessor.IsEncoding)
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(
+                    "There are currently jobs running. Would you like to complete the current jobs before stopping the queue?",
+                    "Confirm",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.queueProcessor.Stop(false);
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+                else
+                {
+                    this.queueProcessor.Stop(true);
+                }
+            }
+            else
+            {
+                this.queueProcessor.Stop(true);
+            }
+
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+            this.IsQueueRunning = false;
         }
 
         public void RemoveSelectedJobs()
@@ -286,7 +326,6 @@ namespace HandBrakeWPF.ViewModels
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    this.queueProcessor.Stop();
                     this.queueProcessor.Remove(task);
                     removed = true;
                 }

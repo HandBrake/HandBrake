@@ -1452,7 +1452,7 @@ Would you like to overwrite it?</value>
     <value>Options</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pause Queue</value>
+    <value>Pause</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Paused Duration:</value>
@@ -2339,5 +2339,8 @@ Please choose a different preset.</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
     <value>(Not supported on this system)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Stop</value>
   </data>
 </root>

@@ -77,7 +77,7 @@ namespace HandBrakeWPF.Services
                         string.Format(
                             Resources.SystemService_LowDiskSpaceLog,
                             lowLevel / 1000 / 1000 / 1000));
-                    this.queueService.Pause();
+                    this.queueService.Pause(true);
                     this.storageLowPause = true;
                 }
             }
@@ -104,7 +104,7 @@ namespace HandBrakeWPF.Services
                 if (this.queueService.IsEncoding && !this.queueService.IsPaused)
                 {
                     this.lowPowerPause = true;
-                    this.queueService.Pause();
+                    this.queueService.Pause(true);
                 }
 
                 Win32.AllowSleep();

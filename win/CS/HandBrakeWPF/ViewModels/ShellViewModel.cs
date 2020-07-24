@@ -201,11 +201,12 @@ namespace HandBrakeWPF.ViewModels
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    processor.Stop();
+                    processor.Stop(true);
                     this.MainViewModel?.Shutdown();
 
                     return true;
                 }
+
                 return false;
             }
 

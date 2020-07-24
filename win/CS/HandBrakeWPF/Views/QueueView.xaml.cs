@@ -1,33 +1,24 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QueueTwoView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="QueueView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
-// <summary>
-//   Interaction logic for QueueTwoView.xaml
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Views
 {
-    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Windows.Media.Animation;
 
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
 
-    /// <summary>
-    /// Interaction logic for VideoView
-    /// </summary>
     public partial class QueueView : Window
     {
         private QueueTask mouseActiveQueueTask;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueueView"/> class.
-        /// </summary>
         public QueueView()
         {
             this.InitializeComponent();
@@ -163,6 +154,11 @@ namespace HandBrakeWPF.Views
             {
                 ((QueueViewModel)this.DataContext).RetryJob(this.mouseActiveQueueTask);
             }
+        }
+
+        private void QueueItem_PauseJobs(object sender, RoutedEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).PauseJob(this.mouseActiveQueueTask);
         }
 
         private void QueueItem_Edit(object sender, RoutedEventArgs e)
