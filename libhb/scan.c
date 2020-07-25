@@ -554,6 +554,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     hb_stream_t      * stream = NULL;
     info_list_t      * info_list;
     int                abort_audio = 0;
+    // TODO: Expose this as an option in GUI
+    bool               conservative_crop = FALSE;
 
     info_list = calloc(data->preview_count+1, sizeof(*info_list));
     crop_record_t *crops = crop_record_init( data->preview_count );
@@ -1072,11 +1074,15 @@ skip_preview:
             sort_crops( crops );
             // The next line selects median cropping - at least
             // 50% of the frames will have their borders removed.
-            // Other possible choices are loose cropping (i = 0) where
+            // Other possible choices are conservative cropping (i = 0) where
             // no non-black pixels will be cropped from any frame and a
-            // tight cropping (i = crops->n - (crops->n >> 2)) where at
+            // aggressive cropping (i = crops->n - (crops->n >> 2)) where at
             // least 75% of the frames will have their borders removed.
             i = crops->n >> 1;
+            if ( conservative_crop )
+            {
+                i = 0;
+            }
             title->crop[0] = EVEN( crops->t[i] );
             title->crop[1] = EVEN( crops->b[i] );
             title->crop[2] = EVEN( crops->l[i] );
