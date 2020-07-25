@@ -156,11 +156,6 @@ namespace HandBrakeWPF.Views
             }
         }
 
-        private void QueueItem_PauseJobs(object sender, RoutedEventArgs e)
-        {
-            ((QueueViewModel)this.DataContext).PauseJob(this.mouseActiveQueueTask);
-        }
-
         private void QueueItem_Edit(object sender, RoutedEventArgs e)
         {
             ((QueueViewModel)this.DataContext).EditJob(this.mouseActiveQueueTask);
