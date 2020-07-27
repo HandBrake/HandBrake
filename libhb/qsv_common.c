@@ -1892,7 +1892,14 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
         }
         else if (!strcasecmp(preset, "speed"))
         {
-            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
+            {
+                // Since IceLake only
+                param->rc.lookahead                = 0;
+                param->videoParam->mfx.NumRefFrame = 1;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_7;
+            }
+            else if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
             {
                 /*
                  * HSW TargetUsage:     6
