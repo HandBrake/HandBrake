@@ -1945,6 +1945,11 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
     return 0;
 }
 
+int hb_qsv_param_default_async_depth()
+{
+    return qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7 ? 6 : HB_QSV_ASYNC_DEPTH_DEFAULT;
+}
+
 int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
                          hb_qsv_info_t  *info)
 {
@@ -2047,14 +2052,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
         param->videoParam->mfx.LowPower     = MFX_CODINGOPTION_OFF; // use Media SDK default
         // introduced in API 1.1
-        if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
-        {
-            param->videoParam->AsyncDepth = 6;
-        }
-        else
-        {
-            param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
-        }
+        param->videoParam->AsyncDepth       = hb_qsv_param_default_async_depth();
         // introduced in API 1.3
         param->videoParam->mfx.BRCParamMultiplier = 0; // no multiplier
 
