@@ -2907,8 +2907,9 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
         return out;
     }
     out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
-    out->qsv_details.qsv_atom = 0;
-    out->qsv_details.ctx      = job->qsv.ctx;
+    out->qsv_details.qsv_frames_ctx = hb_qsv_frames_ctx;
+    out->qsv_details.qsv_atom       = 0;
+    out->qsv_details.ctx            = job->qsv.ctx;
     return out;
 }
 

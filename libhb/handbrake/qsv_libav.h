@@ -252,6 +252,7 @@ typedef struct hb_qsv_stage {
     struct {
         mfxBitstream *p_bs;
         mfxFrameSurface1 *p_surface;
+        HBQSVFramesContext *p_frames_ctx;
     } in;
     struct {
         mfxBitstream *p_bs;

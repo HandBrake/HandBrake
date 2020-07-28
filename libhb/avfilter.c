@@ -239,10 +239,12 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
     int av_frame_is_not_null = 1; // TODO: find the reason for emply input av_frame for ffmpeg filters
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
+    HBQSVFramesContext *frames_ctx = NULL;
     // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
     if (hb_qsv_hw_filters_are_enabled(pv->input.job) && in && in->qsv_details.frame)
     {
         surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
+        frames_ctx = in->qsv_details.qsv_frames_ctx;
     }
     else
     {
@@ -262,7 +264,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     if (hb_qsv_hw_filters_are_enabled(pv->input.job) && surface)
     {
-        hb_qsv_release_surface_from_pool_by_surface_pointer(pv->input.job->qsv.ctx->hb_dec_qsv_frames_ctx, surface);
+        hb_qsv_release_surface_from_pool_by_surface_pointer(frames_ctx, surface);
     }
 #endif
     // Delay one frame so we can set the stop time of the output buffer
