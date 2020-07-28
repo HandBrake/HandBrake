@@ -1139,10 +1139,15 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
     }
-
     // Make sure QSV Decode is only True if the hardware is available.
     job->qsv.decode = job->qsv.decode && hb_qsv_available();
-
+#if HB_PROJECT_FEATURE_QSV
+    int async_depth_default = hb_qsv_param_default_async_depth();
+    if(job->qsv.async_depth <= 0 || job->qsv.async_depth > async_depth_default)
+    {
+        job->qsv.async_depth = async_depth_default;
+    }
+#endif
     // Lookup mux id
     if (hb_value_type(mux) == HB_VALUE_TYPE_STRING)
     {
