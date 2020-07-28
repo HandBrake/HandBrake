@@ -153,10 +153,11 @@ struct hb_buffer_s
 #if HB_PROJECT_FEATURE_QSV
     struct qsv
     {
-        void           * qsv_atom;
-        AVFrame        * frame;
-        void           * filter_details;
-        hb_qsv_context * ctx;
+        void               * qsv_atom;
+        AVFrame            * frame;
+        void               * filter_details;
+        hb_qsv_context     * ctx;
+        HBQSVFramesContext * qsv_frames_ctx;
     } qsv_details;
 #endif
 
