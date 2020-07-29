@@ -1421,7 +1421,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                         return 1;
                     }
                 }
-                hb_qsv_update_frames_context(pv->job);
                 if (!pv->job->qsv.ctx->dec_space)
                 {
                     pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));
@@ -1474,9 +1473,10 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         if (pv->qsv.decode &&
             pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
-            // assign callbacks
-            pv->context->get_format = hb_qsv_get_format;
-            pv->context->get_buffer2 = hb_qsv_get_buffer;
+            // assign callbacks and job to have access to qsv context from ffmpeg
+            pv->context->get_format      = hb_qsv_get_format;
+            pv->context->get_buffer2     = hb_qsv_get_buffer;
+            pv->context->opaque          = pv->job;
             pv->context->hwaccel_context = 0;
         }
 #endif

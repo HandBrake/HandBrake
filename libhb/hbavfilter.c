@@ -128,7 +128,7 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
                 init->vrate.num, init->vrate.den);
 
         AVBufferRef *hb_hw_frames_ctx = NULL;
-        result = hb_create_ffmpeg_pool(init->geometry.width, init->geometry.height, AV_PIX_FMT_NV12, 32, 0, &hb_hw_frames_ctx);
+        result = hb_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, AV_PIX_FMT_NV12, 32, 0, &hb_hw_frames_ctx);
         if (result < 0)
         {
             hb_error("hb_create_ffmpeg_pool failed");

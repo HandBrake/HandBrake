@@ -97,7 +97,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
         hb_dict_set(avfilter, "scale_qsv", avsettings);
-        int result = hb_create_ffmpeg_pool(width, height, AV_PIX_FMT_NV12, HB_QSV_POOL_SURFACE_SIZE, 0, &init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
+        int result = hb_create_ffmpeg_pool(init->job, width, height, AV_PIX_FMT_NV12, HB_QSV_POOL_SURFACE_SIZE, 0, &init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
         if (result < 0)
         {
             hb_error("hb_create_ffmpeg_pool vpp allocation failed");
