@@ -42,8 +42,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "libavutil/hwcontext.h"
 #include <mfx/mfxvideo.h>
 
-extern AVBufferRef *hb_hw_device_ctx;
-
 /*
  * The frame info struct remembers information about each frame across calls to
  * the encoder. Since frames are uniquely identified by their timestamp, we use
@@ -766,7 +764,7 @@ int qsv_enc_init(hb_work_private_t *pv)
             mfxVersion    ver;
             mfxIMPL       impl;
 
-            AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
+            AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)qsv->hb_hw_device_ctx->data;
             AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;
             mfxSession        parent_session = device_hwctx->session;
 

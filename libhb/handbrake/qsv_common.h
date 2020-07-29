@@ -226,11 +226,9 @@ int hb_qsv_is_enabled(hb_job_t *job);
 hb_qsv_context* hb_qsv_context_init();
 void hb_qsv_context_uninit(hb_job_t *job);
 int hb_qsv_sanitize_filter_list(hb_job_t *job);
-int hb_qsv_hw_frames_init(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
-int hb_create_ffmpeg_pool(int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
+int hb_qsv_hw_frames_init(AVCodecContext *s);
+int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx);
 int hb_qsv_hw_filters_are_enabled(hb_job_t *job);
-// TODO: After moving globals to pv->context->opaque = job remove hb_qsv_update_frames_context()
-void hb_qsv_update_frames_context(hb_job_t *job);
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
 AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref);
 hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp);
