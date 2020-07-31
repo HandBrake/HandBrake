@@ -239,6 +239,16 @@
                                 <ComboBox Width="200" ItemsSource="{Binding FileOverwriteBehaviourList, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedOverwriteBehaviour}" HorizontalAlignment="Left" />
                             </StackPanel>
                         </StackPanel>
+
+
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Metadata}" FontSize="14" Margin="0,20,0,10"/>
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <CheckBox Content="{x:Static Properties:Resources.Options_PassthruMetadata}" IsChecked="{Binding PassthruMetadata}" ToolTip="{x:Static Properties:Resources.Options_PassthruMetadataTooltip}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        
                     </StackPanel>
                 </StackPanel>
 

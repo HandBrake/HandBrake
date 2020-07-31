@@ -69,6 +69,8 @@ namespace HandBrakeWPF.Services.Queue
         private int jobIdCounter = 0;
         private bool processIsolationEnabled;
 
+        private EncodeTaskFactory encodeTaskFactory;
+
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider, IPortService portService)
         {
             this.userSettingService = userSettingService;
@@ -83,6 +85,8 @@ namespace HandBrakeWPF.Services.Queue
 
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
             this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
+
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, hbFunctionsProvider.GetHbFunctionsWrapper());
         }
 
         public event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
@@ -688,7 +692,7 @@ namespace HandBrakeWPF.Services.Queue
             List<Task> queueJobs = new List<Task>();
             foreach (var item in tasks)
             {
-                Task task = new Task { Job = EncodeTaskFactory.Create(item, configuration, hbFunctions) };
+                Task task = new Task { Job = this.encodeTaskFactory.Create(item, configuration) };
                 queueJobs.Add(task);
             }
 

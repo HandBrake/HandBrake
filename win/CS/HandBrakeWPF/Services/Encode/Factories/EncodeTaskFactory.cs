@@ -24,7 +24,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Model.Filters;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json.Linq;
@@ -48,57 +48,35 @@ namespace HandBrakeWPF.Services.Encode.Factories
     /// </summary>
     internal class EncodeTaskFactory
     {
-        // TODO make this non-static
-        private static IHbFunctions hbFunctions;
+        private readonly IUserSettingService userSettingService;
+        private IHbFunctions hbFunctions;
 
-        /// <summary>
-        /// The create.
-        /// </summary>
-        /// <param name="job">
-        /// The encode job.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <param name="hbFunctionsWrapper">
-        /// An instance of IHbFunctions
-        /// </param>
-        /// <returns>
-        /// The <see cref="JsonEncodeObject"/>.
-        /// </returns>
-        internal static JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration, IHbFunctions hbFunctionsWrapper)
+        public EncodeTaskFactory(IUserSettingService userSettingService, IHbFunctions hbFunctionsWrapper)
         {
-            hbFunctions = hbFunctionsWrapper;
+            this.userSettingService = userSettingService;
 
+            this.hbFunctions = hbFunctionsWrapper;
+        }
+
+        internal JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration)
+        {
             JsonEncodeObject encode = new JsonEncodeObject
-            {
-                SequenceID = 0,
-                Audio = CreateAudio(job),
-                Destination = CreateDestination(job),
-                Filters = CreateFilters(job),
-                PAR = CreatePAR(job),
-                Metadata = CreateMetadata(job),
-                Source = CreateSource(job, configuration),
-                Subtitle = CreateSubtitle(job),
-                Video = CreateVideo(job, configuration)
-            };
+                                      {
+                                          SequenceID = 0,
+                                          Audio = CreateAudio(job),
+                                          Destination = CreateDestination(job),
+                                          Filters = CreateFilters(job),
+                                          PAR = CreatePAR(job),
+                                          Metadata = CreateMetadata(job),
+                                          Source = CreateSource(job, configuration),
+                                          Subtitle = CreateSubtitle(job),
+                                          Video = CreateVideo(job, configuration)
+                                      };
 
             return encode;
         }
 
-        /// <summary>
-        /// The create source.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Source"/>.
-        /// </returns>
-        private static Source CreateSource(EncodeTask job, HBConfiguration configuration)
+        private Source CreateSource(EncodeTask job, HBConfiguration configuration)
         {
             Range range = new Range();
             switch (job.PointToPointMode)
@@ -135,17 +113,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
             };
             return source;
         }
-
-        /// <summary>
-        /// The create destination.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Destination"/>.
-        /// </returns>
-        private static Destination CreateDestination(EncodeTask job)
+        
+        private Destination CreateDestination(EncodeTask job)
         {
             Destination destination = new Destination
             {
@@ -173,30 +142,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return destination;
         }
 
-        /// <summary>
-        /// Create the PAR object
-        /// </summary>
-        /// <param name="job">
-        /// The Job
-        /// </param>
-        /// <returns>
-        /// The produced PAR object.
-        /// </returns>
-        private static PAR CreatePAR(EncodeTask job)
+        private PAR CreatePAR(EncodeTask job)
         {
             return new PAR { Num = job.PixelAspectX, Den = job.PixelAspectY };
         }
 
-        /// <summary>
-        /// The create subtitle.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="HandBrake.Interop.Interop.Json.Encode.Subtitles"/>.
-        /// </returns>
-        private static Subtitle CreateSubtitle(EncodeTask job)
+        private Subtitle CreateSubtitle(EncodeTask job)
         {
             Subtitles subtitle = new Subtitles
             {
@@ -264,19 +215,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return subtitle;
         }
 
-        /// <summary>
-        /// The create video.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Video"/>.
-        /// </returns>
-        private static Video CreateVideo(EncodeTask job, HBConfiguration configuration)
+        private  Video CreateVideo(EncodeTask job, HBConfiguration configuration)
         {
             Video video = new Video();
 
@@ -336,16 +275,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return video;
         }
 
-        /// <summary>
-        /// The create audio.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Audio"/>.
-        /// </returns>
-        private static Audio CreateAudio(EncodeTask job)
+        private Audio CreateAudio(EncodeTask job)
         {
             Audio audio = new Audio();
 
@@ -412,16 +342,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return audio;
         }
 
-        /// <summary>
-        /// The create filter.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Filters"/>.
-        /// </returns>
-        private static Filters CreateFilters(EncodeTask job)
+        private Filters CreateFilters(EncodeTask job)
         {
             Filters filter = new Filters
             {
@@ -634,34 +555,30 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return filter;
         }
 
-        /// <summary>
-        /// The create meta data.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Metadata"/>.
-        /// </returns>
-        private static Metadata CreateMetadata(EncodeTask job)
+        private Metadata CreateMetadata(EncodeTask job)
         {
-            Metadata metaData = new Metadata();
-
-            if (job.MetaData != null)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MetadataPassthru))
             {
-                metaData.Artist = job.MetaData.Artist;
-                metaData.Album = job.MetaData.Album;
-                metaData.AlbumArtist = job.MetaData.AlbumArtist;
-                metaData.Comment = job.MetaData.Comment;
-                metaData.Composer = job.MetaData.Composer;
-                metaData.Description = job.MetaData.Description;
-                metaData.Genre = job.MetaData.Genre;
-                metaData.LongDescription = job.MetaData.LongDescription;
-                metaData.Name = job.MetaData.Name;
-                metaData.ReleaseDate = job.MetaData.ReleaseDate;
+                if (job.MetaData != null && job.MetaData.IsMetadataSet)
+                {
+                    Metadata metaData = new Metadata();
+                    metaData.Artist = job.MetaData.Artist;
+                    metaData.Album = job.MetaData.Album;
+                    metaData.AlbumArtist = job.MetaData.AlbumArtist;
+                    metaData.Comment = job.MetaData.Comment;
+                    metaData.Composer = job.MetaData.Composer;
+                    metaData.Description = job.MetaData.Description;
+                    metaData.Genre = job.MetaData.Genre;
+                    metaData.LongDescription = job.MetaData.LongDescription;
+                    metaData.Name = job.MetaData.Name;
+                    metaData.ReleaseDate = job.MetaData.ReleaseDate;
+                    return metaData;
+                }
+
+                return null; // Null will allow Libhb to find and passthru any metadata it supports.
             }
 
-            return metaData;
+            return new Metadata(); // Empty Metatdata will not pass through to the destination.  
         }
     }
 }

@@ -40,7 +40,9 @@ namespace HandBrakeWPF.Services.Encode
         private readonly IUserSettingService userSettingService;
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
+        private readonly IPortService portService;
         private readonly object portLock = new object();
+        private readonly EncodeTaskFactory encodeTaskFactory;
         private IEncodeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
@@ -49,8 +51,6 @@ namespace HandBrakeWPF.Services.Encode
         private bool isLoggingInitialised;
         private int encodeCounter;
 
-        private readonly IPortService portService;
-
         public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter, IPortService portService) : base(userSettingService)
         {
             this.userSettingService = userSettingService;
@@ -58,6 +58,7 @@ namespace HandBrakeWPF.Services.Encode
             this.hbFunctionsProvider = hbFunctionsProvider;
             this.encodeCounter = encodeCounter;
             this.portService = portService;
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, hbFunctionsProvider.GetHbFunctionsWrapper());
         }
 
         public bool IsPasued { get; private set; }
@@ -127,10 +128,7 @@ namespace HandBrakeWPF.Services.Encode
                     this.VerifyEncodeDestinationPath(task);
 
                     // Get an EncodeJob object for the Interop Library
-                    JsonEncodeObject work = EncodeTaskFactory.Create(
-                        task,
-                        configuration,
-                        hbFunctionsProvider.GetHbFunctionsWrapper());
+                    JsonEncodeObject work = encodeTaskFactory.Create(task, configuration);
 
                     this.instance.StartEncode(work);
                 }

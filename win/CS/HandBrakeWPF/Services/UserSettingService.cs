@@ -329,6 +329,8 @@ namespace HandBrakeWPF.Services
             // Misc
             defaults.Add(UserSettingConstants.ScalingMode, 0);
             defaults.Add(UserSettingConstants.ForcePresetReset, 3);
+            defaults.Add(UserSettingConstants.MetadataPassthru, true);
+
 
             return defaults;
         }

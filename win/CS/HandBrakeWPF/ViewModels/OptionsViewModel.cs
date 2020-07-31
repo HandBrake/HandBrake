@@ -510,6 +510,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool PassthruMetadata { get; set; }
+
         /* Preview */
 
         public string VLCPath
@@ -1139,7 +1141,7 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
-
+            
             // #############################
             // Output Settings
             // #############################
@@ -1178,6 +1180,8 @@ namespace HandBrakeWPF.ViewModels
             this.PrePostFilenameText = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
 
             this.AlwaysUseDefaultPath = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath);
+
+            this.PassthruMetadata = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MetadataPassthru);
 
             // #############################
             // Picture Tab
@@ -1336,6 +1340,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFileCollisionBehaviour, this.SelectedCollisionBehaviour);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFilePrePostString, this.PrePostFilenameText);
             this.userSettingService.SetUserSetting(UserSettingConstants.AlwaysUseDefaultPath, this.AlwaysUseDefaultPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.MetadataPassthru, this.PassthruMetadata);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
