@@ -10,14 +10,12 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Documents;
     using System.Windows.Media;
 
     using Caliburn.Micro;
@@ -41,9 +39,6 @@ namespace HandBrakeWPF.ViewModels
     using Execute = Caliburn.Micro.Execute;
     using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
 
-    /// <summary>
-    /// The Options View Model
-    /// </summary>
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
         private readonly IUserSettingService userSettingService;
@@ -118,21 +113,6 @@ namespace HandBrakeWPF.ViewModels
 
         private bool enableQuickSyncLowPower;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsViewModel"/> class.
-        /// </summary>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        /// <param name="updateService">
-        /// The update Service.
-        /// </param>
-        /// <param name="aboutViewModel">
-        /// The about View Model.
-        /// </param>
-        /// <param name="errorService">
-        /// The error Service.
-        /// </param>
         public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
         {
             this.Title = "Options";
@@ -146,16 +126,9 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
         }
 
-        
-        /// <summary>
-        /// Gets or sets SelectedTab.
-        /// </summary>
         public OptionsTab SelectedTab
         {
-            get
-            {
-                return this.selectedTab;
-            }
+            get => this.selectedTab;
 
             set
             {
@@ -164,40 +137,19 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the about view model.
-        /// </summary>
         public IAboutViewModel AboutViewModel { get; set; }
 
-        public bool IsUWP
-        {
-            get
-            {
-                return UwpDetect.IsUWP();
-            }
-        }
+        public bool IsUWP { get; } = UwpDetect.IsUWP();
 
-        public bool IsNightly
-        {
-            get
-            {
-                return VersionHelper.IsNightly();
-            }
-        }
+        public bool IsNightly { get; } = VersionHelper.IsNightly();
 
         public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();
 
         public bool HasSystemBattery => PowerService.HasBattery();
 
-        #region General
+        /* General */
 
-        public BindingList<InterfaceLanguage> InterfaceLanguages
-        {
-            get
-            {
-                return new BindingList<InterfaceLanguage>(InterfaceLanguageUtilities.GetUserInterfaceLangauges());
-            }
-        }
+        public BindingList<InterfaceLanguage> InterfaceLanguages { get; } = new BindingList<InterfaceLanguage>(InterfaceLanguageUtilities.GetUserInterfaceLangauges());
 
         public InterfaceLanguage SelectedLanguage
         {
@@ -210,60 +162,33 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether CheckForUpdates.
-        /// </summary>
         public bool CheckForUpdates
         {
-            get
-            {
-                return this.checkForUpdates;
-            }
+            get => this.checkForUpdates;
 
             set
             {
                 this.checkForUpdates = value;
-                this.NotifyOfPropertyChange("CheckForUpdates");
+                this.NotifyOfPropertyChange(() => this.CheckForUpdates);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether reset when done action.
-        /// </summary>
         public bool ResetWhenDoneAction
         {
-            get
-            {
-                return this.resetWhenDoneAction;
-            }
+            get => this.resetWhenDoneAction;
 
             set
             {
                 this.resetWhenDoneAction = value;
-                this.NotifyOfPropertyChange("ResetWhenDoneAction");
+                this.NotifyOfPropertyChange(() => this.ResetWhenDoneAction);
             }
         }
 
-        /// <summary>
-        /// Gets or sets CheckForUpdatesFrequencies.
-        /// </summary>
-        public BindingList<UpdateCheck> CheckForUpdatesFrequencies
-        {
-            get
-            {
-                return new BindingList<UpdateCheck>(EnumHelper<UpdateCheck>.GetEnumList().ToList());
-            }
-        }
+        public BindingList<UpdateCheck> CheckForUpdatesFrequencies { get; } = new BindingList<UpdateCheck>(EnumHelper<UpdateCheck>.GetEnumList().ToList());
 
-        /// <summary>
-        /// Gets or sets a value indicating whether CheckForUpdatesFrequency.
-        /// </summary>
         public UpdateCheck CheckForUpdatesFrequency
         {
-            get
-            {
-                return this.checkForUpdatesFrequency;
-            }
+            get => this.checkForUpdatesFrequency;
 
             set
             {
@@ -272,101 +197,62 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Arguments.
-        /// </summary>
         public string Arguments
         {
-            get
-            {
-                return this.arguments;
-            }
+            get => this.arguments;
 
             set
             {
                 this.arguments = value;
-                this.NotifyOfPropertyChange("Arguments");
+                this.NotifyOfPropertyChange(() => this.Arguments);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether SendFileAfterEncode.
-        /// </summary>
         public bool SendFileAfterEncode
         {
-            get
-            {
-                return this.sendFileAfterEncode;
-            }
+            get => this.sendFileAfterEncode;
 
             set
             {
                 this.sendFileAfterEncode = value;
-                this.NotifyOfPropertyChange("SendFileAfterEncode");
+                this.NotifyOfPropertyChange(() => this.SendFileAfterEncode);
             }
         }
 
-        /// <summary>
-        /// Gets or sets SendFileTo.
-        /// </summary>
         public string SendFileTo
         {
-            get
-            {
-                return this.sendFileTo;
-            }
+            get => this.sendFileTo;
 
             set
             {
                 this.sendFileTo = value;
-                this.NotifyOfPropertyChange("SendFileTo");
+                this.NotifyOfPropertyChange(() => this.SendFileTo);
             }
         }
 
-        /// <summary>
-        /// Gets or sets SendFileToPath.
-        /// </summary>
         public string SendFileToPath
         {
-            get
-            {
-                return this.sendFileToPath;
-            }
+            get => this.sendFileToPath;
 
             set
             {
                 this.sendFileToPath = value;
-                this.NotifyOfPropertyChange("SendFileToPath");
+                this.NotifyOfPropertyChange(() => this.SendFileToPath);
             }
         }
 
-        /// <summary>
-        /// Gets or sets WhenDone.
-        /// </summary>
         public WhenDone WhenDone
         {
-            get
-            {
-                return this.whenDone;
-            }
+            get => this.whenDone;
 
             set
             {
                 this.whenDone = value;
-                this.NotifyOfPropertyChange("WhenDone");
+                this.NotifyOfPropertyChange(() => this.WhenDone);
             }
         }
 
-        /// <summary>
-        /// Gets WhenDoneOptions.
-        /// </summary>
-        public BindingList<WhenDone> WhenDoneOptions
-        {
-            get
-            {
-                return new BindingList<WhenDone>(EnumHelper<WhenDone>.GetEnumList().ToList());
-            }
-        }
+        public BindingList<WhenDone> WhenDoneOptions { get; } = new BindingList<WhenDone>(EnumHelper<WhenDone>.GetEnumList().ToList());
 
         public bool WhenDonePerformActionImmediately
         {
@@ -379,15 +265,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to show encode status in the tile bar.
-        /// </summary>
         public bool ShowStatusInTitleBar
         {
-            get
-            {
-                return this.showStatusInTitleBar;
-            }
+            get => this.showStatusInTitleBar;
             set
             {
                 if (value == this.showStatusInTitleBar) return;
@@ -396,15 +276,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to show previews in the summary tab.
-        /// </summary>
         public bool ShowPreviewOnSummaryTab
         {
-            get
-            {
-                return this.showPreviewOnSummaryTab;
-            }
+            get => this.showPreviewOnSummaryTab;
             set
             {
                 if (value == this.showPreviewOnSummaryTab) return;
@@ -413,15 +287,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// When Done Audio File
-        /// </summary>
         public string WhenDoneAudioFile
         {
-            get
-            {
-                return this.whenDoneAudioFile;
-            }
+            get => this.whenDoneAudioFile;
             set
             {
                 if (value == this.whenDoneAudioFile) return;
@@ -430,20 +298,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// When Done Audio File - File Path
-        /// </summary>
         public string WhenDoneAudioFileFullPath { get; set; }
 
-        /// <summary>
-        /// Play a sound when an encode or queue finishes.
-        /// </summary>
         public bool PlaySoundWhenDone
         {
-            get
-            {
-                return this.playSoundWhenDone;
-            }
+            get => this.playSoundWhenDone;
             set
             {
                 if (value == this.playSoundWhenDone) return;
@@ -454,10 +313,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool PlaySoundWhenQueueDone
         {
-            get
-            {
-                return this.playSoundWhenQueueDone;
-            }
+            get => this.playSoundWhenQueueDone;
             set
             {
                 if (value == this.playSoundWhenQueueDone) return;
@@ -499,53 +355,33 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        /* Output Files */
 
-        #region Output Files
-
-        /// <summary>
-        /// Gets or sets AutoNameDefaultPath.
-        /// </summary>
         public string AutoNameDefaultPath
         {
-            get
-            {
-                return this.autoNameDefaultPath;
-            }
+            get => this.autoNameDefaultPath;
 
             set
             {
                 this.autoNameDefaultPath = value;
-                this.NotifyOfPropertyChange("AutoNameDefaultPath");
+                this.NotifyOfPropertyChange(() => this.AutoNameDefaultPath);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether AutomaticallyNameFiles.
-        /// </summary>
         public bool AutomaticallyNameFiles
         {
-            get
-            {
-                return this.automaticallyNameFiles;
-            }
+            get => this.automaticallyNameFiles;
 
             set
             {
                 this.automaticallyNameFiles = value;
-                this.NotifyOfPropertyChange("AutomaticallyNameFiles");
+                this.NotifyOfPropertyChange(() => this.AutomaticallyNameFiles);
             }
         }
 
-        /// <summary>
-        /// Gets or sets AutonameFormat.
-        /// </summary>
         public string AutonameFormat
         {
-            get
-            {
-                return this.autonameFormat;
-            }
+            get => this.autonameFormat;
 
             set
             {
@@ -554,61 +390,37 @@ namespace HandBrakeWPF.ViewModels
                     this.autonameFormat = value;
                 }
 
-                this.NotifyOfPropertyChange("AutonameFormat");
+                this.NotifyOfPropertyChange(() => this.AutonameFormat);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ChangeToTitleCase.
-        /// </summary>
         public bool ChangeToTitleCase
         {
-            get
-            {
-                return this.changeToTitleCase;
-            }
+            get => this.changeToTitleCase;
 
             set
             {
                 this.changeToTitleCase = value;
-                this.NotifyOfPropertyChange("ChangeToTitleCase");
+                this.NotifyOfPropertyChange(() => this.ChangeToTitleCase);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether RemoveUnderscores.
-        /// </summary>
         public bool RemoveUnderscores
         {
-            get
-            {
-                return this.removeUnderscores;
-            }
+            get => this.removeUnderscores;
 
             set
             {
                 this.removeUnderscores = value;
-                this.NotifyOfPropertyChange("RemoveUnderscores");
+                this.NotifyOfPropertyChange(() => this.RemoveUnderscores);
             }
         }
 
-        public BindingList<Mp4Behaviour> Mp4ExtensionOptions
-        {
-            get
-            {
-                return new BindingList<Mp4Behaviour>(EnumHelper<Mp4Behaviour>.GetEnumList().ToList());
-            }
-        }
+        public BindingList<Mp4Behaviour> Mp4ExtensionOptions { get; } = new BindingList<Mp4Behaviour>(EnumHelper<Mp4Behaviour>.GetEnumList().ToList());
 
-        /// <summary>
-        /// Gets or sets SelectedMp4Extension.
-        /// </summary>
         public Mp4Behaviour SelectedMp4Extension
         {
-            get
-            {
-                return this.selectedMp4Extension;
-            }
+            get => this.selectedMp4Extension;
 
             set
             {
@@ -617,15 +429,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether remove punctuation.
-        /// </summary>
         public bool RemovePunctuation
         {
-            get
-            {
-                return this.removePunctuation;
-            }
+            get => this.removePunctuation;
             set
             {
                 this.removePunctuation = value;
@@ -704,125 +510,80 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        /* Preview */
 
-        #region Preview
-
-        /// <summary>
-        /// Gets or sets VLCPath.
-        /// </summary>
         public string VLCPath
         {
-            get
-            {
-                return this.vlcPath;
-            }
+            get => this.vlcPath;
 
             set
             {
                 this.vlcPath = value;
-                this.NotifyOfPropertyChange("VLCPath");
+                this.NotifyOfPropertyChange(() => this.VLCPath);
             }
         }
 
-        #endregion
 
-        #region System and Logging
+        /* System and Logging */
 
-        /// <summary>
-        /// Gets or sets a value indicating whether CopyLogToEncodeDirectory.
-        /// </summary>
         public bool CopyLogToEncodeDirectory
         {
-            get
-            {
-                return this.copyLogToEncodeDirectory;
-            }
+            get => this.copyLogToEncodeDirectory;
 
             set
             {
                 this.copyLogToEncodeDirectory = value;
-                this.NotifyOfPropertyChange("CopyLogToEncodeDirectory");
+                this.NotifyOfPropertyChange(() => this.CopyLogToEncodeDirectory);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether CopyLogToSepcficedLocation.
-        /// </summary>
         public bool CopyLogToSepcficedLocation
         {
-            get
-            {
-                return this.copyLogToSepcficedLocation;
-            }
+            get => this.copyLogToSepcficedLocation;
 
             set
             {
                 this.copyLogToSepcficedLocation = value;
-                this.NotifyOfPropertyChange("CopyLogToSepcficedLocation");
+                this.NotifyOfPropertyChange(() => this.CopyLogToSepcficedLocation);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ClearOldOlgs.
-        /// </summary>
         public bool ClearOldOlgs
         {
-            get
-            {
-                return this.clearOldOlgs;
-            }
+            get => this.clearOldOlgs;
 
             set
             {
                 this.clearOldOlgs = value;
-                this.NotifyOfPropertyChange("ClearOldOlgs");
+                this.NotifyOfPropertyChange(() => this.ClearOldOlgs);
             }
         }
 
-        /// <summary>
-        /// Gets or sets LogDirectory.
-        /// </summary>
         public string LogDirectory
         {
-            get
-            {
-                return this.logDirectory;
-            }
+            get => this.logDirectory;
 
             set
             {
                 this.logDirectory = value;
-                this.NotifyOfPropertyChange("LogDirectory");
+                this.NotifyOfPropertyChange(() => this.LogDirectory);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether PreventSleep.
-        /// </summary>
         public bool PreventSleep
         {
-            get
-            {
-                return this.preventSleep;
-            }
+            get => this.preventSleep;
 
             set
             {
                 this.preventSleep = value;
-                this.NotifyOfPropertyChange("PreventSleep");
+                this.NotifyOfPropertyChange(() => this.PreventSleep);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether HandBrake should pause on low disk space.
-        /// </summary>
         public bool PauseOnLowDiskspace
         {
-            get
-            {
-                return this.pauseOnLowDiskspace;
-            }
+            get => this.pauseOnLowDiskspace;
 
             set
             {
@@ -831,15 +592,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Get or sets the value that HB warns about low disk space.
-        /// </summary>
         public long PauseOnLowDiskspaceLevel
         {
-            get
-            {
-                return this.pauseOnLowDiskspaceLevel;
-            }
+            get => this.pauseOnLowDiskspaceLevel;
 
             set
             {
@@ -848,40 +603,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public BindingList<ProcessPriority> PriorityLevelOptions
-        {
-            get
-            {
-                return new BindingList<ProcessPriority>(EnumHelper<ProcessPriority>.GetEnumList().ToList());
-            }
-        }
+        public BindingList<ProcessPriority> PriorityLevelOptions { get; } = new BindingList<ProcessPriority>(EnumHelper<ProcessPriority>.GetEnumList().ToList());
 
-        /// <summary>
-        /// Gets or sets a value indicating whether SelectedGranulairty.
-        /// </summary>
         public string SelectedGranulairty
         {
-            get
-            {
-                return this.selectedGranulairty;
-            }
+            get => this.selectedGranulairty;
 
             set
             {
                 this.selectedGranulairty = value;
-                this.NotifyOfPropertyChange("SelectedGranulairty");
+                this.NotifyOfPropertyChange(() => this.SelectedGranulairty);
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedPriority.
-        /// </summary>
         public ProcessPriority SelectedPriority
         {
-            get
-            {
-                return this.selectedPriority;
-            }
+            get => this.selectedPriority;
 
             set
             {
@@ -912,155 +649,100 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
         }
-        #endregion
 
-        #region Advanced
+        /* Advanced */
 
-        /// <summary>
-        /// Gets or sets ConstantQualityGranularity.
-        /// </summary>
         public BindingList<string> ConstantQualityGranularity
         {
-            get
-            {
-                return this.constantQualityGranularity;
-            }
+            get => this.constantQualityGranularity;
 
             set
             {
                 this.constantQualityGranularity = value;
-                this.NotifyOfPropertyChange("ConstantQualityGranularity");
+                this.NotifyOfPropertyChange(() => this.ConstantQualityGranularity);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether DisableLibdvdNav.
-        /// </summary>
         public bool DisableLibdvdNav
         {
-            get
-            {
-                return this.disableLibdvdNav;
-            }
+            get => this.disableLibdvdNav;
 
             set
             {
                 this.disableLibdvdNav = value;
-                this.NotifyOfPropertyChange("DisableLibdvdNav");
+                this.NotifyOfPropertyChange(() => this.DisableLibdvdNav);
             }
         }
 
-        /// <summary>
-        /// Gets or sets LogVerbosityOptions.
-        /// </summary>
         public BindingList<int> LogVerbosityOptions
         {
-            get
-            {
-                return this.logVerbosityOptions;
-            }
+            get => this.logVerbosityOptions;
 
             set
             {
                 this.logVerbosityOptions = value;
-                this.NotifyOfPropertyChange("LogVerbosityOptions");
+                this.NotifyOfPropertyChange(() => this.LogVerbosityOptions);
             }
         }
 
-        /// <summary>
-        /// Gets or sets MinLength.
-        /// </summary>
         public long MinLength
         {
-            get
-            {
-                return this.minLength;
-            }
+            get => this.minLength;
 
             set
             {
                 this.minLength = value;
-                this.NotifyOfPropertyChange("MinLength");
+                this.NotifyOfPropertyChange(() => this.MinLength);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether MinimiseToTray.
-        /// </summary>
         public bool MinimiseToTray
         {
-            get
-            {
-                return this.minimiseToTray;
-            }
+            get => this.minimiseToTray;
 
             set
             {
                 this.minimiseToTray = value;
-                this.NotifyOfPropertyChange("MinimiseToTray");
+                this.NotifyOfPropertyChange(() => this.MinimiseToTray);
             }
         }
 
-        /// <summary>
-        /// Gets or sets PreviewPicturesToScan.
-        /// </summary>
         public BindingList<int> PreviewPicturesToScan
         {
-            get
-            {
-                return this.previewPicturesToScan;
-            }
+            get => this.previewPicturesToScan;
 
             set
             {
                 this.previewPicturesToScan = value;
-                this.NotifyOfPropertyChange("PreviewPicturesToScan");
+                this.NotifyOfPropertyChange(() => this.PreviewPicturesToScan);
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedPreviewCount.
-        /// </summary>
         public int SelectedPreviewCount
         {
-            get
-            {
-                return this.selectedPreviewCount;
-            }
+            get => this.selectedPreviewCount;
 
             set
             {
                 this.selectedPreviewCount = value;
-                this.NotifyOfPropertyChange("SelectedPreviewCount");
+                this.NotifyOfPropertyChange(() => this.SelectedPreviewCount);
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedVerbosity.
-        /// </summary>
         public int SelectedVerbosity
         {
-            get
-            {
-                return this.selectedVerbosity;
-            }
+            get => this.selectedVerbosity;
 
             set
             {
                 this.selectedVerbosity = value;
-                this.NotifyOfPropertyChange("SelectedVerbosity");
+                this.NotifyOfPropertyChange(() => this.SelectedVerbosity);
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ClearQueueOnEncodeCompleted.
-        /// </summary>
         public bool ClearQueueOnEncodeCompleted
         {
-            get
-            {
-                return this.clearQueueOnEncodeCompleted;
-            }
+            get => this.clearQueueOnEncodeCompleted;
             set
             {
                 this.clearQueueOnEncodeCompleted = value;
@@ -1090,10 +772,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
-
-        #region Video
-
+        /* Video */ 
         public bool EnableQuickSyncEncoding
         {
             get => this.enableQuickSyncEncoding && this.IsQuickSyncAvailable;
@@ -1141,10 +820,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool EnableQuickSyncDecoding
         {
-            get
-            {
-                return this.enableQuickSyncDecoding;
-            }
+            get => this.enableQuickSyncDecoding;
 
             set
             {
@@ -1175,47 +851,20 @@ namespace HandBrakeWPF.ViewModels
 
         public VideoScaler SelectedScalingMode { get; set; }
 
-        public bool IsQuickSyncAvailable
-        {
-            get
-            {
-                return SystemInfo.IsQsvAvailable;
-            }
-        }
+        public bool IsQuickSyncAvailable { get; } = SystemInfo.IsQsvAvailable;
 
-        public bool IsVceAvailable
-        {
-            get
-            {
-                return SystemInfo.IsVceH264Available;
-            }
-        }
+        public bool IsVceAvailable { get; } = SystemInfo.IsVceH264Available;
 
-        public bool IsNvencAvailable
-        {
-            get
-            {
-                return SystemInfo.IsNVEncH264Available;
-            }
-        }
+        public bool IsNvencAvailable { get; } = SystemInfo.IsNVEncH264Available;
 
-        /// <summary>
-        /// Gets a value indicating whether is use qsv dec available.
-        /// </summary>
         public bool IsUseQsvDecAvailable
         {
-            get
-            {
-                return IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
-            }
+            get => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
         }
 
         public bool UseQSVDecodeForNonQSVEnc
         {
-            get
-            {
-                return this.useQsvDecodeForNonQsvEnc;
-            }
+            get => this.useQsvDecodeForNonQsvEnc;
 
             set
             {
@@ -1225,40 +874,18 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public BindingList<VideoScaler> ScalingOptions
-        {
-            get
-            {
-                return new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
-            }
-        }
+        public BindingList<VideoScaler> ScalingOptions { get; } = new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
 
         public bool IsHardwareFallbackMode => HandBrakeUtils.IsInitNoHardware();
 
-        #endregion
 
-        #region About HandBrake
+        /* About HandBrake */
 
-        /// <summary>
-        /// Gets Version.
-        /// </summary>
-        public string Version
-        {
-            get
-            {
-                return string.Format("{0}", VersionHelper.GetVersion());
-            }
-        }
+        public string Version { get; } = string.Format("{0}", VersionHelper.GetVersion());
 
-        /// <summary>
-        /// Gets or sets UpdateMessage.
-        /// </summary>
         public string UpdateMessage
         {
-            get
-            {
-                return this.updateMessage;
-            }
+            get => this.updateMessage;
             set
             {
                 this.updateMessage = value;
@@ -1266,15 +893,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether UpdateAvailable.
-        /// </summary>
         public bool UpdateAvailable
         {
-            get
-            {
-                return this.updateAvailable;
-            }
+            get => this.updateAvailable;
             set
             {
                 this.updateAvailable = value;
@@ -1282,15 +903,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets DownloadProgressPercentage.
-        /// </summary>
         public int DownloadProgressPercentage
         {
-            get
-            {
-                return this.downloadProgressPercentage;
-            }
+            get => this.downloadProgressPercentage;
             set
             {
                 this.downloadProgressPercentage = value;
@@ -1298,9 +913,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
-
-        // Experimental
+        /* Experimental */
         public bool RemoteServiceEnabled
         {
             get => this.remoteServiceEnabled;
@@ -1341,13 +954,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsProcessIsolationAllowed
-        {
-            get
-            {
-                return Portable.IsProcessIsolationEnabled();
-            }
-        }
+        public bool IsProcessIsolationAllowed { get; } = Portable.IsProcessIsolationEnabled();
 
         public int SimultaneousEncodes { get; set; }
 
@@ -1378,9 +985,6 @@ namespace HandBrakeWPF.ViewModels
 
         #region Public Methods
 
-        /// <summary>
-        /// Close this window.
-        /// </summary>
         public void Close()
         {
             this.Save();
@@ -1389,9 +993,6 @@ namespace HandBrakeWPF.ViewModels
             shellViewModel.DisplayWindow(ShellWindow.MainWindow);
         }
 
-        /// <summary>
-        /// Browse - Send File To
-        /// </summary>
         public void BrowseSendFileTo()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*", FileName = this.sendFileToPath };
@@ -1403,9 +1004,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Browse Auto Name Path
-        /// </summary>
         public void BrowseAutoNamePath()
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
@@ -1416,9 +1014,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Browse VLC Path
-        /// </summary>
         public void BrowseVlcPath()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.exe)|*.exe", FileName = this.VLCPath };
@@ -1429,9 +1024,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Browse - Log Path
-        /// </summary>
         public void BrowseLogPath()
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
@@ -1442,9 +1034,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// View the Default Log Directory for HandBrake
-        /// </summary>
         public void ViewLogDirectory()
         {
             string logDir = DirectoryUtilities.GetLogDirectory();
@@ -1453,9 +1042,6 @@ namespace HandBrakeWPF.ViewModels
             prc.Start();
         }
 
-        /// <summary>
-        /// Clear HandBrakes log directory.
-        /// </summary>
         public void ClearLogHistory()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(Resources.OptionsView_ClearLogDirConfirm, Resources.OptionsView_ClearLogs,
@@ -1467,27 +1053,18 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Download an Update
-        /// </summary>
         public void DownloadUpdate()
         {
             this.UpdateMessage = Resources.OptionsView_PreparingUpdate;
             this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.updateInfo.Signature, this.DownloadComplete, this.DownloadProgress);
         }
 
-        /// <summary>
-        /// Check for updates
-        /// </summary>
         public void PerformUpdateCheck()
         {
             this.UpdateMessage = Resources.OptionsView_CheckingForUpdates;
             this.updateService.CheckForUpdates(this.UpdateCheckComplete);
         }
 
-        /// <summary>
-        /// Browse - Send File To
-        /// </summary>
         public void BrowseWhenDoneAudioFile()
         {
             OpenFileDialog dialog = new OpenFileDialog() { Filter = "All Files|*.wav;*.mp3", FileName = this.WhenDoneAudioFileFullPath };
@@ -1526,9 +1103,6 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        /// <summary>
-        /// Load User Settings
-        /// </summary>
         public override void OnLoad()
         {
             // #############################
@@ -1696,20 +1270,11 @@ namespace HandBrakeWPF.ViewModels
             this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
         }
 
-        /// <summary>
-        /// Some settings can be changed outside of this window. This will refresh their UI controls.
-        /// </summary>
         public void UpdateSettings()
         {
             this.WhenDone = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
         }
 
-        /// <summary>
-        /// The goto tab.
-        /// </summary>
-        /// <param name="tab">
-        /// The tab.
-        /// </param>
         public void GotoTab(OptionsTab tab)
         {
             this.SelectedTab = tab;
@@ -1730,18 +1295,12 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Load / Update the user settings.
-        /// </summary>
         protected override void OnActivate()
         {
             this.OnLoad();
             base.OnActivate();
         }
 
-        /// <summary>
-        /// Save the settings selected
-        /// </summary>
         private void Save()
         {
             /* General */
@@ -1825,12 +1384,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
         }
 
-        /// <summary>
-        /// Update Check Complete
-        /// </summary>
-        /// <param name="info">
-        /// The info.
-        /// </param>
         private void UpdateCheckComplete(UpdateCheckInformation info)
         {
             this.updateInfo = info;
@@ -1851,12 +1404,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Download Progress Action
-        /// </summary>
-        /// <param name="info">
-        /// The info.
-        /// </param>
         private void DownloadProgress(DownloadStatus info)
         {
             if (info.TotalBytes == 0 || info.BytesRead == 0)
@@ -1874,12 +1421,6 @@ namespace HandBrakeWPF.ViewModels
                 "{0} {1}% - {2}k of {3}k", Resources.OptionsView_Downloading, this.DownloadProgressPercentage, (info.BytesRead / 1024), (info.TotalBytes / 1024));
         }
 
-        /// <summary>
-        /// Download Complete Action
-        /// </summary>
-        /// <param name="info">
-        /// The info.
-        /// </param>
         private void DownloadComplete(DownloadStatus info)
         {
             this.UpdateAvailable = false;
@@ -1892,12 +1433,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Validate the Autoname Fileformat string
-        /// </summary>
-        /// <param name="input">The format string</param>
-        /// <param name="isSilent">Don't show an error dialog if true.</param>
-        /// <returns>True if valid</returns>
         private bool IsValidAutonameFormat(string input, bool isSilent)
         {
             if (string.IsNullOrEmpty(input))
