@@ -504,8 +504,7 @@ AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref)
 
     for (i = 0; i < nb_surfaces; i++) {
         QSVMid *mid = &mids[i];
-        mid->handle        = frames_hwctx->surfaces[i].Data.MemId;
-        mid->texture       = frames_hwctx->texture;
+        mid->handle_pair   = (mfxHDLPair*)frames_hwctx->surfaces[i].Data.MemId;
         mid->hw_frames_ref = hw_frames_ref1;
     }
 
@@ -679,7 +678,7 @@ static mfxStatus hb_qsv_frame_lock(mfxHDL pthis, mfxMemId mid, mfxFrameData *ptr
         goto fail;
 
     qsv_mid->surf.Info = hw_frames_hwctx->surfaces[0].Info;
-    qsv_mid->surf.Data.MemId = qsv_mid->handle;
+    qsv_mid->surf.Data.MemId = qsv_mid->handle_pair;
 
     /* map the data to the system memory */
     ret = av_hwframe_map(qsv_mid->locked_frame, qsv_mid->hw_frame,
@@ -712,14 +711,12 @@ static mfxStatus hb_qsv_frame_unlock(mfxHDL pthis, mfxMemId mid, mfxFrameData *p
 static mfxStatus hb_qsv_frame_get_hdl(mfxHDL pthis, mfxMemId mid, mfxHDL *hdl)
 {
     QSVMid *qsv_mid = (QSVMid*)mid;
+    mfxHDLPair *pair_dst = (mfxHDLPair*)hdl;
+    mfxHDLPair *pair_src = (mfxHDLPair*)qsv_mid->handle_pair;
 
-    if (qsv_mid->texture) {
-        mfxHDLPair *pPair  =  (mfxHDLPair*)hdl;
-        pPair->first  = qsv_mid->texture;
-        pPair->second = qsv_mid->handle;
-    } else {
-        *hdl = qsv_mid->handle;
-    }
+    pair_dst->first = pair_src->first;
+    if (pair_src->second != (mfxMemId)MFX_INFINITE)
+        pair_dst->second = pair_src->second;
 
     return MFX_ERR_NONE;
 }
@@ -1052,7 +1049,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             hb_value_t *value = hb_dict_iter_value(iter);
             char *str = hb_value_get_string_xform(value);
 
-            switch (hb_qsv_param_parse(&pv->param, pv->qsv_info, key, str))
+            switch (hb_qsv_param_parse(&pv->param, pv->qsv_info, pv->job, key, str))
             {
                 case HB_QSV_PARAM_OK:
                     break;

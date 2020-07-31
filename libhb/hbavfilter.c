@@ -135,6 +135,22 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
             goto fail;
         }
         par->hw_frames_ctx = hb_hw_frames_ctx;
+        // TODO: need to pass correct alignment for the scale_qsv output frame
+        int out_alignment = 0;
+        switch (graph->job->vcodec)
+        {
+            case HB_VCODEC_QSV_H264:
+                out_alignment = 16;
+                break;
+            case HB_VCODEC_QSV_H265_10BIT:
+            case HB_VCODEC_QSV_H265:
+                out_alignment = 32;
+                break;
+            default:
+                out_alignment = 0;
+                break;
+        }
+        graph->avgraph->opaque = (void*)(intptr_t)out_alignment;
     }
     else
 #endif

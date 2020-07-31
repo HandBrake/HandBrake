@@ -190,9 +190,7 @@ typedef enum HB_QSV_STAGE_TYPE {
 
 typedef struct QSVMid {
     AVBufferRef *hw_frames_ref;
-    mfxHDL handle;
-
-    void *texture;
+    mfxHDLPair *handle_pair;
 
     AVFrame *locked_frame;
     AVFrame *hw_frame;

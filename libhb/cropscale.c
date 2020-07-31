@@ -111,8 +111,9 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hw_frames_ctx = init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx;
         frames_ctx   = (AVHWFramesContext*)hw_frames_ctx->data;
         frames_hwctx = frames_ctx->hwctx;
-        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->input_texture = frames_hwctx->texture;
-        
+        mfxHDLPair* handle_pair = (mfxHDLPair*)frames_hwctx->surfaces[0].Data.MemId;
+        init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->input_texture = ((size_t)handle_pair->second != MFX_INFINITE) ? handle_pair->first : NULL;
+
         /* allocate the memory ids for the external frames */
         av_buffer_unref(&init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf);
         init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->mids_buf = hb_qsv_create_mids(init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
