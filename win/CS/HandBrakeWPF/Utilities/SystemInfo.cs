@@ -125,7 +125,17 @@ namespace HandBrakeWPF.Utilities
 
             string productName = (string)reg.GetValue("ProductName");
 
-            return productName.StartsWith("Windows 10");
+            if (productName.StartsWith("Windows 10"))
+            {
+                return true;
+            }
+
+            if (productName.StartsWith("Windows Server 2019"))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
