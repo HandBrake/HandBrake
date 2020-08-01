@@ -36,8 +36,10 @@ ifeq (linux,$(HOST.system))
     endif
 endif
 
-ifeq (0-darwin,$(HOST.cross)-$(BUILD.system))
-    ifeq (x86_64,$(BUILD.machine))
+ifeq (darwin,$(HOST.system))
+    ifeq (arm64,$(HOST.machine))
+        LIBVPX.CONFIGURE.extra += --target=arm64-darwin-gcc
+    else ifeq (x86_64,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --target=x86_64-darwin14-gcc
     endif
 endif
