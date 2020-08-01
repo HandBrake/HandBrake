@@ -528,6 +528,12 @@ class BuildTupleProbe( ShellProbe, list ):
         self.release = self[3]
         self.extra   = self[4]
 
+        ## special mapping for Apple Silicon
+        ## config.guess returns aarch64, we need arm64
+        if self.vendor is 'apple' and self.system is 'darwin':
+            if self.machine is 'aarch64':
+                self[0] = self.machine = 'arm64'
+
         ## nice formal name for 'system'
         self.systemf = platform.system()
 
@@ -574,6 +580,12 @@ class HostTupleAction( Action, list ):
         self.release = self[3]
         self.extra   = self[4]
         self.systemf = build_tuple.systemf
+
+        ## special mapping for Apple Silicon
+        ## config.guess returns aarch64, we need arm64
+        if self.vendor is 'apple' and self.system is 'darwin':
+            if self.machine is 'aarch64':
+                self[0] = self.machine = 'arm64'
 
         try:
             self.machine = arch.mode.mode
@@ -674,8 +686,8 @@ class ArchAction( Action ):
         elif host_tuple.match( '*-*-mingw*' ):
             pass
         elif host_tuple.match( '*-*-darwin*' ):
-            self.mode['x86_64'] =  'x86_64-apple-darwin%s' % (host_tuple.release)
-            self.mode['arm64']  = 'aarch64-apple-darwin%s' % (host_tuple.release)
+            self.mode['arm64']  =  'arm64-apple-darwin%s' % (host_tuple.release)
+            self.mode['x86_64'] = 'x86_64-apple-darwin%s' % (host_tuple.release)
         elif host_tuple.match( '*-*-linux*' ):
             pass
         elif host_tuple.match( '*-*-solaris*' ):
