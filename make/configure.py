@@ -530,8 +530,8 @@ class BuildTupleProbe( ShellProbe, list ):
 
         ## special mapping for Apple Silicon
         ## config.guess returns aarch64, we need arm64
-        if self.vendor is 'apple' and self.system is 'darwin':
-            if self.machine is 'aarch64':
+        if self.vendor == 'apple' and self.system == 'darwin':
+            if self.machine == 'aarch64':
                 self[0] = self.machine = 'arm64'
 
         ## nice formal name for 'system'
@@ -583,8 +583,8 @@ class HostTupleAction( Action, list ):
 
         ## special mapping for Apple Silicon
         ## config.guess returns aarch64, we need arm64
-        if self.vendor is 'apple' and self.system is 'darwin':
-            if self.machine is 'aarch64':
+        if self.vendor == 'apple' and self.system == 'darwin':
+            if self.machine == 'aarch64':
                 self[0] = self.machine = 'arm64'
 
         try:
