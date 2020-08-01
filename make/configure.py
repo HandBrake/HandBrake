@@ -674,7 +674,8 @@ class ArchAction( Action ):
         elif host_tuple.match( '*-*-mingw*' ):
             pass
         elif host_tuple.match( '*-*-darwin*' ):
-            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host_tuple.release)
+            self.mode['x86_64'] = 'x86_64-apple-darwin%s' % (host_tuple.release)
+            self.mode['arm64']  =  'arm64-apple-darwin%s' % (host_tuple.release)
         elif host_tuple.match( '*-*-linux*' ):
             pass
         elif host_tuple.match( '*-*-solaris*' ):
