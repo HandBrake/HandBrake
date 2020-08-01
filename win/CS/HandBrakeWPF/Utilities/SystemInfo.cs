@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Management;
     using System.Windows.Forms;
 
@@ -21,6 +22,8 @@ namespace HandBrakeWPF.Utilities
     /// </summary>
     public class SystemInfo
     {
+        private static int cpuCoreCount = -1;
+
         /// <summary>
         /// Gets the total physical ram in a system
         /// </summary>
@@ -51,13 +54,22 @@ namespace HandBrakeWPF.Utilities
         {
             get
             {
+                if (cpuCoreCount != -1)
+                {
+                    return cpuCoreCount;
+                }
+
                 int coreCount = 0;
-                foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+                var cpuList = new System.Management.ManagementObjectSearcher("Select NumberOfCores from Win32_Processor").Get();
+
+                foreach (var item in cpuList)
                 {
                     coreCount += int.Parse(item["NumberOfCores"].ToString());
                 }
 
-                return coreCount;
+                cpuCoreCount = coreCount;
+
+                return cpuCoreCount;
             }
         }
 
@@ -82,7 +94,7 @@ namespace HandBrakeWPF.Utilities
                 try
                 {
                     ManagementObjectSearcher searcher =
-                        new ManagementObjectSearcher("select * from " + "Win32_VideoController");
+                        new ManagementObjectSearcher("select DriverVersion, Name from " + "Win32_VideoController");
 
                     foreach (ManagementObject share in searcher.Get())
                     {
