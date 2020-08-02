@@ -240,15 +240,18 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *frames_ctx = NULL;
-    // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
-    if (hb_qsv_hw_filters_are_enabled(pv->input.job) && in && in->qsv_details.frame)
+    if (hb_qsv_hw_filters_are_enabled(pv->input.job))
     {
-        surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
-        frames_ctx = in->qsv_details.qsv_frames_ctx;
-    }
-    else
-    {
-        av_frame_is_not_null = 0;
+        if (in && in->qsv_details.frame)
+        {
+            // We need to keep surface pointer because hb_avfilter_add_buf set it to 0 after in ffmpeg call
+            surface = (mfxFrameSurface1 *)in->qsv_details.frame->data[3];
+            frames_ctx = in->qsv_details.qsv_frames_ctx;
+        }
+        else
+        {
+            av_frame_is_not_null = 0;
+        }
     }
 #endif
     if (av_frame_is_not_null)
