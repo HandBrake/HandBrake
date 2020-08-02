@@ -1566,20 +1566,21 @@ try:
     project = Project()
 
     # options is created by parse_known_args(), which is called directly after
-    # createCLI(). we need cross info earlier and cannot parse args twice, so
-    # extract the info we need here
+    # createCLI(). we need some options info earlier and cannot parse args
+    # twice, so extract the info we need here
     cross = None
+    xcode_disabled = False
     for i in range(len(sys.argv)):
-        cross_pattern = re.compile( '^--cross=(.+)$' )
-        m = cross_pattern.match( sys.argv[i] )
-        if m:
+        if re.compile( '^--cross=(.+)$' ).match( sys.argv[i] ):
             cross = sys.argv[i][8:]
             continue
-        cross_pattern = re.compile( '^--cross$' )
-        m = cross_pattern.match( sys.argv[i] )
-        if m and ((i + 1) < len(sys.argv)):
+        elif re.compile( '^--cross$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
             cross = sys.argv[i+1]
             cross = None if cross == '' else cross
+            i = i + 1
+            continue
+        elif re.compile( '^--disable-xcode$' ).match( sys.argv[i] ):
+            xcode_disabled = True
             continue
 
     ## create tools in a scope
@@ -1616,7 +1617,7 @@ try:
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
 
-        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (build_tuple.match('*-*-darwin*') and cross is None) else False), versionopt='-version', minversion=[10,3,0] )
+        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_disabled and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
     ## run tool probes
     for tool in ToolProbe.tools:
