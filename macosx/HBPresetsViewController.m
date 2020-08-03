@@ -336,13 +336,12 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
         }
 
-#if defined(NSAppKitVersionNumber10_15)
-        if (@available(macOS 10.16, *))
+#if defined(__MAC_11_0)
+        if (@available(macOS 11, *))
         {
             alert.buttons.lastObject.hasDestructiveAction = true;
         }
 #endif
-
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
 
         NSInteger status = [alert runModal];

@@ -140,8 +140,8 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
  */
 - (void)windowDidLoad
 {
-#if defined(NSAppKitVersionNumber10_15)
-    if (@available (macOS 10.16, *))
+#if defined(__MAC_11_0)
+    if (@available (macOS 11, *))
     {
         self.window.toolbarStyle = NSWindowToolbarStylePreference;
     }
