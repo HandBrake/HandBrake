@@ -806,6 +806,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index
 {
+    [self showWindow:self];
+
     [self scanURL:fileURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
         if (titles.count)
