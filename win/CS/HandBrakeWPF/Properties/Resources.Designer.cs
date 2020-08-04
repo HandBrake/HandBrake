@@ -2596,6 +2596,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no preset selected..
+        /// </summary>
+        public static string ManagePresetView_NoPresetSelected {
+            get {
+                return ResourceManager.GetString("ManagePresetView_NoPresetSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preset Information:.
         /// </summary>
         public static string ManagePresetView_PresetInfo {
@@ -4412,6 +4421,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Default Preset).
+        /// </summary>
+        public static string PresetManagerView_DefaultPreset {
+            get {
+                return ResourceManager.GetString("PresetManagerView_DefaultPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Preset.
         /// </summary>
         public static string PresetManagerView_Delete {
@@ -4503,6 +4521,24 @@ namespace HandBrakeWPF.Properties {
         public static string PresetService_ArchiveFile {
             get {
                 return ResourceManager.GetString("PresetService_ArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The category name you entered already exists. Please choose a different name..
+        /// </summary>
+        public static string PresetService_CategoryAlreadyExists {
+            get {
+                return ResourceManager.GetString("PresetService_CategoryAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The category name was empty. Please provide a name..
+        /// </summary>
+        public static string PresetService_CategoryNameEmpty {
+            get {
+                return ResourceManager.GetString("PresetService_CategoryNameEmpty", resourceCulture);
             }
         }
         
@@ -6193,6 +6229,15 @@ namespace HandBrakeWPF.Properties {
         public static string TaskTrayStatusTitle {
             get {
                 return ResourceManager.GetString("TaskTrayStatusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a name: .
+        /// </summary>
+        public static string TextEntryView_EnterName {
+            get {
+                return ResourceManager.GetString("TextEntryView_EnterName", resourceCulture);
             }
         }
         

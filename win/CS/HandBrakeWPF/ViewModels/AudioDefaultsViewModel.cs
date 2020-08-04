@@ -545,7 +545,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void LaunchHelp()
         {
-            Process.Start("https://handbrake.fr/docs/en/1.2.0/advanced/audio-subtitle-defaults.html");
+            Process.Start("https://handbrake.fr/docs/en/latest/advanced/audio-subtitle-defaults.html");
         }
         
         #endregion

@@ -52,12 +52,15 @@ namespace HandBrakeWPF.Services.Presets
         private readonly IUserSettingService userSettingService;
         private ILog log = null;
 
+
         public PresetService(IErrorService errorService, IUserSettingService userSettingService, ILog logService)
         {
             this.log = logService;
             this.errorService = errorService;
             this.userSettingService = userSettingService;
         }
+
+        public event EventHandler PresetCollectionChanged;
 
         public ObservableCollection<IPresetObject> Presets
         {
@@ -116,6 +119,7 @@ namespace HandBrakeWPF.Services.Presets
                 if (!isLoading)
                 {
                     this.SavePresetFiles();
+                    this.OnPresetCollectionChanged();
                 }
 
                 return true;
@@ -123,6 +127,7 @@ namespace HandBrakeWPF.Services.Presets
             else
             {
                 this.Update(preset);
+                this.OnPresetCollectionChanged();
                 return true;
             }
         }
@@ -258,8 +263,39 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             this.SavePresetFiles();
+            this.OnPresetCollectionChanged();
 
             return true;
+        }
+
+        public void AddCategory(string categoryName)
+        {
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.PresetService_CategoryNameEmpty,
+                    Resources.Error,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
+            PresetDisplayCategory category = this.presets.FirstOrDefault(a => a.Category == categoryName) as PresetDisplayCategory;
+            if (category != null)
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.PresetService_CategoryAlreadyExists,
+                    Resources.Error,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                return;
+            }
+
+            // Otherwise, if we have category but it doesn't exist, create it.
+            this.presets.Add(new PresetDisplayCategory(categoryName, false, new BindingList<Preset>()));
+
+            // Update the presets file
+            this.SavePresetFiles();
         }
 
         public void RemoveGroup(string categoryName)
@@ -437,6 +473,25 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             selectedPreset.IsSelected = true;
+        }
+
+        public void ChangePresetCategory(Preset preset, string categoryName)
+        {
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                return;
+            }
+
+            if (preset != null)
+            {
+                preset.Category = categoryName;
+            }
+
+            this.Save();
+            this.ClearPresetService();
+            this.Load();
+            this.LoadCategoryStates();
+            this.OnPresetCollectionChanged();
         }
 
         public void SaveCategoryStates()
@@ -691,6 +746,13 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
+        private void ClearPresetService()
+        {
+            this.flatPresetDict.Clear();
+            this.flatPresetList.Clear();
+            this.presets.Clear();
+        }
+
         private void HandlePresetListsForSave(List<Preset> processList, Dictionary<string, PresetCategory> presetCategories, List<HBPreset> uncategorisedPresets)
         {
             foreach (Preset item in processList)
@@ -794,6 +856,11 @@ namespace HandBrakeWPF.Services.Presets
             }
             
             return false;
+        }
+
+        private void OnPresetCollectionChanged()
+        {
+            this.PresetCollectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected void ServiceLogMessage(string message)

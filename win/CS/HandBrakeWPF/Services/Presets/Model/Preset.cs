@@ -100,35 +100,5 @@ namespace HandBrakeWPF.Services.Presets.Model
         {
             return this.Name;
         }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((Preset)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return (this.Name != null ? this.Name.GetHashCode() : 0);
-        }
-
-        protected bool Equals(Preset other)
-        {
-            return string.Equals(this.Name, other.Name);
-        }
     }
 }

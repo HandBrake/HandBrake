@@ -8,7 +8,8 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties" xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture"
         Title="{Binding Title}"
-        Width="350"
+        Width="450"
+        MaxHeight="800"
         ResizeMode="NoResize"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
@@ -67,17 +68,11 @@
 
 
             <!--  Description  -->
-            <TextBlock Grid.Row="2"
-                       Grid.Column="0" Margin="0,10,0,0"
-                       Text="{x:Static Properties:Resources.AddPresetView_Description}" />
-            <TextBox Grid.Row="2"
-                     Grid.Column="1" Margin="0,10,0,0"
-                     
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Text="{x:Static Properties:Resources.AddPresetView_Description}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" MinHeight="75" TextWrapping="WrapWithOverflow" VerticalContentAlignment="Top"
                      Text="{Binding Preset.Description, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock Grid.Row="3"
-                       Grid.Column="0" Margin="0,10,0,0"
-                       Text="{x:Static Properties:Resources.AddPresetView_Category}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" Text="{x:Static Properties:Resources.AddPresetView_Category}" />
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,10,0,0">
 
                 <ComboBox ItemsSource="{Binding PresetCategories}" SelectedItem="{Binding SelectedPresetCategory}" DisplayMemberPath="Category" />

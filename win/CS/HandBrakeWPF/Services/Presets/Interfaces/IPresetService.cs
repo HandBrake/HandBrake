@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Services.Presets.Interfaces
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
@@ -21,6 +22,11 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
     /// </summary>
     public interface IPresetService
     {
+        /// <summary>
+        /// Subscribe to get notifications when a preset is added.
+        /// </summary>
+        event EventHandler PresetCollectionChanged;
+
         /// <summary>
         /// Gets a Collection of presets.
         /// </summary>
@@ -191,5 +197,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </summary>
         /// <param name="selectedPreset">The preset we want to select.</param>
         void SetSelected(Preset selectedPreset);
+
+        /// <summary>
+        /// Change the category to which a preset belongs.
+        /// </summary>
+        void ChangePresetCategory(Preset preset, string categoryName);
     }
 }

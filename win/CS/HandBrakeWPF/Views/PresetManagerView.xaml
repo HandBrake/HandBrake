@@ -10,9 +10,9 @@
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture"
         Title="{Binding Title}"
-        Width="750"
+        Width="850"
         Height="500"
-        MinWidth="750"
+        MinWidth="850"
         MinHeight="500"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display">
@@ -44,6 +44,13 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_ManagePreset}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0" Grid.Row="0" />
+
+            <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,5,5,0" Padding="8,2">
+                <Button.Content>
+                    <Image Source="/Views/Images/question.png" Width="16" />
+                </Button.Content>
+            </Button>
+
         </Grid>
 
         <!-- Preset List -->
@@ -128,7 +135,6 @@
                             <Trigger Property="HasItems" Value="True">
                                 <Setter Property="Focusable" Value="false" />
                             </Trigger>
-
                         </Style.Triggers>
                     </Style>
                 </TreeView.ItemContainerStyle>
@@ -154,114 +160,144 @@
         </Grid>
 
         <!-- Control Panel -->
-        <Border BorderThickness="1,0,0,0" BorderBrush="LightGray" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5" 
-                Visibility="{Binding IsPresetSelected, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
-                IsEnabled="{Binding IsBuildIn, Converter={StaticResource booleanConverter}, ConverterParameter=true}">
-            <Grid >
+        <Border BorderThickness="1,0,0,0" BorderBrush="LightGray" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5" >
+
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
-                <!-- Row 1 -->
-                <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_PresetInfo}" FontSize="16" Margin="10,0,0,15" Grid.Row="0"  />
 
-                <!-- Row 2 -->
-                <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_RestrictedPreset}" HorizontalAlignment="Center" FontStyle="Italic" Grid.Row="1"
-                           Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                <!-- No Preset Selected -->
+                <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_NoPresetSelected}" HorizontalAlignment="Center" FontStyle="Italic" 
+                       Visibility="{Binding IsPresetSelected, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                <!-- Row 3 -->
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="10,0,0,15" HorizontalAlignment="Stretch" >
-
-                    <StackPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Padding" Value="8,2" />
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <Button Margin="0,0,0,0"  AutomationProperties.Name="{x:Static Properties:Resources.PresetManagerView_Delete}"  
-                            cal:Message.Attach="[Event Click] = [Action DeletePreset]" 
-                            Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
-                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Remove.png'}">
-                                </Image>
-                                <TextBlock Text="{x:Static Properties:Resources.PresetManagerView_Delete}" VerticalAlignment="Center" />
-                            </StackPanel>
-
-                        </Button.Content>
-                    </Button>
-
-                </StackPanel>
-
-                <!--  Header  -->
-                <Grid Grid.Row="3" Margin="10,0,10,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
+                <!-- Main Content -->
+                <Grid Visibility="{Binding IsPresetSelected, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!--  Name  -->
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static Properties:Resources.AddPresetView_Name}" />
-                    <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding SelectedPreset.Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <!-- Row 1 -->
+                    <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_PresetInfo}" FontSize="16" Margin="10,0,0,15" Grid.Row="0"  />
+
+                    <!-- Row 2 -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,5,0,15" HorizontalAlignment="Stretch" >
+
+                        <StackPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Padding" Value="8,2" />
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Button Content="Set Default" Margin="0,0,5,0" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
+                            cal:Message.Attach="[Event Click] = [Action SetCurrentPresetAsDefault]" />
+
+                        <Button Margin="0,0,0,0"  AutomationProperties.Name="{x:Static Properties:Resources.PresetManagerView_Delete}"  
+                            cal:Message.Attach="[Event Click] = [Action DeletePreset]" 
+                            Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Remove.png'}">
+                                    </Image>
+                                    <TextBlock Text="{x:Static Properties:Resources.PresetManagerView_Delete}" VerticalAlignment="Center" />
+                                </StackPanel>
+
+                            </Button.Content>
+                        </Button>
+
+                    </StackPanel>
 
 
-                    <!--  Description  -->
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Text="{x:Static Properties:Resources.AddPresetView_Description}" VerticalAlignment="Top" />
-                    <TextBox Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Text="{Binding SelectedPreset.Description, UpdateSourceTrigger=PropertyChanged}" Height="80" TextWrapping="WrapWithOverflow" VerticalContentAlignment="Top" 
+                    <!-- Row 3 -->
+                    <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_RestrictedPreset}" HorizontalAlignment="Center" FontStyle="Italic" Grid.Row="2"
+                               Margin="0,5,0,20"
+                               Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
+
+                    <!--  Header  -->
+                    <Grid Grid.Row="3" Margin="10,0,10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Name  -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static Properties:Resources.AddPresetView_Name}" />
+                        <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1">
+                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding SelectedPreset.Name, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock HorizontalAlignment="Stretch" Text="{x:Static Properties:Resources.PresetManagerView_DefaultPreset}" FontWeight="Bold" Margin="15,0,0,0" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}}" />
+                        </StackPanel>
+
+                        <!--  Description  -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Text="{x:Static Properties:Resources.AddPresetView_Description}" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Text="{Binding SelectedPreset.Description, UpdateSourceTrigger=PropertyChanged}" Height="80" TextWrapping="WrapWithOverflow" VerticalContentAlignment="Top" 
                              Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
-                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Text="{Binding SelectedPreset.Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" 
+                        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Text="{Binding SelectedPreset.Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" 
                              Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"  />
 
-                    <!--  Settings  -->
-                    <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResLimit}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"  Margin="0,15,0,5"
+                        <!-- Category -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" Text="{x:Static Properties:Resources.AddPresetView_Category}" />
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,10,0,0">
+
+                            <ComboBox ItemsSource="{Binding UserPresetCategories}" SelectedItem="{Binding SelectedUserPresetCategory}" DisplayMemberPath="Category" Width="250" HorizontalAlignment="Left"
+                                  Visibility="{Binding SelectedPreset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                            <TextBlock Text="{Binding SelectedPreset.Category, UpdateSourceTrigger=PropertyChanged}" 
+                                 Visibility="{Binding SelectedPreset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                        </StackPanel>
+
+                        <!--  Settings  -->
+                        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResLimit}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"  Margin="0,15,0,5"
                                Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                    <ComboBox ItemsSource="{Binding ResolutionLimitModes, Converter={StaticResource resolutionLimitConverter}}"  
+                        <ComboBox ItemsSource="{Binding ResolutionLimitModes, Converter={StaticResource resolutionLimitConverter}}"  
                           SelectedItem="{Binding SelectedPictureSettingsResLimitMode, Converter={StaticResource resolutionLimitConverter}}" 
                           Width="150" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,5" 
                           AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_ResLimit}"
                           Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
 
-                    <!-- MAX Width and MAX Height -->
-                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal"  Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                        <controls:NumberBox Number="{Binding CustomWidth, Mode=TwoWay}" UpdateBindingOnTextChange="True"
+                        <!-- MAX Width and MAX Height -->
+                        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal"  Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                            <controls:NumberBox Number="{Binding CustomWidth, Mode=TwoWay}" UpdateBindingOnTextChange="True"
                                     Modulus="2" Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_MaxWidth}" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" />
 
-                        <TextBlock Text="x" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" Margin="10,0,10,0" />
-                        <controls:NumberBox Number="{Binding CustomHeight, Mode=TwoWay}" UpdateBindingOnTextChange="True"
+                            <TextBlock Text="x" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" Margin="10,0,10,0" />
+                            <controls:NumberBox Number="{Binding CustomHeight, Mode=TwoWay}" UpdateBindingOnTextChange="True"
                                     Modulus="2" Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_MaxHeight}" Visibility="{Binding IsCustomMaxRes, Converter={StaticResource boolToVisConverter}}" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <TextBlock Text="Audio:" Grid.Row="6" VerticalAlignment="Center" Margin="0,15,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
-                    <Button Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="8,2"
+                        <TextBlock Text="Audio:" Grid.Row="6" VerticalAlignment="Center" Margin="0,15,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
+                        <Button Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="8,2"
                     cal:Message.Attach="[Event Click] = [Action EditAudioDefaults]"  Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
 
-                    <TextBlock Text="Subtitles:" Grid.Row="7" VerticalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                    <Button Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+                        <TextBlock Text="Subtitles:" Grid.Row="7" VerticalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                        <Button Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
                     cal:Message.Attach="[Event Click] = [Action EditSubtitleDefaults]" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                </Grid>
+                    </Grid>
 
+                </Grid>
             </Grid>
+
+
         </Border>
 
     </Grid>
