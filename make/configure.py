@@ -1442,6 +1442,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', 'x86_64-w64-mingw32', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = IfHost( 'VAAPI video encoder/decoder', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-vaapi', dest="enable_vaapi", default=IfHost(True, '*-*-linux*', '*-*-freebsd*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-vaapi', dest="enable_vaapi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux*', '*-*-freebsd*', 'x86_64-w64-mingw32', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "x86_64-w64-mingw32", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1733,6 +1737,13 @@ try:
     # Allow GTK mingw only on mingw
     options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
                                        none=False).value
+    # Disable NVENC on unsupported platforms
+    options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
+                                       '*-*-mingw*', none=False).value
+    # Disable VAAPI on unsupported platforms
+    options.enable_vaapi      = IfHost(options.enable_vaapi, '*-*-linux*', '*-*-freebsd*',
+                                       none=False).value
+
     # NUMA is linux only and only needed with x265
     options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
                                         none=False).value
