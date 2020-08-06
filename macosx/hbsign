@@ -158,16 +158,19 @@ for TARGET in "${@}"; do
         find "${TARGET}"/Contents/Frameworks -type f -name ".DS_Store" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.textile" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \; >/dev/null 2>&1
-
-        echo "  Signing Updater App"
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Updater.app
+        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Updater.app
+        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate
 
         echo "  Signing Frameworks"
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate
         sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A
         sign "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A
 
+        echo "  Signing Updater App"
+        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app
+        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate
+
         echo "  Signing XPC Services"
+
         OIFS="${IFS}"
         IFS=$'\n'
         XPC=($(find -s "${TARGET}"/Contents/XPCServices -type d -regex ".*/HandBrakeXPCService[0-9]*\.xpc" 2>/dev/null))
@@ -183,12 +186,12 @@ for TARGET in "${@}"; do
         echo "  Signing App Bundle"
         sign "${TARGET}" main
 
-        echo "  Validating Updater App"
-        verify "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/Current/Resources/Updater.app
-
         echo "  Validating Frameworks"
         verify "${TARGET}"/Contents/Frameworks/Sparkle.framework
         verify "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework
+
+        echo "  Validating Updater App"
+        verify "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app
 
         echo "  Validating XPC Services"
         for FILE in "${XPC[@]}" "${XPC_EXT[@]}"; do

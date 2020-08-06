@@ -1,0 +1,4 @@
+[submodule "macosx/Sparkle"]
+	path = macosx/Sparkle
+	url = https://github.com/sparkle-project/Sparkle.git
+	branch = 2.x
