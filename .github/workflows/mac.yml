@@ -34,6 +34,7 @@ jobs:
         
     - name: Build HandBrake
       run: |
+        git submodule update --init --recursive
         ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
         cd build
         make pkg.create
