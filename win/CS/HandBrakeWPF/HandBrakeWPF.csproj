@@ -45,7 +45,7 @@
     <PackageReference Include="Caliburn.Micro" Version="3.2.0" />
     <PackageReference Include="gong-wpf-dragdrop" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Ookii.Dialogs" Version="1.0.0" />
+    <PackageReference Include="Ookii.Dialogs" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
