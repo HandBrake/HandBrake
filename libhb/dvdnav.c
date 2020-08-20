@@ -1748,6 +1748,11 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                     // Transition to another title signals that we are done.
                     hb_buffer_close( &b );
                     hb_deep_log(2, "dvdnav: vts change, found next title");
+                    if (error_count > 0)
+                    {
+                        // Last read attempt failed
+                        hb_set_work_error(d->h, HB_ERROR_READ);
+                    }
                     return NULL;
                 }
             }
@@ -1772,6 +1777,11 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                     // Transition to another title signals that we are done.
                     hb_buffer_close( &b );
                     hb_deep_log(2, "dvdnav: cell change, found next title");
+                    if (error_count > 0)
+                    {
+                        // Last read attempt failed
+                        hb_set_work_error(d->h, HB_ERROR_READ);
+                    }
                     return NULL;
                 }
                 c = FindChapterIndex(d->list_dvd_chapter, pgcn, pgn);
@@ -1783,6 +1793,11 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                         // a transition to an earlier chapter means we're done.
                         hb_buffer_close( &b );
                         hb_deep_log(2, "dvdnav: cell change, previous chapter");
+                        if (error_count > 0)
+                        {
+                            // Last read attempt failed
+                            hb_set_work_error(d->h, HB_ERROR_READ);
+                        }
                         return NULL;
                     }
                     chapter = d->chapter = c;
@@ -1791,6 +1806,11 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                 {
                     hb_buffer_close( &b );
                     hb_deep_log(2, "dvdnav: cell change, previous cell");
+                    if (error_count > 0)
+                    {
+                        // Last read attempt failed
+                        hb_set_work_error(d->h, HB_ERROR_READ);
+                    }
                     return NULL;
                 }
                 d->cell = cell_event->cellN;
@@ -1829,6 +1849,11 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             d->stopped = 1;
             hb_buffer_close( &b );
             hb_deep_log(2, "dvdnav: stop");
+            if (error_count > 0)
+            {
+                // Last read attempt failed
+                hb_set_work_error(d->h, HB_ERROR_READ);
+            }
             return NULL;
 
         default:
