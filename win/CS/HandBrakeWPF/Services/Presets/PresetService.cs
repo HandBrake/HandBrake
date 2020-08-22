@@ -50,8 +50,7 @@ namespace HandBrakeWPF.Services.Presets
         private readonly List<Preset> flatPresetList = new List<Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
-        private ILog log = null;
-
+        private ILog log;
 
         public PresetService(IErrorService errorService, IUserSettingService userSettingService, ILog logService)
         {
@@ -136,7 +135,7 @@ namespace HandBrakeWPF.Services.Presets
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                PresetTransportContainer container = null;
+                PresetTransportContainer container;
                 try
                 {
                     container = HandBrakePresetService.GetPresetsFromFile(filename);
@@ -159,14 +158,15 @@ namespace HandBrakeWPF.Services.Presets
                     bool containsBuildInPreset = false;
                     foreach (var objectPreset in container.PresetList)
                     {
-                        PresetCategory category = JsonConvert.DeserializeObject<PresetCategory>(objectPreset.ToString());
+                        HBPresetCategory category = JsonConvert.DeserializeObject<HBPresetCategory>(objectPreset.ToString());
                         if (category != null && category.ChildrenArray != null && category.ChildrenArray.Count > 0)
                         {
                             foreach (HBPreset hbPreset in category.ChildrenArray)
                             {
-                                Preset preset = this.ConvertHbPreset(hbPreset);
+                                Preset preset = this.ConvertHbPreset(hbPreset, category.PresetName);
                                 preset.IsPresetDisabled = this.IsPresetDisabled(preset);
-                                if (preset != null && !preset.IsBuildIn)
+                                preset.IsDefault = false; // When importing, force the user to reset default manually.  This prevents conflicts.
+                                if (!preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
                                 }
@@ -181,9 +181,10 @@ namespace HandBrakeWPF.Services.Presets
                             HBPreset hbPreset = JsonConvert.DeserializeObject<HBPreset>(objectPreset.ToString());
                             if (hbPreset != null)
                             {
-                                Preset preset = this.ConvertHbPreset(hbPreset);
+                                Preset preset = this.ConvertHbPreset(hbPreset, null);
+                                preset.IsDefault = false; // When importing, force the user to reset default manually.  This prevents conflicts.
                                 preset.IsPresetDisabled = this.IsPresetDisabled(preset);
-                                if (preset != null && !preset.IsBuildIn)
+                                if (!preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
                                 }
@@ -209,8 +210,13 @@ namespace HandBrakeWPF.Services.Presets
 
         public void Export(string filename, Preset preset, HBConfiguration configuration)
         {
-            // TODO Add support for multiple export
             PresetTransportContainer container = JsonPresetFactory.ExportPreset(preset, configuration);
+            HandBrakePresetService.ExportPreset(filename, container);
+        }
+
+        public void ExportCategories(string filename, IList<PresetDisplayCategory> categories, HBConfiguration configuration)
+        {
+            PresetTransportContainer container = JsonPresetFactory.ExportPresetCategories(categories, configuration);
             HandBrakePresetService.ExportPreset(filename, container);
         }
 
@@ -417,7 +423,7 @@ namespace HandBrakeWPF.Services.Presets
             // Clear the current built in Presets and now parse the temporary Presets file.
             this.ClearBuiltIn();
 
-            IList<PresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
+            IList<HBPresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
 
             foreach (var category in presetCategories)
             {
@@ -667,10 +673,10 @@ namespace HandBrakeWPF.Services.Presets
             // The presets file loaded was OK, so process it.
             foreach (var item in container.PresetList)
             {
-                object deserialisedItem = JsonConvert.DeserializeObject<PresetCategory>(item.ToString());
+                object deserialisedItem = JsonConvert.DeserializeObject<HBPresetCategory>(item.ToString());
 
                 // Handle Categorised Presets.
-                PresetCategory category = deserialisedItem as PresetCategory;
+                HBPresetCategory category = deserialisedItem as HBPresetCategory;
                 if (category != null && category.Folder)
                 {
                     foreach (HBPreset hbpreset in category.ChildrenArray)
@@ -713,7 +719,7 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Organise the Presets list into Json Equivalent objects.
-                Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
+                Dictionary<string, HBPresetCategory> presetCategories = new Dictionary<string, HBPresetCategory>();
                 List<HBPreset> uncategorisedPresets = new List<HBPreset>();
 
                 // Handle User Presets.
@@ -753,7 +759,7 @@ namespace HandBrakeWPF.Services.Presets
             this.presets.Clear();
         }
 
-        private void HandlePresetListsForSave(List<Preset> processList, Dictionary<string, PresetCategory> presetCategories, List<HBPreset> uncategorisedPresets)
+        private void HandlePresetListsForSave(List<Preset> processList, Dictionary<string, HBPresetCategory> presetCategories, List<HBPreset> uncategorisedPresets)
         {
             foreach (Preset item in processList)
             {
@@ -770,8 +776,8 @@ namespace HandBrakeWPF.Services.Presets
                     }
                     else
                     {
-                        presetCategories[item.Category] = new PresetCategory
-                                                          {
+                        presetCategories[item.Category] = new HBPresetCategory
+                        {
                                                               ChildrenArray = new List<HBPreset> { preset },
                                                               Folder = true,
                                                               PresetName = item.Category,
@@ -782,10 +788,10 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        private Preset ConvertHbPreset(HBPreset hbPreset)
+        private Preset ConvertHbPreset(HBPreset hbPreset, string categoryName)
         {
             Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
-            preset.Category = UserPresetCatgoryName; // TODO can we get this from the preset?
+            preset.Category = !string.IsNullOrEmpty(categoryName) ? categoryName : UserPresetCatgoryName;
 
             return preset;
         }

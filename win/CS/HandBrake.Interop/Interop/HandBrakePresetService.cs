@@ -14,7 +14,6 @@ namespace HandBrake.Interop.Interop
     using System.IO;
     using System.Runtime.InteropServices;
 
-    using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Json.Presets;
@@ -44,11 +43,11 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static IList<PresetCategory> GetBuiltInPresets()
+        public static IList<HBPresetCategory> GetBuiltInPresets()
         {
             IntPtr presets = hbFunctions.hb_presets_builtin_get_json();
             string presetJson = Marshal.PtrToStringAnsi(presets);
-            IList<PresetCategory> presetList = JsonConvert.DeserializeObject<IList<PresetCategory>>(presetJson);
+            IList<HBPresetCategory> presetList = JsonConvert.DeserializeObject<IList<HBPresetCategory>>(presetJson);
 
             return presetList;
         }

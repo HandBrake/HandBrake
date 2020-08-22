@@ -2578,6 +2578,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export all user presets.
+        /// </summary>
+        public static string ManagePresetView_ExportUserPresets {
+            get {
+                return ResourceManager.GetString("ManagePresetView_ExportUserPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Preset(s) from file.
         /// </summary>
         public static string ManagePresetView_Import {

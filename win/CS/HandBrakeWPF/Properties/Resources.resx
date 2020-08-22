@@ -2378,4 +2378,7 @@ Fields are limited to:
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
     <value>There is no preset selected.</value>
   </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Export all user presets</value>
+  </data>
 </root>

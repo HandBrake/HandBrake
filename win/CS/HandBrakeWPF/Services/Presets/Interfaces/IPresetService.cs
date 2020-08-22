@@ -44,7 +44,6 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </summary>
         void Load();
 
-
         /// <summary>
         /// Force save updates to the preset files. Rarely should need to be called. Only used by the preset manager.
         /// </summary>
@@ -63,6 +62,9 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// Get a list of preset categories.
         /// </summary>
+        /// <param name="userCategoriesOnly">
+        /// The user Categories Only.
+        /// </param>
         /// <returns>
         /// String list.
         /// </returns>
@@ -101,6 +103,8 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The configuration.
         /// </param>
         void Export(string filename, Preset preset, HBConfiguration configuration);
+
+        void ExportCategories(string filename, IList<PresetDisplayCategory> categories, HBConfiguration configuration);
 
         /// <summary>
         /// Update a preset

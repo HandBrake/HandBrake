@@ -26,19 +26,23 @@ namespace HandBrakeWPF.Services.Presets.Model
         }
 
         public string Category { get; private set; }
+
         public BindingList<Preset> Presets { get; private set; }
+
         public string Description => this.Category;
+
         public bool IsBuiltIn { get; }
 
         public bool IsExpanded
         {
-            get
-            {
-                return this.isExpanded;
-            }
+            get => this.isExpanded;
             set
             {
-                if (value == this.isExpanded) return;
+                if (value == this.isExpanded)
+                {
+                    return;
+                }
+
                 this.isExpanded = value;
                 this.NotifyOfPropertyChange(() => this.IsExpanded);
             }
@@ -46,10 +50,8 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public bool IsSelected
         {
-            get
-            {
-                return this.isSelected;
-            }
+            get => this.isSelected;
+
             set
             {
                 if (value == this.isSelected) return;
@@ -68,7 +70,7 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public override int GetHashCode()
         {
-            return (this.Category != null ? this.Category.GetHashCode() : 0);
+            return this.Category != null ? this.Category.GetHashCode() : 0;
         }
 
         protected bool Equals(PresetDisplayCategory other)

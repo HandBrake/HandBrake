@@ -107,6 +107,7 @@
 
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.ManagePresetView_Import}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.ManagePresetView_Export}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action ExportUserPresets]" Header="{x:Static Properties:Resources.ManagePresetView_ExportUserPresets}" />
                     <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action SetDefault]" Header="{x:Static Properties:Resources.ManagePresetView_SetDefault}" />
 

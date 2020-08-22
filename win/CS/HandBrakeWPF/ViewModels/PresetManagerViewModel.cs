@@ -223,24 +223,6 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.PresetCollectionChanged += this.PresetService_PresetCollectionChanged;
         }
 
-        private void PresetService_PresetCollectionChanged(object sender, System.EventArgs e)
-        {
-            string presetName = this.selectedPreset?.Name; // Recording such that we can re-select
-
-            this.PresetsCategories = this.presetService.Presets;
-            this.UserPresetCategories = presetService.GetPresetCategories(true).ToList(); // .Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
-            
-            this.NotifyOfPropertyChange(() => this.PresetsCategories);
-            this.NotifyOfPropertyChange(() => this.UserPresetCategories);
-            this.NotifyOfPropertyChange(() => this.SelectedUserPresetCategory);
-
-            // Reselect the preset as the object has changed due to the reload that occurred.
-            if (!string.IsNullOrEmpty(presetName))
-            {
-                this.SelectedPreset = this.presetService.FlatPresetList.FirstOrDefault(s => s.Name == presetName);
-            }
-        }
-
         public void DeletePreset()
         {
             if (this.selectedPreset != null)
@@ -327,6 +309,28 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 this.errorService.ShowMessageBox(Resources.Main_SelectPreset, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        public void ExportUserPresets()
+        {
+            SaveFileDialog savefiledialog = new SaveFileDialog
+            {
+                Filter = "json|*.json",
+                CheckPathExists = true,
+                AddExtension = true,
+                DefaultExt = ".json",
+                OverwritePrompt = true,
+                FilterIndex = 0
+            };
+
+            savefiledialog.ShowDialog();
+            string filename = savefiledialog.FileName;
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                IList<PresetDisplayCategory> userPresets = this.presetService.GetPresetCategories(true);
+                this.presetService.ExportCategories(savefiledialog.FileName, userPresets, HBConfigurationFactory.Create());
             }
         }
 
@@ -465,6 +469,24 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.None;
+            }
+        }
+
+        private void PresetService_PresetCollectionChanged(object sender, System.EventArgs e)
+        {
+            string presetName = this.selectedPreset?.Name; // Recording such that we can re-select
+
+            this.PresetsCategories = this.presetService.Presets;
+            this.UserPresetCategories = presetService.GetPresetCategories(true).ToList(); // .Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
+
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+            this.NotifyOfPropertyChange(() => this.UserPresetCategories);
+            this.NotifyOfPropertyChange(() => this.SelectedUserPresetCategory);
+
+            // Reselect the preset as the object has changed due to the reload that occurred.
+            if (!string.IsNullOrEmpty(presetName))
+            {
+                this.SelectedPreset = this.presetService.FlatPresetList.FirstOrDefault(s => s.Name == presetName);
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PresetCategory.cs" company="HandBrake Project (https://handbrake.fr)">
+// <copyright file="HbPresetCategory.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,7 +14,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
     /// <summary>
     /// The preset category.
     /// </summary>
-    public class PresetCategory
+    public class HBPresetCategory
     {
         /// <summary>
         /// Gets or sets the children array.

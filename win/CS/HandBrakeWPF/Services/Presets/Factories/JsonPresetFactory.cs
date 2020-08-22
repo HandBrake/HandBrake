@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.Services.Presets.Factories
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
@@ -25,38 +24,25 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Filters;
-    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
-    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
-    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
-    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
+    using AudioEncoder = Encode.Model.Models.AudioEncoder;
+    using AudioTrack = Encode.Model.Models.AudioTrack;
+    using DenoisePreset = Encode.Model.Models.DenoisePreset;
+    using DenoiseTune = Encode.Model.Models.DenoiseTune;
+    using EncodeTask = Encode.Model.EncodeTask;
+    using FramerateMode = Encode.Model.Models.FramerateMode;
+    using OutputFormat = Encode.Model.Models.OutputFormat;
+    using VideoLevel = Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = Encode.Model.Models.Video.VideoTune;
 
-    /// <summary>
-    /// The json preset factory.
-    /// </summary>
     public class JsonPresetFactory
     {
-        /// <summary>
-        /// The create preset.
-        /// </summary>
-        /// <param name="importedPreset">
-        /// The preset.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Preset"/>.
-        /// </returns>
         public static Preset ImportPreset(HBPreset importedPreset)
         {
             Preset preset = new Preset();
@@ -477,25 +463,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public int PictureForceHeight { get; set; }
             // public int PictureForceWidth { get; set; }
             // public List<object> ChildrenArray { get; set; }
-            // public bool Folder { get; set; }
-            // public bool FolderOpen { get; set; }
             // public int Type { get; set; }
 
             return preset;
         }
 
-        /// <summary>
-        /// The export preset.
-        /// </summary>
-        /// <param name="export">
-        /// The export.
-        /// </param>
-        /// <param name="config">
-        /// HandBrakes configuration options.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Preset"/>.
-        /// </returns>
         public static PresetTransportContainer ExportPreset(Preset export, HBConfiguration config)
         {
             PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
@@ -506,12 +478,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             return container;
         }
 
-        /// <summary>
-        /// Export a list of Presets.
-        /// </summary>
-        /// <param name="exportList">A list of presets to export</param>
-        /// <param name="config">HB's configuration</param>
-        /// <returns>A list of JSON object presets.</returns>
         public static PresetTransportContainer ExportPresets(IEnumerable<Preset> exportList, HBConfiguration config)
         {
             PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
@@ -525,16 +491,38 @@ namespace HandBrakeWPF.Services.Presets.Factories
             return container;
         }
 
-        /// <summary>
-        /// The create hb preset.
-        /// </summary>
-        /// <param name="export">
-        /// The export.
-        /// </param>
-        /// <param name="config">HandBrakes current configuration</param>
-        /// <returns>
-        /// The <see cref="HBPreset"/>.
-        /// </returns>
+        public static PresetTransportContainer ExportPresetCategories(IList<PresetDisplayCategory> categories, HBConfiguration config)
+        {
+            PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
+            PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
+
+            List<object> presets = new List<object>();
+            foreach (var category in categories)
+            {
+                presets.Add(CreatePresetCategory(category, config));
+            }
+
+            container.PresetList = presets;
+
+            return container;
+        }
+
+        public static HBPresetCategory CreatePresetCategory(PresetDisplayCategory category, HBConfiguration config)
+        {
+            HBPresetCategory preset = new HBPresetCategory();
+            preset.Folder = true;
+            preset.PresetName = category.Category;
+            preset.PresetDescription = string.Empty;
+            preset.ChildrenArray = new List<HBPreset>();
+
+            foreach (Preset singlePreset in category.Presets)
+            {
+                preset.ChildrenArray.Add(CreateHbPreset(singlePreset, config));
+            }
+
+            return preset;
+        }
+
         public static HBPreset CreateHbPreset(Preset export, HBConfiguration config)
         {
             HBPreset preset = new HBPreset();
@@ -664,22 +652,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoTwoPass = export.Task.TwoPass;
 
             // Unknown
-            preset.ChildrenArray = new List<object>(); // We don't support nested presets.
-            preset.Folder = false; // TODO
-            preset.FolderOpen = false; // TODO
+            preset.ChildrenArray = new List<object>(); 
+            preset.Folder = false;
+            preset.FolderOpen = false;
 
             return preset;
         }
 
-        /// <summary>
-        /// Get the OutputFormat Enum for a given string
-        /// </summary>
-        /// <param name="format">
-        /// OutputFormat as a string
-        /// </param>
-        /// <returns>
-        /// An OutputFormat Enum
-        /// </returns> 
         private static OutputFormat GetFileFormat(string format)
         {
             switch (format.ToLower())
