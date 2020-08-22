@@ -542,10 +542,6 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Você deve primeiro analisar uma origem e configurar a codificação antes de pré-visualizar.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>Não foi possível encontrar o VLC Player.
-Por favor, certifique-se de que o VLC está instalado e a pasta definida nas opções do HandBrake está correta. (Veja o menu "Ferramentas &gt; Preferências &gt; Geral")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Não foi possível encontrar o arquivo de pré-visualização. O arquivo foi excluído ou a conversão falhou. Verifique os detalhes no Log de Atividades.</value>
   </data>
@@ -1249,9 +1245,6 @@ Você gostaria de substituí-lo?</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Caminho:</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Caminho para o VLC Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Evitar que o sistema entre em modo de espera durante a conversão</value>

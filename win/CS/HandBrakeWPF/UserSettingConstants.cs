@@ -26,7 +26,7 @@ namespace HandBrakeWPF
         public const string MainWindowMinimize = "MainWindowMinimize";
         public const string UpdateStatus = "updateStatus";
         public const string UseM4v = "useM4v";
-        public const string VLCPath = "VLC_Path";
+        public const string MediaPlayerPath = "VLC_Path";
         public const string InstanceId = "InstanceId";
         public const string X264Step = "X264Step";
         public const string LastPreviewDuration = "LastPreviewDuration";

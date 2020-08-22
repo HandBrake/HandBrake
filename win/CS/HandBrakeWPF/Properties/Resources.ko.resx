@@ -540,10 +540,6 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>미리보기를 만들기 전에 먼저 파일을 스캔하고 인코딩을 설정하십시오.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>VLC 플레이어를 발견할 수 없습니다.
-VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더가 올바른 지 확인하십시오. (보기: "도구 메뉴 &gt; 설정 &gt; 일반")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>미리보기 파일을 찾을 수 없습니다. 파일이 삭제되었거나 인코딩에 실패하였습니다. 자세한 내용은 액티비티 로그를 확인하십시오.</value>
   </data>
@@ -1248,9 +1244,6 @@ VLC가 설치되었는지 확인하고 HandBrake의 옵션에 지정된 폴더�
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>경로: </value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>VLC 플레이어 경로</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>인코딩 중 시스템 절전 방지</value>

@@ -541,10 +541,6 @@ Are you sure you wish to exit HandBrake?</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>You must first scan a source and setup your encode before creating a preview.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>Unable to detect VLC Player. 
-Please make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: "Tools Menu &gt; Preferences &gt; General")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.</value>
   </data>
@@ -1250,8 +1246,8 @@ Would you like to overwrite it?</value>
   <data name="Options_Path" xml:space="preserve">
     <value>Path: </value>
   </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Path to VLC Player</value>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Path to Media Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Prevent the system from sleeping while encoding</value>
@@ -1302,7 +1298,8 @@ Would you like to overwrite it?</value>
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>View Log Directory</value>
@@ -1584,7 +1581,7 @@ Would you like to overwrite it?</value>
     <value>Select a preview image</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Use system default video player</value>
+    <value>Prefer system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Add Closed Captions when available</value>

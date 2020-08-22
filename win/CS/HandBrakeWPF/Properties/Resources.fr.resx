@@ -541,10 +541,6 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Vous devez d'abord analyser une source et configurer votre encodage avant de créer un aperçu.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>Impossible de détecter le lecteur VLC.
-Assurez-vous que VLC est installé et que le répertoire spécifié dans les options d'HandBrake est correct. (Voir menu "Outils &gt; Préférences &gt; Général")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Impossible de trouver le fichier de prévisualisation. Le fichier a été supprimé ou l'encodage a échoué. Consultez le journal d'activité pour plus de détails.</value>
   </data>
@@ -1249,9 +1245,6 @@ Souhaitez-vous l'écraser ?</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Chemin d'accès :</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Chemin vers le lecteur VLC</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Empêcher le système de se mettre en veille pendant l'encodage</value>

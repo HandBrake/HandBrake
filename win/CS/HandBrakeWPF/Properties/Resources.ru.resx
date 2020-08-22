@@ -543,10 +543,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Вы должны сперва сканировать источник и установить кодирование, прежде чем создавать предпросмотр.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>Невозможно обнаружить VLC Player.
-Пожалуйста, убедитесь, что VLC установлен и каталог, указанный в настройках HandBrake, верный. (См.: "Меню инструментов &gt; Настройки &gt; Общее")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Невозможно найти файл предпросмотра. Либо файл был удален, либо кодирование не удалось. Проверьте Лог активности для получения детальной информации.</value>
   </data>
@@ -1247,9 +1243,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Путь: </value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Путь до плеера VLC</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Не давать системе уснуть, если происходит кодирование</value>

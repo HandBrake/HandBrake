@@ -1188,7 +1188,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
 
             // VLC Path
-            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath) ?? string.Empty;
+            this.VLCPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath) ?? string.Empty;
 
             // #############################
             // Video
@@ -1343,7 +1343,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.MetadataPassthru, this.PassthruMetadata);
 
             /* Previews */
-            this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.MediaPlayerPath, this.VLCPath);
 
             /* Video */
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncDecoding, this.EnableQuickSyncDecoding);

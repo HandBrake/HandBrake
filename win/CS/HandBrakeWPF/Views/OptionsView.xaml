@@ -155,7 +155,7 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_PathToVLC}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_PathToMediaPlayer}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
 

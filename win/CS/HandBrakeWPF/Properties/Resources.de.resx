@@ -544,10 +544,6 @@ Soll HandBrake wirklich beendet werden?</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Bevor eine Vorschau erstellt werden kann, muss die Quelle überprüft und eine Encodierung festgelegt werden.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>VLC-Player nicht gefunden.
-Bitte sicherstellen, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe „Extras &gt; Einstellungen &gt; Allgemein“)</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Vorschaudatei konnte nicht gefunden werden. Entweder wurde die Datei gelöscht oder die Encodierung ist fehlgeschlagen. Bitte das Aktivitätsprotokoll für Details prüfen.</value>
   </data>
@@ -1251,9 +1247,6 @@ Soll sie überschrieben werden?</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Pfad:</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Pfad zum VLC-Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Das System daran hindern während der Encodierung in den Ruhezustand zu fahren</value>

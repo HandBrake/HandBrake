@@ -576,36 +576,16 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        if (!File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        if (File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath)))
                         {
-                            // Attempt to find VLC if it doesn't exist in the default set location.
-                            string vlcPath;
-
-                            if (IntPtr.Size == 8 || (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
-                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-                            else
-                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
-
-                            if (!string.IsNullOrEmpty(vlcPath))
-                            {
-                                vlcPath = Path.Combine(vlcPath, "VideoLAN\\VLC\\vlc.exe");
-                            }
-
-                            if (File.Exists(vlcPath))
-                            {
-                                userSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
-                            }
-                            else
-                            {
-                                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToFindVLC, 
-                                                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
+                            ProcessStartInfo process = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath), args);
+                            Process.Start(process);
+                            return;
                         }
-
-                        if (File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        else
                         {
-                            ProcessStartInfo vlc = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
-                            Process.Start(vlc);
+                            // Fallback to the System Default
+                            Process.Start(args);
                         }
                     }
                 }

@@ -536,10 +536,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>在创建预览之前，必须先扫描源并设置编码。</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>无法检测到 VLC 播放器。
-请确保已安装 VLC 并且 HandBrake 选项中指定的目录是正确的。（请参阅：“工具菜单 &gt; 首选项 &gt; 常规”）</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>无法找到预览文件。文件已删除或编码失败。检查活动日志以获取详细信息。</value>
   </data>
@@ -1237,9 +1233,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>路径：</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>VLC Player程序路径</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>在编码时防止系统进入睡眠状态</value>

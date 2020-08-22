@@ -539,10 +539,6 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Primero debe escanear un origen y configurar su codificación antes de crear una vista previa.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>No se puede detectar el reproductor VLC. 
- Asegúrese de que VLC está instalado y el directorio especificado en las opciones de HandBrake es correcto. (Véase: "Menú Herramientas &gt; Preferencias &gt; General")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>No se puede encontrar el archivo de vista previa. Se eliminó el archivo o se produjo un error en la codificación. Compruebe el registro de actividad para obtener más información.</value>
   </data>
@@ -1246,9 +1242,6 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Directorio:</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Directorio a VLC</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Evitar que el sistema hiberne mientras se codifica</value>

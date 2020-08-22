@@ -539,10 +539,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>プレビューの前にまずソースをスキャンしてエンコードを設定しなければいけません。</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>VLCプレーヤーを検出できません。
-VLCがインストールされ、HandBrakeの設定で指定されたディレクトリが正しいことを確認してください。(参照:「[ツール] メニュー/[基本設定]/[一般]」)</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>プレビューファイルが見つかりません。ファイルが削除されたか、エンコードに失敗しました。詳細については、履歴ウィンドウを確認してください。</value>
   </data>
@@ -1247,9 +1243,6 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>パス:</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>VLC Playerへのパス</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>エンコード中にシステムがスリープ状態にならないようにする</value>

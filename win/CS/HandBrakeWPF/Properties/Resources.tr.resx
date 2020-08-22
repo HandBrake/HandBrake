@@ -541,10 +541,6 @@ HandBrake'den çıkmak istediğinize emin misiniz?</value>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodunuzu ayarlamalısınız.</value>
   </data>
-  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>VLC Oynatıcı algılanamadı. 
-Lütfen VLC'nin kurulu olduğundan ve HandBrake'nin seçeneklerinde belirtilen dizinin doğru olduğundan emin olun. (Bkz. "Araçlar Menüsü &gt; Tercihler &gt; Genel")</value>
-  </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Önizleme dosyası bulunamadı. Dosya silindi ya da kodlama başarısız oldu. Ayrıntılar için etkinlik günlüğünü kontrol edin.</value>
   </data>
@@ -1249,9 +1245,6 @@ Devam etmek istiyor musunuz? </value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Yol:</value>
-  </data>
-  <data name="Options_PathToVLC" xml:space="preserve">
-    <value>VLC Oynatıcının Yolu</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Kodlama yaparken sistemin uyumasını önleyin</value>
