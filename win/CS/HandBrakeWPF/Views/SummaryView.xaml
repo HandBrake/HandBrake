@@ -61,17 +61,17 @@
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
                               SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
                               AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" />
-            <CheckBox Name="WebOptimized" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"
+            <CheckBox Name="WebOptimized" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" 
                               Content="{x:Static Properties:Resources.MainView_WebOptimized}"
                               IsChecked="{Binding Path=OptimizeMP4}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
                               Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-            <CheckBox Name="AlignAVStart" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"
+            <CheckBox Name="AlignAVStart" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" 
                               Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
                               IsChecked="{Binding Path=AlignAVStart}"
                               Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-            <CheckBox Name="iPod5G" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"
+            <CheckBox Name="iPod5G" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" 
                               Content="{x:Static Properties:Resources.MainView_iPod5G}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
                               IsChecked="{Binding Path=IPod5GSupport}"

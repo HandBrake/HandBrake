@@ -97,7 +97,7 @@
 
                 <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                           Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
-                          VerticalAlignment="Center" Margin="0,5,0,10" />
+                          VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,5,0,10" />
 
 
                 <!-- Anamorphic -->
@@ -156,7 +156,7 @@
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Rotate}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <CheckBox Content="{x:Static Properties:Resources.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding RotateFlipFilter.FlipVideo, UpdateSourceTrigger=PropertyChanged}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}" Grid.Row="0" Grid.Column="2" />
+                              ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"  />
 
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="1" Grid.Column="0" Margin="0,20,0,0" />
