@@ -7,8 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <stddef.h>
+
 int  hb_vt_h264_is_available();
 int  hb_vt_h265_is_available();
+
+int hb_vt_h264_is_constant_quality_available();
+int hb_vt_h265_is_constant_quality_available();
 
 static const char * const hb_vt_h265_level_names[] =
 {

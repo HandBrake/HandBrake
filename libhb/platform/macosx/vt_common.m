@@ -1,0 +1,134 @@
+/* vt_common.c
+
+   Copyright (c) 2003-2020 HandBrake Team
+   This file is part of the HandBrake source code
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
+#include "vt_common.h"
+
+#include <VideoToolbox/VideoToolbox.h>
+#include <CoreMedia/CoreMedia.h>
+#include <CoreVideo/CoreVideo.h>
+
+static const CFStringRef encoder_id_h264 = CFSTR("com.apple.videotoolbox.videoencoder.h264.gva");
+static const CFStringRef encoder_id_h265 = CFSTR("com.apple.videotoolbox.videoencoder.hevc.gva");
+
+static int encvt_available(CFStringRef encoder)
+{
+    CFArrayRef encoder_list;
+    VTCopyVideoEncoderList(NULL, &encoder_list);
+    CFIndex size = CFArrayGetCount(encoder_list);
+
+    for (CFIndex i = 0; i < size; i++ )
+    {
+        CFDictionaryRef encoder_dict = CFArrayGetValueAtIndex(encoder_list, i);
+        CFStringRef encoder_id = CFDictionaryGetValue(encoder_dict, kVTVideoEncoderSpecification_EncoderID);
+        if (CFEqual(encoder_id, encoder))
+        {
+            CFRelease(encoder_list);
+            return 1;
+        }
+    }
+    CFRelease(encoder_list);
+    return 0;
+}
+
+static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *encoderIDOut, CFDictionaryRef *supportedPropertiesOut) API_AVAILABLE(macosx(10.13), ios(11.0), tvos(11.0))
+{
+    const void *keys[1] = { kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder };
+    const void *values[1] = { kCFBooleanTrue };
+    CFDictionaryRef specification = CFDictionaryCreate(NULL, keys, values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    OSStatus err = VTCopySupportedPropertyDictionaryForEncoder(1920, 1080,
+                                                               codecType, specification,
+                                                               encoderIDOut,
+                                                               supportedPropertiesOut);
+
+    return err;
+}
+
+static int hb_vt_is_hardware_encoder_available(CMVideoCodecType codecType)
+{
+    if (@available (macOS 10.15, *))
+    {
+        CFStringRef encoderIDOut;
+        CFDictionaryRef supportedPropertiesOut;
+
+        OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
+
+        if (err == noErr) {
+            CFRelease(encoderIDOut);
+            CFRelease(supportedPropertiesOut);
+            return 1;
+        }
+        return 0;
+    }
+    else
+    {
+        CFStringRef encoder_id;
+
+        switch (codecType) {
+            case kCMVideoCodecType_H264:
+                encoder_id = encoder_id_h264;
+                break;
+            case kCMVideoCodecType_HEVC:
+                encoder_id = encoder_id_h265;
+                break;
+            default:
+                return 0;
+        }
+
+        return encvt_available(encoder_id);
+    }
+}
+
+static int hb_vt_is_constant_quality_available(CMVideoCodecType codecType)
+{
+    if (@available (macOS 10.15, *))
+    {
+        CFStringRef encoderIDOut;
+        CFDictionaryRef supportedPropertiesOut;
+
+        OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
+
+        if (err == noErr) {
+            Boolean keyExists;
+            CFBooleanRef value = kCFBooleanFalse;
+            keyExists = CFDictionaryGetValueIfPresent(supportedPropertiesOut,
+                                                      kVTCompressionPropertyKey_Quality,
+                                                      (const void **)&value);
+
+            CFRelease(encoderIDOut);
+            CFRelease(supportedPropertiesOut);
+
+            if (keyExists) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+int hb_vt_h264_is_available()
+{
+    return hb_vt_is_hardware_encoder_available(kCMVideoCodecType_H264);
+}
+
+int hb_vt_h265_is_available()
+{
+    return hb_vt_is_hardware_encoder_available(kCMVideoCodecType_HEVC);
+}
+
+int hb_vt_h264_is_constant_quality_available()
+{
+    return hb_vt_is_constant_quality_available(kCMVideoCodecType_H264);
+}
+
+int hb_vt_h265_is_constant_quality_available()
+{
+    return hb_vt_is_constant_quality_available(kCMVideoCodecType_HEVC);
+}

@@ -1394,10 +1394,10 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
         case HB_VCODEC_FFMPEG_VT_H264:
         case HB_VCODEC_FFMPEG_VT_H265:
-            *direction   = 1;
-            *granularity = 0.1;
+            *direction   = 0;
+            *granularity = 1.;
             *low         = 0.;
-            *high        = 0.;
+            *high        = 100.;
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:
@@ -1434,12 +1434,31 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_VT_H264:
+        case HB_VCODEC_FFMPEG_VT_H265:
             return "CQ";
 
         default:
             return "QP";
     }
 }
+
+int hb_video_quality_is_supported(uint32_t codec)
+{
+    switch (codec)
+    {
+#ifdef __APPLE__
+        case HB_VCODEC_FFMPEG_VT_H264:
+            return hb_vt_h264_is_constant_quality_available();
+        case HB_VCODEC_FFMPEG_VT_H265:
+            return hb_vt_h265_is_constant_quality_available();
+#endif
+
+        default:
+            return 1;
+    }
+}
+
 
 int hb_video_encoder_get_depth(int encoder)
 {

@@ -651,7 +651,7 @@ fail:
      * for the fVidQualityMatrix. It should also be noted that any preset that used the deprecated Target Size
      * setting of 0 would set us to 0 or ABR since ABR is now tagged 0. Fortunately this does not affect any built-in
      * presets since they all use Constant Quality or Average Bitrate.*/
-    if (qualityType == -1)
+    if (qualityType == -1 || hb_video_quality_is_supported(self.encoder) == 0)
     {
         qualityType = 0;
     }

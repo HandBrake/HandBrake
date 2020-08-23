@@ -137,7 +137,7 @@
 
 - (BOOL)isConstantQualitySupported
 {
-    return (self.qualityMaxValue == 0 && self.qualityMinValue == 0) == NO;
+    return hb_video_quality_is_supported(self.encoder);
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
