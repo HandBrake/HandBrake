@@ -22,6 +22,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the async depth.
         /// </summary>
-        public int AsyncDepth { get; set; }
+        public int? AsyncDepth { get; set; }
     }
 }
