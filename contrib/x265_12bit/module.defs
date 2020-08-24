@@ -3,7 +3,6 @@ $(eval $(call import.MODULE.defs,X265_12,x265_12,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_12))
 
 X265_12.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265_3.2.1.tar.gz
-X265_12.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_3.2.1.tar.gz
 X265_12.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
 X265_12.FETCH.sha256  = fb9badcf92364fd3567f8b5aa0e5e952aeea7a39a2b864387cec31e3b58cbbcc
 X265_12.EXTRACT.tarbase = x265_3.2.1
