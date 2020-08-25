@@ -286,17 +286,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)validateQualityType
 {
-    if (self.qualityType != 0)
+    if (self.qualityType != 0 && !hb_video_quality_is_supported(self.encoder))
     {
-        int direction;
-        float minValue, maxValue, granularity;
-        hb_video_quality_get_limits(self.encoder,
-                                    &minValue, &maxValue, &granularity, &direction);
-
-        if (minValue == 0 && maxValue == 0)
-        {
-            self.qualityType = 0;
-        }
+        self.qualityType = 0;
     }
 
     if ((self.encoder & HB_VCODEC_FFMPEG_VT_H264) ||
