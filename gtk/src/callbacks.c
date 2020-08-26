@@ -749,14 +749,14 @@ ghb_check_dependency(
 }
 
 void
-ghb_check_all_depencencies(signal_user_data_t *ud)
+ghb_check_all_dependencies(signal_user_data_t *ud)
 {
     GhbDictIter iter;
     const gchar *dep_name;
     GhbValue *value;
     GObject *dep_object;
 
-    g_debug("ghb_check_all_depencencies ()");
+    g_debug("ghb_check_all_dependencies ()");
     if (rev_map == NULL) return;
     iter = ghb_dict_iter_init(rev_map);
     while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
@@ -1669,7 +1669,7 @@ ghb_load_post_settings(signal_user_data_t * ud)
     ud->scale_busy = TRUE;
 
     ghb_set_widget_ranges(ud, ud->settings);
-    ghb_check_all_depencencies(ud);
+    ghb_check_all_dependencies(ud);
     ghb_show_container_options(ud);
     check_chapter_markers(ud);
 

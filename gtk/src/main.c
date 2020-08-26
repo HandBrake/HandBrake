@@ -941,7 +941,7 @@ ghb_idle_ui_init(signal_user_data_t *ud)
     }
 
     // Grey out widgets that are dependent on a disabled feature
-    ghb_check_all_depencencies(ud);
+    ghb_check_all_dependencies(ud);
 
     return FALSE;
 }
