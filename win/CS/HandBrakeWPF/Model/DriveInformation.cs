@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Model
         /// Returns  "Drive" + Id  (e.g  Drive2)
         /// </summary>
         /// <returns>
-        /// A String that contrains "Drive" and it's ID
+        /// A String that contains "Drive" and it's ID
         /// </returns>
         public override string ToString()
         {

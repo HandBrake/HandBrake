@@ -569,7 +569,7 @@ namespace HandBrakeWPF.ViewModels
             // For all the source audio tracks
             foreach (Audio sourceTrack in this.SourceTracks)
             {
-                // Step 2: Check if the track list already contrains this track
+                // Step 2: Check if the track list already contains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
                 {
@@ -587,7 +587,7 @@ namespace HandBrakeWPF.ViewModels
             // Add them if they are not already added.
             foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                // Step 2: Check if the track list already contrains this track
+                // Step 2: Check if the track list already contains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
                 {
