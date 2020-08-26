@@ -1,5 +1,5 @@
 name: "Push Notification"
-on: 
+on:
   push:
   pull_request:
       types: [opened, review_requested]
@@ -18,7 +18,7 @@ jobs:
           port: 6697
           tls: true
           message: |
-            COMMIT: ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }} ${{ join(github.event.commits.*.message) }}     
+            COMMIT: ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }} ${{ join(github.event.commits.*.message) }}
       - name: Handle Pull Request
         uses: rectalogic/notify-irc@v1
         if: github.event_name == 'pull_request' && github.repository == 'HandBrake/HandBrake'

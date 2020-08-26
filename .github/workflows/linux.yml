@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Print Warning
       run: |
-        echo "Builds are disabled for forked repositories."  
+        echo "Builds are disabled for forked repositories."
 
   build:
     name: Build on Ubuntu
@@ -19,18 +19,18 @@ jobs:
     if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
-    
+
     - name: Setup Environment
       run: |
         sudo apt-get update
-        sudo apt-get install autoconf automake build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev 
+        sudo apt-get install autoconf automake build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev
         sudo apt-get install libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libvorbis-dev libx264-dev libxml2-dev libvpx-dev m4 make nasm ninja-build patch pkg-config python tar yasm zlib1g-dev
         sudo apt-get install python3-pip
         sudo apt-get install python3-setuptools
         sudo pip3 install meson
         sudo apt-get install gstreamer1.0-libav intltool libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev libgudev-1.0-dev libnotify-dev
         sudo apt-get install libva-dev libdrm-dev
-        
+
     - name: Build HandBrake Linux
       run: |
         ./configure --launch-jobs=0 --disable-gtk-update-checks  --enable-qsv --launch

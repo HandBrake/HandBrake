@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@master
-    
+
     - name: Environment Setup
       run: |
         sudo apt-get install automake autoconf build-essential cmake curl gcc git intltool libtool libtool-bin m4 make nasm patch pkg-config python tar yasm zlib1g-dev ninja-build zip
@@ -16,7 +16,7 @@ jobs:
         sudo apt-get install python3-pip
         sudo apt-get install python3-setuptools
         sudo pip3 install meson
-           
+
     - name: Setup Toolchain
       run: |
         wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.1.0/mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
@@ -35,20 +35,20 @@ jobs:
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
         fi
-          
+
     - name: Build CLI and LibHB
       run: |
         export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.1.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
         cd build
         make pkg.create.zip
-    
+
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v2
       with:
         name: HandBrakeCLI
         path: ./build/HandBrakeCLI.exe
-    
+
     - name: Upload LibHB
       uses: actions/upload-artifact@v2
       with:
@@ -61,35 +61,35 @@ jobs:
     needs: build_mingw
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
-       
+
     steps:
     - uses: actions/checkout@master
-        
+
     - name: Environment Setup
       run: |
         choco install wget
         wget https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip
         mkdir plugins
         move Inetc.zip plugins
-        cd plugins        
+        cd plugins
         7z x Inetc.zip
-          
+
     - name: NuGet Restore
       run: |
          choco install nuget.commandline
          cd win/CS/
          nuget restore HandBrake.sln
-   
+
     - name: Download LibHandBrake
       uses: actions/download-artifact@v2
       with:
        name: LibHandBrake
        path: win/CS/HandBrakeWPF/bin/x64/Debug
-         
+
     - name: Import the Signing Cert
       run: |
         $ErrorView = "NormalView"
-        if (-NOT ($env:SigningCertificate -eq '')) {        
+        if (-NOT ($env:SigningCertificate -eq '')) {
           $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.HandBrakeTeam_Pfx }}")
           $currentDirectory = Get-Location
           $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:SigningCertificate
@@ -97,9 +97,9 @@ jobs:
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
           cp $certificatePath win\cs\
         }
-        
+
     - name: Build Windows GUI
-      run: |      
+      run: |
         $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:Nightly /p:PfxFile=$env:SigningCertificate /p:PfxPwd=${{ secrets.HandBrakeTeam_pfx_pwd }} /p:SignTimestampServer=http://time.certum.pl/
 
@@ -108,7 +108,7 @@ jobs:
       with:
         name: HandBrake-x86_64-Win_GUI-EXE
         path: win/CS/HandBrakeWPF/bin/x64/Debug/HandBrake-Nightly-x86_64-Win_GUI.exe
-    
+
     - name: Upload HandBrake msi Installer
       uses: actions/upload-artifact@v2
       with:
