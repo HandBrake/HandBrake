@@ -471,7 +471,7 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 }
 
 // Initialization order of some widgets matter because the value of
-// these widgets are used to establich limits on the values that
+// these widgets are used to establish limits on the values that
 // other widgets are allowed to take.
 //
 // So make sure these get initialized first.
