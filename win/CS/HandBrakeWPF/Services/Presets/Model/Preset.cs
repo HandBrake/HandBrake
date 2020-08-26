@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Services.Presets.Model
         {
             get
             {
-                string globalCateogry = this.IsBuildIn ? Resources.Preset_Official : Resources.Preset_Custom;
+                string globalCategory = this.IsBuildIn ? Resources.Preset_Official : Resources.Preset_Custom;
                 return string.Format("{0}", this.Name);
             }
         }
