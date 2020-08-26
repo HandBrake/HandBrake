@@ -521,7 +521,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 // Add 2 audio tracks.  One for DTS-HD and one for DTS
                 add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS, HB_AUDIO_ATTR_NONE);
-                // DTS-HD is special.  The substreams must be concatinated
+                // DTS-HD is special.  The substreams must be concatenated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
                 add_audio(ii, title->list_audio, bdaudio, 0,
@@ -601,7 +601,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
                           HB_ACODEC_DCA, AV_CODEC_ID_DTS,
                           HB_AUDIO_ATTR_SECONDARY);
-                // DTS-HD is special.  The substreams must be concatinated
+                // DTS-HD is special.  The substreams must be concatenated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
                 add_audio(ii, title->list_audio, bdaudio, 0,
