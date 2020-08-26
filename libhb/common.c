@@ -4732,7 +4732,7 @@ void hb_chapter_set_title( hb_chapter_t *chapter, const char *title )
  * Applies information from the given job to the official job instance.
  * @param job Handle to hb_job_t.
  * @param chapter The chapter to apply the name to (1-based).
- * @param titel to apply.
+ * @param title to apply.
  *********************************************************************/
 void hb_chapter_set_title_by_index( hb_job_t * job, int chapter_index, const char * title )
 {
