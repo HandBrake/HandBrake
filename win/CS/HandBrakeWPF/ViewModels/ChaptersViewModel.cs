@@ -237,7 +237,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            // Now iterate over each chatper we have, and set it's name
+            // Now iterate over each chapter we have, and set it's name
             foreach (ChapterMarker item in this.Chapters)
             {
                 // If we don't have a chapter name for this chapter then 
