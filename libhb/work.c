@@ -1352,7 +1352,10 @@ static void do_job(hb_job_t *job)
 
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_is_enabled(job))
+    {
         job->qsv.ctx = hb_qsv_context_init();
+        hb_qsv_query_adapters(job);
+    }
 #endif
 
     // Filters have an effect on settings.
