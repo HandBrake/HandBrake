@@ -1,9 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PictureSettingsDescConveter.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PictureSettingsDescConverter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the PictureSettingsDescConveter type.
+//   Defines the PictureSettingsDescConverter type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,9 +18,9 @@ namespace HandBrakeWPF.Converters.Queue
     using HandBrakeWPF.Services.Encode.Model;
 
     /// <summary>
-    /// The picture settings desc conveter.
+    /// The picture settings desc converter.
     /// </summary>
-    public class PictureSettingsDescConveter : IValueConverter
+    public class PictureSettingsDescConverter : IValueConverter
     {
         /// <summary>
         /// Provides a textual description of the picture settings of an encode task.

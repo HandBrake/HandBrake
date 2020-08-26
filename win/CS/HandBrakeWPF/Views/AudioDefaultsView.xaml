@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,11 +22,11 @@
              x:Name="audioDefaultsTab">
 
     <Window.Resources>
-        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
         <Audio:AudioBehaviourConverter x:Key="audioBehaviourConverter" />
         <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
-        <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
+        <Converters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
         <Audio:AudioControlVisibilityConverter x:Key="audioControlVisibilityConverter" />
     </Window.Resources>

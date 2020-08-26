@@ -34,7 +34,7 @@
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
-        <queue:PictureSettingsDescConveter x:Key="pictureSettingsDescConverter" />
+        <queue:PictureSettingsDescConverter x:Key="pictureSettingsDescConverter" />
         <queue:FilterSettingsDescConverter x:Key="filterSettingsDescConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
