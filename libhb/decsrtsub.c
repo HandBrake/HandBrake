@@ -68,27 +68,27 @@ read_time_from_string( const char* timeString, struct start_and_end *result )
 {
     // for ex. 00:00:15,248 --> 00:00:16,545
 
-    long houres1, minutes1, seconds1, milliseconds1,
-         houres2, minutes2, seconds2, milliseconds2;
+    long hours1, minutes1, seconds1, milliseconds1,
+         hours2, minutes2, seconds2, milliseconds2;
     int scanned;
 
     scanned = sscanf(timeString, "%ld:%ld:%ld,%ld --> %ld:%ld:%ld,%ld\n",
-                    &houres1, &minutes1, &seconds1, &milliseconds1,
-                    &houres2, &minutes2, &seconds2, &milliseconds2);
+                    &hours1, &minutes1, &seconds1, &milliseconds1,
+                    &hours2, &minutes2, &seconds2, &milliseconds2);
     if (scanned != 8)
     {
         scanned = sscanf(timeString, "%ld:%ld:%ld.%ld --> %ld:%ld:%ld.%ld\n",
-                        &houres1, &minutes1, &seconds1, &milliseconds1,
-                        &houres2, &minutes2, &seconds2, &milliseconds2);
+                        &hours1, &minutes1, &seconds1, &milliseconds1,
+                        &hours2, &minutes2, &seconds2, &milliseconds2);
         if (scanned != 8)
         {
             return 0;
         }
     }
     result->start =
-        milliseconds1 + seconds1*1000 + minutes1*60*1000 + houres1*60*60*1000;
+        milliseconds1 + seconds1*1000 + minutes1*60*1000 + hours1*60*60*1000;
     result->end =
-        milliseconds2 + seconds2*1000 + minutes2*60*1000 + houres2*60*60*1000;
+        milliseconds2 + seconds2*1000 + minutes2*60*1000 + hours2*60*60*1000;
     return 1;
 }
 
