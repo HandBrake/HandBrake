@@ -323,18 +323,18 @@
                 [csv appendFormat:@"%ld,",idx + 1];
                 idx++;
 
-                NSString *sanatizedTitle = [chapter.title stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
+                NSString *sanitizedTitle = [chapter.title stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
 
                 // If the title contains any commas or quotes, add quotes
-                if ([sanatizedTitle containsString:@","] || [sanatizedTitle containsString:@"\""])
+                if ([sanitizedTitle containsString:@","] || [sanitizedTitle containsString:@"\""])
                 {
                     [csv appendString:@"\""];
-                    [csv appendString:sanatizedTitle];
+                    [csv appendString:sanitizedTitle];
                     [csv appendString:@"\""];
                 }
                 else
                 {
-                    [csv appendString:sanatizedTitle];
+                    [csv appendString:sanitizedTitle];
                 }
                 [csv appendString:@"\n"];
             }

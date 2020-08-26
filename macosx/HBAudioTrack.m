@@ -66,7 +66,7 @@
         }
         else
         {
-            self.encoder = [self sanatizeEncoderValue:self.encoder];
+            self.encoder = [self sanitizeEncoderValue:self.encoder];
         }
     }
     else
@@ -115,7 +115,7 @@
     {
         if (self.encoder)
         {
-            self.encoder = [self sanatizeEncoderValue:self.encoder];
+            self.encoder = [self sanitizeEncoderValue:self.encoder];
         }
     }
 }
@@ -131,9 +131,9 @@
     if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
         self.validating = YES;
-        self.mixdown = [self sanatizeMixdownValue:self.mixdown];
-        self.sampleRate = [self sanatizeSamplerateValue:self.sampleRate];
-        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.mixdown = [self sanitizeMixdownValue:self.mixdown];
+        self.sampleRate = [self sanitizeSamplerateValue:self.sampleRate];
+        self.bitRate = [self sanitizeBitrateValue:self.bitRate];
         [self.delegate encoderChanged];
         self.validating = NO;
     }
@@ -150,7 +150,7 @@
     if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
         self.validating = YES;
-        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.bitRate = [self sanitizeBitrateValue:self.bitRate];
         self.validating = NO;
     }
 }
@@ -166,7 +166,7 @@
     if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
         self.validating = YES;
-        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.bitRate = [self sanitizeBitrateValue:self.bitRate];
         self.validating = NO;
     }
 }
@@ -237,7 +237,7 @@
 
 #pragma mark - Validation
 
-- (int)sanatizeEncoderValue:(int)proposedEncoder
+- (int)sanitizeEncoderValue:(int)proposedEncoder
 {
     if (proposedEncoder)
     {
@@ -270,7 +270,7 @@
     }
 }
 
-- (int)sanatizeMixdownValue:(int)proposedMixdown
+- (int)sanitizeMixdownValue:(int)proposedMixdown
 {
     HBTitleAudioTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
     uint64_t channelLayout = sourceTrack.channelLayout;
@@ -282,7 +282,7 @@
     return proposedMixdown;
 }
 
-- (int)sanatizeSamplerateValue:(int)proposedSamplerate
+- (int)sanitizeSamplerateValue:(int)proposedSamplerate
 {
     if (self.encoder & HB_ACODEC_PASS_FLAG)
     {
@@ -295,7 +295,7 @@
     return proposedSamplerate;
 }
 
-- (int)sanatizeBitrateValue:(int)proposedBitrate
+- (int)sanitizeBitrateValue:(int)proposedBitrate
 {
     if (self.encoder & HB_ACODEC_PASS_FLAG)
     {
