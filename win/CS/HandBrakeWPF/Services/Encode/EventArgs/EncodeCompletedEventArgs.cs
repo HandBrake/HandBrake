@@ -16,9 +16,9 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
     /// </summary>
     public class EncodeCompletedEventArgs : EventArgs
     {
-        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation, string sourceFileName, string filename, string logPath, long finalSizeInBytes)
+        public EncodeCompletedEventArgs(bool successful, Exception exception, string errorInformation, string sourceFileName, string filename, string logPath, long finalSizeInBytes)
         {
-            this.Successful = sucessful;
+            this.Successful = successful;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
             this.SourceFileName = sourceFileName;
