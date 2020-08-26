@@ -289,7 +289,7 @@ format_video_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
         // When the range of a slider changes, GTK used to sample all the
         // possible values to determine the correct amount of screen space to
         // allocate for the value strings. Some *genius* decided it would be
-        // more effecient to just sample the first and last value which means
+        // more efficient to just sample the first and last value which means
         // that if certain characters are wider than others and the middle
         // values happen to use those characters, the space allocated is
         // too small and the string wraps to the next line or is truncated.
@@ -328,7 +328,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
             // When the range of a slider changes, GTK used to sample all the
             // possible values to determine the correct amount of screen space to
             // allocate for the value strings. Some *genius* decided it would be
-            // more effecient to just sample the first and last value which means
+            // more efficient to just sample the first and last value which means
             // that if certain characters are wider than others and the middle
             // values happen to use those characters, the space allocated is
             // too small and the string wraps to the next line or is truncated.
@@ -357,7 +357,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
             // When the range of a slider changes, GTK used to sample all the
             // possible values to determine the correct amount of screen space to
             // allocate for the value strings. Some *genius* decided it would be
-            // more effecient to just sample the first and last value which means
+            // more efficient to just sample the first and last value which means
             // that if certain characters are wider than others and the middle
             // values happen to use those characters, the space allocated is
             // too small and the string wraps to the next line or is truncated.
