@@ -192,7 +192,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.MaxWidth);
                 this.NotifyOfPropertyChange(() => this.MaxHeight);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.ResolutionLimit);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.ResolutionLimit);
 
                 this.OnTabStatusChanged(null);
             }
@@ -208,7 +208,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.OptimalSize = value;
                 this.UpdateVisibileControls();
                 this.NotifyOfPropertyChange(() => this.OptimalSize);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.OptimalSize);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.OptimalSize);
             }
         }
 
@@ -219,7 +219,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.AllowUpscaling = value;
                 this.UpdateVisibileControls();
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.AllowUpscale);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.AllowUpscale);
                 this.NotifyOfPropertyChange(() => this.AllowUpscaling);
             }
         }
@@ -239,7 +239,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Task.Cropping.Bottom = value;
                 this.NotifyOfPropertyChange(() => this.CropBottom);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
@@ -256,7 +256,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Task.Cropping.Left = value;
                 this.NotifyOfPropertyChange(() => this.CropLeft);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
@@ -273,7 +273,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Task.Cropping.Right = value;
                 this.NotifyOfPropertyChange(() => this.CropRight);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
@@ -290,7 +290,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Task.Cropping.Top = value;
                 this.NotifyOfPropertyChange(() => this.CropTop);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
@@ -333,7 +333,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.DisplayWidth = value;
                     this.NotifyOfPropertyChange(() => this.DisplayWidth);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.DisplayWidth);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.DisplayWidth);
                 }
             }
         }
@@ -348,7 +348,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.Width = value;
                     this.NotifyOfPropertyChange(() => this.Width);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.Width);
                 }
             }
         }
@@ -363,7 +363,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.Height = value;
                     this.NotifyOfPropertyChange(() => this.Height);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Height);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.Height);
                 }
             }
         }
@@ -376,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.KeepDisplayAspect = value;
                 this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.MaintainAspectRatio);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.MaintainAspectRatio);
             }
         }
 
@@ -390,7 +390,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.PixelAspectY = value;
                     this.NotifyOfPropertyChange(() => this.ParHeight);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.ParH);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.ParH);
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.PixelAspectX = value;
                     this.NotifyOfPropertyChange(() => this.ParWidth);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.ParW);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.ParW);
                 }
             }
         }
@@ -420,7 +420,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.Anamorphic = value;
                     this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
-                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Anamorphic);
+                    this.RecalculatePictureSettingsProperties(ChangedPictureField.Anamorphic);
                     this.OnTabStatusChanged(null);
                     this.IsPixelAspectSettable = value == Anamorphic.Custom;
                     this.NotifyOfPropertyChange(() => this.IsPixelAspectSettable);
@@ -481,7 +481,7 @@ namespace HandBrakeWPF.ViewModels
             this.Task.Height = height;
 
             // Trigger a calculation
-            this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
+            this.RecalculatePictureSettingsProperties(ChangedPictureField.Width);
 
             // Update the UI
             this.NotifyOfPropertyChange(() => this.Width);
@@ -578,7 +578,7 @@ namespace HandBrakeWPF.ViewModels
                     HandBrakePictureHelpers.GetNiceDisplayAspect(sourceDisplayWidth, title.Resolution.Height)); 
 
                 // Force a re-calc. This will handle MaxWidth / Height corrections.
-                this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Width);
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -732,7 +732,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="changedField">
         /// The changed field.
         /// </param>
-        private void RecaulcatePictureSettingsProperties(ChangedPictureField changedField)
+        private void RecalculatePictureSettingsProperties(ChangedPictureField changedField)
         {
             // Sanity Check
             if (this.currentTitle == null)
@@ -945,7 +945,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.ParWidth);
             this.NotifyOfPropertyChange(() => this.ParHeight);
 
-            RecaulcatePictureSettingsProperties(ChangedPictureField.Rotate);
+            RecalculatePictureSettingsProperties(ChangedPictureField.Rotate);
         }
     }
 }
