@@ -669,7 +669,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
             widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
             gtk_widget_set_visible(widget, import == NULL);
 
-            // Show import subitle widgets
+            // Show import subtitle widgets
             widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
             gtk_widget_set_visible(widget, source == IMPORTSRT ||
                                            source == IMPORTSSA);
@@ -758,7 +758,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
     }
     else
     {
-        // Hide SRT subitle widgets
+        // Hide SRT subtitle widgets
         widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
         gtk_widget_set_visible(widget, FALSE);
 
