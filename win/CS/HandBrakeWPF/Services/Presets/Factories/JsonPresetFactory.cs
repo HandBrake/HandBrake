@@ -413,7 +413,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 IList<string> names = LanguageUtilities.GetLanguageNames(importedPreset.AudioLanguageList);
                 foreach (var name in names)
                 {
-                    preset.AudioTrackBehaviours.SelectedLangauges.Add(name);
+                    preset.AudioTrackBehaviours.SelectedLanguages.Add(name);
                 }
             }
 
@@ -472,7 +472,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 IList<string> names = LanguageUtilities.GetLanguageNames(importedPreset.SubtitleLanguageList);
                 foreach (var name in names)
                 {
-                    preset.SubtitleTrackBehaviours.SelectedLangauges.Add(name);
+                    preset.SubtitleTrackBehaviours.SelectedLanguages.Add(name);
                 }
             }
 
@@ -567,7 +567,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // Audio
             preset.AudioCopyMask = export.Task.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
             preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.Task.AllowedPassthruOptions.AudioEncoderFallback);
-            preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLangauges);
+            preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLanguages);
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
             preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // 1 = First Track, 0 = All
             preset.AudioList = new List<AudioList>();
@@ -597,7 +597,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.SubtitleBurnBDSub = false; // TODO not supported yet.
             preset.SubtitleBurnDVDSub = false; // TODO not supported yet.
             preset.SubtitleBurnBehavior = EnumHelper<SubtitleBurnInBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBurnInBehaviour);
-            preset.SubtitleLanguageList = LanguageUtilities.GetLanguageCodes(export.SubtitleTrackBehaviours.SelectedLangauges);
+            preset.SubtitleLanguageList = LanguageUtilities.GetLanguageCodes(export.SubtitleTrackBehaviours.SelectedLanguages);
             preset.SubtitleTrackSelectionBehavior = EnumHelper<SubtitleBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBehaviour);
 
             // Chapters

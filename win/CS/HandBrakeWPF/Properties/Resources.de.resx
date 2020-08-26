@@ -1517,7 +1517,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Sprachen auswählen:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Ausgewählte Sprachen:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">

@@ -1515,7 +1515,7 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Escolher Idiomas:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Idiomas Selecionados:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">

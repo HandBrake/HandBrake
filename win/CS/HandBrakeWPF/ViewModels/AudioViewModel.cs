@@ -286,9 +286,9 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            foreach (var item in this.AudioBehaviours.SelectedLangauges)
+            foreach (var item in this.AudioBehaviours.SelectedLanguages)
             {
-                if (!preset.AudioTrackBehaviours.SelectedLangauges.Contains(item))
+                if (!preset.AudioTrackBehaviours.SelectedLanguages.Contains(item))
                 {
                     return false;
                 }
@@ -344,15 +344,15 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            foreach (var language in preset.AudioTrackBehaviours.SelectedLangauges)
+            foreach (var language in preset.AudioTrackBehaviours.SelectedLanguages)
             {
-                if (!this.AudioBehaviours.SelectedLangauges.Contains(language))
+                if (!this.AudioBehaviours.SelectedLanguages.Contains(language))
                 {
                     return false;
                 }
             }
 
-            if (preset.AudioTrackBehaviours.SelectedLangauges.Count != this.AudioBehaviours.SelectedLangauges.Count)
+            if (preset.AudioTrackBehaviours.SelectedLanguages.Count != this.AudioBehaviours.SelectedLanguages.Count)
             {
                 return false;
             }
@@ -513,7 +513,7 @@ namespace HandBrakeWPF.ViewModels
                 case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
                     this.AddFirstForSelectedLanguages();
                     break;
-                case AudioBehaviourModes.AllMatching: // Add Langauges tracks for the additional languages selected, in-order.
+                case AudioBehaviourModes.AllMatching: // Add Languages tracks for the additional languages selected, in-order.
                     this.AddAllRemainingForSelectedLanguages();
                     break;
             }
@@ -524,7 +524,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddFirstForSelectedLanguages()
         {
-            bool anyLanguageSelected = this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any);
+            bool anyLanguageSelected = this.AudioBehaviours.SelectedLanguages.Contains(Constants.Any);
 
             if (anyLanguageSelected && this.Task.AudioTracks.Count >= 1)
             {
@@ -608,9 +608,9 @@ namespace HandBrakeWPF.ViewModels
             // The first track in the selected languages list is considered the preferred language.
             // So, try match tracks on this.
             IEnumerable<Audio> preferredAudioTracks = new List<Audio>();
-            if (this.AudioBehaviours.SelectedLangauges.Count > 0)
+            if (this.AudioBehaviours.SelectedLanguages.Count > 0)
             {
-                string langName = this.AudioBehaviours.SelectedLangauges.FirstOrDefault(w => !w.Equals(Constants.Any));
+                string langName = this.AudioBehaviours.SelectedLanguages.FirstOrDefault(w => !w.Equals(Constants.Any));
                 string langCode = LanguageUtilities.GetLanguageCode(langName);
                 if (!string.IsNullOrEmpty(langCode))
                 {
@@ -631,14 +631,14 @@ namespace HandBrakeWPF.ViewModels
         {
             // Translate to Iso Codes
             List<string> iso6392Codes = new List<string>();
-            if (this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any))
+            if (this.AudioBehaviours.SelectedLanguages.Contains(Constants.Any))
             {
                 iso6392Codes = LanguageUtilities.GetIsoCodes();
-                iso6392Codes = LanguageUtilities.OrderIsoCodes(iso6392Codes, this.AudioBehaviours.SelectedLangauges);
+                iso6392Codes = LanguageUtilities.OrderIsoCodes(iso6392Codes, this.AudioBehaviours.SelectedLanguages);
             }
             else
             {
-                iso6392Codes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
+                iso6392Codes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLanguages.ToArray());
             }
             
             List<Audio> orderedTracks = new List<Audio>();

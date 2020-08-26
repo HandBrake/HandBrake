@@ -1512,7 +1512,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Choose Languages:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Selected Languages:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">

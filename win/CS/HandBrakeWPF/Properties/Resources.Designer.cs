@@ -5664,9 +5664,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Selected Languages:.
         /// </summary>
-        public static string Shared_ChosenLangages {
+        public static string Shared_ChosenLanguages {
             get {
-                return ResourceManager.GetString("Shared_ChosenLangages", resourceCulture);
+                return ResourceManager.GetString("Shared_ChosenLanguages", resourceCulture);
             }
         }
         

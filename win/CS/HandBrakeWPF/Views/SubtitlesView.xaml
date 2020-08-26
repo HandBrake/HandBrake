@@ -226,7 +226,7 @@
 
                             <TextBlock  Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Lang" />
                             <ComboBox  Grid.Column="3" Height="22" Width="85" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
-                                      ItemsSource="{Binding DataContext.Langauges, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      ItemsSource="{Binding DataContext.Languages, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SrtLang}" />
                             
                             <TextBlock  Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Char Code" />
