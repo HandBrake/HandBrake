@@ -186,19 +186,19 @@ namespace HandBrakeWPF.Services
                        HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
                        long fileSize = webResponse.ContentLength;
 
-                       Stream responceStream = wcDownload.OpenRead(url);
+                       Stream responseStream = wcDownload.OpenRead(url);
                        Stream localStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
                        int bytesSize;
                        byte[] downBuffer = new byte[2048];
 
-                       while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+                       while ((bytesSize = responseStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                        {
                            localStream.Write(downBuffer, 0, bytesSize);
                            progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize });
                        }
 
-                       responceStream.Close();
+                       responseStream.Close();
                        localStream.Close();
 
                        completed(
