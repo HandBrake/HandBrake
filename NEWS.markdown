@@ -353,7 +353,7 @@
 - Improved preferences layout
 - Improved auto naming collision behavior and file overwriting
 - Added preference to test selected notification sound
-- Added preference to perform when done action immmediately without countdown
+- Added preference to perform when done action immediately without countdown
 - Added preference to disable preview image on summary tab
 - Added hardware.enabled option to portable.ini
 - Added dark theme for Windows 10
