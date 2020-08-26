@@ -1830,7 +1830,7 @@ VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onayla
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Dosyayı Oynat</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Uygulama Araç Çubuğu</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

@@ -1830,7 +1830,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Lire le fichier</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barre d'outils application</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

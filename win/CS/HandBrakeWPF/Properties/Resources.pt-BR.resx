@@ -1830,7 +1830,7 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Reproduzir arquivo</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra de Ferramentas</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

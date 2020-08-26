@@ -1829,7 +1829,7 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>پخش پرونده</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>نوار ابزار برنامه</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

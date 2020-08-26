@@ -1830,7 +1830,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Reproducir archivo</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra de herramientas</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

@@ -1824,7 +1824,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>播放文件</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>应用程序工具栏</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
