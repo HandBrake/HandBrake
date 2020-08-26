@@ -734,7 +734,6 @@ int hb_qsv_info_init()
         }
     }
     while(hw_preference != 0);
-
     // success
     return 0;
 }
@@ -885,6 +884,42 @@ void hb_qsv_info_print()
         else
         {
             hb_log(" - H.265 encoder: no");
+        }
+
+        //if (HB_CHECK_MFX_VERSION(version, 1, 31)) // TODO compilation version check
+        {
+            // support for API 1.31 or later
+            mfxU32           num_adapters_available;
+            mfxAdaptersInfo  adapters_info = {0};
+            // Get number of Intel graphics adapters
+            mfxStatus sts = MFXQueryAdaptersNumber(&num_adapters_available);
+            if (sts != MFX_ERR_NONE)
+            {
+                hb_error("query_capabilities: failed to get number of Intel graphics adapters");
+            }
+
+            if (num_adapters_available > 0);
+            {
+                adapters_info.Adapters = av_mallocz_array(num_adapters_available, sizeof(*adapters_info.Adapters));
+                if (adapters_info.Adapters)
+                {
+                    // Collect information about Intel graphics adapters
+                    sts = MFXQueryAdapters(0, &adapters_info);
+                    if (sts != MFX_ERR_NONE)
+                    {
+                        hb_error("query_capabilities: failed to collect information about Intel graphics adapters");
+                    }
+                }
+            }
+
+            hb_log("qsv: adapters_info.NumActual=%d", adapters_info.NumActual);
+            hb_log("qsv: adapters_info.NumAlloc=%d", adapters_info.NumAlloc);
+
+            for (int i = 0; i < num_adapters_available; i++)
+            {
+                mfxAdapterInfo* info = &adapters_info.Adapters[i];
+                hb_log("qsv:  info->Number=%d, info->Platform.CodeName=%d, info->Platform.DeviceId=%d, info->Platform.MediaAdapterType=%d", info->Number, info->Platform.CodeName, info->Platform.DeviceId, info->Platform.MediaAdapterType);
+            }
         }
     }
 }
@@ -1618,6 +1653,13 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
         else
         {
             return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
+    else if (!strcasecmp(key, "gpu"))
+    {
+        if (value)
+        {
+            job->qsv.ctx->qsv_device = strdup(value);
         }
     }
     else
@@ -2947,7 +2989,11 @@ void hb_qsv_uninit_enc(hb_job_t *job)
         device_context = NULL;
     }
     job->qsv.ctx->hb_hw_device_ctx = NULL;
-    job->qsv.ctx->qsv_device = NULL;
+    if (job->qsv.ctx->qsv_device)
+    {
+        free(job->qsv.ctx->qsv_device);
+        job->qsv.ctx->qsv_device = NULL;
+    }
     device_manager_handle = NULL;
 }
 
@@ -2961,16 +3007,12 @@ static int qsv_device_init(hb_job_t *job)
         if (err < 0)
             return err;
     }
-
-    if (!job->qsv.ctx->qsv_filters_are_enabled)
-    {
-        err = av_dict_set(&dict, "child_device_type", "d3d11va", 0);
-        err = av_dict_set(&dict, "vendor", "0x8086", 0);
-    }
     else
     {
-        err = av_dict_set(&dict, "child_device_type", "dxva2", 0);
+        av_dict_set(&dict, "vendor", "0x8086", 0);
     }
+
+    av_dict_set(&dict, "child_device_type", "d3d11va", 0);
 
     err = av_hwdevice_ctx_create(&job->qsv.ctx->hb_hw_device_ctx, AV_HWDEVICE_TYPE_QSV,
                                  0, dict, 0);
