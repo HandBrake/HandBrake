@@ -4832,7 +4832,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
                         <child>
-                          <object class="GtkLabel" id="PictureSharpenFilterel">
+                          <object class="GtkLabel" id="PictureSharpenFilterLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
