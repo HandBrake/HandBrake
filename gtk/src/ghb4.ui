@@ -5902,7 +5902,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkDialog" id="titla_add_multiple_dialog">
+  <object class="GtkDialog" id="title_add_multiple_dialog">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
