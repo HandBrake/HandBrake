@@ -168,7 +168,7 @@ hb_preset_index_t * hb_preset_search_index(const char *name,
                                            int recurse, int type);
 hb_value_t        * hb_preset_search(const char *name, int recurse, int type);
 char              * hb_preset_search_json(const char *name,
-                                          int recurs, int typee);
+                                          int recurs, int type);
 
 hb_value_t * hb_presets_get_folder_children(const hb_preset_index_t *path);
 hb_value_t * hb_preset_get(const hb_preset_index_t *path);
