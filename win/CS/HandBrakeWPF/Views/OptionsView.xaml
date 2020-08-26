@@ -484,7 +484,7 @@
                             </StackPanel>
 
                             <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToEncDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
-                            <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSepcficedLocation}" />
+                            <CheckBox Content="{x:Static Properties:Resources.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSpecifiedLocation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:Resources.Options_LogPath}" VerticalAlignment="Center" />
                                 <TextBox Width="380" Text="{Binding LogDirectory}" />

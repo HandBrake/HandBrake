@@ -56,7 +56,7 @@ namespace HandBrakeWPF.ViewModels
         private bool clearOldLogs;
         private BindingList<string> constantQualityGranularity = new BindingList<string>();
         private bool copyLogToEncodeDirectory;
-        private bool copyLogToSepcficedLocation;
+        private bool copyLogToSpecifiedLocation;
         private bool disableLibdvdNav;
         private string logDirectory;
         private BindingList<int> logVerbosityOptions = new BindingList<int>();
@@ -538,14 +538,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool CopyLogToSepcficedLocation
+        public bool CopyLogToSpecifiedLocation
         {
-            get => this.copyLogToSepcficedLocation;
+            get => this.copyLogToSpecifiedLocation;
 
             set
             {
-                this.copyLogToSepcficedLocation = value;
-                this.NotifyOfPropertyChange(() => this.CopyLogToSepcficedLocation);
+                this.copyLogToSpecifiedLocation = value;
+                this.NotifyOfPropertyChange(() => this.CopyLogToSpecifiedLocation);
             }
         }
 
@@ -1206,7 +1206,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Logs
             this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
-            this.CopyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory);
+            this.CopyLogToSpecifiedLocation = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory);
 
             // The saved log path
             this.LogDirectory = userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
@@ -1351,7 +1351,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
             this.userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
-            this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
+            this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSpecifiedLocation);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
             this.userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldLogs);
 
