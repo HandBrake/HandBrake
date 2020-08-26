@@ -857,7 +857,7 @@ void eedi2_mark_directions_2x( uint8_t * mskp, int msk_pitch, uint8_t * dmskp, i
 }
 
 /**
- * Filters the frane-height edge direction mask
+ * Filters the frame-height edge direction mask
  * @param mskp Pointer to the edge mask
  * @param msk_pitch Stride of mskp
  * @param dmskp Pointer to the edge direction mask being read from
