@@ -53,7 +53,7 @@ namespace HandBrakeWPF.ViewModels
         private bool changeToTitleCase;
         private bool checkForUpdates;
         private UpdateCheck checkForUpdatesFrequency;
-        private bool clearOldOlgs;
+        private bool clearOldLogs;
         private BindingList<string> constantQualityGranularity = new BindingList<string>();
         private bool copyLogToEncodeDirectory;
         private bool copyLogToSepcficedLocation;
@@ -549,14 +549,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool ClearOldOlgs
+        public bool ClearOldLogs
         {
-            get => this.clearOldOlgs;
+            get => this.clearOldLogs;
 
             set
             {
-                this.clearOldOlgs = value;
-                this.NotifyOfPropertyChange(() => this.ClearOldOlgs);
+                this.clearOldLogs = value;
+                this.NotifyOfPropertyChange(() => this.ClearOldLogs);
             }
         }
 
@@ -1211,7 +1211,7 @@ namespace HandBrakeWPF.ViewModels
             // The saved log path
             this.LogDirectory = userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
 
-            this.ClearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
+            this.ClearOldLogs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
 
             // #############################
             // Advanced
@@ -1353,7 +1353,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
-            this.userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldOlgs);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldLogs);
 
             /* Advanced */
             this.userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);

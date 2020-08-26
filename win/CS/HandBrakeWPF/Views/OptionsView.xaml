@@ -495,7 +495,7 @@
                                 <Button Content="{x:Static Properties:Resources.Options_ClearLogs}" cal:Message.Attach="[Event Click] = [Action ClearLogHistory]" />
                             </StackPanel>
 
-                            <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldOlgs}" />
+                            <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldLogs}" />
                         </StackPanel>
 
                     </StackPanel>
