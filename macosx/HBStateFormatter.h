@@ -9,7 +9,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  Instances of HBStateFormatter format and conver a hb_state_t struct to a textual representation.
+ *  Instances of HBStateFormatter format and convert a hb_state_t struct to a textual representation.
  */
 @interface HBStateFormatter : NSObject
 
