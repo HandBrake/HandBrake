@@ -631,7 +631,7 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>A problem occurred when trying to save your preferences.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

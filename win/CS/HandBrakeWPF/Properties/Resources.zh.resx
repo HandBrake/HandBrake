@@ -622,7 +622,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>你所更改的任何设置可能会在下次HandBrake 启动时被重置。</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>尝试保存你的偏好设置时出现了问题。</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

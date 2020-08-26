@@ -628,7 +628,7 @@ Seu arquivo de perfis será salvo e criado um novo arquivo. Será necessário re
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Pode ser que as configurações alteradas precisem ser redefinidas na próxima inicialização do HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Um problema ocorreu ao tentar salvar suas configurações.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

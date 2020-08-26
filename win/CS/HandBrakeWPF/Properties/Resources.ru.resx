@@ -630,7 +630,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Некоторые измененные вами настройки вступят в силу при повторном запуске HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>При попытке сохранения настроек была обнаружена ошибка.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

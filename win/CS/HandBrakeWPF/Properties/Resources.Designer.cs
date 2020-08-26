@@ -6573,9 +6573,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A problem occurred when trying to save your preferences..
         /// </summary>
-        public static string UserSettings_AnErrorOccured {
+        public static string UserSettings_AnErrorOccurred {
             get {
-                return ResourceManager.GetString("UserSettings_AnErrorOccured", resourceCulture);
+                return ResourceManager.GetString("UserSettings_AnErrorOccurred", resourceCulture);
             }
         }
         

@@ -628,7 +628,7 @@ El archivo predefinido se archivará y se creará uno nuevo. Tendrá que volver 
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Es posible que deba restablecerse cualquier configuración que haya cambiado.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Se ha producido un problema al intentar guardar sus preferencias.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

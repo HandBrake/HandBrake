@@ -148,7 +148,7 @@ namespace HandBrakeWPF.Services
             catch (Exception exc)
             {
                 throw new GeneralApplicationException(
-                    Resources.UserSettings_AnErrorOccured,
+                    Resources.UserSettings_AnErrorOccurred,
                     Resources.SettingService_SaveErrorReset,
                     exc);
             }

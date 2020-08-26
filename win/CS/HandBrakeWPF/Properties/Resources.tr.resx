@@ -628,7 +628,7 @@ Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Değiştirdiğiniz ayarların, bir sonraki HandBrake'yi başlattığında sıfırlanması gerekebilir.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Tercihlerinizi kaydetmeye çalışırken bir sorun oluştu.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

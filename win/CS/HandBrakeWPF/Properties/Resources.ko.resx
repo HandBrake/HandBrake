@@ -627,7 +627,7 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>설정을 저장하려고 할 때 문제가 발생하였습니다.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

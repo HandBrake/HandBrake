@@ -631,7 +631,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Alle geänderten Einstellungen müssen möglicherweise beim nächsten Start von HandBrake zurückgesetzt werden.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Beim Speichern der Einstellungen ist ein Fehler aufgetreten.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">

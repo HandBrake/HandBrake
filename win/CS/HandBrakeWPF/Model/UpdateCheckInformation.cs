@@ -24,7 +24,7 @@ namespace HandBrakeWPF.Model
         /// <summary>
         /// Gets a value indicating whether an Error Occurred.
         /// </summary>
-        public bool ErrorOccured
+        public bool ErrorOccurred
         {
             get { return this.Error != null; }
         }
