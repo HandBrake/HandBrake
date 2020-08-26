@@ -804,7 +804,7 @@
 - Added custom anamorphic to dimensions tab, it's back!
 - Improved static preview window still previews rendering
 - Improved audio selection behavior controls; dropdowns are now context aware and range limited with better defaults
-- Improved UI constency throughout
+- Improved UI consistency throughout
 - Many other bug fixes and improvements
 
 
