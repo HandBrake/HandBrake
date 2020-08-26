@@ -1799,7 +1799,7 @@ libx264 authors:
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckMenuItem" id="hbfd">
-                        <property name="label" translatable="yes">HandBrake For _Dumbies</property>
+                        <property name="label" translatable="yes">HandBrake For _Dummies</property>
                         <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
