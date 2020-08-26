@@ -484,7 +484,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             // get translated to SSA
             //
             // When using the "real_time" option with CC608 subtitles,
-            // ffmpeg prepends an ASS rect that has only the preample
+            // ffmpeg prepends an ASS rect that has only the preamble
             // to every list of returned rects.  libass doesn't like this
             // and logs a warning for every one of these. So strip these
             // out by using only the last rect in the list.
