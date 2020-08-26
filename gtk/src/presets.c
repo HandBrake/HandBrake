@@ -508,7 +508,7 @@ ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict)
     }
 
     iter = ghb_dict_iter_init(tmp);
-    // middle (void*) cast prevents gcc warning "defreferencing type-punned
+    // middle (void*) cast prevents gcc warning "dereferencing type-punned
     // pointer will break strict-aliasing rules"
     while (ghb_dict_iter_next(tmp, &iter, &key, &gval))
     {
