@@ -42,7 +42,7 @@ static void filter_loop( void * );
 /**
  * Allocates work object and launches work thread with work_func.
  * @param jobs Handle to hb_list_t.
- * @param die Handle to user inititated exit indicator.
+ * @param die Handle to user initiated exit indicator.
  * @param error Handle to error indicator.
  */
 hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code * error, hb_job_t ** job )
