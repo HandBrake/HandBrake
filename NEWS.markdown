@@ -30,7 +30,7 @@
 #### Build system
 
 - Improved Flatpak to better conform to freedesktop metainfo standards
-- Improved Intel QSV Flatpak plugin build effiency using cmake-ninja
+- Improved Intel QSV Flatpak plugin build efficiency using cmake-ninja
 - Added a patch to fix cross compiling libdav1d using GCC 10.x (quality of life improvement)
   - Official HandBrake 1.3.3 Windows release is built using GCC 9.x and is not directly affected by this issue
 
