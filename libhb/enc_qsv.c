@@ -2312,7 +2312,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
      *   the encoder to make sure the next frame is a keyframe
      *
      * The hard reset ensures encoding resumes with a clean state, avoiding
-     * miscellaneous hard-to-disagnose issues that may occur when resuming
+     * miscellaneous hard-to-diagnose issues that may occur when resuming
      * an encode after flushing the encoder or using MFXVideoENCODE_Reset.
      */
     if (in->s.new_chap > 0 && job->chapter_markers)
