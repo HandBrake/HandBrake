@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CGRect pictureFrame;
 
 /**
- *  Wheters the image will be scaled to fill the view
+ *  Whether the image will be scaled to fill the view
  *  or not.
  */
 @property (nonatomic, readwrite) BOOL fitToView;
