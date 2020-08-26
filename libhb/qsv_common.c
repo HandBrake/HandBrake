@@ -3747,7 +3747,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
             // replace the mem id to mem id from the pool
             output_surface->Data.MemId = mid;
         }
-        // copy input sufrace to sufrace from the pool
+        // copy input surface to surface from the pool
         ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, 0, input_pair->first, 0);
         if (ret < 0)
         {
@@ -3776,7 +3776,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
             // Make sure that we pass QSVMid to QSV encoder
             output_surface->Data.MemId = mid;
         }
-        // copy input sufrace to sufrace from the pool
+        // copy input surface to surface from the pool
         ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, output_index, input_pair->first, input_index);
         if (ret < 0)
         {
