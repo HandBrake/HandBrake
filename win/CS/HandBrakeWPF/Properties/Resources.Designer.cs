@@ -4224,9 +4224,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Display Size:.
         /// </summary>
-        public static string PictureSettingsView_DisplayWitdh {
+        public static string PictureSettingsView_DisplayWidth {
             get {
-                return ResourceManager.GetString("PictureSettingsView_DisplayWitdh", resourceCulture);
+                return ResourceManager.GetString("PictureSettingsView_DisplayWidth", resourceCulture);
             }
         }
         

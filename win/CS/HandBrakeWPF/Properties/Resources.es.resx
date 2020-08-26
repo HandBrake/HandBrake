@@ -1320,7 +1320,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Personalizado</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Ancho de pantalla:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">

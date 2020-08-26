@@ -1322,7 +1322,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Eigene</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Anzeigebreite:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">

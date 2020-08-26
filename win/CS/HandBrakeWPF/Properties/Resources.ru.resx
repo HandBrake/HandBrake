@@ -1322,7 +1322,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Пользовательский</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Ширина вывода:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
