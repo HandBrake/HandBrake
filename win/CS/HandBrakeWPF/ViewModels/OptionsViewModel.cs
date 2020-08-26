@@ -881,7 +881,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsSafeMode => HandBrakeHardwareEncoderHelper.IsSafeMode;
 
-        public bool IsHardwareOptionsVisibile => !IsSafeMode && !IsHardwareFallbackMode;
+        public bool IsHardwareOptionsVisible => !IsSafeMode && !IsHardwareFallbackMode;
 
 
         /* About HandBrake */

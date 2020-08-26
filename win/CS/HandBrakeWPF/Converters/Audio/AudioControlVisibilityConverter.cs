@@ -22,11 +22,11 @@ namespace HandBrakeWPF.Converters.Audio
         {
             if (values.Length == 3)
             {
-                bool isVisibile = (bool)values[0];
+                bool isVisible = (bool)values[0];
                 bool isPassthru = (bool)values[1];
                 AudioEncoder fallbackEncoder = (AudioEncoder)values[2];
 
-                if (!isVisibile)
+                if (!isVisible)
                 {
                     return Visibility.Collapsed;
                 }

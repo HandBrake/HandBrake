@@ -206,7 +206,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.Task.OptimalSize = value;
-                this.UpdateVisibileControls();
+                this.UpdateVisibleControls();
                 this.NotifyOfPropertyChange(() => this.OptimalSize);
                 this.RecalculatePictureSettingsProperties(ChangedPictureField.OptimalSize);
             }
@@ -218,7 +218,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.Task.AllowUpscaling = value;
-                this.UpdateVisibileControls();
+                this.UpdateVisibleControls();
                 this.RecalculatePictureSettingsProperties(ChangedPictureField.AllowUpscale);
                 this.NotifyOfPropertyChange(() => this.AllowUpscaling);
             }
@@ -498,7 +498,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.Task);
 
-            this.UpdateVisibileControls();
+            this.UpdateVisibleControls();
         }
 
         public void UpdateTask(EncodeTask task)
@@ -524,7 +524,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.MaxWidth);
             this.NotifyOfPropertyChange(() => this.MaxHeight);
 
-            this.UpdateVisibileControls();
+            this.UpdateVisibleControls();
         }
 
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
@@ -741,7 +741,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Step 1, Update what controls are visible.
-            this.UpdateVisibileControls();
+            this.UpdateVisibleControls();
 
             // Step 2, Set sensible defaults
             if (changedField == ChangedPictureField.Anamorphic && (this.SelectedAnamorphicMode == Anamorphic.None))
@@ -835,7 +835,7 @@ namespace HandBrakeWPF.ViewModels
             }
         } 
 
-        private void UpdateVisibileControls()
+        private void UpdateVisibleControls()
         {
             this.WidthControlEnabled = true;
             this.HeightControlEnabled = true;

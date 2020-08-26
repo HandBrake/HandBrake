@@ -151,7 +151,7 @@ namespace HandBrakeWPF.Controls
         /// <summary>
         /// Gets a value indicating whether is action 2 button visible.
         /// </summary>
-        public bool IsActionButton2Visibile
+        public bool IsActionButton2Visible
         {
             get
             {
