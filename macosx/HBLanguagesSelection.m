@@ -171,14 +171,14 @@
 - (void)awakeFromNib
 {
 	[self.tableView registerForDraggedTypes:@[tableViewIndex]];
-	self.isDragginEnabled = YES;
+	self.isDraggingEnabled = YES;
 }
 
 #pragma mark - NSTableView Delegate
 
 - (nullable id <NSPasteboardWriting>)tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
 {
-    if (self.isDragginEnabled)
+    if (self.isDraggingEnabled)
     {
         if (self.showSelectedOnly)
         {

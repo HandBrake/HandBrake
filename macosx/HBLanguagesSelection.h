@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Set whether the user can drag the table view's elements.
  */
-@property (nonatomic, readwrite) BOOL isDragginEnabled;
+@property (nonatomic, readwrite) BOOL isDraggingEnabled;
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSTableView *tableView;
 
