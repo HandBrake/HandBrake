@@ -640,7 +640,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Add a subtitle track.
         /// The Source track is set based on the following order. If null, it will skip to the next option.
-        ///   1. Passed in Subitle param
+        ///   1. Passed in Subtitle param
         ///   2. First preferred Subtitle from source
         ///   3. First subtitle from source.
         /// Will not add a subtitle if the source has none.

@@ -90,7 +90,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets the sbutitle behaviour modes.
+        /// Gets the subtitle behaviour modes.
         /// </summary>
         public BindingList<SubtitleBehaviourModes> SubtitleBehaviourModeList
         {
