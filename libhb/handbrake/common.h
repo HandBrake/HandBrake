@@ -894,7 +894,7 @@ struct hb_audio_config_s
         PRIVATE uint32_t reg_desc; /* Registration descriptor of source */
         PRIVATE uint32_t stream_type; /* Stream type from source stream */
         PRIVATE uint32_t substream_type; /* Substream type for multiplexed streams */
-        PRIVATE uint32_t version; /* Bitsream version */
+        PRIVATE uint32_t version; /* Bitstream version */
         PRIVATE uint32_t flags; /* Bitstream flags, codec-specific */
         PRIVATE uint32_t mode; /* Bitstream mode, codec-specific */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
