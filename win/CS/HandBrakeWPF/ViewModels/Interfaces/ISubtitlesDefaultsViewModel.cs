@@ -13,7 +13,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
-    /// The Subtiles View Model Interface
+    /// The Subtitles View Model Interface
     /// </summary>
     public interface ISubtitlesDefaultsViewModel : IViewModelBase
     {

@@ -12,7 +12,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using HandBrakeWPF.Model.Subtitles;
 
     /// <summary>
-    /// The Subtiles View Model Interface
+    /// The Subtitles View Model Interface
     /// </summary>
     public interface ISubtitlesViewModel : ITabInterface
     {
