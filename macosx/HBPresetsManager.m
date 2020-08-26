@@ -296,7 +296,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     __block HBPreset *normalPreset = nil;
     __block HBPreset *firstUserPreset = nil;
     __block HBPreset *firstBuiltInPreset = nil;
-    __block BOOL defaultAlreadySetted = NO;
+    __block BOOL defaultAlreadySet = NO;
 
     // Search for a possible new default preset
     // Try to use "Normal" or the first user preset.
@@ -320,7 +320,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
         if ([obj isDefault])
         {
             self.defaultPreset = obj;
-            defaultAlreadySetted = YES;
+            defaultAlreadySet = YES;
         }
 
         if ([obj isDefault])
@@ -329,7 +329,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
         }
     }];
 
-    if (defaultAlreadySetted)
+    if (defaultAlreadySet)
     {
         self.defaultPreset.isDefault = YES;
         return;
