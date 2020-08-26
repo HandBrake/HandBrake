@@ -65,9 +65,9 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         bool IsEncoding { get; }
 
         /// <summary>
-        /// Gets a value indicating whether is pasued.
+        /// Gets a value indicating whether is paused.
         /// </summary>
-        bool IsPasued { get; }
+        bool IsPaused { get; }
 
         /// <summary>
         /// Start with a LibHb EncodeJob Object

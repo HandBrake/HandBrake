@@ -65,7 +65,7 @@ namespace HandBrakeWPF.Services.Encode
 
         public event EncodeProgessStatus EncodeStatusChanged;
 
-        public bool IsPasued { get; private set; }
+        public bool IsPaused { get; private set; }
 
         public bool IsEncoding { get; protected set; }
 
@@ -155,7 +155,7 @@ namespace HandBrakeWPF.Services.Encode
             {
                 this.instance.PauseEncode();
                 this.ServiceLogMessage("Encode Paused");
-                this.IsPasued = true;
+                this.IsPaused = true;
             }
         }
 
@@ -165,7 +165,7 @@ namespace HandBrakeWPF.Services.Encode
             {
                 this.instance.ResumeEncode();
                 this.ServiceLogMessage("Encode Resumed");
-                this.IsPasued = false;
+                this.IsPaused = false;
             }
         }
 
