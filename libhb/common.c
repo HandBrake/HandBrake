@@ -3327,7 +3327,7 @@ void hb_list_add( hb_list_t * l, void * p )
 /**********************************************************************
  * hb_list_insert
  **********************************************************************
- * Adds an item at the specifiec position in the list, making it bigger
+ * Adds an item at the specified position in the list, making it bigger
  * if necessary.
  * Can safely be called with a NULL pointer to add, it will be ignored.
  *********************************************************************/
