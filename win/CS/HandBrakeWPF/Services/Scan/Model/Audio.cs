@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   An object represending an AudioTrack associated with a Title, in a DVD
+//   An object representing an AudioTrack associated with a Title, in a DVD
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System;
 
     /// <summary>
-    /// An object represending an AudioTrack associated with a Title, in a DVD
+    /// An object representing an AudioTrack associated with a Title, in a DVD
     /// </summary>
     [Serializable]
     public class Audio
