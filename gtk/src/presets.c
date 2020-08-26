@@ -1906,7 +1906,7 @@ ghb_presets_load(signal_user_data_t *ud)
     {
         if (presets_add_config_file("presets") < 0)
         {
-            ghb_log("Failed to read presets file, initailizing new presets...");
+            ghb_log("Failed to read presets file, initializing new presets...");
             hb_presets_builtin_update();
             store_presets();
         }
