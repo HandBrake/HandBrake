@@ -3154,7 +3154,7 @@ static void UpdateState( sync_common_t * common, int frame_count )
 
     if (job->indepth_scan)
     {
-        // Progress for indept scan is handled by reader
+        // Progress for indepth scan is handled by reader
         // frame_count is used during indepth_scan
         // to find start & end points.
         return;
@@ -3219,7 +3219,7 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
 
     if (job->indepth_scan)
     {
-        // Progress for indept scan is handled by reader
+        // Progress for indepth scan is handled by reader
         // frame_count is used during indepth_scan
         // to find start & end points.
         return;
