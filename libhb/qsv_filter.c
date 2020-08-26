@@ -461,7 +461,7 @@ static void hb_qsv_filter_close( hb_filter_object_t * filter )
         // closing local stuff
         qsv_filter_close(qsv,HB_QSV_VPP_DEFAULT);
 
-        // closing the commong stuff
+        // closing the common stuff
         hb_qsv_context_clean(qsv,hb_qsv_full_path_is_enabled(pv->job));
     }
     hb_buffer_list_close(&pv->list);
