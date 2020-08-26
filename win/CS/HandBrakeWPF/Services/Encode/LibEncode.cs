@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Services.Encode
 
         public event EncodeCompletedStatus EncodeCompleted;
 
-        public event EncodeProgessStatus EncodeStatusChanged;
+        public event EncodeProgressStatus EncodeStatusChanged;
 
         public bool IsPaused { get; private set; }
 
@@ -209,7 +209,7 @@ namespace HandBrakeWPF.Services.Encode
 
         private void InvokeEncodeStatusChanged(EventArgs.EncodeProgressEventArgs e)
         {
-            EncodeProgessStatus handler = this.EncodeStatusChanged;
+            EncodeProgressStatus handler = this.EncodeStatusChanged;
             handler?.Invoke(this, e);
         }
 

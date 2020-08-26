@@ -26,7 +26,7 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
     /// <param name="e">
     /// The EncodeProgressEventArgs.
     /// </param>
-    public delegate void EncodeProgessStatus(object sender, EncodeProgressEventArgs e);
+    public delegate void EncodeProgressStatus(object sender, EncodeProgressEventArgs e);
 
     /// <summary>
     /// Encode Progress Status
@@ -57,7 +57,7 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         /// <summary>
         /// Encode process has progressed
         /// </summary>
-        event EncodeProgessStatus EncodeStatusChanged;
+        event EncodeProgressStatus EncodeStatusChanged;
 
         /// <summary>
         /// Gets a value indicating whether IsEncoding.

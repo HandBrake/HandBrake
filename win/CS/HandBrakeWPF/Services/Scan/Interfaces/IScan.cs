@@ -25,7 +25,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     /// <param name="e">
     /// The EncodeProgressEventArgs.
     /// </param>
-    public delegate void ScanProgessStatus(object sender, ScanProgressEventArgs e);
+    public delegate void ScanProgressStatus(object sender, ScanProgressEventArgs e);
 
     /// <summary>
     /// Encode Progress Status
@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <summary>
         /// Scan process has changed to a new title
         /// </summary>
-        event ScanProgessStatus ScanStatusChanged;
+        event ScanProgressStatus ScanStatusChanged;
 
         /// <summary>
         /// Gets a value indicating whether IsScanning.
