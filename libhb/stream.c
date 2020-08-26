@@ -1806,7 +1806,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
  * hb_stream_chapter
  ***********************************************************************
  * Return the number of the chapter that we are currently in. We store
- * the chapter number starting from 0, so + 1 for the real chpater num.
+ * the chapter number starting from 0, so + 1 for the real chapter num.
  **********************************************************************/
 int hb_stream_chapter( hb_stream_t * src_stream )
 {
