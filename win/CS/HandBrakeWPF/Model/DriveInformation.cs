@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Model
     public class DriveInformation
     {
         /// <summary>
-        /// Gets or sets A Unique ID That represemts this model.
+        /// Gets or sets A Unique ID That represents this model.
         /// </summary>
         public int Id { get; set; }
 
