@@ -12,12 +12,12 @@
 static void *HBAVPlayerRateContext = &HBAVPlayerRateContext;
 static void *HBAVPlayerItemStatusContext = &HBAVPlayerItemStatusContext;
 
-typedef void (^HBRateObverser)(void);
-typedef void (^HBPlayableObverser)(void);
+typedef void (^HBRateObserver)(void);
+typedef void (^HBPlayableObserver)(void);
 
 @interface HBAVPlayerRateObserver : NSObject
 
-@property (nonatomic, copy) HBRateObverser block;
+@property (nonatomic, copy) HBRateObserver block;
 
 - (void)postNotification;
 
@@ -38,7 +38,7 @@ typedef void (^HBPlayableObverser)(void);
 @property (nonatomic, strong) AVPlayer *player;
 
 @property (nonatomic, strong) NSMutableSet<HBAVPlayerRateObserver *> *rateObservers;
-@property (nonatomic, strong) NSMutableSet<HBPlayableObverser> *playableObservers;
+@property (nonatomic, strong) NSMutableSet<HBPlayableObserver> *playableObservers;
 
 @property (nonatomic, readwrite, getter=isPlayable) BOOL playable;
 @property (nonatomic, readwrite, getter=isLoaded) BOOL loaded;
@@ -122,7 +122,7 @@ typedef void (^HBPlayableObverser)(void);
 {
     _loaded = loaded;
 
-    for (HBPlayableObverser block in self.playableObservers)
+    for (HBPlayableObserver block in self.playableObservers)
     {
         block();
     }
