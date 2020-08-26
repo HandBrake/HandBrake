@@ -3961,8 +3961,8 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                 // (which do not have a program stream map)  may use
                 // this for other types of video.
                 //
-                // Also, the hddvd tards decided to use 0xe2 and 0xe3 for
-                // h.264 video :( and the twits decided not to put a
+                // Also, the hddvd folks decided to use 0xe2 and 0xe3 for
+                // h.264 video :( and the folks decided not to put a
                 // program stream map in the stream :'(
                 //
                 // So set this to an unknown stream type and probe.
