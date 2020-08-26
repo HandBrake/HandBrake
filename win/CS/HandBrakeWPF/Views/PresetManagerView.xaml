@@ -129,7 +129,7 @@
                         <Setter Property="ToolTip" Value="{Binding Description}" />
                         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollasped" />
+                        <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollapsed" />
                         <Style.Triggers>
                             <Trigger Property="HasItems" Value="True">
                                 <Setter Property="Focusable" Value="false" />
