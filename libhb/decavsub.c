@@ -468,7 +468,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             // overshot the next subtitle pts.
             //
             // assign a 1 second duration
-            hb_log("decavsub: track %d, non-monotically increasing PTS, last %"PRId64" current %"PRId64"",
+            hb_log("decavsub: track %d, non-monotonically increasing PTS, last %"PRId64" current %"PRId64"",
                    ctx->subtitle->out_track,
                    ctx->last_pts, pts);
             pts = ctx->last_pts + 1 * 90000LL;
