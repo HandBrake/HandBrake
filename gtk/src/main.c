@@ -1228,7 +1228,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Gtk has a really stupid bug.  If the file chooser is showing
     // hidden files AND there is no filter set, it will not select
     // the filename when gtk_file_chooser_set_filename is called.
-    // So add a completely unnessary filter to prevent this behavior.
+    // So add a completely unnecessary filter to prevent this behavior.
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
     gtk_file_chooser_set_filter(chooser, filter);
 
