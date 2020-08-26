@@ -1128,7 +1128,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     if (first_audio_lang != NULL &&
         foreign_first_audio && strncmp(first_audio_lang, pref_lang, 4))
     {
-        // First audio lang does not match the preferred subittle lang.
+        // First audio lang does not match the preferred subtitle lang.
         // Preset says to add pref lang subtitle.
         // Foreign audio search is not necessary since entire audio track
         // is foreign.
