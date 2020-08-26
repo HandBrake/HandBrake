@@ -65,7 +65,7 @@ namespace HandBrakeWPF.ViewModels
         private bool preventSleep;
         private BindingList<int> previewPicturesToScan = new BindingList<int>();
         private bool removeUnderscores;
-        private string selectedGranulairty;
+        private string selectedGranularity;
         private Mp4Behaviour selectedMp4Extension;
         private int selectedPreviewCount;
         private ProcessPriority selectedPriority;
@@ -606,14 +606,14 @@ namespace HandBrakeWPF.ViewModels
 
         public BindingList<ProcessPriority> PriorityLevelOptions { get; } = new BindingList<ProcessPriority>(EnumHelper<ProcessPriority>.GetEnumList().ToList());
 
-        public string SelectedGranulairty
+        public string SelectedGranularity
         {
-            get => this.selectedGranulairty;
+            get => this.selectedGranularity;
 
             set
             {
-                this.selectedGranulairty = value;
-                this.NotifyOfPropertyChange(() => this.SelectedGranulairty);
+                this.selectedGranularity = value;
+                this.NotifyOfPropertyChange(() => this.SelectedGranularity);
             }
         }
 
@@ -1241,7 +1241,7 @@ namespace HandBrakeWPF.ViewModels
             this.ConstantQualityGranularity.Add("1.00");
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
-            this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
+            this.SelectedGranularity = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
             this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
@@ -1359,7 +1359,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             this.userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
-            this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
+            this.userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranularity, CultureInfo.InvariantCulture));
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
