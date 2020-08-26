@@ -164,7 +164,7 @@ namespace HandBrakeWPF.Utilities
         /// Return a list of all the enum values.
         /// </summary>
         /// <returns>
-        /// An Enum Oject List
+        /// An Enum Object List
         /// </returns>
         public static IEnumerable<T> GetEnumList()
         {
