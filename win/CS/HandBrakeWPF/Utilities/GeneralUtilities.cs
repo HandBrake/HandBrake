@@ -65,7 +65,7 @@ namespace HandBrakeWPF.Utilities
                 var info = new DirectoryInfo(LogDir);
                 FileInfo[] logFiles = info.GetFiles("*.txt");
 
-                // Delete old and excessivly large files (> ~50MB).
+                // Delete old and excessively large files (> ~50MB).
                 foreach (FileInfo file in logFiles)
                 {
                     try
