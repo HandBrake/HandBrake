@@ -270,7 +270,7 @@ ghb_appcast_parse(gchar *buf, gchar **desc, gchar **build, gchar **version)
     g_markup_parse_context_free(ctx);
     g_queue_free(pd.tag_stack);
     *desc = g_string_free(pd.description, FALSE);
-    // work around a bug to leaves the CDATA closing brakets on the string
+    // work around a bug to leaves the CDATA closing brackets on the string
     gchar *glitch;
     glitch = g_strrstr(*desc, "]]>");
     if (glitch)
