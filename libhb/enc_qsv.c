@@ -1417,7 +1417,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (pv->qsv_info->implementation & MFX_IMPL_HARDWARE_ANY)
     {
         // On linux, the handle to the VA display must be set.
-        // This code is essentiall a NOP other platforms.
+        // This code is essentially a NOP other platforms.
         pv->display = hb_qsv_display_init();
         if (pv->display != NULL)
         {

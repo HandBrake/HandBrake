@@ -905,7 +905,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
             if (MFXInit(hw_impl | hw_preference, &version, &session) == MFX_ERR_NONE)
             {
                 // On linux, the handle to the VA display must be set.
-                // This code is essentiall a NOP other platforms.
+                // This code is essentially a NOP other platforms.
                 hb_display_t * display = hb_qsv_display_init();
 
                 if (display != NULL)
