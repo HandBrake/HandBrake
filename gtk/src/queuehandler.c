@@ -301,7 +301,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
 
-    // Dimenstions
+    // Dimensions
     double display_width;
     int    width, height, display_height, par_width, par_height;
     int    crop[4];
