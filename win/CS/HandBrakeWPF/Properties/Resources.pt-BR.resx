@@ -257,7 +257,7 @@ O backup do arquivo 'user_presets.xml' anterior foi salvo.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Falha ao Analisar:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Falha ao Analisar... Por favor, verifique o Log de Atividades para mais detalhes.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">

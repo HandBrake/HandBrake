@@ -259,7 +259,7 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Überprüfen fehlgeschlagen:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Überprüfen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">

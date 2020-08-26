@@ -1638,9 +1638,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Scan Failed... Please See Activity Log for details..
         /// </summary>
-        public static string Main_ScanFailled_CheckLog {
+        public static string Main_ScanFailed_CheckLog {
             get {
-                return ResourceManager.GetString("Main_ScanFailled_CheckLog", resourceCulture);
+                return ResourceManager.GetString("Main_ScanFailed_CheckLog", resourceCulture);
             }
         }
         

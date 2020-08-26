@@ -255,7 +255,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>스캔 실패:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>스캔에 실패하였습니다... 자세한 내용은 Activity Log를 참고하십시오.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">

@@ -256,7 +256,7 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Echec de l'analyse :</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Échec de l'analyse... Veuillez consulter le journal d'activité pour plus de détails.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">

@@ -253,7 +253,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>扫描失败：</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>扫描失败...有关详细信息，请参阅活动日志。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">

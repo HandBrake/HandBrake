@@ -256,7 +256,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Tarama başarısız oldu: </value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Tarama Başarısız... Lütfen ayrıntılar için Etkinlik Günlüğüne bakınız.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
