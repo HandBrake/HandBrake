@@ -127,14 +127,14 @@ get_buffer(int fd, guint64 off, gsize len)
 }
 
 static gint
-set_unicode16(guint8 *str, gsize len, const guint8 *buf, gint endianess, gsize count)
+set_unicode16(guint8 *str, gsize len, const guint8 *buf, gint endianness, gsize count)
 {
     gint ii, jj;
     guint16 c;
 
     jj = 0;
     for (ii = 0; ii + 2 <= count; ii += 2) {
-        if (endianess == LE)
+        if (endianness == LE)
             c = (buf[ii+1] << 8) | buf[ii];
         else
             c = (buf[ii] << 8) | buf[ii+1];
