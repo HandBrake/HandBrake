@@ -1427,7 +1427,7 @@ preview_state_cb(
         // Look for transition to iconified state.
         // Toggle "Show Preview" button when iconified.
         // I only do this because there seems to be no
-        // way to reliably disable the iconfy button without
+        // way to reliably disable the iconify button without
         // also disabling the maximize button.
         GdkEventWindowState * wse = (GdkEventWindowState*)event;
         if (wse->changed_mask & wse->new_window_state &
