@@ -2120,7 +2120,7 @@ void hb_get_state2( hb_handle_t * h, hb_state_t * s )
 }
 
 /**
- * Closes access to libhb by freeing the hb_handle_t handle ontained in hb_init.
+ * Closes access to libhb by freeing the hb_handle_t handle contained in hb_init.
  * @param _h Pointer to handle to hb_handle_t.
  */
 void hb_close( hb_handle_t ** _h )
