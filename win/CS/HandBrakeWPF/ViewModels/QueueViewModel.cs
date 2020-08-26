@@ -180,7 +180,7 @@ namespace HandBrakeWPF.ViewModels
         public void Clear()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                Resources.QueueViewModel_ClearQueueConfirmation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 this.queueProcessor.Clear();
@@ -397,7 +397,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_EditConfrimation,
+                Resources.QueueViewModel_EditConfirmation,
                 "Modify Job?",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);

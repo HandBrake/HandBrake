@@ -234,7 +234,7 @@ Vá para o menu "Ferramentas" &gt; "Opções" para instalá-la.</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Perfis</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Tem certeza que quer atualizar o perfil selecionado?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -480,7 +480,7 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Fila</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Tem certeza que você quer esvaziar a fila?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -501,7 +501,7 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Não há tarefas pendentes.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Tem certeza que quer editar esta tarefa? Ela será removida da fila e enviada de volta para a janela principal.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

@@ -236,7 +236,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Voreinstellungen</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Soll die ausgewählte Voreinstellung wirklich aktualisiert werden?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -481,7 +481,7 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Warteschlange</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Die Warteschlange wirklich löschen?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -502,7 +502,7 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Es sind keine Aufgaben anstehend.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Soll diese Aufgabe wirklich bearbeitet werden? Sie wird aus der Warteschlange entfernt und zum Hauptfenster geleitet.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

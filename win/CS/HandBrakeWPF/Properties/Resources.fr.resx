@@ -233,7 +233,7 @@ avec ce programme; sinon écrivez à la Free Software Foundation, Inc.,
   <data name="Main_Presets" xml:space="preserve">
     <value>Préréglages</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir mettre à jour le préréglage sélectionné ?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -478,7 +478,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>File d'attente</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir nettoyer la file ?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -499,7 +499,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Il n'y a pas de travail en attente.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir modifier ce travail ? Il sera retiré de la file et envoyé à la fenêtre principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

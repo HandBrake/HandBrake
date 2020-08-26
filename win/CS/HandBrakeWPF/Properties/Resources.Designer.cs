@@ -1527,9 +1527,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to update the selected preset?.
         /// </summary>
-        public static string Main_PresetUpdateConfrimation {
+        public static string Main_PresetUpdateConfirmation {
             get {
-                return ResourceManager.GetString("Main_PresetUpdateConfrimation", resourceCulture);
+                return ResourceManager.GetString("Main_PresetUpdateConfirmation", resourceCulture);
             }
         }
         
@@ -5429,9 +5429,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the queue?.
         /// </summary>
-        public static string QueueViewModel_ClearQueueConfrimation {
+        public static string QueueViewModel_ClearQueueConfirmation {
             get {
-                return ResourceManager.GetString("QueueViewModel_ClearQueueConfrimation", resourceCulture);
+                return ResourceManager.GetString("QueueViewModel_ClearQueueConfirmation", resourceCulture);
             }
         }
         
@@ -5447,9 +5447,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window..
         /// </summary>
-        public static string QueueViewModel_EditConfrimation {
+        public static string QueueViewModel_EditConfirmation {
             get {
-                return ResourceManager.GetString("QueueViewModel_EditConfrimation", resourceCulture);
+                return ResourceManager.GetString("QueueViewModel_EditConfirmation", resourceCulture);
             }
         }
         

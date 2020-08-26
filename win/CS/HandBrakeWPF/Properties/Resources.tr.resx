@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
   <data name="Main_Presets" xml:space="preserve">
     <value>Ön ayarlar</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Seçilen ön ayarı güncellemek istediğinizden emin misiniz?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -478,7 +478,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Sıra</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Sırayı temizlemek istediğine emin misin?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -499,7 +499,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Bekleyen iş yok.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Bu işi düzenlemek istediğinize emin misiniz? Sıradan kaldırılacak ve ana pencereye gönderilecektir.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

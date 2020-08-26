@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_Presets" xml:space="preserve">
     <value>Presets</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Are you sure you wish to update the selected preset?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -481,7 +481,7 @@ The Activity log may have further information.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Queue</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Are you sure you wish to clear the queue?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -502,7 +502,7 @@ The Activity log may have further information.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>There are no pending jobs.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

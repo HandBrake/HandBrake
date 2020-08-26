@@ -234,7 +234,7 @@ Barra de herramientas &gt; Opciones</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Ajustes</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea actualizar el ajuste seleccionado?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -480,7 +480,7 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Cola</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea limpiar la cola?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -501,7 +501,7 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>No hay trabajos pendientes.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea editar este trabajo? Será quitado de la lista y enviado a la ventana principal.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

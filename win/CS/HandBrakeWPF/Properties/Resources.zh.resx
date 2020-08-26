@@ -230,7 +230,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_Presets" xml:space="preserve">
     <value>预设</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>您确定要更新所选预设吗？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -475,7 +475,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>队列</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>你确定要清除队列吗？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -496,7 +496,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>没有待处理的作业。</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>是否确实要编辑此作业？它将从队列中删除并发送到主窗口。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

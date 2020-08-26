@@ -232,7 +232,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_Presets" xml:space="preserve">
     <value>환경 설정</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>선택된 환경 설정으로 업데이트하려는 것이 확실합니까?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -477,7 +477,7 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>대기열</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>대기열을 비우시겠습니까?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -498,7 +498,7 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>보류 중인 작업이 없습니다.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">

@@ -230,7 +230,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="Main_Presets" xml:space="preserve">
     <value>プリセット</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>選択したプリセットを更新してもよろしいですか？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -477,7 +477,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>キューの表示</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>キューを本当にクリアしますか？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -498,7 +498,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>待機中のジョブはありません</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>本当にこのジョブを編集しますか？キューから削除され、メインウィンドウに送られます。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
