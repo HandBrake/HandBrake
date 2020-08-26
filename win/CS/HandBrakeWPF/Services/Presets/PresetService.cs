@@ -625,7 +625,7 @@ namespace HandBrakeWPF.Services.Presets
                     this.ServiceLogMessage("Corrupted Presets File Detected: " + Environment.NewLine + exc);
                 }
 
-                // Sanity Check. Did the container deserialise.
+                // Sanity Check. Did the container deserialize.
                 if (container?.PresetList == null)
                 {
                     this.ServiceLogMessage("Attempting Preset Recovery ...");
@@ -678,10 +678,10 @@ namespace HandBrakeWPF.Services.Presets
             // The presets file loaded was OK, so process it.
             foreach (var item in container.PresetList)
             {
-                object deserialisedItem = JsonSerializer.Deserialize<HBPresetCategory>(item.ToString(), JsonSettings.Options);
+                object deserializedItem = JsonSerializer.Deserialize<HBPresetCategory>(item.ToString(), JsonSettings.Options);
 
                 // Handle Categorised Presets.
-                HBPresetCategory category = deserialisedItem as HBPresetCategory;
+                HBPresetCategory category = deserializedItem as HBPresetCategory;
                 if (category != null && category.Folder)
                 {
                     foreach (HBPreset hbpreset in category.ChildrenArray)
@@ -698,8 +698,8 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Uncategorised Presets
-                deserialisedItem = JsonSerializer.Deserialize<HBPreset>(item.ToString(), JsonSettings.Options);
-                HBPreset hbPreset = deserialisedItem as HBPreset;
+                deserializedItem = JsonSerializer.Deserialize<HBPreset>(item.ToString(), JsonSettings.Options);
+                HBPreset hbPreset = deserializedItem as HBPreset;
                 if (hbPreset != null && !hbPreset.Folder)
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
