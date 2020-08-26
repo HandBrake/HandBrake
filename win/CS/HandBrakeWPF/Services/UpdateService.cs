@@ -255,10 +255,10 @@ namespace HandBrakeWPF.Services
             try
             {
                 byte[] file = File.ReadAllBytes(updateFile);
-                using (RSACryptoServiceProvider verifyProfider = new RSACryptoServiceProvider())
+                using (RSACryptoServiceProvider verifyProvider = new RSACryptoServiceProvider())
                 {
-                    verifyProfider.FromXmlString(publicKey);
-                    return verifyProfider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
+                    verifyProvider.FromXmlString(publicKey);
+                    return verifyProvider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
                 }
             }
             catch (Exception e)
