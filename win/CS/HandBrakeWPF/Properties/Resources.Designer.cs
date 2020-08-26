@@ -917,7 +917,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the problem presists, please try restarting HandBrake..
+        ///   Looks up a localized string similar to If the problem persists, please try restarting HandBrake..
         /// </summary>
         public static string ErrorViewModel_IfTheProblemPersists {
             get {

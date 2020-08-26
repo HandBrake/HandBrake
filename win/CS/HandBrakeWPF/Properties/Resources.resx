@@ -439,7 +439,7 @@ The Activity log may have further information.</value>
     <value>The following action '{0}' will occur in {1} seconds.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>If the problem presists, please try restarting HandBrake.</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>There is no further information available about this error.</value>
