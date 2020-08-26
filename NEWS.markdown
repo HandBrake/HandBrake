@@ -1724,7 +1724,7 @@ Superseded by HandBrake 1.0.5.
 - Nested presets
 - Individual activity logs for each encode
 - Slow and slower deinterlacing and decomb work now in Windows
-- Added resizeable update window
+- Added resizable update window
 - Fixed parsing of non-DVD source audio formats
 - Restored Copy to Clipboard to the Activity Log Window, among other enhancements to it
 - Fixed bug with MKV presets showing up as .m4v
