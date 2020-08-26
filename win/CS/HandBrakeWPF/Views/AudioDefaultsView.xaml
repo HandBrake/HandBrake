@@ -376,7 +376,7 @@
                 <Button Content="{x:Static Properties:Resources.AudioDefaultsView_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
 
                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="15,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
-                <ComboBox Name="audioTrackBeahaviorMode" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                <ComboBox Name="audioTrackBehaviorMode" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
                           ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
                           SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
             </StackPanel>
