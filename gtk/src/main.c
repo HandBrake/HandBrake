@@ -1166,8 +1166,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_file_filter_set_name(filter, "MPG");
     gtk_file_filter_add_pattern(filter, "*.mpg");
     gtk_file_filter_add_pattern(filter, "*.MPG");
-    gtk_file_filter_add_pattern(filter, "*.mepg");
-    gtk_file_filter_add_pattern(filter, "*.MEPG");
+    gtk_file_filter_add_pattern(filter, "*.mpeg");
+    gtk_file_filter_add_pattern(filter, "*.MPEG");
     gtk_file_chooser_add_filter(chooser, filter);
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterEVO"));
     gtk_file_filter_set_name(filter, "EVO");
