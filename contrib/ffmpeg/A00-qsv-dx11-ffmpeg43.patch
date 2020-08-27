@@ -421,7 +421,7 @@ index 5064dcbb60..82bb64eb42 100644
          return AVERROR_UNKNOWN;
      }
 diff --git a/libavutil/hwcontext_d3d11va.c b/libavutil/hwcontext_d3d11va.c
-index c8ae58f908..499c6b709b 100644
+index c8ae58f908..9d6339bf35 100644
 --- a/libavutil/hwcontext_d3d11va.c
 +++ b/libavutil/hwcontext_d3d11va.c
 @@ -72,7 +72,8 @@ static av_cold void load_functions(void)
@@ -485,6 +485,15 @@ index c8ae58f908..499c6b709b 100644
  }
  
  static int d3d11va_frames_init(AVHWFramesContext *ctx)
+@@ -267,7 +277,7 @@ static int d3d11va_frames_init(AVHWFramesContext *ctx)
+             av_log(ctx, AV_LOG_ERROR, "User-provided texture has mismatching parameters\n");
+             return AVERROR(EINVAL);
+         }
+-    } else if (texDesc.ArraySize > 0) {
++    } else if (!(texDesc.BindFlags & D3D11_BIND_RENDER_TARGET) && texDesc.ArraySize > 0) {
+         hr = ID3D11Device_CreateTexture2D(device_hwctx->device, &texDesc, NULL, &hwctx->texture);
+         if (FAILED(hr)) {
+             av_log(ctx, AV_LOG_ERROR, "Could not create the texture (%lx)\n", (long)hr);
 @@ -275,6 +285,12 @@ static int d3d11va_frames_init(AVHWFramesContext *ctx)
          }
      }
