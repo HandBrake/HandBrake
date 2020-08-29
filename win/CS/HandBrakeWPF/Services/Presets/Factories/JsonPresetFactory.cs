@@ -301,7 +301,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 string[] split = importedPreset.VideoTune.Split(',');
                 foreach (var item in split)
                 {
-                    preset.Task.VideoTunes.Add(new VideoTune(item, item));
+                    preset.Task.VideoTunes.Add(new VideoTune(item?.Trim(), item?.Trim()));
                 }
             }
 
