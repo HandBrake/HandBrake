@@ -19,8 +19,8 @@
 
   <!-- Setup -->
   <PropertyGroup>
-    <Configuration>Release</Configuration>
-    <Platform Condition="'$(Platform)'==''">x64</Platform>
+    <Configuration>Debug</Configuration>
+    <Platform>x64</Platform>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
@@ -31,24 +31,27 @@
     <ProjectsToBuild Include="HandBrake.Installer\*wixproj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
-  <!-- Dependencies -->
-  <PropertyGroup>
-    <NightlyDependsOn>BuildRelease;NightlyPostBuild;CodeSign</NightlyDependsOn>
-    <InstallDependsOn>BuildRelease;ReleasePostBuild;CodeSign</InstallDependsOn>
-  </PropertyGroup>
-
   <!-- Builds /t: -->
   <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
   <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
 
-  <!-- Build All Components (WPF, Interop, Interop) -->
-  <Target Name="BuildRelease">
-    <Message Text="Project File Name = $(Platform)" />
-    <MSBuild Projects ="@(ProjectsToBuild)"
-             ContinueOnError ="false"
-             Properties="Configuration=$(Configuration);Platform=$(Platform)" >
-      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
-    </MSBuild>
+  <!-- Dependencies -->
+  <PropertyGroup>
+    <NightlyDependsOn>SetupForNightly;BuildRelease;NightlyPostBuild;CodeSign</NightlyDependsOn>
+    <InstallDependsOn>SetupForRelease;BuildRelease;ReleasePostBuild;CodeSign</InstallDependsOn>
+  </PropertyGroup>
+  
+  <!-- Setup -->
+  <Target Name="SetupForNightly">
+    <PropertyGroup>
+      <Configuration>Debug</Configuration>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="SetupForRelease">
+    <PropertyGroup>
+      <Configuration>Release</Configuration>
+    </PropertyGroup>
   </Target>
 
   <!-- Code Signing Configuration -->
@@ -59,17 +62,27 @@
   <PropertyGroup Condition="'$(SignTimestampServer)'!=''">
     <SignTimestamp  Condition="'$(SignTimestampServer)'!=''" >/t</SignTimestamp>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(SignThumbprint)'!=''">
     <SignType>/sha1</SignType>
     <SignEnabled>true</SignEnabled>
   </PropertyGroup>
-  
-   <PropertyGroup Condition="'$(PfxFile)'!=''">
+
+  <PropertyGroup Condition="'$(PfxFile)'!=''">
     <SignType>/f</SignType>
     <SignPwd Condition="'$(PfxPwd)'!=''">/p</SignPwd>
     <SignEnabled>true</SignEnabled>
   </PropertyGroup>
+
+  <!-- Build All Components (WPF, Interop, Interop) -->
+  <Target Name="BuildRelease">
+    <Message Text="Project File Name = $(Platform)" />
+    <MSBuild Projects ="@(ProjectsToBuild)"
+             ContinueOnError ="false"
+             Properties="Configuration=$(Configuration);Platform=$(Platform)" >
+      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
 
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuild">
@@ -89,7 +102,7 @@
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\Installer64.nsi" />
 
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Version-x86_64-Win_GUI.msi /Y" />
   </Target>
 
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">

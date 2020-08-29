@@ -11,7 +11,19 @@
 
   <?define packagePath = "..\HandBrakeWPF\bin\x64\Release" ?>
 
-  <Product Id="*" Name="HandBrake" Language="1033" Version="1.4.0.0" Manufacturer="HandBrake Team" UpgradeCode="fd19ef0e-77c4-47a6-b1e4-4cea0b3a4c93">
+  <?if $(var.Configuration)=Debug ?>
+    <?define msiProductId = "fd19ef0e-77c4-47a6-b1e4-4cea0b3a4c94" ?>
+    <?define productName = "HandBrake Nightly" ?>
+    <?define installDir = "Nightly" ?>
+    <?define ToastActivatorCLSID = "" ?>
+  <?else ?>
+    <?define msiProductId = "fd19ef0e-77c4-47a6-b1e4-4cea0b3a4c93" ?>
+    <?define productName = "HandBrake" ?>
+    <?define installDir = "HandBrake" ?>
+    <?define ToastActivatorCLSID = "" ?>
+  <?endif ?>
+
+  <Product Id="$(var.msiProductId)" Name="$(var.productName)" Language="1033" Version="1.4.0.0" Manufacturer="HandBrake Team" UpgradeCode="$(var.msiProductId)">
     <Package InstallerVersion="200" Platform="x64" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -24,7 +36,7 @@
     <Property Id="ARPHELPLINK" Value="https://www.handbrake.fr/docs"/>
     <Property Id="ARPURLINFOABOUT" Value="https://www.handbrake.fr"/>
     <Property Id="ARPNOREPAIR" Value="1"/>
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="WIXUI_INSTALLDIR" Value="APPDIR" />
 
     <UIRef Id="WixUI_InstallDir" />
 
@@ -50,81 +62,81 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
 
       <Directory Id="ProgramFiles64Folder">
-        <Directory Id="INSTALLDIR" Name="HandBrake">
+        <Directory Id="INSTALLDIR" Name="HandBrakeTeam">
+          <Directory Id="APPDIR" Name="$(var.installDir)">
 
-          <Component Win64="yes" Id="ApplicationFiles" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42181">
-            <!-- Core Application -->
-            <File Source="$(var.packagePath)\HandBrake.exe" />
-            <File Source="$(var.packagePath)\HandBrake.exe.config"/>
-            <File Source="$(var.packagePath)\HandBrake.Worker.exe" />
-            <File Source="$(var.packagePath)\HandBrake.Worker.exe.config"/>
-            <File Source="$(var.packagePath)\HandBrake.Interop.dll"/>
-            <File Source="$(var.packagePath)\hb.dll"/>
-            <File Source="$(var.packagePath)\portable.ini.template"/>
+            <Component Win64="yes" Id="ApplicationFiles" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42181">
+              <!-- Core Application -->
+              <File Source="$(var.packagePath)\HandBrake.exe" />
+              <File Source="$(var.packagePath)\HandBrake.exe.config"/>
+              <File Source="$(var.packagePath)\HandBrake.Worker.exe" />
+              <File Source="$(var.packagePath)\HandBrake.Worker.exe.config"/>
+              <File Source="$(var.packagePath)\HandBrake.Interop.dll"/>
+              <File Source="$(var.packagePath)\hb.dll"/>
+              <File Source="$(var.packagePath)\portable.ini.template"/>
 
-            <!-- 3rd Party Libraries -->
-            <File Source="$(var.packagePath)\Caliburn.Micro.dll"/>
-            <File Source="$(var.packagePath)\Caliburn.Micro.Platform.Core.dll"/>
-            <File Source="$(var.packagePath)\Caliburn.Micro.Platform.dll"/>
-            <File Source="$(var.packagePath)\GongSolutions.WPF.DragDrop.dll"/>
-            <File Source="$(var.packagePath)\Ookii.Dialogs.Wpf.dll"/>
-            <File Source="$(var.packagePath)\System.Windows.Interactivity.dll"/>
-            <File Source="$(var.packagePath)\Newtonsoft.Json.dll"/>
-
-          </Component>
-
-          <Directory Id="de_lang" Name="de">
-            <Component Win64="yes" Id="de_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42182">
-              <File Id="de_lang" Source="$(var.packagePath)\de\HandBrake.resources.dll" />
+              <!-- 3rd Party Libraries -->
+              <File Source="$(var.packagePath)\Caliburn.Micro.dll"/>
+              <File Source="$(var.packagePath)\Caliburn.Micro.Platform.Core.dll"/>
+              <File Source="$(var.packagePath)\Caliburn.Micro.Platform.dll"/>
+              <File Source="$(var.packagePath)\GongSolutions.WPF.DragDrop.dll"/>
+              <File Source="$(var.packagePath)\Ookii.Dialogs.Wpf.dll"/>
+              <File Source="$(var.packagePath)\System.Windows.Interactivity.dll"/>
+              <File Source="$(var.packagePath)\Newtonsoft.Json.dll"/>
             </Component>
-          </Directory>
 
-          <Directory Id="es_lang" Name="es">
-            <Component Win64="yes" Id="es_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42183">
-              <File Id="es_lang" Source="$(var.packagePath)\es\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="de_lang" Name="de">
+              <Component Win64="yes" Id="de_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42182">
+                <File Id="de_lang" Source="$(var.packagePath)\de\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="fr_lang" Name="fr">
-            <Component Win64="yes" Id="fr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42184">
-              <File Id="fr_lang" Source="$(var.packagePath)\fr\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="es_lang" Name="es">
+              <Component Win64="yes" Id="es_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42183">
+                <File Id="es_lang" Source="$(var.packagePath)\es\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="ja_lang" Name="ja">
-            <Component Win64="yes" Id="ja_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42185">
-              <File Id="ja_lang" Source="$(var.packagePath)\ja\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="fr_lang" Name="fr">
+              <Component Win64="yes" Id="fr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42184">
+                <File Id="fr_lang" Source="$(var.packagePath)\fr\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="ko_lang" Name="ko">
-            <Component Win64="yes" Id="ko_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42186">
-              <File Id="ko_lang" Source="$(var.packagePath)\ko\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="ja_lang" Name="ja">
+              <Component Win64="yes" Id="ja_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42185">
+                <File Id="ja_lang" Source="$(var.packagePath)\ja\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="ru_lang" Name="ru">
-            <Component Win64="yes" Id="ru_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42187">
-              <File Id="ru_lang" Source="$(var.packagePath)\ru\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="ko_lang" Name="ko">
+              <Component Win64="yes" Id="ko_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42186">
+                <File Id="ko_lang" Source="$(var.packagePath)\ko\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="tr_lang" Name="tr">
-            <Component Win64="yes" Id="tr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
-              <File Id="tr_lang" Source="$(var.packagePath)\tr\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="ru_lang" Name="ru">
+              <Component Win64="yes" Id="ru_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42187">
+                <File Id="ru_lang" Source="$(var.packagePath)\ru\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
-          <Directory Id="zh_lang" Name="zh">
-            <Component Win64="yes" Id="zh_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42189">
-              <File Id="zh_lang" Source="$(var.packagePath)\zh\HandBrake.resources.dll" />
-            </Component>
-          </Directory>
+            <Directory Id="tr_lang" Name="tr">
+              <Component Win64="yes" Id="tr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
+                <File Id="tr_lang" Source="$(var.packagePath)\tr\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
 
+            <Directory Id="zh_lang" Name="zh">
+              <Component Win64="yes" Id="zh_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42189">
+                <File Id="zh_lang" Source="$(var.packagePath)\zh\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
+          </Directory>
         </Directory>
 
         <Directory Id="ProgramMenuFolder">
-          <Directory Id="DIR_Shortcuts" Name="HandBrake" />
+          <Directory Id="DIR_Shortcuts" Name="$(var.productName)" />
         </Directory>
 
       </Directory>
@@ -135,21 +147,20 @@
       <Component Id="AppShortcuts" Win64="yes">
 
         <!-- Shortcuts for the shell -->
-        <Shortcut Id="SCUT_Shortcuts_Shell" Name="HandBrake" Target="[#HandBrake.exe]" WorkingDirectory="APPLICATIONROOTDIRECTORY">
+        <Shortcut Id="SCUT_Shortcuts_Shell" Name="$(var.productName)" Target="[#HandBrake.exe]" WorkingDirectory="APPLICATIONROOTDIRECTORY">
           <!--AUMID-->
-          <ShortcutProperty Key="System.AppUserModel.ID" Value="HandBrakeTeam.HandBrake"/>
+          <ShortcutProperty Key="System.AppUserModel.ID" Value="HandBrakeTeam.$(var.productName)"/>
           <!--COM CLSID-->
           <ShortcutProperty Key="System.AppUserModel.ToastActivatorCLSID" Value="{cbae29e7-6d39-49bb-8c76-0305c3d42181}"/>
         </Shortcut>
 
         <!-- Uninstall shortcut -->
-        <Shortcut Id="SCUT_Shortcuts_Uninstall" Name="Uninstall HandBrake" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]"/>
+        <Shortcut Id="SCUT_Shortcuts_Uninstall" Name="Uninstall $(var.productName)" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]"/>
         <RemoveFolder Id="REMOVE_Shortcuts" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\HandBakeTeam\HandBrake" Name="installedShortcut" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\HandBakeTeam\$(var.installDir)" Name="installedShortcut" Type="integer" Value="1" KeyPath="yes" />
 
       </Component>
     </DirectoryRef>
-
 
     <!-- Installer Feature Set -->
     <Feature Id="DefaultFeature" Level="1">
