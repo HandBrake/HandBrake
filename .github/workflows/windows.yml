@@ -84,7 +84,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
        name: LibHandBrake
-       path: win/CS/HandBrakeWPF/bin/x64/Release
+       path: win/CS/HandBrakeWPF/bin/x64/Debug
          
     - name: Import the Signing Cert
       run: |
