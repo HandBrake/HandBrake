@@ -86,23 +86,23 @@
 
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuild">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
-    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\MakeNightly64.nsi" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\doc /I /Y" />
+    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\MakeNightly64.nsi" />
 
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" />
   </Target>
 
   <Target Name="ReleasePostBuild">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" />
-    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" />
-    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\Installer64.nsi" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration) /Y" />
+    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\doc /I /Y" />
+    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\Installer64.nsi" />
 
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\HandBrake-Version-x86_64-Win_GUI.msi /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Platform)\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\$(Configuration)\HandBrake-Version-x86_64-Win_GUI.msi /Y" />
   </Target>
 
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
