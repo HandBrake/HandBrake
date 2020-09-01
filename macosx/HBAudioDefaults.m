@@ -106,6 +106,15 @@
     _allowDTSPassthru = allowDTSPassthru;
 }
 
+- (void)setAllowMP2Passthru:(BOOL)allowMP2Passthru
+{
+    if (allowMP2Passthru != _allowMP2Passthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowMP2Passthru:_allowMP2Passthru];
+    }
+    _allowMP2Passthru = allowMP2Passthru;
+}
+
 - (void)setAllowMP3Passthru:(BOOL)allowMP3Passthru
 {
     if (allowMP3Passthru != _allowMP3Passthru)
@@ -204,6 +213,7 @@
     self.allowDTSHDPassthru  = NO;
     self.allowEAC3Passthru   = NO;
     self.allowFLACPassthru   = NO;
+    self.allowMP2Passthru    = NO;
     self.allowMP3Passthru    = NO;
     self.allowTrueHDPassthru = NO;
 
@@ -232,6 +242,9 @@
                     break;
                 case HB_ACODEC_FLAC_PASS:
                     self.allowFLACPassthru = YES;
+                    break;
+                case HB_ACODEC_MP2_PASS:
+                    self.allowMP2Passthru = YES;
                     break;
                 case HB_ACODEC_MP3_PASS:
                     self.allowMP3Passthru = YES;
@@ -333,6 +346,10 @@
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_DCA_PASS))];
     }
+    if (self.allowMP2Passthru)
+    {
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_MP2_PASS))];
+    }
     if (self.allowMP3Passthru)
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_MP3_PASS))];
@@ -422,6 +439,7 @@
         copy->_allowEAC3Passthru = _allowEAC3Passthru;
         copy->_allowDTSHDPassthru = _allowDTSHDPassthru;
         copy->_allowDTSPassthru = _allowDTSPassthru;
+        copy->_allowMP2Passthru = _allowMP2Passthru;
         copy->_allowMP3Passthru = _allowMP3Passthru;
         copy->_allowTrueHDPassthru = _allowTrueHDPassthru;
         copy->_allowFLACPassthru = _allowFLACPassthru;
@@ -455,6 +473,7 @@
     encodeBool(_allowEAC3Passthru);
     encodeBool(_allowDTSHDPassthru);
     encodeBool(_allowDTSPassthru);
+    encodeBool(_allowMP2Passthru);
     encodeBool(_allowMP3Passthru);
     encodeBool(_allowTrueHDPassthru);
     encodeBool(_allowFLACPassthru);
@@ -482,6 +501,7 @@
     decodeBool(_allowEAC3Passthru);
     decodeBool(_allowDTSHDPassthru);
     decodeBool(_allowDTSPassthru);
+    decodeBool(_allowMP2Passthru);
     decodeBool(_allowMP3Passthru);
     decodeBool(_allowTrueHDPassthru);
     decodeBool(_allowFLACPassthru);
