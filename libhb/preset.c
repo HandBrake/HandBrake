@@ -3109,6 +3109,8 @@ static void import_audio_0_0_0(hb_value_t *preset)
 
     copy = hb_value_array_init();
     hb_dict_set(preset, "AudioCopyMask", copy);
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowMP2Pass")))
+        hb_value_array_append(copy, hb_value_string("copy:mp2"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowMP3Pass")))
         hb_value_array_append(copy, hb_value_string("copy:mp3"));
     if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowAACPass")))
