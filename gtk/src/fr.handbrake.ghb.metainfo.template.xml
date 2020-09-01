@@ -36,6 +36,7 @@
     <mimetype>audio/ogg</mimetype>
     <mimetype>audio/x-flac</mimetype>
     <mimetype>audio/x-matroska</mimetype>
+    <mimetype>audio/x-mp2</mimetype>
     <mimetype>audio/x-mp3</mimetype>
     <mimetype>audio/x-mpeg</mimetype>
     <mimetype>audio/x-vorbis</mimetype>

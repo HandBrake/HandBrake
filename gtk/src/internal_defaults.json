@@ -9,6 +9,7 @@
         "title": "none"
     },
     "Initialization": {
+        "AudioAllowMP2Pass": false,
         "AudioAllowMP3Pass": false,
         "AudioAllowAACPass": false,
         "AudioAllowAC3Pass": false,
