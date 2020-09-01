@@ -743,7 +743,7 @@ static int tx3g_update_style(hb_tx3g_style_context_t *ctx, int utf8_end_pos)
     {
         if (ctx->style_start < utf8_end_pos)
         {
-            if (!tx3g_update_style_atoms(ctx, utf8_end_pos - 1))
+            if (!tx3g_update_style_atoms(ctx, utf8_end_pos))
             {
                 return 0;
             }
