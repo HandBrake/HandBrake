@@ -148,21 +148,19 @@ Custom: при желании вы можете установить макси�
 Source maximum: кодирование всегда будет происходить из исходных файлов, когда это возможно.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Все права защищены (C) 2003-2019 The HandBrake Team
+    <value>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-Эта программа бесплатна; вы можете распространять ее/или
-изменять в соответствии с условиями GNU General Public License
-опубликованными Free Software Foundation; используя 2-ю версию
-лицензии, или (на ваш выбор) любой поздней версии.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-Эта программа распространяется в надежде быть полезной,
-но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; либо без каких-либо подразумевающихся гарантий
-ПРОДАЖИ или ИСПОЛЬЗОВАНИЯ В КОРЫСТНЫХ ЦЕЛЯХ. Посмотрите
-GNU General Public License для более детальной информации.
-
-Вы должны получить копию GNU General Public License
-вместе с этой программой; если нет, напишите Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>ВНИМАНИЕ: У вас не включено автоматическое именование файлов. Включите его в настройках.</value>
@@ -284,7 +282,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>Выберите 'Источник' для продолжения</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Работ в ожидании</value>
+    <value>{0} Jobs Pending</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Внимание</value>
@@ -404,7 +402,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Вы уверены что хотите удалить пресет: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Кодирование: Проход {0} из {1}, {2:00.00}%, Кадров в секунду: {3:000.0}, Среднее значение: {4:000.0}, Осталось времени: {5}, Прошло: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>Пресет должен иметь имя. Пожалуйста, заполните поле 'Название пресета'.</value>
@@ -670,7 +668,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Пожалуйста, проверьте правильность указанного путя назначения.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Обработка Прохода {0} из {1}, (Скан Субтитров)  {2:00.00}%, Оставшееся Время Сканирования: {3},  Прошло: {4:d\:hh\:mm\:ss}</value>
+    <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Нет доп. информации</value>
@@ -692,7 +690,11 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Очередь приостановлена</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Ваш каталог назначений находится на диске, на котором мало свободного места. Пожалуйста, освободите немного места на вашем носителе. Или же вы можете изменить количество уведомлений в настройках.</value>
+    <value>Your destination directory is low on diskspace. 
+
+You can configure the level at which this alert appears in preferences. 
+
+Do you wish to continue? </value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
     <value>Невозможно сбросить состояние задания, так как оно не в ошибочном или завершенном состоянии</value>
@@ -1122,7 +1124,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Оптимизирован для Веб</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Управление пресетами</value>
+    <value>Manage Presets</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Метаданные</value>
@@ -1152,7 +1154,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Показывать состояние кодирования в заголовке окна приложения.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Очистить логи, существующие более 30 дней</value>
+    <value>Clear Log files older than 7 days</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>О HandBrake</value>
@@ -1224,7 +1226,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Путь лога:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Приостановить очередь, если на диске свободного пространства меньше, чем:</value>
+    <value>Pause queue if disk space is low</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Минимизировать в системный трей (необходим перезапуск)</value>
@@ -1243,6 +1245,9 @@ Foreign Audio Preferred, else First - Если существует дорожк
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Путь: </value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Path to Media Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Не давать системе уснуть, если происходит кодирование</value>
@@ -1293,7 +1298,8 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Видео</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Эта настройка используется только для предварительного просмотра видео.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Посмотреть папку с логами</value>
@@ -1317,7 +1323,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Низ</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Кадрирование</value>
+    <value>Cropping:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Пользовательский</value>
@@ -1443,7 +1449,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Опции</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Приостановить очередь</value>
+    <value>Пауза</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Время паузы:</value>
@@ -1575,7 +1581,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Выберите картинку для предварительного просмотра</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Использовать видеоплеер, установленный в системе по умолчанию</value>
+    <value>Prefer system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Добавлять скрытые субтитры, когда возможно</value>
@@ -1862,7 +1868,8 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Импортировать очередь</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Кодирование: Проход {0} из {1}, {2:00.00}%, FPS: {3:000.0}, Среднее: {4:000.0}, Осталось времени: {5:hh\:mm\:ss} , Прошло: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Удалить выбранное</value>
@@ -1983,7 +1990,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Критическое состояние батареи! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Низкий уровень заряда батареи ({0} %). Ваши задания кодирования были поставлены на паузу для защиты системы. Режим сна системы разрешен!</value>
+    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Свободное пространство на указанном диске ниже {0} ГБ. Ставлю кодирование на паузу...</value>
@@ -2152,5 +2159,226 @@ Foreign Audio Preferred, else First - Если существует дорожк
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Всегда использовать путь по умолчанию для каждого нового сгенерированного имени.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Port range must be between 5000 and 32767</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Replacement Placeholders: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>A new version of HandBrake is available!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Low battery level:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pause any running jobs when the battery gets low.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Добавить все оставшиеся субтитры</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Duplicates Detected</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Please select a single job to view summary information.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Run each queued job in a separate worker process. (Experimental)</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Default network port for worker:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>The preset you have selected is not available for use on this system.
+
+This is typically an indication that your system does not support the hardware required to utilise it.
+
+Please choose a different preset.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Process Isolation</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Number of simultaneous encodes:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Пресет:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Reset Settings</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Custom (Not Limited)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Fill (pad to resolution limit)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Height (pad up to res limit)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Width (pad up to res limit)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Padding:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Padding Colour:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Borders</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolution and Scaling</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Rotate and Crop</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>( Windows 10 Only! )</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Фильтры:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forced</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Пользовательский</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max Height:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max Width:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Resolution Limit:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Manage Presets</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Delete Built-in Presets</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Export selected preset</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Import Preset(s) from file</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Preset Information:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Build in presets can not be modified.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Set selected preset as default</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Удалить пресет</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Not supported on this system)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>Метаданные</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
+Fields are limited to:
+- Name
+- Artist
+- Album Artist
+- Composer
+- Release Date
+- Comment
+- Album
+- Genre
+- Description
+- Long Description</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
+    <value>(Default Preset)</value>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>The category name you entered already exists. Please choose a different name.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>The category name was empty. Please provide a name.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Enter a name: </value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>There is no preset selected.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Export all user presets</value>
   </data>
 </root>

@@ -1123,7 +1123,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>웹 최적화</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>환경 설정 관리</value>
+    <value>Manage Presets</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>메타데이터</value>
@@ -1245,6 +1245,9 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="Options_Path" xml:space="preserve">
     <value>경로: </value>
   </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Path to Media Player</value>
+  </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>인코딩 중 시스템 절전 방지</value>
   </data>
@@ -1294,7 +1297,8 @@ HandBrake를 종료하시겠습니까?</value>
     <value>비디오</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>해당 경로는 비디오 미리보기 기능을 위해서만 사용됩니다.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>로그 디렉토리 보기</value>
@@ -1318,7 +1322,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>맨 아래</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>자르기</value>
+    <value>Cropping:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>사용자 설정</value>
@@ -1444,7 +1448,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>옵션</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>대기열 중지</value>
+    <value>중단</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>중단 지속 시간:</value>
@@ -1576,7 +1580,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>미리보기 이미지 선택</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>시스템 기본 비디오 플레이어 사용</value>
+    <value>Prefer system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>사용 가능할 경우 내장 자막 추가</value>
@@ -2185,7 +2189,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>중복 감지</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>저전력 QuickSync Hardware을 실행합니다.</value>
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Please select a single job to view summary information.</value>
@@ -2229,5 +2233,151 @@ Please choose a different preset.</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
     <value>Are you sure you wish to reset HandBrake to default settings?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Custom (Not Limited)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Fill (pad to resolution limit)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Height (pad up to res limit)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Width (pad up to res limit)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Padding:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Padding Colour:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Borders</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolution and Scaling</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Rotate and Crop</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>( Windows 10 Only! )</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>필터:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>기본값</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forced</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max Height:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max Width:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Resolution Limit:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Manage Presets</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Delete Built-in Presets</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Export selected preset</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Import Preset(s) from file</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Preset Information:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Build in presets can not be modified.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Set selected preset as default</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>환경 설정 삭제</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Not supported on this system)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>멈춤</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>메타데이터</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
+Fields are limited to:
+- Name
+- Artist
+- Album Artist
+- Composer
+- Release Date
+- Comment
+- Album
+- Genre
+- Description
+- Long Description</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
+    <value>(Default Preset)</value>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>The category name you entered already exists. Please choose a different name.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>The category name was empty. Please provide a name.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Enter a name: </value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>There is no preset selected.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Export all user presets</value>
   </data>
 </root>

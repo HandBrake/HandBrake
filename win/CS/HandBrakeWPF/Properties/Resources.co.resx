@@ -118,2157 +118,2159 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>完整的编码器参数列表：
+    <value>A lista sana di i parametri di cudificatore : 
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>减少解码器对CPU的占用。
+    <value>Riduce l’impiegu CPU di u discudificatore.
 
-当你的设备无法流畅播放输出时选择此选项。（例如： 丢帧）</value>
+Attivate st’ozzione s’è u vostru apparechju ùn leghje micca bè u schedariu d’esciuta. (i.e. perdita di fiure)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>警告： RF 0 表示无损！</value>
+    <value>Fate casu : RF 0 vole dì senza perdita !</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>值为“0”表示无损，将导致文件大小大于原始源，除非源文件也是无损的。
+    <value>Un valore à 0 vole dì senza perdita è per què, u schedariu d’esciuta serà più maiò chì quellu di a fonte, for di s’è a fonte era dinù senza perdita. 
 
-使用x264和x265时比例是对数的，较低的值对应于较高的质量。
+E scale di x264 è x265 sò logaritmiche, è valori più chjuchi currispondenu à una qualità più maiò. 
 
-因此，即使值的小幅减少也会导致文件大小逐渐增大。</value>
+Dunque, chjuchi aumenti di valore aumentanu prugressivamente a dimensione di u schedariu d’esciuta.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>您可以选择使用此预设存储图像设置。有3种模式：
-None: 图像设置不存储在预设中。加载源时，它们将保持在源分辨率的范围内。这也会影响变形、模量、裁剪等。
+    <value>Pudete eventualmente allucà preferenze di fiura cù sta prerigatura. Ci hè 3 modi :
 
-Custom: 您可以选择设置最大宽度和高度。这样做时，输出视频的宽度和高度不会超过设定值。保持宽高比将自动打开。
-Source Maximum: 始终在源分辨率下进行编码。</value>
+Alcunu : E preferenze di fiurà ùn sò micca allucate cù sta prerigatura. À u caricamentu d’una fonte, e preferenze steranu tale quale in i cunfini di a risuluzione di a fonte. Quessa affetta dinù Anamorficu, mudullu, runzicatura, ecc.
+
+Persunalizatu : Pudete eventualmente definisce una larghezza è un’altezza massima. S’è vo fate què, a cudificazione serà inferiore o uguale à sti valori. L’ozzione « Cunservà e prupurzioni » serà autumaticamente attivata.
+
+Fonte massima : Cudificà sempre à a risuluzione di a fonte quand’ella hè pussibule.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+    <value>Stu prugramma hè liberu ; pudete ridistribuiscellu è/o mudificallu
+dapervoi secondu i termini di a Licenza Publica Generale GNU tale
+chì publicata da a Free Software Foundation ; sia a versione 2 di
+a licenza, o s’è voi preferite, una versione più recente.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Stu prugramma hè distribuitu cù a sperenza d’esse ghjuvevule, ma SENZA NISUNA ASSICURANZA ; senza manc’una assicuranza di CUMMERCIALISAZIONE o di CURRISPUNDENZA À UN IMPIEGU PARTICULARE.  Fighjate a licenza GNU General Public License per sapene di più.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+Duveriate avè ricevutu una copia di a licenza GNU General Public License
+cù stu prugramma ; osinnò, ci vole à scrive à : Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>警告：自动文件命名选项未打开。请在设置中开启。</value>
+    <value>Avertimentu : U numinà autumaticu di i schedarii ùn hè micca attivu. Ci vole à attivallu in l’ozzioni.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>警告：您当前没有自动选择音频和字幕轨道的设置。您可以在选项中设置默认轨道选择行为。</value>
+    <value>Avertimentu : Ùn avete micca attivatu a cunfigurazione autumatica di a selezzione di e traccie audio è di i sottutituli. Pudete cunfigurà in l’ozzioni u cumpurtamentu predefinitu di a selezzione di e traccie.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>内置的预设已被重置。</value>
+    <value>E prerigature integrate sò state rimesse d’origine.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>重置完成</value>
+    <value>Reinizializazione compia</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>高质量 |</value>
+    <value>Qualità alta |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| 低质量</value>
+    <value>| Qualità debule</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>最高质量 |</value>
+    <value>Qualità placebo |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>错误</value>
+    <value>Sbagliu</value>
   </data>
   <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>警告：如果您希望为要列队的每个项目添加字幕，请确认您在字幕选项卡上正确设置了字幕默认设置。
+    <value>Avertimentu : s’è vo vulete chì sottutituli sianu aghjunti à ogni elementu chì vo site prontu à mette in fila d’attesa, verificate chì i parametri predefiniti di i sottutituli sianu currettamente cunfigurati in l’unghjetta Sottutituli.
     
-你想继续吗？</value>
+Vulete cuntinuà ?</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>在添加到队列之前，必须启用自动文件命名并在首选项中设置默认路径。</value>
+    <value>Ci vole à attivà u numinà autumaticu di i schedarii È sceglie un chjassu predefinitu in e preferenze nanzu di pudè aghjunghje à a fila d’attesa.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>警告</value>
+    <value>Avertimentu</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>你确定吗？</value>
+    <value>Site sicuru ?</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake 已在进行编码。</value>
+    <value>HandBrake hè in corsu di cudificazione.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>队列中的作业具有相同的目标路径。请为此作业选择不同的路径。</value>
+    <value>Ci sò travaglii in a fila d’attesa cù u listessu chjassu di destinazione. Ci vole à sceglie un chjassu sfarente per stu travagliu.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   等待工作 {0}</value>
+    <value>   {0} Travaglii in attesa</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>新的默认预设集：{0}</value>
+    <value>Nova prerigatura predefinita : {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>有新的更新可用。转到“工具”菜单 &gt; “选项”安装</value>
+    <value>Un rinnovu recente hè dispunibule. Andate à u listinu Attrezzi &gt; Ozzioni per installalu</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>未选择预设。</value>
+    <value>Alcuna prerigatura selezziunata.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>您无法修改内置预设。请选择一个您自己的预设。</value>
+    <value>Ùn pudete micca mudificà e prerigature integrate. Ci vole à selezziunà una di e vostre proprie prerigature.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>请选择一个文件夹。</value>
+    <value>Ci vole à selezziunà un cartulare.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>正在准备编码…</value>
+    <value>Preparazione à cudificà…</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>您无法导入与内置预设同名的预设。</value>
+    <value>Ùn pudete micca impurtà una prerigatura cù u listessu nome ch’una prerigatura integrata.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>预设 "{0}" 已经存在。你想覆盖它吗？</value>
+    <value>A prerigatura « {0} » esiste dighjà. Vulete rimpiazzalla ?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>预设</value>
+    <value>Prerigature</value>
   </data>
   <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
-    <value>您确定要更新所选预设吗？</value>
+    <value>Site sicuru di vulè mudificà a prerigatura selezziunata ?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>预设现在已使用您当前的设置进行更新。</value>
+    <value>A prerigatura hè stata mudificata cù e vostre preferenze attuale.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake 已确认你的内置预设已过期... 现在将更新这些预设。
-您的自定义预设尚未更新，因此您可能需要通过删除和重新添加来重新创建这些预设。
-以前的 user_presets.xml 文件已备份。</value>
+    <value>HandBrake hà determinatu chì e vostre prerigature integrate sò anticogne… Ste prerigature anu da esse rinnovate avà.
+E vostre prerigature persunalizate ùn sò micca state mudificate ; forse ci vulerà à ricrealle, sqassendule è re-aghjunghjendule. 
+U schedariu precedente user_presets.xml hè statu accantatu.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>队列完成</value>
+    <value>Fila d’attesa compia</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>扫描取消。</value>
+    <value>Analisa abbandunata.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>扫描完成</value>
+    <value>Analisa compia</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>扫描失败：</value>
+    <value>Fiascu di l’analisa : </value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>扫描失败...有关详细信息，请参阅活动日志。</value>
+    <value>Fiascu di l’analisa… Ci vole à fighjà u ghjurnale d’attività per sapene di più.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>正在扫描源，请稍候…</value>
+    <value>Analisa di a fonte, aspittate per piacè…</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>正在扫描标题 {0}/{1} ({2}%)</value>
+    <value>Analisa di u titulu {0} nant’à {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>在开始编码之前，必须首先扫描源并设置作业。单击工具栏上的“添加源”按钮继续。</value>
+    <value>Prima, ci vole à analizà una fonte è definisce u vostru travagliu nanzu di principià una cudificazione. Appughjate nant’à u buttone « Fonte » in a barre d’attrezzi per cuntinuà.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>请确保您已选择自己的预设。请注意，您无法导出内置预设。</value>
+    <value>Assicuratevvi chì voi abbiate selezziunatu una di e vostre proprie prerigature. Ci vole à sapè chì ùn pudete micca espurtà e prerigature integrate.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>请选择要更新的预设。</value>
+    <value>Ci vole à selezziunà una prerigatura à mudificà.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>选择“源”以继续</value>
+    <value>Selezziunate « Apre a fonte » per cuntinuà</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Jobs Pending</value>
+    <value>{0} Travaglii in attesa</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>注意</value>
+    <value>Avertimentu</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>是否覆盖？</value>
+    <value>Rimpiazzallu ?</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>问题</value>
+    <value>Dumanda</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>准备就绪</value>
+    <value>Prontu</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>更新</value>
+    <value>Mudificatu</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>预设版本</value>
+    <value>Versione di a prerigatura</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>您尝试导入的预设来自不同版本的 HandBrake。
-可能无法从此预设中导入所有值。
+    <value>A prerigatura chì vo circate à impurtà vene d’una versione sfarente d’HandBrake. 
+ Forse ùn serà micca pussibule d’impurtà tutti i valori di sta prerigatura. 
 
-你要继续吗？</value>
+Vulete cuntinuà ?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>无法导入预设！</value>
+    <value>Impussibule d’impurtà a prerigatura !</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>无法导入预设，因为它似乎已损坏或来自旧版本的 HandBrake。</value>
+    <value>Impussibule d’impurtà a prerigatura chì pare esse alterata o vene d’una vechja versione d’HandBrake.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>在添加到队列之前，必须先为输出文件设置目标路径。</value>
+    <value>Prima, ci vole à definisce u chjassu di destinazione di u schedariu d’esciuta nanzu d’aghjunghjelu à a fila d’attesa.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>输入的目标路径包含非法字符，将不会更新。</value>
+    <value>U chjassu di destinazione pruvistu cuntene caratteri inaccettevule è ùn serà micca  mudificatu.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>预览{0}</value>
+    <value>Previsualizazione {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>预览（缩放）</value>
+    <value>Previsualizazione (à a scala)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>输出：{0}</value>
+    <value>Esciuta : {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>输出文件的格式。除了任何受支持的文件系统字符之外，您还可以使用以下占位符，这些占位符将在更改标题或扫描源时被替换。
+    <value>U furmatu di u schedariu d’esciuta. In più di i caratteri pigliati in carica da u sistema di schedariu, pudete impiegà i campi di sustituzione seguente chì seranu rimpiazzati quandu vo cambiate di titulu o analizate una fonte.
 
-实时更新选项：{source} {title} {chapters} 
-非实时选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+Ozzioni mudificate direttamente : {source} {title} {chapters} 
+Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>可用的附加选项: {source_path} 或 {source_folder_name} 或 {source}</value>
+    <value>Ozzioni cumplementarie dispunibule : {source_path} o {source_folder_name} o {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>您不能编码到与源文件具有相同路径和文件名的文件。请更新目标文件名，使其与源文件不匹配。</value>
+    <value>Ùn pudete micca cudificà ver di un schedariu cù u listessu chjassu è u listessu nome chì u schedariu di a fonte. Ci vole à mudificà u nome di schedariu di destinazione per ch’ellu ùn currispondi più à u schedariu di a fonte. </value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>您的系统阻止了 HandBrake 启动Web浏览器。</value>
+    <value>U vostru sistema hà impeditu à HandBrake di lancià un navigatore web.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>您仍然可以直接访问网站的帮助页面：https://handbrake.fr</value>
+    <value>Pudete sempre accede à e pagine d’aiutu direttamente da u situ web : https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>无法导入所选预设。</value>
+    <value>Impussibule d’impurtà a prerigatura selezziunata.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>预设可能已损坏，或者来自不受支持的旧版 HandBrake。
-必须在当前版本中重新创建旧版本的预设。</value>
+    <value>Forse a prerigatura hè alterata o vene d’una vechja versione d’HandBrake, ciò ch’ùn hè micca accettatu. 
+E prerigature chì venenu da vechje versioni devenu esse create torna in a versione attuale.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>可以传递给视频编码器的其他高级参数。</value>
+    <value>Parametri addiziunale d’espertu chì ponu esse trasmessi à u cudificatore video.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>None - 只有容器不支持的轨道才会被烧入。
-Foreign Audio Track - 如果可用，外语轨道将被烧入。
-First Track - 第一条轨道会被烧入。
-Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧入，否则将选择第一条轨道。</value>
+    <value>Alcunu - Solu e traccie per quelle u cuntenentu ùn accetta micca u furmatu seranu intarsiate.
+Traccia audio straniera - A traccia audio straniera serà intarsiata s’ella hè dispunibule. 
+Prima traccia - A prima traccia serà intarsiata.
+Audio straniera preferita, osinnò Prima traccia - A traccia audio straniera serà intarsiata s’ella esiste, osinnò a prima traccia serà scelta.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM 字幕兼容性</value>
+    <value>Cumpatibilità di sottutituli WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake中的WebM格式仅支持内镶字幕。
+    <value>WebM in HandBrake accetta solu i sottutituli intarsiati.
 
-您应该更改字幕选择。
+Ci vuleria à cambià e vostre selezzione di sottutituli.
 
-如果继续，您未烧录的字幕将丢失。</value>
+S’è vo cuntinuate, i vostri sottutituli micca intarsiati seranu persi.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>找不到有效的源或标题。</value>
+    <value>Alcuna fonte o titulu ùn hè statu trovu.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake 不能对选定的来源进行编码，因为它没有找到一个可以编码的有效来源。
-这可能是由于以下原因之一：
-- 每个源标题的持续时间低于“首选项&gt;高级”中的“最小标题持续时间”阈值选项。
-- 源文件不是有效的视频文件，或者是HandBrake不支持的格式。
-- 源可以是受复制保护的或包括DRM。请注意，HandBrake不支持删除复制保护。
+    <value>HandBrake ùn puderà micca cudificà a fonte selezziunata perchè ùn hà micca trovu di fonte accettevule cù tituli à cudificà. 
+E cagioni pussibule sò :
+- A durata d’ogni titulu di a fonte hè più corta chì l’ozzione di sogliu « Durata minima » in « Ozzioni &gt; Espertu ». 
+- U schedariu di fonte ùn hè micca un schedariu video accettevule o si trova in un furmatu scunnisciutu da HandBrake.
+- U schedariu di fonte pò esse prutettu contr’à a copia o cuntene un dirittu DRM. Ci vole à sapè ch’HandBrake ùn permette micca di squassà e prutezzioni contr’à a copia.
 
-活动日志可能包含更多信息。</value>
+U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>队列{0}</value>
+    <value>Fila d’attesa{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>开始编码</value>
+    <value>Principià a cudificazione</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>启动队列</value>
+    <value>Principià a fila d’attesa</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>不能删除默认预设。请先将另一个预设设置为默认值。</value>
+    <value>Ùn pudete micca squassà a prerigatura predefinita. Prima, ci vole à sceglie un’altra prerigatura predefinita.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>您确定要删除预设：</value>
+    <value>Site sicuru di vulè squassà a prerigatura : </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
+    <value>Cudificazione : Passu {0} nant’à {1},  {2:00.00}%, FPS : {3:000.0},  FPS mediana : {4:000.0},  Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>预设必须有名称。请填写预设名称字段。</value>
+    <value>Una prerigatura deve avè un nome. Ci vole à riempie u campu di u nome di prerigatura.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>已存在具有此名称的预设。 你想覆盖它吗？</value>
+    <value>Una prerigatura cù stu nome esiste dighjà. Vulete rimpiazzalla ?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>必须先扫描源才能使用“源最大值”选项。</value>
+    <value>Prima, ci vole à analizà una fonte per impiegà l’ozzione « Fonte massima ».</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>必须为“自定义”选项填写自定义宽度或高度字段。</value>
+    <value>I campi persunalizati Larghezza o Altezza devenu esse riimpiuti per impiegà l’ozzione « Persunalizatu ».</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>无法添加预设</value>
+    <value>Impussibule d’aghjunghje una prerigatura</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>未知错误</value>
+    <value>Sbagliu scunnisciutu</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>音频默认值</value>
+    <value>Audio predefinitu</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>音轨</value>
+    <value>Traccie audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>选择行为</value>
+    <value>Selezzione di cumpurtamentu</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>切换回轨道</value>
+    <value>Rivene à e traccie</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>无法保存章节标记文件！</value>
+    <value>Impussibule d’arregistrà u schedariu di marcatori di capitulu ! </value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>章节标记名称不会保存在您的编码中。</value>
+    <value>I nomi di marcatore di capitulu ùn seranu micca arregistrati in a vostra cudificazione.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>以下操作 “{0}”将在{1}内发生。</value>
+    <value>L’azzione seguente « {0} » si farà in {1} seconde.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>如果问题仍然存在，请尝试重新启动 HandBrake。</value>
+    <value>S'è stu penseru ùn smarisce micca, ci vole à pruvà di rilancià HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>没有关于此错误的更多信息。</value>
+    <value>Ùn ci hè mancu un’altra infurmazione di dispunibule per stu sbagliu.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>出现未知错误。</value>
+    <value>Un sbagliu scunnisciutu hè accadutu.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>有一个新的更新！请查看网站上的发行说明。</value>
+    <value>Un rinnovu recente hè dispunibule ! Ci vole à cunsultà u situ web per fighjà e note di versione.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>您的系统支持64位版本的 HandBrake！ 与32位版本相比，提供了性能和稳定性改进。
-    请查看网站上的发行说明。</value>
+    <value>U vostru sistema accetta a versione 64bit d’HandBrake ! Sta versione permette capacità è stabilità più belle chì a versione 32bit.
+    Ci vole à cunsultà u situ web per fighjà e note di versione.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>目前没有新的更新。</value>
+    <value>À st’ora, ùn ci hè alcunu rinnovu recente.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>更新已下载</value>
+    <value>Rinnovu scaricatu</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>更新服务不可用。您可以尝试从 https://handbrake.fr 下载更新</value>
+    <value>Serviziu di rinnovu micca dispunibule. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>更新失败。您可以尝试从 https://handbrake.fr 下载更新</value>
+    <value>Rinnovu fiascu. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>显示尺寸： {0}x{1},  PAR {2}x{3}</value>
+    <value>Dimensione di u screnu : {0}x{1},  PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>Aghjunghje à a fila d’attesa</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>没有在等待的编码</value>
+    <value>Alcuna cudificazione in attesa</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>当前没有编码作业</value>
+    <value>Ùn ci hè alcunu travagliu di cudificazione in corsu</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>队列</value>
+    <value>Fila d’attesa</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
-    <value>你确定要清除队列吗？</value>
+    <value>Site sicuru di vulè viutà a fila d’attesa ?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>确认</value>
+    <value>Cunfirmà</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} 等待作业</value>
+    <value>{0} travaglii in attesa</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>列队已暂停</value>
+    <value>Fila d’attesa interrotta</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>您确定要删除所选作业吗？</value>
+    <value>Site sicuru di vulè squassà i travaglii selezziunati ?</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>此编码目前正在进行中。如果删除它，编码将停止。你确定要继续吗？</value>
+    <value>Sta cudificazione hè in corsu. S’è vo a squassate, a cudificazione serà piantata. Site sicuru di vulè fà què ?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>没有待处理的作业。</value>
+    <value>Ùn ci hè alcunu travagliu in attesa.</value>
   </data>
   <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
-    <value>是否确实要编辑此作业？它将从队列中删除并发送到主窗口。</value>
+    <value>Site sicuru di vulè mudificà stu travagliu ? Serà cacciatu da a fila d’attesa è mandatu ver di a finestra principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>队列已就绪</value>
+    <value>Fila d’attesa pronta</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>队列未运行</value>
+    <value>A fila d’attesa ùn hè micca in corsu d’esecuzione</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>队列已完成</value>
+    <value>Fila d’attesa compia</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>上次列队的作业已完成</value>
+    <value>Ultimu travagliu in attesa compiu</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>列队已开始</value>
+    <value>Fila d’attesa principiata</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss}</value>
+    <value>Cudificazione : Passu {0} nant’à {1},  {2:00.00}%, FPS : {3:000.0},  FPS mediana : {4:000.0},  Tempu rimanente : {5}, Trascorsu : {6:g\:oo\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>当前正在运行编码。退出 HandBrake 将停止此编码。
-你确定要退出 HandBrake 吗？</value>
+    <value>Una cudificazione hè in corsu d’esecuzione. L’esce d’HandBrake pianterà sta cudificazione.
+Site sicuru di vulè esce d’HandBrake ?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>图片预览</value>
+    <value>Previsualizazione di a fiura</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>无法删除以前的预览文件。您可能需要重新启动应用程序。</value>
+    <value>Impussibule di squassà u schedariu di previsualizazione precedente. Forse, ci vulerà à rilancià l’appiecazione.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>在创建预览之前，必须先扫描源并设置编码。</value>
+    <value>Prima, ci vole à analizà una fonte è definisce a vostra cudificazione nanzu di creà una previsualizazione.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>无法找到预览文件。文件已删除或编码失败。检查活动日志以获取详细信息。</value>
+    <value>Impussibule di truvà u schedariu di previsualizazione. U schedariu hè statu squassatu o a cudificazione hè fiasca. Fighjate u ghjurnale d’attività per sapene di più.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>Handbrake 已经在编码视频了！ 一次只能编码一个文件。</value>
+    <value>Ci hè dighjà una cudificazione video in corsu ! HandBrake pò cudificà una sola video in una volta.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>字幕默认值</value>
+    <value>Sottutituli predefiniti</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>字幕轨道</value>
+    <value>Traccie di sottutitulu</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>切换回轨道</value>
+    <value>Rivene à e traccie</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>选择行为</value>
+    <value>Selezzione di cumpurtamentu</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>存档的文件：</value>
+    <value>Schedariu archiviatu :</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>无法加载预设。</value>
+    <value>Impussibule di caricà e prerigature.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake 无法加载您的预设文件。它可能来自较旧的不受支持的 HandBrake 版本或已损坏。
+    <value>HandBrake ùn hà micca pussutu caricà u schedariu di prerigature. Forse, hè statu creatu da una vechja versione oramai più accettata d’HandBrake o ancu alteratu. 
 
-您的旧预设文件已归档为：</value>
+U vostru vechju schedariu di prerigature hè statu archiviatu :</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> 有{0} 个错误或取消检测。</value>
+    <value> cù {0} sbaglii o abbandoni abbentati.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>磁盘空间不足</value>
+    <value>Spaziu discu chjucu</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>警告，您的磁盘空间不足。如果空间不足，HandBrake 将无法完成此编码。</value>
+    <value>Avertimentu : ùn ci hè abbastanza spaziu di discu. HandBrake ùn puderà compie sta cudificazione s’ellu ùn ci hè abbastanza spaziu di discu. </value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>第{0}行无效。不会导入任何内容。</value>
+    <value>A linea {0} hè inaccetevule. Ùn ci serà nunda d’impurtatu.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>无法导入章节文件</value>
+    <value>Impussibule d’impurtà u schedariu di capitulu</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>章节文件中的所有行必须至少有2列数据</value>
+    <value>Tutte e linee d’un schedariu di capitulu devenu cuntene omancu 2 culonne di dati</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>章节文件中的第一列只能包含大于零（0）的整数值</value>
+    <value>A prima culonna d’un schedariu di capitulu deve cuntene solu un numeru interu superiore à zeru (0)</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>目前不支持类型为 '{0}' 的章节文件。</value>
+    <value>I schedarii di capitulu di tipu « {0} » ùn sò micca accettati à st’ora.</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>不支持的章节文件类型</value>
+    <value>Tipu di schedariu di capitulu micca accettatu</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>源媒体的章节信息无效</value>
+    <value>Infurmazioni di capitulu inaccettevule in u media di fonte</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+    <value>U numeru di capituli nant’à u media di fonte
+è quellu in u schedariu d’entrata ùn currispundenu micca ({0} vs {1}).
 
-你依然要导入章节名吗？</value>
+Vulete impurtà i nomi di capitulu quantunque ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+    <value>U numeru di capituli nant’à u media di fonte
+è quellu in u schedariu d’entrata ùn currispundenu micca ({0} vs {1}).
 
-你依然要导入章节名吗？</value>
+Vulete impurtà i nomi di capitulu quantunque ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>源文件和输入文件的章节数不匹配</value>
+    <value>U numeru di capituli ùn currispunde micca trà u schedariu di fonte è quellu d’entrata</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>源媒体上各章的持续时长和输入文件中各章的持续时长相差很大。
+    <value>A durata di i capituli nant’à u media di fonte
+è quella in u schedariu d’entrata sò assai sfarente.
 
-本章节文件很可能是从其他源媒体生成的。
+Ghjè sicuramente chì stu schedariu di capitulu fussi creatu da un media di fonte sfarente.
 
-确实要导入章节名称吗？</value>
+Site sicuru di vulè impurtà i nomi di capitulu ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>源文件和输入文件的章节时长不匹配</value>
+    <value>U numeru di capituli ùn currispunde micca trà u schedariu di fonte è quellu d’entrata</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>尝试停止扫描时发生了错误。请重启HandBrake。</value>
+    <value>Un sbagliu hè accadutu pruvendu di piantà l’analisa. Ci vole à rilancià HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake 无法将预设文件升级为新版本格式。
-您的预设文件将被存档。您需要重新创建自己的预设。</value>
+    <value>HandBrake ùn pò micca mudernizà u vostru schedariu di prerigature ver di u furmatu di a nova versione.
+U vostru schedariu di prerigatura hà da esse archiviatu è un novu hà da esse creatu. Duverete creà torna e vostre proprie prerigature.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>你所更改的任何设置可能会在下次HandBrake 启动时被重置。</value>
+    <value>Forse, tutte e preferenze chì vo avete cambiate duveranu esse rimesse d’origine à u prossimu lanciu d’HandBrake.</value>
   </data>
   <data name="UserSettings_AnErrorOccured" xml:space="preserve">
-    <value>尝试保存你的偏好设置时出现了问题。</value>
+    <value>Un sbagliu hè accadutu pruvendu d’arregistrà e vostre preferenze.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>警告，你的设置已被重置！</value>
+    <value>Avertimentu : e vostre preferenze sò state rimesse d’origine !</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>你的用户设置文件已损坏或不可访问。设置已经被恢复为默认。</value>
+    <value>U vostru schedariu di preferenze persunalizate era inaccessibile o alteratu. E preferenze sò state rimesse à i so valori d’origine.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>无法加载用户设置文件: {0}</value>
+    <value>Impussibule di caricà u schedariu di e preferenze persunalizate : {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>你的用户设置文件似乎无法访问或已损坏。你可能需要删除它并让HandBrake 生成一份新的。</value>
+    <value>U vostru schedariu di preferenze persunalizate pare esse inaccessibile o alteratu. Forse, duverete squassà u schedariu è lascià HandBrake creane un novu.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>你选择的输出目录不存在或者没有写入文件的权限。</value>
+    <value>U cartulare d’esciuta chì vo avete sceltu ùn esiste micca, o ùn avete micca u permessu di scriveci schedarii.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>创建文件夹？</value>
+    <value>Creà u cartulare ?</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>要写入的文件夹并不存在。你希望HandBrake创建该文件夹吗？
+    <value>U cartulare, in quellu circate à scrive, ùn esiste micca. Vulete chì HandBrake crei quellu cartulare ?
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>无法启动目标目录。</value>
+    <value>Impussibule di lancià u cartulare di destinazione.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>请检查目标目录是否有效。</value>
+    <value>Ci vole à verificà chì vo avete un cartulare di destinazione accettevule.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}</value>
+    <value>Passu di trattamentu {0} nant’à {1}, (Analisa di i sottutituli)  {2:00.00}%, Tempu d’analisa rimanente : {3}, Trascorsu : {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>没有附加信息</value>
+    <value>Alcuna infurmazione cumplementaria</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, 已完成 {2} /{3} )</value>
+    <value>{0} - ({1}%, Passu {2} nant’à {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, 已完成 {2} / {3}
-剩余时间: {4}</value>
+    <value>{1}%, Passu {2} nant’à {3}
+Tempu rimanente : {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>队列已暂停。警告，您编码的驱动器磁盘空间不足。请释放一些空间，然后按开始继续。您还可以调整首选项中的最小空间级别。</value>
+    <value>Fila d’attesa interrotta.  Avertimentu : ùn ci hè abbastanza spaziu di discu nant’à u lettore per fà a cudificazione. Ci vole à liberà qualchì spaziu è appughjate nant’à Principià per cuntinuà. Pudete ancu adattà u livellu minimu di spaziu in e preferenze.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>列队已暂停</value>
+    <value>Fila d’attesa interrotta</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>列队已暂停</value>
+    <value>Fila d’attesa interrotta</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Your destination directory is low on diskspace. 
+    <value>Ùn ci hè abbastanza spaziu di discu per u vostru cartulare di destinazione. 
 
-You can configure the level at which this alert appears in preferences. 
+Pudete cunfigurà in e preferenze à chì livellu st’alerta deve accade. 
 
-Do you wish to continue? </value>
+Vulete cuntinuà ? </value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>无法重置作业状态，因为它未处于错误或已完成状态</value>
+    <value>Impussibule di reinizià u statu di u travagliu perchè ùn hè micca in un statu « Sbagliu » o « Compiu ».</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>无法恢复队列文件。</value>
+    <value>Impussibule di risturà u schedariu di fila d’attesa.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>文件可能损坏或是来自旧的不兼容版本的HandBrake</value>
+    <value>Forse u schedariu hè alteratu o vene d’una vechja versione incumpatibule d’HandBrake.</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake已经在编码文件中。</value>
+    <value>Ci hè dighjà una cudificazione di schedariu in corsu.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>请停止当前编码。如果问题依然存在，请重启HandBrake。</value>
+    <value>Ci vole à piantà a cudificazione attuale. S'è stu penseru ùn smarisce micca, ci vole à rilancià HandBrake.</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>预览 ({0}% 实际大小)</value>
+    <value>Previsualizazione ({0}% di a dimensione attuale)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake需要在64bit Windows 7或更高版本中运行。</value>
+    <value>HandBrake richiede una versione 64bit di Windows 7 o più recente per funziunà.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake 需要Windows 7或更高版本才能运行。版本0.9.9 (XP)和版本0.10.5 (Vista)是支持这些版本的最后一个版本。</value>
+    <value>HandBrake richiede Windows 7 o più recente per funziunà. E versioni 0.9.9 (XP) è 0.10.5 (Vista) sò l’ultime à piglià in carica sti sistemi.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>你希望继续尝试添加剩下的吗？</value>
+    <value>Vulete cuntinuà pruvendu d’aghjunghje u restu ?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>文件 '{0}' 已存在!
-你想要覆盖它吗?</value>
+    <value>U schedariu « {0} » esiste dighjà !
+Vulete rimpiazzallu ?</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>系统剪贴板目前无法使用。</value>
+    <value>U preme’papei di u sistema  ùn hè micca dispunibule attualmente.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>这可能是由于另外的应用程序正监视或锁定了剪贴板。当剪贴板解锁后你才能继续使用它。</value>
+    <value>Forse ci hè un’altra appiecazione chì cuttighjeghja o ammarchjuneghja u preme’papei per u so propriu adopru. Ùn puderete micca impiegalu finch’ellu sia spalancatu?</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>许可：</value>
+    <value>Licenza : </value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>版本：</value>
+    <value>Versione : </value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 添加新类别 --</value>
+    <value>-- Aghjunghje una nova categuria --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>添加预设</value>
+    <value>Aghjunghje una prerigatura</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>类别：</value>
+    <value>Categuria :</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>描述：</value>
+    <value>Discrizzione :</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>名字：</value>
+    <value>Nome :</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>尺寸：</value>
+    <value>Dimensioni :</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>轨道源选择</value>
+    <value>Selezzione di a traccia di fonte</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>允许通过：</value>
+    <value>Permette u passthru di :</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>配置在选择新标题或源视频时如何自动选择和配置音频轨道。</value>
+    <value>Cunfigurate cumu e traccie audio sò autumaticamente selezziunate è cunfigurate quandu vo selezziunate un novu titulu o una nova fonte video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>“自动通过” 行为：</value>
+    <value>Cumpurtamentu di l’« Auto Passthru » :</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>比特率</value>
+    <value>Ghjettu</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>编码</value>
+    <value>Cudecu</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>增益</value>
+    <value>Guadagnu</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>隐藏</value>
+    <value>Piattà</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>混音</value>
+    <value>Mischiera</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>后备编码器：</value>
+    <value>Cudificatore di sustituzione :</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>重新加载</value>
+    <value>Ricaricà</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>采样率</value>
+    <value>Frequenza di campiunariu</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>显示</value>
+    <value>Affissà</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>轨道名称</value>
+    <value>Nome di a traccia</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>轨道选择行为：</value>
+    <value>Cumpurtamentu di a selezzione di traccia :</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>额外的轨道：</value>
+    <value>Per e traccie addiziunale :</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>选择“Auto Passthru”作为音频编解码器时。</value>
+    <value>Quandu l’« Auto Passthru » hè selezziunatu cum’è cudecu audio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>章节标记</value>
+    <value>Marcatori di capitulu</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>章节名称</value>
+    <value>Nome di capitulu</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>章节编号</value>
+    <value>Numeru di capitulu</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>创建章节标记</value>
+    <value>Creà marcatori di capitulu</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>时长</value>
+    <value>Durata</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>导出</value>
+    <value>Espurtà</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>导入</value>
+    <value>Impurtà</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>导出名称</value>
+    <value>Espurtà i nomi</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>导入名称</value>
+    <value>Impurtà i nomi</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>重置章节名称</value>
+    <value>Reinizià i nomi di capitulu</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>取消操作</value>
+    <value>Abbandunà l’azzione</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>继续</value>
+    <value>Cuntinuà</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>完成操作时</value>
+    <value>Qaundu l’azzione hè compia</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>错误详情：</value>
+    <value>Detaglii di sbagliu :</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>自定义：</value>
+    <value>Persunalizatu :</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>去块滤波</value>
+    <value>Sblucchime</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>反交错：</value>
+    <value>Disintricciamentu :</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>预设：</value>
+    <value>Prerigatura :</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>反交错预设</value>
+    <value>Prerigatura di disintricciamentu</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>降噪：</value>
+    <value>Denoise :</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>降噪预设</value>
+    <value>Prerigatura « Denoise »</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>降噪调节</value>
+    <value>Rigatura « Denoise »</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>反胶卷过带：</value>
+    <value>Detelesinema :</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>滤镜</value>
+    <value>Filtri</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>翻转</value>
+    <value>Rivultà</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>灰度</value>
+    <value>Scala di grisgiu</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>隔行扫描：</value>
+    <value>Abbentata d’intricciamentu :</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>预设：</value>
+    <value>Prerigatura :</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>旋转：</value>
+    <value>Girà :</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>锐化</value>
+    <value>Arrutà</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>锐化预设</value>
+    <value>Prerigatura d’arrutata</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>锐化调节</value>
+    <value>Rigatura d’arrutata</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>调节：</value>
+    <value>Rigatura :</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>添加</value>
+    <value>Aghjunghje</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>取消</value>
+    <value>Abbandunà</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>清除</value>
+    <value>Squassà</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>关闭</value>
+    <value>Chjode</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>复制到剪贴板</value>
+    <value>Cupià ver di u preme’papei</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>左移</value>
+    <value>Dispiazzà à manca</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>右移</value>
+    <value>Dispiazzà à diritta</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>保存</value>
+    <value>Arregistrà</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>复制到剪贴板</value>
+    <value>Cupià ver di u preme’papei</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>编码日志</value>
+    <value>Ghjurnale di cudificazione</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>打开日志目录</value>
+    <value>Apre u cartulare di i ghjurnali</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>扫描日志</value>
+    <value>Analisa di u ghjurnale</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>活动日志</value>
+    <value>Ghjurnale d’attività</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>全部添加</value>
+    <value>Tuttu aghjunghje</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>添加当前</value>
+    <value>Aghjunghje l’elementu attuale</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>添加选中</value>
+    <value>Aghjunghje a selezzione</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>Aghjunghje à a fila d’attesa</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>高级</value>
+    <value>Espertu</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>音视频起始对齐</value>
+    <value>Alineà u principiu di l’audio/video</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>角度</value>
+    <value>Angulu : </value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>音频</value>
+    <value>Audio</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>音轨</value>
+    <value>Traccie audio</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>浏览</value>
+    <value>Navigà</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>章节</value>
+    <value>Capituli</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>容器</value>
+    <value>Cuntenentu</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>目标路径</value>
+    <value>Destinazione</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>持续时间：</value>
+    <value>Durata : </value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>保存为：</value>
+    <value>Arregistrà cù u nome :</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>滤镜</value>
+    <value>Filtri</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>格式：</value>
+    <value>Furmatu :</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>帮助</value>
+    <value>Aiutu</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5代 支持</value>
+    <value>Ghjestione di l’iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>元数据</value>
+    <value>Metadati</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(修改的)</value>
+    <value>(mudificatu)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>开始合并：这可能需要一段时间…</value>
+    <value>Muxing : Què pò piglià qualchì tempu…</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>选项</value>
+    <value>Ozzioni</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>输出设置</value>
+    <value>Preferenze d’esciuta</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>暂停</value>
+    <value>Pausa</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>尺寸</value>
+    <value>Dimensioni</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>重命名预设</value>
+    <value>Rinumà a prerigatura</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>预设选项上下文菜单</value>
+    <value>Listinu cuntestuale di l’ozzioni di prerigatura</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>删除预设</value>
+    <value>Squassà a prerigatura</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>预设</value>
+    <value>Prerigature</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>预览</value>
+    <value>Previsualizazione</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>编码中: {0}, {1:00.00}%, 剩余时间: {2}, {3}</value>
+    <value>Cudificazione : {0}, {1:00.00}%, Tempu rimanente : {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>范围：</value>
+    <value>Stesa :</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>重新加载</value>
+    <value>Ricaricà</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>移除</value>
+    <value>Caccià</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>重置内置预设</value>
+    <value>Reinizià e prerigature integrate</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>保存新预设</value>
+    <value>Arregistrà a nova prerigatura</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>正在寻找开始时间</value>
+    <value>Ricerca di l’ora di principiu</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>设置为默认</value>
+    <value>Sceglie u valore predefinitu</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>预览</value>
+    <value>Previsualizazione</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>队列</value>
+    <value>Fila d’attesa</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>Fonte :</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>打开源</value>
+    <value>Apre a fonte</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>开始编码</value>
+    <value>Principià a cudificazione</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>启动队列</value>
+    <value>Principià a fila d’attesa</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>停止</value>
+    <value>Piantà</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>停止编码</value>
+    <value>Piantà a cudificazione</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>你确定要停止此编码吗？</value>
+    <value>Site sicuru di vulè piantà sta cudificazione ?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>请在导入字幕文件前选择一个要编码的源</value>
+    <value>Ci vole à sceglie una fonte à cudificà nanzu di pruvà d’impurtà un schedariu di sottutitulu.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>字幕</value>
+    <value>Sottutituli</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>字幕轨道</value>
+    <value>Traccie di sottutitulu</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>摘要</value>
+    <value>Riassuntu</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value> - </value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>标题：</value>
+    <value>Titulu : </value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>更新选中的预设</value>
+    <value>Mudificà a prerigatura selezziunata</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>视频</value>
+    <value>Video</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>网页优化</value>
+    <value>Megliuratu per u Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>Ghjestione di e prerigature</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>元数据</value>
+    <value>Metadati</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>允许使用 Nvidia NVENC 编码器</value>
+    <value>Permette l’adopru di i cudificatori Nvidia NVENC</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>允许使用 Intel QuickSync 编码器</value>
+    <value>Permette l’adopru di i cudificatori Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>允许使用 AMD VCE 编码器</value>
+    <value>Permette l’adopru di i cudificatori AMD VCE</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>输入的文件格式包含无效的字符。这些字符已被移除。</value>
+    <value>U furmatu di schedariu pruvistu cuntene caratteri inaccettevule. Quelli sò stati cacciati. </value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>每个编码完成时都发出提示音</value>
+    <value>Sente un sonu quandu ogni cudificazione si compia</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>队列完成时发出提示音</value>
+    <value>Sente un sonu quandu a fila d’attesa si compia</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>在摘要栏中显示预览。</value>
+    <value>Affissà e previsualizazioni nant’à l’unghjetta Riassuntu.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>在应用程序标题栏中显示编码进度。</value>
+    <value>Affissà u statu di a cudificazione in a barra di titulu di l’appiecazione.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 7 days</value>
+    <value>Viutà i schedarii di ghjurnale di più di 7 ghjorni</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>关于 HandBrake</value>
+    <value>Apprupositu d’HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>高级</value>
+    <value>Espertu</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>高级选项</value>
+    <value>Ozzioni d’espertu</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>参数：</value>
+    <value>Argumenti :</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>自动文件命名</value>
+    <value>Numinà autumaticu di i schedarii</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>自动命名输出文件</value>
+    <value>Numinà autumaticamente i schedarii d’esciuta</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>检查更新</value>
+    <value>Cuntrollà e nove versioni</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>每当编码完成时总是清除已完成的队列任务</value>
+    <value>Sempre squassà l’elementi compii di a fila d’attesa dopu a cudificazione</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>清理日志历史</value>
+    <value>Viutà a crunulogia di u ghjurnale</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>复制编码日志文件到指定位置：</value>
+    <value>Piazzà una copia individuale di i ghjurnali di cudificazione in un locu specificu :</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>复制编码日志文件到编码视频所在位置</value>
+    <value>Piazzà una copia individuale di i ghjurnali di cudificazione in u listessu locu chì a video cudificata</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>当前版本</value>
+    <value>Versione attuale</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>解码中</value>
+    <value>Discudificazione</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>默认路径：</value>
+    <value>Chjassu predefinitu :</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>下载更新</value>
+    <value>Scaricà u rinnovu</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD 读取中</value>
+    <value>Lettura di DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>禁止LibDVDNav。(将会使用livdvdread)</value>
+    <value>Disattivà LibDVDNav. (libdvdread serà impiegatu à a so piazza)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>编码中</value>
+    <value>Cudificazione</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>文件格式：</value>
+    <value>Furmatu di Schedariu :</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>常规</value>
+    <value>Generale</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>日志记录</value>
+    <value>Cunnettassi</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>日志详细级别：</value>
+    <value>Livellu di verbusità di u ghjurnale :</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>日志文件路径：</value>
+    <value>Chjassu d’accessu à i ghjurnali :</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pause queue if disk space is low</value>
+    <value>Interrompe a fila d’attesa s’ella ùn basta u spaziu discu</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>最小化到系统托盘(需要重启)</value>
+    <value>Impuculì in lu spaziu di nutificazione di u sistema (Richiede un rilanciu)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>DVD和蓝光标题的最短持续时间"秒"。将跳过较短的标题：</value>
+    <value>Durata minima in seconde di i tituli DVD è Blu-ray. I tituli più corti seranu tralasciati :</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 文件扩展名：</value>
+    <value>Estensione di schedariu MP4 :</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>启动时</value>
+    <value>À u lanciu</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>输出文件</value>
+    <value>Schedarii d’esciuta</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>路径：</value>
+    <value>Chjassu d’accessu : </value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Chjassu ver di u lettore media</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>在编码时防止系统进入睡眠状态</value>
+    <value>Impedisce u sistema di mettesi in veghja durante a cudificazione</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>要扫描的预览图片数：</value>
+    <value>Numeru di previsualizazione di fiure à analizà :</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>优先级：</value>
+    <value>Livellu di priurità :</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>如果可用，优先使用 Intel QuickSync 解码视频。</value>
+    <value>Preferisce l’adopru d’Intel QuickSync, quand’ellu hè dispunibule, per a discudificazione video. </value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>在没有使用QuickSync 编码器时使用QSV 解码器。(如 x265)</value>
+    <value>Impiegà dinù a discudificazione QSV quandu u cudificatore QuickSync ùn hè micca impiegatu. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>移除常见的标点符号</value>
+    <value>Caccià a puntuazione cumuna</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>用空格替换下划线</value>
+    <value>Rimpiazzà i spazii sottulineati cù un spaziu</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>当应用重启时重置为“无操作”。</value>
+    <value>Reinizià cù « Ùn fà nunda » quandu l’appiecazione hè rilanciata.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>选择缩放器：</value>
+    <value>Sceglie a scala :</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>缩放</value>
+    <value>Messa à a scala</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>发送文件至：</value>
+    <value>Mandà u schedariu à :</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>更改大写格式为词首字母大写</value>
+    <value>Maiuscula per ogni Parolla Impurtante</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>更新</value>
+    <value>Rinnovi</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>用户界面</value>
+    <value>Interfaccia d’utilizatore</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>版本：</value>
+    <value>Versione :</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>视频</value>
+    <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Stu chjassu hè impiegatu solu per a funzione di previsualizazione di video.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>查看日志目录</value>
+    <value>Fighjà u cartulare di u ghjurnale</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>当完成时</value>
+    <value>Quandu hè compiu</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 设置</value>
+    <value>Preferenze x264/5</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>固定质量模式的最小刻度：</value>
+    <value>Granularità frazziunale di qualità custente :</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>变形：</value>
+    <value>Anamorficu :</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>自动</value>
+    <value>Autumaticu</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>下</value>
+    <value>Inghjò</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Cropping:</value>
+    <value>Riquadramentu :</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>Persunalizatu</value>
   </data>
   <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>显示宽度：</value>
+    <value>Larghezza d’affissera :</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>高度：</value>
+    <value>Altezza :</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>保持宽高比</value>
+    <value>Cunservà e prupurzioni</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>左</value>
+    <value>Manca</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>系数：</value>
+    <value>Mudullu :</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>输出</value>
+    <value>Esciuta</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>标准：</value>
+    <value>PAR :</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>右</value>
+    <value>Diritta</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>大小：</value>
+    <value>Dimensione</value>
   </data>
   <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>Fonte :</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>上</value>
+    <value>Insù</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>宽度：</value>
+    <value>Larghezza :</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>Persunalizatu</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>导出文件</value>
+    <value>Espurtà ver di un schedariu</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>导入文件</value>
+    <value>Impurtà da un schedariu</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>官方的</value>
+    <value>Officiale</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>选择标题：</value>
+    <value>Sciglite tituli :</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>Aghjunghje à a fila d’attesa</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>选中的标题将会使用 "{0}" 预设添加</value>
+    <value>I tituli selezziunati seranu aghjunti impieghendu a prerigatura « {0} ».</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>高级：</value>
+    <value>Espertu :</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>音频：</value>
+    <value>Audio :</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>清除全部</value>
+    <value>Tuttu viutà</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>清除已完成的</value>
+    <value>Viutatura compia</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>清除队列</value>
+    <value>Viutà a fila d’attesa</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>清除选中的</value>
+    <value>Viutà a selezzione</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>删除</value>
+    <value>Squassà</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>目标路径：</value>
+    <value>Destinazione :</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>无操作</value>
+    <value>Ùn fà nunda</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>编码时间：</value>
+    <value>Durata di cudificazione :</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>编辑</value>
+    <value>Mudificà</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>结束时间：</value>
+    <value>Ora di fine :</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>导出队列</value>
+    <value>Espurtà a fila d’attesa</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>文件大小：</value>
+    <value>Dimensione di u schedariu : </value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>休眠</value>
+    <value>Veghja prulungata</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>锁定系统</value>
+    <value>Ammarchjunà u sistema</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>日志将在编码完成后可用。</value>
+    <value>U ghjurnale serà dispunibule quandu a cudificazione serà compia.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>登出</value>
+    <value>Scunnettassi</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>打开目标目录</value>
+    <value>Apre u cartulare di destinazione</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>打开源目录</value>
+    <value>Apre u cartulare di fonte</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>选项</value>
+    <value>Ozzioni</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>暂停</value>
+    <value>Interrompe a fila d’attesa</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>暂停时常：</value>
+    <value>Durata di l’interruzzione :</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>图像设置：</value>
+    <value>Preferenze di fiura :</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>退出HandBrake</value>
+    <value>Piantà Handbrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>重试所有任务</value>
+    <value>Rilancià tutti i travaglii</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>重试失败的</value>
+    <value>Fiascu di u novu tentativu</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>重置选中的任务</value>
+    <value>Reinizià i travaglii selezziunati</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>重置</value>
+    <value>Reinizià</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>关机</value>
+    <value>Spenghje l’urdinatore</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>Fonte :</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>启动队列</value>
+    <value>Principià a fila d’attesa</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>开始时间：</value>
+    <value>Ora di principiu :</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>统计数据</value>
+    <value>Statistiche</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>统计数据将在编码完成后可用。</value>
+    <value>E statistiche seranu dispunibule quandu una cudificazione si compia.</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>字幕：</value>
+    <value>Sottutituli :</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>概要</value>
+    <value>Riassuntu</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>睡眠</value>
+    <value>Veghja</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>视频：</value>
+    <value>Video :</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>Quandu hè compiu :</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>添加所有剩余选中的语言</value>
+    <value>Aghjunghje tutte e lingue selezziunate chì fermanu</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>添加所有剩余的轨道</value>
+    <value>Aghjunghje tutte e traccie chì fermanu</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>添加新轨道</value>
+    <value>Aghjunghje una nova traccia</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>添加轨道</value>
+    <value>Aghjunghje una traccia</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>可用的语言：</value>
+    <value>Lingue dispunibule :</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>选择语言：</value>
+    <value>Sceglie e lingue :</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>选择语言：</value>
+    <value>Lingue selezziunate :</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>配置默认行为</value>
+    <value>Sceglie i cumpurtamenti predefiniti</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>重新加载</value>
+    <value>Ricaricà</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>选择要扫描的光盘</value>
+    <value>Sceglie un discu à analizà</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>选择要扫描的文件</value>
+    <value>Sceglie un schedariu à analizà</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>选择要扫描的文件夹</value>
+    <value>Sceglie un cartulare à analizà</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>视需要选择一个具体的标题：</value>
+    <value>Sceglie eventualmente un titulu specificu : </value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>然后选择你想编码的视频：</value>
+    <value>Tandu, sciglite a - o e - video qu’ellu ci vole à cudificà : </value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>文件</value>
+    <value>Schedariu</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>文件夹(批量扫描)</value>
+    <value>Cartulare (Analisa da gruppu)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>打开DVD或蓝光驱动器</value>
+    <value>Apre stu lettore DVD o Blu-ray</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>打开有一个或多个文件的文件夹。</value>
+    <value>Apre un cartulare cù un o parechji schedarii.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>恢复队列文件</value>
+    <value>Ricuperà i schedarii in fila d’attesa</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>以前的队列存档可用。</value>
+    <value>Un archiviu precedente di fila d’attesa hè dispunibule. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>打开单个视频文件。</value>
+    <value>Apre un solu schedariu video.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>选择源</value>
+    <value>Selezzione di a fonte</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>时长：</value>
+    <value>Durata :</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>实时预览</value>
+    <value>Previsualizazione diretta</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>选择预览图片</value>
+    <value>Selezziunà una previsualizazione di fiura</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Impiegà u lettore video predefinitu di u sistema</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>添加隐藏式字幕（可用时）</value>
+    <value>Aghjunghje i sottutituli ditagliati s’elli sò dispunibule</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>添加“外部音频扫描”</value>
+    <value>Aghjunghje un « Analisa audio straniera »</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>烧录行为：</value>
+    <value>Cumpurtamentu d’intarsiatura :</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>导入字幕</value>
+    <value>Impurtà un sottutitulu</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>轨道选择行为：</value>
+    <value>Cumpurtamentu di a selezzione di traccia :</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>Aghjunghje tutti i sottutituli ditagliati chì fermanu</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>选择新标题或源视频时自动选择和配置字幕轨道的方式。</value>
+    <value>Cunfigurate cumu e traccie di sottutitulu sò autumaticamente selezziunate è cunfigurate quandu vo selezziunate un novu titulu o una nova fonte video.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>额外的音频轨道</value>
+    <value>Traccie audio addiziunale</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>额外的字幕轨道</value>
+    <value>Traccie di sottutitulu addiziunale</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>已烧录</value>
+    <value>Intarsiatu</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>章节标记</value>
+    <value>Marcatori di capitulu</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>去块滤波</value>
+    <value>Sblucchime</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>反胶卷过带</value>
+    <value>Detelesinema</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>显示</value>
+    <value>affissera</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>灰度</value>
+    <value>Scala di grisgiu</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>没有音频轨道</value>
+    <value>Alcuna traccia audio</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>没有章节标记</value>
+    <value>Alcunu marcatore di capitulu</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>无滤镜</value>
+    <value>Alcunu filtru</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>没有源</value>
+    <value>Alcuna fonte</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>没有字幕轨</value>
+    <value>Alcuna traccia di sottutitulu</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>无轨道</value>
+    <value>Alcuna traccia</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>预览 {0} / {1}</value>
+    <value>Previsualizazione {0} nant’à {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>旋转</value>
+    <value>Rotazione</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>存储空间</value>
+    <value>allucamentu</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>二次编码</value>
+    <value>Cudificazione à 2 passi</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>平均码率(kbps)：</value>
+    <value>Ghjettu medianu (kbps) :</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>视频编解码器：</value>
+    <value>Cudecu video :</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>固定帧率</value>
+    <value>Frequenza di fiure custente</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>固定质量：</value>
+    <value>Qualità custente :</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>编码器级别：</value>
+    <value>Livellu di u cudificatore :</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>编码器预设：</value>
+    <value>Prerigatura di u cudificatore :</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>编码器配置文件：</value>
+    <value>Prufilu di u cudificatore :</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>编码器调优：</value>
+    <value>Rigatura di u cudificatore :</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>高级选项：</value>
+    <value>Ozzioni d’espertu :</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>快速解码</value>
+    <value>Discudificazione rapida</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>帧率 (FPS):</value>
+    <value>Frequenza di fiure (FPS) :</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>优化视频：</value>
+    <value>Migliurà a video :</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>峰值帧率</value>
+    <value>Frequenza di fiure di cresta</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>质量</value>
+    <value>Qualità</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo 一次通过</value>
+    <value>Primu passagiu in modu Turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>可变帧率</value>
+    <value>Frequenza di fiure variabile</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>视频</value>
+    <value>Video</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>语言：</value>
+    <value>Lingua :</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>使用系统语言</value>
+    <value>Impiegà a lingua di u sistema</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>关于 HandBrake</value>
+    <value>Apprupositu d’HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>或者将文件或文件夹拖放到这里...</value>
+    <value>Osinnò depone un schedariu o un cartulare quì…</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>帮助</value>
+    <value>Aiutu</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>首选项</value>
+    <value>Preferenze</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>添加轨道</value>
+    <value>Aghjunghje una traccia</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>为每个轨道设置音频码器：</value>
+    <value>Preferenze di u cudificatore audio per ogni traccia scelta :</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>清除</value>
+    <value>Nettà</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>烧入</value>
+    <value>Intarsiatu</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>默认</value>
+    <value>Predefinitu</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>仅限强制</value>
+    <value>Sfurzatu solu</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_关于...</value>
+    <value>_Apprupositu…</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_活动日志</value>
+    <value>_Ghjurnale d’attività</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_检查更新</value>
+    <value>_Cuntrollà e nove versioni</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_退出</value>
+    <value>_Esce</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_导出到文件</value>
+    <value>_Espurtà ver di un schedariu</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_文件</value>
+    <value>_Schedariu</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake 文档 (HTTPS)</value>
+    <value>_Documentazione HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_帮助</value>
+    <value>_Aiutu</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_从文件导入</value>
+    <value>_Impurtà da un schedariu</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_首选项</value>
+    <value>_Preferenze</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_预设</value>
+    <value>_Prerigature</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_队列</value>
+    <value>_Fila d’attesa</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_重置内置预设</value>
+    <value>_Reinizià e prerigature integrate</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_将当前设置为默认值</value>
+    <value>_Sceglie cum’è valore predefinitu</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>_显示预设面板</value>
+    <value>A_ffissà u pannellu di e prerigature</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_显示队列</value>
+    <value>Affissà a _fila d'attesa</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_工具</value>
+    <value>Attre_zzi</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>检查更新 ...</value>
+    <value>Cuntrollu di e nove versioni…</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>您确定要清除日志文件目录吗？</value>
+    <value>Site sicuru di vulè viutà u cartulare di i ghjurnali ?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>清除日志</value>
+    <value>Viutà i ghjurnali</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>正在下载...</value>
+    <value>Scaricamentu…</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake 的日志文件目录已被清除！</value>
+    <value>U cartulare di i ghjurnali hè statu viotu !</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>注意</value>
+    <value>Avertimentu</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>准备更新...</value>
+    <value>Preparazione di a nova versione…</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>请选择一个文件夹。</value>
+    <value>Ci vole à selezziunà un cartulare.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>单击“浏览”以设置默认位置</value>
+    <value>Sciglite « Navigà » per sceglie u locu predefinitu</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>隐藏</value>
+    <value>Piattà</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>显示</value>
+    <value>Affissà</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>“添加所有”至队列</value>
+    <value>« Tuttu aghjunghje » à a fila d’attesa</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>“添加选中”至队列</value>
+    <value>« Aghjunghje a selezzione » à a fila d’attesa</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>播放文件</value>
+    <value>Sunà u schedariu</value>
   </data>
   <data name="Options_ApplicaitonToolbar" xml:space="preserve">
-    <value>应用程序工具栏</value>
+    <value>Barra d’attrezzi d’appiecazione</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>在工具栏中显示“添加所有至队列”</value>
+    <value>Affissà « Tuttu aghjunghje à a fila d’attesa » nant’à a barra d’attrezzi</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>在工具栏中显示“添加选中至队列”</value>
+    <value>Affissà « Aghjunghje a selezzione à a fila d’attesa » nant’à a barra d’attrezzi</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>目前禁用硬件编码支持。 请确保您为此系统中的所有图形适配器运行最新的驱动程序。
-这不会对软件编码器产生任何影响。</value>
+    <value>L’adopru di a cudificazione materiale hè attualmente disattivatu. Assicuratevvi chì voi impiegate l’ultimi piloti per tutte e carte grafiche di stu sistema.
+
+Què ùn affetterà micca i cudificatori d’appiecazione.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>请更正您的字幕设置然后再继续。</value>
+    <value>Ci vole à currege e vostre preferenze nanzu di cuntinuà. </value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>应用</value>
+    <value>Appiecà</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>继续编码</value>
+    <value>Ripiglià a cudificazione</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>活动</value>
+    <value>Azzioni</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>导入列队</value>
+    <value>Impurtà una fila d’attesa</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
-Time Remaining: {5},  Elapsed: {6} {7}</value>
+    <value>Cudificazione : Passu {0} nant’à {1},  {2:00.00}%, FPS : {3:000.0},  FPS mediana : {4:000.0}
+Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>删除所选</value>
+    <value>Squassà a selezzione</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建TMP目录。请检查路径是否正确且可写。
+    <value>Modu purtabile : Impussibule di creà u cartulare timpurariu. Ci vole à verificà chì u chjassu hè currettu è accessibile in scrittura.
 
     {0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建存储目录。请检查路径是否正确且可写。
+    <value>Modu purtabile : Impussibule di creà u cartulare d’allucamentu. Ci vole à verificà chì u chjassu hè currettu è accessibile in scrittura.
 
     {0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
+    <value>Modu purtabile : Impussibule di leghje portable.ini. Forse ci hè qualchì sbagliu in stu schedariu. Ci vole à pruvà torna impieghendu portable.ini.template cum’è esempiu.</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 无法初始化引擎。这通常是由过时的GPU驱动程序引起的。\n 请更新显卡驱动程序。</value>
+    <value>U mutore d’HandBrake ùn hà micca pussutu inizziasi. Ghjè aspessu cagiunatu da piloti GPU troppu anziani.\nCi vole à rinnovà sti piloti per tutte e carte grafiche integrate è specificate di u vostru sistema.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>实时更新选项：{source} {title} {chapters} 
-非实时更新选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+    <value>Ozzioni mudificate direttamente : {source} {title} {chapters} 
+Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>可用的附加选项: {source_path} {source_folder_name} {source}</value>
+    <value>Ozzioni dispunibule : {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>询问是否覆盖文件</value>
+    <value>Dumandà per rimpiazzà u schedariu</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>自动重命名文件</value>
+    <value>Pruvà di rinumà autumaticamente u schedariu</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>覆盖文件</value>
+    <value>Rimpiazzà u schedariu</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>用户界面操作</value>
+    <value>Cumpurtamentu di l’interfaccia d’utilizatore</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>文件覆盖操作</value>
+    <value>Cosa fà in casu di rimpiazzamentu di schedariu</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>编码完成</value>
+    <value>Cudificazione compia</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>通知</value>
+    <value>Nutificazioni</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>队列已完成</value>
+    <value>Fila d’attesa compia</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>Quandu hè compiu :</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>文件名冲突操作</value>
+    <value>Cosa fà in casu di cunflittu di nome di schedariu :</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>后缀</value>
+    <value>Suffissu</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>前缀</value>
+    <value>Prefissu</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>添加编号</value>
+    <value>Aghjunghje un numeru à a fine</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>过滤器视图——去块效应滤波器预设</value>
+    <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>去块效应滤波器调整</value>
+    <value>Rigatura di sblucchime</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>编码器的选择将在“视频”选项卡上提供。</value>
+    <value>A scelta di u cudificatore serà dispunibule in l’unghjetta « Video ».</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake 检测到多个未完成的队列文件。恢复这些文件将使 HandBrake 运行多个实例。 你想恢复所有未完成的工作吗？</value>
+    <value>HandBrake hà trovu parechji schedarii di fila d’attesa micca compii. Quelli venenu da parechje instanze d’HandBrake. Vulete ricuperà tutti sti travaglii micca compii ?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake 检测到上次启动时队列中尚有未完成的项目。你想恢复这些项目吗？</value>
+    <value>HandBrake hà trovu elementi micca compii in a fila d’attesa di l’ultima sessione di l’appiecazione. Vulete ricuperalli ?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>有可恢复的队列</value>
+    <value>Ricuperazione pussibule di fila d’attesa</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>您的预设文件包含内置预设，但导入功能不支持导入内置预设。请使用“预设菜单  -&gt; 重置内置预设”来恢复标准预设。
+    <value>U vostru schedariu di prerigature cuntinia prerigature integrate. A funzione d’impurtazione ùn e accetteghja micca. Ci vole à impiegà « Prerigature -&gt; Reinizià e prerigature integrate » per risturà e prerigature predefinite.
 
-将导入所有支持的用户预设。</value>
+Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>立即执行操作。（这将禁用60秒确认对话框）</value>
+    <value>Effettuà st’azzione subitu subitu. (Què disattiverà u dialogu di cunfirmazione di 60 seconde)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>浏览</value>
+    <value>Navigà</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>没有设置音频文件。请单击“浏览”以选择要播放的wav或mp3文件。</value>
+    <value>Alcunu schedariu audio ùn hè statu definitu. Ci vole sceglie « Navigà » per selezziunà un schedariu wav o mp3 à sunà.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>播放</value>
+    <value>Sunà</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>导出列队（仅限命令行界面）</value>
+    <value>Espurtà a fila d’attesa  (CLI solu)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>使用黑暗主题。（需要重启软件，仅支持 Windows 10）</value>
+    <value>Impiegà u tema scuru (Richiede un rilanciu, solu cù Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>不可用</value>
+    <value>Indispunibule</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
-    <value>GB</value>
+    <value>Go</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>已检测到交流电源。正在恢复编码... ({0} %)</value>
+    <value>Alimentazione settore abbentata. Ripigliu di a cudificazione… ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>系统电量严重不足! ({0} %)</value>
+    <value>Livellu d’energia di batteria criticu ! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
+    <value>Livellu d’energia di batteria debule ! ({0} %). A vostra cudificazione hè stata interrotta.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>目标磁盘剩余存储容量少于 {0} GB。正在暂停编码...</value>
+    <value>A capacità d’allucamentu hè falata sottu {0} Go nant’à u lettore di destinazione. Interruzzione di a cudificazione…</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>配置自动音频选择</value>
+    <value>Cunfigurà e selezzioni audio autumatiche</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>配置自动字幕选择</value>
+    <value>Cunfigurà e selezzioni di sottutituli autumatiche</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>系统</value>
+    <value>Sistema</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>演员：</value>
+    <value>Attori :</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>评论：</value>
+    <value>Cummenti :</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>描述：</value>
+    <value>Discrizzione :</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>导演：</value>
+    <value>Direttore :</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>类型：</value>
+    <value>Generu :</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>剧情：</value>
+    <value>Intricu :</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>发行日期：</value>
+    <value>Data d’esciuta :</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>标题：</value>
+    <value>Titulu :</value>
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>预览旋转和翻转</value>
+    <value>Previsualizazione di a rotazione è di u rivoltamentu</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>日志查看器</value>
+    <value>Fighjata di u ghjurnale</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>详情：</value>
+    <value>Furmatu :</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>Filtri :</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>大小：</value>
+    <value>Dimensione :</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>轨道：</value>
+    <value>Traccie :</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>常规</value>
+    <value>Generale</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>点击“检查更新”检查新版本</value>
+    <value>Sciglite « Cuntrollà e nove versioni » per sapè s’ella esiste una nova versione di l’appiecazione</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; 返回</value>
+    <value>&lt; Precedente</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>目前已暂停</value>
+    <value>Attualmente interrotta</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>输出文件</value>
+    <value>Schedarii d’esciuta</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>章节</value>
+    <value>Capituli</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>帧数</value>
+    <value>Fiure</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>预览</value>
+    <value>Previsualizazione</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>秒</value>
+    <value>Seconde</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>Tutte e lingue chì currispundenu</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>Prima lingua chì currispunde</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>无</value>
+    <value>Alcunu</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>第一个轨道</value>
+    <value>Prima traccia</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>外部音频优先，否则第一个优先</value>
+    <value>Traccia audio straniera preferita, osinnò Prima traccia</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>外部音轨</value>
+    <value>Traccia audio straniera</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>无</value>
+    <value>Alcunu</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>外部音频搜索</value>
+    <value>Ricerca di traccia audio straniera</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>外部音频扫描</value>
+    <value>Analisa di traccia audio straniera</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>Tutte e lingue chì currispundenu</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>使用所有轨道作为模板</value>
+    <value>Impiegà tutte e traccie cum’è mudellu</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>Prima lingua chì currispunde</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>使用首轨作为模板</value>
+    <value>Impiegà a prima traccia cum’è mudellu</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>无音频</value>
+    <value>Alcuna traccia audio</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>章节 {0}</value>
+    <value>Capitulu {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>自动</value>
+    <value>Autumaticu</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>始终使用 M4V</value>
+    <value>Sempre impiegà M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>始终使用 MP4</value>
+    <value>Sempre impiegà MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>Persunalizatu</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>无</value>
+    <value>Alcunu</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>始终使用源分辨率</value>
+    <value>Sempre impiegà a risuluzione di a video di a fonte</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>高于标准</value>
+    <value>Più altu chì a nurmale</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>低于标准</value>
+    <value>Più bassu chì a nurmale</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>高</value>
+    <value>Altu</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>低</value>
+    <value>Bassu</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>标准</value>
+    <value>Nurmale</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>每月</value>
+    <value>Misinca</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>每周</value>
+    <value>Settimanale</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>始终为生成的每个新名称使用默认路径。</value>
+    <value>Sempre impiegà u chjassu predefinitu per ogni novu nome ingeneratu.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>端口范围必须在5000到32767之间</value>
+    <value>A stesa di porti deve esse scelta trà 5000 è 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>替换占位符: {source} {destination}</value>
+    <value>Campi di sustituzione : {source} {destination}</value>
     <comment>Note: {source} and {destination} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>有新版本的 HandBrake 可供使用！</value>
+    <value>Una nova versione d’HandBrake hè dispunibule !</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2020 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Low battery level:</value>
+    <value>Livellu di batteria debule :</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pause any running jobs when the battery gets low.</value>
+    <value>Interrompe tuttu travagliu in corsu quandu u livellu di batteria hè debule.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>Aghjunghje tutti i sottutituli ditagliati chì fermanu</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
-This will also stop any existing running jobs.</value>
+    <value>Travaglii in doppiu sò stati trovi in u schedariu di fila d’attesa chì voi pruvate d’impurtà. Vulete rimpiazzà l’arregistramenti chì esistenu ? 
+Què pianterà tuttu travagliu in corsu.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>Duplicates Detected</value>
+    <value>Duppioni trovi</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Attivà u QuickSync di bassa cunsumazione.</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Please select a single job to view summary information.</value>
+    <value>Ci vole à selezziunà un travagliu solu per fighjà l’infurmazioni di sintesi.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process. (Experimental)</value>
+    <value>Eseguisce ogni travagliu di a fila d’attesa in un trattamentu di travagliu distintu. (Esperimentale)</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Default network port for worker:</value>
+    <value>Portu di reta predefinitu per u trattamentu di travagliu :</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>The preset you have selected is not available for use on this system.
+    <value>A prerigatura selezziunata ùn hè micca dispunibule nant’à stu sistema.
 
-This is typically an indication that your system does not support the hardware required to utilise it.
+Da bona regula, vole si dì chì u vostru sistema ùn accetteghja micca u materiale richiestu per impiegalla.
 
-Please choose a different preset.</value>
+Ci vole à sceglie una prerigatura sfarente.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>Process Isolation</value>
+    <value>Isulamentu di i trattamenti</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+    <value>Nota : L’adopru di sta funzione lancerà un servitore HTTP ligatu à l’indirizzu 127.0.0.1 nant’à u portu sceltu.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+    <value>S’è u portu definitu hè dighjà impiegatu, si truverà u primu portu liberu in un intervallu massimu di 100 à partesi di u portu definitu.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Number of simultaneous encodes:</value>
+    <value>Numeru di cudificazioni simultanei :</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>取消</value>
+    <value>Abbandunà</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>预设：</value>
+    <value>Prerigatura :</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Same as source</value>
+    <value>Listessa chè a fonte</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>Reset Settings</value>
+    <value>Reinizializazione di e preferenze</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+    <value>Site sicuru di vulè reinizià e preferenze d’HandBrake à i so valori predefiniti ?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>Custom (Not Limited)</value>
+    <value>Persunalizatu (Micca ristrintu)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (pad to resolution limit)</value>
+    <value>Riempie (imburrà fine à a cunfina di a risuluzione)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (pad up to res limit)</value>
+    <value>Altezza (imburrà fine à a cunfina di a risuluzione)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>无</value>
+    <value>Alcunu</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (pad up to res limit)</value>
+    <value>Larghezza (imburrà fine à a cunfina di a risuluzione)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Imburrera :</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding Colour:</value>
+    <value>Culore d’imburrera :</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders</value>
+    <value>Bordi</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling</value>
+    <value>Risuluzione è messa à a scala</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop</value>
+    <value>Girà è runzicà</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 Only! )</value>
+    <value>( Windows 10 solu ! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>Filtri :</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>默认</value>
+    <value>Predefinitu</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>Forced</value>
+    <value>Sfurzatu</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2289,89 +2291,89 @@ Please choose a different preset.</value>
     <value>4320p 8K Ultra HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>Persunalizatu</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
+    <value>Altezza massima :</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+    <value>Larghezza massima :</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Resolution Limit:</value>
+    <value>Cunfina di risuluzione :</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>无</value>
+    <value>Alcunu</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>Ghjestione di e prerigature</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Delete Built-in Presets</value>
+    <value>Squassà e prerigature integrate</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Export selected preset</value>
+    <value>Espurtà a prerigatura selezziunata</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Import Preset(s) from file</value>
+    <value>Impurtà a/e prerigatura(e) da un schedariu</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Preset Information:</value>
+    <value>Infurmazione nant’à a prerigatura :</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Build in presets can not be modified.</value>
+    <value>E prerigature integrate ùn ponu micca esse mudificate.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Set selected preset as default</value>
+    <value>Sceglie a prerigatura selezziunata cum’è predefinita</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>删除预设</value>
+    <value>Squassà a prerigatura</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(Not supported on this system)</value>
+    <value>(Micca accettatu nant’à stu sistema)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>停止</value>
+    <value>Piantà</value>
   </data>
   <data name="Options_Metadata" xml:space="preserve">
-    <value>元数据</value>
+    <value>Metadati</value>
   </data>
   <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+    <value>Passeghju di i metadati basichi da a fonte ver di u schedariu di destinazione (quand’ellu hè accettatu)</value>
   </data>
   <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
+    <value>St’ozzione permette à i campi metadati basichi d’esse cupiati da a fonte ver di u schedariu di destinazione.
+I campi sò limitati à :
+- Nome
+- Artista
+- Artista di l’albumu
+- Cumpositore
+- Data d’esciuta
+- Cummentu
+- Albumu
+- Generu
+- Discrizzione
+- Discrizzione longa</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
-    <value>(Default Preset)</value>
+    <value>(Prerigatura predefinita)</value>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>U nome di categuria scrittu esiste dighjà. Ci vole à sceglie un nome sfarente.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>U nome di categuria era viotu. Ci vole à pruvede un nome.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>Scrivite un nome :</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>Ùn ci hè alcuna prerigatura selezziunata.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Espurtà tutte e prerigature persunalizate</value>
   </data>
 </root>
