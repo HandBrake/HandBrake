@@ -121,9 +121,9 @@
               </Component>
             </Directory>
 
-            <Directory Id="pt-BR_lang" Name="pt-BR">
-              <Component Win64="yes" Id="pt-BR_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
-                <File Id="pt-BR_lang" Source="$(var.packagePath)\pt-BR\HandBrake.resources.dll" />
+            <Directory Id="pt_BR_lang" Name="pt-BR">
+              <Component Win64="yes" Id="pt_BR_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
+                <File Id="pt_BR_lang" Source="$(var.packagePath)\pt-BR\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
@@ -191,7 +191,7 @@
       <ComponentRef Id="fr_lang"/>
       <ComponentRef Id="ja_lang"/>
       <ComponentRef Id="ko_lang"/>
-      <ComponentRef Id="pt-BR_lang"/>
+      <ComponentRef Id="pt_BR_lang"/>
       <ComponentRef Id="ru_lang"/>
       <ComponentRef Id="tr_lang"/>
       <ComponentRef Id="uk_lang"/>
