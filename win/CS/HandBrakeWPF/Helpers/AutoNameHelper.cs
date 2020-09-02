@@ -138,13 +138,13 @@ namespace HandBrakeWPF.Helpers
                 destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                 destinationFilename =
                     destinationFilename
-                        .RegexReplace(Constants.Source, sourceName)
-                        .RegexReplace(Constants.Title, dvdTitle)
-                        .RegexReplace(Constants.Chapters, combinedChapterTag)
-                        .RegexReplace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                        .RegexReplace(Constants.Time, DateTime.Now.ToString("HH-mm"))
-                        .RegexReplace(Constants.CretaionDate, createDate)
-                        .RegexReplace(Constants.CreationTime, createTime);
+                        .Replace(Constants.Source, sourceName)
+                        .Replace(Constants.Title, dvdTitle)
+                        .Replace(Constants.Chapters, combinedChapterTag)
+                        .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
+                        .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
+                        .Replace(Constants.CretaionDate, createDate)
+                        .Replace(Constants.CreationTime, createTime);
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                 {
