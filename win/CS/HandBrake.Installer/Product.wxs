@@ -91,44 +91,62 @@
               </Component>
             </Directory>
 
+            <Directory Id="co_lang" Name="co">
+              <Component Win64="yes" Id="co_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42183">
+                <File Id="co_lang" Source="$(var.packagePath)\co\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
+
             <Directory Id="es_lang" Name="es">
-              <Component Win64="yes" Id="es_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42183">
+              <Component Win64="yes" Id="es_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42184">
                 <File Id="es_lang" Source="$(var.packagePath)\es\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
             <Directory Id="fr_lang" Name="fr">
-              <Component Win64="yes" Id="fr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42184">
+              <Component Win64="yes" Id="fr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42185">
                 <File Id="fr_lang" Source="$(var.packagePath)\fr\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
             <Directory Id="ja_lang" Name="ja">
-              <Component Win64="yes" Id="ja_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42185">
+              <Component Win64="yes" Id="ja_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42186">
                 <File Id="ja_lang" Source="$(var.packagePath)\ja\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
             <Directory Id="ko_lang" Name="ko">
-              <Component Win64="yes" Id="ko_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42186">
+              <Component Win64="yes" Id="ko_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42187">
                 <File Id="ko_lang" Source="$(var.packagePath)\ko\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
+            <Directory Id="pt-BR_lang" Name="pt-BR">
+              <Component Win64="yes" Id="pt-BR_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
+                <File Id="pt-BR_lang" Source="$(var.packagePath)\pt-BR\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
+
             <Directory Id="ru_lang" Name="ru">
-              <Component Win64="yes" Id="ru_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42187">
+              <Component Win64="yes" Id="ru_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42189">
                 <File Id="ru_lang" Source="$(var.packagePath)\ru\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
             <Directory Id="tr_lang" Name="tr">
-              <Component Win64="yes" Id="tr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42188">
+              <Component Win64="yes" Id="tr_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42190">
                 <File Id="tr_lang" Source="$(var.packagePath)\tr\HandBrake.resources.dll" />
               </Component>
             </Directory>
 
+            <Directory Id="uk_lang" Name="uk">
+              <Component Win64="yes" Id="uk_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42191">
+                <File Id="uk_lang" Source="$(var.packagePath)\uk\HandBrake.resources.dll" />
+              </Component>
+            </Directory>
+
             <Directory Id="zh_lang" Name="zh">
-              <Component Win64="yes" Id="zh_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42189">
+              <Component Win64="yes" Id="zh_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42192">
                 <File Id="zh_lang" Source="$(var.packagePath)\zh\HandBrake.resources.dll" />
               </Component>
             </Directory>
@@ -168,12 +186,15 @@
       <ComponentRef Id="AppShortcuts"/>
 
       <ComponentRef Id="de_lang"/>
+      <ComponentRef Id="co_lang"/>
       <ComponentRef Id="es_lang"/>
       <ComponentRef Id="fr_lang"/>
       <ComponentRef Id="ja_lang"/>
       <ComponentRef Id="ko_lang"/>
+      <ComponentRef Id="pt-BR_lang"/>
       <ComponentRef Id="ru_lang"/>
       <ComponentRef Id="tr_lang"/>
+      <ComponentRef Id="uk_lang"/>
       <ComponentRef Id="zh_lang"/>
     </Feature>
 
