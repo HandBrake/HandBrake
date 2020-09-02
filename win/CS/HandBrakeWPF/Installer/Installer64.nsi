@@ -198,6 +198,10 @@ Section "HandBrake" SectionApp
   SetOverwrite ifnewer
   File "co\*.*"
 
+  SetOutPath "$INSTDIR\uk"
+  SetOverwrite ifnewer
+  File "uk\*.*"
+
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -263,6 +267,8 @@ Section Uninstall
   RMDir  "$INSTDIR\pt-BR"
   Delete "$INSTDIR\co\*.*"
   RMDir  "$INSTDIR\co"
+  Delete "$INSTDIR\uk\*.*"
+  RMDir  "$INSTDIR\uk"
 
   RMDir  "$INSTDIR"
 
