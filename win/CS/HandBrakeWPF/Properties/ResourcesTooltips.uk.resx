@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Choose decomb or deinterlace filter options.
+
+The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.
+
+The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Усунення шумів (denoise), зменшує або усуває появу шуму та зернистості. Це може підвищити ефективність стиснення даних та створити відео вищої якості при менших розмірах файлів. 
+Завеликі налаштування усунення шумів можуть погіршити якість зображення, знехтувавши деталізацією.
+         
+NLMeans – це високоякісний фільтр усунення шумів, але не швидкий. Використовуйте там, де якість важливіша, ніж швидкість.
+         
+HQDN3D – адаптивний низькочастотний фільтр. Він швидший, ніж NLMeans, але менш ефективний при збереженні дрібних деталей.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Зворотна телекінопроекція (detelecine) видаляє ефекти «гребінки», які є результатом кінопроекції, процесу перетворення частоти кадрів фільму в частоту кадрів телебачення.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Відтінки сірого видаляє кольоровий складову відео. Часто його називають чорно-білим відео.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Шлях призначення, включаючи назву каталогу та файлу. Тут буде створено ваше нове відео з вказаною назвою.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Додає спеціальний маркер MP4, що дозволяє відтворення на старовинних пристроях iPod 5-го покоління близько 2006 року випуску. Інші налаштування можуть впливати на сумісність.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Формат контейнера. Відео, аудіо та інші доріжки об'єднуються в єдиний файл цього типу. Впливає на сумісність.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Оптимізує MP4 для послідовного завантаження (progressive download). Після кодування дані реорганізуються та переписуються, щоб дозволити негайне відтворення через мережу, не потребуючи завантаження всього файлу.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Вибір діапазону джерела. За замовчуванням вибираються всі глави та кодується все джерело.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Заголовок, чи відеокліп для кодування.
+У джерелах Blu-ray та DVD часто є кілька заголовків, найдовший з яких, як правило, є основною частиною</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Анаморфування дозволяє вказувати довільні розміри зображення, зберігаючи початкове співвідношення сторін під час відтворення.
+
+Off (Вимк.) вимикає анаморфування. Розміри зображення та розміри показу будуть однаковими. Корисна лише для сумісності з певними застарілими пристроями.
+
+Auto (Авто) максимально збільшує роздільну здатність зображення, зберігаючи співвідношення сторін. Рекомендованою.
+
+Loose (Вільне) схоже на Auto (Авто), але намагається зберегти співвідношення сторін. Це може спричинити невелику втрату роздільної здатності в порівняні з Auto (Авто).
+
+Custom (Власне) дозволяє вручну встановлювати всі параметри. Корисно для виправлення неправильного співвідношення сторін джерела та для професіоналів, які потребують розширеного контролю в постпродукції.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Автоматично обрізає чорні рамки по краях відео.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Обрізати відео знизу.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Обрізати відео з лівого боку.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Обрізати відео з правого боку.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Обрізати відео зверху.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Це висота, з якою буде збережено відео.
+Фактичні розміри відображення будуть відрізнятися, якщо співвідношення сторін пікселів не буде 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Обрізання відео вручну.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Вирівнює розміри збереження кратних до цього значення.
+
+Цей параметр необхідний лише для сумісності з деякими пристроями.
+Ви повинні використовувати 2, доки у вас не виникнуть проблеми з сумісністю.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Співвідношення сторін пікселя визначає їх форму.
+Співвідношення 1:1 відповідає квадратному пікселю. Інші значення відповідають прямокутним фігурам.
+Програвачі будуть масштабувати зображення для досягнення заданого співвідношення сторін.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Це ширина, з якою буде збережено відео.
+Фактичні розміри відображення будуть відрізнятися, якщо співвідношення сторін пікселів не буде 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Видаляє завдання з черги.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Скидає статус завдання на «Очікування».</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Відправляє завдання для редагування назад у головне вікно.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Встановлює середній бітрейт.
+
+Миттєвий бітрейт в певний момент часу може бути набагато вищим або нижчим.
+Але середній бітрейт протягом всієї тривалості буде значенням, встановленим тут.
+Якщо вам потрібно обмежити миттєвий бітрейт, погляньте на параметри x264 vbv-bufsize та vbv-maxrate.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Вмикає постійну частоту кадрів (constant framerate) для виводу.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Доступні кодувальники відео.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Налаштовує параметри оптимізації для загальних сценаріїв.
+
+Це може підвищити ефективність для окремих характеристик джерела,
+або встановити характеристики вихідного файлу. Зміни будуть застосовані
+після набору, але перед усіма іншими параметрами.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Додаткові налаштування кодувальника.
+
+Список опцій кодувальника розділяти двокрапкою.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Зменшує використання ЦП декодувальником.
+
+Встановіть цей параметр, якщо ваш пристрій має проблеми з відтворенням виводу (випадання кадрів).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Частота кадрів виводу (кадри в секунду).
+
+Рекомендується вибирати «Same as source» (Так само, як в джерелі). Якщо у джерела відео змінна частота кадрів – «Same as source» збереже її.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Встановлює та забезпечує відповідність заданому рівню.
+
+Перекриває всі інші налаштування.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Вмикає змінну частоту кадрів (variable framerate) для виводу, з піковим значенням, що визначається налаштуванням частоти кадрів.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Налаштовує параметри кодувальника, щоб встановити компроміс між ефективністю стиснення та швидкістю кодування.
+
+Цей параметр встановлює ваші параметри кодувальника за замовчуванням.
+Інші налаштування, профілі, рівні та рядок розширених опцій будуть застосовані до цих налаштувань.
+Як правило, варто встановити цю опцію в найповільніше значення, яке ви можете витримати,
+оскільки повільніші значення призводять до кращої якості або меншого розміру файлів.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Встановлює та забезпечує відповідність заданому профілю.
+
+Перекриває всі інші налаштування.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Встановіть бажаний коефіцієнт якості.
+Кодувальник намагатиметься досягнути вказаної якості.
+У кожного кодувальника своя шкала якості.
+
+Шкала для x264 є логарифмічною, а нижчі значення відповідають вищій якості.
+Невелике зменшення значення призведе до значного збільшення
+розміру вихідного файлу.  Значення 0 означає якість без втрат і призведе
+до того, що розмір файлу перевищуватиме розмір джерела, хіба що
+джерело також без втрат.
+Пропоновані значення: від 18 до 20 для джерел стандартної якості, та від 20 до 23 джерел високої якості.
+
+Шкала FFMpeg і Theora є більш лінійною.
+Ці кодувальники не мають режиму без втрат.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>Під час 1-го проходу 2-прохідного кодування використовувати параметри, які прискорюють роботу.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Виконує 2 проходи кодування.
+
+Необхідна опція «бітрейт». Під час 1-го проходу збирається статистика про відео.
+У другому проході ця статистика використовується для прийняття рішень щодо розподілу бітрейту.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Вмикає змінну частоту кадрів (variable framerate, VFR) для виводу.
+
+VFR не сумісний з деякими програвачами.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Коли HandBrake закінчить поточну чергу чи кодування – виконається ця дія.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Натисніть кнопку «Огляд», щоб вибрати для кодування новий шлях призначення та назву файлу.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Ракурс відео для кодування. Застосовується лише для багаторакурсних DVD та Blu-ray.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Додайте новий набір.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Додаткові параметри набору.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Набори – це групи наперед визначених параметрів кодування, пристосовані до конкретних сценаріїв. Виберіть найближчий до ваших намірів.
+ 
+Перевизначає усі параметри кодування. Налаштування можуть бути додатково відрегульовані після вибору набору.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Вилучити вибраний набір.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Сканує лише вказаний заголовок замість усіх заголовків.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Власні параметри усунення шумів.
+ 
+Синтаксис NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+Стандартні NLMeans: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+Синтаксис HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+Стандартні HQDN3D: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Попередньо встановлений фільтр усунення шумів. Встановлює потужність фільтра.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Настроювання усунення шумів. Додатково коригує набір усунення шумів для оптимізації налаштувань під конкретні сценарії.
+ 
+- None використовує стандартні налаштування набору.
+ 
+- Film (фільм) удосконалює налаштування для використання з більшістю кіноконтенту.
+ 
+- Grain (зерно) обробляє лише колірні канали. Корисно для збереження плівкового вигляду зі світіннями зерна при зменшенні або видаленні колірного шуму.
+
+- High Motion (висока швидкість руху) зменшує розмазування кольорів у сценах з високою швидкістю руху, уникаючи тимчасової обробки колірних каналів. Корисно для спортивних відео та бойовиків.
+
+- Animation (анімація) корисний для мальованої анімації, такої як аніме та мультфільми.
+
+- Tape (стрічка) корисний для джерел як аналогові стрічки з низькою деталізацією, таких як VHS, де Film (фільм) не дає бажаного результату.
+
+- Sprite (спрайт) корисний для 1-/4-/8-/16-бітних 2D-ігор. Sprite не призначений для відео високої чіткості.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Деінтерлейсинг (deinterlace) видаляє із зображення артефакти «гребінки».
+
+Yadif – популярний і швидкий деінтерлейсер.
+
+Decomb перемикається між кількома алгоритмами інтерполяції для кращої швидкості та якості.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Власні параметри деінтерлейсингу.
+ 
+Синтаксис Yadif: mode=m:parity=p
+ 
+Стандартні Yadif: mode=3
+ 
+Синтаксис Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+Стандартні Decomb: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Deinterlace filter preset.
+
+Default is well balanced for speed and quality.
+
+Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+
+EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+
+Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Перевертає (дзеркально відображає) зображення по горизонтальній осі.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Виявлення інтерлейсингу (interlace detection), коли увімкнено – дозволяє фільтру деінтерлейсингу обробляти лише відеокадри з інтерлейсингом.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Власні параметри виявлення інтерлейсингу.
+ 
+Синтаксис: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+Стандартні: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Обертає зображення за годинниковою стрілкою з кроком 90 градусів.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Тривалість діапазону вибраного джерела в години:хвилини:секунди</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Зберігати пропорції (Keep Aspect Ratio) підтримує початкове співвідношення сторін джерела. Відключення цього налаштування може призвести до розтягування або стискання зображення.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Власні параметри різкості.
+
+Синтаксис Unsharp: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Стандартні Unsharp: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Синтаксис Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Стандартні Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Збільшення різкості (sharpening) покращує зовнішній вигляд деталей, особливо по краях. Надто сильні налаштування різкості можуть погіршити якість зображення створюючи кільцеві артефакти та посилюючи шуми, це може знизити ефективність стиснення.
+
+Unsharp – це нерізкий маскувальний фільтр загального призначення. Він збільшує різкість за допомогою розмиття, розраховуючи різницю між розмитим зображенням та оригіналом.
+
+Lapsharp збільшує різкість за допомогою ядер згортки, апроксимуючи крайові фільтри Лапласа (Laplacian edge filters), іноді показує результати вищої якості, ніж Unsharp.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Попередньо встановлений фільтр збільшення різкості. Встановлює потужність фільтра.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+
+Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+
+Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+
+Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Вирівнює початкові часові позначки всіх аудіо та відеопотоків, вставляючи порожні або пропускаючи кадри. Може покращити синхронізацію аудіо/відео для зламаних плеєрів, які не шанують списки редагування MP4.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Опції для управління наборами.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Кінцева точка для цього діапазону.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Початкова точка для цього діапазону.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Якщо ввімкнено, система автоматичного іменування завжди використовуватиме стандартний шлях. 
+Якщо вимкнено – буде використовувати шлях у вікні призначення у головному вікні, якщо він вказаний, інакше використовуватиме стандартний шлях.</value>
+  </data>
+</root>

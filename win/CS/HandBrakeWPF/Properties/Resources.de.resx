@@ -209,7 +209,7 @@ Trotzdem fortfahren?</value>
     <value>HandBrake encodiert bereits.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Es sind Aufgaben mit demselben Zielpfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
+    <value>Es sind Aufgaben mit demselben Ausgabepfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>Anstehende Aufgaben {0}</value>
@@ -322,7 +322,7 @@ Trotzdem fortfahren?</value>
     <value>Vor dem Hinzufügen zur Warteschlange, muss der Zielpfad für die Ausgabedatei angegeben werden.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>Der eingegebene Zielpfad enthält ungültige Zeichen und wird nicht aktualisiert.</value>
+    <value>Der eingegebene Ausgabepfad enthält ungültige Zeichen und wird nicht aktualisiert.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Vorschau {0}</value>
@@ -343,7 +343,7 @@ Nicht-Live-Optionen: {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} oder {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>Es kann keine Datei mit demselben Pfad und Dateinamen wie die Quelldatei encodiert werden. Bitte den Namen der Zieldatei ändern, so dass er nicht der Quelldatei entspricht.</value>
+    <value>Es kann keine Datei mit demselben Pfad und Dateinamen wie die Quelldatei encodiert werden. Bitte den Namen der Ausgabedatei ändern, so dass er nicht der Quelldatei entspricht.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
     <value>Das System hat HandBrake daran gehindert einen Webbrowser zu starten.</value>
@@ -665,10 +665,10 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>Öffnen des Zielverzeichnises fehlgeschlagen.</value>
+    <value>Öffnen des Ausgabeverzeichnises fehlgeschlagen.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>Bitte überprüfen, dass das Zielverzeichnis gültig ist.</value>
+    <value>Bitte überprüfen, dass das Ausgabeverzeichnis gültig ist.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
     <value>Durchgang {0} von {1} wird verarbeitet, (Untertitelprüfung) {2:00.00} %, verbleibende Prüfungszeit: {3}, vergangen: {4}</value>
@@ -692,7 +692,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Warteschlange angehalten</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Das Zielverzeichnis hat wenig freien Speicherplatz.
+    <value>Das Ausgabeverzeichnis hat wenig freien Speicherplatz.
 
 In den Einstellungen kann definiert werden, ab welchem Batterielevel diese Warnung erscheint.
 
@@ -991,7 +991,7 @@ Soll sie überschrieben werden?</value>
     <value>Container</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Ziel</value>
+    <value>Ausgabe</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
     <value>Dauer:</value>
@@ -1248,6 +1248,9 @@ Soll sie überschrieben werden?</value>
   <data name="Options_Path" xml:space="preserve">
     <value>Pfad:</value>
   </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Pfad zum Media-Player</value>
+  </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Das System daran hindern während der Encodierung in den Ruhezustand zu fahren</value>
   </data>
@@ -1297,7 +1300,8 @@ Soll sie überschrieben werden?</value>
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Dieser Pfad wird nur für die Videovorschaufunktion verwendet.</value>
+    <value>Dieser Pfad wird nur für die Videovorschaufunktion verwendet.
+Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktionieren, sind aber nicht validiert.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Verzeichnis des Aktivitätsprotokolls zeigen</value>
@@ -1405,7 +1409,7 @@ Soll sie überschrieben werden?</value>
     <value>Löschen</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Ziel:</value>
+    <value>Ausgabe:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Nichts tun</value>
@@ -1438,7 +1442,7 @@ Soll sie überschrieben werden?</value>
     <value>Ausloggen</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>Zielpfad öffnen</value>
+    <value>Ausgabeverzeichnis öffnen</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
     <value>Pfad der Quelle öffnen</value>
@@ -1447,7 +1451,7 @@ Soll sie überschrieben werden?</value>
     <value>Einstellungen</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Warteschlange anhalten</value>
+    <value>Anhalten</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Angehalten:</value>
@@ -1991,7 +1995,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
+    <value>Der verfügbare Speicherplatz auf dem Ausgabelaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
     <value>Automatische Tonauswahl konfigurieren</value>
@@ -2169,7 +2173,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Eine neue Version von HandBrake ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003–2020 Das HandBrake-Team</value>
+    <value>Copyright (C) 2003–2020 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2188,7 +2192,7 @@ Dadurch werden auch alle bereits laufenden Aufgaben gestoppt.</value>
     <value>Duplikate erkannt</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Low Power QuickSync-Hardware aktivieren.</value>
+    <value>Low Power QuickSync-Hardware aktivieren (wo unterstützt).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Bitte nur eine Aufgabe auswählen um die Übersichtsinformationen anzuzeigen.</value>
@@ -2262,5 +2266,121 @@ Bitte eine andere Voreinstellung auswählen.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Drehen und Beschneiden</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>( Nur Windows 10! )</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Erzwungen</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Eigene</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Maximale Höhe:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Maximale Breite:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Auflösunglimit:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Voreinstellungen verwalten</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Offizielle Voreinstellungen löschen</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Ausgewählte Voreinstellung exportieren</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Voreinstellung(en) aus Datei importieren</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Voreinstellungsinformation:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Offizielle Voreinstellungen können nicht verändert werden.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Ausgewählte Voreinstellung zum Standard machen</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Voreinstellung löschen</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Auf diesem System nicht unterstützt)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>Metadaten</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru der Standard-Metadaten von der Quelle zur Ausgabedatei (wo unterstützt)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>Diese Einstellung erlaubt das Durchreichen von Standard-Metadatenfeldern von der Quelle zur Ausgabedatei.
+Dies ist auf folgende Felder begrenzt:
+- Name
+- Künstler
+- Albumkünstler
+- Komponist
+- Erscheinungsdatum
+- Kommentar
+- Album
+- Genre
+- Beschreibung
+- Lange Beschreibung</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
+    <value>(Standardvoreinstellung)</value>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Der Name der Kategorie war leer. Bitte einen Namen eingeben.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Gebe einen Namen ein:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Es ist keine Voreinstellung ausgewählt.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Alle eigenen Voreinstellungen exportieren</value>
   </data>
 </root>

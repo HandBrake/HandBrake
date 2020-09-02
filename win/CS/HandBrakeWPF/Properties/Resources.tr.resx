@@ -174,10 +174,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>Sıfırlama Tamamlandı</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>Yüksek Kalite |</value>
+    <value>Daha Yüksek Kalite |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| Düşük Kalite</value>
+    <value>| Daha Düşük Kalite</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
     <value>Plasebo Kalitesi |</value>
@@ -203,10 +203,10 @@ Devam etmek istiyor musun?</value>
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten kodlanıyor.</value>
+    <value>HandBrake zaten kodlama yapıyor.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Aynı hedef yolunda, sırada işler var. Lütfen bu iş için farklı bir yol seçin.</value>
+    <value>Sırada aynı dizini hedefleyen işler var. Lütfen bu iş için farklı bir yol seçin.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>   Bekleyen İşler {0}</value>
@@ -215,7 +215,7 @@ Devam etmek istiyor musun?</value>
     <value>Yeni Varsayılan Ön Ayar Seti: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Yeni Bir Güncelleme Var. Araçlar Menüsüne Git &gt; Yükleme Seçenekleri</value>
+    <value>Yeni Bir Güncelleme Var.  Yüklemek İçin Araçlar &gt; Ayarlar Menüsünü Ziyaret Edin. </value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
     <value>Ön Ayar seçilmedi.</value>
@@ -301,7 +301,7 @@ Devam etmek istiyor musun?</value>
     <value>Güncellenmiş</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Ön Ayarlı Sürüm</value>
+    <value>Ön Ayar Sürümü</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
     <value>Almaya çalıştığınız ön ayar, HandBrake'in farklı bir sürümünden. 
@@ -356,7 +356,7 @@ Canlı olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quali
 Eski sürümlerdeki ön ayarlar geçerli sürümde yeniden oluşturulmalıdır.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Video kodlayıcısına geçirilebilen ek gelişmiş bağımsız değişkenler.</value>
+    <value>Video kodlayıcısına aktarılabilen gelişmiş ek komutlar.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
     <value>Yok - Yalnızca kabın formatı desteklemediği parçalar yanacaktır.
@@ -490,7 +490,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
     <value>Sırayı temizlemek istediğine emin misin?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Onaylamak</value>
+    <value>Onayla</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
     <value>{0} bekleyen işler</value>
@@ -785,10 +785,10 @@ Devam etmek istiyor musunuz? </value>
     <value>Saklamak</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>Karıştırmak</value>
+    <value>Kanal Birleştirme</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Geri dönüş kodlayıcı:</value>
+    <value>Yedek kodlayıcı:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
     <value>Tekrar yüklemek</value>
@@ -857,31 +857,31 @@ Devam etmek istiyor musunuz? </value>
     <value>Özel:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Serbest bırakmak</value>
+    <value>Karelenme azaltıcı</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Ayrıştırma</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Ayırma:</value>
+    <value>Binişiklik Giderme -Deinterlace-:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
     <value>Ön Ayar:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Ayırma Ön Ayarı</value>
+    <value>Binişiklik Giderme -Deinterlace- Ön Ayarı</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>İptal Et:</value>
+    <value>Parazit Azaltma:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>İptal Etme Ön Ayarı</value>
+    <value>Parazit Azaltma Ön Ayarı</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Ayarlamayı İptal Et</value>
+    <value>Parazit Azaltma Ayarı</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>Telesine değil:</value>
+    <value>Telesine Etkisi Giderme:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
     <value>Filtreler</value>
@@ -1124,7 +1124,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Web Optimize Edilmiş</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Ön Ayarı Yönet</value>
+    <value>Ön Ayarları Yönet</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Meta veri</value>
@@ -1232,7 +1232,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Sistem tepsisine simge durumuna küçültme (Yeniden başlatma gerektirir)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Minimum saniye cinsinden DVD ve Blu-ray başlık süresi. Daha kısa olan başlıklar atlanacak:</value>
+    <value>Saniye cinsinden en düşük DVD ve Blu-ray başlık süresi. Daha kısa olan başlıklar atlanacaktır:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 Dosya Uzantısı:</value>
@@ -1245,6 +1245,9 @@ Devam etmek istiyor musunuz? </value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>Yol:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Path to Media Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Kodlama yaparken sistemin uyumasını önleyin</value>
@@ -1295,7 +1298,8 @@ Devam etmek istiyor musunuz? </value>
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Bu yol yalnızca video önizleme özelliği için kullanılır.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Günlük Dizinini Görüntüle</value>
@@ -1445,7 +1449,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Seçenekler</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Sırayı Duraklat</value>
+    <value>Duraklat</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Duraklatılan Süre:</value>
@@ -1541,7 +1545,7 @@ Devam etmek istiyor musunuz? </value>
     <value>İsteğe bağlı olarak belirli bir başlık seçin:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Ardından kodlamak istediğiniz videoları seçin:</value>
+    <value>Ardından kodlamak istediğiniz video ya da videoları seçin:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
     <value>Dosya</value>
@@ -1577,7 +1581,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Bir önizleme resmi seçin</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Sistem varsayılan video oynatıcısını kullan</value>
+    <value>Prefer system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Mümkün olduğunda Kapalı Başlıklar ekleyin</value>
@@ -1613,10 +1617,10 @@ Devam etmek istiyor musunuz? </value>
     <value>Bölüm İşaretleyicileri</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>Serbest bırakmak</value>
+    <value>Karelenme azaltıcı</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>Telesine değil</value>
+    <value>Telesine etkisi giderme</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
     <value>Görüntüle</value>
@@ -1936,7 +1940,7 @@ Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quali
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Serbest Bırakma Ayarı</value>
+    <value>Karelenme Azaltıcı İnce Ayarı</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
     <value>'Video' sekmesinde kodlayıcı seçimi yapılacaktır.</value>
@@ -2186,7 +2190,7 @@ Bu, mevcut çalışan işleri de durduracaktır.</value>
     <value>Yinelenenler Algılandı</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Düşük Güçlü QuickSync Donanımını etkinleştirin.</value>
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Özet bilgileri görüntülemek için lütfen tek bir iş seçin.</value>
@@ -2260,5 +2264,121 @@ Lütfen farklı bir ön ayar seçin.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Döndür ve Kırp</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>( Sadece Windows 10! )</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filtreler:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Varsayılan</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Zorunlu</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Azami Yükseklik:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Azami Genişlik:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Çözünürlük Sınırı:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Ön Ayarları Yönet</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Hazır Ön Ayarları Sil</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Seçili ön ayarı dışarı aktar</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Dosyadan ön Ayar(lar)ı içeri aktar</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Ön Ayar Bilgisi:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Hazır ön ayarlar değiştirilemez</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Seçilen ön ayarı varsayılan yap</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Silme Ön Ayarı</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Bu sistemde desteklenmiyor)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Durdur</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>Meta veri</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
+Fields are limited to:
+- Name
+- Artist
+- Album Artist
+- Composer
+- Release Date
+- Comment
+- Album
+- Genre
+- Description
+- Long Description</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
+    <value>(Default Preset)</value>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>The category name you entered already exists. Please choose a different name.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>The category name was empty. Please provide a name.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Enter a name: </value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>There is no preset selected.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Export all user presets</value>
   </data>
 </root>

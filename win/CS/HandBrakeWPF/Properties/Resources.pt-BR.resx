@@ -1124,7 +1124,7 @@ Você gostaria de substituí-lo?</value>
     <value>Otimizado para a Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Gerenciar Perfil</value>
+    <value>Gerenciar Pré-configuracões</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>Metadados</value>
@@ -1246,6 +1246,9 @@ Você gostaria de substituí-lo?</value>
   <data name="Options_Path" xml:space="preserve">
     <value>Caminho:</value>
   </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Path to Media Player</value>
+  </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Evitar que o sistema entre em modo de espera durante a conversão</value>
   </data>
@@ -1295,7 +1298,8 @@ Você gostaria de substituí-lo?</value>
     <value>Vídeo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Este caminho é usado apenas para o recurso de pré-visualização de vídeo.</value>
+    <value>This path is used for the video preview feature only.
+VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Abrir Pasta de Log</value>
@@ -1319,7 +1323,7 @@ Você gostaria de substituí-lo?</value>
     <value>Inferior</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Recorte</value>
+    <value>Cortando:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Personalizado</value>
@@ -1445,7 +1449,7 @@ Você gostaria de substituí-lo?</value>
     <value>Opções</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pausar Fila</value>
+    <value>Pausar</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Duração da Pausa:</value>
@@ -1577,7 +1581,7 @@ Você gostaria de substituí-lo?</value>
     <value>Selecione uma imagem de pré-visualização</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Usar reprodutor de vídeo padrão do sistema</value>
+    <value>Prefer system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Adicionar Closed Captions quando disponível</value>
@@ -2186,7 +2190,7 @@ Isso também interromperá os trabalhos em execução existentes.</value>
     <value>Duplicados Detectados</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Habilita o Hardware QuickSync de Baixa Potência</value>
+    <value>Enable Low Power QuickSync Hardware (where supported).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Selecione um único trabalho para visualizar as informações resumidas.</value>
@@ -2229,5 +2233,151 @@ Por favor, escolha uma predefinição diferente.</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
     <value>Tem certeza de que deseja redefinir o HandBrake para as configurações originais?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Customizado (Não Limitado)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Preencher (clique para ir ao limite da resolução)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Altura (clique para ir ao limite da resolução)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Largura (clique para ir ao limite da resolução)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Preenchimento:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Cor de Preenchimento:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Bordas</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Resolução e Escala</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Rotacionar e Cortar</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>( Apenas Windows 10! )</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Filtros:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forçado</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Altura Máxima:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Largura Máxima:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Limite de Resolução:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Gerenciar Pré-configuracões</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Apagar Pré-configurações Padrão</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Exportar pré-configuração selecionada</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Importar pré-configuração(ões) de arquivo</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Informação de pré-configuração:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Pré-configuração padão não pode ser modificada.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Definir pré-configuração selecionada como padrão</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Excluir Perfil</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Não compatível neste sistema)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Parar</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>Metadados</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
+Fields are limited to:
+- Name
+- Artist
+- Album Artist
+- Composer
+- Release Date
+- Comment
+- Album
+- Genre
+- Description
+- Long Description</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
+    <value>(Default Preset)</value>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>The category name you entered already exists. Please choose a different name.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>The category name was empty. Please provide a name.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Enter a name: </value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>There is no preset selected.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Export all user presets</value>
   </data>
 </root>
