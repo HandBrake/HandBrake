@@ -149,7 +149,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 {
     if (frameRate != _frameRate)
     {
-        [(HBVideo *)[self.undo prepareWithInvocationTarget:self] setFrameRate:_frameRate];
+        [[self.undo prepareWithInvocationTarget:self] setFrameRate:_frameRate];
     }
     _frameRate = frameRate;
     [self postChangedNotification];
