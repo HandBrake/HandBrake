@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBMFX,libmfx))
 $(eval $(call import.CONTRIB.defs,LIBMFX))
 
-LIBMFX.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/mfx_dispatch-1.32.tar.gz
-LIBMFX.FETCH.url      += https://github.com/lu-zero/mfx_dispatch/archive/1.32.tar.gz
-LIBMFX.FETCH.sha256    = 39992236630b17f0d5b632a5ddcc78a1c9abb96c9fb6e6888b066d3711dd4b1c
-LIBMFX.FETCH.basename  = mfx_dispatch-1.32.tar.gz
-LIBMFX.EXTRACT.tarbase = mfx_dispatch-1.32
+LIBMFX.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/mfx_dispatch-1.32.1.tar.gz
+LIBMFX.FETCH.url      += https://github.com/lu-zero/mfx_dispatch/archive/1.32.1.tar.gz
+LIBMFX.FETCH.sha256    = 6eb77dd5acee43306bf25bbad105c69f229fbd3d285fdf28b5b08019584383ed
+LIBMFX.FETCH.basename  = mfx_dispatch-1.32.1.tar.gz
+LIBMFX.EXTRACT.tarbase = mfx_dispatch-1.32.1
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
 
