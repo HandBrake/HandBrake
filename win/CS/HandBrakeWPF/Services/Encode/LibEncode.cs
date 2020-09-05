@@ -287,6 +287,7 @@ namespace HandBrakeWPF.Services.Encode
                 string logFile = Path.Combine(DirectoryUtilities.GetLogDirectory(), filename);
                 this.encodeLogService = new LogService();
                 this.encodeLogService.ConfigureLogging(logFile);
+                this.encodeLogService.SetId(this.encodeCounter);
                 this.logInstanceManager.RegisterLoggerInstance(filename, this.encodeLogService, false);
                 isLoggingInitialised = true;
             }

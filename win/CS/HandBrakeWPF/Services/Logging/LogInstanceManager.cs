@@ -10,12 +10,12 @@ namespace HandBrakeWPF.Services.Logging
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Windows.Media.Animation;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
-
-    using Microsoft.Win32.SafeHandles;
 
     public class LogInstanceManager : ILogInstanceManager
     {
@@ -104,11 +104,29 @@ namespace HandBrakeWPF.Services.Logging
 
         private void CleanupInstance()
         {
-            List<string> encodeLogs = this.logInstances.Keys.Where(f => f.Contains(".encode.")).ToList();
-            string removalKey = this.logInstances.Keys.OrderBy(k => k).FirstOrDefault(w => w.Contains(".encode."));
-            if (encodeLogs.Count > this.maxInstances)
+            List<int> encodeLogs = new List<int>();
+            foreach (ILog logInstance in this.logInstances.Values)
             {
-                this.logInstances.Remove(removalKey);
+                if (logInstance.LogId != -1)
+                {
+                    encodeLogs.Add(logInstance.LogId);
+                }
+            }
+
+            encodeLogs.Sort();
+
+            if (encodeLogs.Count > 0 && encodeLogs.Count > this.maxInstances)
+            {
+                int idToRemove = encodeLogs.FirstOrDefault();
+
+                KeyValuePair<string, ILog> service = this.logInstances.FirstOrDefault(i => i.Value.LogId == idToRemove);
+
+                string filename = Path.GetFileName(service.Value.FileName);
+
+                if (this.logInstances.ContainsKey(filename))
+                {
+                    this.logInstances.Remove(filename);
+                }
             }
         }
     }

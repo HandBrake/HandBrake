@@ -32,6 +32,16 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         event EventHandler LogReset;
 
         /// <summary>
+        /// An ID that allows this instance to be associated with an encode service implementation. 
+        /// </summary>
+        int LogId { get; }
+
+        /// <summary>
+        /// The filename this log service is outputting to.
+        /// </summary>
+        string FileName { get; }
+
+        /// <summary>
         /// Enable logging for this worker process.
         /// </summary>
         /// <param name="filename">
@@ -58,5 +68,11 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// Empty the log cache and reset the log handler to defaults.
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Add a Marker to this log service to make it easier to associate with an encode instance.
+        /// </summary>
+        /// <param name="id">An ID number from the underlying service.</param>
+        void SetId(int id);
     }
 }

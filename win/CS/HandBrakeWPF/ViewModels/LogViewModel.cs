@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
-    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -27,9 +26,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
-    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
-    using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
-    using LogService = HandBrakeWPF.Services.Logging.LogService;
+    using ILog = Services.Logging.Interfaces.ILog;
+    using LogEventArgs = Services.Logging.EventArgs.LogEventArgs;
 
     public class LogViewModel : ViewModelBase, ILogViewModel
     {
@@ -48,7 +46,6 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.logInstanceManager = logInstanceManager;
             this.Title = Resources.LogViewModel_Title;
-            this.selectedLogFile = logInstanceManager.ApplicationAndScanLog;
         }
 
         public event EventHandler<LogEventArgs> LogMessageReceived;
@@ -74,7 +71,11 @@ namespace HandBrakeWPF.ViewModels
             get => this.selectedLogFile;
             set
             {
-                if (value == this.selectedLogFile) return;
+                if (value == this.selectedLogFile)
+                {
+                    return;
+                }
+
                 this.selectedLogFile = value;
                 this.NotifyOfPropertyChange(() => this.SelectedLogFile);
 
@@ -106,57 +107,34 @@ namespace HandBrakeWPF.ViewModels
         {
             this.logInstanceManager.NewLogInstanceRegistered += this.LogInstanceManager_NewLogInstanceRegistered;
 
-            if (string.IsNullOrEmpty(this.SelectedLogFile))
-            {
-                base.OnActivate();
-                return;
-            }
-
-            if (this.logService == null)
-            {
-                this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
-            }
-
             this.NotifyOfPropertyChange(() => this.LogFiles);
 
-            this.logService.MessageLogged += this.LogService_MessageLogged;
-            this.logService.LogReset += LogService_LogReset;
-
-            // Refresh the Log Display
-            this.log.Clear();
-            foreach (LogMessage logMessage in this.logService.GetLogMessages())
+            if (string.IsNullOrEmpty(this.SelectedLogFile) || !this.LogFiles.Contains(this.SelectedLogFile))
             {
-                this.log.AppendLine(logMessage.Content);
-                this.lastReadIndex = logMessage.MessageIndex;
-
-                if (this.lastReadIndex > logMessage.MessageIndex)
-                {
-                    throw new Exception("Log Message Index Error");
-                }
-            }
-
-            this.OnLogMessageReceived(null);
-            this.NotifyOfPropertyChange(() => this.ActivityLog);
+                this.SelectedLogFile = this.LogFiles.LastOrDefault();
+            } 
 
             base.OnActivate();
+        }
+
+        protected override void OnDeactivate(bool close)
+        {
+            if (this.logService != null)
+            {
+                this.logService.MessageLogged -= this.LogService_MessageLogged;
+                this.logService.LogReset -= this.LogService_LogReset;
+            }
+
+            this.SelectedLogFile = null;
+            this.logInstanceManager.NewLogInstanceRegistered -= this.LogInstanceManager_NewLogInstanceRegistered;
+
+            base.OnDeactivate(close);
         }
 
         protected virtual void OnLogMessageReceived(LogEventArgs e)
         {
             var onLogMessageReceived = this.LogMessageReceived;
-            if (onLogMessageReceived != null)
-            {
-                onLogMessageReceived.Invoke(this, e);
-            }
-        }
-
-        protected override void OnDeactivate(bool close)
-        {
-            this.logService.MessageLogged -= this.LogService_MessageLogged;
-            this.logService.LogReset -= this.LogService_LogReset;
-            this.logInstanceManager.NewLogInstanceRegistered -= this.LogInstanceManager_NewLogInstanceRegistered;
-
-            base.OnDeactivate(close);
+            onLogMessageReceived?.Invoke(this, e);
         }
 
         private void ChangeLogFileView()
@@ -167,11 +145,33 @@ namespace HandBrakeWPF.ViewModels
                 this.logService.LogReset -= this.LogService_LogReset;
             }
 
+            if (this.SelectedLogFile == null)
+            {
+                return;
+            }
+
             this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
 
             if (this.logService != null)
             {
-                OnActivate();
+                this.logService.MessageLogged += this.LogService_MessageLogged;
+                this.logService.LogReset += LogService_LogReset;
+
+                // Refresh the Log Display
+                this.log.Clear();
+                foreach (LogMessage logMessage in this.logService.GetLogMessages())
+                {
+                    this.log.AppendLine(logMessage.Content);
+                    this.lastReadIndex = logMessage.MessageIndex;
+
+                    if (this.lastReadIndex > logMessage.MessageIndex)
+                    {
+                        throw new Exception("Log Message Index Error");
+                    }
+                }
+
+                this.OnLogMessageReceived(null);
+                this.NotifyOfPropertyChange(() => this.ActivityLog);
             }
         }
 

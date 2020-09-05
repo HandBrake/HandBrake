@@ -11,6 +11,7 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
@@ -278,7 +279,14 @@ namespace HandBrakeWPF.Instance
                 this.encodePollTimer.Stop();
                 if (this.workerProcess != null && !this.workerProcess.HasExited)
                 {
-                    this.workerProcess?.Kill();
+                    try
+                    {
+                        this.workerProcess?.Kill();
+                    }
+                    catch (Win32Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
                 }
 
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error));

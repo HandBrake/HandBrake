@@ -5,9 +5,9 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         Title="{Binding Title}"
-        Width="600"
+        Width="625"
         Height="650"
-        MinWidth="525"
+        MinWidth="625"
         MinHeight="600"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display">
@@ -32,7 +32,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Choose Log File: " Margin="5,0,5,0"></TextBlock>
-                    <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" Width="150" />
+                    <ComboBox ItemsSource="{Binding LogFiles}" SelectedItem="{Binding SelectedLogFile}" Width="195" />
                 </StackPanel>
 
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0" 
