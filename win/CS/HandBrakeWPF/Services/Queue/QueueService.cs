@@ -56,6 +56,7 @@ namespace HandBrakeWPF.Services.Queue
         private readonly IErrorService errorService;
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
+        private readonly DelayedActionProcessor delayedQueueBackupProcessor = new DelayedActionProcessor();
 
         private readonly IPortService portService;
 
@@ -138,6 +139,24 @@ namespace HandBrakeWPF.Services.Queue
             lock (QueueLock)
             {
                 this.queue.Add(job);
+                this.InvokeQueueChanged(EventArgs.Empty);
+
+                if (this.IsEncoding)
+                {
+                    this.ProcessNextJob();
+                }
+            }
+        }
+
+        public void Add(List<QueueTask> tasks)
+        {
+            lock (QueueLock)
+            {
+                foreach (var job in tasks)
+                {
+                    this.queue.Add(job);
+                }
+               
                 this.InvokeQueueChanged(EventArgs.Empty);
 
                 if (this.IsEncoding)
@@ -556,7 +575,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             try
             {
-                this.BackupQueue(string.Empty);
+                delayedQueueBackupProcessor.PerformTask(() => this.BackupQueue(string.Empty), 1000);
             }
             catch (Exception)
             {
