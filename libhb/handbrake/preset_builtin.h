@@ -9149,6 +9149,7 @@ const char hb_builtin_presets_json[] =
 "            \"PictureTopCrop\": 0, \n"
 "            \"PictureWidth\": 0, \n"
 "            \"PresetDescription\": \"\", \n"
+"            \"PresetDisabled\": false, \n"
 "            \"PresetName\": \"Name Missing\", \n"
 "            \"SubtitleAddCC\": false, \n"
 "            \"SubtitleAddForeignAudioSearch\": false, \n"

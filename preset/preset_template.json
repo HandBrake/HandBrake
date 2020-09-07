@@ -81,6 +81,7 @@
         "PictureForceHeight": 0,
         "PictureForceWidth": 0,
         "PresetDescription": "",
+        "PresetDisabled": false,
         "PresetName": "Name Missing",
         "Type": 1,
         "UsesPictureFilters": true,
