@@ -575,7 +575,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             try
             {
-                delayedQueueBackupProcessor.PerformTask(() => this.BackupQueue(string.Empty), 1000);
+                delayedQueueBackupProcessor.PerformTask(() => this.BackupQueue(string.Empty), 200);
             }
             catch (Exception)
             {

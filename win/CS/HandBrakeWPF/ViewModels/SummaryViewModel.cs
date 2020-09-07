@@ -52,6 +52,8 @@ namespace HandBrakeWPF.ViewModels
 
         private bool showPreview;
 
+        private DelayedActionProcessor previewDelayProcessor = new DelayedActionProcessor();
+
         public SummaryViewModel(IScan scanService, IUserSettingService userSettingService)
         {
             this.scanService = scanService;
@@ -390,7 +392,10 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.PopulateSummaryTab();
-            this.UpdatePreviewFrame();
+            if (this.ShowPreview)
+            {
+                this.previewDelayProcessor.PerformTask(this.UpdatePreviewFrame, 250);
+            }
         }
 
         public void SetContainer(OutputFormat container)
