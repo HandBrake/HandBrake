@@ -17,7 +17,7 @@
 @interface HBQueueTableViewController () <NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate>
 
 @property (nonatomic, weak, readonly) HBQueue *queue;
-@property (nonatomic) NSArray<HBQueueItem *> *dragNodesArray;
+@property (nonatomic) NSArray<id<HBQueueItem>> *dragNodesArray;
 
 @property (nonatomic, strong) id<HBQueueTableViewControllerDelegate> delegate;
 
@@ -82,7 +82,7 @@
 
     typedef void (^HBUpdateHeight)(NSNotification *note);
     HBUpdateHeight updateHeight = ^void(NSNotification *note) {
-        HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
+        HBQueueJobItem *item = note.userInfo[HBQueueItemNotificationItemKey];
         NSUInteger index = [self.queue.items indexOfObject:item];
         if (index != NSNotFound)
         {
@@ -119,8 +119,12 @@
 
     NSUInteger currentIndex = targetedRows.firstIndex;
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.queue.items objectAtIndex:currentIndex] completeOutputURL];
-        [urls addObject:url];
+        id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
+        if ([item isKindOfClass:[HBQueueJobItem class]])
+        {
+            NSURL *url = [(HBQueueJobItem *)item completeOutputURL];
+            [urls addObject:url];
+        }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
@@ -137,8 +141,12 @@
 
     NSUInteger currentIndex = targetedRows.firstIndex;
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.queue.items objectAtIndex:currentIndex] fileURL];
-        [urls addObject:url];
+        id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
+        if ([item isKindOfClass:[HBQueueJobItem class]])
+        {
+            NSURL *url = [(HBQueueJobItem *)item fileURL];
+            [urls addObject:url];
+        }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
@@ -155,10 +163,14 @@
 
     NSUInteger currentIndex = targetedRows.firstIndex;
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.queue.items objectAtIndex:currentIndex] activityLogURL];
-        if (url)
+        id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
+        if ([item isKindOfClass:[HBQueueJobItem class]])
         {
-            [urls addObject:url];
+            NSURL *url = [(HBQueueJobItem *)item activityLogURL];
+            if (url)
+            {
+                [urls addObject:url];
+            }
         }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
@@ -187,7 +199,7 @@
 - (IBAction)editSelectedQueueItem:(id)sender
 {
     NSInteger row = self.tableView.clickedRow;
-    HBQueueItem *item = [self.queue.items objectAtIndex:row];
+    HBQueueJobItem *item = [self.queue.items objectAtIndex:row];
     if (item)
     {
         [self.delegate tableViewEditItem:item];
@@ -248,7 +260,7 @@
                   row:(NSInteger)row
 {
 
-    HBQueueItem *item = self.queue.items[row];
+    id<HBQueueItem> item = self.queue.items[row];
     HBQueueItemView *view = nil;
 
     if (item.state == HBQueueItemStateWorking)
@@ -277,21 +289,24 @@
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    HBQueueItem *item = self.queue.items[row];
+    id<HBQueueItem> item = self.queue.items[row];
     return item.state == HBQueueItemStateWorking ? 58 : 22;
 }
 
 #pragma mark NSQueueItemView delegate
 
-- (void)removeQueueItem:(nonnull HBQueueItem *)item
+- (void)removeQueueItem:(nonnull id<HBQueueItem>)item
 {
     NSUInteger index = [self.queue.items indexOfObject:item];
     [self.delegate tableViewRemoveItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
-- (void)revealQueueItem:(nonnull HBQueueItem *)item
+- (void)revealQueueItem:(nonnull id<HBQueueItem>)item
 {
-    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[item.completeOutputURL]];
+    if ([item isKindOfClass:[HBQueueJobItem class]])
+    {
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[[(HBQueueJobItem *)item completeOutputURL]]];
+    }
 }
 
 #pragma mark NSTableView delegate
@@ -309,7 +324,7 @@
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
-    NSArray<HBQueueItem *> *items = [self.queue.items objectsAtIndexes:rowIndexes];
+    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:rowIndexes];
     // Dragging is only allowed of the pending items.
     if (items[0].state != HBQueueItemStateReady)
     {

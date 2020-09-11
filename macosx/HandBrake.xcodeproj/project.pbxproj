@@ -210,6 +210,7 @@
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
 		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
+		A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A942B66C250BB1FE00049203 /* HBQueueActionItem.m */; };
 		A943874122ED911B005F701B /* HBJob+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A943874022ED911B005F701B /* HBJob+HBAdditions.m */; };
 		A9442D2424DAC04E005EDF62 /* org.sparkle-project.Downloader.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A9442D1824DAC03A005EDF62 /* org.sparkle-project.Downloader.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A9442D2524DAC04E005EDF62 /* org.sparkle-project.InstallerConnection.xpc in Copy Files */ = {isa = PBXBuildFile; fileRef = A9442D1424DAC03A005EDF62 /* org.sparkle-project.InstallerConnection.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -225,7 +226,7 @@
 		A957EBCD218DBE5900007988 /* HBAutoNamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A957EBCC218DBE5900007988 /* HBAutoNamer.m */; };
 		A958EAC222E24D6400D83AF4 /* HBQueueTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A958EAC422E24D6400D83AF4 /* HBQueueTableViewController.xib */; };
 		A958EAC522E24D6800D83AF4 /* HBQueueInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A958EAC722E24D6800D83AF4 /* HBQueueInfoViewController.xib */; };
-		A95BA15D220C968500A2F9F9 /* HBQueueItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA15C220C968500A2F9F9 /* HBQueueItem.m */; };
+		A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
 		A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */; };
 		A96127DF22E0994E0086E6DC /* HBQueueInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96127DD22E0994E0086E6DC /* HBQueueInfoViewController.m */; };
@@ -774,6 +775,9 @@
 		A93FD4731A62ABE800A6AC43 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
 		A93FD4741A62ABE800A6AC43 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
 		A941ACB91CD75B4E0029D06A /* HBHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUD.h; sourceTree = "<group>"; };
+		A942B668250BA70400049203 /* HBQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueItem.h; sourceTree = "<group>"; };
+		A942B66B250BB1FE00049203 /* HBQueueActionItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueActionItem.h; sourceTree = "<group>"; };
+		A942B66C250BB1FE00049203 /* HBQueueActionItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueActionItem.m; sourceTree = "<group>"; };
 		A943873F22ED911B005F701B /* HBJob+HBAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HBJob+HBAdditions.h"; sourceTree = "<group>"; };
 		A943874022ED911B005F701B /* HBJob+HBAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBAdditions.m"; sourceTree = "<group>"; };
 		A9442CDD24DABFED005EDF62 /* Sparkle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Sparkle.xcodeproj; path = Sparkle/Sparkle.xcodeproj; sourceTree = "<group>"; };
@@ -803,8 +807,8 @@
 		A958EAC622E24D6800D83AF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBQueueInfoViewController.xib; sourceTree = "<group>"; };
 		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
-		A95BA15B220C968500A2F9F9 /* HBQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueItem.h; sourceTree = "<group>"; };
-		A95BA15C220C968500A2F9F9 /* HBQueueItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueItem.m; sourceTree = "<group>"; };
+		A95BA15B220C968500A2F9F9 /* HBQueueJobItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueJobItem.h; sourceTree = "<group>"; };
+		A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueJobItem.m; sourceTree = "<group>"; };
 		A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volHighTemplate.pdf; sourceTree = "<group>"; };
 		A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volLowTemplate.pdf; sourceTree = "<group>"; };
 		A95CB2FB217B6D07001E9F51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1491,8 +1495,11 @@
 			children = (
 				A97ECB8022E1D85500570935 /* HBQueue.h */,
 				A97ECB8122E1D85500570935 /* HBQueue.m */,
-				A95BA15B220C968500A2F9F9 /* HBQueueItem.h */,
-				A95BA15C220C968500A2F9F9 /* HBQueueItem.m */,
+				A942B668250BA70400049203 /* HBQueueItem.h */,
+				A942B66B250BB1FE00049203 /* HBQueueActionItem.h */,
+				A942B66C250BB1FE00049203 /* HBQueueActionItem.m */,
+				A95BA15B220C968500A2F9F9 /* HBQueueJobItem.h */,
+				A95BA15C220C968500A2F9F9 /* HBQueueJobItem.m */,
 				A9A5F7D3243DD90100C82EC8 /* HBQueueWorker.h */,
 				A9A5F7D4243DD90100C82EC8 /* HBQueueWorker.m */,
 				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
@@ -2490,6 +2497,7 @@
 				A954010322FF397000F83A5F /* HBRedirect.m in Sources */,
 				A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */,
 				A916C9991C8449E200C7B560 /* main.m in Sources */,
+				A942B66D250BB1FE00049203 /* HBQueueActionItem.m in Sources */,
 				A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */,
 				A916C9981C8449DB00C7B560 /* HBTitleSelectionController.m in Sources */,
 				A943874122ED911B005F701B /* HBJob+HBAdditions.m in Sources */,
@@ -2531,7 +2539,7 @@
 				273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */,
 				A9C61F9E22E31CDB00C28E7C /* HBFlippedClipView.m in Sources */,
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
-				A95BA15D220C968500A2F9F9 /* HBQueueItem.m in Sources */,
+				A95BA15D220C968500A2F9F9 /* HBQueueJobItem.m in Sources */,
 				A964D3A822FDE91B00DFCAEA /* HBRemoteCore.m in Sources */,
 				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
 				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,

@@ -11,8 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBQueueDetailsViewControllerDelegate
 
-- (void)detailsViewEditItem:(HBQueueItem *)item;
-- (void)detailsViewResetItem:(HBQueueItem *)item;
+- (void)detailsViewEditItem:(id<HBQueueItem>)item;
+- (void)detailsViewResetItem:(id<HBQueueItem>)item;
 
 @end
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDelegate:(id<HBQueueDetailsViewControllerDelegate>)delegate;
 
-@property (nonatomic) HBQueueItem *item;
+@property (nonatomic) id<HBQueueItem> item;
 
 @end
 

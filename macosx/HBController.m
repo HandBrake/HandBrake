@@ -512,8 +512,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)setUpForSingleWorker
 {
-    HBQueueItem *firstWorkingItem = nil;
-    for (HBQueueItem *item in self.queue.items)
+    HBQueueJobItem *firstWorkingItem = nil;
+    for (HBQueueJobItem *item in self.queue.items)
     {
         if (item.state == HBQueueItemStateWorking)
         {

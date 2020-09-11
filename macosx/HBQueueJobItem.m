@@ -1,10 +1,10 @@
-/*  HBQueueItem.m $
+/*  HBQueueJobItem.m $
 
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import "HBQueueItem.h"
+#import "HBQueueJobItem.h"
 
 #import "HBCodingUtilities.h"
 #import "HBAttributedStringAdditions.h"
@@ -16,7 +16,7 @@ static NSDictionary     *detailAttr;
 static NSDictionary     *detailBoldAttr;
 static NSDictionary     *shortHeightAttr;
 
-@interface HBQueueItem ()
+@interface HBQueueJobItem ()
 
 @property (nonatomic, nullable) NSDate *pausedDate;
 @property (nonatomic, nullable) NSDate *resumedDate;
@@ -27,11 +27,11 @@ static NSDictionary     *shortHeightAttr;
 
 @end
 
-@implementation HBQueueItem
+@implementation HBQueueJobItem
 
 + (void)initialize
 {
-    if (self == [HBQueueItem class]) {
+    if (self == [HBQueueJobItem class]) {
         _dateFormatter = [[NSDateFormatter alloc] init];
         [_dateFormatter setDateStyle:NSDateFormatterLongStyle];
         [_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
@@ -80,6 +80,21 @@ static NSDictionary     *shortHeightAttr;
         [self resetStatistics];
         self.activityLogURL = nil;
     }
+}
+
+- (NSString *)title
+{
+    return _job.outputFileName;
+}
+
+- (BOOL)hasFileRepresentation
+{
+    return YES;
+}
+
+- (NSImage *)image
+{
+    return [NSImage imageNamed:@"JobSmall"];;
 }
 
 - (NSURL *)fileURL

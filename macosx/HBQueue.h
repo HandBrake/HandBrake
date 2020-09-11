@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 
 #import "HBQueueItem.h"
+#import "HBQueueJobItem.h"
+#import "HBQueueActionItem.h"
 #import "HBQueueWorker.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -28,14 +30,14 @@ extern NSString * const HBQueueDidChangeStateNotification;
 
 extern NSString * const HBQueueDidStartItemNotification;
 extern NSString * const HBQueueDidCompleteItemNotification;
-extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueItem
+extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueJobItem
 
 @interface HBQueue : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)fileURL;
 
-@property (nonatomic, readonly) NSArray<HBQueueItem *> *items;
+@property (nonatomic, readonly) NSArray<id<HBQueueItem>> *items;
 
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;
 @property (nonatomic, readonly) NSUInteger failedItemsCount;
@@ -49,9 +51,9 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (void)addJob:(HBJob *)job;
 - (void)addJobs:(NSArray<HBJob *> *)jobs;
 
-- (void)addItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes;
+- (void)addItems:(NSArray<id<HBQueueItem>> *)items atIndexes:(NSIndexSet *)indexes;
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes;
-- (void)moveItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index;
+- (void)moveItems:(NSArray<id<HBQueueItem>> *)items toIndex:(NSUInteger)index;
 
 - (BOOL)itemExistAtURL:(NSURL *)url;
 
@@ -81,7 +83,7 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 @property (nonatomic, readonly) BOOL canResume;
 - (void)resume;
 
-- (nullable HBQueueWorker *)workerForItem:(HBQueueItem *)item;
+- (nullable HBQueueWorker *)workerForItem:(HBQueueJobItem *)item;
 
 @end
 

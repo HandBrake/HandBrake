@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,17 +23,18 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
-                    <rect key="frame" x="420" y="3" width="64" height="32"/>
+                    <rect key="frame" x="427" y="3" width="58" height="32"/>
                     <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erY-5X-50l">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="editItem:" target="-2" id="ozj-G7-6d5"/>
+                        <binding destination="-2" name="enabled" keyPath="self.canEdit" id="nuW-8z-gyx"/>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
-                    <rect key="frame" x="348" y="3" width="75" height="32"/>
+                    <rect key="frame" x="363" y="3" width="69" height="32"/>
                     <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hgl-N3-x4S">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -44,13 +45,13 @@
                     </connections>
                 </button>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXt-Cb-20x">
-                    <rect key="frame" x="0.0" y="39" width="488" height="296"/>
+                    <rect key="frame" x="0.0" y="38" width="488" height="297"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="kkx-XF-sYr" customClass="HBFlippedClipView">
-                        <rect key="frame" x="0.0" y="0.0" width="488" height="296"/>
+                        <rect key="frame" x="0.0" y="0.0" width="488" height="297"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="Akt-r1-6fP">
-                                <rect key="frame" x="0.0" y="200" width="488" height="96"/>
+                                <rect key="frame" x="0.0" y="201" width="488" height="96"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVC-g8-nGU">
                                         <rect key="frame" x="12" y="8" width="464" height="80"/>
@@ -160,7 +161,7 @@
                     </scroller>
                 </scrollView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gAc-tj-J9f">
-                    <rect key="frame" x="0.0" y="36" width="488" height="5"/>
+                    <rect key="frame" x="0.0" y="35" width="488" height="5"/>
                 </box>
             </subviews>
             <constraints>

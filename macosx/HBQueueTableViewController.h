@@ -7,14 +7,14 @@
 #import <Cocoa/Cocoa.h>
 
 #import "HBQueue.h"
-#import "HBQueueItem.h"
+#import "HBQueueJobItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBQueueTableViewControllerDelegate
 
 - (void)tableViewDidSelectItemsAtIndexes:(NSIndexSet *)indexes;
-- (void)tableViewEditItem:(HBQueueItem *)item;
+- (void)tableViewEditItem:(HBQueueJobItem *)item;
 - (void)tableViewResetItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)tableViewRemoveItemsAtIndexes:(NSIndexSet *)indexes;
 

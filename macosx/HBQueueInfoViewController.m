@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueInfoViewController.h"
+#import "HBQueueJobItem.h"
 
 static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContext;
 
@@ -19,6 +20,7 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
 @property (nonatomic, weak) id<HBQueueDetailsViewControllerDelegate> delegate;
 
 @property (nonatomic) BOOL canReset;
+@property (nonatomic) BOOL canEdit;
 
 @end
 
@@ -37,7 +39,7 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self updateLabels];
+    [self updateUI];
     [self addObserver:self forKeyPath:@"item.state" options:0 context:HBQueueInfoViewControllerContext];
 }
 
@@ -67,17 +69,28 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
 {
     self.canReset = self.item && (self.item.state != HBQueueItemStateWorking &&
                                   self.item.state != HBQueueItemStateRescanning && self.item.state != HBQueueItemStateReady);
+    self.canEdit = self.item && self.item.hasFileRepresentation;
 }
 
 - (void)updateLabels
 {
     if (self.item)
     {
-        self.statisticsLabel.hidden = self.item.startedDate == nil;
-        self.statisticsHeader.hidden = self.item.startedDate == nil;
-        self.summaryLabel.hidden = NO;
+        if ([self.item isKindOfClass:[HBQueueJobItem class]])
+        {
+            HBQueueJobItem *jobItem = (HBQueueJobItem *)self.item;
+            self.statisticsLabel.hidden = jobItem.startedDate == nil;
+            self.statisticsHeader.hidden = jobItem.startedDate == nil;
 
-        self.statisticsLabel.attributedStringValue = self.item.attributedStatistics;
+            self.statisticsLabel.attributedStringValue = jobItem.attributedStatistics;
+        }
+        else
+        {
+            self.statisticsLabel.hidden = YES;
+            self.statisticsHeader.hidden = YES;
+        }
+
+        self.summaryLabel.hidden = NO;
         self.summaryLabel.attributedStringValue = self.item.attributedDescription;
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -103,7 +116,7 @@ static void *HBQueueInfoViewControllerContext = &HBQueueInfoViewControllerContex
     [self updateDivider];
 }
 
-- (void)setItem:(HBQueueItem *)item
+- (void)setItem:(id<HBQueueItem>)item
 {
     _item = item;
 }

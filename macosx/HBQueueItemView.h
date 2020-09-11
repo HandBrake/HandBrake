@@ -5,22 +5,21 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
-
-@class HBQueueItem;
+#import "HBQueueItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBQueueItemViewDelegate
 
-- (void)revealQueueItem:(HBQueueItem *)job;
-- (void)removeQueueItem:(HBQueueItem *)job;
+- (void)revealQueueItem:(id<HBQueueItem>)item;
+- (void)removeQueueItem:(id<HBQueueItem>)item;
 
 @end
 
 @interface HBQueueItemView : NSTableCellView
 
-@property (nonatomic, weak, nullable) HBQueueItem *item;
-@property (nonatomic, weak, nullable) id <HBQueueItemViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<HBQueueItem> item;
+@property (nonatomic, weak, nullable) id<HBQueueItemViewDelegate> delegate;
 
 @end
 

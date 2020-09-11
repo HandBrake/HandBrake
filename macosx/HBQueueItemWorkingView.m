@@ -6,7 +6,7 @@
 
 #import "HBQueueItemWorkingView.h"
 
-#import "HBQueueItem.h"
+#import "HBQueueJobItem.h"
 #import "HBQueueWorker.h"
 
 #import "HBAttributedStringAdditions.h"
@@ -72,7 +72,7 @@
     [self setUpObserversWithWorker:worker];
 }
 
-- (void)setItem:(HBQueueItem *)item
+- (void)setItem:(HBQueueJobItem *)item
 {
     [self removeObservers];
     self.progressField.stringValue = @"";

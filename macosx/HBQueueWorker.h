@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HBQueueItem.h"
+#import "HBQueueJobItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,9 +28,9 @@ extern NSString * const HBQueueWorkerItemNotificationItemKey;              // HB
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithXPCServiceName:(NSString *)serviceName;
 
-@property (nonatomic, nullable, readonly) HBQueueItem *item;
+@property (nonatomic, nullable, readonly) HBQueueJobItem *item;
 
-- (void)encodeItem:(HBQueueItem *)item;
+- (void)encodeItem:(HBQueueJobItem *)item;
 - (void)cancel;
 
 @property (nonatomic, readonly) BOOL canEncode;

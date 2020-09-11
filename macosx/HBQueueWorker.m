@@ -30,7 +30,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 
 @property (nonatomic, readonly) HBRemoteCore *core;
 
-@property (nonatomic, nullable) HBQueueItem *item;
+@property (nonatomic, nullable) HBQueueJobItem *item;
 @property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
 
 @end
@@ -115,7 +115,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     [self.core preventSleep];
 }
 
-- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result
+- (void)completedItem:(HBQueueJobItem *)item result:(HBCoreResult)result
 {
     NSParameterAssert(item);
 
@@ -156,7 +156,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)encodeItem:(HBQueueItem *)item
+- (void)encodeItem:(HBQueueJobItem *)item
 {
     NSParameterAssert(item);
 
@@ -219,7 +219,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 /**
  * This assumes that we have re-scanned and loaded up a new queue item to send to libhb
  */
-- (void)realEncodeItem:(HBQueueItem *)item
+- (void)realEncodeItem:(HBQueueJobItem *)item
 {
     HBJob *job = item.job;
 
