@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17154"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
             <connections>
-                <outlet property="showAllButton" destination="QAt-5X-NBT" id="3IW-6r-piX"/>
                 <outlet property="tableController" destination="ZBe-aP-wvq" id="HBN-Z2-bbo"/>
                 <outlet property="window" destination="kwM-lz-5lG" id="rob-Fo-JhL"/>
             </connections>
@@ -19,8 +18,8 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="283" y="305" width="427" height="422"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
-            <view key="contentView" id="ZP2-Cp-K5w">
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+            <view key="contentView" misplaced="YES" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="427" height="422"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
@@ -33,7 +32,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Jsz-Er-bsF">
-                        <rect key="frame" x="18" y="362" width="138" height="14"/>
+                        <rect key="frame" x="18" y="364" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -41,7 +40,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Hqz-Lw-gAu">
-                        <rect key="frame" x="18" y="182" width="138" height="14"/>
+                        <rect key="frame" x="18" y="187" width="138" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -49,7 +48,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiD-QI-wly">
-                        <rect key="frame" x="159" y="381" width="251" height="22"/>
+                        <rect key="frame" x="159" y="383" width="251" height="22"/>
                         <string key="toolTip">Track Selection Behavior.
 
 None will not select any audio tracks by default.
@@ -74,7 +73,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </popUpButton>
                     <button toolTip="Add Closed Caption subtitles as a soft subtitle track (not burned-in)." translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
-                        <rect key="frame" x="159" y="180" width="250" height="18"/>
+                        <rect key="frame" x="161" y="186" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Closed Captions when available" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -84,7 +83,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <button toolTip="Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default." translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
-                        <rect key="frame" x="159" y="162" width="250" height="18"/>
+                        <rect key="frame" x="161" y="166" width="246" height="16"/>
                         <buttonCell key="cell" type="check" title="Add Foreign Audio Search" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -94,21 +93,20 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
-                        <rect key="frame" x="162" y="240" width="245" height="136"/>
-                        <clipView key="contentView" id="TdE-Sh-NcS">
-                            <rect key="frame" x="1" y="1" width="243" height="134"/>
+                        <rect key="frame" x="162" y="221" width="245" height="157"/>
+                        <clipView key="contentView" ambiguous="YES" id="TdE-Sh-NcS">
+                            <rect key="frame" x="1" y="1" width="243" height="155"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
-                                    <rect key="frame" x="0.0" y="0.0" width="243" height="134"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
+                                    <rect key="frame" x="0.0" y="0.0" width="243" height="155"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="checkBox" width="240" minWidth="16" maxWidth="1000" id="G44-XP-6xE">
+                                        <tableColumn identifier="checkBox" width="231" minWidth="16" maxWidth="1000" id="G44-XP-6xE">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -123,7 +121,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="8lG-Fl-ywI">
-                                                            <rect key="frame" x="0.0" y="1" width="22" height="18"/>
+                                                            <rect key="frame" x="2" y="2" width="14" height="16"/>
                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="w0a-by-kw7">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -134,7 +132,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                             </connections>
                                                         </button>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5jc-Ll-JCQ">
-                                                            <rect key="frame" x="18" y="3" width="221" height="14"/>
+                                                            <rect key="frame" x="15" y="2" width="221" height="14"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="217" id="DZU-aZ-riC"/>
                                                             </constraints>
@@ -150,9 +148,9 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="8lG-Fl-ywI" firstAttribute="leading" secondItem="HzO-IC-pgS" secondAttribute="leading" constant="3" id="1cF-fd-WLC"/>
+                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="centerY" secondItem="HzO-IC-pgS" secondAttribute="centerY" id="Jcd-6h-low"/>
                                                         <constraint firstItem="8lG-Fl-ywI" firstAttribute="top" secondItem="HzO-IC-pgS" secondAttribute="top" constant="1" id="KaA-tF-dl6"/>
-                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="leading" secondItem="8lG-Fl-ywI" secondAttribute="trailing" id="L0w-Xr-orb"/>
-                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="baseline" secondItem="8lG-Fl-ywI" secondAttribute="baseline" id="f7n-Yw-7JT"/>
+                                                        <constraint firstItem="5jc-Ll-JCQ" firstAttribute="leading" secondItem="8lG-Fl-ywI" secondAttribute="trailing" constant="2" id="L0w-Xr-orb"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="5jc-Ll-JCQ" id="vUb-nB-17f"/>
@@ -177,7 +175,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="136" id="ALe-lg-Sa2"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
-                            <rect key="frame" x="1" y="119" width="243" height="16"/>
+                            <rect key="frame" x="1" y="120" width="243" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
@@ -185,23 +183,8 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </scroller>
                         <accessibility description="Subtitles Track Languages"/>
                     </scrollView>
-                    <button toolTip="Show all subtitles languages in the Languages list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QAt-5X-NBT">
-                        <rect key="frame" x="162" y="210" width="71" height="23"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="71" id="FFS-P3-FfD"/>
-                            <constraint firstAttribute="height" constant="21" id="ftj-Wf-PU1"/>
-                        </constraints>
-                        <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" inset="3" id="PiQ-bA-7P1">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <accessibility description="Show all subtitles languages"/>
-                        <connections>
-                            <action selector="edit:" target="-2" id="13y-nD-hEj"/>
-                        </connections>
-                    </button>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lsa-kB-2BP">
-                        <rect key="frame" x="159" y="129" width="251" height="22"/>
+                        <rect key="frame" x="159" y="131" width="251" height="22"/>
                         <string key="toolTip">Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.
 
 Only one subtitles track can be burned in.</string>
@@ -231,7 +214,7 @@ Only one subtitles track can be burned in.</string>
                         </textFieldCell>
                     </textField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="ceZ-On-t5S">
-                        <rect key="frame" x="159" y="109" width="250" height="18"/>
+                        <rect key="frame" x="161" y="111" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.
 
 Only one subtitles track can be burned in.</string>
@@ -244,7 +227,7 @@ Only one subtitles track can be burned in.</string>
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Px8-G6-NVX">
-                        <rect key="frame" x="159" y="91" width="250" height="18"/>
+                        <rect key="frame" x="161" y="91" width="246" height="16"/>
                         <string key="toolTip">Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.
 
 Only one subtitles track can be burned in.</string>
@@ -257,7 +240,7 @@ Only one subtitles track can be burned in.</string>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="MlS-tB-pEv">
-                        <rect key="frame" x="160" y="58" width="249" height="28"/>
+                        <rect key="frame" x="160" y="56" width="249" height="28"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one subtitles burn-in option will be applied, starting with the first (top)." id="N4s-K9-RwM">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -265,7 +248,7 @@ Only one subtitles track can be burned in.</string>
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QdJ-64-GgC">
-                        <rect key="frame" x="350" y="14" width="62" height="27"/>
+                        <rect key="frame" x="349" y="13" width="64" height="27"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iLI-Nb-D7t">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -278,7 +261,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AAX-DK-L3G">
-                        <rect key="frame" x="290" y="14" width="62" height="27"/>
+                        <rect key="frame" x="289" y="13" width="64" height="27"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ego-rt-a64">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -291,7 +274,7 @@ Gw
                         </connections>
                     </button>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nfu-VW-cTe">
-                        <rect key="frame" x="20" y="17" width="18" height="19"/>
+                        <rect key="frame" x="19" y="16" width="18" height="19"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X9Q-sR-XPa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -306,7 +289,6 @@ Gw
                     <constraint firstItem="nfu-VW-cTe" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="4u3-4b-4ps"/>
                     <constraint firstAttribute="trailing" secondItem="Lsa-kB-2BP" secondAttribute="trailing" constant="20" id="7cO-6T-zv0"/>
                     <constraint firstItem="Px8-G6-NVX" firstAttribute="leading" secondItem="Lsa-kB-2BP" secondAttribute="leading" id="8S5-Gb-lK8"/>
-                    <constraint firstItem="uF5-6E-EIe" firstAttribute="top" secondItem="QAt-5X-NBT" secondAttribute="bottom" constant="16" id="8we-VP-7wd"/>
                     <constraint firstAttribute="bottom" secondItem="nfu-VW-cTe" secondAttribute="bottom" constant="18" id="D3B-WT-db0"/>
                     <constraint firstAttribute="trailing" secondItem="oiD-QI-wly" secondAttribute="trailing" constant="20" id="DCH-xM-c7M"/>
                     <constraint firstItem="MlS-tB-pEv" firstAttribute="top" secondItem="Px8-G6-NVX" secondAttribute="bottom" constant="8" id="DuC-dI-6lg"/>
@@ -325,7 +307,6 @@ Gw
                     <constraint firstItem="fPg-3n-1TN" firstAttribute="baseline" secondItem="oiD-QI-wly" secondAttribute="baseline" id="XJA-tm-IJd"/>
                     <constraint firstAttribute="bottom" secondItem="QdJ-64-GgC" secondAttribute="bottom" constant="20" id="XzF-Bn-tMl"/>
                     <constraint firstItem="Hqz-Lw-gAu" firstAttribute="baseline" secondItem="uF5-6E-EIe" secondAttribute="baseline" id="bmT-Td-cBg"/>
-                    <constraint firstItem="QAt-5X-NBT" firstAttribute="top" secondItem="aTC-39-h6S" secondAttribute="bottom" constant="8" id="cwx-ga-usN"/>
                     <constraint firstItem="ceZ-On-t5S" firstAttribute="top" secondItem="Lsa-kB-2BP" secondAttribute="bottom" constant="8" id="fZD-U2-nWu"/>
                     <constraint firstItem="Lsa-kB-2BP" firstAttribute="leading" secondItem="qAf-lQ-GN4" secondAttribute="trailing" constant="8" id="fl7-9l-tFW"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="trailing" secondItem="oiD-QI-wly" secondAttribute="trailing" id="hq2-2Y-G4l"/>
@@ -334,9 +315,9 @@ Gw
                     <constraint firstItem="QdJ-64-GgC" firstAttribute="top" secondItem="MlS-tB-pEv" secondAttribute="bottom" constant="20" id="iyr-A8-UM6"/>
                     <constraint firstItem="ceZ-On-t5S" firstAttribute="leading" secondItem="Lsa-kB-2BP" secondAttribute="leading" id="koA-TF-GxL"/>
                     <constraint firstAttribute="trailing" secondItem="uF5-6E-EIe" secondAttribute="trailing" constant="20" id="l0V-di-L2v"/>
+                    <constraint firstItem="uF5-6E-EIe" firstAttribute="top" secondItem="aTC-39-h6S" secondAttribute="bottom" constant="20" id="nhU-5A-Rap"/>
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="leading" secondItem="fPg-3n-1TN" secondAttribute="leading" id="o90-wY-3FL"/>
                     <constraint firstItem="Hqz-Lw-gAu" firstAttribute="leading" secondItem="fPg-3n-1TN" secondAttribute="leading" id="p6B-ac-s9o"/>
-                    <constraint firstItem="QAt-5X-NBT" firstAttribute="leading" secondItem="aTC-39-h6S" secondAttribute="leading" id="qCP-iV-r50"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="leading" secondItem="Jsz-Er-bsF" secondAttribute="trailing" constant="8" id="rLi-Pt-pSb"/>
                     <constraint firstItem="fPg-3n-1TN" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="rjw-eY-hZF"/>
                     <constraint firstItem="MlS-tB-pEv" firstAttribute="leading" secondItem="Px8-G6-NVX" secondAttribute="leading" id="sKB-2V-Vpl"/>

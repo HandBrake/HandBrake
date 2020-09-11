@@ -35,36 +35,6 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
     return self;
 }
 
-- (void)windowDidLoad
-{
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:NSKeyValueObservingOptionInitial context:HBSubtitlesDefaultsContext];
-
-    if (self.settings.trackSelectionLanguages.count)
-    {
-        self.tableController.showSelectedOnly = YES;
-    }
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context == HBSubtitlesDefaultsContext)
-    {
-        if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
-        {
-            [self.showAllButton setState:!self.tableController.showSelectedOnly];
-        }
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-- (IBAction)edit:(id)sender
-{
-    self.tableController.showSelectedOnly = !self.tableController.showSelectedOnly;
-}
-
 - (IBAction)ok:(id)sender
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
@@ -78,14 +48,7 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/audio-subtitle-defaults.html"]];
-}
-
-- (void)dealloc
-{
-    @try {
-        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly" context:HBSubtitlesDefaultsContext];
-    } @catch (NSException * __unused exception) {}
+    [NSWorkspace.sharedWorkspace openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/audio-subtitle-defaults.html"]];
 }
 
 @end
