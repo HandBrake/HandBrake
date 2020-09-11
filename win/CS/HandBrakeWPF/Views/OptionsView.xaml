@@ -396,11 +396,11 @@
 
                             <CheckBox Content="{x:Static Properties:Resources.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" Margin="0,8,0,0" />
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="{x:Static Properties:Resources.Options_LowDiskspaceSize}" IsChecked="{Binding PauseOnLowDiskspace}" Width="255" />
+                                <CheckBox Content="{x:Static Properties:Resources.Options_LowDiskspaceSize}" IsChecked="{Binding PauseOnLowDiskspace}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Level at which low disk space alerts show: " Width="250" />
+                                <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceLevelText}" Width="250" />
 
                                 <TextBox x:Name="PauseOnLowDiskspaceLevel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
                                 <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceSizeGB}" VerticalAlignment="Center" Margin="5,0,0,0" />

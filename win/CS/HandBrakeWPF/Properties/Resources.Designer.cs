@@ -3040,6 +3040,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level at which low disk space alerts show:.
+        /// </summary>
+        public static string Options_LowDiskspaceLevelText {
+            get {
+                return ResourceManager.GetString("Options_LowDiskspaceLevelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pause queue if disk space is low.
         /// </summary>
         public static string Options_LowDiskspaceSize {
