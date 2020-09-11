@@ -17,7 +17,6 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 
 @property (nonatomic, readonly) HBLanguagesSelection *languagesList;
 @property (nonatomic, unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
-@property (nonatomic, unsafe_unretained) IBOutlet NSButton *showAllButton;
 
 @end
 
