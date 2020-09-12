@@ -1319,6 +1319,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", @"File already exists alert -> informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
+#if defined(__MAC_11_0)
+    if (@available(macOS 11, *))
+    {
+        alert.buttons.lastObject.hasDestructiveAction = true;
+    }
+#endif
         [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
