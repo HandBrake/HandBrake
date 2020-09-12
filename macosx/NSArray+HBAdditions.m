@@ -20,6 +20,18 @@
     return YES;
 }
 
+- (BOOL)containsWhere:(BOOL (^)(id object))block
+{
+   for (id object in self)
+   {
+       if (block(object) == YES)
+       {
+           return YES;
+       }
+   }
+   return NO;
+}
+
 - (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id object))block
 {
     NSMutableArray *filteredArray = [NSMutableArray array];

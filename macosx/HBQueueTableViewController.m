@@ -10,6 +10,7 @@
 #import "HBTableView.h"
 #import "HBQueueItemView.h"
 #import "HBQueueItemWorkingView.h"
+#import "NSArray+HBAdditions.h"
 
 // Pasteboard type for or drag operations
 #define HBQueueDragDropPboardType @"HBQueueCustomTableViewPboardType"
@@ -222,22 +223,52 @@
 {
     SEL action = menuItem.action;
 
-    if (action == @selector(editSelectedQueueItem:) ||
-        action == @selector(removeSelectedQueueItem:) ||
-        action == @selector(revealSelectedQueueItems:) ||
-        action == @selector(revealSelectedQueueItemsSources:))
-    {
-        return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
+    if (action == @selector(editSelectedQueueItem:)) {
+        NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+        return indexes.count == 1 && self.queue.items[indexes.firstIndex].hasFileRepresentation;
     }
 
-    if (action == @selector(revealSelectedQueueItemsActivityLogs:))
+    if (action == @selector(removeSelectedQueueItem:))
     {
-        return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
+        return self.tableView.targetedRowIndexes.count > 0;
+    }
+
+    if (action == @selector(revealSelectedQueueItemsSources:))
+    {
+        NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+        if (indexes.count == 0) { return NO; }
+        NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
+
+        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+            return object.hasFileRepresentation;
+        }];
+    }
+
+    if (action == @selector(revealSelectedQueueItemsActivityLogs:) ||
+        action == @selector(revealSelectedQueueItems:))
+    {
+        NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+        if (indexes.count == 0) { return NO; }
+        NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
+
+        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+            return object.hasFileRepresentation &&
+                (object.state == HBQueueItemStateWorking || object.state == HBQueueItemStateFailed ||
+                 object.state == HBQueueItemStateCanceled || object.state == HBQueueItemStateCompleted);
+        }];
     }
 
     if (action == @selector(resetJobState:))
     {
-        return self.tableView.targetedRowIndexes.count > 0;
+        NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+        if (indexes.count == 0) { return NO; }
+        NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
+
+        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+            return object.hasFileRepresentation &&
+                (object.state == HBQueueItemStateFailed || object.state == HBQueueItemStateCanceled ||
+                 object.state == HBQueueItemStateCompleted);
+        }];
     }
 
     if (action == @selector(removeAll:))
