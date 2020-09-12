@@ -405,7 +405,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)removeCompletedAndCancelledItems
 {
-    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
+    NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
     [self removeItemsAtIndexes:indexes];
@@ -424,7 +424,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)removeNotWorkingItems
 {
-    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
+    NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state != HBQueueItemStateWorking && item.state != HBQueueItemStateRescanning);
     }];
     [self removeItemsAtIndexes:indexes];
@@ -432,7 +432,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)removeCompletedItems
 {
-    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
+    NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state == HBQueueItemStateCompleted);
     }];
     [self removeItemsAtIndexes:indexes];
@@ -462,7 +462,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)resetAllItems
 {
-    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
+    NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state != HBQueueItemStateWorking && item.state != HBQueueItemStateRescanning);
     }];
     [self resetItemsAtIndexes:indexes];
@@ -470,7 +470,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)resetFailedItems
 {
-    NSIndexSet *indexes = [self.itemsInternal indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
+    NSIndexSet *indexes = [self.itemsInternal HB_indexesOfObjectsUsingBlock:^BOOL(id<HBQueueItem> item) {
         return (item.state == HBQueueItemStateFailed);
     }];
     [self resetItemsAtIndexes:indexes];

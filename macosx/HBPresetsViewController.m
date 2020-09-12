@@ -492,7 +492,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             result = NSDragOperationCopy;
         }
     }
-    else if ([self.dragNodesArray allSatisfy:^BOOL(id  _Nonnull object) { return [[object representedObject] isBuiltIn] == NO; }])
+    else if ([self.dragNodesArray HB_allSatisfy:^BOOL(id  _Nonnull object) { return [[object representedObject] isBuiltIn] == NO; }])
     {
         if ([[item representedObject] isBuiltIn] ||
             ([[item representedObject] isLeaf] && index == -1) ||

@@ -239,7 +239,7 @@
         if (indexes.count == 0) { return NO; }
         NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
 
-        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+        return [items HB_containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
             return object.hasFileRepresentation;
         }];
     }
@@ -251,7 +251,7 @@
         if (indexes.count == 0) { return NO; }
         NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
 
-        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+        return [items HB_containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
             return object.hasFileRepresentation &&
                 (object.state == HBQueueItemStateWorking || object.state == HBQueueItemStateFailed ||
                  object.state == HBQueueItemStateCanceled || object.state == HBQueueItemStateCompleted);
@@ -264,7 +264,7 @@
         if (indexes.count == 0) { return NO; }
         NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
 
-        return [items containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
+        return [items HB_containsWhere:^BOOL(id<HBQueueItem> _Nonnull object) {
             return object.hasFileRepresentation &&
                 (object.state == HBQueueItemStateFailed || object.state == HBQueueItemStateCanceled ||
                  object.state == HBQueueItemStateCompleted);

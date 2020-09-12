@@ -308,11 +308,11 @@
         // if this is a currently encoding job, we need to be sure to alert the user,
         // to let them decide to cancel it first, then if they do, we can come back and
         // remove it
-        NSIndexSet *workingIndexes = [self.queue.items indexesOfObjectsUsingBlock:^BOOL(HBQueueJobItem *item) {
+        NSIndexSet *workingIndexes = [self.queue.items HB_indexesOfObjectsUsingBlock:^BOOL(HBQueueJobItem *item) {
             return item.state == HBQueueItemStateWorking;
         }];
 
-        NSIndexSet *workingSelectedIndexes = [workingIndexes intersectionWith:indexes];
+        NSIndexSet *workingSelectedIndexes = [workingIndexes HB_intersectionWith:indexes];
         [mutableIndexes removeIndexes:workingSelectedIndexes];
 
         if (workingSelectedIndexes.count)
