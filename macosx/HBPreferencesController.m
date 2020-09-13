@@ -147,12 +147,12 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
     }
 #endif
     
-    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier: @"Preferences Toolbar"];
-    [toolbar setDelegate: self];
-    [toolbar setAllowsUserCustomization: NO];
-    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-    [toolbar setSizeMode: NSToolbarSizeModeRegular];
-    [[self window] setToolbar: toolbar];
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
+    toolbar.delegate = self;
+    toolbar.allowsUserCustomization = NO;
+    toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
+    toolbar.sizeMode = NSToolbarSizeModeRegular;
+    self.window.toolbar = toolbar;
 
     // Format token field initialization
     [self.formatTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
@@ -162,7 +162,7 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
     [self.builtInTokenField setTokenizingCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"%%"]];
     [self.builtInTokenField setStringValue:[self.buildInFormatTokens componentsJoinedByString:@"%%"]];
 
-    [toolbar setSelectedItemIdentifier: TOOLBAR_GENERAL];
+    toolbar.selectedItemIdentifier = TOOLBAR_GENERAL;
     [self setPrefView:nil];
 }
 
@@ -170,17 +170,31 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
      itemForItemIdentifier: (NSString *)ident
  willBeInsertedIntoToolbar: (BOOL)flag
 {
-    if ( [ident isEqualToString:TOOLBAR_GENERAL] )
+    if ([ident isEqualToString:TOOLBAR_GENERAL])
     {
+        NSImage *image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
+#if defined(__MAC_11_0)
+        if (@available (macOS 11, *))
+        {
+            image = [NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:@"General preferences"];
+        }
+#endif
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
-                                         image:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
+                                         image:image];
     }
-    else if ( [ident isEqualToString:TOOLBAR_ADVANCED] )
+    else if ([ident isEqualToString:TOOLBAR_ADVANCED])
     {
+        NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
+#if defined(__MAC_11_0)
+        if (@available (macOS 11, *))
+        {
+            image = [NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:@"General preferences"];
+        }
+#endif
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
-                                         image:[NSImage imageNamed:NSImageNameAdvanced]];
+                                         image:image];
     }
 
     return nil;
