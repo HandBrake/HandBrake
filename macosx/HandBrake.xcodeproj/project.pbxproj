@@ -41,7 +41,6 @@
 		273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202F14ADB9790021BE6D /* AudioToolbox.framework */; };
 		273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203214ADB9F00021BE6D /* CoreServices.framework */; };
 		273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
-		273F208914ADBE3B0021BE6D /* fakexcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 273F208514ADBE3B0021BE6D /* fakexcode.cpp */; };
 		273F208A14ADBE3B0021BE6D /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 273F208614ADBE3B0021BE6D /* parsecsv.c */; };
 		273F208B14ADBE3B0021BE6D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 273F208814ADBE3B0021BE6D /* test.c */; };
 		273F20AC14ADBE670021BE6D /* HBController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F208F14ADBE670021BE6D /* HBController.m */; };
@@ -632,7 +631,6 @@
 		273F203E14ADBC210021BE6D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		273F203F14ADBC210021BE6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		273F204014ADBC210021BE6D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		273F208514ADBE3B0021BE6D /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fakexcode.cpp; sourceTree = "<group>"; };
 		273F208614ADBE3B0021BE6D /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parsecsv.c; sourceTree = "<group>"; };
 		273F208714ADBE3B0021BE6D /* parsecsv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parsecsv.h; sourceTree = "<group>"; };
 		273F208814ADBE3B0021BE6D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
@@ -1338,7 +1336,6 @@
 		273F200214ADAE950021BE6D /* HandBrakeCLI */ = {
 			isa = PBXGroup;
 			children = (
-				273F208514ADBE3B0021BE6D /* fakexcode.cpp */,
 				273F208614ADBE3B0021BE6D /* parsecsv.c */,
 				273F208714ADBE3B0021BE6D /* parsecsv.h */,
 				273F208814ADBE3B0021BE6D /* test.c */,
@@ -2480,7 +2477,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				273F208914ADBE3B0021BE6D /* fakexcode.cpp in Sources */,
 				273F208A14ADBE3B0021BE6D /* parsecsv.c in Sources */,
 				273F208B14ADBE3B0021BE6D /* test.c in Sources */,
 			);
