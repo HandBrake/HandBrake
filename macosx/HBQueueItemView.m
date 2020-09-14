@@ -61,7 +61,7 @@
             break;
         default:
             state = _item.image;
-            NSLocalizedString(@"Encode ready", @"HBQueueItemView -> Encode state accessibility label");
+            label = NSLocalizedString(@"Encode ready", @"HBQueueItemView -> Encode state accessibility label");
             break;
     }
 
