@@ -70,6 +70,9 @@ namespace HandBrakeWPF.Services.Queue
         private int jobIdCounter = 0;
         private bool processIsolationEnabled;
 
+        private bool qsvHardware0 = false;
+        private bool qsvHardware1 = false;
+
         private EncodeTaskFactory encodeTaskFactory;
 
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider, IPortService portService)
@@ -358,6 +361,12 @@ namespace HandBrakeWPF.Services.Queue
                 QueueTask task = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
                 if (task != null)
                 {
+                    //Change qsv instances in QueueResourceServices when optionGPU is enabled
+                    if (task.Configuration.EnableGPUs)
+                        this.hardwareEncoderResourceManager.changeGPUCount(Utilities.SystemInfo.GetGPUInfo.Count);
+                    else if (!task.Configuration.EnableGPUs)
+                        this.hardwareEncoderResourceManager.changeGPUCount(1);
+
                     task.HardwareResourceToken = this.hardwareEncoderResourceManager.GetHardwareLock(task.Task.VideoEncoder);
                     return task;
                 }
@@ -620,6 +629,20 @@ namespace HandBrakeWPF.Services.Queue
                     return; // Don't start the next job.
                 }
 
+                if (job.Configuration.EnableGPUs)
+                {
+                    if (!job.Task.ExtraAdvancedArguments.Contains("gpu=") && !this.qsvHardware0)
+                    {
+                        job.Task.ExtraAdvancedArguments = string.IsNullOrEmpty(job.Task.ExtraAdvancedArguments) ? "gpu=0" : string.Concat(job.Task.ExtraAdvancedArguments, ":gpu=0");
+                        this.qsvHardware0 = true;
+                    }
+                    if (!job.Task.ExtraAdvancedArguments.Contains("gpu=") && !this.qsvHardware1)
+                    {
+                        job.Task.ExtraAdvancedArguments = string.IsNullOrEmpty(job.Task.ExtraAdvancedArguments) ? "gpu=1" : string.Concat(job.Task.ExtraAdvancedArguments, ":gpu=1");
+                        this.qsvHardware1 = true;
+                    }
+                }
+
                 this.jobIdCounter = this.jobIdCounter + 1;
                 ActiveJob activeJob = new ActiveJob(job, this.hbFunctionsProvider, this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
                 activeJob.JobFinished += this.ActiveJob_JobFinished;
@@ -655,6 +678,14 @@ namespace HandBrakeWPF.Services.Queue
         private void ActiveJob_JobFinished(object sender, ActiveJobCompletedEventArgs e)
         {
             this.hardwareEncoderResourceManager.UnlockHardware(e.Job.Job.Task.VideoEncoder, e.Job.Job.HardwareResourceToken);
+
+            if (e.Job.Job.Configuration.EnableGPUs)
+            {
+                if (e.Job.Job.Task.ExtraAdvancedArguments.Contains("gpu=0"))
+                    this.qsvHardware0 = false;
+                if (e.Job.Job.Task.ExtraAdvancedArguments.Contains("gpu=1"))
+                    this.qsvHardware1 = false;
+            }
 
             this.activeJobs.Remove(e.Job);
             this.OnEncodeCompleted(e.EncodeEventArgs);

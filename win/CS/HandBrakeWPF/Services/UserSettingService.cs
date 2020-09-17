@@ -325,6 +325,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ProcessIsolationEnabled, SystemInfo.IsWindows10() ? true : false);
             defaults.Add(UserSettingConstants.ProcessIsolationPort, 8037);
             defaults.Add(UserSettingConstants.SimultaneousEncodes, 1);
+            defaults.Add(UserSettingConstants.UseGPUs, false);
 
             // Misc
             defaults.Add(UserSettingConstants.ScalingMode, 0);

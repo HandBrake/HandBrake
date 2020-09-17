@@ -110,7 +110,7 @@ namespace HandBrakeWPF.ViewModels
         // Experimental
         private int remoteServicePort;
         private bool remoteServiceEnabled;
-
+        private bool useGPUs;
         private bool enableQuickSyncLowPower;
 
         public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
@@ -958,12 +958,35 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsProcessIsolationAllowed { get; } = Portable.IsProcessIsolationEnabled();
 
+        public bool IsMultiGPUSupported { get; } = Utilities.SystemInfo.GetGPUInfo.Count >= 2 && SystemInfo.IsQsvAvailable;
+
+        public bool UseGPUs
+        {
+            get => this.useGPUs;
+
+            set
+            {
+                this.useGPUs = value;
+                this.NotifyOfPropertyChange(() => this.useGPUs);
+                this.NotifyOfPropertyChange(() => this.IsSimultaneousEncodesSupported);
+                this.NotifyOfPropertyChange(() => this.RemoteServiceEnabled);
+                this.NotifyOfPropertyChange(() => this.SimultaneousEncodes);
+                this.NotifyOfPropertyChange(() => this.SimultaneousEncodesList);
+            }
+        }
+
+
         public int SimultaneousEncodes { get; set; }
 
         public BindingList<int> SimultaneousEncodesList
         {
             get
             {
+                if (this.useGPUs && IsMultiGPUSupported)
+                {
+                    return new BindingList<int> { 1, 2 };
+                }
+
                 if (Utilities.SystemInfo.GetCpuCoreCount > 8)
                 {
                     return new BindingList<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -983,7 +1006,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsSimultaneousEncodesSupported => Utilities.SystemInfo.GetCpuCoreCount >= 4;
+        public bool IsSimultaneousEncodesSupported => Utilities.SystemInfo.GetCpuCoreCount >= 4 || IsMultiGPUSupported;
 
         #region Public Methods
 
@@ -1272,6 +1295,7 @@ namespace HandBrakeWPF.ViewModels
             this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
             this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
             this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+            this.UseGPUs = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseGPUs);
         }
 
         public void UpdateSettings()
@@ -1387,6 +1411,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationEnabled, this.RemoteServiceEnabled);
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessIsolationPort, this.RemoteServicePort);
             this.userSettingService.SetUserSetting(UserSettingConstants.SimultaneousEncodes, this.SimultaneousEncodes);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseGPUs, this.UseGPUs);
         }
 
         private void UpdateCheckComplete(UpdateCheckInformation info)

@@ -448,6 +448,10 @@
                             <TextBox Text="{Binding RemoteServicePort}" Width="100" IsEnabled="{Binding RemoteServiceEnabled}"  />
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                            <CheckBox Content="{x:Static Properties:Resources.Options_UseGPUs}" IsChecked="{Binding UseGPUs}" IsEnabled="{Binding IsMultiGPUSupported}" />
+                        </StackPanel>
+
                         <StackPanel Orientation="Horizontal" Margin="10,10,0,0" IsEnabled="{Binding IsSimultaneousEncodesSupported}" >
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousEncodes}" VerticalAlignment="Center"/>
                             <ComboBox ItemsSource="{Binding SimultaneousEncodesList}" SelectedItem="{Binding SimultaneousEncodes}" IsEnabled="{Binding RemoteServiceEnabled}" />

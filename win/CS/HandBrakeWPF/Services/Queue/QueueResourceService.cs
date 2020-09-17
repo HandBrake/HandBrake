@@ -24,6 +24,8 @@ namespace HandBrakeWPF.Services.Queue
 
         private HashSet<Guid> vceInstances = new HashSet<Guid>();
 
+        private static int gpuCount = 1;
+
         public Guid? GetHardwareLock(VideoEncoder encoder)
         {
             lock (this.lockOjb)
@@ -33,7 +35,7 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
-                        if (this.qsvInstances.Count < 1)
+                        if (this.qsvInstances.Count < gpuCount)
                         {
                             Guid guid = Guid.NewGuid();
                             this.qsvInstances.Add(guid);
@@ -74,6 +76,12 @@ namespace HandBrakeWPF.Services.Queue
 
             return null;
         }
+
+        public void changeGPUCount(int count)
+        {
+            gpuCount = count;
+        }
+
 
         public void UnlockHardware(VideoEncoder encoder, Guid? unlockKey)
         {

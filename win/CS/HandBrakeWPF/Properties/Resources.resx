@@ -2384,4 +2384,7 @@ Fields are limited to:
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
     <value>Level at which low disk space alerts show:</value>
   </data>
+  <data name="Options_UseGPUs" xml:space="preserve">
+    <value>Use GPUs when possible</value>
+  </data>
 </root>

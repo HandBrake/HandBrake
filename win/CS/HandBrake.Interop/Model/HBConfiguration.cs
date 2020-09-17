@@ -22,5 +22,7 @@ namespace HandBrake.Interop.Model
         public bool UseQSVDecodeForNonQSVEnc { get; set; }
 
         public bool EnableQsvLowPower { get; set; }
+
+        public bool EnableGPUs { get; set; }
     }
 }

@@ -3366,6 +3366,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use GPUs when possible.
+        /// </summary>
+        public static string Options_UseGPUs {
+            get {
+                return ResourceManager.GetString("Options_UseGPUs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Interface.
         /// </summary>
         public static string Options_UserInterface {

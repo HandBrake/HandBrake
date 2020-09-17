@@ -38,7 +38,8 @@ namespace HandBrakeWPF.Factories
                 PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount),
                 EnableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding),
                 UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc),
-                EnableQsvLowPower = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower)
+                EnableQsvLowPower = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower),
+                EnableGPUs = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseGPUs)
             };
 
             return config;
