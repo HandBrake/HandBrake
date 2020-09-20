@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -440,7 +440,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>L’azzione seguente « {0} » si farà in {1} seconde.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>S'è stu penseru ùn smarisce micca, ci vole à pruvà di rilancià HandBrake.</value>
+    <value>S’è stu penseru ùn smarisce micca, ci vole à pruvà di rilancià HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Ùn ci hè mancu un’altra infurmazione di dispunibule per stu sbagliu.</value>
@@ -570,7 +570,7 @@ U vostru vechju schedariu di prerigature hè statu archiviatu :</value>
     <value> cù {0} sbaglii o abbandoni abbentati.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>Spaziu discu chjucu</value>
+    <value>Spaziu discu debule</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
     <value>Avertimentu : ùn ci hè abbastanza spaziu di discu. HandBrake ùn puderà compie sta cudificazione s’ellu ùn ci hè abbastanza spaziu di discu. </value>
@@ -705,7 +705,7 @@ Vulete cuntinuà ? </value>
     <value>Ci hè dighjà una cudificazione di schedariu in corsu.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>Ci vole à piantà a cudificazione attuale. S'è stu penseru ùn smarisce micca, ci vole à rilancià HandBrake.</value>
+    <value>Ci vole à piantà a cudificazione attuale. S’è stu penseru ùn smarisce micca, ci vole à rilancià HandBrake.</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Previsualizazione ({0}% di a dimensione attuale)</value>
@@ -802,7 +802,7 @@ Vulete rimpiazzallu ?</value>
     <value>Cumpurtamentu di a selezzione di traccia :</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>Per e traccie addiziunale :</value>
+    <value>Mudellu per e traccie addiziunale :</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
     <value>Quandu l’« Auto Passthru » hè selezziunatu cum’è cudecu audio.</value>
@@ -925,10 +925,10 @@ Vulete rimpiazzallu ?</value>
     <value>Cupià ver di u preme’papei</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>Dispiazzà à manca</value>
+    <value>Move à manca</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>Dispiazzà à diritta</value>
+    <value>Move à diritta</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
     <value>Arregistrà</value>
@@ -1171,7 +1171,7 @@ Vulete rimpiazzallu ?</value>
     <value>Numinà autumaticamente i schedarii d’esciuta</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Cuntrollà e nove versioni</value>
+    <value>Circà e nove versioni</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
     <value>Sempre squassà l’elementi compii di a fila d’attesa dopu a cudificazione</value>
@@ -1207,13 +1207,13 @@ Vulete rimpiazzallu ?</value>
     <value>Cudificazione</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>Furmatu di Schedariu :</value>
+    <value>Furmatu di schedariu :</value>
   </data>
   <data name="Options_General" xml:space="preserve">
     <value>Generale</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Cunnettassi</value>
+    <value>Arregistramentu di i messaghji</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
     <value>Livellu di verbusità di u ghjurnale :</value>
@@ -1222,7 +1222,7 @@ Vulete rimpiazzallu ?</value>
     <value>Chjassu d’accessu à i ghjurnali :</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Interrompe a fila d’attesa s’ella ùn basta u spaziu discu</value>
+    <value>Interrompe fila d’attesa s’è spaziu discu hè debule</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Impuculì in lu spaziu di nutificazione di u sistema (Richiede un rilanciu)</value>
@@ -1372,7 +1372,7 @@ Vulete rimpiazzallu ?</value>
     <value>Officiale</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>Sciglite tituli :</value>
+    <value>Sciglite i tituli :</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
     <value>Aghjunghje à a fila d’attesa</value>
@@ -1747,7 +1747,7 @@ Vulete rimpiazzallu ?</value>
     <value>_Ghjurnale d’attività</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Cuntrollà e nove versioni</value>
+    <value>_Circà e nove versioni</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
     <value>_Esce</value>
@@ -1762,7 +1762,7 @@ Vulete rimpiazzallu ?</value>
     <value>_Documentazione HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_Aiutu</value>
+    <value>Ai_utu</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
     <value>_Impurtà da un schedariu</value>
@@ -1786,10 +1786,10 @@ Vulete rimpiazzallu ?</value>
     <value>A_ffissà u pannellu di e prerigature</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>Affissà a _fila d'attesa</value>
+    <value>Affissà a _fila d’attesa</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>Attre_zzi</value>
+    <value>_Attrezzi</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
     <value>Cuntrollu di e nove versioni…</value>
@@ -1825,10 +1825,10 @@ Vulete rimpiazzallu ?</value>
     <value>Affissà</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>« Tuttu aghjunghje » à a fila d’attesa</value>
+    <value>« Tuttu aghjunghje » (à a fila d’attesa)</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>« Aghjunghje a selezzione » à a fila d’attesa</value>
+    <value>« Aghjunghje a selezzione » (à a fila d’attesa)</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Sunà u schedariu</value>
@@ -1837,10 +1837,10 @@ Vulete rimpiazzallu ?</value>
     <value>Barra d’attrezzi d’appiecazione</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Affissà « Tuttu aghjunghje à a fila d’attesa » nant’à a barra d’attrezzi</value>
+    <value>Affissà « Tuttu aghjunghje » (à a fila d’attesa) nant’à a barra d’attrezzi</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Affissà « Aghjunghje a selezzione à a fila d’attesa » nant’à a barra d’attrezzi</value>
+    <value>Affissà « Aghjunghje a selezzione » (à a fila d’attesa) nant’à a barra d’attrezzi</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
     <value>L’adopru di a cudificazione materiale hè attualmente disattivatu. Assicuratevvi chì voi impiegate l’ultimi piloti per tutte e carte grafiche di stu sistema.
@@ -1893,19 +1893,19 @@ Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Ozzioni dispunibule : {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Dumandà per rimpiazzà u schedariu</value>
+    <value>Dumandà nanzu di rimpiazzà</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
     <value>Pruvà di rinumà autumaticamente u schedariu</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Rimpiazzà u schedariu</value>
+    <value>Rimpiazzà senza dumandà</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
     <value>Cumpurtamentu di l’interfaccia d’utilizatore</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>Cosa fà in casu di rimpiazzamentu di schedariu</value>
+    <value>Cosa fà in casu di rimpiazzamentu di schedariu :</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
     <value>Cudificazione compia</value>
@@ -1920,7 +1920,7 @@ Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Quandu hè compiu :</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Cosa fà in casu di cunflittu di nome di schedariu :</value>
+    <value>Cosa aghjunghje in casu di cunflittu di nome di schedariu :</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
     <value>Suffissu</value>
@@ -1929,7 +1929,7 @@ Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Prefissu</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Aghjunghje un numeru à a fine</value>
+    <value>Numeru à a fine</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
@@ -2045,10 +2045,10 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Generale</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Sciglite « Cuntrollà e nove versioni » per sapè s’ella esiste una nova versione di l’appiecazione</value>
+    <value>Sciglite « Circà e nove versioni » per sapè s’ella esiste una nova versione di l’appiecazione</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; Precedente</value>
+    <value>&lt; Ritornu</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
     <value>Attualmente interrotta</value>
@@ -2099,13 +2099,13 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Tutte e lingue chì currispundenu</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>Impiegà tutte e traccie cum’è mudellu</value>
+    <value>Impiegà tutte e traccie</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
     <value>Prima lingua chì currispunde</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>Impiegà a prima traccia cum’è mudellu</value>
+    <value>Impiegà a prima traccia</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
     <value>Alcuna traccia audio</value>
@@ -2132,16 +2132,16 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Sempre impiegà a risuluzione di a video di a fonte</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Più altu chì a nurmale</value>
-  </data>
-  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Più bassu chì a nurmale</value>
-  </data>
-  <data name="ProcessPriority_High" xml:space="preserve">
     <value>Altu</value>
   </data>
-  <data name="ProcessPriority_Low" xml:space="preserve">
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
     <value>Bassu</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>U più altu</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>U più bassu</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
     <value>Nurmale</value>
@@ -2375,5 +2375,8 @@ I campi sò limitati à :
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Espurtà tutte e prerigature persunalizate</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Livellu quandu l’alerte nant’à u spaziu discu debule s’affissenu :</value>
   </data>
 </root>
