@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -133,9 +133,9 @@ Quelle chì ùn sò micca intricciate averanu una perdita di qualità.</value>
     <value>U filtru « denoise » riduce o caccia l’aspettu di rumore è di granellu d’una video. Què pò megliurà u rendimentu di a cumpressione è creà una video di più bella qualità cù schedarii più chjuchi. 
 Preferenze « denoise » troppu putente ponu dannighjà a qualità di a fiura scartendu i detaglii.
          
-NLMeans hè un filtru « denoise » d’alta qualità chì fà dinù cresce a vitezza di a cudificazione. Impiegatelu quandu a qualità hè più impurtante chè a vitezza.
+- « NLMeans » hè un filtru « denoise » d’alta qualità chì fà dinù cresce a vitezza di a cudificazione. Impiegatelu quandu a qualità hè più impurtante chè a vitezza.
          
-HQDN3D hè un filtru passu-bassu adattevule, più prestu chè NLMeans ma menu efficiente per preservà i detaglii i più fini.</value>
+- « HQDN3D » hè un filtru passu-bassu adattevule, più prestu chè NLMeans ma menu efficiente per preservà i detaglii i più fini.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>U filtru « detelecine » caccia l’effetti parassiti chì sò cagiunati da u telesinema, un trattamentu chì cunvertisce e frequenze di fiure d’un filmu ver di frequenze di fiure di televisiò.</value>
@@ -165,13 +165,13 @@ I dischi di fonte Blu-ray è DVD anu aspessu parechji tituli ; da bona regula, u
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.
 
-« Off » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.
+- « None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.
 
-« Auto » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.
+- « Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.
 
-« Loose » hè simile à « Auto » ma prova di preservà e prupurzioni d’allucamentu. Què pò cagiunà una chjuca perdita di risuluzione d’allucamentu in pettu à « Auto ».
+- « Loose » hè simile à « Automatic » ma prova di preservà e prupurzioni d’allucamentu. Què pò cagiunà una chjuca perdita di risuluzione d’allucamentu in pettu à « Automatic ».
 
-« Persunalizatu » permette di definisce dapervoi tutte e preferenze. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
+- « Custom » permette di definisce dapervoi tutte e preferenze. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Runzicà autumaticamente i bordi neri intornu à a video.</value>
@@ -350,26 +350,26 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-te
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>Rigatura « Denoise ». Adattazioni addiziunale di a prerigatura « Denoise » per megliurà e preferenze per scenarii specifichi.
  
-- « Alcunu » impiegheghja e preferenze di prerigatura predefinite.
+- « None » (Alcuna) impiegheghja e preferenze di prerigatura predefinite.
  
-- « Filmu » affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione.
+- « Film » (Filmu) affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione.
  
-- « Granellu » tratta solu i canali di culore. Ghjuvevule per preservà l’aspettu cinematograficu di u granellu di luminanza, tuttu riducendu o cacciendu u rumore di culore.
+- « Grain » (Granellu) tratta solu i canali di culore. Ghjuvevule per preservà l’aspettu cinematograficu di u granellu di luminanza, tuttu riducendu o cacciendu u rumore di culore.
 
-- « Mossa presta » riduce u sparghjimentu di i culori in e scene rapide impediscendu u trattamentu tempurale di i canali di culore. Ghjuvevule per e video di sport è d’azzione.
+- « High Motion » (Mossa presta) riduce u sparghjimentu di i culori in e scene rapide impediscendu u trattamentu tempurale di i canali di culore. Ghjuvevule per e video di sport è d’azzione.
 
-- « Animazione » hè ghjuvevule per l’animazione in celluloide, cum’è a fiura mossa.
+- « Animation » (Animazione) hè ghjuvevule per l’animazione in celluloide, cum’è a fiura mossa.
 
-- « Scagninu » hè ghjuvevule per e video nant’à un frisgiu magneticu analogicu di bassa qualità, cum’è e VHS, quandu « Filmu » ùn produce micca u risultatu aspettatu.
+- « Tape » (Scagninu) hè ghjuvevule per e video nant’à un frisgiu magneticu analogicu di bassa qualità, cum’è e VHS, quandu « Filmu » ùn produce micca u risultatu aspettatu.
 
-- « Spiritibugliettu » hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Ùn hè micca previstu per e video di alta definizione.</value>
+- « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Ùn hè micca previstu per e video di alta definizione.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>« Disintricciamentu » caccia l’effetti parassiti da a fiura.
+    <value>U filtru« Disintricciamentu » caccia l’effetti parassiti da a fiura.
 
-Yadif hè un filtru di disintricciamentu populare è rapidu.
+- « Yadif » hè un filtru di disintricciamentu populare è rapidu.
 
-« Decomb » bilanceghja trà parechje cudificazioni d’interpolazione per favurisce a vitezza è a qualità.</value>
+- « Decomb » bilanceghja trà parechje cudificazioni d’interpolazione per favurisce a vitezza è a qualità.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Parametri di disintricciamentu persunalizati.
@@ -422,16 +422,16 @@ Sintassa Unsharp : y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:c
 
 Predefinizioni Unsharp : y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-SintassaLapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Sintassa Lapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Sintassa Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
     <value>L’arrutata amendeghja l’aspettu di i detaglii, sopratuttu i bordi. Preferenze d’arrutata troppu forte ponu dannighjà a qualità di a fiura creendu effetti parassiti è aumentendu u rumore, ciò chì pò riduce a faccindaghjine di a cumpressione.
 
-Flosciu hè un filtru di maschera floscia à usu generale. Funziuneghja imbrugliendu, è dopu calculendu a sfarenza trà a fiura imbrugliata è a fiura d’origine.
+- « Unsharp » hè un filtru di maschera floscia à usu generale. Funziuneghja imbrugliendu, è dopu calculendu a sfarenza trà a fiura imbrugliata è a fiura d’origine.
 
-Lapsharp arruteghja impieghendu nocciuli di convuluzione s’avvicinendu di i filtri di bordu Laplacian, pruducendu ognitantu risultati di più bella qualità chì a maschera floscia.</value>
+- « Lapsharp » arruteghja impieghendu nocciuli di convuluzione s’avvicinendu di i filtri di bordu Laplacian, pruducendu ognitantu risultati di più bella qualità chì a maschera floscia.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Prerigatura di u filtru d’arrutata. Definisce a forza di u filtru.</value>
@@ -439,17 +439,17 @@ Lapsharp arruteghja impieghendu nocciuli di convuluzione s’avvicinendu di i fi
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Rigatura d’arrutata. Adattazioni addiziunale di a prerigatura d’arrutata per megliurà e preferenze per scenarii specifichi.
 
-Alcunu impiegheghja e preferenze di prerigatura predefinite.
+- « None » (Alcuna) impiegheghja e preferenze di prerigatura predefinite.
 
-Flosciu pò esse rigatu per un’arrutata Ultrafina, Fina, Mediana, Roza, o Assai roza. Selezziunate una rigatura secondu à a risuluzione di a fiura aspettata è a finezza di detaglii à amendà.
+- « Unsharp » pò esse rigatu per un’arrutata Ultrafina, Fina, Mediana, Roza, o Assai roza. Selezziunate una rigatura secondu à a risuluzione di a fiura aspettata è a finezza di detaglii à amendà.
 
-A rigatura « Filmu » affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione. Impiegheghja un nocciulu Laplacianu isotropicu per rende più netti tutti i bordi d’una manera simile, è l’infurmazioni di luminanza (lucidezza) sò più arrutate chè quelle di u culore.
+A rigatura « Film » (Filmu) affineghja e preferenze per un adopru cù a maiò parte di i cuntenuti d’azzione. Impiegheghja un nocciulu Laplacianu isotropicu per rende più netti tutti i bordi d’una manera simile, è l’infurmazioni di luminanza (lucidezza) sò più arrutate chè quelle di u culore.
 
-A rigatura « Granellu » hè simile à Filmu, ma impiegheghja un Laplacianu isotropicu à nocciulu Gaussianu per riduce l’zffetti nant’à u rumore è granellu. Ghjuvevule per preservà u granellu è cum’è alternativa à Filmu.
+A rigatura « Grain » (Granellu) hè simile à Film, ma impiegheghja un Laplacianu isotropicu à nocciulu Gaussianu per riduce l’zffetti nant’à u rumore è granellu. Ghjuvevule per preservà u granellu è cum’è alternativa à Film.
 
-A rigatura « Animazione » hè ghjuvevule per l’animazione in celluloide, cum’è a fiura mossa. Hè uguale à Filmu, ma a forza di u trattamentu hè ridutta per impedisce di creà effetti parassiti.
+A rigatura « Animation » (Animazione) hè ghjuvevule per l’animazione in celluloide, cum’è a fiura mossa. Hè uguale à Film, ma a forza di u trattamentu hè ridutta per impedisce di creà effetti parassiti.
 
-A rigatura « Spiritibugliettu » hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Impiegheghja un nocciulu Laplacianu à 4 vicini chì amendeghja i cuntorni verticale è orizuntale più chì i cuntorni diagunale.</value>
+A rigatura « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Impiegheghja un nocciulu Laplacianu à 4 vicini chì amendeghja i cuntorni verticale è orizuntale più chì i cuntorni diagunale.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Alineeghja e stampiglie iniziale di tutti i flussi audio è video framittendu fiure viote o squassendu fiure. Què pò megliurà a sincrunizazione audio/video per i lettori disfunziunendu chì ùn rispettanu micca e liste di mudificazioni MP4.</value>
