@@ -46,7 +46,7 @@ static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *enco
                                                                codecType, specification,
                                                                encoderIDOut,
                                                                supportedPropertiesOut);
-
+    CFRelease(specification);
     return err;
 }
 
