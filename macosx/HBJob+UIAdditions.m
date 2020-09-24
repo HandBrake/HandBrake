@@ -945,12 +945,13 @@ static HBMixdownTransformer    *mixdownTransformer;
         [summary appendString:@", "];
     }
 
+    // FIX ME
     // Rotation
-    if (filters.rotate || filters.flip)
-    {
-        [summary appendString:HBKitLocalizedString(@"Rotation", @"HBJob -> filters short description")];
-        [summary appendString:@", "];
-    }
+    //if (picture.rotate || picture.flip)
+    //{
+    //    [summary appendString:HBKitLocalizedString(@"Rotation", @"HBJob -> filters short description")];
+    //    [summary appendString:@", "];
+    //}
 
     if ([summary hasSuffix:@", "])
     {

@@ -11,6 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, HBPictureResolutionLimitMode) {
+    HBPictureResolutionLimitModeNone,
+    HBPictureResolutionLimitMode8K,
+    HBPictureResolutionLimitMode4K,
+    HBPictureResolutionLimitMode1080p,
+    HBPictureResolutionLimitMode720p,
+    HBPictureResolutionLimitMode576p,
+    HBPictureResolutionLimitMode480p,
+    HBPictureResolutionLimitModeCustom,
+};
+
 typedef NS_ENUM(NSUInteger, HBPictureAnarmophicMode) {
     HBPictureAnarmophicModeNone,
     HBPictureAnarmophicModeStrict,
@@ -19,12 +30,39 @@ typedef NS_ENUM(NSUInteger, HBPictureAnarmophicMode) {
     HBPictureAnarmophicModeAuto
 };
 
+typedef NS_ENUM(NSUInteger, HBPicturePaddingMode) {
+    HBPicturePaddingModeNone,
+    HBPicturePaddingModeFill,
+    HBPicturePaddingModeFillHeight,
+    HBPicturePaddingModeFillWidth,
+    HBPicturePaddingModeCustom
+};
+
+typedef NS_ENUM(NSUInteger, HBPicturePaddingColorMode) {
+    HBPicturePaddingColorModeBlack,
+    HBPicturePaddingColorModeWhite,
+    HBPicturePaddingColorModeCustom,
+};
+
 extern NSString * const HBPictureChangedNotification;
 
 /**
  * HBPicture
  */
 @interface HBPicture : NSObject <NSSecureCoding, NSCopying>
+
+/**
+ *  Rotation
+ */
+@property (nonatomic, readwrite) int rotate;
+@property (nonatomic, readwrite) BOOL flip;
+
+/**
+ *  Size
+ */
+@property (nonatomic, readwrite) HBPictureResolutionLimitMode resolutionLimitMode;
+@property (nonatomic, readwrite) int maxWidth;
+@property (nonatomic, readwrite) int maxHeight;
 
 @property (nonatomic, readwrite) int width;
 @property (nonatomic, readwrite) int height;
@@ -48,6 +86,17 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readwrite) int cropBottom;
 @property (nonatomic, readwrite) int cropLeft;
 @property (nonatomic, readwrite) int cropRight;
+
+/**
+ *  Padding settings
+ */
+@property (nonatomic, readwrite) HBPicturePaddingMode paddingMode;
+@property (nonatomic, readwrite) int paddingTop;
+@property (nonatomic, readwrite) int paddingBottom;
+@property (nonatomic, readwrite) int paddingLeft;
+@property (nonatomic, readwrite) int paddingRight;
+@property (nonatomic, readwrite) HBPicturePaddingColorMode paddingColorMode;
+@property (nonatomic, readwrite) NSString *paddingColorCustom;
 
 /**
  *  Source size

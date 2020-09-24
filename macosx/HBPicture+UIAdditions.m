@@ -12,15 +12,27 @@
 
 @implementation HBPicture (UIAdditions)
 
-@dynamic maxHeight;
-@dynamic maxWidth;
-
 @dynamic maxTopCrop;
 @dynamic maxBottomCrop;
 @dynamic maxLeftCrop;
 @dynamic maxRightCrop;
 
+@dynamic maxTopPadding;
+@dynamic maxBottomPadding;
+@dynamic maxLeftPadding;
+@dynamic maxRightPadding;
+
 #pragma mark - Editable state
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomResolutionLimitEnabled
+{
+    return [NSSet setWithObjects:@"resolutionLimitMode", nil];
+}
+
+- (BOOL)isCustomResolutionLimitEnabled
+{
+    return self.resolutionLimitMode == HBPictureResolutionLimitModeCustom;
+}
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingKeepDisplayAspectEditable
 {
@@ -29,8 +41,8 @@
 
 - (BOOL)isKeepDisplayAspectEditable
 {
-    if (self.anamorphicMode == HB_ANAMORPHIC_AUTO ||
-        self.anamorphicMode == HB_ANAMORPHIC_LOOSE)
+    if (self.anamorphicMode == HBPictureAnarmophicModeAuto ||
+        self.anamorphicMode == HBPictureAnarmophicModeLoose)
     {
         return NO;
     }
@@ -48,6 +60,26 @@
 - (BOOL)isCustomAnamorphicEnabled
 {
     return self.anamorphicMode == HB_ANAMORPHIC_CUSTOM;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPaddingEnabled
+{
+    return [NSSet setWithObjects:@"paddingMode", nil];
+}
+
+- (BOOL)isCustomPaddingEnabled
+{
+    return self.paddingMode == HBPicturePaddingModeCustom;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPaddingColorEnabled
+{
+    return [NSSet setWithObjects:@"paddingColorMode", nil];
+}
+
+- (BOOL)isCustomPaddingColorEnabled
+{
+    return self.paddingColorMode == HBPicturePaddingColorModeCustom;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingInfo
@@ -98,7 +130,7 @@
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingSummary
 {
-    return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
+    return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", @"paddingTop", @"paddingBottom", @"paddingLeft", @"paddingRight", nil];
 }
 
 - (NSString *)summary

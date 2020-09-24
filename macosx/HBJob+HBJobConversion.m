@@ -23,6 +23,8 @@
 #import "HBAudio.h"
 #import "HBSubtitles.h"
 
+#import "NSDictionary+HBAdditions.h"
+
 @implementation HBJob (HBJobConversion)
 
 - (NSDictionary *)jobDict
@@ -526,12 +528,40 @@
     }
 
     // Add rotate filter
-    if (self.filters.rotate || self.filters.flip)
+    if (self.picture.rotate || self.picture.flip)
     {
         int filter_id = HB_FILTER_ROTATE;
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
                                                              NULL, NULL,
-                                                             [NSString stringWithFormat:@"angle=%d:hflip=%d", self.filters.rotate, self.filters.flip].UTF8String);
+                                                             [NSString stringWithFormat:@"angle=%d:hflip=%d", self.picture.rotate, self.picture.flip].UTF8String);
+
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_dict_free(&filter_dict);
+    }
+
+    if (self.picture.paddingMode != HBPicturePaddingModeNone)
+    {
+        int filter_id = HB_FILTER_PAD;
+        NSString *color;
+        switch (self.picture.paddingColorMode) {
+            case HBPicturePaddingColorModeBlack:
+                color = @"black";
+                break;
+            case HBPicturePaddingColorModeWhite:
+                color = @"white";
+                break;
+            case HBPicturePaddingColorModeCustom:
+                color = self.picture.paddingColorCustom;
+                break;
+        }
+        NSString *settings = [NSString stringWithFormat:@"width=%d:height=%d:color=%@:x=%d:y=%d",
+                              self.picture.width + self.picture.paddingLeft + self.picture.paddingRight,
+                              self.picture.height + self.picture.paddingTop + self.picture.paddingBottom,
+                              color,
+                              self.picture.paddingRight,
+                              self.picture.paddingTop];
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id, NULL, NULL, settings.UTF8String);
 
         filter = hb_filter_init(filter_id);
         hb_add_filter_dict(job, filter, filter_dict);

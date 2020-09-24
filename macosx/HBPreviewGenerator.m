@@ -99,8 +99,8 @@
                                                            forTitle:self.job.title
                                                        pictureFrame:self.job.picture
                                                         deinterlace:deinterlace
-                                                        rotate:self.job.filters.rotate
-                                                       flipped:self.job.filters.flip];
+                                                        rotate:self.job.picture.rotate
+                                                       flipped:self.job.picture.flip];
         if (cache && theImage)
         {
             // The cost is the number of pixels of the image
@@ -194,8 +194,8 @@
                                                        forTitle:self.job.title
                                                    pictureFrame:self.job.picture
                                                     deinterlace:NO
-                                                         rotate:self.job.filters.rotate
-                                                        flipped:self.job.filters.flip];
+                                                         rotate:self.job.picture.rotate
+                                                        flipped:self.job.picture.flip];
             CFAutorelease(image);
         }
 

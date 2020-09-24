@@ -682,30 +682,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
-#pragma mark - Rotate
-
-- (void)setRotate:(int)rotate
-{
-    if (rotate != _rotate)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setRotate:_rotate];
-    }
-    _rotate = rotate;
-    [self postChangedNotification];
-}
-
-#pragma mark - Flip
-
-- (void)setFlip:(BOOL)flip
-{
-    if (flip != _flip)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setFlip:_flip];
-    }
-    _flip = flip;
-    [self postChangedNotification];
-}
-
 #pragma mark - KVO
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
@@ -800,8 +776,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         copy->_deblockCustomString = [_deblockCustomString copy];
 
         copy->_grayscale = _grayscale;
-        copy->_rotate = _rotate;
-        copy->_flip = _flip;
     }
 
     return copy;
@@ -843,8 +817,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_deblockCustomString);
 
     encodeBool(_grayscale);
-    encodeInt(_rotate);
-    encodeBool(_flip);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -876,8 +848,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObjectOrFail(_deblockCustomString, NSString);
 
     decodeBool(_grayscale);
-    decodeInt(_rotate); if (_rotate != 0 && _rotate != 90 && _rotate != 180 && _rotate != 270) { goto fail; }
-    decodeBool(_flip);
 
     _notificationsEnabled = YES;
 
@@ -916,7 +886,6 @@ fail:
     preset[@"PictureDeblockCustom"] = self.deblockCustomString;
 
     preset[@"VideoGrayScale"] = @(self.grayscale);
-    preset[@"PictureRotate"] = [NSString stringWithFormat:@"angle=%d:hflip=%d", self.rotate, self.flip];
 }
 
 - (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
@@ -957,15 +926,6 @@ fail:
         self.deblockCustomString = preset[@"PictureDeblockCustom"];
 
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
-
-        // Rotate
-        NSString *rotate = preset[@"PictureRotate"];
-        hb_dict_t *hbdict = hb_parse_filter_settings(rotate.UTF8String);
-        NSDictionary *dict = [[NSDictionary alloc] initWithHBDict:hbdict];
-        hb_value_free(&hbdict);
-
-        self.rotate = [dict[@"angle"] intValue];
-        self.flip = [dict[@"hflip"] boolValue];
     }
 
     self.notificationsEnabled = YES;

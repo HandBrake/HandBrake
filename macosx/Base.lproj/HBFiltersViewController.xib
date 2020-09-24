@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="875" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="1a5-Yb-uwn">
+                <textField verticalHuggingPriority="750" verticalCompressionResistancePriority="751" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="1a5-Yb-uwn">
                     <rect key="frame" x="8" y="303" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
                         <font key="font" metaFont="smallSystem"/>
@@ -45,7 +45,7 @@
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DER-tS-cLx">
-                    <rect key="frame" x="119" y="299" width="136" height="22"/>
+                    <rect key="frame" x="118" y="297" width="138" height="22"/>
                     <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="jiO-4I-seR"/>
@@ -72,7 +72,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
-                    <rect key="frame" x="332" y="300" width="180" height="19"/>
+                    <rect key="frame" x="332" y="301" width="180" height="19"/>
                     <string key="toolTip">Custom Detelecine parameters.
 
 Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
@@ -101,7 +101,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="N8y-at-fwU">
-                    <rect key="frame" x="8" y="125" width="108" height="14"/>
+                    <rect key="frame" x="8" y="149" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -109,17 +109,6 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </textFieldCell>
                     <connections>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="m7I-VM-1ct"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="xGD-5W-CDB">
-                    <rect key="frame" x="8" y="170" width="108" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Rotate:" id="1nr-nE-3a6">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="IrA-1f-C6F"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="xKf-yr-nCk">
@@ -150,7 +139,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xct-UB-bKm">
-                    <rect key="frame" x="119" y="233" width="136" height="22"/>
+                    <rect key="frame" x="118" y="231" width="138" height="22"/>
                     <string key="toolTip">Deinterlace removes comb artifacts from the picture.
 
 Yadif is a popular and fast deinterlacer.
@@ -180,7 +169,7 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
-                    <rect key="frame" x="539" y="234" width="180" height="19"/>
+                    <rect key="frame" x="539" y="235" width="180" height="19"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
 Yadif syntax: mode=m:parity=p
@@ -228,7 +217,7 @@ Decomb default: mode=7</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6nG-zk-FMo">
-                    <rect key="frame" x="329" y="233" width="134" height="22"/>
+                    <rect key="frame" x="328" y="231" width="136" height="22"/>
                     <string key="toolTip">Deinterlace filter preset.
 
 Default is well balanced for speed and quality.
@@ -261,45 +250,6 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="LJa-RO-dzf"/>
                     </connections>
                 </popUpButton>
-                <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dsH-ZQ-dBs">
-                    <rect key="frame" x="119" y="165" width="61" height="22"/>
-                    <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eZj-V7-e0o" id="ee3-w2-XRX">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" id="HcI-ak-pPG">
-                            <items>
-                                <menuItem title="0°" state="on" id="eZj-V7-e0o"/>
-                                <menuItem title="90°" tag="90" id="OyA-fK-x19"/>
-                                <menuItem title="180°" tag="180" id="bEe-EV-Q73"/>
-                                <menuItem title="270°" tag="270" id="PY6-PT-J4z"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="xGD-5W-CDB" id="xGe-Sz-aAs"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="H8L-zc-UcO">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedTag" keyPath="self.filters.rotate" id="tcT-dR-5Fw"/>
-                    </connections>
-                </popUpButton>
-                <button toolTip="Flips (mirrors) the picture on the horizontal axis." translatesAutoresizingMaskIntoConstraints="NO" id="IWV-25-FSC">
-                    <rect key="frame" x="182" y="168" width="41" height="18"/>
-                    <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tvl-40-1Tc">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="99W-3A-fiF">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.flip" id="xdh-96-5s5"/>
-                    </connections>
-                </button>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Mg1-Yq-F9S">
                     <rect key="frame" x="8" y="263" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Interlace Detection:" id="xHD-vC-ePQ">
@@ -328,7 +278,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </textField>
                 <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IQG-Nn-HTb">
-                    <rect key="frame" x="119" y="259" width="136" height="22"/>
+                    <rect key="frame" x="118" y="257" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="Kbc-Vj-81g"/>
                     </constraints>
@@ -354,7 +304,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
-                    <rect key="frame" x="332" y="260" width="180" height="19"/>
+                    <rect key="frame" x="332" y="261" width="180" height="19"/>
                     <string key="toolTip">Custom Interlace Detection parameters.
 
 Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
@@ -382,7 +332,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="ZIa-hr-ytV">
-                    <rect key="frame" x="8" y="72" width="108" height="14"/>
+                    <rect key="frame" x="8" y="96" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="Gg8-cE-gaL">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -393,7 +343,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pYa-Af-F47">
-                    <rect key="frame" x="119" y="68" width="136" height="22"/>
+                    <rect key="frame" x="118" y="90" width="138" height="22"/>
                     <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
 Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
@@ -424,7 +374,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="cJD-9a-3Xh">
-                    <rect key="frame" x="278" y="72" width="48" height="14"/>
+                    <rect key="frame" x="278" y="96" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="1zF-s5-Lic">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -440,7 +390,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <popUpButton toolTip="Sharpen filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bac-vC-bD4">
-                    <rect key="frame" x="329" y="68" width="134" height="22"/>
+                    <rect key="frame" x="328" y="90" width="136" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="lIB-9d-MoC"/>
                     </constraints>
@@ -477,7 +427,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." translatesAutoresizingMaskIntoConstraints="NO" id="Psx-nN-XiT">
-                    <rect key="frame" x="119" y="191" width="74" height="18"/>
+                    <rect key="frame" x="121" y="192" width="73" height="16"/>
                     <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -492,7 +442,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-c1-7hB">
-                    <rect key="frame" x="8" y="98" width="108" height="14"/>
+                    <rect key="frame" x="8" y="122" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -503,7 +453,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ins-7X-kbN">
-                    <rect key="frame" x="119" y="94" width="136" height="22"/>
+                    <rect key="frame" x="118" y="116" width="138" height="22"/>
                     <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
 
 NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
@@ -534,7 +484,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-3F-Xh0">
-                    <rect key="frame" x="278" y="98" width="48" height="14"/>
+                    <rect key="frame" x="278" y="122" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -550,7 +500,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </textField>
                 <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cTy-PO-BSd">
-                    <rect key="frame" x="329" y="94" width="134" height="22"/>
+                    <rect key="frame" x="328" y="116" width="136" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="Zly-jH-wkv"/>
                     </constraints>
@@ -576,7 +526,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1XQ-md-5cQ">
-                    <rect key="frame" x="537" y="94" width="114" height="22"/>
+                    <rect key="frame" x="536" y="116" width="116" height="22"/>
                     <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
@@ -616,7 +566,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="O3I-G6-dfv">
-                    <rect key="frame" x="486" y="98" width="48" height="14"/>
+                    <rect key="frame" x="486" y="122" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -632,7 +582,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
-                    <rect key="frame" x="540" y="95" width="180" height="19"/>
+                    <rect key="frame" x="540" y="120" width="180" height="19"/>
                     <string key="toolTip">Custom Denoise parameters.
 
 NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
@@ -664,7 +614,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="A6i-ft-02b">
-                    <rect key="frame" x="486" y="98" width="48" height="14"/>
+                    <rect key="frame" x="486" y="122" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -680,7 +630,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6he-FC-h6S">
-                    <rect key="frame" x="537" y="68" width="114" height="22"/>
+                    <rect key="frame" x="536" y="90" width="116" height="22"/>
                     <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
@@ -718,7 +668,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="8RO-OY-HTu">
-                    <rect key="frame" x="486" y="72" width="48" height="14"/>
+                    <rect key="frame" x="486" y="96" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="oqh-kd-lEw">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -734,7 +684,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hht-Rt-VA0">
-                    <rect key="frame" x="540" y="69" width="180" height="19"/>
+                    <rect key="frame" x="540" y="94" width="180" height="19"/>
                     <string key="toolTip">Custom Sharpen parameters.
 
 Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
@@ -766,7 +716,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="JrA-qB-1JA">
-                    <rect key="frame" x="486" y="72" width="48" height="14"/>
+                    <rect key="frame" x="486" y="96" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="N6B-kA-kMA">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -782,7 +732,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <popUpButton toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bz8-FC-vYp">
-                    <rect key="frame" x="119" y="121" width="136" height="22"/>
+                    <rect key="frame" x="118" y="143" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="lTF-ns-c6C"/>
                     </constraints>
@@ -808,7 +758,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </popUpButton>
                 <popUpButton toolTip="Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bRd-Km-Wa8">
-                    <rect key="frame" x="329" y="121" width="114" height="22"/>
+                    <rect key="frame" x="328" y="143" width="116" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="Q7t-rC-L8C"/>
                     </constraints>
@@ -833,7 +783,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="dXf-9u-LSs">
-                    <rect key="frame" x="278" y="125" width="48" height="14"/>
+                    <rect key="frame" x="278" y="149" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="xqk-dM-L3o">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -849,7 +799,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DI9-Ed-acp">
-                    <rect key="frame" x="332" y="122" width="180" height="19"/>
+                    <rect key="frame" x="332" y="147" width="180" height="19"/>
                     <string key="toolTip">Custom Deblock parameters.
 
 strength=s:thresh=t:blocksize=b</string>
@@ -875,7 +825,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PIN-cz-nC7">
-                    <rect key="frame" x="278" y="125" width="48" height="14"/>
+                    <rect key="frame" x="278" y="149" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="ydN-tP-vpt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -892,13 +842,11 @@ strength=s:thresh=t:blocksize=b</string>
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="Mwp-XS-2tc" secondAttribute="firstBaseline" id="08i-jh-iiz"/>
-                <constraint firstItem="xGD-5W-CDB" firstAttribute="firstBaseline" secondItem="dsH-ZQ-dBs" secondAttribute="firstBaseline" id="0PQ-DK-mtL"/>
                 <constraint firstItem="IQG-Nn-HTb" firstAttribute="firstBaseline" secondItem="RZE-gp-SB7" secondAttribute="firstBaseline" id="0dS-SS-8hV"/>
                 <constraint firstItem="O3I-G6-dfv" firstAttribute="width" secondItem="A6i-ft-02b" secondAttribute="width" id="1Bm-P8-EJ6"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="leading" secondItem="9hM-c1-7hB" secondAttribute="leading" id="3in-pI-cO3"/>
-                <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="1a5-Yb-uwn" secondAttribute="firstBaseline" id="4Di-pC-1uQ"/>
                 <constraint firstItem="6nG-zk-FMo" firstAttribute="firstBaseline" secondItem="C83-aJ-v3x" secondAttribute="firstBaseline" id="4Gh-ni-riT"/>
+                <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="Mwp-XS-2tc" secondAttribute="firstBaseline" id="4Ne-Es-RdZ"/>
                 <constraint firstItem="1a5-Yb-uwn" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="4v0-Rd-A4l"/>
                 <constraint firstItem="O3I-G6-dfv" firstAttribute="firstBaseline" secondItem="ZR9-YG-pfn" secondAttribute="firstBaseline" id="50f-Fo-ZOR"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="leading" secondItem="1a5-Yb-uwn" secondAttribute="leading" id="5BY-Ix-ea2"/>
@@ -906,9 +854,7 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ipJ-z3-XnJ" secondAttribute="trailing" constant="16" id="5gz-m6-AVl"/>
                 <constraint firstItem="cTy-PO-BSd" firstAttribute="firstBaseline" secondItem="A6i-ft-02b" secondAttribute="firstBaseline" id="65k-wK-z3r"/>
                 <constraint firstItem="cTy-PO-BSd" firstAttribute="leading" secondItem="k1h-3F-Xh0" secondAttribute="trailing" constant="8" id="69x-s6-r1K"/>
-                <constraint firstItem="IQG-Nn-HTb" firstAttribute="top" secondItem="DER-tS-cLx" secondAttribute="bottom" constant="22" id="7T7-Ny-qZI"/>
                 <constraint firstItem="r64-vI-ymx" firstAttribute="leading" secondItem="C83-aJ-v3x" secondAttribute="trailing" constant="7" id="7hY-RC-dVu"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="leading" secondItem="xGD-5W-CDB" secondAttribute="leading" id="8WH-Nn-XWx"/>
                 <constraint firstItem="JrA-qB-1JA" firstAttribute="leading" secondItem="bac-vC-bD4" secondAttribute="trailing" constant="28" id="A4F-M0-eAd"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="firstBaseline" secondItem="pYa-Af-F47" secondAttribute="firstBaseline" id="AAF-Wa-WFA"/>
                 <constraint firstItem="PIN-cz-nC7" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="AEP-Mg-Q8f"/>
@@ -920,12 +866,12 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstItem="C83-aJ-v3x" firstAttribute="width" secondItem="O3I-G6-dfv" secondAttribute="width" id="EWH-EM-7gu"/>
                 <constraint firstItem="ns7-Ww-hmX" firstAttribute="firstBaseline" secondItem="Psx-nN-XiT" secondAttribute="firstBaseline" id="EWh-CY-9Rf"/>
                 <constraint firstItem="C83-aJ-v3x" firstAttribute="leading" secondItem="6nG-zk-FMo" secondAttribute="trailing" constant="28" id="F2f-25-6rO"/>
-                <constraint firstItem="xGD-5W-CDB" firstAttribute="top" secondItem="ns7-Ww-hmX" secondAttribute="bottom" constant="9" id="FBZ-Gx-yrs"/>
                 <constraint firstItem="JrA-qB-1JA" firstAttribute="width" secondItem="8RO-OY-HTu" secondAttribute="width" id="FDo-AO-Miu"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="firstBaseline" secondItem="ins-7X-kbN" secondAttribute="firstBaseline" id="G4h-Af-D9U"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="leading" id="GGp-x0-Xh9"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="width" secondItem="9hM-c1-7hB" secondAttribute="width" id="GcR-NY-3In"/>
                 <constraint firstItem="ins-7X-kbN" firstAttribute="leading" secondItem="9hM-c1-7hB" secondAttribute="trailing" constant="8" id="GpT-1T-5wU"/>
+                <constraint firstItem="N8y-at-fwU" firstAttribute="leading" secondItem="ns7-Ww-hmX" secondAttribute="leading" id="Gyr-Lm-634"/>
                 <constraint firstItem="xct-UB-bKm" firstAttribute="leading" secondItem="xKf-yr-nCk" secondAttribute="trailing" constant="8" symbolic="YES" id="Hhn-Wm-CKa"/>
                 <constraint firstItem="k1h-3F-Xh0" firstAttribute="firstBaseline" secondItem="cTy-PO-BSd" secondAttribute="firstBaseline" id="I9w-GF-tGe"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6he-FC-h6S" secondAttribute="trailing" constant="20" symbolic="YES" id="IUp-GG-Vnj"/>
@@ -935,16 +881,13 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstItem="6he-FC-h6S" firstAttribute="leading" secondItem="JrA-qB-1JA" secondAttribute="trailing" constant="8" id="ONR-hc-66k"/>
                 <constraint firstItem="RZE-gp-SB7" firstAttribute="firstBaseline" secondItem="rPg-F2-gtl" secondAttribute="firstBaseline" id="OiR-HB-gIM"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Psx-nN-XiT" secondAttribute="trailing" constant="20" symbolic="YES" id="PFE-0C-68s"/>
-                <constraint firstItem="xGD-5W-CDB" firstAttribute="width" secondItem="ns7-Ww-hmX" secondAttribute="width" id="PkL-mZ-nma"/>
-                <constraint firstItem="dsH-ZQ-dBs" firstAttribute="firstBaseline" secondItem="IWV-25-FSC" secondAttribute="firstBaseline" id="Pl6-VG-ISW"/>
                 <constraint firstItem="dXf-9u-LSs" firstAttribute="firstBaseline" secondItem="DI9-Ed-acp" secondAttribute="firstBaseline" id="Rzb-Eo-Irg"/>
                 <constraint firstItem="pYa-Af-F47" firstAttribute="leading" secondItem="ZIa-hr-ytV" secondAttribute="trailing" constant="8" id="TEn-7K-rcJ"/>
+                <constraint firstItem="N8y-at-fwU" firstAttribute="top" secondItem="ns7-Ww-hmX" secondAttribute="bottom" constant="30" id="TSw-Be-f9f"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="firstBaseline" secondItem="IQG-Nn-HTb" secondAttribute="firstBaseline" id="TUA-D9-0hP"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="top" secondItem="N8y-at-fwU" secondAttribute="bottom" constant="13" id="TUK-Ba-Aer"/>
-                <constraint firstItem="dsH-ZQ-dBs" firstAttribute="leading" secondItem="xGD-5W-CDB" secondAttribute="trailing" constant="8" id="TcK-B9-MAq"/>
                 <constraint firstItem="cTy-PO-BSd" firstAttribute="firstBaseline" secondItem="O3I-G6-dfv" secondAttribute="firstBaseline" id="TkU-Tx-eUQ"/>
                 <constraint firstItem="A6i-ft-02b" firstAttribute="firstBaseline" secondItem="1XQ-md-5cQ" secondAttribute="firstBaseline" id="Ttq-h5-KQ7"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="top" secondItem="xGD-5W-CDB" secondAttribute="bottom" constant="31" id="UaX-5V-3FY"/>
                 <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="PIN-cz-nC7" secondAttribute="firstBaseline" id="UeH-cp-uAL"/>
                 <constraint firstItem="ipJ-z3-XnJ" firstAttribute="leading" secondItem="Mwp-XS-2tc" secondAttribute="trailing" constant="8" id="Uep-dq-b95"/>
                 <constraint firstItem="PIN-cz-nC7" firstAttribute="width" secondItem="Mwp-XS-2tc" secondAttribute="width" id="V0I-kx-Uyo"/>
@@ -954,10 +897,10 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="width" secondItem="Mg1-Yq-F9S" secondAttribute="width" id="VSJ-pe-iZe"/>
                 <constraint firstItem="bac-vC-bD4" firstAttribute="leading" secondItem="cJD-9a-3Xh" secondAttribute="trailing" constant="8" id="Vom-f3-0FR"/>
                 <constraint firstItem="xct-UB-bKm" firstAttribute="firstBaseline" secondItem="9Uz-PL-igg" secondAttribute="firstBaseline" id="W1H-eO-Cb6"/>
-                <constraint firstItem="IWV-25-FSC" firstAttribute="leading" secondItem="dsH-ZQ-dBs" secondAttribute="trailing" constant="8" id="XDo-hq-wrs"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="firstBaseline" secondItem="xct-UB-bKm" secondAttribute="firstBaseline" id="XEq-wm-fhi"/>
                 <constraint firstItem="IQG-Nn-HTb" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="trailing" constant="8" id="XHx-q2-MUy"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="leading" id="Yil-hv-p4i"/>
+                <constraint firstItem="N8y-at-fwU" firstAttribute="width" secondItem="ns7-Ww-hmX" secondAttribute="width" id="ZP7-sR-7md"/>
                 <constraint firstItem="dXf-9u-LSs" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="a0a-wA-Fan"/>
                 <constraint firstItem="rPg-F2-gtl" firstAttribute="leading" secondItem="RZE-gp-SB7" secondAttribute="trailing" constant="8" id="aEN-SB-67H"/>
                 <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="N8y-at-fwU" secondAttribute="firstBaseline" id="aHL-a7-xlD"/>
@@ -967,12 +910,12 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstItem="Mwp-XS-2tc" firstAttribute="width" secondItem="RZE-gp-SB7" secondAttribute="width" id="bbp-0P-bnR"/>
                 <constraint firstItem="bac-vC-bD4" firstAttribute="firstBaseline" secondItem="8RO-OY-HTu" secondAttribute="firstBaseline" id="d6I-rq-5ys"/>
                 <constraint firstItem="C83-aJ-v3x" firstAttribute="firstBaseline" secondItem="r64-vI-ymx" secondAttribute="firstBaseline" id="e8e-r5-iiZ"/>
-                <constraint firstItem="xGD-5W-CDB" firstAttribute="leading" secondItem="ns7-Ww-hmX" secondAttribute="leading" id="f1A-7C-Gcf"/>
                 <constraint firstItem="Psx-nN-XiT" firstAttribute="leading" secondItem="ns7-Ww-hmX" secondAttribute="trailing" constant="8" id="gGh-rk-4tF"/>
                 <constraint firstItem="9Uz-PL-igg" firstAttribute="firstBaseline" secondItem="6nG-zk-FMo" secondAttribute="firstBaseline" id="gI6-6V-Dh4"/>
                 <constraint firstItem="8RO-OY-HTu" firstAttribute="leading" secondItem="bac-vC-bD4" secondAttribute="trailing" constant="28" id="gg0-Yl-aFu"/>
                 <constraint firstItem="JrA-qB-1JA" firstAttribute="firstBaseline" secondItem="6he-FC-h6S" secondAttribute="firstBaseline" id="ghu-tS-XOy"/>
                 <constraint firstItem="ZR9-YG-pfn" firstAttribute="leading" secondItem="O3I-G6-dfv" secondAttribute="trailing" constant="8" id="gn5-IW-Afc"/>
+                <constraint firstItem="1a5-Yb-uwn" firstAttribute="firstBaseline" secondItem="DER-tS-cLx" secondAttribute="firstBaseline" id="gxp-Ie-JgE"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZR9-YG-pfn" secondAttribute="trailing" constant="16" id="i1I-OX-yOq"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZIa-hr-ytV" secondAttribute="bottom" constant="16" id="iwO-8g-aFZ"/>
                 <constraint firstItem="k1h-3F-Xh0" firstAttribute="width" secondItem="cJD-9a-3Xh" secondAttribute="width" id="jKz-cj-RcU"/>
@@ -989,15 +932,14 @@ strength=s:thresh=t:blocksize=b</string>
                 <constraint firstItem="bz8-FC-vYp" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="trailing" constant="8" id="px3-NP-9iI"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="r64-vI-ymx" secondAttribute="trailing" constant="16" id="qBi-eK-wC6"/>
                 <constraint firstItem="Mwp-XS-2tc" firstAttribute="leading" secondItem="DER-tS-cLx" secondAttribute="trailing" constant="28" id="qf0-yA-nvR"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bRd-Km-Wa8" secondAttribute="trailing" constant="20" symbolic="YES" id="rGV-su-AmC"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="width" secondItem="1a5-Yb-uwn" secondAttribute="width" id="rW7-Mh-RBN"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="top" secondItem="9hM-c1-7hB" secondAttribute="bottom" constant="12" id="sW6-LT-Sok"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IWV-25-FSC" secondAttribute="trailing" constant="20" symbolic="YES" id="scV-RG-eOF"/>
                 <constraint firstItem="cJD-9a-3Xh" firstAttribute="leading" secondItem="pYa-Af-F47" secondAttribute="trailing" constant="28" id="t7M-3E-QXI"/>
                 <constraint firstItem="9Uz-PL-igg" firstAttribute="width" secondItem="k1h-3F-Xh0" secondAttribute="width" id="tAb-z7-anc"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1XQ-md-5cQ" secondAttribute="trailing" constant="20" symbolic="YES" id="tIL-sP-iSX"/>
                 <constraint firstItem="pYa-Af-F47" firstAttribute="firstBaseline" secondItem="cJD-9a-3Xh" secondAttribute="firstBaseline" id="tPA-fg-FTO"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="top" secondItem="Mg1-Yq-F9S" secondAttribute="bottom" constant="12" id="u90-Po-dOZ"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="width" secondItem="xGD-5W-CDB" secondAttribute="width" id="v3e-nl-NT1"/>
                 <constraint firstItem="bRd-Km-Wa8" firstAttribute="leading" secondItem="PIN-cz-nC7" secondAttribute="trailing" constant="8" id="wvq-ZA-Jq2"/>
                 <constraint firstItem="6nG-zk-FMo" firstAttribute="leading" secondItem="9Uz-PL-igg" secondAttribute="trailing" constant="8" id="yfU-Fj-aGf"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="width" secondItem="N8y-at-fwU" secondAttribute="width" id="z2o-1a-JSL"/>
