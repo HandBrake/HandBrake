@@ -84,7 +84,7 @@ int            hb_qsv_video_encoder_is_enabled(int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
 void           hb_qsv_info_print();
-int            hb_qsv_query_adapters(hb_job_t *job);
+hb_list_t*     hb_qsv_adapters_list();
 hb_qsv_info_t* hb_qsv_info_get(int encoder);
 int qsv_hardware_generation(int cpu_platform);
 
