@@ -546,15 +546,18 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             int low = 32;
 
             // Based on the users settings, find the high and low bitrates.
-            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
             HBRate rate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(t => t.Name == this.SampleRate.ToString(CultureInfo.InvariantCulture));
             HBMixdown mixdown = this.mixDown != null ? HandBrakeEncoderHelpers.GetMixdown(this.mixDown) : HandBrakeEncoderHelpers.GetMixdown("dpl2");
 
-            BitrateLimits limits = HandBrakeEncoderHelpers.GetBitrateLimits(hbaenc, rate != null ? rate.Rate : 48000, mixdown);
-            if (limits != null)
+            if (hbaenc != null)
             {
-                max = limits.High;
-                low = limits.Low;
+                BitrateLimits limits = HandBrakeEncoderHelpers.GetBitrateLimits(hbaenc, rate != null ? rate.Rate : 48000, mixdown);
+                if (limits != null)
+                {
+                    max = limits.High;
+                    low = limits.Low;
+                }
             }
 
             // Return the subset of available bitrates.
@@ -571,8 +574,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         private void SetupQualityCompressionLimits()
         {
-            HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
-            if (hbAudioEncoder.SupportsQuality)
+            HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            if (hbAudioEncoder != null && hbAudioEncoder.SupportsQuality)
             {
                 RangeLimits limits = null;
 
@@ -616,7 +619,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
 
             // Default the audio quality value if it's out of range.
-            if (Equals(this.EncoderRateType, HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Quality))
+            if (Equals(this.EncoderRateType, AudioEncoderRateType.Quality))
             {
                 if (this.Quality.HasValue && !this.encoderQualityValues.Contains(this.Quality.Value))
                 {
@@ -637,11 +640,15 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             HBAudioEncoder aencoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
             HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
             HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, aencoder, (uint)this.ScannedTrack.ChannelLayout);
-            HBMixdown defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
-
+            HBMixdown defaultMixdown = sanitisedMixdown;
+            if (aencoder != null)
+            {
+                defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
+            }
+         
             if (this.mixDown == null || this.mixDown == "none")
             {
-                this.MixDown = defaultMixdown.ShortName;
+                this.MixDown = defaultMixdown?.ShortName;
             }
             else if (sanitisedMixdown != null)
             {
