@@ -46,7 +46,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     case VideoEncoder.NvencH264:
                     case VideoEncoder.NvencH265:
-                        if (this.nvencInstances.Count < 1)
+                        if (this.nvencInstances.Count < 3)
                         {
                             Guid guid = Guid.NewGuid();
                             this.nvencInstances.Add(guid);
