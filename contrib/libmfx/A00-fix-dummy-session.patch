@@ -1,0 +1,33 @@
+diff --git a/src/mfx_dispatcher.cpp b/src/mfx_dispatcher.cpp
+index 163f53e..0365057 100644
+--- a/src/mfx_dispatcher.cpp
++++ b/src/mfx_dispatcher.cpp
+@@ -354,27 +354,7 @@ static mfxStatus InitDummySession(mfxU32 adapter_n, MFXVideoSession & dummy_sess
+     initPar.Version.Major = 1;
+     initPar.Version.Minor = 0;
+
+-    switch (adapter_n)
+-    {
+-    case 0:
+-        initPar.Implementation = MFX_IMPL_HARDWARE;
+-        break;
+-    case 1:
+-        initPar.Implementation = MFX_IMPL_HARDWARE2;
+-        break;
+-    case 2:
+-        initPar.Implementation = MFX_IMPL_HARDWARE3;
+-        break;
+-    case 3:
+-        initPar.Implementation = MFX_IMPL_HARDWARE4;
+-        break;
+-
+-    default:
+-        // try searching on all display adapters
+-        initPar.Implementation = MFX_IMPL_HARDWARE_ANY;
+-        break;
+-    }
+-
++    initPar.Implementation = MFX_IMPL_HARDWARE_ANY;
+     initPar.Implementation |= MFX_IMPL_VIA_D3D11;
+
+     return dummy_session.InitEx(initPar);
