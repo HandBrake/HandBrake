@@ -11,7 +11,6 @@
 namespace HandBrake.Worker.Routing
 {
     using System;
-    using System.Collections.Generic;
     using System.Net;
 
     using HandBrake.Interop.Interop;
@@ -19,7 +18,6 @@ namespace HandBrake.Worker.Routing
     using HandBrake.Interop.Utilities;
     using HandBrake.Worker.Logging;
     using HandBrake.Worker.Logging.Interfaces;
-    using HandBrake.Worker.Logging.Models;
     using HandBrake.Worker.Routing.Commands;
     using HandBrake.Worker.Routing.Results;
     using HandBrake.Worker.Utilities;
@@ -148,6 +146,8 @@ namespace HandBrake.Worker.Routing
             this.completedState = new JsonState() { WorkDone = new WorkDone() { Error = e.Error } };
             this.completedState.State = "WORKDONE";
             this.logHandler.ShutdownFileWriter();
+            this.handbrakeInstance.Dispose();
+            HandBrakeUtils.DisposeGlobal();
         }
 
         private void Initialise(InitCommand command)

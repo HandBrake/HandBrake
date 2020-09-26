@@ -14,6 +14,7 @@ namespace HandBrake.Worker
     using System.Net;
     using System.Threading;
 
+    using HandBrake.Interop.Interop;
     using HandBrake.Worker.Routing;
 
     public class Program
@@ -23,6 +24,8 @@ namespace HandBrake.Worker
 
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+
             int port = 8037; // Default Port;
             string token = null;
             
@@ -45,24 +48,29 @@ namespace HandBrake.Worker
                     }
                 }
             }
-
+            
             Console.WriteLine("Worker: Starting HandBrake Engine ...");
             router = new ApiRouter();
             router.TerminationEvent += Router_TerminationEvent;
-
+            
             Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port, token);
             if (webServer.Run())
             {
                 Console.WriteLine("Worker: Server Started");
-                manualResetEvent.WaitOne();webServer.Stop();
+                manualResetEvent.WaitOne();
                 webServer.Stop();
             }
             else
             {
                 Console.WriteLine("Worker: Failed to start. Exiting ...");
             }
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, System.EventArgs e)
+        {
+            HandBrakeUtils.DisposeGlobal();
         }
 
         private static Dictionary<string, Func<HttpListenerRequest, string>> RegisterApiHandlers()

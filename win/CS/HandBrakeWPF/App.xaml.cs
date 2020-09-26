@@ -22,7 +22,6 @@ namespace HandBrakeWPF
 
     using HandBrake.Interop.Interop;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -31,7 +30,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -44,9 +43,9 @@ namespace HandBrakeWPF
         public App()
         {
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
-            AppDomain.CurrentDomain.UnhandledException +=
-                this.CurrentDomain_UnhandledException;
-
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.ProcessExit += this.CurrentDomain_ProcessExit;
+            
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
         }
 
@@ -158,6 +157,11 @@ namespace HandBrakeWPF
                 IMainViewModel mvm = IoC.Get<IMainViewModel>();
                 mvm.StartScan(args[0], 0);
             }
+        }
+
+        private void CurrentDomain_ProcessExit(object sender, System.EventArgs e)
+        {
+            HandBrakeUtils.DisposeGlobal();
         }
 
         /// <summary>
