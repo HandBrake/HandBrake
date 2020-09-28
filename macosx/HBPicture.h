@@ -69,7 +69,6 @@ extern NSString * const HBPictureChangedNotification;
 
 @property (nonatomic, readwrite) BOOL keepDisplayAspect;
 @property (nonatomic, readwrite) HBPictureAnarmophicMode anamorphicMode;
-@property (nonatomic, readwrite) int modulus;
 
 /**
  *  Custom anamorphic settings

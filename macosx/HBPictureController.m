@@ -41,7 +41,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         [self window];
 
         [self addObserver:self forKeyPath:@"self.picture.anamorphicMode" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
-        [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
     }
 
 	return self;
@@ -49,7 +48,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
 - (void)dealloc
 {
-    NSArray *observerdKeyPaths = @[@"self.picture.anamorphicMode", @"self.picture.modulus"];
+    NSArray *observerdKeyPaths = @[@"self.picture.anamorphicMode"];
     @try
     {
         for (NSString *keyPath in observerdKeyPaths)
@@ -86,11 +85,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         if ([keyPath isEqualToString:@"self.picture.anamorphicMode"])
         {
             [self adjustSizingDisplay:nil];
-        }
-        else if ([keyPath isEqualToString:@"self.picture.modulus"])
-        {
-            [fWidthStepper setIncrement:self.picture.modulus];
-            [fHeightStepper setIncrement:self.picture.modulus];
         }
     }
     else

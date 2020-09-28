@@ -27,18 +27,8 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
     if (self)
     {
         _labelColor = [NSColor disabledControlTextColor];
-        [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureViewControllerContext];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    @try
-    {
-        [self removeObserver:self forKeyPath:@"self.picture.modulus" context:HBPictureViewControllerContext];
-    }
-    @catch (NSException * __unused exception) {}
 }
 
 - (void)setPicture:(HBPicture *)picture
@@ -55,25 +45,5 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
     }
 
 }
-
-#pragma mark - KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (context == HBPictureViewControllerContext)
-    {
-        // Set the increment here, it's not possible with bindings.
-        if ([keyPath isEqualToString:@"self.picture.modulus"])
-        {
-            [self.widthStepper setIncrement:self.picture.modulus];
-            [self.heightStepper setIncrement:self.picture.modulus];
-        }
-    }
-    else
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
 
 @end

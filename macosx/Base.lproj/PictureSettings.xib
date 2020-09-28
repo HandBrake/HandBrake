@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17503.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17503.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,16 +22,16 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" utility="YES" HUD="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="1024" width="648" height="148"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <view key="contentView" wantsLayer="YES" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="648" height="148"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <userGuides>
                     <userLayoutGuide affinity="minY"/>
-                    <userLayoutGuide location="115" affinity="minX"/>
+                    <userLayoutGuide location="116" affinity="minX"/>
                 </userGuides>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="XmO-LR-1DQ">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XmO-LR-1DQ">
                         <rect key="frame" x="257" y="61" width="120" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nothing to inspect" id="buq-K6-Wvy">
@@ -47,14 +47,14 @@
                             </binding>
                         </connections>
                     </textField>
-                    <box borderType="none" title="Box" titlePosition="noTitle" id="436">
+                    <box fixedFrame="YES" borderType="none" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="436">
                         <rect key="frame" x="17" y="5" width="358" height="126"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="izI-da-gGT">
                             <rect key="frame" x="0.0" y="0.0" width="358" height="126"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="402">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="402">
                                     <rect key="frame" x="192" y="106" width="82" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Width:" id="403">
@@ -70,7 +70,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="440">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="440">
                                     <rect key="frame" x="278" y="81" width="37" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="441">
@@ -94,7 +94,7 @@
                                         <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="PXg-GA-vo6"/>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="442">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="442">
                                     <rect key="frame" x="278" y="56" width="37" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="443">
@@ -118,7 +118,7 @@
                                         <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="HrI-5d-evg"/>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="444">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="444">
                                     <rect key="frame" x="207" y="81" width="67" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Width:" id="445">
@@ -134,7 +134,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="446">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="446">
                                     <rect key="frame" x="202" y="56" width="71" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Height:" id="447">
@@ -150,7 +150,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="44">
                                     <rect key="frame" x="143" y="103" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
@@ -161,26 +161,7 @@
                                         <binding destination="-2" name="value" keyPath="self.picture.width" previousBinding="P3g-UC-vRH" id="Ilz-OP-M5c"/>
                                     </connections>
                                 </stepper>
-                                <popUpButton verticalHuggingPriority="750" id="384">
-                                    <rect key="frame" x="75" y="15" width="46" height="15"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <popUpButtonCell key="cell" type="push" title="4" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="389" id="385">
-                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="miniSystem"/>
-                                        <menu key="menu" title="OtherViews" id="386">
-                                            <items>
-                                                <menuItem title="16" id="387"/>
-                                                <menuItem title="8" id="388"/>
-                                                <menuItem title="4" state="on" id="389"/>
-                                                <menuItem title="2" id="Fx1-DI-r18"/>
-                                            </items>
-                                        </menu>
-                                    </popUpButtonCell>
-                                    <connections>
-                                        <binding destination="-2" name="selectedValue" keyPath="self.picture.modulus" id="anc-Ha-mxE"/>
-                                    </connections>
-                                </popUpButton>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="42">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42">
                                     <rect key="frame" x="76" y="107" width="62" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="167">
@@ -198,10 +179,10 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="46">
                                     <rect key="frame" x="143" y="78" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
+                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <connections>
@@ -209,7 +190,7 @@
                                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="nJk-wN-aaB"/>
                                     </connections>
                                 </stepper>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="138">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="138">
                                     <rect key="frame" x="-1" y="38" width="73" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="174">
@@ -218,7 +199,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="41">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="41">
                                     <rect key="frame" x="-1" y="82" width="73" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Height:" id="166">
@@ -227,7 +208,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <popUpButton verticalHuggingPriority="750" id="132">
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="132">
                                     <rect key="frame" x="75" y="38" width="80" height="15"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="135" id="173">
@@ -246,16 +227,7 @@
                                         <binding destination="-2" name="selectedTag" keyPath="self.picture.anamorphicMode" id="edu-WH-uPF"/>
                                     </connections>
                                 </popUpButton>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="390">
-                                    <rect key="frame" x="19" y="15" width="53" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="391">
-                                        <font key="font" metaFont="smallSystem"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="47">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="47">
                                     <rect key="frame" x="-1" y="108" width="71" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Width:" id="172">
@@ -264,7 +236,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="43">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="43">
                                     <rect key="frame" x="76" y="81" width="62" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="168">
@@ -282,7 +254,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <button id="45">
+                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="45">
                                     <rect key="frame" x="73" y="57" width="125" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="170">
@@ -294,7 +266,7 @@
                                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspectEditable" id="DSI-Ra-G0d"/>
                                     </connections>
                                 </button>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="396">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="396">
                                     <rect key="frame" x="278" y="106" width="61" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="397">
@@ -328,14 +300,14 @@
                             </binding>
                         </connections>
                     </box>
-                    <box borderType="none" titlePosition="noTitle" id="7">
+                    <box fixedFrame="YES" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                         <rect key="frame" x="377" y="5" width="254" height="126"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="tBW-2g-t2L">
                             <rect key="frame" x="0.0" y="0.0" width="254" height="126"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="12">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12">
                                     <rect key="frame" x="169" y="55" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="152">
@@ -351,7 +323,7 @@
                                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopCrop" id="Kft-ci-UbK"/>
                                     </connections>
                                 </stepper>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="15">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15">
                                     <rect key="frame" x="232" y="45" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="155">
@@ -367,7 +339,7 @@
                                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightCrop" id="Fyc-RI-h9A"/>
                                     </connections>
                                 </stepper>
-                                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
+                                <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="16">
                                     <rect key="frame" x="64" y="84" width="190" height="43"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -397,7 +369,7 @@
                                         </binding>
                                     </connections>
                                 </matrix>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="13">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13">
                                     <rect key="frame" x="131" y="58" width="36" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="153">
@@ -419,7 +391,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="10">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10">
                                     <rect key="frame" x="131" y="31" width="36" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="150">
@@ -441,7 +413,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="19">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="19">
                                     <rect key="frame" x="110" y="46" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="156">
@@ -457,7 +429,7 @@
                                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftCrop" id="CcF-LX-2Wg"/>
                                     </connections>
                                 </stepper>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="11">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11">
                                     <rect key="frame" x="72" y="49" width="36" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="151">
@@ -479,7 +451,7 @@
                                         </binding>
                                     </connections>
                                 </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="14">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14">
                                     <rect key="frame" x="169" y="28" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="154">
@@ -495,7 +467,7 @@
                                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomCrop" id="YKW-no-4sN"/>
                                     </connections>
                                 </stepper>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="382">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="382">
                                     <rect key="frame" x="3" y="107" width="59" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="383">
@@ -504,7 +476,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="9">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9">
                                     <rect key="frame" x="194" y="48" width="36" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="149">

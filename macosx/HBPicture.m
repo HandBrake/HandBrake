@@ -20,6 +20,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 @property (nonatomic, readwrite, getter=isValidating) BOOL validating;
 @property (nonatomic, readwrite, getter=areNotificationsEnabled) BOOL notificationsEnabled;
 
+@property (nonatomic, readonly) int modulus;
+
 @property (nonatomic, readwrite) int keep;
 @property (nonatomic, readwrite) BOOL darUpdated;
 
@@ -51,7 +53,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _sourceHeight = 1080;
 
         _anamorphicMode = HBPictureAnarmophicModeNone;
-        _modulus = 2;
 
         _paddingMode = HBPicturePaddingModeNone;
         _paddingColorMode = HBPicturePaddingColorModeBlack;
@@ -605,17 +606,9 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (void)setModulus:(int)modulus
+- (int)modulus
 {
-    if (modulus != _modulus)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setModulus:_modulus];
-    }
-    _modulus = modulus;
-    if (!self.isValidating)
-    {
-        [self validateSettings];
-    }
+    return 2;
 }
 
 #pragma mark - Max sizes
@@ -823,7 +816,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
         copy->_keepDisplayAspect = _keepDisplayAspect;
         copy->_anamorphicMode = _anamorphicMode;
-        copy->_modulus = _modulus;
 
         copy->_displayWidth = _displayWidth;
         copy->_parWidth = _parWidth;
@@ -881,7 +873,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
     encodeBool(_keepDisplayAspect);
     encodeInteger(_anamorphicMode);
-    encodeInt(_modulus);
 
     encodeInt(_displayWidth);
     encodeInt(_parWidth);
@@ -937,8 +928,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         goto fail;
     }
 
-    decodeInt(_modulus); if (_modulus < 2 || _modulus > 16) { goto fail; }
-
     decodeInt(_displayWidth); if (_displayWidth < 0) { goto fail; }
     decodeInt(_parWidth); if (_parWidth < 0) { goto fail; }
     decodeInt(_parHeight); if (_parHeight < 0) { goto fail; }
@@ -993,7 +982,6 @@ fail:
     preset[@"PictureHeight"] = @(self.maxHeight);
 
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
-    preset[@"PictureModulus"]   = @(self.modulus);
 
     switch (self.anamorphicMode) {
         case HB_ANAMORPHIC_NONE:
@@ -1081,7 +1069,7 @@ fail:
     }
     else if (self.maxWidth == 720 && self.maxHeight == 480)
     {
-        self.resolutionLimitMode = HBPictureResolutionLimitMode576p;
+        self.resolutionLimitMode = HBPictureResolutionLimitMode480p;
     }
     else
     {
@@ -1114,21 +1102,6 @@ fail:
             self.cropBottom = [preset[@"PictureBottomCrop"] intValue];
             self.cropLeft   = [preset[@"PictureLeftCrop"] intValue];
             self.cropRight  = [preset[@"PictureRightCrop"] intValue];
-        }
-
-        // Set modulus
-        if (preset[@"PictureModulus"])
-        {
-            self.modulus = [preset[@"PictureModulus"]  intValue];
-        }
-        else
-        {
-            self.modulus = 16;
-        }
-
-        if (self.modulus <= 0 || self.modulus > 16)
-        {
-            self.modulus = 2;
         }
 
         // Assume max picture settings initially.
