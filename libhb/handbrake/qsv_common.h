@@ -84,7 +84,7 @@ int            hb_qsv_video_encoder_is_enabled(int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
 void           hb_qsv_info_print();
-int            hb_qsv_query_adapters(hb_job_t *job);
+hb_list_t*     hb_qsv_adapters_list();
 hb_qsv_info_t* hb_qsv_info_get(int encoder);
 int qsv_hardware_generation(int cpu_platform);
 
@@ -197,10 +197,10 @@ float hb_qsv_atof    (const char *str, int *err);
 int hb_qsv_param_default_async_depth();
 int hb_qsv_param_default_preset     (hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info, const char *preset);
 int hb_qsv_param_default            (hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info);
-int hb_qsv_param_parse_decoder      (hb_job_t *job, const char *key, const char *value);
 int hb_qsv_param_parse              (hb_qsv_param_t *param,                            hb_qsv_info_t *info, hb_job_t *job,  const char *key, const char *value);
 int hb_qsv_profile_parse            (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *profile_key, const int codec);
 int hb_qsv_level_parse              (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *level_key);
+int hb_qsv_param_parse_dx_index     (hb_job_t *job, const int dx_index);
 
 typedef struct
 {

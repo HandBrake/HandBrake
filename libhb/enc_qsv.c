@@ -998,6 +998,35 @@ int qsv_enc_init(hb_work_private_t *pv)
     return 0;
 }
 
+static mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
+{
+    mfxIMPL impl;
+
+    switch (dx_index)
+    {
+        {
+        case 0:
+            impl = MFX_IMPL_HARDWARE;
+            break;
+        case 1:
+            impl = MFX_IMPL_HARDWARE2;
+            break;
+        case 2:
+            impl = MFX_IMPL_HARDWARE3;
+            break;
+        case 3:
+            impl = MFX_IMPL_HARDWARE4;
+            break;
+
+        default:
+            // try searching on all display adapters
+            impl = MFX_IMPL_HARDWARE_ANY;
+            break;
+        }
+    }
+    return impl;
+}
+
 /***********************************************************************
  * encqsvInit
  ***********************************************************************
@@ -1076,6 +1105,15 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_dict_free(&options_list);
     }
 
+    // select the right hardware implementation based on dx index
+    if (!job->qsv.ctx->qsv_device)
+        hb_qsv_param_parse_dx_index(pv->job, -1);
+#if defined(SYS_LINUX) || defined(SYS_FREEBSD)
+    mfxIMPL hw_preference = MFX_IMPL_VIA_ANY;
+#else
+    mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
+#endif
+    pv->qsv_info->implementation = hb_qsv_dx_index_to_impl(job->qsv.ctx->dx_index) | hw_preference;
     // reload colorimetry in case values were set in encoder_options
     if (pv->param.videoSignalInfo.ColourDescriptionPresent)
     {
