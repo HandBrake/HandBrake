@@ -121,7 +121,7 @@
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
-                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" IsCancel="True"  Padding="8,2" />
+                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="{x:Static Properties:Resources.Generic_Cancel}" IsCancel="True"  Padding="8,2" />
             </StackPanel>
 
             <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
@@ -146,7 +146,7 @@
                 <Border.BorderBrush>
                     <SolidColorBrush Color="White" Opacity=".65"/>
                 </Border.BorderBrush>
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" Foreground="White" Margin="100,125,100,125"  FontSize="26" FontFamily="Segoe UI Light" />
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" Margin="100,125,100,125"  FontSize="26" FontFamily="Segoe UI Light" />
             </Border>
         </Grid>
     </Grid>

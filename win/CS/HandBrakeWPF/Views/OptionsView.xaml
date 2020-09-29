@@ -400,9 +400,9 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceLevelText}" Width="250" />
+                                <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceLevelText}" TextWrapping="Wrap" Width="250" />
 
-                                <TextBox x:Name="PauseOnLowDiskspaceLevel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
+                                <TextBox x:Name="PauseOnLowDiskspaceLevel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Width="120"/>
                                 <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceSizeGB}" VerticalAlignment="Center" Margin="5,0,0,0" />
                             </StackPanel>
 
