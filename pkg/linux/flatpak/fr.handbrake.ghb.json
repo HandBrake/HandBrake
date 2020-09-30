@@ -5,7 +5,7 @@
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
-        "--device=dri",
+        "--device=all",
         "--share=ipc",
         "--socket=fallback-x11",
         "--socket=wayland",
