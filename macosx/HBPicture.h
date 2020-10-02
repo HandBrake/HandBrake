@@ -63,6 +63,8 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readwrite) HBPictureResolutionLimitMode resolutionLimitMode;
 @property (nonatomic, readwrite) int maxWidth;
 @property (nonatomic, readwrite) int maxHeight;
+@property (nonatomic, readwrite) BOOL allowUpscaling;
+@property (nonatomic, readwrite) BOOL useMaximumSize;
 
 @property (nonatomic, readwrite) int width;
 @property (nonatomic, readwrite) int height;

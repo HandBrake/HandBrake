@@ -559,7 +559,7 @@
                               self.picture.width + self.picture.paddingLeft + self.picture.paddingRight,
                               self.picture.height + self.picture.paddingTop + self.picture.paddingBottom,
                               color,
-                              self.picture.paddingRight,
+                              self.picture.paddingLeft,
                               self.picture.paddingTop];
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id, NULL, NULL, settings.UTF8String);
 
