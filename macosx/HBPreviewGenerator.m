@@ -98,9 +98,7 @@
         theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
                                                        pictureFrame:self.job.picture
-                                                        deinterlace:deinterlace
-                                                        rotate:self.job.picture.rotate
-                                                       flipped:self.job.picture.flip];
+                                                        deinterlace:deinterlace];
         if (cache && theImage)
         {
             // The cost is the number of pixels of the image
@@ -193,9 +191,7 @@
             image = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                        forTitle:self.job.title
                                                    pictureFrame:self.job.picture
-                                                    deinterlace:NO
-                                                         rotate:self.job.picture.rotate
-                                                        flipped:self.job.picture.flip];
+                                                    deinterlace:NO];
             CFAutorelease(image);
         }
 

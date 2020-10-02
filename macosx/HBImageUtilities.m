@@ -113,79 +113,108 @@ CGImageRef CGImageRotated(CGImageRef imgRef, CGFloat angle, BOOL flipped) CF_RET
 
 CGColorSpaceRef copyColorSpace(int primaries, int transfer, int matrix)
 {
-    CFStringRef primariesKey = NULL;
+    CFStringRef primariesValue = NULL;
     switch (primaries)
     {
         case HB_COLR_PRI_EBUTECH:
-            primariesKey = kCVImageBufferColorPrimaries_EBU_3213;
+            primariesValue = kCVImageBufferColorPrimaries_EBU_3213;
             break;
 
         case HB_COLR_PRI_SMPTEC:
-            primariesKey = kCVImageBufferColorPrimaries_SMPTE_C;
+            primariesValue = kCVImageBufferColorPrimaries_SMPTE_C;
             break;
 
         case HB_COLR_PRI_BT2020:
-            primariesKey = kCVImageBufferColorPrimaries_ITU_R_2020;
+            primariesValue = kCVImageBufferColorPrimaries_ITU_R_2020;
             break;
 
         case HB_COLR_PRI_BT709:
         default:
-            primariesKey = kCVImageBufferColorPrimaries_ITU_R_709_2;
+            primariesValue = kCVImageBufferColorPrimaries_ITU_R_709_2;
     }
 
-    CFStringRef transferKey = NULL;
+    CFStringRef transferValue = NULL;
+    CFNumberRef gammaValue = NULL;
     switch (transfer)
     {
-        case HB_COLR_TRA_SMPTE240M:
-            transferKey = kCVImageBufferTransferFunction_SMPTE_240M_1995;
+        case HB_COLR_TRA_GAMMA22:
+        {
+            transferValue = kCVImageBufferTransferFunction_UseGamma;
+            Float32 gamma = 2.2;
+            gammaValue = CFNumberCreate(NULL, kCFNumberFloat32Type, &gamma);
             break;
+        }
+
+        case HB_COLR_TRA_GAMMA28:
+        {
+            transferValue = kCVImageBufferTransferFunction_UseGamma;
+            Float32 gamma = 2.8;
+            gammaValue = CFNumberCreate(NULL, kCFNumberFloat32Type, &gamma);
+            break;
+        }
+
+        case HB_COLR_TRA_SMPTE240M:
+            transferValue = kCVImageBufferTransferFunction_SMPTE_240M_1995;
+            break;
+
+        case HB_COLR_TRA_LINEAR:
+            if (@available(macOS 10.14, *)) {
+            transferValue = kCVImageBufferTransferFunction_Linear;
+            break;
+            }
 
         case HB_COLR_TRA_BT2020_10:
         case HB_COLR_TRA_BT2020_12:
-            transferKey = kCVImageBufferTransferFunction_ITU_R_2020;
+            transferValue = kCVImageBufferTransferFunction_ITU_R_2020;
             break;
 
         case HB_COLR_TRA_SMPTEST2084:
             if (@available(macOS 10.13, *)) {
-            transferKey = kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
+            transferValue = kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
             break;
             }
 
         case HB_COLR_TRA_ARIB_STD_B67:
             if (@available(macOS 10.13, *)) {
-            transferKey = kCVImageBufferTransferFunction_ITU_R_2100_HLG;
+            transferValue = kCVImageBufferTransferFunction_ITU_R_2100_HLG;
+            break;
+            }
+
+        case HB_COLR_TRA_SMPTE428:
+            if (@available(macOS 10.12, *)) {
+            transferValue = kCVImageBufferTransferFunction_SMPTE_ST_428_1;
             break;
             }
 
         case HB_COLR_TRA_BT709:
         default:
-            transferKey = kCVImageBufferTransferFunction_ITU_R_709_2;
+            transferValue = kCVImageBufferTransferFunction_ITU_R_709_2;
     }
 
-    CFStringRef matrixKey = NULL;
+    CFStringRef matrixValue = NULL;
     switch (matrix)
     {
         case HB_COLR_MAT_SMPTE170M:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_601_4;
+            matrixValue = kCVImageBufferYCbCrMatrix_ITU_R_601_4;
             break;
 
         case HB_COLR_MAT_SMPTE240M:
-            matrixKey = kCVImageBufferYCbCrMatrix_SMPTE_240M_1995;
+            matrixValue = kCVImageBufferYCbCrMatrix_SMPTE_240M_1995;
             break;
 
         case HB_COLR_MAT_BT2020_NCL:
         case HB_COLR_MAT_BT2020_CL:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_2020;
+            matrixValue = kCVImageBufferYCbCrMatrix_ITU_R_2020;
             break;
 
         case HB_COLR_MAT_BT709:
         default:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_709_2;;
+            matrixValue = kCVImageBufferYCbCrMatrix_ITU_R_709_2;
     }
 
-    const void *keys[3] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey };
-    const void *values[3] = { primariesKey, transferKey, matrixKey};
-    CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    const void *keys[4] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey, kCVImageBufferGammaLevelKey };
+    const void *values[4] = { primariesValue, transferValue, matrixValue, gammaValue};
+    CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
     CGColorSpaceRef colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
     CFRelease(attachments);

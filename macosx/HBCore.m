@@ -334,9 +334,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
-                   deinterlace:(BOOL)deinterlace
-                        rotate:(int)angle
-                       flipped:(BOOL)flipped CF_RETURNS_RETAINED
+                   deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
 
@@ -401,9 +399,9 @@ typedef void (^HBCoreCleanupHandler)(void);
         hb_image_close(&image);
     }
 
-    if (img && (angle || flipped))
+    if (img && (frame.rotate || frame.flip))
     {
-        CGImageRef rotatedImg = CGImageRotated(img, angle, flipped);
+        CGImageRef rotatedImg = CGImageRotated(img, frame.rotate, frame.flip);
         CGImageRelease(img);
         return rotatedImg;
     }
