@@ -1105,15 +1105,18 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_dict_free(&options_list);
     }
 
+    if (pv->is_sys_mem)
+    {
     // select the right hardware implementation based on dx index
-    if (!job->qsv.ctx->qsv_device)
-        hb_qsv_param_parse_dx_index(pv->job, -1);
+        if (!job->qsv.ctx->qsv_device)
+            hb_qsv_param_parse_dx_index(pv->job, -1);
 #if defined(SYS_LINUX) || defined(SYS_FREEBSD)
     mfxIMPL hw_preference = MFX_IMPL_VIA_ANY;
 #else
     mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
 #endif
-    pv->qsv_info->implementation = hb_qsv_dx_index_to_impl(job->qsv.ctx->dx_index) | hw_preference;
+        pv->qsv_info->implementation = hb_qsv_dx_index_to_impl(job->qsv.ctx->dx_index) | hw_preference;
+    }
     // reload colorimetry in case values were set in encoder_options
     if (pv->param.videoSignalInfo.ColourDescriptionPresent)
     {
@@ -1434,7 +1437,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     err = MFXInit(pv->qsv_info->implementation, &version, &session);
     if (err != MFX_ERR_NONE)
     {
-        hb_error("encqsvInit: MFXInit failed (%d)", err);
+        hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", err, pv->qsv_info->implementation);
         return -1;
     }
 
