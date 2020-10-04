@@ -19,10 +19,16 @@ namespace HandBrakeWPF.Services.Queue
         private readonly object lockOjb = new object();
 
         private HashSet<Guid> qsvInstances = new HashSet<Guid>();
-
         private HashSet<Guid> nvencInstances = new HashSet<Guid>();
-
         private HashSet<Guid> vceInstances = new HashSet<Guid>();
+
+        private List<int> qsvGpus = new List<int>();
+        
+        public void Init()
+        {
+            // TODO Coming Soon!
+            //   List<int> qsvGpus = hbFunctions.hb_qsv_adapters_list();
+        }
 
         public Guid? GetHardwareLock(VideoEncoder encoder)
         {
@@ -33,7 +39,7 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
-                        if (this.qsvInstances.Count < 1)
+                        if (this.qsvInstances.Count < 3)
                         {
                             Guid guid = Guid.NewGuid();
                             this.qsvInstances.Add(guid);

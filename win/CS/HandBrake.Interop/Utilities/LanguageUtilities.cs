@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageUtilities.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="LanguageUtilities.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -10,10 +10,7 @@
 namespace HandBrake.Interop.Utilities
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
-
-    using HandBrake.Interop.Interop.HbLib;
 
     /// <summary>
     /// Language Utilities
@@ -21,6 +18,7 @@ namespace HandBrake.Interop.Utilities
     public class LanguageUtilities
     {
         public static string Any = "(Any)";
+
         private static IDictionary<string, string> languageMap;
 
         /// <summary>

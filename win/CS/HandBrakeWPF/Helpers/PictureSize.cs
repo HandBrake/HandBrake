@@ -9,15 +9,10 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using Caliburn.Micro;
-
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
-
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// The picture size Helpers
@@ -215,12 +210,7 @@ namespace HandBrakeWPF.Helpers
                 par = new hb_rational_t { den = title.ParH, num = title.ParW }
             };
 
-            hb_geometry_s result = new hb_geometry_s();
-
-            IHbFunctionsProvider provider = IoC.Get<IHbFunctionsProvider>(); // TODO make this method non static and remove IoC call.
-            IHbFunctions hbFunctions = provider.GetHbFunctionsWrapper();
-
-            hbFunctions.hb_set_anamorphic_size2(ref sourceGeometry, ref uiGeometry, ref result);
+            hb_geometry_s result = HandBrakePictureHelpers.GetAnamorphicSizes(sourceGeometry, uiGeometry);
 
             int outputWidth = result.width;
             int outputHeight = result.height;

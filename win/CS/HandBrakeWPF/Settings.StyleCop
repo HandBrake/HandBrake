@@ -1,4 +1,20 @@
 <StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>decomb</Value>
+      <Value>deinterlace</Value>
+      <Value>denoise</Value>
+      <Value>detelecine</Value>
+      <Value>framerate</Value>
+      <Value>hb</Value>
+      <Value>interop</Value>
+      <Value>ipod</Value>
+      <Value>mixdown</Value>
+      <Value>qsv</Value>
+      <Value>samplerate</Value>
+      <Value>vrate</Value>
+    </CollectionProperty>
+  </GlobalSettings>
   <Parsers>
     <Parser ParserId="StyleCop.CSharp.CsParser">
       <ParserSettings>

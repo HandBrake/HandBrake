@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Cropping.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="Cropping.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -25,15 +25,15 @@ namespace HandBrake.Interop.Interop.Model
         /// Initializes a new instance of the <see cref="Cropping"/> class.
         /// Copy Constructor
         /// </summary>
-        /// <param name="croping">
-        /// The croping.
+        /// <param name="cropping">
+        /// The cropping.
         /// </param>
-        public Cropping(Cropping croping)
+        public Cropping(Cropping cropping)
         {
-            this.Top = croping.Top;
-            this.Bottom = croping.Bottom;
-            this.Left = croping.Left;
-            this.Right = croping.Right;
+            this.Top = cropping.Top;
+            this.Bottom = cropping.Bottom;
+            this.Left = cropping.Left;
+            this.Right = cropping.Right;
         }
 
         /// <summary>

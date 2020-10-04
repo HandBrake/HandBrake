@@ -14,9 +14,6 @@ namespace HandBrakeWPF.Startup
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
-
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
@@ -30,8 +27,8 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
+    using IEncode = Services.Encode.Interfaces.IEncode;
+    using LibEncode = Services.Encode.LibEncode;
 
     /// <summary>
     /// The Castle Bootstrapper
@@ -85,7 +82,6 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ICountdownAlertViewModel, CountdownAlertViewModel>();
             this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
             this.container.Singleton<ISystemService, SystemService>();
-            this.container.Singleton<IHbFunctionsProvider, HbFunctionsProvider>();
             this.container.Singleton<ILogInstanceManager, LogInstanceManager>();
             this.container.Singleton<IPortService, PortService>();
             

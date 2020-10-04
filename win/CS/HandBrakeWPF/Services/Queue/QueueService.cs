@@ -15,13 +15,8 @@ namespace HandBrakeWPF.Services.Queue
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Media.Animation;
 
-    using Caliburn.Micro;
-
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Json.Queue;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -55,7 +50,6 @@ namespace HandBrakeWPF.Services.Queue
         private readonly ILog logService;
         private readonly IErrorService errorService;
         private readonly ILogInstanceManager logInstanceManager;
-        private readonly IHbFunctionsProvider hbFunctionsProvider;
         private readonly DelayedActionProcessor delayedQueueBackupProcessor = new DelayedActionProcessor();
 
         private readonly IPortService portService;
@@ -72,13 +66,12 @@ namespace HandBrakeWPF.Services.Queue
 
         private EncodeTaskFactory encodeTaskFactory;
 
-        public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IHbFunctionsProvider hbFunctionsProvider, IPortService portService)
+        public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
             this.userSettingService = userSettingService;
             this.logService = logService;
             this.errorService = errorService;
             this.logInstanceManager = logInstanceManager;
-            this.hbFunctionsProvider = hbFunctionsProvider;
             this.portService = portService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -87,7 +80,9 @@ namespace HandBrakeWPF.Services.Queue
             this.allowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
             this.processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
 
-            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, hbFunctionsProvider.GetHbFunctionsWrapper());
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService);
+
+            this.hardwareEncoderResourceManager.Init();
         }
 
         public event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
@@ -621,7 +616,7 @@ namespace HandBrakeWPF.Services.Queue
                 }
 
                 this.jobIdCounter = this.jobIdCounter + 1;
-                ActiveJob activeJob = new ActiveJob(job, this.hbFunctionsProvider, this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
+                ActiveJob activeJob = new ActiveJob(job, this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
                 activeJob.JobFinished += this.ActiveJob_JobFinished;
                 activeJob.JobStatusUpdated += this.ActiveJob_JobStatusUpdated;
                 this.activeJobs.Add(activeJob);
@@ -704,9 +699,6 @@ namespace HandBrakeWPF.Services.Queue
                                               {
                                                   NullValueHandling = NullValueHandling.Ignore,
                                               };
-
-            IHbFunctionsProvider provider = IoC.Get<IHbFunctionsProvider>(); // TODO remove IoC call.
-            IHbFunctions hbFunctions = provider.GetHbFunctionsWrapper();
 
             List<Task> queueJobs = new List<Task>();
             foreach (var item in tasks)

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandBrakeUnitConversionHelpers.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeUnitConversionHelpers.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -12,25 +12,18 @@ namespace HandBrake.Interop.Interop
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// Converters for various encoding values.
     /// </summary>
     public static class HandBrakeUnitConversionHelpers
     {
-        private static IHbFunctions hbFunctions;
-        
-        /// <summary>
-        /// Video Frame Rates
-        /// </summary>
         private static readonly Dictionary<double, int> VideoRates;
 
         /// <summary>
@@ -38,9 +31,6 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         static HandBrakeUnitConversionHelpers()
         {
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
-
             if (!HandBrakeUtils.IsInitialised())
             {
                 throw new Exception("Please Initialise with HandBrakeUtils.EnsureGlobalInit before using!");
@@ -74,6 +64,41 @@ namespace HandBrake.Interop.Interop
 
             return VideoRates[framerate];
         }
+        
+        public static int GetFramerateFromName(string name)
+        {
+            IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(name);
+
+            return HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
+        }
+
+        /// <summary>
+        /// Converts the PTS amount to a TimeSpan. There may be some accuracy loss here.
+        /// </summary>
+        /// <param name="pts">
+        /// The PTS to convert.
+        /// </param>
+        /// <returns>
+        /// The timespan for it.
+        /// </returns>
+        public static TimeSpan PtsToTimeSpan(ulong pts)
+        {
+            return TimeSpan.FromTicks((long)((pts * 10000000) / 90000));
+        }
+
+        /// <summary>
+        /// Converts the PTS amount to seconds.
+        /// </summary>
+        /// <param name="pts">
+        /// The PTS to convert.
+        /// </param>
+        /// <returns>
+        /// The corresponding number of seconds.
+        /// </returns>
+        public static double PtsToSeconds(ulong pts)
+        {
+            return (double)pts / 90000;
+        }
 
         /// <summary>
         /// Converts a native HB encoder structure to an Encoder model.
@@ -103,8 +128,8 @@ namespace HandBrake.Interop.Interop
             var result = new HBAudioEncoder(
                 encoder.muxers,
                 HandBrakeEncoderHelpers.GetAudioCompressionLimits(encoder.codec),
-                hbFunctions.hb_audio_compression_get_default((uint)encoder.codec),
-                hbFunctions.hb_audio_quality_get_default((uint)encoder.codec),
+                HBFunctions.hb_audio_compression_get_default((uint)encoder.codec),
+                HBFunctions.hb_audio_quality_get_default((uint)encoder.codec),
                 encoder.name,
                 encoder.codec,
                 HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec),
@@ -169,34 +194,6 @@ namespace HandBrake.Interop.Interop
             string englishName = InteropUtilities.ToStringFromUtf8Ptr(language.eng_name);
             string nativeName = InteropUtilities.ToStringFromUtf8Ptr(language.native_name);
             return new Language(englishName, nativeName, language.iso639_2);
-        }
-
-        /// <summary>
-        /// Converts the PTS amount to a TimeSpan. There may be some accuracy loss here.
-        /// </summary>
-        /// <param name="pts">
-        /// The PTS to convert.
-        /// </param>
-        /// <returns>
-        /// The timespan for it.
-        /// </returns>
-        public static TimeSpan PtsToTimeSpan(ulong pts)
-        {
-            return TimeSpan.FromTicks((long)((pts * 10000000) / 90000));
-        }
-
-        /// <summary>
-        /// Converts the PTS amount to seconds.
-        /// </summary>
-        /// <param name="pts">
-        /// The PTS to convert.
-        /// </param>
-        /// <returns>
-        /// The corresponding number of seconds.
-        /// </returns>
-        public static double PtsToSeconds(ulong pts)
-        {
-            return (double)pts / 90000;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HBPresetTune.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HBPresetTune.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//    An object represetning the key and name of a Filter Preset or Tune option.
+//   An object represetning the key and name of a Filter Preset or Tune option.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -27,9 +27,21 @@ namespace HandBrake.Interop.Interop.Model.Encoding
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
             return this.Equals((HBPresetTune)obj);
         }
 

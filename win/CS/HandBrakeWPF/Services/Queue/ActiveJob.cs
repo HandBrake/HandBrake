@@ -10,10 +10,7 @@
 namespace HandBrakeWPF.Services.Queue
 {
     using System;
-    using System.Diagnostics;
-
-    using HandBrake.Interop.Interop.Providers.Interfaces;
-
+    
     using HandBrakeWPF.Services.Encode;
     using HandBrakeWPF.Services.Encode.EventArgs;
     using HandBrakeWPF.Services.Encode.Interfaces;
@@ -27,10 +24,10 @@ namespace HandBrakeWPF.Services.Queue
         private readonly QueueTask job;
         private readonly IEncode encodeService;
 
-        public ActiveJob(QueueTask task, IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int jobId, IPortService portService)
+        public ActiveJob(QueueTask task, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int jobId, IPortService portService)
         {
             this.job = task;
-            this.encodeService = new LibEncode(hbFunctionsProvider, userSettingService, logInstanceManager, jobId, portService);
+            this.encodeService = new LibEncode(userSettingService, logInstanceManager, jobId, portService);
         }
 
         public event EventHandler<ActiveJobCompletedEventArgs> JobFinished;

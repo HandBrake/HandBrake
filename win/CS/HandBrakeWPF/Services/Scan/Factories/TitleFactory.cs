@@ -11,16 +11,12 @@ namespace HandBrakeWPF.Services.Scan.Factories
 {
     using System;
 
-    using Caliburn.Micro;
-
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
 
     public class TitleFactory
@@ -96,11 +92,8 @@ namespace HandBrakeWPF.Services.Scan.Factories
                         break;
                 }
 
-                IHbFunctionsProvider provider = IoC.Get<IHbFunctionsProvider>(); // TODO remove IoC call
-                IHbFunctions hbFunctions = provider.GetHbFunctionsWrapper();
-
-                bool canBurn = hbFunctions.hb_subtitle_can_burn(track.Source) > 0;
-                bool canSetForcedOnly = hbFunctions.hb_subtitle_can_force(track.Source) > 0;
+                bool canBurn = HandBrakeSubtitleHelpers.CheckCanBurnSubtitle(track.Source) > 0;
+                bool canSetForcedOnly = HandBrakeSubtitleHelpers.CheckCanForceSubtitle(track.Source) > 0;
 
                 converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly, track.Name));
                 currentSubtitleTrack++;

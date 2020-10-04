@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandBrakeEncoderHelpers.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeEncoderHelpers.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,19 +14,12 @@ namespace HandBrake.Interop.Interop
     using System.Linq;
 
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
-    /// <summary>
-    /// The encoders.
-    /// </summary>
     public static class HandBrakeEncoderHelpers
     {
-        private static IHbFunctions hbFunctions;
         private static List<HBAudioEncoder> audioEncoders;
         private static List<HBVideoEncoder> videoEncoders;
         private static List<HBRate> videoFramerates;
@@ -40,9 +33,6 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         static HandBrakeEncoderHelpers()
         {
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
-
             if (!HandBrakeUtils.IsInitialised())
             {
                 throw new Exception("Please Initialise with HandBrakeUtils.EnsureGlobalInit before using!");
@@ -58,7 +48,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (audioEncoders == null)
                 {
-                    audioEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBAudioEncoder>(hbFunctions.hb_audio_encoder_get_next, HandBrakeUnitConversionHelpers.NativeToAudioEncoder);
+                    audioEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBAudioEncoder>(HBFunctions.hb_audio_encoder_get_next, HandBrakeUnitConversionHelpers.NativeToAudioEncoder);
                 }
 
                 return audioEncoders;
@@ -74,7 +64,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (videoEncoders == null)
                 {
-                    videoEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBVideoEncoder>(hbFunctions.hb_video_encoder_get_next, HandBrakeUnitConversionHelpers.NativeToVideoEncoder);
+                    videoEncoders = InteropUtilities.ToListFromIterator<hb_encoder_s, HBVideoEncoder>(HBFunctions.hb_video_encoder_get_next, HandBrakeUnitConversionHelpers.NativeToVideoEncoder);
                 }
 
                 return videoEncoders;
@@ -90,7 +80,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (videoFramerates == null)
                 {
-                    videoFramerates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(hbFunctions.hb_video_framerate_get_next, HandBrakeUnitConversionHelpers.NativeToRate);
+                    videoFramerates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_video_framerate_get_next, HandBrakeUnitConversionHelpers.NativeToRate);
                 }
 
                 return videoFramerates;
@@ -106,7 +96,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (mixdowns == null)
                 {
-                    mixdowns = InteropUtilities.ToListFromIterator<hb_mixdown_s, HBMixdown>(hbFunctions.hb_mixdown_get_next, HandBrakeUnitConversionHelpers.NativeToMixdown);
+                    mixdowns = InteropUtilities.ToListFromIterator<hb_mixdown_s, HBMixdown>(HBFunctions.hb_mixdown_get_next, HandBrakeUnitConversionHelpers.NativeToMixdown);
                 }
 
                 return mixdowns;
@@ -122,7 +112,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (audioBitrates == null)
                 {
-                    audioBitrates = InteropUtilities.ToListFromIterator<hb_rate_s, int>(hbFunctions.hb_audio_bitrate_get_next, b => b.rate);
+                    audioBitrates = InteropUtilities.ToListFromIterator<hb_rate_s, int>(HBFunctions.hb_audio_bitrate_get_next, b => b.rate);
                 }
 
                 return audioBitrates;
@@ -138,7 +128,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (audioSampleRates == null)
                 {
-                    audioSampleRates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(hbFunctions.hb_audio_samplerate_get_next, HandBrakeUnitConversionHelpers.NativeToRate);
+                    audioSampleRates = InteropUtilities.ToListFromIterator<hb_rate_s, HBRate>(HBFunctions.hb_audio_samplerate_get_next, HandBrakeUnitConversionHelpers.NativeToRate);
                 }
 
                 return audioSampleRates;
@@ -154,7 +144,7 @@ namespace HandBrake.Interop.Interop
             {
                 if (containers == null)
                 {
-                    containers = InteropUtilities.ToListFromIterator<hb_container_s, HBContainer>(hbFunctions.hb_container_get_next, HandBrakeUnitConversionHelpers.NativeToContainer);
+                    containers = InteropUtilities.ToListFromIterator<hb_container_s, HBContainer>(HBFunctions.hb_container_get_next, HandBrakeUnitConversionHelpers.NativeToContainer);
                 }
 
                 return containers;
@@ -168,7 +158,7 @@ namespace HandBrake.Interop.Interop
         {
             get
             {
-                return hbFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSRT) > 0;
+                return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSRT) > 0;
             }
         }
 
@@ -179,7 +169,7 @@ namespace HandBrake.Interop.Interop
         {
             get
             {
-                return hbFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSSA) > 0;
+                return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSSA) > 0;
             }
         }
 
@@ -281,7 +271,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool SubtitleCanSetForcedOnly(int source)
         {
-            return hbFunctions.hb_subtitle_can_force(source) > 0;
+            return HBFunctions.hb_subtitle_can_force(source) > 0;
         }
 
         /// <summary>
@@ -295,7 +285,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool SubtitleCanBurn(int source)
         {
-            return hbFunctions.hb_subtitle_can_burn(source) > 0;
+            return HBFunctions.hb_subtitle_can_burn(source) > 0;
         }
 
         /// <summary>
@@ -312,7 +302,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool SubtitleCanPassthrough(int subtitleSourceType, int muxer)
         {
-            return hbFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
+            return HBFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
         }
 
         /// <summary>
@@ -360,7 +350,7 @@ namespace HandBrake.Interop.Interop
         /// The encoder to examine.
         /// </param>
         /// <returns>
-        /// True if the given encoder is comatible with the given audio track.
+        /// True if the given encoder is compatible with the given audio track.
         /// </returns>
         /// <remarks>
         /// Only works with passthrough encoders.
@@ -384,7 +374,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool MixdownHasRemixSupport(HBMixdown mixdown, ulong layout)
         {
-            return hbFunctions.hb_mixdown_has_remix_support(mixdown.Id, layout) > 0;
+            return HBFunctions.hb_mixdown_has_remix_support(mixdown.Id, layout) > 0;
         }
 
         /// <summary>
@@ -401,7 +391,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool MixdownHasCodecSupport(HBMixdown mixdown, HBAudioEncoder encoder)
         {
-            return hbFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint)encoder.Id) > 0;
+            return HBFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint)encoder.Id) > 0;
         }
 
         /// <summary>
@@ -417,12 +407,15 @@ namespace HandBrake.Interop.Interop
         /// <returns>True if available.</returns>
         public static bool MixdownIsSupported(HBMixdown mixdown, HBAudioEncoder encoder, long channelLayout)
         {
-            return hbFunctions.hb_mixdown_is_supported(mixdown.Id, (uint)encoder.Id, (uint)channelLayout) > 0;
+            return HBFunctions.hb_mixdown_is_supported(mixdown.Id, (uint)encoder.Id, (uint)channelLayout) > 0;
         }
 
         /// <summary>
         /// Determines if DRC can be applied to the given track with the given encoder.
         /// </summary>
+        /// <param name="handle">
+        /// The handle.
+        /// </param>
         /// <param name="trackNumber">
         /// The track Number.
         /// </param>
@@ -437,7 +430,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool CanApplyDrc(IntPtr handle, int trackNumber, HBAudioEncoder encoder, int title)
         {
-            return hbFunctions.hb_audio_can_apply_drc2(handle, title, trackNumber, encoder.Id) > 0; 
+            return HBFunctions.hb_audio_can_apply_drc2(handle, title, trackNumber, encoder.Id) > 0; 
         }
 
         /// <summary>
@@ -476,7 +469,7 @@ namespace HandBrake.Interop.Interop
                 return null;
             }
 
-            int sanitizedMixdown = hbFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
+            int sanitizedMixdown = HBFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
             if (sanitizedMixdown != -1)
             {
                 return Mixdowns.Single(m => m.Id == sanitizedMixdown);
@@ -499,7 +492,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static HBMixdown GetDefaultMixdown(HBAudioEncoder encoder, ulong layout)
         {
-            int defaultMixdown = hbFunctions.hb_mixdown_get_default((uint)encoder.Id, layout);
+            int defaultMixdown = HBFunctions.hb_mixdown_get_default((uint)encoder.Id, layout);
             return Mixdowns.Single(m => m.Id == defaultMixdown);
         }
 
@@ -511,7 +504,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>The sanitized sample rate.</returns>
         public static int SanitizeSampleRate(HBAudioEncoder encoder, int sampleRate)
         {
-            return hbFunctions.hb_audio_samplerate_find_closest(sampleRate, (uint)encoder.Id);
+            return HBFunctions.hb_audio_samplerate_find_closest(sampleRate, (uint)encoder.Id);
         }
 
         /// <summary>
@@ -534,7 +527,7 @@ namespace HandBrake.Interop.Interop
             int low = 0;
             int high = 0;
 
-            hbFunctions.hb_audio_bitrate_get_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
+            HBFunctions.hb_audio_bitrate_get_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
 
             return new BitrateLimits(low, high);
         }
@@ -555,7 +548,7 @@ namespace HandBrake.Interop.Interop
             float granularity = 0;
             int direction = 0;
 
-            hbFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
+            HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
 
             return new VideoQualityLimits(low, high, granularity, direction == 0);
         }
@@ -580,7 +573,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static int SanitizeAudioBitrate(int audioBitrate, HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
         {
-            return hbFunctions.hb_audio_bitrate_get_best((uint)encoder.Id, audioBitrate, sampleRate, mixdown.Id);
+            return HBFunctions.hb_audio_bitrate_get_best((uint)encoder.Id, audioBitrate, sampleRate, mixdown.Id);
         }
 
         /// <summary>
@@ -600,7 +593,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static int GetDefaultBitrate(HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
         {
-            return hbFunctions.hb_audio_bitrate_get_default((uint)encoder.Id, sampleRate, mixdown.Id);
+            return HBFunctions.hb_audio_bitrate_get_default((uint)encoder.Id, sampleRate, mixdown.Id);
         }
 
         /// <summary>
@@ -616,7 +609,7 @@ namespace HandBrake.Interop.Interop
         {
             float low = 0, high = 0, granularity = 0;
             int direction = 0;
-            hbFunctions.hb_audio_quality_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
+            HBFunctions.hb_audio_quality_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
             return new RangeLimits(direction == 0, granularity, high, low);
         }
@@ -634,7 +627,7 @@ namespace HandBrake.Interop.Interop
         {
             float low = 0, high = 0, granularity = 0;
             int direction = 0;
-            hbFunctions.hb_audio_compression_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
+            HBFunctions.hb_audio_compression_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
             return new RangeLimits(direction == 0, granularity, high, low);
         }
@@ -650,7 +643,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static double GetDefaultQuality(HBAudioEncoder encoder)
         {
-           return hbFunctions.hb_audio_quality_get_default((uint)encoder.Id);
+           return HBFunctions.hb_audio_quality_get_default((uint)encoder.Id);
         }
 
         /// <summary>
@@ -664,7 +657,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static double GetDefaultAudioCompression(HBAudioEncoder encoder)
         {
-            return hbFunctions.hb_audio_compression_get_default((uint)encoder.Id);
+            return HBFunctions.hb_audio_compression_get_default((uint)encoder.Id);
         }
 
         public static uint BuildCopyMask(bool audioAllowMP3Pass, bool audioAllowAACPass, bool audioAllowAC3Pass, bool audioAllowDTSPass, bool audioAllowDTSHDPass, bool audioAllowEac3Pass, bool audioAllowFlacPass, bool audioAllowTruehdPass)
@@ -712,6 +705,15 @@ namespace HandBrake.Interop.Interop
             }
 
             return mask;
+        }
+
+        public static List<int> GetQsvAdaptorList()
+        {
+            IntPtr gpuListPtr = HBFunctions.hb_qsv_adapters_list();
+
+            List<int> gpuList = InteropUtilities.ToListFromHandBrakeList<int>(gpuListPtr);
+
+            return gpuList;
         }
     }
 }

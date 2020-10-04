@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NativeList.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="NativeList.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -15,16 +15,16 @@ namespace HandBrake.Interop.Interop.Helpers
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// Represents a HandBrake style native list.
     /// </summary>
     internal class NativeList : IDisposable
     {
-        private static IHbFunctions hbFunctions;
+        /// <summary>
+        /// The list of native memory locations allocated for this list.
+        /// </summary>
+        private readonly List<IntPtr> allocatedMemory = new List<IntPtr>();
 
         /// <summary>
         /// Initializes a new instance of the NativeList class.
@@ -33,14 +33,7 @@ namespace HandBrake.Interop.Interop.Helpers
         public NativeList(IntPtr listPtr)
         {
             this.Ptr = listPtr;
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
         }
-        
-        /// <summary>
-        /// The list of native memory locations allocated for this list.
-        /// </summary>
-        private readonly List<IntPtr> allocatedMemory = new List<IntPtr>();
 
         /// <summary>
         /// Gets the pointer to the native list.
@@ -55,7 +48,7 @@ namespace HandBrake.Interop.Interop.Helpers
             get
             {
                 Debug.WriteLine("Got a Zero Pointer in the NativeList");
-                return this.Ptr == IntPtr.Zero ? 0 : hbFunctions.hb_list_count(this.Ptr);
+                return this.Ptr == IntPtr.Zero ? 0 : HBFunctions.hb_list_count(this.Ptr);
             }
         }
 
@@ -71,12 +64,25 @@ namespace HandBrake.Interop.Interop.Helpers
         }
 
         /// <summary>
+        /// Gets an item out of the list.
+        /// </summary>
+        /// <param name="i">Index in the list.</param>
+        /// <returns>The item at that index in the list.</returns>
+        public IntPtr this[int i]
+        {
+            get
+            {
+                return HBFunctions.hb_list_item(this.Ptr, i);
+            }
+        }
+
+        /// <summary>
         /// Adds an item to the end of the list.
         /// </summary>
         /// <param name="item">The item to add.</param>
         public void Add(IntPtr item)
         {
-            hbFunctions.hb_list_add(this.Ptr, item);
+            HBFunctions.hb_list_add(this.Ptr, item);
         }
 
         /// <summary>
@@ -86,7 +92,7 @@ namespace HandBrake.Interop.Interop.Helpers
         /// <param name="item">The item to insert.</param>
         public void Insert(int position, IntPtr item)
         {
-            hbFunctions.hb_list_insert(this.Ptr, position, item);
+            HBFunctions.hb_list_insert(this.Ptr, position, item);
         }
 
         /// <summary>
@@ -95,20 +101,7 @@ namespace HandBrake.Interop.Interop.Helpers
         /// <param name="item">The item to remove.</param>
         public void Remove(IntPtr item)
         {
-            hbFunctions.hb_list_rem(this.Ptr, item);
-        }
-
-        /// <summary>
-        /// Gets an item out of the list.
-        /// </summary>
-        /// <param name="i">Index in the list.</param>
-        /// <returns>The item at that index in the list.</returns>
-        public IntPtr this[int i]
-        {
-            get
-            {
-                return hbFunctions.hb_list_item(this.Ptr, i);
-            }
+            HBFunctions.hb_list_rem(this.Ptr, item);
         }
 
         /// <summary>
@@ -118,7 +111,7 @@ namespace HandBrake.Interop.Interop.Helpers
         {
             IntPtr listPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
             Marshal.WriteIntPtr(listPtrPtr, this.Ptr);
-            hbFunctions.hb_list_close(listPtrPtr);
+            HBFunctions.hb_list_close(listPtrPtr);
             Marshal.FreeHGlobal(listPtrPtr);
         }
 
@@ -128,8 +121,7 @@ namespace HandBrake.Interop.Interop.Helpers
         /// <returns>The created list.</returns>
         public static NativeList CreateList()
         {
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            return new NativeList(hbFunctionsProvider.GetHbFunctionsWrapper().hb_list_init());
+            return new NativeList(HBFunctions.hb_list_init());
         }
     }
 }

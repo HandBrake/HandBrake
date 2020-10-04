@@ -17,7 +17,6 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Exceptions;
@@ -39,7 +38,6 @@ namespace HandBrakeWPF.Services.Encode
     {
         private readonly IUserSettingService userSettingService;
         private readonly ILogInstanceManager logInstanceManager;
-        private readonly IHbFunctionsProvider hbFunctionsProvider;
         private readonly IPortService portService;
         private readonly object portLock = new object();
         private readonly EncodeTaskFactory encodeTaskFactory;
@@ -51,14 +49,13 @@ namespace HandBrakeWPF.Services.Encode
         private bool isLoggingInitialised;
         private int encodeCounter;
 
-        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter, IPortService portService) : base(userSettingService)
+        public LibEncode(IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter, IPortService portService) : base(userSettingService)
         {
             this.userSettingService = userSettingService;
             this.logInstanceManager = logInstanceManager;
-            this.hbFunctionsProvider = hbFunctionsProvider;
             this.encodeCounter = encodeCounter;
             this.portService = portService;
-            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService, hbFunctionsProvider.GetHbFunctionsWrapper());
+            this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService);
         }
 
         public bool IsPasued { get; private set; }

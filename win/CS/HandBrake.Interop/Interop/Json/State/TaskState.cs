@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TaskState.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="TaskState.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -13,6 +13,8 @@ namespace HandBrake.Interop.Interop.Json.State
 
     public class TaskState
     {
+        private static readonly Dictionary<string, TaskState> TaskStates = new Dictionary<string, TaskState>();
+
         public static TaskState Idle = new TaskState("IDLE");
         public static TaskState Scanning = new TaskState("SCANNING");
         public static TaskState ScanDone = new TaskState("SCANDONE");
@@ -23,19 +25,17 @@ namespace HandBrake.Interop.Interop.Json.State
         public static TaskState Muxing = new TaskState("MUXING");
         public static TaskState Unknown = new TaskState("UNKNOWN");
 
-        private static readonly Dictionary<string, TaskState> taskStates = new Dictionary<string, TaskState>();
-
         static TaskState()
         {
-            taskStates.Add("IDLE", Idle);
-            taskStates.Add("SCANNING", Scanning);
-            taskStates.Add("SCANDONE", ScanDone);
-            taskStates.Add("WORKING", Working);
-            taskStates.Add("PAUSED", Paused);
-            taskStates.Add("SEARCHING", Searching);
-            taskStates.Add("WORKDONE", WorkDone);
-            taskStates.Add("MUXING", Muxing);
-            taskStates.Add("UNKNOWN", Unknown);
+            TaskStates.Add("IDLE", Idle);
+            TaskStates.Add("SCANNING", Scanning);
+            TaskStates.Add("SCANDONE", ScanDone);
+            TaskStates.Add("WORKING", Working);
+            TaskStates.Add("PAUSED", Paused);
+            TaskStates.Add("SEARCHING", Searching);
+            TaskStates.Add("WORKDONE", WorkDone);
+            TaskStates.Add("MUXING", Muxing);
+            TaskStates.Add("UNKNOWN", Unknown);
         }
 
         public TaskState(string code)
@@ -47,8 +47,7 @@ namespace HandBrake.Interop.Interop.Json.State
 
         public static TaskState FromRepositoryValue(string code)
         {
-            TaskState state = null;
-            if (taskStates.TryGetValue(code, out state))
+            if (TaskStates.TryGetValue(code, out TaskState state))
             {
                 return state;
             }

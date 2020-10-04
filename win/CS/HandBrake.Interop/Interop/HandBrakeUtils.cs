@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandBrakeUtils.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeUtils.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -11,18 +11,13 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using System.Runtime.CompilerServices;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Json.Anamorphic;
     using HandBrake.Interop.Interop.Json.Shared;
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     using Newtonsoft.Json;
 
@@ -59,17 +54,12 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
 
-        private static IHbFunctions hbFunctions;
-
-        static HandBrakeUtils()
-        {
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
-        }
-
         /// <summary>
         /// Ensures the HB global initialize method has been called.
         /// </summary>
+        /// <param name="initNoHardwareMode">
+        /// Init without hardware encoders.
+        /// </param>
         public static void EnsureGlobalInit(bool initNoHardwareMode)
         {
             if (!globalInitialized)
@@ -79,7 +69,7 @@ namespace HandBrake.Interop.Interop
                     if (initNoHardwareMode)
                     {
                         initNoHardware = true;
-                        if (hbFunctions.hb_global_init_no_hardware() == -1)
+                        if (HBFunctions.hb_global_init_no_hardware() == -1)
                         {
                             throw new InvalidOperationException("HB global init failed.");
                         }
@@ -99,7 +89,7 @@ namespace HandBrake.Interop.Interop
                 // Try without Hardware support. Bad drivers can sometimes cause issues.
                 if (!initSuccess)
                 {
-                    if (hbFunctions.hb_global_init_no_hardware() == -1)
+                    if (HBFunctions.hb_global_init_no_hardware() == -1)
                     {
                         throw new InvalidOperationException("HB global init failed.");
                     }
@@ -117,7 +107,7 @@ namespace HandBrake.Interop.Interop
         /// </param>
         public static void SetDvdNav(bool enableDvdNav)
         {
-            hbFunctions.hb_dvd_set_dvdnav(enableDvdNav ? 1 : 0);
+            HBFunctions.hb_dvd_set_dvdnav(enableDvdNav ? 1 : 0);
         }
 
         /// <summary>
@@ -125,7 +115,7 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         public static void DisposeGlobal()
         {
-            hbFunctions.hb_global_close();
+            HBFunctions.hb_global_close();
         }
 
         /// <summary>
@@ -139,8 +129,8 @@ namespace HandBrake.Interop.Interop
                 // Keep the callback as a member to prevent it from being garbage collected.
                 loggingCallback = LoggingHandler;
                 errorCallback = ErrorHandler;
-                hbFunctions.hb_register_logger(loggingCallback);
-                hbFunctions.hb_register_error_handler(errorCallback);
+                HBFunctions.hb_register_logger(loggingCallback);
+                HBFunctions.hb_register_error_handler(errorCallback);
             }
         }
 
@@ -192,7 +182,7 @@ namespace HandBrake.Interop.Interop
         public static string SanitizeX264OptName(string name)
         {
             IntPtr namePtr = Marshal.StringToHGlobalAnsi(name);
-            string sanitizedName = Marshal.PtrToStringAnsi(hbFunctions.hb_x264_encopt_name(namePtr));
+            string sanitizedName = Marshal.PtrToStringAnsi(HBFunctions.hb_x264_encopt_name(namePtr));
             Marshal.FreeHGlobal(namePtr);
             return sanitizedName;
         }
@@ -226,14 +216,14 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static bool IsH264LevelValid(string level, int width, int height, int fpsNumerator, int fpsDenominator, bool interlaced, bool fakeInterlaced)
         {
-            return hbFunctions.hb_check_h264_level(
-                level,
-                width,
-                height,
-                fpsNumerator,
-                fpsDenominator,
-                interlaced ? 1 : 0,
-                fakeInterlaced ? 1 : 0) == 0;
+            return HBFunctions.hb_check_h264_level(
+                       level,
+                       width,
+                       height,
+                       fpsNumerator,
+                       fpsDenominator,
+                       interlaced ? 1 : 0,
+                       fakeInterlaced ? 1 : 0) == 0;
         }
 
         /// <summary>
@@ -282,7 +272,7 @@ namespace HandBrake.Interop.Interop
                 throw new ArgumentException("height must be positive.");
             }
 
-            IntPtr ptr = hbFunctions.hb_x264_param_unparse(
+            IntPtr ptr = HBFunctions.hb_x264_param_unparse(
                 8,
                 preset,
                 string.Join(",", tunes),
@@ -305,7 +295,7 @@ namespace HandBrake.Interop.Interop
         public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
         {
             string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            IntPtr json = hbFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
+            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
             string result = Marshal.PtrToStringAnsi(json);
             return JsonConvert.DeserializeObject<Geometry>(result);
         }
@@ -370,7 +360,7 @@ namespace HandBrake.Interop.Interop
         {
             try
             {
-                if (hbFunctions.hb_global_init() == -1)
+                if (HBFunctions.hb_global_init() == -1)
                 {
                     throw new InvalidOperationException("HB global init failed.");
                 }

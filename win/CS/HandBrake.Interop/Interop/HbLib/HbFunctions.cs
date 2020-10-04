@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HBFunctions.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HBFunctions.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -307,5 +307,8 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "qsv_hardware_generation", CallingConvention = CallingConvention.Cdecl)]
         public static extern int qsv_hardware_generation(int cpu_platform);
+
+        [DllImport("hb", EntryPoint = "hb_qsv_adapters_list", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_qsv_adapters_list();
     }
 }

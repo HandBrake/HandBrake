@@ -19,6 +19,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interop\HbLib\Wrappers\**" />
+    <EmbeddedResource Remove="Interop\HbLib\Wrappers\**" />
+    <None Remove="Interop\HbLib\Wrappers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

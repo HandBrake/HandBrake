@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandBrakeLanguagesHelper.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HandBrakeLanguagesHelper.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -12,11 +12,8 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
 
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Providers;
-    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// Contains utilities for converting language codes.
@@ -24,14 +21,6 @@ namespace HandBrake.Interop.Interop
     public static class HandBrakeLanguagesHelper
     {
         private static IList<Language> allLanguages;
-
-        private static IHbFunctions hbFunctions;
-
-        static HandBrakeLanguagesHelper()
-        {
-            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
-            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
-        }
 
         /// <summary>
         /// Gets a list of all languages.
@@ -42,7 +31,7 @@ namespace HandBrake.Interop.Interop
             {
                 return allLanguages
                        ?? (allLanguages =
-                           InteropUtilities.ToListFromIterator<iso639_lang_t, Language>(hbFunctions.lang_get_next, HandBrakeUnitConversionHelpers.NativeToLanguage));
+                           InteropUtilities.ToListFromIterator<iso639_lang_t, Language>(HBFunctions.lang_get_next, HandBrakeUnitConversionHelpers.NativeToLanguage));
             }
         }
 
@@ -53,7 +42,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>Object that describes the language.</returns>
         public static Language Get(string code)
         {
-            iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(hbFunctions.lang_for_code2(code));
+            iso639_lang_t language = InteropUtilities.ToStructureFromPtr<iso639_lang_t>(HBFunctions.lang_for_code2(code));
             return HandBrakeUnitConversionHelpers.NativeToLanguage(language);
         }
     }
