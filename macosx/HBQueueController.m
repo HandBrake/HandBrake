@@ -20,7 +20,7 @@
 
 @import HandBrakeKit;
 
-@interface HBQueueController () <NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
+@interface HBQueueController () <NSToolbarItemValidation, NSMenuItemValidation, NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
 @property (nonatomic) NSSplitViewController *splitViewController;
 @property (nonatomic) HBQueueTableViewController *tableViewController;

@@ -11,17 +11,12 @@
 #import "HBQueueItemView.h"
 #import "HBQueueItemWorkingView.h"
 #import "NSArray+HBAdditions.h"
+#import "HBPasteboardItem.h"
 
-// Pasteboard type for or drag operations
-#define HBQueueDragDropPboardType @"HBQueueCustomTableViewPboardType"
-
-@interface HBQueueTableViewController () <NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate>
+@interface HBQueueTableViewController () <NSMenuItemValidation, NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate>
 
 @property (nonatomic, weak, readonly) HBQueue *queue;
-@property (nonatomic) NSArray<id<HBQueueItem>> *dragNodesArray;
-
 @property (nonatomic, strong) id<HBQueueTableViewControllerDelegate> delegate;
-
 @property (nonatomic, weak) IBOutlet HBTableView *tableView;
 
 @end
@@ -48,8 +43,7 @@
     [super viewDidLoad];
 
     // lets setup our queue list table view for drag and drop here
-    [self.tableView registerForDraggedTypes:@[HBQueueDragDropPboardType]];
-    [self.tableView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
+    [self.tableView registerForDraggedTypes:@[tableViewIndex]];
     [self.tableView setVerticalMotionCanBeginDrag:YES];
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidAddItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
@@ -353,41 +347,39 @@
     [self removeSelectedQueueItem:tableView];
 }
 
-- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+- (nullable id <NSPasteboardWriting>)tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
 {
-    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:rowIndexes];
-    // Dragging is only allowed of the pending items.
-    if (items[0].state != HBQueueItemStateReady)
-    {
-        return NO;
-    }
-
-    self.dragNodesArray = items;
-
-    // Provide data for our custom type, and simple NSStrings.
-    [pboard declareTypes:@[HBQueueDragDropPboardType] owner:self];
-
-    // the actual data doesn't matter since DragDropSimplePboardType drags aren't recognized by anyone but us!.
-    [pboard setData:[NSData data] forType:HBQueueDragDropPboardType];
-
-    return YES;
+    return [[HBPasteboardItem alloc] initWithIndex:row];
 }
 
 - (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
-    // Don't allow dropping ONTO an item since they can't really contain any children.
-    BOOL isOnDropTypeProposal = dropOperation == NSTableViewDropOn;
-    if (isOnDropTypeProposal)
+    NSDragOperation dragOp = NSDragOperationNone;
+
+    // if drag source is our own table view, it's a move or a copy
+    if (info.draggingSource == tableView)
     {
-        return NSDragOperationNone;
+        // At a minimum, allow move
+        dragOp = NSDragOperationMove;
     }
 
-    return NSDragOperationMove;
+    [tableView setDropRow:row dropOperation:NSTableViewDropAbove];
+
+    return dragOp;
 }
 
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
 {
-    [self.queue moveItems:self.dragNodesArray toIndex:row];
+    NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc] init];
+    for (NSPasteboardItem *item in info.draggingPasteboard.pasteboardItems)
+    {
+        NSNumber *index = [item propertyListForType:tableViewIndex];
+        [indexes addIndex:index.integerValue];
+    }
+
+    NSArray *items = [self.queue.items objectsAtIndexes:indexes];
+    [self.queue moveItems:items toIndex:row];
+
     return YES;
 }
 

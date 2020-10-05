@@ -313,6 +313,7 @@
 		A9DF49271C884C4E008AC14A /* HBJobTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49221C884C4E008AC14A /* HBJobTests.m */; };
 		A9DF49281C884C4E008AC14A /* HBJobUndoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */; };
 		A9DF492A1C884C4E008AC14A /* HBPresetsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49261C884C4E008AC14A /* HBPresetsTests.m */; };
+		A9E05A082529E77F000E0E9A /* HBPasteboardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E05A072529E77F000E0E9A /* HBPasteboardItem.m */; };
 		A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */; };
 		A9E1468016BC2AD800C307BC /* NextTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467C16BC2AD800C307BC /* NextTemplate.pdf */; };
 		A9E1468116BC2AD800C307BC /* PauseTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467D16BC2AD800C307BC /* PauseTemplate.pdf */; };
@@ -1022,6 +1023,8 @@
 		A9DF49221C884C4E008AC14A /* HBJobTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobTests.m; sourceTree = "<group>"; };
 		A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobUndoTests.m; sourceTree = "<group>"; };
 		A9DF49261C884C4E008AC14A /* HBPresetsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsTests.m; sourceTree = "<group>"; };
+		A9E05A062529E77F000E0E9A /* HBPasteboardItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPasteboardItem.h; sourceTree = "<group>"; };
+		A9E05A072529E77F000E0E9A /* HBPasteboardItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPasteboardItem.m; sourceTree = "<group>"; };
 		A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		A9E1467C16BC2AD800C307BC /* NextTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = NextTemplate.pdf; sourceTree = "<group>"; };
 		A9E1467D16BC2AD800C307BC /* PauseTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PauseTemplate.pdf; sourceTree = "<group>"; };
@@ -1581,6 +1584,8 @@
 				A943873F22ED911B005F701B /* HBJob+HBAdditions.h */,
 				A943874022ED911B005F701B /* HBJob+HBAdditions.m */,
 				273F20BD14ADC09F0021BE6D /* main.m */,
+				A9E05A062529E77F000E0E9A /* HBPasteboardItem.h */,
+				A9E05A072529E77F000E0E9A /* HBPasteboardItem.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -2537,6 +2542,7 @@
 				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
 				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,
 				A9D363512209C08600D8EFEA /* HBQueueItemView.m in Sources */,
+				A9E05A082529E77F000E0E9A /* HBPasteboardItem.m in Sources */,
 				A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */,
 				A96664B51CCE48F700DA4A57 /* HBPictureHUDController.m in Sources */,
 				A957EBCD218DBE5900007988 /* HBAutoNamer.m in Sources */,
