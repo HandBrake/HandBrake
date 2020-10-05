@@ -761,12 +761,12 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
         int crop[4] = {self.cropTop, self.cropBottom, self.cropLeft, self.cropRight};
         memcpy(uiGeo.crop, crop, sizeof(int[4]));
-        uiGeo.geometry.width = self.useMaximumSize ? self.maxWidth : self.width;
-        uiGeo.geometry.height =  self.useMaximumSize ? self.maxHeight : self.height;
+        uiGeo.geometry.width = self.useMaximumSize || self.maxWidth < self.width ? self.maxWidth : self.width;
+        uiGeo.geometry.height =  self.useMaximumSize || self.maxHeight < self.height ? self.maxHeight : self.height;
         // Modulus added to maxWidth/maxHeight to allow a small amount of
         // upscaling to the next mod boundary.
-        uiGeo.maxWidth = self.allowUpscaling ? self.maxWidth : self.sourceWidth - crop[2] - crop[3] + self.modulus - 1;
-        uiGeo.maxHeight = self.allowUpscaling ? self.maxHeight : self.sourceHeight - crop[0] - crop[1] + self.modulus - 1;
+        uiGeo.maxWidth = self.allowUpscaling || self.maxWidth < self.width ? self.maxWidth : self.sourceWidth - crop[2] - crop[3] + self.modulus - 1;
+        uiGeo.maxHeight = self.allowUpscaling || self.maxHeight < self.height ? self.maxHeight : self.sourceHeight - crop[0] - crop[1] + self.modulus - 1;
 
         hb_rational_t par = {self.parWidth, self.parHeight};
         uiGeo.geometry.par = par;
@@ -1126,10 +1126,7 @@ fail:
         self.resolutionLimitMode = HBPictureResolutionLimitModeCustom;
     }
 
-    // Check to see if UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
-    // (2 is use max for source and 1 is use exact size when the preset was created) and the
-    // preset completely ignores any picture sizing values in the preset.
-    if (cropScale && [preset[@"UsesPictureSettings"] intValue])
+    if (cropScale)
     {
         // If Cropping is set to custom, then recall all four crop values from
         // when the preset was created and apply them

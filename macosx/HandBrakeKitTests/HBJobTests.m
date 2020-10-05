@@ -112,8 +112,6 @@
 {
     HBMutablePreset *preset = [self.preset mutableCopy];
 
-    preset[@"UsesPictureSettings"] = @1;
-
     preset[@"PictureWidth"] = @720;
     preset[@"PictureHeight"] = @576;
 

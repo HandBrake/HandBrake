@@ -27,7 +27,7 @@
 #define MIN_WIDTH 480.0
 #define MIN_HEIGHT 360.0
 
-@interface HBPreviewController () <HBPreviewGeneratorDelegate, HBPictureHUDControllerDelegate, HBEncodingProgressHUDControllerDelegate, HBPlayerHUDControllerDelegate>
+@interface HBPreviewController () <NSMenuItemValidation, HBPreviewGeneratorDelegate, HBPictureHUDControllerDelegate, HBEncodingProgressHUDControllerDelegate, HBPlayerHUDControllerDelegate>
 
 @property (nonatomic, readonly) HBPictureHUDController *pictureHUD;
 @property (nonatomic, readonly) HBEncodingProgressHUDController *encodingHUD;

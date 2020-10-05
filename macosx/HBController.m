@@ -41,7 +41,7 @@
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDraggingDestination, NSPopoverDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSMenuItemValidation, NSDraggingDestination, NSPopoverDelegate>
 {
     IBOutlet NSTabView *fMainTabView;
 
@@ -1454,15 +1454,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     [self.window HB_endEditing];
 
-    BOOL defaultToCustom = ((self.job.picture.width + self.job.picture.cropRight + self.job.picture.cropLeft) < self.job.picture.sourceWidth) ||
-                           ((self.job.picture.height + self.job.picture.cropTop + self.job.picture.cropBottom) < self.job.picture.sourceHeight);
-
     // Show the add panel
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
                                                                                  presetManager:presetManager
-                                                                                   customWidth:self.job.picture.width
-                                                                                  customHeight:self.job.picture.height
-                                                                               defaultToCustom:defaultToCustom];
+                                                                                   customWidth:self.job.picture.maxWidth
+                                                                                  customHeight:self.job.picture.maxHeight
+                                                                           resolutionLimitMode:self.job.picture.resolutionLimitMode];
 
     [self.window beginSheet:addPresetController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)

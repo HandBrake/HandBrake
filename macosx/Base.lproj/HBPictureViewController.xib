@@ -23,7 +23,7 @@
                     <rect key="frame" x="20" y="134" width="736" height="187"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zU5-gT-j2i">
-                            <rect key="frame" x="0.0" y="59" width="222" height="128"/>
+                            <rect key="frame" x="0.0" y="59" width="218" height="128"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uev-zj-FIR">
                                     <rect key="frame" x="0.0" y="112" width="163" height="16"/>
@@ -102,7 +102,7 @@
                                     </customSpacing>
                                 </stackView>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZkN-1w-lLe">
-                                    <rect key="frame" x="0.0" y="0.0" width="222" height="104"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="218" height="104"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="753" verticalHuggingPriority="750" horizontalCompressionResistancePriority="753" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-Uc-JnZ">
                                             <rect key="frame" x="-2" y="90" width="56" height="14"/>
@@ -116,7 +116,7 @@
                                             </connections>
                                         </textField>
                                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Bc-mZ-CrZ">
-                                            <rect key="frame" x="60" y="0.0" width="162" height="104"/>
+                                            <rect key="frame" x="60" y="0.0" width="158" height="104"/>
                                             <subviews>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pvq-R5-nb1">
                                                     <rect key="frame" x="-1" y="89.5" width="75" height="15"/>
@@ -153,10 +153,10 @@
                                                     </connections>
                                                 </button>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="xfh-Wp-ZQz">
-                                                    <rect key="frame" x="0.0" y="0.0" width="162" height="60"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
                                                     <subviews>
                                                         <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="LTu-ic-Ty9">
-                                                            <rect key="frame" x="1" y="21" width="36" height="19"/>
+                                                            <rect key="frame" x="-3" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="WoC-YC-H5L"/>
@@ -189,7 +189,7 @@
                                                             </connections>
                                                         </textField>
                                                         <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="1Z0-JT-vst">
-                                                            <rect key="frame" x="57" y="2" width="36" height="19"/>
+                                                            <rect key="frame" x="51" y="2" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="r1c-KK-4uF"/>
@@ -222,7 +222,7 @@
                                                             </connections>
                                                         </textField>
                                                         <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="wsq-TS-cC6">
-                                                            <rect key="frame" x="113" y="21" width="36" height="19"/>
+                                                            <rect key="frame" x="105" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="rtx-vd-c05"/>
@@ -255,7 +255,7 @@
                                                             </connections>
                                                         </textField>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                                                            <rect key="frame" x="148" y="18" width="15" height="23"/>
+                                                            <rect key="frame" x="140" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -281,7 +281,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                                                            <rect key="frame" x="92" y="38" width="15" height="22"/>
+                                                            <rect key="frame" x="86" y="38" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -307,12 +307,12 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                                                            <rect key="frame" x="36" y="18" width="15" height="23"/>
+                                                            <rect key="frame" x="32" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </stepperCell>
-                                                            <accessibility description="v"/>
+                                                            <accessibility description="Crop left"/>
                                                             <connections>
                                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="erl-nf-Xs5" id="UPJ-QD-Izo">
                                                                     <dictionary key="options">
@@ -333,7 +333,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                                                            <rect key="frame" x="92" y="-1" width="15" height="22"/>
+                                                            <rect key="frame" x="86" y="-1" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -359,7 +359,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
-                                                            <rect key="frame" x="57" y="40" width="36" height="19"/>
+                                                            <rect key="frame" x="51" y="40" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="FyD-ad-rqf"/>
@@ -394,7 +394,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="60" id="KLa-lj-WRq"/>
-                                                        <constraint firstAttribute="width" constant="162" id="fWY-zW-mQg"/>
+                                                        <constraint firstAttribute="width" constant="158" id="fWY-zW-mQg"/>
                                                     </constraints>
                                                 </customView>
                                             </subviews>
@@ -568,17 +568,17 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
                                     <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture" id="6hS-sA-J2I">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                            </dictionary>
+                                        </binding>
                                         <binding destination="-2" name="enabled2" keyPath="self.picture.allowUpscaling" previousBinding="6hS-sA-J2I" id="KA6-bo-mMk">
                                             <dictionary key="options">
                                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                 <integer key="NSNullPlaceholder" value="-1"/>
-                                            </dictionary>
-                                        </binding>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture" id="6hS-sA-J2I">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSIsNotNil</string>
                                             </dictionary>
                                         </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.useMaximumSize" id="hu9-Sk-Q4S"/>
@@ -928,7 +928,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EGb-Zz-WQd">
-                            <rect key="frame" x="520" y="52" width="216" height="135"/>
+                            <rect key="frame" x="524" y="52" width="212" height="135"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i16-mF-pVp">
                                     <rect key="frame" x="0.0" y="119" width="195" height="16"/>
@@ -979,15 +979,15 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                     </customSpacing>
                                 </stackView>
                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="OHL-2S-XXO">
-                                    <rect key="frame" x="54" y="51" width="162" height="60"/>
+                                    <rect key="frame" x="54" y="51" width="158" height="60"/>
                                     <subviews>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="09f-sT-7la">
-                                            <rect key="frame" x="92" y="38" width="15" height="22"/>
+                                            <rect key="frame" x="90" y="38" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="atZ-cf-YyH">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
-                                            <accessibility description="Crop top"/>
+                                            <accessibility description="Pad top"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="N8A-F4-7bg" id="SjJ-2L-8qg">
                                                     <dictionary key="options">
@@ -1003,8 +1003,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <binding destination="-2" name="value" keyPath="self.picture.paddingTop" previousBinding="0Ue-21-yg9" id="Fh6-i2-D7o"/>
                                             </connections>
                                         </stepper>
-                                        <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
-                                            <rect key="frame" x="57" y="40" width="36" height="19"/>
+                                        <textField toolTip="Top edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
+                                            <rect key="frame" x="55" y="40" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0yJ-2J-ept">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="P5C-Bq-g5Y"/>
@@ -1032,8 +1032,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WfM-tx-rC5">
-                                            <rect key="frame" x="57" y="2" width="36" height="19"/>
+                                        <textField toolTip="Bottom edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WfM-tx-rC5">
+                                            <rect key="frame" x="55" y="2" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="Wfu-ZW-M6N">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="87o-Sq-Vz0"/>
@@ -1061,8 +1061,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 </binding>
                                             </connections>
                                         </textField>
-                                        <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ck0-Gu-lGg">
-                                            <rect key="frame" x="113" y="21" width="36" height="19"/>
+                                        <textField toolTip="Right edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ck0-Gu-lGg">
+                                            <rect key="frame" x="109" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="TIQ-pu-KHa">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="2oO-Js-S4B"/>
@@ -1096,7 +1096,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Rzf-mS-h9z">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
-                                            <accessibility description="v"/>
+                                            <accessibility description="Pad left"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="WJd-cO-An1" id="Hgw-OX-jVX">
                                                     <dictionary key="options">
@@ -1112,7 +1112,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <binding destination="-2" name="value" keyPath="self.picture.paddingLeft" previousBinding="Wuh-bv-zBN" id="EtJ-Yg-edZ"/>
                                             </connections>
                                         </stepper>
-                                        <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
+                                        <textField toolTip="Left edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
                                             <rect key="frame" x="1" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iYd-5t-kFE">
@@ -1142,12 +1142,12 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uoH-Hv-lNp">
-                                            <rect key="frame" x="148" y="19" width="15" height="22"/>
+                                            <rect key="frame" x="144" y="19" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="xS2-KN-fds">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
-                                            <accessibility description="Crop right"/>
+                                            <accessibility description="Pad right"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="I7b-pp-RRE" id="xDK-UI-pnE">
                                                     <dictionary key="options">
@@ -1164,12 +1164,12 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </stepper>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVm-0W-Jxg">
-                                            <rect key="frame" x="92" y="0.0" width="15" height="22"/>
+                                            <rect key="frame" x="90" y="0.0" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="tcI-lL-sqJ">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
-                                            <accessibility description="Crop bottom"/>
+                                            <accessibility description="Pad bottom"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="fZW-aV-Qw9" id="2gQ-R1-qMP">
                                                     <dictionary key="options">
@@ -1188,7 +1188,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="60" id="Cfe-bp-87s"/>
-                                        <constraint firstAttribute="width" constant="162" id="a0u-Rp-4fD"/>
+                                        <constraint firstAttribute="width" constant="158" id="a0u-Rp-4fD"/>
                                     </constraints>
                                 </customView>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="65d-Xd-JdE">

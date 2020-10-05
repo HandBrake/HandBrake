@@ -11,12 +11,6 @@
 #import "HBAudioDefaultsController.h"
 #import "HBSubtitlesDefaultsController.h"
 
-typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
-    HBAddPresetControllerModeNone,
-    HBAddPresetControllerModeCustom,
-    HBAddPresetControllerModeSourceMaximum,
-};
-
 @interface HBAddPresetController ()
 
 @property (nonatomic, unsafe_unretained) IBOutlet NSTextField *name;
@@ -39,7 +33,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 @property (nonatomic) int width;
 @property (nonatomic) int height;
 
-@property (nonatomic) BOOL defaultToCustom;
+@property (nonatomic) HBPictureResolutionLimitMode resolutionLimitMode;
 
 @property (nonatomic, readwrite, strong) NSWindowController *defaultsController;
 
@@ -48,7 +42,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 @implementation HBAddPresetController
 
-- (instancetype)initWithPreset:(HBPreset *)preset presetManager:(HBPresetsManager *)manager customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom
+- (instancetype)initWithPreset:(HBPreset *)preset presetManager:(HBPresetsManager *)manager customWidth:(int)customWidth customHeight:(int)customHeight resolutionLimitMode:(HBPictureResolutionLimitMode)resolutionLimitMode
 {
     self = [super initWithWindowNibName:@"AddPreset"];
     if (self)
@@ -59,7 +53,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         _manager = manager;
         _width = customWidth;
         _height = customHeight;
-        _defaultToCustom = defaultToCustom;
+        _resolutionLimitMode = resolutionLimitMode;
     }
     return self;
 }
@@ -82,24 +76,31 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     // Populate the preset picture settings popup.
     // Use [NSMenuItem tag] to store preset values for each option.
 
-    // Default to Source Maximum
-    HBAddPresetControllerMode mode = HBAddPresetControllerModeSourceMaximum;
-
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", @"Add preset window -> picture setting")];
-    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeNone];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitModeNone];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"4320p 8K Ultra HD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode8K];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"2160p 4K Ultra HD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode4K];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"1080p HD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode1080p];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"720p HD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode720p];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"576p PAL SD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode576p];
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"480p NTSC SD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode480p];
 
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", @"Add preset window -> picture setting")];
-    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitModeCustom];
 
-    if (self.defaultToCustom)
-    {
-        mode = HBAddPresetControllerModeCustom;
-    }
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", @"Add preset window -> picture setting")];
-    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];
-
-
-    [self.picSettingsPopUp selectItemWithTag:mode];
+    [self.picSettingsPopUp selectItemWithTag:self.resolutionLimitMode];
 
     // Initialize custom height and width settings to current values
     [self.picWidth setIntValue:self.width];
@@ -157,14 +158,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 - (IBAction)addPresetPicDropdownChanged:(id)sender
 {
-    if (self.picSettingsPopUp.selectedItem.tag == HBAddPresetControllerModeCustom)
-    {
-        self.picWidthHeightBox.hidden = NO;
-    }
-    else
-    {
-        self.picWidthHeightBox.hidden = YES;
-    }
+    self.picWidthHeightBox.hidden = self.picSettingsPopUp.selectedItem.tag != HBPictureResolutionLimitModeCustom;
 }
 
 - (IBAction)showAudioSettingsSheet:(id)sender
@@ -215,20 +209,41 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         newPreset.name = self.name.stringValue;
         newPreset.presetDescription = self.desc.stringValue;
 
-        if (self.picSettingsPopUp.selectedTag == HBAddPresetControllerModeSourceMaximum)
-        {
-            newPreset[@"PictureWidth"] = @0;
-            newPreset[@"PictureHeight"] = @0;
+        switch (self.picSettingsPopUp.selectedTag) {
+            case HBPictureResolutionLimitModeNone:
+                newPreset[@"PictureWidth"] = @(0);
+                newPreset[@"PictureHeight"] = @(0);
+                break;
+            case HBPictureResolutionLimitMode8K:
+                newPreset[@"PictureWidth"] = @(7680);
+                newPreset[@"PictureHeight"] = @(4320);
+                break;
+            case HBPictureResolutionLimitMode4K:
+                newPreset[@"PictureWidth"] = @(3840);
+                newPreset[@"PictureHeight"] = @(2160);
+                break;
+            case HBPictureResolutionLimitMode1080p:
+                newPreset[@"PictureWidth"] = @(1920);
+                newPreset[@"PictureHeight"] = @(1080);
+                break;
+            case HBPictureResolutionLimitMode720p:
+                newPreset[@"PictureWidth"] = @(1280);
+                newPreset[@"PictureHeight"] = @(720);
+                break;
+            case HBPictureResolutionLimitMode576p:
+                newPreset[@"PictureWidth"] = @(720);
+                newPreset[@"PictureHeight"] = @(576);
+                break;
+            case HBPictureResolutionLimitMode480p:
+                newPreset[@"PictureWidth"] = @(720);
+                newPreset[@"PictureHeight"] = @(480);
+                break;
+            case HBPictureResolutionLimitModeCustom:
+            default:
+                newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
+                newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
+                break;
         }
-        else
-        {
-            // Get the user set picture size
-            newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
-            newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
-        }
-
-        //Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-        newPreset[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedTag);
 
         // Always use Picture Filter settings for the preset
         newPreset[@"UsesPictureFilters"] = @YES;
