@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,11 +21,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="agq-EJ-miM" userLabel="Picture Controls" customClass="HBHUDView">
-            <rect key="frame" x="0.0" y="0.0" width="476" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="476" height="96"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button toolTip="Encode and play a preview video using current settings." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
-                    <rect key="frame" x="16" y="11" width="79" height="16"/>
+                    <rect key="frame" x="15" y="10" width="73" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ir9-qd-gak"/>
                     </constraints>
@@ -37,21 +37,21 @@
                         <action selector="createMoviePreview:" target="-2" id="rhf-gy-aMT"/>
                     </connections>
                 </button>
-                <button toolTip="Show picture settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
-                    <rect key="frame" x="399" y="11" width="61" height="16"/>
+                <button toolTip="Show cropping settings" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
+                    <rect key="frame" x="407" y="10" width="54" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="xea-W9-xGB"/>
                     </constraints>
-                    <buttonCell key="cell" type="push" title="Settings" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NWd-Lq-c1A">
+                    <buttonCell key="cell" type="push" title="Crop" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NWd-Lq-c1A">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="showPictureSettings:" target="-2" id="aDd-cp-S1k"/>
+                        <action selector="showCroppingSettings:" target="-2" id="aDd-cp-S1k"/>
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5T3-Vx-mC1">
-                    <rect key="frame" x="109" y="14" width="48" height="11"/>
+                    <rect key="frame" x="101" y="14" width="48" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="wtS-2b-Ijm"/>
                     </constraints>
@@ -62,7 +62,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-He-CjP">
-                    <rect key="frame" x="211" y="14" width="21" height="11"/>
+                    <rect key="frame" x="203" y="14" width="21" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="17" id="88j-t5-f6t"/>
                     </constraints>
@@ -73,7 +73,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton toolTip="Duration to encode in seconds." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
-                    <rect key="frame" x="158" y="11" width="53" height="16"/>
+                    <rect key="frame" x="149" y="10" width="55" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="JLd-YP-qt1"/>
                     </constraints>
@@ -92,7 +92,7 @@
                     </connections>
                 </popUpButton>
                 <slider toolTip="Starting point for the preview encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wUk-SQ-GhS">
-                    <rect key="frame" x="17" y="38" width="442" height="15"/>
+                    <rect key="frame" x="12" y="34" width="452" height="17"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="9" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="dPk-jb-w9o">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
@@ -102,7 +102,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="426" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-KN-I1h">
-                    <rect key="frame" x="15" y="54" width="446" height="20"/>
+                    <rect key="frame" x="15" y="50" width="446" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Wqt-oa-eQj"/>
                     </constraints>
@@ -113,7 +113,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="7UR-Zz-7iX">
-                    <rect key="frame" x="15" y="76" width="446" height="12"/>
+                    <rect key="frame" x="15" y="72" width="446" height="12"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" id="CeL-Pu-NS6">
                         <font key="font" metaFont="miniSystemBold"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -121,7 +121,7 @@
                     </textFieldCell>
                 </textField>
                 <button toolTip="Scale preview to fill the display." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
-                    <rect key="frame" x="298" y="11" width="95" height="16"/>
+                    <rect key="frame" x="314" y="10" width="89" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="N0p-GD-cNh"/>
                     </constraints>

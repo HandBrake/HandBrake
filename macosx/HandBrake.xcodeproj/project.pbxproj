@@ -49,7 +49,7 @@
 		273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A014ADBE670021BE6D /* HBPreferencesController.m */; };
 		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; };
-		273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* HBPictureController.m */; };
+		273F20BA14ADBE670021BE6D /* HBCroppingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* HBCroppingController.m */; };
 		273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 273F217C14ADDDA10021BE6D /* InfoPlist.strings */; };
 		27D6C72614B1019100B785E4 /* libhandbrake.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72414B1019100B785E4 /* libhandbrake.a */; };
 		27D6C74414B102DA00B785E4 /* libass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72814B102DA00B785E4 /* libass.a */; };
@@ -280,7 +280,7 @@
 		A9A96BCE20CAD61F00A39AFB /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BCC20CAD61F00A39AFB /* SubtitlesDefaults.xib */; };
 		A9A96BD120CAD62500A39AFB /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BCF20CAD62500A39AFB /* ChaptersTitles.xib */; };
 		A9A96BD420CAD63000A39AFB /* Queue.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BD220CAD63000A39AFB /* Queue.xib */; };
-		A9A96BD720CAD64300A39AFB /* PictureSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BD520CAD64200A39AFB /* PictureSettings.xib */; };
+		A9A96BD720CAD64300A39AFB /* HBCroppingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BD520CAD64200A39AFB /* HBCroppingView.xib */; };
 		A9A96BDA20CAD64B00A39AFB /* PicturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BD820CAD64B00A39AFB /* PicturePreview.xib */; };
 		A9A96BDD20CAD66000A39AFB /* OutputPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BDB20CAD66000A39AFB /* OutputPanel.xib */; };
 		A9A96BE020CAD66500A39AFB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BDE20CAD66500A39AFB /* Preferences.xib */; };
@@ -652,8 +652,8 @@
 		273F20A214ADBE670021BE6D /* HBPresetsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsManager.m; sourceTree = "<group>"; };
 		273F20A314ADBE670021BE6D /* HBPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewController.h; sourceTree = "<group>"; };
 		273F20A414ADBE670021BE6D /* HBPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewController.m; sourceTree = "<group>"; };
-		273F20A914ADBE670021BE6D /* HBPictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPictureController.h; sourceTree = "<group>"; };
-		273F20AA14ADBE670021BE6D /* HBPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureController.m; sourceTree = "<group>"; };
+		273F20A914ADBE670021BE6D /* HBCroppingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCroppingController.h; sourceTree = "<group>"; };
+		273F20AA14ADBE670021BE6D /* HBCroppingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBCroppingController.m; sourceTree = "<group>"; };
 		273F20BD14ADC09F0021BE6D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		275916DA14B2AB27007211E9 /* native.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = native.xcconfig; sourceTree = "<group>"; };
 		277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = supplemental.xcconfig; sourceTree = "<group>"; };
@@ -693,7 +693,7 @@
 		A90713C72242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		A90713C82242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Subtitles.strings; sourceTree = "<group>"; };
 		A90713C92242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Video.strings; sourceTree = "<group>"; };
-		A90713CA2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A90713CA2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
 		A90713CB2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
 		A90713CC2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainWindow.strings; sourceTree = "<group>"; };
 		A90713CD2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Preferences.strings; sourceTree = "<group>"; };
@@ -823,7 +823,7 @@
 		A9637D9620F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		A9637D9720F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Subtitles.strings; sourceTree = "<group>"; };
 		A9637D9820F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Video.strings; sourceTree = "<group>"; };
-		A9637D9920F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A9637D9920F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
 		A9637D9A20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
 		A9637D9B20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MainWindow.strings; sourceTree = "<group>"; };
 		A9637D9C20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Preferences.strings; sourceTree = "<group>"; };
@@ -930,7 +930,7 @@
 		A9A96BCD20CAD61F00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SubtitlesDefaults.xib; sourceTree = "<group>"; };
 		A9A96BD020CAD62500A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ChaptersTitles.xib; sourceTree = "<group>"; };
 		A9A96BD320CAD63000A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Queue.xib; sourceTree = "<group>"; };
-		A9A96BD620CAD64200A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PictureSettings.xib; sourceTree = "<group>"; };
+		A9A96BD620CAD64200A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBCroppingView.xib; sourceTree = "<group>"; };
 		A9A96BD920CAD64B00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PicturePreview.xib; sourceTree = "<group>"; };
 		A9A96BDC20CAD66000A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/OutputPanel.xib; sourceTree = "<group>"; };
 		A9A96BDF20CAD66500A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
@@ -987,7 +987,7 @@
 		A9D3E300234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PicturePreview.strings; sourceTree = "<group>"; };
 		A9D3E301234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
 		A9D3E302234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MainWindow.strings; sourceTree = "<group>"; };
-		A9D3E303234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A9D3E303234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
 		A9D3E304234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
 		A9D3E305234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Subtitles.strings; sourceTree = "<group>"; };
 		A9D3E306234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Queue.strings; sourceTree = "<group>"; };
@@ -1054,7 +1054,7 @@
 		A9F5E33B2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		A9F5E33C2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Subtitles.strings; sourceTree = "<group>"; };
 		A9F5E33D2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Video.strings; sourceTree = "<group>"; };
-		A9F5E33E2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A9F5E33E2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
 		A9F5E33F2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
 		A9F5E3402215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Preferences.strings; sourceTree = "<group>"; };
 		A9F5E3412215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/MainWindow.strings; sourceTree = "<group>"; };
@@ -1089,7 +1089,7 @@
 		D0DA2ABE24B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HBSummaryViewController.strings"; sourceTree = "<group>"; };
 		D0DA2ABF24B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/AudioDefaults.strings"; sourceTree = "<group>"; };
 		D0DA2AC024B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/MainWindow.strings"; sourceTree = "<group>"; };
-		D0DA2AC124B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/PictureSettings.strings"; sourceTree = "<group>"; };
+		D0DA2AC124B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HBCroppingView.strings"; sourceTree = "<group>"; };
 		D0DA2AC224B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HBTrackTitleViewController.strings"; sourceTree = "<group>"; };
 		D0DA2AC324B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Subtitles.strings"; sourceTree = "<group>"; };
 		D0DA2AC424B384AD003ACA30 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Queue.strings"; sourceTree = "<group>"; };
@@ -1532,9 +1532,9 @@
 				A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */,
 				A914BCB11BC441C700157917 /* HBPreviewView.h */,
 				A914BCB21BC441C700157917 /* HBPreviewView.m */,
-				273F20A914ADBE670021BE6D /* HBPictureController.h */,
-				273F20AA14ADBE670021BE6D /* HBPictureController.m */,
-				A9A96BD520CAD64200A39AFB /* PictureSettings.xib */,
+				273F20A914ADBE670021BE6D /* HBCroppingController.h */,
+				273F20AA14ADBE670021BE6D /* HBCroppingController.m */,
+				A9A96BD520CAD64200A39AFB /* HBCroppingView.xib */,
 				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
 				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
 				A9A96BD820CAD64B00A39AFB /* PicturePreview.xib */,
@@ -2380,7 +2380,7 @@
 				A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */,
 				A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */,
 				A9A96BAD20CAD5A200A39AFB /* MainMenu.xib in Resources */,
-				A9A96BD720CAD64300A39AFB /* PictureSettings.xib in Resources */,
+				A9A96BD720CAD64300A39AFB /* HBCroppingView.xib in Resources */,
 				A9A96BD120CAD62500A39AFB /* ChaptersTitles.xib in Resources */,
 				A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */,
 				A9AB054D233CC60B00F26894 /* HBTrackTitleViewController.xib in Resources */,
@@ -2554,7 +2554,7 @@
 				A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */,
 				273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */,
 				A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */,
-				273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */,
+				273F20BA14ADBE670021BE6D /* HBCroppingController.m in Sources */,
 				A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */,
 				A9A5F7D5243DD90100C82EC8 /* HBQueueWorker.m in Sources */,
 			);
@@ -3055,7 +3055,7 @@
 			name = Queue.xib;
 			sourceTree = "<group>";
 		};
-		A9A96BD520CAD64200A39AFB /* PictureSettings.xib */ = {
+		A9A96BD520CAD64200A39AFB /* HBCroppingView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A9A96BD620CAD64200A39AFB /* Base */,
@@ -3065,7 +3065,7 @@
 				A9D3E303234A119400F39385 /* ru */,
 				D0DA2AC124B384AD003ACA30 /* pt-BR */,
 			);
-			name = PictureSettings.xib;
+			name = HBCroppingView.xib;
 			sourceTree = "<group>";
 		};
 		A9A96BD820CAD64B00A39AFB /* PicturePreview.xib */ = {

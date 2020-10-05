@@ -6,7 +6,7 @@
 
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
-#import "HBPictureController.h"
+#import "HBCroppingController.h"
 
 #import "HBController.h"
 #import "HBPreviewView.h"
@@ -40,7 +40,7 @@
 
 @property (nonatomic) id<HBPlayer> player;
 
-@property (nonatomic) HBPictureController *pictureSettingsWindow;
+@property (nonatomic) NSPopover *croppingPopover;
 
 @property (nonatomic) NSPoint windowCenterPoint;
 @property (nonatomic, weak) IBOutlet HBPreviewView *previewView;
@@ -143,7 +143,8 @@
 - (void)setPicture:(HBPicture *)picture
 {
     _picture = picture;
-    self.pictureSettingsWindow.picture = _picture;
+    [self.croppingPopover close];
+    self.croppingPopover = nil;
 }
 
 - (void)setGenerator:(HBPreviewGenerator *)generator
@@ -207,7 +208,6 @@
         [self.player pause];
     }
 
-    [self.pictureSettingsWindow close];
     [self.generator purgeImageCache];
 }
 
@@ -486,16 +486,14 @@
     }
 }
 
-- (void)showPictureSettings
+- (void)showCroppingSettings:(id)sender
 {
-    if (self.pictureSettingsWindow == nil)
-    {
-        self.pictureSettingsWindow = [[HBPictureController alloc] init];
-        self.pictureSettingsWindow.previewController = self;
-    }
-
-    self.pictureSettingsWindow.picture = self.picture;
-    [self.pictureSettingsWindow showWindow:self];
+    HBCroppingController *croppingController = [[HBCroppingController alloc] initWithPicture:self.picture];
+    self.croppingPopover = [[NSPopover alloc] init];
+    self.croppingPopover.behavior = NSPopoverBehaviorTransient;
+    self.croppingPopover.contentViewController = croppingController;
+    self.croppingPopover.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+    [self.croppingPopover showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxYEdge];
 }
 
 #pragma mark - Encoding mode

@@ -154,9 +154,9 @@
     self.fitToView = !self.fitToView;
 }
 
-- (IBAction)showPictureSettings:(id)sender
+- (IBAction)showCroppingSettings:(id)sender
 {
-    [self.delegate showPictureSettings];
+    [self.delegate showCroppingSettings:sender];
 }
 
 - (IBAction)createMoviePreview:(id)sender
