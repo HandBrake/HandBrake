@@ -22,7 +22,7 @@
 #define PRESET_FILE @"UserPresets.json"
 #define QUEUE_FILE @"Queue.hbqueue"
 
-@interface HBAppDelegate ()
+@interface HBAppDelegate () <NSMenuItemValidation>
 
 @property (nonatomic, strong) HBPresetsManager *presetsManager;
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
