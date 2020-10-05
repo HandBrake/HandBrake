@@ -374,19 +374,25 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 {
                     info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
                 }
-                if (adapters_info->NumActual > 0)
+                if (info->codec_id == MFX_CODEC_HEVC &&
+                    (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7))
                 {
-                    if (info->codec_id == MFX_CODEC_HEVC &&
-                        ((qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7) ||
-                        (adapters_info->Adapters[0].Platform.MediaAdapterType == MFX_MEDIA_DISCRETE)))
+                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
+                }
+#if !defined(SYS_LINUX) && !defined(SYS_FREEBSD)
+                if (info->codec_id == MFX_CODEC_HEVC &&
+                    (adapters_info->NumActual > 0))
+                {
+                    if (adapters_info->Adapters[0].Platform.MediaAdapterType == MFX_MEDIA_DISCRETE)
                     {
                         info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
                     }
                 }
                 else
                 {
-                    hb_error("query_capabilities: failed to query adapters");
+                    hb_error("query_capabilities: adapters_info->NumActual=%d", adapters_info->NumActual);
                 }
+#endif
             }
             else
             {
@@ -856,11 +862,28 @@ static void log_capabilities(int log_level, uint64_t caps, const char *prefix)
 void hb_qsv_info_print()
 {
     // is QSV available and usable?
-    hb_log("Intel Quick Sync Video support: %s",
-           hb_qsv_available() ? "yes": "no");
-
     if (hb_qsv_available())
     {
+#if !defined(SYS_LINUX) && !defined(SYS_FREEBSD)
+        if (qsv_adapters_list && hb_list_count(qsv_adapters_list))
+        {
+            char gpu_list_str[256] = "";
+            for (int i = 0; i < hb_list_count(qsv_adapters_list); i++)
+            {
+                char value_str[256];
+                int *value = hb_list_item(qsv_adapters_list, i);
+                sprintf(value_str, "%d", *value);
+                if (i > 0)
+                    strcat(gpu_list_str, ", ");
+                strcat(gpu_list_str, value_str);
+            }
+            hb_log("Intel Quick Sync Video support: yes, gpu list: %s", gpu_list_str);
+        }
+        else
+#endif
+        {
+            hb_log("Intel Quick Sync Video support: yes");
+        }
         // also print the details
         if (qsv_hardware_version.Version)
         {
@@ -918,6 +941,10 @@ void hb_qsv_info_print()
         {
             hb_log(" - H.265 encoder: no");
         }
+    }
+    else
+    {
+        hb_log("Intel Quick Sync Video support: no");
     }
 }
 
@@ -1038,8 +1065,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     if(!device_check_completed)
     {
-       device_check_succeded = ((hb_d3d11va_device_check() >= 0)
-        || (hb_dxva2_device_check() == 0)) ? 1 : 0;
+       device_check_succeded = (hb_d3d11va_device_check() >= 0) ? 1 : 0;
        device_check_completed = 1;
     }
 
@@ -1190,7 +1216,7 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
             return 0;
         }
     }
-    hb_error("hb_qsv_param_parse_dx_index: incorrect qsv device index");
+    hb_error("qsv: incorrect qsv device index %d", dx_index);
     return -1;
 }
 
