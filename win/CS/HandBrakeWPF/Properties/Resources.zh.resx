@@ -331,7 +331,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>输出文件的格式。除了任何受支持的文件系统字符之外，您还可以使用以下占位符，这些占位符将在更改标题或扫描源时被替换。
 
 实时更新选项：{source} {title} {chapters} 
-非实时选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+非实时选项：{date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>可用的附加选项: {source_path} 或 {source_folder_name} 或 {source}</value>
@@ -1885,7 +1885,7 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>实时更新选项：{source} {title} {chapters} 
-非实时更新选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+非实时更新选项：{date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>可用的附加选项: {source_path} {source_folder_name} {source}</value>

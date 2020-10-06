@@ -334,7 +334,7 @@ Do you wish to proceed?</value>
     <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
 
 Live Update Options: {source} {title} {chapters} 
-Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+Non-Live Options: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Available additional Options: {source_path} or {source_folder_name} or {source}</value>
@@ -1892,7 +1892,7 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Live Update Options: {source} {title} {chapters} 
-Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+Non-Live Options: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Available Options: {source_path} {source_folder_name} {source}</value>

@@ -330,7 +330,7 @@ Vulete cuntinuà ?</value>
     <value>U furmatu di u schedariu d’esciuta. In più di i caratteri pigliati in carica da u sistema di schedariu, pudete impiegà i campi di sustituzione seguente chì seranu rimpiazzati quandu vo cambiate di titulu o analizate una fonte.
 
 Ozzioni mudificate direttamente : {source} {title} {chapters} 
-Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
+Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Ozzioni cumplementarie dispunibule : {source_path} o {source_folder_name} o {source}</value>
@@ -1887,7 +1887,7 @@ Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Ozzioni mudificate direttamente : {source} {title} {chapters} 
-Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
+Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Ozzioni dispunibule : {source_path} {source_folder_name} {source}</value>

@@ -2125,7 +2125,7 @@ msgstr "자동 이름 부여 템플릿"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{creation-date} {creation-time} {quality} {bitrate}"
+"{creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 "사용가능한 옵션: {source} {title} {preset} {chapters} {date} {time} {creation-date}"
 " {creation-time} {quality} {bitrate}"

@@ -333,7 +333,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>출력 결과 파일의 형식. 지원되는 파일 시스템 형식 이외에, 제목을 수정하거나 파일을 스캔할 때는 기존의 형식을 대체할 수 있는 아래의 자리 표시자를 사용할 수 있습니다.
 
 Live 업데이트 옵션: {source} {title} {chapters}
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+Non-Live 옵션: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>이용 가능한 추가 옵션: {source_path} 또는 {source_folder_name} 또는 {source}</value>
@@ -1891,7 +1891,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Live 업데이트 옵션: {source} {title} {chapters} 
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+Non-Live 옵션: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>사용 가능한 옵션: {source_path} {source_folder_name} {source}</value>

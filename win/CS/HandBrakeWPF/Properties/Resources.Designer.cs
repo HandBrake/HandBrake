@@ -8,10 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Properties {
+namespace HandBrakeWPF.Properties
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,53 +23,63 @@ namespace HandBrakeWPF.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
-        
+    public class Resources
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Resources()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HandBrakeWPF.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Copyright (C) 2003-2020 The HandBrake Team.
         /// </summary>
-        public static string About_Copyright {
-            get {
+        public static string About_Copyright
+        {
+            get
+            {
                 return ResourceManager.GetString("About_Copyright", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
@@ -82,30 +93,36 @@ namespace HandBrakeWPF.Properties {
         ///
         ///You should have received a [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string About_GPL {
-            get {
+        public static string About_GPL
+        {
+            get
+            {
                 return ResourceManager.GetString("About_GPL", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to License: .
         /// </summary>
-        public static string AboutView_License {
-            get {
+        public static string AboutView_License
+        {
+            get
+            {
                 return ResourceManager.GetString("AboutView_License", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Version: .
         /// </summary>
-        public static string AboutView_Version {
-            get {
+        public static string AboutView_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("AboutView_Version", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You can optionally store a picture settings with this preset. There are 3 modes:
         ///
@@ -115,576 +132,702 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Source Maximum:  Always encode at the sources [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string AddPreset_PictureSizeMode {
-            get {
+        public static string AddPreset_PictureSizeMode
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPreset_PictureSizeMode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to -- Add New Category --.
         /// </summary>
-        public static string AddPresetView_AddNewCategory {
-            get {
+        public static string AddPresetView_AddNewCategory
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_AddNewCategory", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Preset.
         /// </summary>
-        public static string AddPresetView_AddPreset {
-            get {
+        public static string AddPresetView_AddPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_AddPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Category:.
         /// </summary>
-        public static string AddPresetView_Category {
-            get {
+        public static string AddPresetView_Category
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_Category", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
-        public static string AddPresetView_Description {
-            get {
+        public static string AddPresetView_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_Description", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Name:.
         /// </summary>
-        public static string AddPresetView_Name {
-            get {
+        public static string AddPresetView_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_Name", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Dimensions:.
         /// </summary>
-        public static string AddPresetView_SavePictureSize {
-            get {
+        public static string AddPresetView_SavePictureSize
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetView_SavePictureSize", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The Custom Width or Height fields must be filled in for the &apos;Custom&apos; option..
         /// </summary>
-        public static string AddPresetViewModel_CustomWidthHeightFieldsRequired {
-            get {
+        public static string AddPresetViewModel_CustomWidthHeightFieldsRequired
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetViewModel_CustomWidthHeightFieldsRequired", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A Preset must have a Name. Please fill out the Preset Name field..
         /// </summary>
-        public static string AddPresetViewModel_PresetMustProvideName {
-            get {
+        public static string AddPresetViewModel_PresetMustProvideName
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetViewModel_PresetMustProvideName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A Preset with this name already exists. Would you like to overwrite it?.
         /// </summary>
-        public static string AddPresetViewModel_PresetWithSameNameOverwriteWarning {
-            get {
+        public static string AddPresetViewModel_PresetWithSameNameOverwriteWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetViewModel_PresetWithSameNameOverwriteWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to add preset.
         /// </summary>
-        public static string AddPresetViewModel_UnableToAddPreset {
-            get {
+        public static string AddPresetViewModel_UnableToAddPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetViewModel_UnableToAddPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You must first scan a source to use the &apos;Source Maximum&apos; Option..
         /// </summary>
-        public static string AddPresetViewModel_YouMustFirstScanSource {
-            get {
+        public static string AddPresetViewModel_YouMustFirstScanSource
+        {
+            get
+            {
                 return ResourceManager.GetString("AddPresetViewModel_YouMustFirstScanSource", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
-        public static string AreYouSure {
-            get {
+        public static string AreYouSure
+        {
+            get
+            {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to All Matching Selected Languages.
         /// </summary>
-        public static string AudioBehaviourModes_AllMatching {
-            get {
+        public static string AudioBehaviourModes_AllMatching
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioBehaviourModes_AllMatching", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Use All Tracks as templates.
         /// </summary>
-        public static string AudioBehaviourModes_AllTracks {
-            get {
+        public static string AudioBehaviourModes_AllTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioBehaviourModes_AllTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to First Matching Selected Language.
         /// </summary>
-        public static string AudioBehaviourModes_FirstMatch {
-            get {
+        public static string AudioBehaviourModes_FirstMatch
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioBehaviourModes_FirstMatch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Use First Track as template.
         /// </summary>
-        public static string AudioBehaviourModes_FirstTrack {
-            get {
+        public static string AudioBehaviourModes_FirstTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioBehaviourModes_FirstTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Audio.
         /// </summary>
-        public static string AudioBehaviourModes_None {
-            get {
+        public static string AudioBehaviourModes_None
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioBehaviourModes_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Track.
         /// </summary>
-        public static string AudioDefaultsView_AddTrack {
-            get {
+        public static string AudioDefaultsView_AddTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioDefaultsView_AddTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio encoder settings for each chosen track:.
         /// </summary>
-        public static string AudioDefaultsView_AutoAddTracks {
-            get {
+        public static string AudioDefaultsView_AutoAddTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioDefaultsView_AutoAddTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
-        public static string AudioDefaultsView_Clear {
-            get {
+        public static string AudioDefaultsView_Clear
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioDefaultsView_Clear", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Configure Automatic Audio Selections.
         /// </summary>
-        public static string AudioDefaultsView_PaneTitle {
-            get {
+        public static string AudioDefaultsView_PaneTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioDefaultsView_PaneTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Source Track Selection.
         /// </summary>
-        public static string AudioDefaultView_Behaviours {
-            get {
+        public static string AudioDefaultView_Behaviours
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioDefaultView_Behaviours", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Allow passthru of:.
         /// </summary>
-        public static string AudioView_AllowPassThruOf {
-            get {
+        public static string AudioView_AllowPassThruOf
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_AllowPassThruOf", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video..
         /// </summary>
-        public static string AudioView_AudioDefaultsDescription {
-            get {
+        public static string AudioView_AudioDefaultsDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_AudioDefaultsDescription", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;Auto Passthru&apos; Behaviour:.
         /// </summary>
-        public static string AudioView_AutoPassthruBehaviour {
-            get {
+        public static string AudioView_AutoPassthruBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_AutoPassthruBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Bitrate.
         /// </summary>
-        public static string AudioView_Bitrate {
-            get {
+        public static string AudioView_Bitrate
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Bitrate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Codec.
         /// </summary>
-        public static string AudioView_Codec {
-            get {
+        public static string AudioView_Codec
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Codec", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to DRC.
         /// </summary>
-        public static string AudioView_DRC {
-            get {
+        public static string AudioView_DRC
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_DRC", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Gain.
         /// </summary>
-        public static string AudioView_Gain {
-            get {
+        public static string AudioView_Gain
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Gain", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Hide.
         /// </summary>
-        public static string AudioView_Hide {
-            get {
+        public static string AudioView_Hide
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Hide", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Mixdown.
         /// </summary>
-        public static string AudioView_Mixdown {
-            get {
+        public static string AudioView_Mixdown
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Mixdown", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Fallback encoder:.
         /// </summary>
-        public static string AudioView_OtherwiseFallbackEncoder {
-            get {
+        public static string AudioView_OtherwiseFallbackEncoder
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_OtherwiseFallbackEncoder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
-        public static string AudioView_ReloadDefaults {
-            get {
+        public static string AudioView_ReloadDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_ReloadDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Samplerate.
         /// </summary>
-        public static string AudioView_Samplerate {
-            get {
+        public static string AudioView_Samplerate
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Samplerate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
-        public static string AudioView_Show {
-            get {
+        public static string AudioView_Show
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_Show", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Track Name.
         /// </summary>
-        public static string AudioView_TrackName {
-            get {
+        public static string AudioView_TrackName
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_TrackName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Track Selection Behaviour:.
         /// </summary>
-        public static string AudioView_TrackSelectionBehaviour {
-            get {
+        public static string AudioView_TrackSelectionBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_TrackSelectionBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to For Additional Tracks:.
         /// </summary>
-        public static string AudioView_TrackSettingDefaultBehaviour {
-            get {
+        public static string AudioView_TrackSettingDefaultBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_TrackSettingDefaultBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to When &apos;Auto Passthru&apos; is selected as the audio codec..
         /// </summary>
-        public static string AudioView_WhenAutoPassthru {
-            get {
+        public static string AudioView_WhenAutoPassthru
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioView_WhenAutoPassthru", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio Defaults.
         /// </summary>
-        public static string AudioViewModel_AudioDefaults {
-            get {
+        public static string AudioViewModel_AudioDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioViewModel_AudioDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio Tracks.
         /// </summary>
-        public static string AudioViewModel_AudioTracks {
-            get {
+        public static string AudioViewModel_AudioTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioViewModel_AudioTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Selection Behavior.
         /// </summary>
-        public static string AudioViewModel_ConfigureDefaults {
-            get {
+        public static string AudioViewModel_ConfigureDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioViewModel_ConfigureDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Switch Back To Tracks.
         /// </summary>
-        public static string AudioViewModel_SwitchBackToTracks {
-            get {
+        public static string AudioViewModel_SwitchBackToTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("AudioViewModel_SwitchBackToTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
-        public static string Browse {
-            get {
+        public static string Browse
+        {
+            get
+            {
                 return ResourceManager.GetString("Browse", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter Markers.
         /// </summary>
-        public static string ChaptersView_ChapterMarkers {
-            get {
+        public static string ChaptersView_ChapterMarkers
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_ChapterMarkers", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter Name.
         /// </summary>
-        public static string ChaptersView_ChapterName {
-            get {
+        public static string ChaptersView_ChapterName
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_ChapterName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter Number.
         /// </summary>
-        public static string ChaptersView_ChapterNumber {
-            get {
+        public static string ChaptersView_ChapterNumber
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_ChapterNumber", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Create chapter markers.
         /// </summary>
-        public static string ChaptersView_CreateChapterMarkers {
-            get {
+        public static string ChaptersView_CreateChapterMarkers
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_CreateChapterMarkers", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duration.
         /// </summary>
-        public static string ChaptersView_Duration {
-            get {
+        public static string ChaptersView_Duration
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_Duration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
-        public static string ChaptersView_Export {
-            get {
+        public static string ChaptersView_Export
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_Export", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import.
         /// </summary>
-        public static string ChaptersView_Import {
-            get {
+        public static string ChaptersView_Import
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersView_Import", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter marker names will NOT be saved in your encode..
         /// </summary>
-        public static string ChaptersViewModel_UnableToExportChaptersMsg {
-            get {
+        public static string ChaptersViewModel_UnableToExportChaptersMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to save Chapter Markers file! .
         /// </summary>
-        public static string ChaptersViewModel_UnableToExportChaptersWarning {
-            get {
+        public static string ChaptersViewModel_UnableToExportChaptersWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to First column in chapters file must only contain a integer number value higher than zero (0).
         /// </summary>
-        public static string ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber {
-            get {
+        public static string ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to All lines in chapters file must have at least 2 columns of data.
         /// </summary>
-        public static string ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns {
-            get {
+        public static string ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Line {0} is invalid. Nothing will be imported..
         /// </summary>
-        public static string ChaptersViewModel_UnableToImportChaptersMalformedLineMsg {
-            get {
+        public static string ChaptersViewModel_UnableToImportChaptersMalformedLineMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersMalformedLineMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to import chapter file.
         /// </summary>
-        public static string ChaptersViewModel_UnableToImportChaptersWarning {
-            get {
+        public static string ChaptersViewModel_UnableToImportChaptersWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter files of type &apos;{0}&apos; are not currently supported..
         /// </summary>
-        public static string ChaptersViewModel_UnsupportedFileFormatMsg {
-            get {
+        public static string ChaptersViewModel_UnsupportedFileFormatMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unsupported chapter file type.
         /// </summary>
-        public static string ChaptersViewModel_UnsupportedFileFormatWarning {
-            get {
+        public static string ChaptersViewModel_UnsupportedFileFormatWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The number of chapters on the source media 
         ///and the number of chapters in the input file do not match ({0} vs {1}).
         ///
         ///Do you still want to import the chapter names?.
         /// </summary>
-        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch {
-            get {
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The number of chapters on the source media 
         ///and the number of chapters in the input file do not match ({0} vs {1}).
         ///
         ///Do you still want to import the chapter names?.
         /// </summary>
-        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg {
-            get {
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter count doesn&apos;t match between source and input file.
         /// </summary>
-        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning {
-            get {
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The reported duration of the chapters on the source media 
         ///and the duration of chapters in the input file differ greatly.
@@ -693,645 +836,787 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Are you sure you want to import the chapter names?.
         /// </summary>
-        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg {
-            get {
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter duration doesn&apos;t match between source and input file.
         /// </summary>
-        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning {
-            get {
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Invalid chapter information for source media.
         /// </summary>
-        public static string ChaptersViewModel_ValidationFailedWarning {
-            get {
+        public static string ChaptersViewModel_ValidationFailedWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("ChaptersViewModel_ValidationFailedWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export Names.
         /// </summary>
-        public static string ChapterView_ExportNames {
-            get {
+        public static string ChapterView_ExportNames
+        {
+            get
+            {
                 return ResourceManager.GetString("ChapterView_ExportNames", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import Names.
         /// </summary>
-        public static string ChapterView_ImportNames {
-            get {
+        public static string ChapterView_ImportNames
+        {
+            get
+            {
                 return ResourceManager.GetString("ChapterView_ImportNames", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset Chapter Names.
         /// </summary>
-        public static string ChapterView_ResetChapterNames {
-            get {
+        public static string ChapterView_ResetChapterNames
+        {
+            get
+            {
                 return ResourceManager.GetString("ChapterView_ResetChapterNames", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter {0}.
         /// </summary>
-        public static string ChapterViewModel_Chapter {
-            get {
+        public static string ChapterViewModel_Chapter
+        {
+            get
+            {
                 return ResourceManager.GetString("ChapterViewModel_Chapter", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The system clipboard is currently unavailable..
         /// </summary>
-        public static string Clipboard_Unavailable {
-            get {
+        public static string Clipboard_Unavailable
+        {
+            get
+            {
                 return ResourceManager.GetString("Clipboard_Unavailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked..
         /// </summary>
-        public static string Clipboard_Unavailable_Solution {
-            get {
+        public static string Clipboard_Unavailable_Solution
+        {
+            get
+            {
                 return ResourceManager.GetString("Clipboard_Unavailable_Solution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Append Number.
         /// </summary>
-        public static string CollisionBehaviour_AppendNumber {
-            get {
+        public static string CollisionBehaviour_AppendNumber
+        {
+            get
+            {
                 return ResourceManager.GetString("CollisionBehaviour_AppendNumber", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Postfix.
         /// </summary>
-        public static string CollisionBehaviour_Post {
-            get {
+        public static string CollisionBehaviour_Post
+        {
+            get
+            {
                 return ResourceManager.GetString("CollisionBehaviour_Post", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Prefix.
         /// </summary>
-        public static string CollisionBehaviour_Pre {
-            get {
+        public static string CollisionBehaviour_Pre
+        {
+            get
+            {
                 return ResourceManager.GetString("CollisionBehaviour_Pre", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
-        public static string Confirm {
-            get {
+        public static string Confirm
+        {
+            get
+            {
                 return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The following action &apos;{0}&apos; will occur in {1} seconds..
         /// </summary>
-        public static string CountdownAlertViewModel_NoticeMessage {
-            get {
+        public static string CountdownAlertViewModel_NoticeMessage
+        {
+            get
+            {
                 return ResourceManager.GetString("CountdownAlertViewModel_NoticeMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cancel Action.
         /// </summary>
-        public static string CountdownAlterView_CancelAction {
-            get {
+        public static string CountdownAlterView_CancelAction
+        {
+            get
+            {
                 return ResourceManager.GetString("CountdownAlterView_CancelAction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Proceed.
         /// </summary>
-        public static string CountdownAlterView_Proceed {
-            get {
+        public static string CountdownAlterView_Proceed
+        {
+            get
+            {
                 return ResourceManager.GetString("CountdownAlterView_Proceed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to When Done Action.
         /// </summary>
-        public static string CountdownAlterView_WhenDoneAction {
-            get {
+        public static string CountdownAlterView_WhenDoneAction
+        {
+            get
+            {
                 return ResourceManager.GetString("CountdownAlterView_WhenDoneAction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Create Folder?.
         /// </summary>
-        public static string DirectoryUtils_CreateFolder {
-            get {
+        public static string DirectoryUtils_CreateFolder
+        {
+            get
+            {
                 return ResourceManager.GetString("DirectoryUtils_CreateFolder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
         ///{0}.
         /// </summary>
-        public static string DirectoryUtils_CreateFolderMsg {
-            get {
+        public static string DirectoryUtils_CreateFolderMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("DirectoryUtils_CreateFolderMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        public static string Error {
-            get {
+        public static string Error
+        {
+            get
+            {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Error Details:.
         /// </summary>
-        public static string ErrorView_ErrorDetails {
-            get {
+        public static string ErrorView_ErrorDetails
+        {
+            get
+            {
                 return ResourceManager.GetString("ErrorView_ErrorDetails", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to If the problem presists, please try restarting HandBrake..
         /// </summary>
-        public static string ErrorViewModel_IfTheProblemPersists {
-            get {
+        public static string ErrorViewModel_IfTheProblemPersists
+        {
+            get
+            {
                 return ResourceManager.GetString("ErrorViewModel_IfTheProblemPersists", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There is no further information available about this error..
         /// </summary>
-        public static string ErrorViewModel_NoFurtherInformation {
-            get {
+        public static string ErrorViewModel_NoFurtherInformation
+        {
+            get
+            {
                 return ResourceManager.GetString("ErrorViewModel_NoFurtherInformation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An Unknown Error has occurred..
         /// </summary>
-        public static string ErrorViewModel_UnknownError {
-            get {
+        public static string ErrorViewModel_UnknownError
+        {
+            get
+            {
                 return ResourceManager.GetString("ErrorViewModel_UnknownError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Ask to overwrite file.
         /// </summary>
-        public static string FileOverwriteBehaviours_Ask {
-            get {
+        public static string FileOverwriteBehaviours_Ask
+        {
+            get
+            {
                 return ResourceManager.GetString("FileOverwriteBehaviours_Ask", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Try to automatically rename file.
         /// </summary>
-        public static string FileOverwriteBehaviours_Autoname {
-            get {
+        public static string FileOverwriteBehaviours_Autoname
+        {
+            get
+            {
                 return ResourceManager.GetString("FileOverwriteBehaviours_Autoname", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Overwrite the file.
         /// </summary>
-        public static string FileOverwriteBehaviours_Overwrite {
-            get {
+        public static string FileOverwriteBehaviours_Overwrite
+        {
+            get
+            {
                 return ResourceManager.GetString("FileOverwriteBehaviours_Overwrite", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom:.
         /// </summary>
-        public static string FiltersView_Custom {
-            get {
+        public static string FiltersView_Custom
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deblock.
         /// </summary>
-        public static string FiltersView_Deblock {
-            get {
+        public static string FiltersView_Deblock
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Deblock", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Decomb.
         /// </summary>
-        public static string FiltersView_Decomb {
-            get {
+        public static string FiltersView_Decomb
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Decomb", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deinterlace:.
         /// </summary>
-        public static string FiltersView_Deinterlace {
-            get {
+        public static string FiltersView_Deinterlace
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Deinterlace", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset:.
         /// </summary>
-        public static string FiltersView_DeinterlacePreset {
-            get {
+        public static string FiltersView_DeinterlacePreset
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_DeinterlacePreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deinterlace Preset.
         /// </summary>
-        public static string FiltersView_DeinterlacePresetAuto {
-            get {
+        public static string FiltersView_DeinterlacePresetAuto
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_DeinterlacePresetAuto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Denoise:.
         /// </summary>
-        public static string FiltersView_Denoise {
-            get {
+        public static string FiltersView_Denoise
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Denoise", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Denoise Preset.
         /// </summary>
-        public static string FiltersView_DenoisePresetAuto {
-            get {
+        public static string FiltersView_DenoisePresetAuto
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_DenoisePresetAuto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Denoise Tune.
         /// </summary>
-        public static string FiltersView_DenoiseTuneAuto {
-            get {
+        public static string FiltersView_DenoiseTuneAuto
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_DenoiseTuneAuto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Detelecine:.
         /// </summary>
-        public static string FiltersView_Detelecine {
-            get {
+        public static string FiltersView_Detelecine
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Detelecine", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
-        public static string FiltersView_Filters {
-            get {
+        public static string FiltersView_Filters
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Filters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Flip.
         /// </summary>
-        public static string FiltersView_FlipVideo {
-            get {
+        public static string FiltersView_FlipVideo
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_FlipVideo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Grayscale.
         /// </summary>
-        public static string FiltersView_Grayscale {
-            get {
+        public static string FiltersView_Grayscale
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Grayscale", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Interlace Detection:.
         /// </summary>
-        public static string FiltersView_InterlaceDetection {
-            get {
+        public static string FiltersView_InterlaceDetection
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_InterlaceDetection", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset:.
         /// </summary>
-        public static string FiltersView_Preset {
-            get {
+        public static string FiltersView_Preset
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Preset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rotate:.
         /// </summary>
-        public static string FiltersView_Rotate {
-            get {
+        public static string FiltersView_Rotate
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Rotate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Sharpen.
         /// </summary>
-        public static string FiltersView_Sharpen {
-            get {
+        public static string FiltersView_Sharpen
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Sharpen", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Sharpen Preset.
         /// </summary>
-        public static string FiltersView_SharpenPresetAuto {
-            get {
+        public static string FiltersView_SharpenPresetAuto
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_SharpenPresetAuto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Sharpen Tune.
         /// </summary>
-        public static string FiltersView_SharpenTuneAuto {
-            get {
+        public static string FiltersView_SharpenTuneAuto
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_SharpenTuneAuto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Tune:.
         /// </summary>
-        public static string FiltersView_Tune {
-            get {
+        public static string FiltersView_Tune
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersView_Tune", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to FiltersView_DeblockPreset.
         /// </summary>
-        public static string FiltersViewAuto_DeblockPreset {
-            get {
+        public static string FiltersViewAuto_DeblockPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersViewAuto_DeblockPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deblock Tune.
         /// </summary>
-        public static string FiltersViewAuto_DeblockTune {
-            get {
+        public static string FiltersViewAuto_DeblockTune
+        {
+            get
+            {
                 return ResourceManager.GetString("FiltersViewAuto_DeblockTune", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
-        public static string Generic_Add {
-            get {
+        public static string Generic_Add
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Add", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
-        public static string Generic_Apply {
-            get {
+        public static string Generic_Apply
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Apply", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string Generic_Cancel {
-            get {
+        public static string Generic_Cancel
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Cancel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
-        public static string Generic_Clear {
-            get {
+        public static string Generic_Clear
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Clear", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string Generic_Close {
-            get {
+        public static string Generic_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Close", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Copy to Clipboard.
         /// </summary>
-        public static string Generic_CopyToClipboard {
-            get {
+        public static string Generic_CopyToClipboard
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_CopyToClipboard", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move Left.
         /// </summary>
-        public static string Generic_MoveLeft {
-            get {
+        public static string Generic_MoveLeft
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_MoveLeft", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Move Right.
         /// </summary>
-        public static string Generic_MoveRight {
-            get {
+        public static string Generic_MoveRight
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_MoveRight", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        public static string Generic_Save {
-            get {
+        public static string Generic_Save
+        {
+            get
+            {
                 return ResourceManager.GetString("Generic_Save", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake.
         /// </summary>
-        public static string HandBrake_Title {
-            get {
+        public static string HandBrake_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("HandBrake_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Use System Language.
         /// </summary>
-        public static string Language_UseSystem {
-            get {
+        public static string Language_UseSystem
+        {
+            get
+            {
                 return ResourceManager.GetString("Language_UseSystem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Copy to clipboard.
         /// </summary>
-        public static string LogView_CopyClipboard {
-            get {
+        public static string LogView_CopyClipboard
+        {
+            get
+            {
                 return ResourceManager.GetString("LogView_CopyClipboard", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encode Log.
         /// </summary>
-        public static string LogView_EncodeLog {
-            get {
+        public static string LogView_EncodeLog
+        {
+            get
+            {
                 return ResourceManager.GetString("LogView_EncodeLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open Log Directory.
         /// </summary>
-        public static string LogView_OpenLogDir {
-            get {
+        public static string LogView_OpenLogDir
+        {
+            get
+            {
                 return ResourceManager.GetString("LogView_OpenLogDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ScanLog.
         /// </summary>
-        public static string LogView_ScanLog {
-            get {
+        public static string LogView_ScanLog
+        {
+            get
+            {
                 return ResourceManager.GetString("LogView_ScanLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Log Viewer.
         /// </summary>
-        public static string LogViewModel_Title {
-            get {
+        public static string LogViewModel_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("LogViewModel_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake is already encoding..
         /// </summary>
-        public static string Main_AlreadyEncoding {
-            get {
+        public static string Main_AlreadyEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_AlreadyEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
         ///    
         ///Do you wish to continue?.
         /// </summary>
-        public static string Main_AutoAdd_AudioAndSubWarning {
-            get {
+        public static string Main_AutoAdd_AudioAndSubWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_AutoAdd_AudioAndSubWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Do you wish to proceed trying to add the rest?.
         /// </summary>
-        public static string Main_ContinueAddingToQueue {
-            get {
+        public static string Main_ContinueAddingToQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ContinueAddingToQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There are jobs on the queue with the same destination path. Please choose a different path for this job..
         /// </summary>
-        public static string Main_DuplicateDestinationOnQueue {
-            get {
+        public static string Main_DuplicateDestinationOnQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_DuplicateDestinationOnQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The entered destination path contained illegal characters and will not be updated..
         /// </summary>
-        public static string Main_InvalidDestination {
-            get {
+        public static string Main_InvalidDestination
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_InvalidDestination", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to    Pending Jobs {0}.
         /// </summary>
-        public static string Main_JobsPending_addon {
-            get {
+        public static string Main_JobsPending_addon
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_JobsPending_addon", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your destination directory is low on diskspace. 
         ///
@@ -1339,286 +1624,348 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Do you wish to continue? .
         /// </summary>
-        public static string Main_LowDiskspace {
-            get {
+        public static string Main_LowDiskspace
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_LowDiskspace", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file..
         /// </summary>
-        public static string Main_MatchingFileOverwriteWarning {
-            get {
+        public static string Main_MatchingFileOverwriteWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_MatchingFileOverwriteWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to New Default Preset Set: {0}.
         /// </summary>
-        public static string Main_NewDefaultPreset {
-            get {
+        public static string Main_NewDefaultPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_NewDefaultPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A New Update is Available. Goto Tools Menu &gt; Options to Install.
         /// </summary>
-        public static string Main_NewUpdate {
-            get {
+        public static string Main_NewUpdate
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_NewUpdate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The output directory you have chosen either does not exist, or you do not have permissions to write files to it..
         /// </summary>
-        public static string Main_NoPermissionsOrMissingDirectory {
-            get {
+        public static string Main_NoPermissionsOrMissingDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_NoPermissionsOrMissingDirectory", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Preset selected..
         /// </summary>
-        public static string Main_NoPresetSelected {
-            get {
+        public static string Main_NoPresetSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_NoPresetSelected", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You can not modify built in presets. Please select one of your own presets..
         /// </summary>
-        public static string Main_NoUpdateOfBuiltInPresets {
-            get {
+        public static string Main_NoUpdateOfBuiltInPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_NoUpdateOfBuiltInPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please correct your subtitle settings before continuing. .
         /// </summary>
-        public static string Main_PleaseFixSubtitleSettings {
-            get {
+        public static string Main_PleaseFixSubtitleSettings
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PleaseFixSubtitleSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please select a folder..
         /// </summary>
-        public static string Main_PleaseSelectFolder {
-            get {
+        public static string Main_PleaseSelectFolder
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PleaseSelectFolder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preparing to encode ....
         /// </summary>
-        public static string Main_PreparingToEncode {
-            get {
+        public static string Main_PreparingToEncode
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PreparingToEncode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You can not import a preset with the same name as a built-in preset..
         /// </summary>
-        public static string Main_PresetErrorBuiltInName {
-            get {
+        public static string Main_PresetErrorBuiltInName
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetErrorBuiltInName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to import the selected preset..
         /// </summary>
-        public static string Main_PresetImportFailed {
-            get {
+        public static string Main_PresetImportFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetImportFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The preset may be corrupted or from an older version of HandBrake which is not supported. 
         ///Presets from older versions must be re-created in the current version..
         /// </summary>
-        public static string Main_PresetImportFailedSolution {
-            get {
+        public static string Main_PresetImportFailedSolution
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetImportFailedSolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The preset &quot;{0}&quot; already exists. Would you like to overwrite it?.
         /// </summary>
-        public static string Main_PresetOverwriteWarning {
-            get {
+        public static string Main_PresetOverwriteWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetOverwriteWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Presets.
         /// </summary>
-        public static string Main_Presets {
-            get {
+        public static string Main_Presets
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_Presets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to update the selected preset?.
         /// </summary>
-        public static string Main_PresetUpdateConfrimation {
-            get {
+        public static string Main_PresetUpdateConfrimation
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetUpdateConfrimation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The Preset has now been updated with your current settings..
         /// </summary>
-        public static string Main_PresetUpdated {
-            get {
+        public static string Main_PresetUpdated
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetUpdated", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake has determined your built-in presets are out of date... These presets will now be updated.
         ///Your custom presets have not been updated so you may have to re-create these by deleting and re-adding them. 
         ///The previous user_presets.xml file was backed up..
         /// </summary>
-        public static string Main_PresetUpdateNotification {
-            get {
+        public static string Main_PresetUpdateNotification
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_PresetUpdateNotification", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Finished.
         /// </summary>
-        public static string Main_QueueFinished {
-            get {
+        public static string Main_QueueFinished
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_QueueFinished", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to  with {0} errors or cancellations detected..
         /// </summary>
-        public static string Main_QueueFinishedErrors {
-            get {
+        public static string Main_QueueFinishedErrors
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_QueueFinishedErrors", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue{0}.
         /// </summary>
-        public static string Main_QueueLabel {
-            get {
+        public static string Main_QueueLabel
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_QueueLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The file &apos;{0}&apos; already exists!
         ///Would you like to overwrite it?.
         /// </summary>
-        public static string Main_QueueOverwritePrompt {
-            get {
+        public static string Main_QueueOverwritePrompt
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_QueueOverwritePrompt", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Paused.
         /// </summary>
-        public static string Main_QueuePaused {
-            get {
+        public static string Main_QueuePaused
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_QueuePaused", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Resume Encode.
         /// </summary>
-        public static string Main_ResumeEncode {
-            get {
+        public static string Main_ResumeEncode
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ResumeEncode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scan Cancelled..
         /// </summary>
-        public static string Main_ScanCancelled {
-            get {
+        public static string Main_ScanCancelled
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanCancelled", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scan Completed.
         /// </summary>
-        public static string Main_ScanCompleted {
-            get {
+        public static string Main_ScanCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scan failed: .
         /// </summary>
-        public static string Main_ScanFailed_NoReason {
-            get {
+        public static string Main_ScanFailed_NoReason
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanFailed_NoReason", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scan Failed... Please See Activity Log for details..
         /// </summary>
-        public static string Main_ScanFailled_CheckLog {
-            get {
+        public static string Main_ScanFailled_CheckLog
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanFailled_CheckLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scanning source, please wait....
         /// </summary>
-        public static string Main_ScanningPleaseWait {
-            get {
+        public static string Main_ScanningPleaseWait
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanningPleaseWait", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scanning Title {0} of {1} ({2}%).
         /// </summary>
-        public static string Main_ScanningTitleXOfY {
-            get {
+        public static string Main_ScanningTitleXOfY
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanningTitleXOfY", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No valid source or titles found..
         /// </summary>
-        public static string Main_ScanNoTitlesFound {
-            get {
+        public static string Main_ScanNoTitlesFound
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanNoTitlesFound", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. 
         ///This could be due to one of the following reasons:
@@ -1626,1527 +1973,1865 @@ namespace HandBrakeWPF.Properties {
         ///- The source file is not a valid video file or is in a format that HandBrake does not support.
         ///- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string Main_ScanNoTitlesFoundMessage {
-            get {
+        public static string Main_ScanNoTitlesFoundMessage
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanNoTitlesFoundMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encode. Click the &apos;Source&apos; button on the toolbar to continue..
         /// </summary>
-        public static string Main_ScanSource {
-            get {
+        public static string Main_ScanSource
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_ScanSource", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please make sure you have selected one of your own presets. Please note that you cannot export built-in presets..
         /// </summary>
-        public static string Main_SelectPreset {
-            get {
+        public static string Main_SelectPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_SelectPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please select a preset to update..
         /// </summary>
-        public static string Main_SelectPresetForUpdate {
-            get {
+        public static string Main_SelectPresetForUpdate
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_SelectPresetForUpdate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Select &apos;Source&apos; to continue.
         /// </summary>
-        public static string Main_SelectSource {
-            get {
+        public static string Main_SelectSource
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_SelectSource", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You must first set the destination path for the output file before adding to the queue..
         /// </summary>
-        public static string Main_SetDestination {
-            get {
+        public static string Main_SetDestination
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_SetDestination", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Encode.
         /// </summary>
-        public static string Main_Start {
-            get {
+        public static string Main_Start
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_Start", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Queue.
         /// </summary>
-        public static string Main_StartQueue {
-            get {
+        public static string Main_StartQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_StartQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You must turn on automatic file naming AND set a default path in preferences before you can add to the queue..
         /// </summary>
-        public static string Main_TurnOnAutoFileNaming {
-            get {
+        public static string Main_TurnOnAutoFileNaming
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_TurnOnAutoFileNaming", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your system prevented HandBrake from launching a web browser..
         /// </summary>
-        public static string Main_UnableToLoadHelpMessage {
-            get {
+        public static string Main_UnableToLoadHelpMessage
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_UnableToLoadHelpMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You can still access the help pages by visiting the website directly at: https://handbrake.fr.
         /// </summary>
-        public static string Main_UnableToLoadHelpSolution {
-            get {
+        public static string Main_UnableToLoadHelpSolution
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_UnableToLoadHelpSolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} Jobs Pending.
         /// </summary>
-        public static string Main_XEncodesPending {
-            get {
+        public static string Main_XEncodesPending
+        {
+            get
+            {
                 return ResourceManager.GetString("Main_XEncodesPending", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _About....
         /// </summary>
-        public static string MainView_About {
-            get {
+        public static string MainView_About
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_About", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Activity Log.
         /// </summary>
-        public static string MainView_ActivityLog {
-            get {
+        public static string MainView_ActivityLog
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ActivityLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Activity Log.
         /// </summary>
-        public static string MainView_ActivityLogMenu {
-            get {
+        public static string MainView_ActivityLogMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ActivityLogMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add All.
         /// </summary>
-        public static string MainView_AddAll {
-            get {
+        public static string MainView_AddAll
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AddAll", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Current.
         /// </summary>
-        public static string MainView_AddCurrent {
-            get {
+        public static string MainView_AddCurrent
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AddCurrent", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Selection.
         /// </summary>
-        public static string MainView_AddSelection {
-            get {
+        public static string MainView_AddSelection
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AddSelection", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add to Queue.
         /// </summary>
-        public static string MainView_AddToQueue {
-            get {
+        public static string MainView_AddToQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AddToQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
-        public static string MainView_AdvancedTab {
-            get {
+        public static string MainView_AdvancedTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AdvancedTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Align A/V Start.
         /// </summary>
-        public static string MainView_AlignAVStart {
-            get {
+        public static string MainView_AlignAVStart
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AlignAVStart", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Angle: .
         /// </summary>
-        public static string MainView_Angle {
-            get {
+        public static string MainView_Angle
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Angle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Aspect:.
         /// </summary>
-        public static string MainView_Aspect {
-            get {
+        public static string MainView_Aspect
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Aspect", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio.
         /// </summary>
-        public static string MainView_AudioTab {
-            get {
+        public static string MainView_AudioTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AudioTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio Tracks.
         /// </summary>
-        public static string MainView_AudioTrackCount {
-            get {
+        public static string MainView_AudioTrackCount
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_AudioTrackCount", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
-        public static string MainView_Browser {
-            get {
+        public static string MainView_Browser
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Browser", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapters.
         /// </summary>
-        public static string MainView_ChaptersTab {
-            get {
+        public static string MainView_ChaptersTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ChaptersTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Check for Updates.
         /// </summary>
-        public static string MainView_CheckForUpdates {
-            get {
+        public static string MainView_CheckForUpdates
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_CheckForUpdates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Container.
         /// </summary>
-        public static string MainView_Container {
-            get {
+        public static string MainView_Container
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Container", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Destination.
         /// </summary>
-        public static string MainView_Destination {
-            get {
+        public static string MainView_Destination
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Destination", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duration: .
         /// </summary>
-        public static string MainView_Duration {
-            get {
+        public static string MainView_Duration
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Duration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Exit.
         /// </summary>
-        public static string MainView_Exit {
-            get {
+        public static string MainView_Exit
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Exit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Export to file.
         /// </summary>
-        public static string MainView_ExportToFile {
-            get {
+        public static string MainView_ExportToFile
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ExportToFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Save As:.
         /// </summary>
-        public static string MainView_File {
-            get {
+        public static string MainView_File
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_File", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _File.
         /// </summary>
-        public static string MainView_FileMenu {
-            get {
+        public static string MainView_FileMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_FileMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filters:.
         /// </summary>
-        public static string MainView_Filters {
-            get {
+        public static string MainView_Filters
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Filters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
-        public static string MainView_FiltersTab {
-            get {
+        public static string MainView_FiltersTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_FiltersTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Format:.
         /// </summary>
-        public static string MainView_Format {
-            get {
+        public static string MainView_Format
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Format", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _HandBrake Documentation (HTTPS).
         /// </summary>
-        public static string MainView_HandBrakeDocs {
-            get {
+        public static string MainView_HandBrakeDocs
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_HandBrakeDocs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
-        public static string MainView_Help {
-            get {
+        public static string MainView_Help
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Help", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Help.
         /// </summary>
-        public static string MainView_HelpMenu {
-            get {
+        public static string MainView_HelpMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_HelpMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Hide.
         /// </summary>
-        public static string MainView_Hide {
-            get {
+        public static string MainView_Hide
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Hide", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Import from file.
         /// </summary>
-        public static string MainView_ImportFromFile {
-            get {
+        public static string MainView_ImportFromFile
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ImportFromFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to iPod 5G Support.
         /// </summary>
-        public static string MainView_iPod5G {
-            get {
+        public static string MainView_iPod5G
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_iPod5G", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Metadata.
         /// </summary>
-        public static string MainView_MetaDataTab {
-            get {
+        public static string MainView_MetaDataTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_MetaDataTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to (Modified).
         /// </summary>
-        public static string MainView_ModifiedPreset {
-            get {
+        public static string MainView_ModifiedPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ModifiedPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Muxing: This may take a while....
         /// </summary>
-        public static string MainView_Muxing {
-            get {
+        public static string MainView_Muxing
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Muxing", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
-        public static string MainView_Options {
-            get {
+        public static string MainView_Options
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Options", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Output Settings.
         /// </summary>
-        public static string MainView_OutputSettings {
-            get {
+        public static string MainView_OutputSettings
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_OutputSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
-        public static string MainView_Pause {
-            get {
+        public static string MainView_Pause
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Pause", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Dimensions.
         /// </summary>
-        public static string MainView_PictureTab {
-            get {
+        public static string MainView_PictureTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PictureTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Preferences.
         /// </summary>
-        public static string MainView_PreferencesMenu {
-            get {
+        public static string MainView_PreferencesMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PreferencesMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rename Preset.
         /// </summary>
-        public static string MainView_PresetManage {
-            get {
+        public static string MainView_PresetManage
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PresetManage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset Options Context Menu.
         /// </summary>
-        public static string MainView_PresetOptionsContextMenu {
-            get {
+        public static string MainView_PresetOptionsContextMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PresetOptionsContextMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete Preset.
         /// </summary>
-        public static string MainView_PresetRemove {
-            get {
+        public static string MainView_PresetRemove
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PresetRemove", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Presets.
         /// </summary>
-        public static string MainView_Presets {
-            get {
+        public static string MainView_Presets
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Presets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Presets.
         /// </summary>
-        public static string MainView_PresetsMenu {
-            get {
+        public static string MainView_PresetsMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_PresetsMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
-        public static string MainView_Preview {
-            get {
+        public static string MainView_Preview
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Preview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}.
         /// </summary>
-        public static string MainView_ProgressStatusWithTask {
-            get {
+        public static string MainView_ProgressStatusWithTask
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ProgressStatusWithTask", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Queue.
         /// </summary>
-        public static string MainView_QueueMenu {
-            get {
+        public static string MainView_QueueMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_QueueMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Range:.
         /// </summary>
-        public static string MainView_Range {
-            get {
+        public static string MainView_Range
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Range", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
-        public static string MainView_Reload {
-            get {
+        public static string MainView_Reload
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Reload", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
-        public static string MainView_Remove {
-            get {
+        public static string MainView_Remove
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Remove", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset Built-in Presets.
         /// </summary>
-        public static string MainView_ResetBuiltInPresets {
-            get {
+        public static string MainView_ResetBuiltInPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ResetBuiltInPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Reset Built-In Presets.
         /// </summary>
-        public static string MainView_ResetPresets {
-            get {
+        public static string MainView_ResetPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ResetPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Save New Preset.
         /// </summary>
-        public static string MainView_SaveNewPreset {
-            get {
+        public static string MainView_SaveNewPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SaveNewPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Searching for start time.
         /// </summary>
-        public static string MainView_Searching {
-            get {
+        public static string MainView_Searching
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Searching", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset:.
         /// </summary>
-        public static string MainView_SelectedPresets {
-            get {
+        public static string MainView_SelectedPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SelectedPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Set Current as Default.
         /// </summary>
-        public static string MainView_SetCurrentAsDefault {
-            get {
+        public static string MainView_SetCurrentAsDefault
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SetCurrentAsDefault", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Set Default.
         /// </summary>
-        public static string MainView_SetDefault {
-            get {
+        public static string MainView_SetDefault
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SetDefault", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
-        public static string MainView_Show {
-            get {
+        public static string MainView_Show
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Show", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;Add All&apos; to Queue.
         /// </summary>
-        public static string MainView_ShowAddAllToQueue {
-            get {
+        public static string MainView_ShowAddAllToQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowAddAllToQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;Add Selection&apos; to Queue.
         /// </summary>
-        public static string MainView_ShowAddSelectionToQueue {
-            get {
+        public static string MainView_ShowAddSelectionToQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowAddSelectionToQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to S_how Preset Panel.
         /// </summary>
-        public static string MainView_ShowPresetPanel {
-            get {
+        public static string MainView_ShowPresetPanel
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowPresetPanel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
-        public static string MainView_ShowPreview {
-            get {
+        public static string MainView_ShowPreview
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowPreview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue.
         /// </summary>
-        public static string MainView_ShowQueue {
-            get {
+        public static string MainView_ShowQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Show Queue.
         /// </summary>
-        public static string MainView_ShowQueueMenu {
-            get {
+        public static string MainView_ShowQueueMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ShowQueueMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size:.
         /// </summary>
-        public static string MainView_Size {
-            get {
+        public static string MainView_Size
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Size", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Source:.
         /// </summary>
-        public static string MainView_Source {
-            get {
+        public static string MainView_Source
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Source", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open Source.
         /// </summary>
-        public static string MainView_SourceOpen {
-            get {
+        public static string MainView_SourceOpen
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SourceOpen", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Encode.
         /// </summary>
-        public static string MainView_StartEncode {
-            get {
+        public static string MainView_StartEncode
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_StartEncode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Queue.
         /// </summary>
-        public static string MainView_StartQueue {
-            get {
+        public static string MainView_StartQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_StartQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Stop.
         /// </summary>
-        public static string MainView_Stop {
-            get {
+        public static string MainView_Stop
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Stop", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Stop Encode.
         /// </summary>
-        public static string MainView_StopEncode {
-            get {
+        public static string MainView_StopEncode
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_StopEncode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to stop this encode?.
         /// </summary>
-        public static string MainView_StopEncodeConfirm {
-            get {
+        public static string MainView_StopEncodeConfirm
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_StopEncodeConfirm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please choose a source to encode before trying to import a subtitle file..
         /// </summary>
-        public static string MainView_SubtitleBeforeScanError {
-            get {
+        public static string MainView_SubtitleBeforeScanError
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SubtitleBeforeScanError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subtitles.
         /// </summary>
-        public static string MainView_SubtitlesTab {
-            get {
+        public static string MainView_SubtitlesTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SubtitlesTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subtitle Tracks.
         /// </summary>
-        public static string MainView_SubtitleTracksCount {
-            get {
+        public static string MainView_SubtitleTracksCount
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SubtitleTracksCount", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Summary.
         /// </summary>
-        public static string MainView_SummaryTab {
-            get {
+        public static string MainView_SummaryTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_SummaryTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to  - .
         /// </summary>
-        public static string MainView_through {
-            get {
+        public static string MainView_through
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_through", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Title: .
         /// </summary>
-        public static string MainView_Title {
-            get {
+        public static string MainView_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to _Tools.
         /// </summary>
-        public static string MainView_ToolsMenu {
-            get {
+        public static string MainView_ToolsMenu
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_ToolsMenu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Tracks:.
         /// </summary>
-        public static string MainView_Tracks {
-            get {
+        public static string MainView_Tracks
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_Tracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Update Selected Preset.
         /// </summary>
-        public static string MainView_UpdateSelectedPreset {
-            get {
+        public static string MainView_UpdateSelectedPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_UpdateSelectedPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Video.
         /// </summary>
-        public static string MainView_VideoTab {
-            get {
+        public static string MainView_VideoTab
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_VideoTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Web Optimized.
         /// </summary>
-        public static string MainView_WebOptimized {
-            get {
+        public static string MainView_WebOptimized
+        {
+            get
+            {
                 return ResourceManager.GetString("MainView_WebOptimized", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You can not delete the default preset. Please set another preset as default first..
         /// </summary>
-        public static string MainViewModel_CanNotDeleteDefaultPreset {
-            get {
+        public static string MainViewModel_CanNotDeleteDefaultPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_CanNotDeleteDefaultPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}.
         /// </summary>
-        public static string MainViewModel_EncodeStatusChanged_StatusLabel {
-            get {
+        public static string MainViewModel_EncodeStatusChanged_StatusLabel
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}.
         /// </summary>
-        public static string MainViewModel_EncodeStatusChanged_SubScan_StatusLabel {
-            get {
+        public static string MainViewModel_EncodeStatusChanged_SubScan_StatusLabel
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_SubScan_StatusLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Low Disk Space.
         /// </summary>
-        public static string MainViewModel_LowDiskSpace {
-            get {
+        public static string MainViewModel_LowDiskSpace
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_LowDiskSpace", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. .
         /// </summary>
-        public static string MainViewModel_LowDiskSpaceWarning {
-            get {
+        public static string MainViewModel_LowDiskSpaceWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_LowDiskSpaceWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete the preset: .
         /// </summary>
-        public static string MainViewModel_PresetRemove_AreYouSure {
-            get {
+        public static string MainViewModel_PresetRemove_AreYouSure
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_PresetRemove_AreYouSure", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to launch destination directory..
         /// </summary>
-        public static string MainViewModel_UnableToLaunchDestDir {
-            get {
+        public static string MainViewModel_UnableToLaunchDestDir
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please check that you have a valid destination directory..
         /// </summary>
-        public static string MainViewModel_UnableToLaunchDestDirSolution {
-            get {
+        public static string MainViewModel_UnableToLaunchDestDirSolution
+        {
+            get
+            {
                 return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDirSolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete Built-in Presets.
         /// </summary>
-        public static string ManagePresetView_DeleteBuiltIn {
-            get {
+        public static string ManagePresetView_DeleteBuiltIn
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_DeleteBuiltIn", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export selected preset.
         /// </summary>
-        public static string ManagePresetView_Export {
-            get {
+        public static string ManagePresetView_Export
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_Export", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export all user presets.
         /// </summary>
-        public static string ManagePresetView_ExportUserPresets {
-            get {
+        public static string ManagePresetView_ExportUserPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_ExportUserPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import Preset(s) from file.
         /// </summary>
-        public static string ManagePresetView_Import {
-            get {
+        public static string ManagePresetView_Import
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_Import", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Manage Presets.
         /// </summary>
-        public static string ManagePresetView_ManagePreset {
-            get {
+        public static string ManagePresetView_ManagePreset
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_ManagePreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There is no preset selected..
         /// </summary>
-        public static string ManagePresetView_NoPresetSelected {
-            get {
+        public static string ManagePresetView_NoPresetSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_NoPresetSelected", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset Information:.
         /// </summary>
-        public static string ManagePresetView_PresetInfo {
-            get {
+        public static string ManagePresetView_PresetInfo
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_PresetInfo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Build in presets can not be modified..
         /// </summary>
-        public static string ManagePresetView_RestrictedPreset {
-            get {
+        public static string ManagePresetView_RestrictedPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_RestrictedPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Set selected preset as default.
         /// </summary>
-        public static string ManagePresetView_SetDefault {
-            get {
+        public static string ManagePresetView_SetDefault
+        {
+            get
+            {
                 return ResourceManager.GetString("ManagePresetView_SetDefault", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Actors:.
         /// </summary>
-        public static string MetadataView_Actors {
-            get {
+        public static string MetadataView_Actors
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Actors", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Comments:.
         /// </summary>
-        public static string MetadataView_Comments {
-            get {
+        public static string MetadataView_Comments
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Comments", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
-        public static string MetadataView_Description {
-            get {
+        public static string MetadataView_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Description", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Director:.
         /// </summary>
-        public static string MetadataView_Director {
-            get {
+        public static string MetadataView_Director
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Director", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Genre:.
         /// </summary>
-        public static string MetadataView_Genre {
-            get {
+        public static string MetadataView_Genre
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Genre", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Plot:.
         /// </summary>
-        public static string MetadataView_Plot {
-            get {
+        public static string MetadataView_Plot
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_Plot", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Release Date:.
         /// </summary>
-        public static string MetadataView_ReleaseDate {
-            get {
+        public static string MetadataView_ReleaseDate
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_ReleaseDate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Metadata.
         /// </summary>
-        public static string MetaDataView_Title {
-            get {
+        public static string MetaDataView_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("MetaDataView_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Title:.
         /// </summary>
-        public static string MetadataView_TitleTag {
-            get {
+        public static string MetadataView_TitleTag
+        {
+            get
+            {
                 return ResourceManager.GetString("MetadataView_TitleTag", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
-        public static string Mp4Behaviour_Auto {
-            get {
+        public static string Mp4Behaviour_Auto
+        {
+            get
+            {
                 return ResourceManager.GetString("Mp4Behaviour_Auto", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Always use M4V.
         /// </summary>
-        public static string Mp4Behaviour_UseM4v {
-            get {
+        public static string Mp4Behaviour_UseM4v
+        {
+            get
+            {
                 return ResourceManager.GetString("Mp4Behaviour_UseM4v", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Always use MP4.
         /// </summary>
-        public static string Mp4Behaviour_UseMp4 {
-            get {
+        public static string Mp4Behaviour_UseMp4
+        {
+            get
+            {
                 return ResourceManager.GetString("Mp4Behaviour_UseMp4", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Additional Information.
         /// </summary>
-        public static string NoAdditionalInformation {
-            get {
+        public static string NoAdditionalInformation
+        {
+            get
+            {
                 return ResourceManager.GetString("NoAdditionalInformation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
-        public static string Notice {
-            get {
+        public static string Notice
+        {
+            get
+            {
                 return ResourceManager.GetString("Notice", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Log files older than 7 days.
         /// </summary>
-        public static string Options_7DayLogClear {
-            get {
+        public static string Options_7DayLogClear
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_7DayLogClear", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to About HandBrake.
         /// </summary>
-        public static string Options_About {
-            get {
+        public static string Options_About
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_About", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
         ///
         ///Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
+        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
         /// </summary>
-        public static string Options_AdditionalFormatOptions {
-            get {
+        public static string Options_AdditionalFormatOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_AdditionalFormatOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
-        public static string Options_Advanced {
-            get {
+        public static string Options_Advanced
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Advanced", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Advanced Options.
         /// </summary>
-        public static string Options_AdvancedOptions {
-            get {
+        public static string Options_AdvancedOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_AdvancedOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Application Toolbar.
         /// </summary>
-        public static string Options_ApplicaitonToolbar {
-            get {
+        public static string Options_ApplicaitonToolbar
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ApplicaitonToolbar", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Arguments:.
         /// </summary>
-        public static string Options_Arguments {
-            get {
+        public static string Options_Arguments
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Arguments", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Automatic File Naming.
         /// </summary>
-        public static string Options_AutomaticFileNaming {
-            get {
+        public static string Options_AutomaticFileNaming
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_AutomaticFileNaming", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Automatically name output files.
         /// </summary>
-        public static string Options_AutoNameOutput {
-            get {
+        public static string Options_AutoNameOutput
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_AutoNameOutput", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Check for Updates.
         /// </summary>
-        public static string Options_CheckForUpdates {
-            get {
+        public static string Options_CheckForUpdates
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_CheckForUpdates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Always clear completed queue items after an encode completes.
         /// </summary>
-        public static string Options_ClearCompleted {
-            get {
+        public static string Options_ClearCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ClearCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Log History.
         /// </summary>
-        public static string Options_ClearLogs {
-            get {
+        public static string Options_ClearLogs
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ClearLogs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Put a copy of individual encode logs in a specified location:.
         /// </summary>
-        public static string Options_CopyLogToDir {
-            get {
+        public static string Options_CopyLogToDir
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_CopyLogToDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Put a copy of individual encode logs in the same location as the encoded video.
         /// </summary>
-        public static string Options_CopyLogToEncDir {
-            get {
+        public static string Options_CopyLogToEncDir
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_CopyLogToEncDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Current Version.
         /// </summary>
-        public static string Options_CurVersion {
-            get {
+        public static string Options_CurVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_CurVersion", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Use the Dark Theme. (Requires Restart, Windows 10 only).
         /// </summary>
-        public static string Options_DarkTheme {
-            get {
+        public static string Options_DarkTheme
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DarkTheme", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Decoding.
         /// </summary>
-        public static string Options_Decoding {
-            get {
+        public static string Options_Decoding
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Decoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Default Path:.
         /// </summary>
-        public static string Options_DefaultPath {
-            get {
+        public static string Options_DefaultPath
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DefaultPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Available additional Options: {source_path} or {source_folder_name} or {source}.
         /// </summary>
-        public static string Options_DefaultPathAdditionalParams {
-            get {
+        public static string Options_DefaultPathAdditionalParams
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DefaultPathAdditionalParams", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Download Update.
         /// </summary>
-        public static string Options_DownloadUpdates {
-            get {
+        public static string Options_DownloadUpdates
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DownloadUpdates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to DVD Reading.
         /// </summary>
-        public static string Options_DVD {
-            get {
+        public static string Options_DVD
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DVD", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Disable LibDVDNav. (libdvdread will be used instead).
         /// </summary>
-        public static string Options_DvdRead {
-            get {
+        public static string Options_DvdRead
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_DvdRead", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encode Completed.
         /// </summary>
-        public static string Options_EncodeCompleted {
-            get {
+        public static string Options_EncodeCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_EncodeCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoding.
         /// </summary>
-        public static string Options_Encoding {
-            get {
+        public static string Options_Encoding
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Encoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
-        public static string Options_Format {
-            get {
+        public static string Options_Format
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Format", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        public static string Options_General {
-            get {
+        public static string Options_General
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_General", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Logging.
         /// </summary>
-        public static string Options_Logging {
-            get {
+        public static string Options_Logging
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Logging", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Log Verbosity Level:.
         /// </summary>
-        public static string Options_LogLevel {
-            get {
+        public static string Options_LogLevel
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LogLevel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Log Path:.
         /// </summary>
-        public static string Options_LogPath {
-            get {
+        public static string Options_LogPath
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LogPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Low battery level:.
         /// </summary>
-        public static string Options_LowBatteryLevel {
-            get {
+        public static string Options_LowBatteryLevel
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LowBatteryLevel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Level at which low disk space alerts show:.
         /// </summary>
-        public static string Options_LowDiskspaceLevelText {
-            get {
+        public static string Options_LowDiskspaceLevelText
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LowDiskspaceLevelText", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Pause queue if disk space is low.
         /// </summary>
-        public static string Options_LowDiskspaceSize {
-            get {
+        public static string Options_LowDiskspaceSize
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LowDiskspaceSize", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to GB.
         /// </summary>
-        public static string Options_LowDiskspaceSizeGB {
-            get {
+        public static string Options_LowDiskspaceSizeGB
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_LowDiskspaceSizeGB", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Metadata.
         /// </summary>
-        public static string Options_Metadata {
-            get {
+        public static string Options_Metadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Metadata", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Minimize to system tray (Requires Restart).
         /// </summary>
-        public static string Options_MinimiseTray {
-            get {
+        public static string Options_MinimiseTray
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_MinimiseTray", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:.
         /// </summary>
-        public static string Options_MinTitleScanLength {
-            get {
+        public static string Options_MinTitleScanLength
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_MinTitleScanLength", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to MP4 File Extension:.
         /// </summary>
-        public static string Options_MP4FileExtension {
-            get {
+        public static string Options_MP4FileExtension
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_MP4FileExtension", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Notifications.
         /// </summary>
-        public static string Options_Notifications {
-            get {
+        public static string Options_Notifications
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Notifications", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to On Startup.
         /// </summary>
-        public static string Options_OnStartup {
-            get {
+        public static string Options_OnStartup
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_OnStartup", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Output Files.
         /// </summary>
-        public static string Options_Output {
-            get {
+        public static string Options_Output
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Output", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Output Files.
         /// </summary>
-        public static string Options_OutputFiles {
-            get {
+        public static string Options_OutputFiles
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_OutputFiles", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Passthru basic metadata from the source to the destination file (where supported).
         /// </summary>
-        public static string Options_PassthruMetadata {
-            get {
+        public static string Options_PassthruMetadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PassthruMetadata", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This option will allow basic metadata fields to be passed through from the source to destination file.
         ///Fields are limited to:
@@ -3161,1338 +3846,1632 @@ namespace HandBrakeWPF.Properties {
         ///- Description
         ///- Long Description.
         /// </summary>
-        public static string Options_PassthruMetadataTooltip {
-            get {
+        public static string Options_PassthruMetadataTooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PassthruMetadataTooltip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Path: .
         /// </summary>
-        public static string Options_Path {
-            get {
+        public static string Options_Path
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Path", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Path to Media Player.
         /// </summary>
-        public static string Options_PathToMediaPlayer {
-            get {
+        public static string Options_PathToMediaPlayer
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PathToMediaPlayer", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Pause any running jobs when the battery gets low..
         /// </summary>
-        public static string Options_PauseOnLowBattery {
-            get {
+        public static string Options_PauseOnLowBattery
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PauseOnLowBattery", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Prevent the system from sleeping while encoding.
         /// </summary>
-        public static string Options_PreventSleep {
-            get {
+        public static string Options_PreventSleep
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PreventSleep", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Number of picture previews to scan:.
         /// </summary>
-        public static string Options_PreviewScanCount {
-            get {
+        public static string Options_PreviewScanCount
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PreviewScanCount", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Priority Level:.
         /// </summary>
-        public static string Options_PriorityLevel {
-            get {
+        public static string Options_PriorityLevel
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PriorityLevel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Perform action immediately. (This will disable the 60 second confirmation dialog).
         /// </summary>
-        public static string Options_PromptBeforeAction {
-            get {
+        public static string Options_PromptBeforeAction
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_PromptBeforeAction", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Prefer use of Intel QuickSync for decoding video when available. .
         /// </summary>
-        public static string Options_QsvDecode {
-            get {
+        public static string Options_QsvDecode
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_QsvDecode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) .
         /// </summary>
-        public static string Options_QsvDecodeForNonFullPath {
-            get {
+        public static string Options_QsvDecodeForNonFullPath
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_QsvDecodeForNonFullPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Completed.
         /// </summary>
-        public static string Options_QueueCompleted {
-            get {
+        public static string Options_QueueCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_QueueCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remove common punctuation.
         /// </summary>
-        public static string Options_RemovePunctuation {
-            get {
+        public static string Options_RemovePunctuation
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Replace underscores with a space.
         /// </summary>
-        public static string Options_ReplaceUnderscores {
-            get {
+        public static string Options_ReplaceUnderscores
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ReplaceUnderscores", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset to &apos;Do nothing&apos; when the app is re-launched..
         /// </summary>
-        public static string Options_ResetDoNothing {
-            get {
+        public static string Options_ResetDoNothing
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ResetDoNothing", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Scaler:.
         /// </summary>
-        public static string Options_Scaler {
-            get {
+        public static string Options_Scaler
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Scaler", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Scaling.
         /// </summary>
-        public static string Options_Scaling {
-            get {
+        public static string Options_Scaling
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Scaling", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Send file to:.
         /// </summary>
-        public static string Options_SendFileTo {
-            get {
+        public static string Options_SendFileTo
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_SendFileTo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show &apos;Add All to Queue&apos; on the toolbar.
         /// </summary>
-        public static string Options_ShowToolbarAddAll {
-            get {
+        public static string Options_ShowToolbarAddAll
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ShowToolbarAddAll", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show &apos;Add Selection to Queue&apos; on the toolbar.
         /// </summary>
-        public static string Options_ShowToolbarAddSelection {
-            get {
+        public static string Options_ShowToolbarAddSelection
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ShowToolbarAddSelection", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to System.
         /// </summary>
-        public static string Options_SystemOptions {
-            get {
+        public static string Options_SystemOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_SystemOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Change case to Title Case.
         /// </summary>
-        public static string Options_TitleCase {
-            get {
+        public static string Options_TitleCase
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_TitleCase", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to User Interface Behaviour.
         /// </summary>
-        public static string Options_UIBehaviour {
-            get {
+        public static string Options_UIBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_UIBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Updates.
         /// </summary>
-        public static string Options_Updates {
-            get {
+        public static string Options_Updates
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Updates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to User Interface.
         /// </summary>
-        public static string Options_UserInterface {
-            get {
+        public static string Options_UserInterface
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_UserInterface", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Version:.
         /// </summary>
-        public static string Options_Version {
-            get {
+        public static string Options_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Version", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Video.
         /// </summary>
-        public static string Options_Video {
-            get {
+        public static string Options_Video
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_Video", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This path is used for the video preview feature only.
         ///VLC and MPC-HC are supported. Other players may also work but are not validated..
         /// </summary>
-        public static string Options_VideoPreviewPath {
-            get {
+        public static string Options_VideoPreviewPath
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_VideoPreviewPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to View Log Directory.
         /// </summary>
-        public static string Options_ViewLogDirectory {
-            get {
+        public static string Options_ViewLogDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_ViewLogDirectory", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to When Done.
         /// </summary>
-        public static string Options_WhenDone {
-            get {
+        public static string Options_WhenDone
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_WhenDone", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to When Done:.
         /// </summary>
-        public static string Options_WhenDoneColon {
-            get {
+        public static string Options_WhenDoneColon
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_WhenDoneColon", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to x264/5 Settings.
         /// </summary>
-        public static string Options_x264 {
-            get {
+        public static string Options_x264
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_x264", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Constant quality fractional granularity:.
         /// </summary>
-        public static string Options_x264Granularity {
-            get {
+        public static string Options_x264Granularity
+        {
+            get
+            {
                 return ResourceManager.GetString("Options_x264Granularity", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
-        public static string OptionsTab_General {
-            get {
+        public static string OptionsTab_General
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsTab_General", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Always use the default path for each new name generated..
         /// </summary>
-        public static string OptionsView_AlwaysUseDefaultPath {
-            get {
+        public static string OptionsView_AlwaysUseDefaultPath
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_AlwaysUseDefaultPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &lt; Back.
         /// </summary>
-        public static string OptionsView_BackButton {
-            get {
+        public static string OptionsView_BackButton
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_BackButton", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Checking for Updates ....
         /// </summary>
-        public static string OptionsView_CheckingForUpdates {
-            get {
+        public static string OptionsView_CheckingForUpdates
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_CheckingForUpdates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choice of encoder will be made available on the &apos;Video&apos; tab..
         /// </summary>
-        public static string OptionsView_ChoiceOfEncoderHint {
-            get {
+        public static string OptionsView_ChoiceOfEncoderHint
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ChoiceOfEncoderHint", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the log file directory?.
         /// </summary>
-        public static string OptionsView_ClearLogDirConfirm {
-            get {
+        public static string OptionsView_ClearLogDirConfirm
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ClearLogDirConfirm", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Logs.
         /// </summary>
-        public static string OptionsView_ClearLogs {
-            get {
+        public static string OptionsView_ClearLogs
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ClearLogs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Downloading....
         /// </summary>
-        public static string OptionsView_Downloading {
-            get {
+        public static string OptionsView_Downloading
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_Downloading", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Allow use of the Nvidia NVENC Encoders.
         /// </summary>
-        public static string OptionsView_EnableNvencEncoding {
-            get {
+        public static string OptionsView_EnableNvencEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_EnableNvencEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Allow use of the Intel QuickSync Encoders.
         /// </summary>
-        public static string OptionsView_EnableQuicksyncEncoding {
-            get {
+        public static string OptionsView_EnableQuicksyncEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_EnableQuicksyncEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enable Low Power QuickSync Hardware (where supported)..
         /// </summary>
-        public static string OptionsView_EnableQuicksyncLowPower {
-            get {
+        public static string OptionsView_EnableQuicksyncLowPower
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_EnableQuicksyncLowPower", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Allow use of the AMD VCE Encoders.
         /// </summary>
-        public static string OptionsView_EnableVceEncoding {
-            get {
+        public static string OptionsView_EnableVceEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Run each queued job in a separate worker process. (Experimental).
         /// </summary>
-        public static string OptionsView_EnableWorkerProcesses {
-            get {
+        public static string OptionsView_EnableWorkerProcesses
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_EnableWorkerProcesses", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filename collision behaviour:.
         /// </summary>
-        public static string OptionsView_FileCollisionBehaviour {
-            get {
+        public static string OptionsView_FileCollisionBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_FileCollisionBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to File overwrite behaviour:.
         /// </summary>
-        public static string OptionsView_FileOverwriteBehaviour {
-            get {
+        public static string OptionsView_FileOverwriteBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_FileOverwriteBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
+        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
         /// </summary>
-        public static string OptionsView_FormatOptions {
-            get {
+        public static string OptionsView_FormatOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_FormatOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
         ///
         ///This will not impact any of the software encoders..
         /// </summary>
-        public static string OptionsView_HardwareDetectFailed {
-            get {
+        public static string OptionsView_HardwareDetectFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_HardwareDetectFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The file format entered contained invalid characters. These have been removed. .
         /// </summary>
-        public static string OptionsView_InvalidFileFormatChars {
-            get {
+        public static string OptionsView_InvalidFileFormatChars
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_InvalidFileFormatChars", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Language:.
         /// </summary>
-        public static string OptionsView_Language {
-            get {
+        public static string OptionsView_Language
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_Language", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake&apos;s Log file directory has been cleared!.
         /// </summary>
-        public static string OptionsView_LogsCleared {
-            get {
+        public static string OptionsView_LogsCleared
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_LogsCleared", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No audio file has been set. Please click &apos;Browse&apos; to select a wav or mp3 file for playback..
         /// </summary>
-        public static string OptionsView_MediaFileNotSet {
-            get {
+        public static string OptionsView_MediaFileNotSet
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_MediaFileNotSet", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
-        public static string OptionsView_Notice {
-            get {
+        public static string OptionsView_Notice
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_Notice", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to (Not supported on this system).
         /// </summary>
-        public static string OptionsView_NotSupported {
-            get {
+        public static string OptionsView_NotSupported
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_NotSupported", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name} {source}.
         /// </summary>
-        public static string OptionsView_PathOptions {
-            get {
+        public static string OptionsView_PathOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_PathOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Play.
         /// </summary>
-        public static string OptionsView_Play {
-            get {
+        public static string OptionsView_Play
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_Play", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Play a sound when each encode completes.
         /// </summary>
-        public static string OptionsView_PlaySoundWhenDone {
-            get {
+        public static string OptionsView_PlaySoundWhenDone
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_PlaySoundWhenDone", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Play a sound when the queue completes.
         /// </summary>
-        public static string OptionsView_PlaySoundWhenQueueDone {
-            get {
+        public static string OptionsView_PlaySoundWhenQueueDone
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_PlaySoundWhenQueueDone", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preparing for Update ....
         /// </summary>
-        public static string OptionsView_PreparingUpdate {
-            get {
+        public static string OptionsView_PreparingUpdate
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_PreparingUpdate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Process Isolation.
         /// </summary>
-        public static string OptionsView_ProcessIsolation {
-            get {
+        public static string OptionsView_ProcessIsolation
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ProcessIsolation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated..
         /// </summary>
-        public static string OptionsView_ProcessIsolation_Warning1 {
-            get {
+        public static string OptionsView_ProcessIsolation_Warning1
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ProcessIsolation_Warning1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to If the set port is in use, it will find the first free port within +100 from the defined port..
         /// </summary>
-        public static string OptionsView_ProcessIsolation_Warning2 {
-            get {
+        public static string OptionsView_ProcessIsolation_Warning2
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ProcessIsolation_Warning2", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Port range must be between 5000 and 32767.
         /// </summary>
-        public static string OptionsView_RemotePortLimit {
-            get {
+        public static string OptionsView_RemotePortLimit
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_RemotePortLimit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please select a folder..
         /// </summary>
-        public static string OptionsView_SelectFolder {
-            get {
+        public static string OptionsView_SelectFolder
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_SelectFolder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Replacement Placeholders: {source} {destination}.
         /// </summary>
-        public static string OptionsView_SendFileToArgPlaceholders {
-            get {
+        public static string OptionsView_SendFileToArgPlaceholders
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_SendFileToArgPlaceholders", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Browse&apos; to set the default location.
         /// </summary>
-        public static string OptionsView_SetDefaultLocationOutputFIle {
-            get {
+        public static string OptionsView_SetDefaultLocationOutputFIle
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_SetDefaultLocationOutputFIle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show previews on summary tab..
         /// </summary>
-        public static string OptionsView_ShowPreviewOnSummaryTab {
-            get {
+        public static string OptionsView_ShowPreviewOnSummaryTab
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ShowPreviewOnSummaryTab", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Show the encode status in the application title bar..
         /// </summary>
-        public static string OptionsView_ShowStatusInTitleBar {
-            get {
+        public static string OptionsView_ShowStatusInTitleBar
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_ShowStatusInTitleBar", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Number of simultaneous encodes:.
         /// </summary>
-        public static string OptionsView_SimultaneousEncodes {
-            get {
+        public static string OptionsView_SimultaneousEncodes
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_SimultaneousEncodes", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ( Windows 10 Only! ).
         /// </summary>
-        public static string OptionsView_Win10Only {
-            get {
+        public static string OptionsView_Win10Only
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_Win10Only", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Default network port for worker:.
         /// </summary>
-        public static string OptionsView_WorkerDefaultPort {
-            get {
+        public static string OptionsView_WorkerDefaultPort
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsView_WorkerDefaultPort", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
         ///    Please check the website for release notes..
         /// </summary>
-        public static string OptionsViewModel_64bitAvailable {
-            get {
+        public static string OptionsViewModel_64bitAvailable
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_64bitAvailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Check for Updates&apos; to check for new versions.
         /// </summary>
-        public static string OptionsViewModel_CheckForUpdatesMsg {
-            get {
+        public static string OptionsViewModel_CheckForUpdatesMsg
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_CheckForUpdatesMsg", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A New Update is Available! Please check the website for release notes..
         /// </summary>
-        public static string OptionsViewModel_NewUpdate {
-            get {
+        public static string OptionsViewModel_NewUpdate
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_NewUpdate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There are no new updates at this time..
         /// </summary>
-        public static string OptionsViewModel_NoNewUpdates {
-            get {
+        public static string OptionsViewModel_NoNewUpdates
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_NoNewUpdates", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset Settings.
         /// </summary>
-        public static string OptionsViewModel_ResetHandBrake {
-            get {
+        public static string OptionsViewModel_ResetHandBrake
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_ResetHandBrake", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to reset HandBrake to default settings?.
         /// </summary>
-        public static string OptionsViewModel_ResetHandBrakeQuestion {
-            get {
+        public static string OptionsViewModel_ResetHandBrakeQuestion
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_ResetHandBrakeQuestion", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Update Downloaded.
         /// </summary>
-        public static string OptionsViewModel_UpdateDownloaded {
-            get {
+        public static string OptionsViewModel_UpdateDownloaded
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_UpdateDownloaded", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Update Failed. You can try downloading the update from https://handbrake.fr.
         /// </summary>
-        public static string OptionsViewModel_UpdateFailed {
-            get {
+        public static string OptionsViewModel_UpdateFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_UpdateFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Update Service Unavailable. You can try downloading the update from https://handbrake.fr.
         /// </summary>
-        public static string OptionsViewModel_UpdateServiceUnavailable {
-            get {
+        public static string OptionsViewModel_UpdateServiceUnavailable
+        {
+            get
+            {
                 return ResourceManager.GetString("OptionsViewModel_UpdateServiceUnavailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake requires a 64bit version of Windows 7 or later to run..
         /// </summary>
-        public static string OsBitnessWarning {
-            get {
+        public static string OsBitnessWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("OsBitnessWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions..
         /// </summary>
-        public static string OsVersionWarning {
-            get {
+        public static string OsVersionWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("OsVersionWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Overwrite?.
         /// </summary>
-        public static string Overwrite {
-            get {
+        public static string Overwrite
+        {
+            get
+            {
                 return ResourceManager.GetString("Overwrite", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom (Not Limited).
         /// </summary>
-        public static string PaddingMode_Custom {
-            get {
+        public static string PaddingMode_Custom
+        {
+            get
+            {
                 return ResourceManager.GetString("PaddingMode_Custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Fill (pad to resolution limit).
         /// </summary>
-        public static string PaddingMode_Fill {
-            get {
+        public static string PaddingMode_Fill
+        {
+            get
+            {
                 return ResourceManager.GetString("PaddingMode_Fill", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Height (pad up to res limit).
         /// </summary>
-        public static string PaddingMode_Height {
-            get {
+        public static string PaddingMode_Height
+        {
+            get
+            {
                 return ResourceManager.GetString("PaddingMode_Height", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
-        public static string PaddingMode_None {
-            get {
+        public static string PaddingMode_None
+        {
+            get
+            {
                 return ResourceManager.GetString("PaddingMode_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Width (pad up to res limit).
         /// </summary>
-        public static string PaddingMode_Width {
-            get {
+        public static string PaddingMode_Width
+        {
+            get
+            {
                 return ResourceManager.GetString("PaddingMode_Width", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Paused.  Warning, the drive you are encoding to is low on disk space. Please free up some space and press start to continue. You can also adjust the minimum space level in preferences..
         /// </summary>
-        public static string PauseOnLowDiskspace {
-            get {
+        public static string PauseOnLowDiskspace
+        {
+            get
+            {
                 return ResourceManager.GetString("PauseOnLowDiskspace", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Output: {0}.
         /// </summary>
-        public static string PictureSettings_OutputResolution {
-            get {
+        public static string PictureSettings_OutputResolution
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettings_OutputResolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 1080p HD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_1080p {
-            get {
+        public static string PictureSettingsResLimitModes_1080p
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_1080p", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 480p NTSC SD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_480p {
-            get {
+        public static string PictureSettingsResLimitModes_480p
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_480p", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 2160p 4K Ultra HD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_4K {
-            get {
+        public static string PictureSettingsResLimitModes_4K
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_4K", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 576p PAL SD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_576p {
-            get {
+        public static string PictureSettingsResLimitModes_576p
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_576p", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 720p HD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_720p {
-            get {
+        public static string PictureSettingsResLimitModes_720p
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_720p", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 4320p 8K Ultra HD.
         /// </summary>
-        public static string PictureSettingsResLimitModes_8K {
-            get {
+        public static string PictureSettingsResLimitModes_8K
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_8K", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
-        public static string PictureSettingsResLimitModes_custom {
-            get {
+        public static string PictureSettingsResLimitModes_custom
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
-        public static string PictureSettingsResLimitModes_none {
-            get {
+        public static string PictureSettingsResLimitModes_none
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsResLimitModes_none", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
-        public static string PictureSettingsView_Anamorphic {
-            get {
+        public static string PictureSettingsView_Anamorphic
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Anamorphic", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
-        public static string PictureSettingsView_Automatic {
-            get {
+        public static string PictureSettingsView_Automatic
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Automatic", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Borders.
         /// </summary>
-        public static string PictureSettingsView_Borders {
-            get {
+        public static string PictureSettingsView_Borders
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Borders", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Bottom.
         /// </summary>
-        public static string PictureSettingsView_Bottom {
-            get {
+        public static string PictureSettingsView_Bottom
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Bottom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cropping:.
         /// </summary>
-        public static string PictureSettingsView_Cropping {
-            get {
+        public static string PictureSettingsView_Cropping
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Cropping", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
-        public static string PictureSettingsView_Custom {
-            get {
+        public static string PictureSettingsView_Custom
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Display Width:.
         /// </summary>
-        public static string PictureSettingsView_DisplayWitdh {
-            get {
+        public static string PictureSettingsView_DisplayWitdh
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_DisplayWitdh", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Height:.
         /// </summary>
-        public static string PictureSettingsView_Height {
-            get {
+        public static string PictureSettingsView_Height
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Height", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Keep Aspect Ratio.
         /// </summary>
-        public static string PictureSettingsView_KeepAR {
-            get {
+        public static string PictureSettingsView_KeepAR
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_KeepAR", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Left.
         /// </summary>
-        public static string PictureSettingsView_Left {
-            get {
+        public static string PictureSettingsView_Left
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Left", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Max Height:.
         /// </summary>
-        public static string PictureSettingsView_MaxHeight {
-            get {
+        public static string PictureSettingsView_MaxHeight
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_MaxHeight", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Max Width:.
         /// </summary>
-        public static string PictureSettingsView_MaxWidth {
-            get {
+        public static string PictureSettingsView_MaxWidth
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_MaxWidth", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Modulus:.
         /// </summary>
-        public static string PictureSettingsView_Modulus {
-            get {
+        public static string PictureSettingsView_Modulus
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Modulus", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Output.
         /// </summary>
-        public static string PictureSettingsView_Output {
-            get {
+        public static string PictureSettingsView_Output
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Output", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Padding:.
         /// </summary>
-        public static string PictureSettingsView_Padding {
-            get {
+        public static string PictureSettingsView_Padding
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Padding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Padding Colour:.
         /// </summary>
-        public static string PictureSettingsView_PaddingColour {
-            get {
+        public static string PictureSettingsView_PaddingColour
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_PaddingColour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to PAR:.
         /// </summary>
-        public static string PictureSettingsView_PAR {
-            get {
+        public static string PictureSettingsView_PAR
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_PAR", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Resolution and Scaling.
         /// </summary>
-        public static string PictureSettingsView_ResAndScaling {
-            get {
+        public static string PictureSettingsView_ResAndScaling
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_ResAndScaling", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Resolution Limit:.
         /// </summary>
-        public static string PictureSettingsView_ResLimit {
-            get {
+        public static string PictureSettingsView_ResLimit
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_ResLimit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Right.
         /// </summary>
-        public static string PictureSettingsView_Right {
-            get {
+        public static string PictureSettingsView_Right
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Right", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rotate and Crop.
         /// </summary>
-        public static string PictureSettingsView_RotateAndCrop {
-            get {
+        public static string PictureSettingsView_RotateAndCrop
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_RotateAndCrop", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Size.
         /// </summary>
-        public static string PictureSettingsView_Size {
-            get {
+        public static string PictureSettingsView_Size
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Size", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Source:.
         /// </summary>
-        public static string PictureSettingsView_Source {
-            get {
+        public static string PictureSettingsView_Source
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Source", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Top.
         /// </summary>
-        public static string PictureSettingsView_Top {
-            get {
+        public static string PictureSettingsView_Top
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Top", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Width:.
         /// </summary>
-        public static string PictureSettingsView_Width {
-            get {
+        public static string PictureSettingsView_Width
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsView_Width", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Display Size: {0}x{1},  PAR {2}x{3}.
         /// </summary>
-        public static string PictureSettingsViewModel_StorageDisplayLabel {
-            get {
+        public static string PictureSettingsViewModel_StorageDisplayLabel
+        {
+            get
+            {
                 return ResourceManager.GetString("PictureSettingsViewModel_StorageDisplayLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapters.
         /// </summary>
-        public static string PointToPointMode_Chapters {
-            get {
+        public static string PointToPointMode_Chapters
+        {
+            get
+            {
                 return ResourceManager.GetString("PointToPointMode_Chapters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Frames.
         /// </summary>
-        public static string PointToPointMode_Frames {
-            get {
+        public static string PointToPointMode_Frames
+        {
+            get
+            {
                 return ResourceManager.GetString("PointToPointMode_Frames", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
-        public static string PointToPointMode_Preview {
-            get {
+        public static string PointToPointMode_Preview
+        {
+            get
+            {
                 return ResourceManager.GetString("PointToPointMode_Preview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Seconds.
         /// </summary>
-        public static string PointToPointMode_Seconds {
-            get {
+        public static string PointToPointMode_Seconds
+        {
+            get
+            {
                 return ResourceManager.GetString("PointToPointMode_Seconds", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide..
         /// </summary>
-        public static string Portable_IniFileError {
-            get {
+        public static string Portable_IniFileError
+        {
+            get
+            {
                 return ResourceManager.GetString("Portable_IniFileError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.
         ///
         ///    {0}.
         /// </summary>
-        public static string Portable_StorageNotWritable {
-            get {
+        public static string Portable_StorageNotWritable
+        {
+            get
+            {
                 return ResourceManager.GetString("Portable_StorageNotWritable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.
         ///
         ///    {0}.
         /// </summary>
-        public static string Portable_TmpNotWritable {
-            get {
+        public static string Portable_TmpNotWritable
+        {
+            get
+            {
                 return ResourceManager.GetString("Portable_TmpNotWritable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preferences.
         /// </summary>
-        public static string Preferences {
-            get {
+        public static string Preferences
+        {
+            get
+            {
                 return ResourceManager.GetString("Preferences", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
-        public static string Preset_Custom {
-            get {
+        public static string Preset_Custom
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_Custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export to file.
         /// </summary>
-        public static string Preset_Export {
-            get {
+        public static string Preset_Export
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_Export", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import from file.
         /// </summary>
-        public static string Preset_Import {
-            get {
+        public static string Preset_Import
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_Import", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Official.
         /// </summary>
-        public static string Preset_Official {
-            get {
+        public static string Preset_Official
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_Official", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preset Version.
         /// </summary>
-        public static string Preset_OldVersion_Header {
-            get {
+        public static string Preset_OldVersion_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_OldVersion_Header", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The preset you are trying to import is from a different version of HandBrake. 
         /// It may not be possible to import all the values from this preset. 
         ///
         ///Do you wish to proceed?.
         /// </summary>
-        public static string Preset_OldVersion_Message {
-            get {
+        public static string Preset_OldVersion_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_OldVersion_Message", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to import preset!.
         /// </summary>
-        public static string Preset_UnableToImport_Header {
-            get {
+        public static string Preset_UnableToImport_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_UnableToImport_Header", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to import the preset as it appears to be corrupted or from an older version of HandBrake..
         /// </summary>
-        public static string Preset_UnableToImport_Message {
-            get {
+        public static string Preset_UnableToImport_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Preset_UnableToImport_Message", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to (Default Preset).
         /// </summary>
-        public static string PresetManagerView_DefaultPreset {
-            get {
+        public static string PresetManagerView_DefaultPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetManagerView_DefaultPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete Preset.
         /// </summary>
-        public static string PresetManagerView_Delete {
-            get {
+        public static string PresetManagerView_Delete
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetManagerView_Delete", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Manage Presets.
         /// </summary>
-        public static string PresetManger_Title {
-            get {
+        public static string PresetManger_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetManger_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
-        public static string PresetPictureSettingsMode_Custom {
-            get {
+        public static string PresetPictureSettingsMode_Custom
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetPictureSettingsMode_Custom", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
-        public static string PresetPictureSettingsMode_None {
-            get {
+        public static string PresetPictureSettingsMode_None
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetPictureSettingsMode_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Always use Source Resolution.
         /// </summary>
-        public static string PresetPictureSettingsMode_SourceMaximum {
-            get {
+        public static string PresetPictureSettingsMode_SourceMaximum
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetPictureSettingsMode_SourceMaximum", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The preset you have selected is not available for use on this system.
         ///
@@ -4500,1346 +5479,1642 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Please choose a different preset..
         /// </summary>
-        public static string Presets_NotAvailableForUse {
-            get {
+        public static string Presets_NotAvailableForUse
+        {
+            get
+            {
                 return ResourceManager.GetString("Presets_NotAvailableForUse", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
         ///Your preset file will be archived and new one created. You will need to re-create your own presets..
         /// </summary>
-        public static string Presets_PresetForceReset {
-            get {
+        public static string Presets_PresetForceReset
+        {
+            get
+            {
                 return ResourceManager.GetString("Presets_PresetForceReset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The Built-in presets have been reset..
         /// </summary>
-        public static string Presets_ResetComplete {
-            get {
+        public static string Presets_ResetComplete
+        {
+            get
+            {
                 return ResourceManager.GetString("Presets_ResetComplete", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset Complete.
         /// </summary>
-        public static string Presets_ResetHeader {
-            get {
+        public static string Presets_ResetHeader
+        {
+            get
+            {
                 return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Archived File:.
         /// </summary>
-        public static string PresetService_ArchiveFile {
-            get {
+        public static string PresetService_ArchiveFile
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_ArchiveFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The category name you entered already exists. Please choose a different name..
         /// </summary>
-        public static string PresetService_CategoryAlreadyExists {
-            get {
+        public static string PresetService_CategoryAlreadyExists
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_CategoryAlreadyExists", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The category name was empty. Please provide a name..
         /// </summary>
-        public static string PresetService_CategoryNameEmpty {
-            get {
+        public static string PresetService_CategoryNameEmpty
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_CategoryNameEmpty", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your presets file contained built-in presets. The import function does not support importing these. Please use &apos;Presets Menu -&gt; Reset Built In-Presets&apos; to restore the standard presets.
         ///
         ///Where supported, any user presets will have been imported..
         /// </summary>
-        public static string PresetService_ImportingBuiltInWarning {
-            get {
+        public static string PresetService_ImportingBuiltInWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_ImportingBuiltInWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to load presets..
         /// </summary>
-        public static string PresetService_UnableToLoad {
-            get {
+        public static string PresetService_UnableToLoad
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_UnableToLoad", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
         ///
         ///Your old presets file was archived to:.
         /// </summary>
-        public static string PresetService_UnableToLoadPresets {
-            get {
+        public static string PresetService_UnableToLoadPresets
+        {
+            get
+            {
                 return ResourceManager.GetString("PresetService_UnableToLoadPresets", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview {0}.
         /// </summary>
-        public static string Preview {
-            get {
+        public static string Preview
+        {
+            get
+            {
                 return ResourceManager.GetString("Preview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview (Scaled).
         /// </summary>
-        public static string Preview_Scaled {
-            get {
+        public static string Preview_Scaled
+        {
+            get
+            {
                 return ResourceManager.GetString("Preview_Scaled", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Above Normal.
         /// </summary>
-        public static string ProcessPriority_AboveNormal {
-            get {
+        public static string ProcessPriority_AboveNormal
+        {
+            get
+            {
                 return ResourceManager.GetString("ProcessPriority_AboveNormal", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Below Normal.
         /// </summary>
-        public static string ProcessPriority_BelowNormal {
-            get {
+        public static string ProcessPriority_BelowNormal
+        {
+            get
+            {
                 return ResourceManager.GetString("ProcessPriority_BelowNormal", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
-        public static string ProcessPriority_High {
-            get {
+        public static string ProcessPriority_High
+        {
+            get
+            {
                 return ResourceManager.GetString("ProcessPriority_High", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Low.
         /// </summary>
-        public static string ProcessPriority_Low {
-            get {
+        public static string ProcessPriority_Low
+        {
+            get
+            {
                 return ResourceManager.GetString("ProcessPriority_Low", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Normal.
         /// </summary>
-        public static string ProcessPriority_Normal {
-            get {
+        public static string ProcessPriority_Normal
+        {
+            get
+            {
                 return ResourceManager.GetString("ProcessPriority_Normal", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Question.
         /// </summary>
-        public static string Question {
-            get {
+        public static string Question
+        {
+            get
+            {
                 return ResourceManager.GetString("Question", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake is already encoding a file..
         /// </summary>
-        public static string Queue_AlreadyEncoding {
-            get {
+        public static string Queue_AlreadyEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_AlreadyEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please stop the current encode. If the problem persists, please restart HandBrake..
         /// </summary>
-        public static string Queue_AlreadyEncodingSolution {
-            get {
+        public static string Queue_AlreadyEncodingSolution
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_AlreadyEncodingSolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?.
         /// </summary>
-        public static string Queue_RecoverQueueQuestionPlural {
-            get {
+        public static string Queue_RecoverQueueQuestionPlural
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_RecoverQueueQuestionPlural", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?.
         /// </summary>
-        public static string Queue_RecoverQueueQuestionSingular {
-            get {
+        public static string Queue_RecoverQueueQuestionSingular
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_RecoverQueueQuestionSingular", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Recovery Possible.
         /// </summary>
-        public static string Queue_RecoveryPossible {
-            get {
+        public static string Queue_RecoveryPossible
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_RecoveryPossible", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to reset job status as it is not in an Error or Completed state.
         /// </summary>
-        public static string Queue_UnableToResetJob {
-            get {
+        public static string Queue_UnableToResetJob
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_UnableToResetJob", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to restore queue file..
         /// </summary>
-        public static string Queue_UnableToRestoreFile {
-            get {
+        public static string Queue_UnableToRestoreFile
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_UnableToRestoreFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The file may be corrupted or from an older incompatible version of HandBrake.
         /// </summary>
-        public static string Queue_UnableToRestoreFileExtended {
-            get {
+        public static string Queue_UnableToRestoreFileExtended
+        {
+            get
+            {
                 return ResourceManager.GetString("Queue_UnableToRestoreFileExtended", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to WARNING: You do not have automatic file naming turned on. Please enable this in options..
         /// </summary>
-        public static string QueueSelection_AutoNameWarning {
-            get {
+        public static string QueueSelection_AutoNameWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelection_AutoNameWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options..
         /// </summary>
-        public static string QueueSelection_AutoTrackSelectionWarning {
-            get {
+        public static string QueueSelection_AutoTrackSelectionWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelection_AutoTrackSelectionWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The selected titles will be added using the  &quot;{0}&quot;  preset..
         /// </summary>
-        public static string QueueSelection_UsingPreset {
-            get {
+        public static string QueueSelection_UsingPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelection_UsingPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose titles:.
         /// </summary>
-        public static string QueueSelectionView_ChooseTitles {
-            get {
+        public static string QueueSelectionView_ChooseTitles
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelectionView_ChooseTitles", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add to Queue.
         /// </summary>
-        public static string QueueSelectionView_Title {
-            get {
+        public static string QueueSelectionView_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelectionView_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add to Queue.
         /// </summary>
-        public static string QueueSelectionViewModel_AddToQueue {
-            get {
+        public static string QueueSelectionViewModel_AddToQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueSelectionViewModel_AddToQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
         ///This will also stop any existing running jobs..
         /// </summary>
-        public static string QueueService_DuplicatesQuestion {
-            get {
+        public static string QueueService_DuplicatesQuestion
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueService_DuplicatesQuestion", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duplicates Detected.
         /// </summary>
-        public static string QueueService_DuplicatesTitle {
-            get {
+        public static string QueueService_DuplicatesTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueService_DuplicatesTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
-        public static string QueueView_Actions {
-            get {
+        public static string QueueView_Actions
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Actions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Advanced:.
         /// </summary>
-        public static string QueueView_Advanced {
-            get {
+        public static string QueueView_Advanced
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Advanced", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Audio:.
         /// </summary>
-        public static string QueueView_Audio {
-            get {
+        public static string QueueView_Audio
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Audio", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear All.
         /// </summary>
-        public static string QueueView_ClearAll {
-            get {
+        public static string QueueView_ClearAll
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ClearAll", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Completed.
         /// </summary>
-        public static string QueueView_ClearCompleted {
-            get {
+        public static string QueueView_ClearCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ClearCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Queue.
         /// </summary>
-        public static string QueueView_ClearQueue {
-            get {
+        public static string QueueView_ClearQueue
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ClearQueue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Clear Selected.
         /// </summary>
-        public static string QueueView_ClearSelected {
-            get {
+        public static string QueueView_ClearSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ClearSelected", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Currently Paused.
         /// </summary>
-        public static string QueueView_CurrentlyPaused {
-            get {
+        public static string QueueView_CurrentlyPaused
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_CurrentlyPaused", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
-        public static string QueueView_Delete {
-            get {
+        public static string QueueView_Delete
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Delete", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Delete Selected.
         /// </summary>
-        public static string QueueView_DeleteSelected {
-            get {
+        public static string QueueView_DeleteSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_DeleteSelected", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Destination:.
         /// </summary>
-        public static string QueueView_Destination {
-            get {
+        public static string QueueView_Destination
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Destination", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encode Time:.
         /// </summary>
-        public static string QueueView_Duration {
-            get {
+        public static string QueueView_Duration
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Duration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
-        public static string QueueView_Edit {
-            get {
+        public static string QueueView_Edit
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Edit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to End Time:.
         /// </summary>
-        public static string QueueView_EndTime {
-            get {
+        public static string QueueView_EndTime
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_EndTime", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export Queue.
         /// </summary>
-        public static string QueueView_Export {
-            get {
+        public static string QueueView_Export
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Export", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Export Queue (CLI Only).
         /// </summary>
-        public static string QueueView_ExportCLI {
-            get {
+        public static string QueueView_ExportCLI
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ExportCLI", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filesize: .
         /// </summary>
-        public static string QueueView_FileSize {
-            get {
+        public static string QueueView_FileSize
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_FileSize", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Filters:.
         /// </summary>
-        public static string QueueView_FilterSettings {
-            get {
+        public static string QueueView_FilterSettings
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_FilterSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import Queue.
         /// </summary>
-        public static string QueueView_Import {
-            get {
+        public static string QueueView_Import
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Import", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please select a single job to view summary information..
         /// </summary>
-        public static string QueueView_JobInformationNotAvailable {
-            get {
+        public static string QueueView_JobInformationNotAvailable
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_JobInformationNotAvailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The log will be available after the encode completes..
         /// </summary>
-        public static string QueueView_LogNotAvailableYet {
-            get {
+        public static string QueueView_LogNotAvailableYet
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_LogNotAvailableYet", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Not Available.
         /// </summary>
-        public static string QueueView_NotAvailable {
-            get {
+        public static string QueueView_NotAvailable
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_NotAvailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open Destination Directory.
         /// </summary>
-        public static string QueueView_OpenDestDir {
-            get {
+        public static string QueueView_OpenDestDir
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_OpenDestDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open Source Directory.
         /// </summary>
-        public static string QueueView_OpenSourceDir {
-            get {
+        public static string QueueView_OpenSourceDir
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_OpenSourceDir", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
-        public static string QueueView_Options {
-            get {
+        public static string QueueView_Options
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Options", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
-        public static string QueueView_Pause {
-            get {
+        public static string QueueView_Pause
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Pause", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Paused Duration:.
         /// </summary>
-        public static string QueueView_PausedDuration {
-            get {
+        public static string QueueView_PausedDuration
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_PausedDuration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Picture Settings:.
         /// </summary>
-        public static string QueueView_PictureSettings {
-            get {
+        public static string QueueView_PictureSettings
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_PictureSettings", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Play File.
         /// </summary>
-        public static string QueueView_PlayMediaFile {
-            get {
+        public static string QueueView_PlayMediaFile
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_PlayMediaFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
-        public static string QueueView_Reset {
-            get {
+        public static string QueueView_Reset
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Reset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Retry All Jobs.
         /// </summary>
-        public static string QueueView_ResetAllJobs {
-            get {
+        public static string QueueView_ResetAllJobs
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ResetAllJobs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Retry Failed.
         /// </summary>
-        public static string QueueView_ResetFailed {
-            get {
+        public static string QueueView_ResetFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ResetFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reset Selected Jobs.
         /// </summary>
-        public static string QueueView_ResetSelectedJobs {
-            get {
+        public static string QueueView_ResetSelectedJobs
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_ResetSelectedJobs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Source:.
         /// </summary>
-        public static string QueueView_Source {
-            get {
+        public static string QueueView_Source
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Source", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Queue.
         /// </summary>
-        public static string QueueView_Start {
-            get {
+        public static string QueueView_Start
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Start", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Start Time:.
         /// </summary>
-        public static string QueueView_StartTime {
-            get {
+        public static string QueueView_StartTime
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_StartTime", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Statistics.
         /// </summary>
-        public static string QueueView_Statistics {
-            get {
+        public static string QueueView_Statistics
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Statistics", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Statistics will be available after an encode completes..
         /// </summary>
-        public static string QueueView_StatsNotAvailableYet {
-            get {
+        public static string QueueView_StatsNotAvailableYet
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_StatsNotAvailableYet", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Stop.
         /// </summary>
-        public static string QueueView_Stop {
-            get {
+        public static string QueueView_Stop
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Stop", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subtitles:.
         /// </summary>
-        public static string QueueView_Subtitles {
-            get {
+        public static string QueueView_Subtitles
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Subtitles", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Summary.
         /// </summary>
-        public static string QueueView_Summary {
-            get {
+        public static string QueueView_Summary
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Summary", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Video:.
         /// </summary>
-        public static string QueueView_Video {
-            get {
+        public static string QueueView_Video
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_Video", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to When Done:.
         /// </summary>
-        public static string QueueView_WhenDone {
-            get {
+        public static string QueueView_WhenDone
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueView_WhenDone", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the queue?.
         /// </summary>
-        public static string QueueViewModel_ClearQueueConfrimation {
-            get {
+        public static string QueueViewModel_ClearQueueConfrimation
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_ClearQueueConfrimation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete the selected jobs?.
         /// </summary>
-        public static string QueueViewModel_DelSelectedJobConfirmation {
-            get {
+        public static string QueueViewModel_DelSelectedJobConfirmation
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_DelSelectedJobConfirmation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window..
         /// </summary>
-        public static string QueueViewModel_EditConfrimation {
-            get {
+        public static string QueueViewModel_EditConfrimation
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_EditConfrimation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
         ///Time Remaining: {5},  Elapsed: {6} {7}.
         /// </summary>
-        public static string QueueViewModel_EncodeStatusChanged_StatusLabel {
-            get {
+        public static string QueueViewModel_EncodeStatusChanged_StatusLabel
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?.
         /// </summary>
-        public static string QueueViewModel_JobCurrentlyRunningWarning {
-            get {
+        public static string QueueViewModel_JobCurrentlyRunningWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_JobCurrentlyRunningWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} jobs pending.
         /// </summary>
-        public static string QueueViewModel_JobsPending {
-            get {
+        public static string QueueViewModel_JobsPending
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_JobsPending", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Last Queued Job Finished.
         /// </summary>
-        public static string QueueViewModel_LastJobFinished {
-            get {
+        public static string QueueViewModel_LastJobFinished
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_LastJobFinished", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No encodes pending.
         /// </summary>
-        public static string QueueViewModel_NoEncodesPending {
-            get {
+        public static string QueueViewModel_NoEncodesPending
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_NoEncodesPending", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There are no jobs currently encoding.
         /// </summary>
-        public static string QueueViewModel_NoJobsPending {
-            get {
+        public static string QueueViewModel_NoJobsPending
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_NoJobsPending", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to There are no pending jobs..
         /// </summary>
-        public static string QueueViewModel_NoPendingJobs {
-            get {
+        public static string QueueViewModel_NoPendingJobs
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_NoPendingJobs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue.
         /// </summary>
-        public static string QueueViewModel_Queue {
-            get {
+        public static string QueueViewModel_Queue
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_Queue", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Completed.
         /// </summary>
-        public static string QueueViewModel_QueueCompleted {
-            get {
+        public static string QueueViewModel_QueueCompleted
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueueCompleted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Not Running.
         /// </summary>
-        public static string QueueViewModel_QueueNotRunning {
-            get {
+        public static string QueueViewModel_QueueNotRunning
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueueNotRunning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Paused.
         /// </summary>
-        public static string QueueViewModel_QueuePaused {
-            get {
+        public static string QueueViewModel_QueuePaused
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueuePaused", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Paused.
         /// </summary>
-        public static string QueueViewModel_QueuePending {
-            get {
+        public static string QueueViewModel_QueuePending
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueuePending", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Ready.
         /// </summary>
-        public static string QueueViewModel_QueueReady {
-            get {
+        public static string QueueViewModel_QueueReady
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueueReady", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Queue Started.
         /// </summary>
-        public static string QueueViewModel_QueueStarted {
-            get {
+        public static string QueueViewModel_QueueStarted
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueueStarted", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}.
         /// </summary>
-        public static string QueueViewModel_QueueStatusDisplay {
-            get {
+        public static string QueueViewModel_QueueStatusDisplay
+        {
+            get
+            {
                 return ResourceManager.GetString("QueueViewModel_QueueStatusDisplay", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An error occurred when trying to stop the scan. Please restart HandBrake..
         /// </summary>
-        public static string ScanService_ScanStopFailed {
-            get {
+        public static string ScanService_ScanStopFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("ScanService_ScanStopFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Any settings you changed may need to be reset the next time HandBrake launches..
         /// </summary>
-        public static string SettingService_SaveErrorReset {
-            get {
+        public static string SettingService_SaveErrorReset
+        {
+            get
+            {
                 return ResourceManager.GetString("SettingService_SaveErrorReset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add All Remaining Selected Languages.
         /// </summary>
-        public static string Shared_AddAllForSelected {
-            get {
+        public static string Shared_AddAllForSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_AddAllForSelected", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add All Remaining Tracks.
         /// </summary>
-        public static string Shared_AddAllRemaining {
-            get {
+        public static string Shared_AddAllRemaining
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_AddAllRemaining", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add New Track.
         /// </summary>
-        public static string Shared_AddNewTrack {
-            get {
+        public static string Shared_AddNewTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_AddNewTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Track.
         /// </summary>
-        public static string Shared_AddTrack {
-            get {
+        public static string Shared_AddTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_AddTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Available Languages:.
         /// </summary>
-        public static string Shared_AvailableLanguages {
-            get {
+        public static string Shared_AvailableLanguages
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_AvailableLanguages", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Languages:.
         /// </summary>
-        public static string Shared_ChooseLanguages {
-            get {
+        public static string Shared_ChooseLanguages
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_ChooseLanguages", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Selected Languages:.
         /// </summary>
-        public static string Shared_ChosenLangages {
-            get {
+        public static string Shared_ChosenLangages
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_ChosenLangages", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Configure Default Behaviours.
         /// </summary>
-        public static string Shared_ConfigureDefaultBehaviours {
-            get {
+        public static string Shared_ConfigureDefaultBehaviours
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_ConfigureDefaultBehaviours", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
-        public static string Shared_ReloadDefaults {
-            get {
+        public static string Shared_ReloadDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("Shared_ReloadDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>
-        public static string ShellViewModel_CanClose {
-            get {
+        public static string ShellViewModel_CanClose
+        {
+            get
+            {
                 return ResourceManager.GetString("ShellViewModel_CanClose", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to About HandBrake.
         /// </summary>
-        public static string SourceSelection_AboutHandBrake {
-            get {
+        public static string SourceSelection_AboutHandBrake
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_AboutHandBrake", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Disc to Scan.
         /// </summary>
-        public static string SourceSelection_ChooseDisc {
-            get {
+        public static string SourceSelection_ChooseDisc
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_ChooseDisc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose File to Scan.
         /// </summary>
-        public static string SourceSelection_ChooseFile {
-            get {
+        public static string SourceSelection_ChooseFile
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_ChooseFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Folder to Scan.
         /// </summary>
-        public static string SourceSelection_ChooseFolder {
-            get {
+        public static string SourceSelection_ChooseFolder
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_ChooseFolder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Optionally choose a specific title: .
         /// </summary>
-        public static string SourceSelection_ChooseSpecificTitle {
-            get {
+        public static string SourceSelection_ChooseSpecificTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_ChooseSpecificTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Then choose the video(s) you&apos;d like to encode: .
         /// </summary>
-        public static string SourceSelection_ChooseVideo {
-            get {
+        public static string SourceSelection_ChooseVideo
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_ChooseVideo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Or drop a file or folder here ....
         /// </summary>
-        public static string SourceSelection_DropFileHere {
-            get {
+        public static string SourceSelection_DropFileHere
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_DropFileHere", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
-        public static string SourceSelection_File {
-            get {
+        public static string SourceSelection_File
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_File", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Folder (Batch Scan).
         /// </summary>
-        public static string SourceSelection_FolderBatchScan {
-            get {
+        public static string SourceSelection_FolderBatchScan
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_FolderBatchScan", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
-        public static string SourceSelection_Help {
-            get {
+        public static string SourceSelection_Help
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_Help", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open this DVD or Bluray Drive.
         /// </summary>
-        public static string SourceSelection_OpenDVDBluray {
-            get {
+        public static string SourceSelection_OpenDVDBluray
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_OpenDVDBluray", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open a folder with one or more files..
         /// </summary>
-        public static string SourceSelection_OpenFolderWIth {
-            get {
+        public static string SourceSelection_OpenFolderWIth
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_OpenFolderWIth", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Recover Queue Files.
         /// </summary>
-        public static string SourceSelection_QueueArchiveRecovery {
-            get {
+        public static string SourceSelection_QueueArchiveRecovery
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_QueueArchiveRecovery", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A previous queue archive is available. .
         /// </summary>
-        public static string SourceSelection_QueueArchiveRecoveryDesc {
-            get {
+        public static string SourceSelection_QueueArchiveRecoveryDesc
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_QueueArchiveRecoveryDesc", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Open a single video file..
         /// </summary>
-        public static string SourceSelection_SingleVideoFile {
-            get {
+        public static string SourceSelection_SingleVideoFile
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_SingleVideoFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Source Selection.
         /// </summary>
-        public static string SourceSelection_SourceSelection {
-            get {
+        public static string SourceSelection_SourceSelection
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_SourceSelection", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A new version of HandBrake is available!.
         /// </summary>
-        public static string SourceSelection_UpdateAvailable {
-            get {
+        public static string SourceSelection_UpdateAvailable
+        {
+            get
+            {
                 return ResourceManager.GetString("SourceSelection_UpdateAvailable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to HandBrake&apos;s engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has..
         /// </summary>
-        public static string Startup_InitFailed {
-            get {
+        public static string Startup_InitFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Startup_InitFailed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
-        public static string State_Ready {
-            get {
+        public static string State_Ready
+        {
+            get
+            {
                 return ResourceManager.GetString("State_Ready", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to delete previous preview file. You may need to restart the application..
         /// </summary>
-        public static string StaticPreview_UnableToDeletePreview {
-            get {
+        public static string StaticPreview_UnableToDeletePreview
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreview_UnableToDeletePreview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string StaticPreviewView_CancelPreview {
-            get {
+        public static string StaticPreviewView_CancelPreview
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_CancelPreview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Duration:.
         /// </summary>
-        public static string StaticPreviewView_Duration {
-            get {
+        public static string StaticPreviewView_Duration
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_Duration", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Live Preview.
         /// </summary>
-        public static string StaticPreviewView_LivePreview {
-            get {
+        public static string StaticPreviewView_LivePreview
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_LivePreview", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview Rotation and Flip.
         /// </summary>
-        public static string StaticPreviewView_PreviewRotationFlip {
-            get {
+        public static string StaticPreviewView_PreviewRotationFlip
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_PreviewRotationFlip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Select a preview image.
         /// </summary>
-        public static string StaticPreviewView_SelectPreviewImage {
-            get {
+        public static string StaticPreviewView_SelectPreviewImage
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_SelectPreviewImage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview ({0}% actual size).
         /// </summary>
-        public static string StaticPreviewView_Title {
-            get {
+        public static string StaticPreviewView_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Prefer system default video player.
         /// </summary>
-        public static string StaticPreviewView_UseSystemDefault {
-            get {
+        public static string StaticPreviewView_UseSystemDefault
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewView_UseSystemDefault", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Handbrake is already encoding a video! Only one file can be encoded at any one time..
         /// </summary>
-        public static string StaticPreviewViewModel_AlreadyEncoding {
-            get {
+        public static string StaticPreviewViewModel_AlreadyEncoding
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewViewModel_AlreadyEncoding", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to You must first scan a source and setup your encode before creating a preview..
         /// </summary>
-        public static string StaticPreviewViewModel_ScanFirst {
-            get {
+        public static string StaticPreviewViewModel_ScanFirst
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewViewModel_ScanFirst", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Picture Preview.
         /// </summary>
-        public static string StaticPreviewViewModel_Title {
-            get {
+        public static string StaticPreviewViewModel_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewViewModel_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details..
         /// </summary>
-        public static string StaticPreviewViewModel_UnableToPlayFile {
-            get {
+        public static string StaticPreviewViewModel_UnableToPlayFile
+        {
+            get
+            {
                 return ResourceManager.GetString("StaticPreviewViewModel_UnableToPlayFile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        public static string String1 {
-            get {
+        public static string String1
+        {
+            get
+            {
                 return ResourceManager.GetString("String1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Foreign Audio Scan.
         /// </summary>
-        public static string Subtitle_ForeignAudioScan {
-            get {
+        public static string Subtitle_ForeignAudioScan
+        {
+            get
+            {
                 return ResourceManager.GetString("Subtitle_ForeignAudioScan", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to All Matching Selected Languages.
         /// </summary>
-        public static string SubtitleBehaviourModes_AllMatching {
-            get {
+        public static string SubtitleBehaviourModes_AllMatching
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBehaviourModes_AllMatching", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to First Matching Selected Language.
         /// </summary>
-        public static string SubtitleBehaviourModes_FirstMatching {
-            get {
+        public static string SubtitleBehaviourModes_FirstMatching
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBehaviourModes_FirstMatching", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
-        public static string SubtitleBehaviourModes_None {
-            get {
+        public static string SubtitleBehaviourModes_None
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBehaviourModes_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to First Track.
         /// </summary>
-        public static string SubtitleBurnInBehaviourModes_FirstTrack {
-            get {
+        public static string SubtitleBurnInBehaviourModes_FirstTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBurnInBehaviourModes_FirstTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Foreign Audio Preferred, else First.
         /// </summary>
-        public static string SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst {
-            get {
+        public static string SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Foreign Audio Track.
         /// </summary>
-        public static string SubtitleBurnInBehaviourModes_ForeignAudioTrack {
-            get {
+        public static string SubtitleBurnInBehaviourModes_ForeignAudioTrack
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBurnInBehaviourModes_ForeignAudioTrack", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
-        public static string SubtitleBurnInBehaviourModes_None {
-            get {
+        public static string SubtitleBurnInBehaviourModes_None
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleBurnInBehaviourModes_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None - Only tracks where the container does not support the format will be burned in.
         ///Foreign Audio Track - The Foreign Audio track will be burned in if available. 
         ///First Track - The first track will be burned in.
         ///Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen..
         /// </summary>
-        public static string Subtitles_BurnInBehaviourModes {
-            get {
+        public static string Subtitles_BurnInBehaviourModes
+        {
+            get
+            {
                 return ResourceManager.GetString("Subtitles_BurnInBehaviourModes", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to WebM in HandBrake only supports burned subtitles.
         ///
@@ -5847,527 +7122,643 @@ namespace HandBrakeWPF.Properties {
         ///
         ///If you continue, your non-burned subtitles will be lost..
         /// </summary>
-        public static string Subtitles_WebmSubtitleIncompatibilityError {
-            get {
+        public static string Subtitles_WebmSubtitleIncompatibilityError
+        {
+            get
+            {
                 return ResourceManager.GetString("Subtitles_WebmSubtitleIncompatibilityError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to WebM Subtitle Compatibility.
         /// </summary>
-        public static string Subtitles_WebmSubtitleIncompatibilityHeader {
-            get {
+        public static string Subtitles_WebmSubtitleIncompatibilityHeader
+        {
+            get
+            {
                 return ResourceManager.GetString("Subtitles_WebmSubtitleIncompatibilityHeader", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Configure Automatic Subtitle Selections.
         /// </summary>
-        public static string SubtitlesDefaultsView_PaneTitle {
-            get {
+        public static string SubtitlesDefaultsView_PaneTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesDefaultsView_PaneTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add Closed Captions when available.
         /// </summary>
-        public static string SubtitlesView_AddCC {
-            get {
+        public static string SubtitlesView_AddCC
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_AddCC", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add &apos;Foreign Audio Scan&apos;.
         /// </summary>
-        public static string SubtitlesView_AddForeignAudioSearch {
-            get {
+        public static string SubtitlesView_AddForeignAudioSearch
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_AddForeignAudioSearch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Burn In.
         /// </summary>
-        public static string SubtitlesView_BurnIn {
-            get {
+        public static string SubtitlesView_BurnIn
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_BurnIn", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Burn-In Behaviour:.
         /// </summary>
-        public static string SubtitlesView_BurnInBehaviour {
-            get {
+        public static string SubtitlesView_BurnInBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_BurnInBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
-        public static string SubtitlesView_Default {
-            get {
+        public static string SubtitlesView_Default
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_Default", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Forced Only.
         /// </summary>
-        public static string SubtitlesView_ForcedOnly {
-            get {
+        public static string SubtitlesView_ForcedOnly
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_ForcedOnly", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Import Subtitle.
         /// </summary>
-        public static string SubtitlesView_ImportSubtitle {
-            get {
+        public static string SubtitlesView_ImportSubtitle
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_ImportSubtitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Track Selection Behaviour:.
         /// </summary>
-        public static string SubtitlesView_TrackSelectionBehaviour {
-            get {
+        public static string SubtitlesView_TrackSelectionBehaviour
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesView_TrackSelectionBehaviour", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Selection Behavior.
         /// </summary>
-        public static string SubtitlesViewModel_ConfigureDefaults {
-            get {
+        public static string SubtitlesViewModel_ConfigureDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesViewModel_ConfigureDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subtitle Defaults.
         /// </summary>
-        public static string SubtitlesViewModel_SubDefaults {
-            get {
+        public static string SubtitlesViewModel_SubDefaults
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesViewModel_SubDefaults", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subtitle Tracks.
         /// </summary>
-        public static string SubtitlesViewModel_SubTracks {
-            get {
+        public static string SubtitlesViewModel_SubTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesViewModel_SubTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Switch Back To Tracks.
         /// </summary>
-        public static string SubtitlesViewModel_SwitchToTracks {
-            get {
+        public static string SubtitlesViewModel_SwitchToTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitlesViewModel_SwitchToTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add All Remaining Closed Captions.
         /// </summary>
-        public static string SubtitleView_AddAllCC {
-            get {
+        public static string SubtitleView_AddAllCC
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleView_AddAllCC", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add All Remaining Closed Captions.
         /// </summary>
-        public static string SubtitleView_AddRemainingCC {
-            get {
+        public static string SubtitleView_AddRemainingCC
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleView_AddRemainingCC", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video..
         /// </summary>
-        public static string SubtitleView_SubtitleDefaultsDescription {
-            get {
+        public static string SubtitleView_SubtitleDefaultsDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleView_SubtitleDefaultsDescription", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Foreign Audio Search.
         /// </summary>
-        public static string SubtitleViewModel_ForeignAudioSearch {
-            get {
+        public static string SubtitleViewModel_ForeignAudioSearch
+        {
+            get
+            {
                 return ResourceManager.GetString("SubtitleViewModel_ForeignAudioSearch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Additional Audio Tracks.
         /// </summary>
-        public static string SummaryView_AdditionalAudioTracks {
-            get {
+        public static string SummaryView_AdditionalAudioTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_AdditionalAudioTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Additional Subtitle Tracks.
         /// </summary>
-        public static string SummaryView_AdditionalSubtitleTracks {
-            get {
+        public static string SummaryView_AdditionalSubtitleTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_AdditionalSubtitleTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Burned.
         /// </summary>
-        public static string SummaryView_Burned {
-            get {
+        public static string SummaryView_Burned
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Burned", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Chapter Markers.
         /// </summary>
-        public static string SummaryView_Chapters {
-            get {
+        public static string SummaryView_Chapters
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Chapters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deblock.
         /// </summary>
-        public static string SummaryView_Deblock {
-            get {
+        public static string SummaryView_Deblock
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Deblock", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
-        public static string SummaryView_Default {
-            get {
+        public static string SummaryView_Default
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Default", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Detelecine.
         /// </summary>
-        public static string SummaryView_Detelecine {
-            get {
+        public static string SummaryView_Detelecine
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Detelecine", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to display.
         /// </summary>
-        public static string SummaryView_display {
-            get {
+        public static string SummaryView_display
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_display", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Forced.
         /// </summary>
-        public static string SummaryView_Forced {
-            get {
+        public static string SummaryView_Forced
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Forced", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Grayscale.
         /// </summary>
-        public static string SummaryView_Grayscale {
-            get {
+        public static string SummaryView_Grayscale
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Grayscale", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Audio Tracks.
         /// </summary>
-        public static string SummaryView_NoAudioTracks {
-            get {
+        public static string SummaryView_NoAudioTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoAudioTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Chapter Markers.
         /// </summary>
-        public static string SummaryView_NoChapters {
-            get {
+        public static string SummaryView_NoChapters
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoChapters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Filters.
         /// </summary>
-        public static string SummaryView_NoFilters {
-            get {
+        public static string SummaryView_NoFilters
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoFilters", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Source.
         /// </summary>
-        public static string SummaryView_NoSource {
-            get {
+        public static string SummaryView_NoSource
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoSource", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Subtitle Tracks.
         /// </summary>
-        public static string SummaryView_NoSubtitleTracks {
-            get {
+        public static string SummaryView_NoSubtitleTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoSubtitleTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No Tracks.
         /// </summary>
-        public static string SummaryView_NoTracks {
-            get {
+        public static string SummaryView_NoTracks
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_NoTracks", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Preview {0} of {1}.
         /// </summary>
-        public static string SummaryView_PreviewInfo {
-            get {
+        public static string SummaryView_PreviewInfo
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_PreviewInfo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rotation.
         /// </summary>
-        public static string SummaryView_Rotation {
-            get {
+        public static string SummaryView_Rotation
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_Rotation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Same as source.
         /// </summary>
-        public static string SummaryView_SameAsSource {
-            get {
+        public static string SummaryView_SameAsSource
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_SameAsSource", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to storage.
         /// </summary>
-        public static string SummaryView_storage {
-            get {
+        public static string SummaryView_storage
+        {
+            get
+            {
                 return ResourceManager.GetString("SummaryView_storage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to AC Mains power detected. Resuming encode... ({0} %).
         /// </summary>
-        public static string SystemService_ACMains {
-            get {
+        public static string SystemService_ACMains
+        {
+            get
+            {
                 return ResourceManager.GetString("SystemService_ACMains", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to System Battery Critical! ({0} %).
         /// </summary>
-        public static string SystemService_CriticalBattery {
-            get {
+        public static string SystemService_CriticalBattery
+        {
+            get
+            {
                 return ResourceManager.GetString("SystemService_CriticalBattery", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to System Battery Low! ({0} %). Your encode has been paused..
         /// </summary>
-        public static string SystemService_LowBatteryLog {
-            get {
+        public static string SystemService_LowBatteryLog
+        {
+            get
+            {
                 return ResourceManager.GetString("SystemService_LowBatteryLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode....
         /// </summary>
-        public static string SystemService_LowDiskSpaceLog {
-            get {
+        public static string SystemService_LowDiskSpaceLog
+        {
+            get
+            {
                 return ResourceManager.GetString("SystemService_LowDiskSpaceLog", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {1}%, Pass {2} of {3}
         ///Remaining Time: {4}.
         /// </summary>
-        public static string TaskTrayStatusTitle {
-            get {
+        public static string TaskTrayStatusTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("TaskTrayStatusTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enter a name: .
         /// </summary>
-        public static string TextEntryView_EnterName {
-            get {
+        public static string TextEntryView_EnterName
+        {
+            get
+            {
                 return ResourceManager.GetString("TextEntryView_EnterName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unknown Error.
         /// </summary>
-        public static string UnknownError {
-            get {
+        public static string UnknownError
+        {
+            get
+            {
                 return ResourceManager.GetString("UnknownError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Monthly.
         /// </summary>
-        public static string UpdateCheck_Monthly {
-            get {
+        public static string UpdateCheck_Monthly
+        {
+            get
+            {
                 return ResourceManager.GetString("UpdateCheck_Monthly", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Weekly.
         /// </summary>
-        public static string UpdateCheck_Weekly {
-            get {
+        public static string UpdateCheck_Weekly
+        {
+            get
+            {
                 return ResourceManager.GetString("UpdateCheck_Weekly", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Updated.
         /// </summary>
-        public static string Updated {
-            get {
+        public static string Updated
+        {
+            get
+            {
                 return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A problem occurred when trying to save your preferences..
         /// </summary>
-        public static string UserSettings_AnErrorOccured {
-            get {
+        public static string UserSettings_AnErrorOccured
+        {
+            get
+            {
                 return ResourceManager.GetString("UserSettings_AnErrorOccured", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Unable to load user settings file: {0}.
         /// </summary>
-        public static string UserSettings_UnableToLoad {
-            get {
+        public static string UserSettings_UnableToLoad
+        {
+            get
+            {
                 return ResourceManager.GetString("UserSettings_UnableToLoad", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one..
         /// </summary>
-        public static string UserSettings_UnableToLoadSolution {
-            get {
+        public static string UserSettings_UnableToLoadSolution
+        {
+            get
+            {
                 return ResourceManager.GetString("UserSettings_UnableToLoadSolution", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Your user settings file was corrupted or inaccessible. Settings have been reset to defaults..
         /// </summary>
-        public static string UserSettings_YourSettingsAreCorrupt {
-            get {
+        public static string UserSettings_YourSettingsAreCorrupt
+        {
+            get
+            {
                 return ResourceManager.GetString("UserSettings_YourSettingsAreCorrupt", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Warning, your settings have been reset!.
         /// </summary>
-        public static string UserSettings_YourSettingsHaveBeenReset {
-            get {
+        public static string UserSettings_YourSettingsHaveBeenReset
+        {
+            get
+            {
                 return ResourceManager.GetString("UserSettings_YourSettingsHaveBeenReset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The full list of encoder parameters: 
         ///{0}.
         /// </summary>
-        public static string Video_EncoderExtraArgs {
-            get {
+        public static string Video_EncoderExtraArgs
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_EncoderExtraArgs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Additional advanced arguments that can be passed to the video encoder..
         /// </summary>
-        public static string Video_EncoderExtraArgsTooltip {
-            get {
+        public static string Video_EncoderExtraArgsTooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_EncoderExtraArgsTooltip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Higher Quality |.
         /// </summary>
-        public static string Video_HigherQuality {
-            get {
+        public static string Video_HigherQuality
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_HigherQuality", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Warning: RF 0 is Lossless!.
         /// </summary>
-        public static string Video_LosslessWarning {
-            get {
+        public static string Video_LosslessWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_LosslessWarning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A value of 0 means lossless and will result in a file size that is larger than the original source, 
         ///unless the source was also lossless. 
@@ -6376,280 +7767,342 @@ namespace HandBrakeWPF.Properties {
         ///
         ///So small increases in value will result in progressively larger increases in the resulting file size..
         /// </summary>
-        public static string Video_LosslessWarningTooltip {
-            get {
+        public static string Video_LosslessWarningTooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_LosslessWarningTooltip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to | Lower Quality.
         /// </summary>
-        public static string Video_LowQuality {
-            get {
+        public static string Video_LowQuality
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_LowQuality", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Placebo Quality |.
         /// </summary>
-        public static string Video_PlaceboQuality {
-            get {
+        public static string Video_PlaceboQuality
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reduce decoder CPU usage.
         ///
         ///Set this if your device is struggling to play the output. (i.e. dropped frames).
         /// </summary>
-        public static string Video_x264FastDecode {
-            get {
+        public static string Video_x264FastDecode
+        {
+            get
+            {
                 return ResourceManager.GetString("Video_x264FastDecode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to 2-Pass Encoding.
         /// </summary>
-        public static string VideoView_2Pass {
-            get {
+        public static string VideoView_2Pass
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_2Pass", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Avg Bitrate (kbps):.
         /// </summary>
-        public static string VideoView_AverageBitrate {
-            get {
+        public static string VideoView_AverageBitrate
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_AverageBitrate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Video Codec:.
         /// </summary>
-        public static string VideoView_Codec {
-            get {
+        public static string VideoView_Codec
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_Codec", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Constant Framerate.
         /// </summary>
-        public static string VideoView_ConstantFramerate {
-            get {
+        public static string VideoView_ConstantFramerate
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_ConstantFramerate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Constant Quality:.
         /// </summary>
-        public static string VideoView_ConstantQuality {
-            get {
+        public static string VideoView_ConstantQuality
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_ConstantQuality", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoder Level:.
         /// </summary>
-        public static string VideoView_EncoderLevel {
-            get {
+        public static string VideoView_EncoderLevel
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_EncoderLevel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoder Preset:.
         /// </summary>
-        public static string VideoView_EncoderPreset {
-            get {
+        public static string VideoView_EncoderPreset
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_EncoderPreset", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoder Profile:.
         /// </summary>
-        public static string VideoView_EncoderProfile {
-            get {
+        public static string VideoView_EncoderProfile
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_EncoderProfile", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Encoder Tune:.
         /// </summary>
-        public static string VideoView_EncodeTune {
-            get {
+        public static string VideoView_EncodeTune
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_EncodeTune", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Advanced Options:.
         /// </summary>
-        public static string VideoView_ExtraOptions {
-            get {
+        public static string VideoView_ExtraOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_ExtraOptions", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Fast Decode.
         /// </summary>
-        public static string VideoView_FastDecode {
-            get {
+        public static string VideoView_FastDecode
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_FastDecode", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Framerate (FPS):.
         /// </summary>
-        public static string VideoView_Framerate {
-            get {
+        public static string VideoView_Framerate
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_Framerate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Optimise Video:.
         /// </summary>
-        public static string VideoView_OptimiseVideo {
-            get {
+        public static string VideoView_OptimiseVideo
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_OptimiseVideo", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Peak Framerate.
         /// </summary>
-        public static string VideoView_PeakFramerate {
-            get {
+        public static string VideoView_PeakFramerate
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_PeakFramerate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Quality.
         /// </summary>
-        public static string VideoView_Quality {
-            get {
+        public static string VideoView_Quality
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_Quality", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Turbo first pass.
         /// </summary>
-        public static string VideoView_TurboFirstPass {
-            get {
+        public static string VideoView_TurboFirstPass
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_TurboFirstPass", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Variable Framerate.
         /// </summary>
-        public static string VideoView_VariableFramerate {
-            get {
+        public static string VideoView_VariableFramerate
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_VariableFramerate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Video.
         /// </summary>
-        public static string VideoView_Video {
-            get {
+        public static string VideoView_Video
+        {
+            get
+            {
                 return ResourceManager.GetString("VideoView_Video", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
-        public static string Warning {
-            get {
+        public static string Warning
+        {
+            get
+            {
                 return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Do nothing.
         /// </summary>
-        public static string WhenDone_DoNothing {
-            get {
+        public static string WhenDone_DoNothing
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_DoNothing", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Hibernate.
         /// </summary>
-        public static string WhenDone_Hibernate {
-            get {
+        public static string WhenDone_Hibernate
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_Hibernate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Lock System.
         /// </summary>
-        public static string WhenDone_LockSystem {
-            get {
+        public static string WhenDone_LockSystem
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_LockSystem", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Log off.
         /// </summary>
-        public static string WhenDone_Logoff {
-            get {
+        public static string WhenDone_Logoff
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_Logoff", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Quit HandBrake.
         /// </summary>
-        public static string WhenDone_QuitHandBrake {
-            get {
+        public static string WhenDone_QuitHandBrake
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_QuitHandBrake", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Shutdown.
         /// </summary>
-        public static string WhenDone_Shutdown {
-            get {
+        public static string WhenDone_Shutdown
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_Shutdown", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Sleep.
         /// </summary>
-        public static string WhenDone_Suspend {
-            get {
+        public static string WhenDone_Suspend
+        {
+            get
+            {
                 return ResourceManager.GetString("WhenDone_Suspend", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to {0} - ({1}%, Pass {2} of {3}).
         /// </summary>
-        public static string WindowTitleStatus {
-            get {
+        public static string WindowTitleStatus
+        {
+            get
+            {
                 return ResourceManager.GetString("WindowTitleStatus", resourceCulture);
             }
         }

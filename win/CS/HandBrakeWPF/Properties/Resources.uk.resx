@@ -334,7 +334,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Формат вихідного файлу. На додаток до будь-якого підтримуваного символу файлової системи, ви можете використовувати наступні покажчики місця заповнення, що будуть замінені під час зміни заголовка чи сканування джерела.
 
 Динамічні опції оновлення: {source} {title} {chapters} 
-Нединамічні опції: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (вони змінюються, лише при скануванні нового джерела, зміни назви чи глав)</value>
+Нединамічні опції: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (вони змінюються, лише при скануванні нового джерела, зміни назви чи глав)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Доступні додаткові параметри: {source_path} чи {source_folder_name} чи {source}</value>
@@ -1892,7 +1892,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Динамічні опції оновлення: {source} {title} {chapters} 
-Нединамічні опції: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (вони змінюються, лише при скануванні нового джерела, зміни назви чи глав)</value>
+Нединамічні опції: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (вони змінюються, лише при скануванні нового джерела, зміни назви чи глав)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Доступні опції: {source_path} {source_folder_name} {source}</value>

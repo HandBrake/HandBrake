@@ -335,7 +335,7 @@ Você deseja continuar?</value>
     <value>Formato do arquivo de saída. Além de qualquer caractere suportado pelo sistema, você pode usar os seguintes espaços reservados, que serão substituídos quando você alterar um título ou analisar um arquivo.
 
 Atualizados em tempo real: {source} {title} {chapters}
-Atualizáveis: {date} {time} {creation-date} {creation-time} {quality} {bitrate} 
+Atualizáveis: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} 
 (Estes mudam apenas ao analisar um novo arquivo, alterar títulos ou capítulos)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
@@ -1892,7 +1892,7 @@ Tempo Restante: {5},  Decorrido: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Opções de Atualização Ao Vivo: {source} {title} {chapters} 
-Opções Não Ativas: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Elas só mudam se você procurar uma nova fonte, alterar o título ou capítulos)</value>
+Opções Não Ativas: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Elas só mudam se você procurar uma nova fonte, alterar o título ou capítulos)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Opções Disponíveis: {source_path} {source_folder_name} {source}</value>
