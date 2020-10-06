@@ -1,0 +1,5121 @@
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index c019c2e..005a409 100644
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -38,14 +38,20 @@ configure_file("${PROJECT_SOURCE_DIR}/x265_config.h.in"
+ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
+ 
+ # System architecture detection
+-string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
++if (APPLE)
++    string(TOLOWER "${CMAKE_OSX_ARCHITECTURES}" SYSPROC)
++else()
++    string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
++endif()
+ set(X86_ALIASES x86 i386 i686 x86_64 amd64)
+ set(ARM_ALIASES armv6l armv7l)
++set(ARM64_ALIASES arm64 arm64e aarch64)
+ list(FIND X86_ALIASES "${SYSPROC}" X86MATCH)
+ list(FIND ARM_ALIASES "${SYSPROC}" ARMMATCH)
++list(FIND ARM64_ALIASES "${SYSPROC}" ARM64MATCH)
+ set(POWER_ALIASES ppc64 ppc64le)
+ list(FIND POWER_ALIASES "${SYSPROC}" POWERMATCH)
+-if("${SYSPROC}" STREQUAL "" OR X86MATCH GREATER "-1")
++if(X86MATCH GREATER "-1")
+     set(X86 1)
+     add_definitions(-DX265_ARCH_X86=1)
+     if(CMAKE_CXX_FLAGS STREQUAL "-m32")
+@@ -73,6 +79,15 @@ elseif(ARMMATCH GREATER "-1")
+     message(STATUS "Detected ARM target processor")
+     set(ARM 1)
+     add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1)
++elseif(ARM64MATCH GREATER "-1")
++    if(CROSS_COMPILE_ARM64)
++        message(STATUS "Cross compiling for ARM64 arch")
++    else()
++        set(CROSS_COMPILE_ARM64 0)
++    endif()
++    message(STATUS "Detected ARM64 target processor")
++    set(ARM64 1)
++    add_definitions(-DX265_ARCH_ARM64=1 -DHAVE_NEON)
+ else()
+     message(STATUS "CMAKE_SYSTEM_PROCESSOR value `${CMAKE_SYSTEM_PROCESSOR}` is unknown")
+     message(STATUS "Please add this value near ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE}")
+@@ -241,6 +256,9 @@ if(GCC)
+             set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+         endif()
+     endif()
++    if(ARM64 OR CROSS_COMPILE_ARM64)
++        add_definitions(-DHAVE_NEON)
++    endif()
+     add_definitions(${ARM_ARGS})
+     if(FPROFILE_GENERATE)
+         if(INTEL_CXX)
+@@ -332,7 +350,7 @@ if(GCC)
+ endif(GCC)
+ 
+ find_package(Nasm)
+-if(ARM OR CROSS_COMPILE_ARM)
++if(ARM OR CROSS_COMPILE_ARM OR ARM64 OR CROSS_COMPILE_ARM64)
+     option(ENABLE_ASSEMBLY "Enable use of assembly coded primitives" ON)
+ elseif(NASM_FOUND AND X86)
+     if (NASM_VERSION_STRING VERSION_LESS "2.13.0")
+@@ -527,6 +545,19 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+                 ARGS ${ARM_ARGS} -c ${ASM_SRC} -o ${ASM}.${SUFFIX}
+                 DEPENDS ${ASM_SRC})
+         endforeach()
++    elseif(ARM64 OR CROSS_COMPILE_ARM64)
++    # compile ARM arch asm files here
++        enable_language(ASM)
++        foreach(ASM ${ARM_ASMS})
++            set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/arm64/${ASM})
++            list(APPEND ASM_SRCS ${ASM_SRC})
++            list(APPEND ASM_OBJS ${ASM}.${SUFFIX})
++            add_custom_command(
++                OUTPUT ${ASM}.${SUFFIX}
++                COMMAND ${CMAKE_CXX_COMPILER}
++                ARGS ${ARM_ARGS} -c ${ASM_SRC} -o ${ASM}.${SUFFIX}
++                DEPENDS ${ASM_SRC})
++        endforeach()
+     elseif(X86)
+     # compile X86 arch asm files here
+         foreach(ASM ${MSVC_ASMS})
+diff --git a/source/common/CMakeLists.txt b/source/common/CMakeLists.txt
+index c70bb10..3c179f3 100644
+--- a/source/common/CMakeLists.txt
++++ b/source/common/CMakeLists.txt
+@@ -97,6 +97,22 @@ if(ENABLE_ASSEMBLY AND (ARM OR CROSS_COMPILE_ARM))
+     source_group(Assembly FILES ${ASM_PRIMITIVES})
+ endif(ENABLE_ASSEMBLY AND (ARM OR CROSS_COMPILE_ARM))
+ 
++
++if(ENABLE_ASSEMBLY AND (ARM64 OR CROSS_COMPILE_ARM64))
++    set(C_SRCS asm-primitives.cpp pixel-prim.h pixel-prim.cpp  filter-prim.h filter-prim.cpp dct-prim.h dct-prim.cpp loopfilter-prim.cpp loopfilter-prim.h intrapred-prim.cpp arm64-utils.cpp arm64-utils.h)
++    enable_language(ASM)
++    # add ARM assembly/intrinsic files here
++    #set(A_SRCS )
++    #set(VEC_PRIMITIVES)
++
++    #set(ARM64_ASMS "${A_SRCS}" CACHE INTERNAL "ARM64 Assembly Sources")
++    foreach(SRC ${C_SRCS})
++        set(ASM_PRIMITIVES ${ASM_PRIMITIVES} arm64/${SRC})
++    endforeach()
++    source_group(Assembly FILES ${ASM_PRIMITIVES})
++endif(ENABLE_ASSEMBLY AND (ARM64 OR CROSS_COMPILE_ARM64))
++
++
+ if(POWER)
+     set_source_files_properties(version.cpp PROPERTIES COMPILE_FLAGS -DX265_VERSION=${X265_VERSION})
+     if(ENABLE_ALTIVEC)
+diff --git a/source/common/arm64/arm64-utils.cpp b/source/common/arm64/arm64-utils.cpp
+new file mode 100644
+index 0000000..4291acc
+--- /dev/null
++++ b/source/common/arm64/arm64-utils.cpp
+@@ -0,0 +1,290 @@
++#include "common.h"
++#include "x265.h"
++#include "arm64-utils.h"
++#include <arm_neon.h>
++
++#define COPY_16(d,s) *(uint8x16_t *)(d) = *(uint8x16_t *)(s)
++namespace X265_NS {
++
++
++
++void transpose8x8(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride)
++{
++    uint8x8_t a0,a1,a2,a3,a4,a5,a6,a7;
++    uint8x8_t b0,b1,b2,b3,b4,b5,b6,b7;
++
++    a0 = *(uint8x8_t *)(src + 0*sstride);
++    a1 = *(uint8x8_t *)(src + 1*sstride);
++    a2 = *(uint8x8_t *)(src + 2*sstride);
++    a3 = *(uint8x8_t *)(src + 3*sstride);
++    a4 = *(uint8x8_t *)(src + 4*sstride);
++    a5 = *(uint8x8_t *)(src + 5*sstride);
++    a6 = *(uint8x8_t *)(src + 6*sstride);
++    a7 = *(uint8x8_t *)(src + 7*sstride);
++
++    b0 = vtrn1_u32(a0,a4);
++    b1 = vtrn1_u32(a1,a5);
++    b2 = vtrn1_u32(a2,a6);
++    b3 = vtrn1_u32(a3,a7);
++    b4 = vtrn2_u32(a0,a4);
++    b5 = vtrn2_u32(a1,a5);
++    b6 = vtrn2_u32(a2,a6);
++    b7 = vtrn2_u32(a3,a7);
++
++    a0 = vtrn1_u16(b0,b2);
++    a1 = vtrn1_u16(b1,b3);
++    a2 = vtrn2_u16(b0,b2);
++    a3 = vtrn2_u16(b1,b3);
++    a4 = vtrn1_u16(b4,b6);
++    a5 = vtrn1_u16(b5,b7);
++    a6 = vtrn2_u16(b4,b6);
++    a7 = vtrn2_u16(b5,b7);
++
++    b0 = vtrn1_u8(a0,a1);
++    b1 = vtrn2_u8(a0,a1);
++    b2 = vtrn1_u8(a2,a3);
++    b3 = vtrn2_u8(a2,a3);
++    b4 = vtrn1_u8(a4,a5);
++    b5 = vtrn2_u8(a4,a5);
++    b6 = vtrn1_u8(a6,a7);
++    b7 = vtrn2_u8(a6,a7);
++
++    *(uint8x8_t *)(dst + 0*dstride) = b0;
++    *(uint8x8_t *)(dst + 1*dstride) = b1;
++    *(uint8x8_t *)(dst + 2*dstride) = b2;
++    *(uint8x8_t *)(dst + 3*dstride) = b3;
++    *(uint8x8_t *)(dst + 4*dstride) = b4;
++    *(uint8x8_t *)(dst + 5*dstride) = b5;
++    *(uint8x8_t *)(dst + 6*dstride) = b6;
++    *(uint8x8_t *)(dst + 7*dstride) = b7;
++}
++
++
++
++
++
++
++void transpose16x16(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride)
++{
++    uint16x8_t a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,aA,aB,aC,aD,aE,aF;
++    uint16x8_t b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,bA,bB,bC,bD,bE,bF;
++    uint16x8_t c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,cA,cB,cC,cD,cE,cF;
++    uint16x8_t d0,d1,d2,d3,d4,d5,d6,d7,d8,d9,dA,dB,dC,dD,dE,dF;
++    
++    a0 = *(uint16x8_t *)(src + 0*sstride);
++    a1 = *(uint16x8_t *)(src + 1*sstride);
++    a2 = *(uint16x8_t *)(src + 2*sstride);
++    a3 = *(uint16x8_t *)(src + 3*sstride);
++    a4 = *(uint16x8_t *)(src + 4*sstride);
++    a5 = *(uint16x8_t *)(src + 5*sstride);
++    a6 = *(uint16x8_t *)(src + 6*sstride);
++    a7 = *(uint16x8_t *)(src + 7*sstride);
++    a8 = *(uint16x8_t *)(src + 8*sstride);
++    a9 = *(uint16x8_t *)(src + 9*sstride);
++    aA = *(uint16x8_t *)(src + 10*sstride);
++    aB = *(uint16x8_t *)(src + 11*sstride);
++    aC = *(uint16x8_t *)(src + 12*sstride);
++    aD = *(uint16x8_t *)(src + 13*sstride);
++    aE = *(uint16x8_t *)(src + 14*sstride);
++    aF = *(uint16x8_t *)(src + 15*sstride);
++
++    b0 = vtrn1q_u64(a0, a8);
++    b1 = vtrn1q_u64(a1, a9);
++    b2 = vtrn1q_u64(a2, aA);
++    b3 = vtrn1q_u64(a3, aB);
++    b4 = vtrn1q_u64(a4, aC);
++    b5 = vtrn1q_u64(a5, aD);
++    b6 = vtrn1q_u64(a6, aE);
++    b7 = vtrn1q_u64(a7, aF);
++    b8 = vtrn2q_u64(a0, a8);
++    b9 = vtrn2q_u64(a1, a9);
++    bA = vtrn2q_u64(a2, aA);
++    bB = vtrn2q_u64(a3, aB);
++    bC = vtrn2q_u64(a4, aC);
++    bD = vtrn2q_u64(a5, aD);
++    bE = vtrn2q_u64(a6, aE);
++    bF = vtrn2q_u64(a7, aF);
++
++    c0 = vtrn1q_u32(b0, b4);
++    c1 = vtrn1q_u32(b1, b5);
++    c2 = vtrn1q_u32(b2, b6);
++    c3 = vtrn1q_u32(b3, b7);
++    c4 = vtrn2q_u32(b0, b4);
++    c5 = vtrn2q_u32(b1, b5);
++    c6 = vtrn2q_u32(b2, b6);
++    c7 = vtrn2q_u32(b3, b7);
++    c8 = vtrn1q_u32(b8, bC);
++    c9 = vtrn1q_u32(b9, bD);
++    cA = vtrn1q_u32(bA, bE);
++    cB = vtrn1q_u32(bB, bF);
++    cC = vtrn2q_u32(b8, bC);
++    cD = vtrn2q_u32(b9, bD);
++    cE = vtrn2q_u32(bA, bE);
++    cF = vtrn2q_u32(bB, bF);
++    
++    d0 = vtrn1q_u16(c0, c2);
++    d1 = vtrn1q_u16(c1, c3);
++    d2 = vtrn2q_u16(c0, c2);
++    d3 = vtrn2q_u16(c1, c3);
++    d4 = vtrn1q_u16(c4, c6);
++    d5 = vtrn1q_u16(c5, c7);
++    d6 = vtrn2q_u16(c4, c6);
++    d7 = vtrn2q_u16(c5, c7);
++    d8 = vtrn1q_u16(c8, cA);
++    d9 = vtrn1q_u16(c9, cB);
++    dA = vtrn2q_u16(c8, cA);
++    dB = vtrn2q_u16(c9, cB);
++    dC = vtrn1q_u16(cC, cE);
++    dD = vtrn1q_u16(cD, cF);
++    dE = vtrn2q_u16(cC, cE);
++    dF = vtrn2q_u16(cD, cF);
++    
++    *(uint16x8_t *)(dst + 0*dstride)  = vtrn1q_u8(d0, d1);
++    *(uint16x8_t *)(dst + 1*dstride)  = vtrn2q_u8(d0, d1);
++    *(uint16x8_t *)(dst + 2*dstride)  = vtrn1q_u8(d2, d3);
++    *(uint16x8_t *)(dst + 3*dstride)  = vtrn2q_u8(d2, d3);
++    *(uint16x8_t *)(dst + 4*dstride)  = vtrn1q_u8(d4, d5);
++    *(uint16x8_t *)(dst + 5*dstride)  = vtrn2q_u8(d4, d5);
++    *(uint16x8_t *)(dst + 6*dstride)  = vtrn1q_u8(d6, d7);
++    *(uint16x8_t *)(dst + 7*dstride)  = vtrn2q_u8(d6, d7);
++    *(uint16x8_t *)(dst + 8*dstride)  = vtrn1q_u8(d8, d9);
++    *(uint16x8_t *)(dst + 9*dstride)  = vtrn2q_u8(d8, d9);
++    *(uint16x8_t *)(dst + 10*dstride)  = vtrn1q_u8(dA, dB);
++    *(uint16x8_t *)(dst + 11*dstride)  = vtrn2q_u8(dA, dB);
++    *(uint16x8_t *)(dst + 12*dstride)  = vtrn1q_u8(dC, dD);
++    *(uint16x8_t *)(dst + 13*dstride)  = vtrn2q_u8(dC, dD);
++    *(uint16x8_t *)(dst + 14*dstride)  = vtrn1q_u8(dE, dF);
++    *(uint16x8_t *)(dst + 15*dstride)  = vtrn2q_u8(dE, dF);
++
++    
++}
++
++
++void transpose32x32(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride)
++{
++    //assumption: there is no partial overlap
++    transpose16x16(dst,src,dstride,sstride);
++    transpose16x16(dst+16*dstride+16,src+16*sstride+16,dstride,sstride);
++    if (dst == src)
++    {
++        uint8_t tmp[16*16] __attribute__((aligned(64)));
++        transpose16x16(tmp,src + 16,16,sstride);
++        transpose16x16(dst + 16, src + 16*sstride,dstride,sstride);
++        for (int i=0;i<16;i++) COPY_16(dst+(16 + i)*dstride,tmp + 16*i);
++    }
++    else
++    {
++        transpose16x16(dst+16*dstride,src + 16,dstride,sstride);
++        transpose16x16(dst + 16, src + 16*sstride,dstride,sstride);
++    }
++    
++}
++
++
++
++void transpose8x8(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride)
++{
++    uint16x8_t a0,a1,a2,a3,a4,a5,a6,a7;
++    uint16x8_t b0,b1,b2,b3,b4,b5,b6,b7;
++
++    a0 = *(uint16x8_t *)(src + 0*sstride);
++    a1 = *(uint16x8_t *)(src + 1*sstride);
++    a2 = *(uint16x8_t *)(src + 2*sstride);
++    a3 = *(uint16x8_t *)(src + 3*sstride);
++    a4 = *(uint16x8_t *)(src + 4*sstride);
++    a5 = *(uint16x8_t *)(src + 5*sstride);
++    a6 = *(uint16x8_t *)(src + 6*sstride);
++    a7 = *(uint16x8_t *)(src + 7*sstride);
++
++    b0 = vtrn1q_u64(a0,a4);
++    b1 = vtrn1q_u64(a1,a5);
++    b2 = vtrn1q_u64(a2,a6);
++    b3 = vtrn1q_u64(a3,a7);
++    b4 = vtrn2q_u64(a0,a4);
++    b5 = vtrn2q_u64(a1,a5);
++    b6 = vtrn2q_u64(a2,a6);
++    b7 = vtrn2q_u64(a3,a7);
++
++    a0 = vtrn1q_u32(b0,b2);
++    a1 = vtrn1q_u32(b1,b3);
++    a2 = vtrn2q_u32(b0,b2);
++    a3 = vtrn2q_u32(b1,b3);
++    a4 = vtrn1q_u32(b4,b6);
++    a5 = vtrn1q_u32(b5,b7);
++    a6 = vtrn2q_u32(b4,b6);
++    a7 = vtrn2q_u32(b5,b7);
++
++    b0 = vtrn1q_u16(a0,a1);
++    b1 = vtrn2q_u16(a0,a1);
++    b2 = vtrn1q_u16(a2,a3);
++    b3 = vtrn2q_u16(a2,a3);
++    b4 = vtrn1q_u16(a4,a5);
++    b5 = vtrn2q_u16(a4,a5);
++    b6 = vtrn1q_u16(a6,a7);
++    b7 = vtrn2q_u16(a6,a7);
++
++    *(uint16x8_t *)(dst + 0*dstride) = b0;
++    *(uint16x8_t *)(dst + 1*dstride) = b1;
++    *(uint16x8_t *)(dst + 2*dstride) = b2;
++    *(uint16x8_t *)(dst + 3*dstride) = b3;
++    *(uint16x8_t *)(dst + 4*dstride) = b4;
++    *(uint16x8_t *)(dst + 5*dstride) = b5;
++    *(uint16x8_t *)(dst + 6*dstride) = b6;
++    *(uint16x8_t *)(dst + 7*dstride) = b7;
++}
++
++void transpose16x16(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride)
++{
++    //assumption: there is no partial overlap
++    transpose8x8(dst,src,dstride,sstride);
++    transpose8x8(dst+8*dstride+8,src+8*sstride+8,dstride,sstride);
++
++    if (dst == src)
++    {
++        uint16_t tmp[8*8];
++        transpose8x8(tmp,src + 8,8,sstride);
++        transpose8x8(dst + 8, src + 8*sstride,dstride,sstride);
++        for (int i=0;i<8;i++) COPY_16(dst+(8 + i)*dstride,tmp + 8*i);
++    }
++    else
++    {
++        transpose8x8(dst+8*dstride,src + 8,dstride,sstride);
++        transpose8x8(dst + 8, src + 8*sstride,dstride,sstride);
++    }
++    
++}
++
++
++
++void transpose32x32(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride)
++{
++    //assumption: there is no partial overlap
++    for (int i=0;i<4;i++)
++    {
++        transpose8x8(dst+i*8*(1+dstride),src+i*8*(1+sstride),dstride,sstride);
++        for (int j=i+1;j<4;j++)
++        {
++            if (dst == src)
++            {
++                uint16_t tmp[8*8] __attribute__((aligned(64)));
++                transpose8x8(tmp,src + 8*i + 8*j*sstride,8,sstride);
++                transpose8x8(dst + 8*i + 8*j*dstride, src + 8*j + 8*i*sstride,dstride,sstride);
++                for (int k=0;k<8;k++) COPY_16(dst+ 8*j + (8*i+k)*dstride,tmp + 8*k);
++            }
++            else
++            {
++                transpose8x8(dst + 8*(j + i*dstride),src + 8*(i + j*sstride),dstride,sstride);
++                transpose8x8(dst + 8*(i + j*dstride),src + 8*(j + i*sstride),dstride,sstride);
++            }
++            
++        }
++    }
++}
++
++
++
++
++}
++
++
++
+diff --git a/source/common/arm64/arm64-utils.h b/source/common/arm64/arm64-utils.h
+new file mode 100644
+index 0000000..bf1d346
+--- /dev/null
++++ b/source/common/arm64/arm64-utils.h
+@@ -0,0 +1,14 @@
++#ifndef __ARM64_UTILS_H__
++#define __ARM64_UTILS_H__
++
++
++namespace X265_NS {
++void transpose8x8(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride);
++void transpose16x16(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride);
++void transpose32x32(uint8_t* dst, const uint8_t* src, intptr_t dstride, intptr_t sstride);
++void transpose8x8(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride);
++void transpose16x16(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride);
++void transpose32x32(uint16_t* dst, const uint16_t* src, intptr_t dstride, intptr_t sstride);
++}
++
++#endif
+diff --git a/source/common/arm64/asm-primitives.cpp b/source/common/arm64/asm-primitives.cpp
+new file mode 100644
+index 0000000..f7a8a70
+--- /dev/null
++++ b/source/common/arm64/asm-primitives.cpp
+@@ -0,0 +1,53 @@
++/*****************************************************************************
++ * Copyright (C) 2013-2017 MulticoreWare, Inc
++ *
++ * Authors: Steve Borho <steve@borho.org>
++ *          Praveen Kumar Tiwari <praveen@multicorewareinc.com>
++ *          Min Chen <chenm003@163.com> <min.chen@multicorewareinc.com>
++ *          Dnyaneshwar Gorade <dnyaneshwar@multicorewareinc.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111, USA.
++ *
++ * This program is also available under a commercial proprietary license.
++ * For more information, contact us at license @ x265.com.
++ *****************************************************************************/
++
++#include "common.h"
++#include "primitives.h"
++#include "x265.h"
++#include "cpu.h"
++
++#include "pixel-prim.h"
++#include "filter-prim.h"
++#include "dct-prim.h"
++#include "loopfilter-prim.h"
++#include "intrapred-prim.h"
++
++namespace X265_NS {
++// private x265 namespace
++
++void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
++{
++    if (cpuMask & X265_CPU_NEON)
++    {
++      setupPixelPrimitives_neon(p);
++      setupFilterPrimitives_neon(p);
++      setupDCTPrimitives_neon(p);
++      setupLoopFilterPrimitives_neon(p);
++      setupIntraPrimitives_neon(p);
++    }
++}
++
++} // namespace X265_NS
+diff --git a/source/common/arm64/dct-prim.cpp b/source/common/arm64/dct-prim.cpp
+new file mode 100644
+index 0000000..5160293
+--- /dev/null
++++ b/source/common/arm64/dct-prim.cpp
+@@ -0,0 +1,933 @@
++#include "dct-prim.h"
++
++
++#if HAVE_NEON
++
++#include <arm_neon.h>
++
++
++namespace {
++using namespace X265_NS;
++
++
++static int16x8_t rev16(const int16x8_t a)
++{
++    static const int8x16_t tbl = {14,15,12,13,10,11,8,9,6,7,4,5,2,3,0,1};
++    return vqtbx1q_u8(a,a,tbl);
++}
++
++static int32x4_t rev32(const int32x4_t a)
++{
++    static const int8x16_t tbl = {12,13,14,15,8,9,10,11,4,5,6,7,0,1,2,3};
++    return vqtbx1q_u8(a,a,tbl);
++}
++    
++static void transpose_4x4x16(int16x4_t& x0,int16x4_t& x1,int16x4_t& x2,int16x4_t& x3)
++{
++    int16x4_t s0,s1,s2,s3;
++    s0 = vtrn1_s32(x0,x2);
++    s1 = vtrn1_s32(x1,x3);
++    s2 = vtrn2_s32(x0,x2);
++    s3 = vtrn2_s32(x1,x3);
++    
++    x0 = vtrn1_s16(s0,s1);
++    x1 = vtrn2_s16(s0,s1);
++    x2 = vtrn1_s16(s2,s3);
++    x3 = vtrn2_s16(s2,s3);
++}
++
++
++
++static int scanPosLast_opt(const uint16_t *scan, const coeff_t *coeff, uint16_t *coeffSign, uint16_t *coeffFlag, uint8_t *coeffNum, int numSig, const uint16_t* /*scanCG4x4*/, const int /*trSize*/)
++{
++
++    // This is an optimized function for scanPosLast, which removes the rmw dependency, once integrated into mainline x265, should replace reference implementation
++    // For clarity, left the original reference code in comments
++    int scanPosLast = 0;
++    
++    uint16_t cSign = 0;
++    uint16_t cFlag = 0;
++    uint8_t cNum = 0;
++    
++    uint32_t prevcgIdx = 0;
++    do
++    {
++        const uint32_t cgIdx = (uint32_t)scanPosLast >> MLS_CG_SIZE;
++
++        const uint32_t posLast = scan[scanPosLast];
++
++        const int curCoeff = coeff[posLast];
++        const uint32_t isNZCoeff = (curCoeff != 0);
++        /*
++        NOTE: the new algorithm is complicated, so I keep reference code here
++        uint32_t posy   = posLast >> log2TrSize;
++        uint32_t posx   = posLast - (posy << log2TrSize);
++        uint32_t blkIdx0 = ((posy >> MLS_CG_LOG2_SIZE) << codingParameters.log2TrSizeCG) + (posx >> MLS_CG_LOG2_SIZE);
++        const uint32_t blkIdx = ((posLast >> (2 * MLS_CG_LOG2_SIZE)) & ~maskPosXY) + ((posLast >> MLS_CG_LOG2_SIZE) & maskPosXY);
++        sigCoeffGroupFlag64 |= ((uint64_t)isNZCoeff << blkIdx);
++        */
++
++        // get L1 sig map
++        numSig -= isNZCoeff;
++
++        if (scanPosLast % (1<<MLS_CG_SIZE) == 0)
++        {
++            coeffSign[prevcgIdx] = cSign;
++            coeffFlag[prevcgIdx] = cFlag;
++            coeffNum[prevcgIdx] = cNum;
++            cSign = 0;
++            cFlag = 0;
++            cNum = 0;
++        }
++        // TODO: optimize by instruction BTS
++       cSign += (uint16_t)(((curCoeff < 0) ? 1 : 0) << cNum);
++       cFlag = (cFlag << 1) + (uint16_t)isNZCoeff;
++       cNum += (uint8_t)isNZCoeff;
++       prevcgIdx = cgIdx;
++        scanPosLast++;
++    }
++    while (numSig > 0);
++
++    coeffSign[prevcgIdx] = cSign;
++    coeffFlag[prevcgIdx] = cFlag;
++    coeffNum[prevcgIdx] = cNum;
++    return scanPosLast - 1;
++}
++
++
++#if (MLS_CG_SIZE == 4)
++template<int log2TrSize>
++static void nonPsyRdoQuant_neon(int16_t *m_resiDctCoeff, int64_t *costUncoded, int64_t *totalUncodedCost, int64_t *totalRdCost, uint32_t blkPos)
++{
++    const int transformShift = MAX_TR_DYNAMIC_RANGE - X265_DEPTH - log2TrSize; /* Represents scaling through forward transform */
++    const int scaleBits = SCALE_BITS - 2 * transformShift;
++    const uint32_t trSize = 1 << log2TrSize;
++
++    int64x2_t vcost_sum_0 = vdupq_n_s64(0);
++    int64x2_t vcost_sum_1 = vdupq_n_s64(0);
++    for (int y = 0; y < MLS_CG_SIZE; y++)
++    {
++      int16x4_t in = *(int16x4_t *)&m_resiDctCoeff[blkPos];
++      int32x4_t mul = vmull_s16(in,in);
++      int64x2_t cost0, cost1;
++      cost0 = vshll_n_s32(vget_low_s32(mul),scaleBits);
++      cost1 = vshll_high_n_s32(mul,scaleBits);
++      *(int64x2_t *)&costUncoded[blkPos+0] = cost0;
++      *(int64x2_t *)&costUncoded[blkPos+2] = cost1;
++      vcost_sum_0 = vaddq_s64(vcost_sum_0,cost0);
++      vcost_sum_1 = vaddq_s64(vcost_sum_1,cost1);
++      blkPos += trSize;
++    }
++    int64_t sum = vaddvq_s64(vaddq_s64(vcost_sum_0,vcost_sum_1));
++    *totalUncodedCost += sum;
++    *totalRdCost += sum;
++}
++
++template<int log2TrSize>
++static void psyRdoQuant_neon(int16_t *m_resiDctCoeff, int16_t *m_fencDctCoeff, int64_t *costUncoded, int64_t *totalUncodedCost, int64_t *totalRdCost, int64_t *psyScale, uint32_t blkPos)
++{
++    const int transformShift = MAX_TR_DYNAMIC_RANGE - X265_DEPTH - log2TrSize; /* Represents scaling through forward transform */
++    const int scaleBits = SCALE_BITS - 2 * transformShift;
++    const uint32_t trSize = 1 << log2TrSize;
++    //using preprocessor to bypass clang bug
++    const int max = X265_MAX(0, (2 * transformShift + 1));
++
++    int64x2_t vcost_sum_0 = vdupq_n_s64(0);
++    int64x2_t vcost_sum_1 = vdupq_n_s64(0);
++    int32x4_t vpsy = vdupq_n_s32(*psyScale);
++    for (int y = 0; y < MLS_CG_SIZE; y++)
++    {
++      int32x4_t signCoef = vmovl_s16(*(int16x4_t *)&m_resiDctCoeff[blkPos]);
++      int32x4_t predictedCoef = vsubq_s32(vmovl_s16(*(int16x4_t *)&m_fencDctCoeff[blkPos]),signCoef);
++      int64x2_t cost0, cost1;
++      cost0 = vmull_s32(vget_low_s32(signCoef),vget_low_s32(signCoef));
++      cost1 = vmull_high_s32(signCoef,signCoef);
++      cost0 = vshlq_n_s64(cost0,scaleBits);
++      cost1 = vshlq_n_s64(cost1,scaleBits);
++      int64x2_t neg0 = vmull_s32(vget_low_s32(predictedCoef),vget_low_s32(vpsy));
++      int64x2_t neg1 = vmull_high_s32(predictedCoef,vpsy);
++      if (max > 0) {
++        int64x2_t shift = vdupq_n_s64(-max);
++        neg0 = vshlq_s64(neg0,shift);
++        neg1 = vshlq_s64(neg1,shift);
++      }
++      cost0 = vsubq_s64(cost0,neg0);
++      cost1 = vsubq_s64(cost1,neg1);
++      *(int64x2_t *)&costUncoded[blkPos+0] = cost0;
++      *(int64x2_t *)&costUncoded[blkPos+2] = cost1;
++      vcost_sum_0 = vaddq_s64(vcost_sum_0,cost0);
++      vcost_sum_1 = vaddq_s64(vcost_sum_1,cost1);
++     
++        blkPos += trSize;
++    }
++  int64_t sum = vaddvq_s64(vaddq_s64(vcost_sum_0,vcost_sum_1));
++  *totalUncodedCost += sum;
++  *totalRdCost += sum;
++}
++
++#else
++      #error "MLS_CG_SIZE must be 4 for neon version"
++#endif
++
++
++
++template<int trSize>
++int  count_nonzero_neon(const int16_t* quantCoeff)
++{
++  X265_CHECK(((intptr_t)quantCoeff & 15) == 0, "quant buffer not aligned\n");
++  int count = 0;
++  int16x8_t vcount = vdupq_n_s16(0);
++  const int numCoeff = trSize * trSize;
++  int i = 0;
++  for (; (i + 8) <= numCoeff; i+=8)
++  {
++    int16x8_t in = *(int16x8_t*)&quantCoeff[i];
++    vcount = vaddq_s16(vcount,vtstq_s16(in,in));
++  }
++  for (; i < numCoeff; i++)
++  {
++      count += quantCoeff[i] != 0;
++  }
++
++  return count - vaddvq_s16(vcount);
++}
++
++template<int trSize>
++uint32_t copy_count_neon(int16_t* coeff, const int16_t* residual, intptr_t resiStride)
++{
++  uint32_t numSig = 0;
++  int16x8_t vcount = vdupq_n_s16(0);
++  for (int k = 0; k < trSize; k++)
++  {
++    int j = 0;
++    for (; (j + 8) <= trSize; j+=8)
++    {
++      int16x8_t in = *(int16x8_t*)&residual[j];
++      *(int16x8_t*)&coeff[j] = in;
++      vcount = vaddq_s16(vcount,vtstq_s16(in,in));
++    }
++    for (; j < trSize; j++)
++    {
++      coeff[j] = residual[j];
++      numSig += (residual[j] != 0);
++    }
++    residual += resiStride;
++    coeff += trSize;
++  }
++
++  return numSig - vaddvq_s16(vcount);
++}
++
++
++static void partialButterfly16(const int16_t* src, int16_t* dst, int shift, int line)
++{
++    int j, k;
++    int32x4_t E[2], O[2];
++    int32x4_t EE, EO;
++    int32x2_t EEE, EEO;
++    const int add = 1 << (shift - 1);
++    const int32x4_t _vadd = {add,0};
++    
++    for (j = 0; j < line; j++)
++    {
++        int16x8_t in0 = *(int16x8_t *)src;
++        int16x8_t in1 = rev16(*(int16x8_t *)&src[8]);
++        
++        E[0] = vaddl_s16(vget_low_s16(in0),vget_low_s16(in1));
++        O[0] = vsubl_s16(vget_low_s16(in0),vget_low_s16(in1));
++        E[1] = vaddl_high_s16(in0,in1);
++        O[1] = vsubl_high_s16(in0,in1);
++
++        for (k = 1; k < 16; k += 2)
++        {
++            int32x4_t c0 = vmovl_s16(*(int16x4_t *)&g_t16[k][0]);
++            int32x4_t c1 = vmovl_s16(*(int16x4_t *)&g_t16[k][4]);
++            
++            int32x4_t res = _vadd;
++            res = vmlaq_s32(res,c0,O[0]);
++            res = vmlaq_s32(res,c1,O[1]);
++            dst[k * line] = (int16_t)(vaddvq_s32(res) >> shift);
++        }
++
++        /* EE and EO */
++        EE = vaddq_s32(E[0],rev32(E[1]));
++        EO = vsubq_s32(E[0],rev32(E[1]));
++        
++        for (k = 2; k < 16; k += 4)
++        {
++            int32x4_t c0 = vmovl_s16(*(int16x4_t *)&g_t16[k][0]);
++            int32x4_t res = _vadd;
++            res = vmlaq_s32(res,c0,EO);
++            dst[k * line] = (int16_t)(vaddvq_s32(res) >> shift);
++        }
++
++        /* EEE and EEO */
++        EEE[0] = EE[0] + EE[3];
++        EEO[0] = EE[0] - EE[3];
++        EEE[1] = EE[1] + EE[2];
++        EEO[1] = EE[1] - EE[2];
++        
++        dst[0] = (int16_t)((g_t16[0][0] * EEE[0] + g_t16[0][1] * EEE[1] + add) >> shift);
++        dst[8 * line] = (int16_t)((g_t16[8][0] * EEE[0] + g_t16[8][1] * EEE[1] + add) >> shift);
++        dst[4 * line] = (int16_t)((g_t16[4][0] * EEO[0] + g_t16[4][1] * EEO[1] + add) >> shift);
++        dst[12 * line] = (int16_t)((g_t16[12][0] * EEO[0] + g_t16[12][1] * EEO[1] + add) >> shift);
++        
++  
++        src += 16;
++        dst++;
++    }
++}
++
++    
++static void partialButterfly32(const int16_t* src, int16_t* dst, int shift, int line)
++{
++    int j, k;
++    const int add = 1 << (shift - 1);
++    
++    
++    for (j = 0; j < line; j++)
++    {
++        int32x4_t VE[4], VO0,VO1,VO2,VO3;
++        int32x4_t VEE[2], VEO[2];
++        int32x4_t VEEE, VEEO;
++        int EEEE[2], EEEO[2];
++
++        int16x8x4_t inputs;
++        inputs = *(int16x8x4_t *)&src[0];
++        int16x8x4_t in_rev;
++        
++        in_rev.val[1] = rev16(inputs.val[2]);
++        in_rev.val[0] = rev16(inputs.val[3]);
++        
++        VE[0] = vaddl_s16(vget_low_s16(inputs.val[0]),vget_low_s16(in_rev.val[0]));
++        VE[1] = vaddl_high_s16(inputs.val[0],in_rev.val[0]);
++        VO0 = vsubl_s16(vget_low_s16(inputs.val[0]),vget_low_s16(in_rev.val[0]));
++        VO1 = vsubl_high_s16(inputs.val[0],in_rev.val[0]);
++        VE[2] = vaddl_s16(vget_low_s16(inputs.val[1]),vget_low_s16(in_rev.val[1]));
++        VE[3] = vaddl_high_s16(inputs.val[1],in_rev.val[1]);
++        VO2 = vsubl_s16(vget_low_s16(inputs.val[1]),vget_low_s16(in_rev.val[1]));
++        VO3 = vsubl_high_s16(inputs.val[1],in_rev.val[1]);
++
++        for (k = 1; k < 32; k += 2)
++        {
++            int32x4_t c0 = vmovl_s16(*(int16x4_t *)&g_t32[k][0]);
++            int32x4_t c1 = vmovl_s16(*(int16x4_t *)&g_t32[k][4]);
++            int32x4_t c2 = vmovl_s16(*(int16x4_t *)&g_t32[k][8]);
++            int32x4_t c3 = vmovl_s16(*(int16x4_t *)&g_t32[k][12]);
++            int32x4_t s = vmulq_s32(c0,VO0);
++            s = vmlaq_s32(s,c1,VO1);
++            s = vmlaq_s32(s,c2,VO2);
++            s = vmlaq_s32(s,c3,VO3);
++            
++            dst[k * line] = (int16_t)((vaddvq_s32(s) + add) >> shift);
++            
++        }
++        
++        int32x4_t rev_VE[2];
++        
++        
++        rev_VE[0] = rev32(VE[3]);
++        rev_VE[1] = rev32(VE[2]);
++        
++        /* EE and EO */
++        for (k = 0; k < 2; k++)
++        {
++            VEE[k] = vaddq_s32(VE[k],rev_VE[k]);
++            VEO[k] = vsubq_s32(VE[k],rev_VE[k]);
++        }
++        for (k = 2; k < 32; k += 4)
++        {
++            int32x4_t c0 = vmovl_s16(*(int16x4_t *)&g_t32[k][0]);
++            int32x4_t c1 = vmovl_s16(*(int16x4_t *)&g_t32[k][4]);
++            int32x4_t s = vmulq_s32(c0,VEO[0]);
++            s = vmlaq_s32(s,c1,VEO[1]);
++            
++            dst[k * line] = (int16_t)((vaddvq_s32(s) + add) >> shift);
++            
++        }
++        
++        int32x4_t tmp = rev32(VEE[1]);
++        VEEE = vaddq_s32(VEE[0],tmp);
++        VEEO = vsubq_s32(VEE[0],tmp);
++        for (k = 4; k < 32; k += 8)
++        {
++            int32x4_t c = vmovl_s16(*(int16x4_t *)&g_t32[k][0]);
++            int32x4_t s = vmulq_s32(c,VEEO);
++            
++            dst[k * line] = (int16_t)((vaddvq_s32(s) + add) >> shift);
++        }
++        
++        /* EEEE and EEEO */
++        EEEE[0] = VEEE[0] + VEEE[3];
++        EEEO[0] = VEEE[0] - VEEE[3];
++        EEEE[1] = VEEE[1] + VEEE[2];
++        EEEO[1] = VEEE[1] - VEEE[2];
++        
++        dst[0] = (int16_t)((g_t32[0][0] * EEEE[0] + g_t32[0][1] * EEEE[1] + add) >> shift);
++        dst[16 * line] = (int16_t)((g_t32[16][0] * EEEE[0] + g_t32[16][1] * EEEE[1] + add) >> shift);
++        dst[8 * line] = (int16_t)((g_t32[8][0] * EEEO[0] + g_t32[8][1] * EEEO[1] + add) >> shift);
++        dst[24 * line] = (int16_t)((g_t32[24][0] * EEEO[0] + g_t32[24][1] * EEEO[1] + add) >> shift);
++        
++        
++        
++        src += 32;
++        dst++;
++    }
++}
++
++static void partialButterfly8(const int16_t* src, int16_t* dst, int shift, int line)
++{
++    int j, k;
++    int E[4], O[4];
++    int EE[2], EO[2];
++    int add = 1 << (shift - 1);
++
++    for (j = 0; j < line; j++)
++    {
++        /* E and O*/
++        for (k = 0; k < 4; k++)
++        {
++            E[k] = src[k] + src[7 - k];
++            O[k] = src[k] - src[7 - k];
++        }
++
++        /* EE and EO */
++        EE[0] = E[0] + E[3];
++        EO[0] = E[0] - E[3];
++        EE[1] = E[1] + E[2];
++        EO[1] = E[1] - E[2];
++
++        dst[0] = (int16_t)((g_t8[0][0] * EE[0] + g_t8[0][1] * EE[1] + add) >> shift);
++        dst[4 * line] = (int16_t)((g_t8[4][0] * EE[0] + g_t8[4][1] * EE[1] + add) >> shift);
++        dst[2 * line] = (int16_t)((g_t8[2][0] * EO[0] + g_t8[2][1] * EO[1] + add) >> shift);
++        dst[6 * line] = (int16_t)((g_t8[6][0] * EO[0] + g_t8[6][1] * EO[1] + add) >> shift);
++
++        dst[line] = (int16_t)((g_t8[1][0] * O[0] + g_t8[1][1] * O[1] + g_t8[1][2] * O[2] + g_t8[1][3] * O[3] + add) >> shift);
++        dst[3 * line] = (int16_t)((g_t8[3][0] * O[0] + g_t8[3][1] * O[1] + g_t8[3][2] * O[2] + g_t8[3][3] * O[3] + add) >> shift);
++        dst[5 * line] = (int16_t)((g_t8[5][0] * O[0] + g_t8[5][1] * O[1] + g_t8[5][2] * O[2] + g_t8[5][3] * O[3] + add) >> shift);
++        dst[7 * line] = (int16_t)((g_t8[7][0] * O[0] + g_t8[7][1] * O[1] + g_t8[7][2] * O[2] + g_t8[7][3] * O[3] + add) >> shift);
++
++        src += 8;
++        dst++;
++    }
++}
++
++static void partialButterflyInverse4(const int16_t* src, int16_t* dst, int shift, int line)
++{
++    int j;
++    int E[2], O[2];
++    int add = 1 << (shift - 1);
++
++    for (j = 0; j < line; j++)
++    {
++        /* Utilizing symmetry properties to the maximum to minimize the number of multiplications */
++        O[0] = g_t4[1][0] * src[line] + g_t4[3][0] * src[3 * line];
++        O[1] = g_t4[1][1] * src[line] + g_t4[3][1] * src[3 * line];
++        E[0] = g_t4[0][0] * src[0] + g_t4[2][0] * src[2 * line];
++        E[1] = g_t4[0][1] * src[0] + g_t4[2][1] * src[2 * line];
++
++        /* Combining even and odd terms at each hierarchy levels to calculate the final spatial domain vector */
++        dst[0] = (int16_t)(x265_clip3(-32768, 32767, (E[0] + O[0] + add) >> shift));
++        dst[1] = (int16_t)(x265_clip3(-32768, 32767, (E[1] + O[1] + add) >> shift));
++        dst[2] = (int16_t)(x265_clip3(-32768, 32767, (E[1] - O[1] + add) >> shift));
++        dst[3] = (int16_t)(x265_clip3(-32768, 32767, (E[0] - O[0] + add) >> shift));
++
++        src++;
++        dst += 4;
++    }
++}
++
++ 
++    
++static void partialButterflyInverse16_neon(const int16_t* src, int16_t* orig_dst, int shift, int line)
++{
++#define FMAK(x,l) s[l] = vmlal_lane_s16(s[l],*(int16x4_t*)&src[(x)*line],*(int16x4_t *)&g_t16[x][k],l)
++#define MULK(x,l) vmull_lane_s16(*(int16x4_t*)&src[x*line],*(int16x4_t *)&g_t16[x][k],l);
++#define ODD3_15(k) FMAK(3,k);FMAK(5,k);FMAK(7,k);FMAK(9,k);FMAK(11,k);FMAK(13,k);FMAK(15,k);
++#define EVEN6_14_STEP4(k) FMAK(6,k);FMAK(10,k);FMAK(14,k);
++
++
++    int j, k;
++    int32x4_t E[8], O[8];
++    int32x4_t EE[4], EO[4];
++    int32x4_t EEE[2], EEO[2];
++    const int add = 1 << (shift - 1);
++
++    
++#pragma unroll(4)
++    for (j = 0; j < line; j+=4)
++    {
++        /* Utilizing symmetry properties to the maximum to minimize the number of multiplications */
++        
++#pragma unroll(2)
++        for (k=0;k<2;k++) {
++            int32x4_t s;
++            s = vmull_s16(vdup_n_s16(g_t16[4][k]),*(int16x4_t*)&src[4*line]);;
++            EEO[k] = vmlal_s16(s,vdup_n_s16(g_t16[12][k]),*(int16x4_t*)&src[(12)*line]);
++            s = vmull_s16(vdup_n_s16(g_t16[0][k]),*(int16x4_t*)&src[0*line]);;
++            EEE[k] = vmlal_s16(s,vdup_n_s16(g_t16[8][k]),*(int16x4_t*)&src[(8)*line]);
++        }
++        
++        /* Combining even and odd terms at each hierarchy levels to calculate the final spatial domain vector */
++        EE[0] = vaddq_s32(EEE[0] , EEO[0]);
++        EE[2] = vsubq_s32(EEE[1] , EEO[1]);
++        EE[1] = vaddq_s32(EEE[1] , EEO[1]);
++        EE[3] = vsubq_s32(EEE[0] , EEO[0]);
++
++
++#pragma unroll(1)
++        for (k = 0; k < 4; k+=4)
++        {
++            int32x4_t s[4];
++            s[0] = MULK(2,0);
++            s[1] = MULK(2,1);
++            s[2] = MULK(2,2);
++            s[3] = MULK(2,3);
++            
++            EVEN6_14_STEP4(0);
++            EVEN6_14_STEP4(1);
++            EVEN6_14_STEP4(2);
++            EVEN6_14_STEP4(3);
++            
++            EO[k] = s[0];
++            EO[k+1] = s[1];
++            EO[k+2] = s[2];
++            EO[k+3] = s[3];
++         }
++        
++
++        
++        static const int32x4_t min = vdupq_n_s32(-32768);
++        static const int32x4_t max = vdupq_n_s32(32767);
++        const int32x4_t minus_shift = vdupq_n_s32(-shift);
++
++#pragma unroll(4)
++        for (k = 0; k < 4; k++)
++        {
++            E[k] = vaddq_s32(EE[k] , EO[k]);
++            E[k + 4] = vsubq_s32(EE[3 - k] , EO[3 - k]);
++        }
++        
++#pragma unroll(2)
++        for (k = 0; k < 8; k+=4)
++        {
++            int32x4_t s[4];
++            s[0] = MULK(1,0);
++            s[1] = MULK(1,1);
++            s[2] = MULK(1,2);
++            s[3] = MULK(1,3);
++            ODD3_15(0);
++            ODD3_15(1);
++            ODD3_15(2);
++            ODD3_15(3);
++            O[k] = s[0];
++            O[k+1] = s[1];
++            O[k+2] = s[2];
++            O[k+3] = s[3];
++            int32x4_t t;
++            int16x4_t x0,x1,x2,x3;
++            
++            E[k] = vaddq_s32(vdupq_n_s32(add),E[k]);
++            t = vaddq_s32(E[k],O[k]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x0 = vmovn_s32(t);
++
++            E[k+1] = vaddq_s32(vdupq_n_s32(add),E[k+1]);
++            t = vaddq_s32(E[k+1],O[k+1]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x1 = vmovn_s32(t);
++
++            E[k+2] = vaddq_s32(vdupq_n_s32(add),E[k+2]);
++            t = vaddq_s32(E[k+2],O[k+2]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x2 = vmovn_s32(t);
++
++            E[k+3] = vaddq_s32(vdupq_n_s32(add),E[k+3]);
++            t = vaddq_s32(E[k+3],O[k+3]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x3 = vmovn_s32(t);
++            
++            transpose_4x4x16(x0,x1,x2,x3);
++            *(int16x4_t*)&orig_dst[0*16+k] = x0;
++            *(int16x4_t*)&orig_dst[1*16+k] = x1;
++            *(int16x4_t*)&orig_dst[2*16+k] = x2;
++            *(int16x4_t*)&orig_dst[3*16+k] = x3;
++        }
++
++
++#pragma unroll(2)
++        for (k = 0; k < 8; k+=4)
++        {
++            int32x4_t t;
++            int16x4_t x0,x1,x2,x3;
++            
++            t = vsubq_s32(E[7-k],O[7-k]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x0 = vmovn_s32(t);
++            
++            t = vsubq_s32(E[6-k],O[6-k]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x1 = vmovn_s32(t);
++            
++            t = vsubq_s32(E[5-k],O[5-k]);
++ 
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x2 = vmovn_s32(t);
++            
++            t = vsubq_s32(E[4-k],O[4-k]);
++            t = vshlq_s32(t,minus_shift);
++            t = vmaxq_s32(t,min);
++            t = vminq_s32(t,max);
++            x3 = vmovn_s32(t);
++            
++            transpose_4x4x16(x0,x1,x2,x3);
++            *(int16x4_t*)&orig_dst[0*16+k+8] = x0;
++            *(int16x4_t*)&orig_dst[1*16+k+8] = x1;
++            *(int16x4_t*)&orig_dst[2*16+k+8] = x2;
++            *(int16x4_t*)&orig_dst[3*16+k+8] = x3;
++        }
++        orig_dst += 4*16;
++        src+=4;
++    }
++    
++#undef MUL
++#undef FMA
++#undef FMAK
++#undef MULK
++#undef ODD3_15
++#undef EVEN6_14_STEP4
++
++    
++}
++
++
++
++static void partialButterflyInverse32_neon(const int16_t* src, int16_t* orig_dst, int shift, int line)
++{
++#define MUL(x) vmull_s16(vdup_n_s16(g_t32[x][k]),*(int16x4_t*)&src[x*line]);
++#define FMA(x) s = vmlal_s16(s,vdup_n_s16(g_t32[x][k]),*(int16x4_t*)&src[(x)*line])
++#define FMAK(x,l) s[l] = vmlal_lane_s16(s[l],*(int16x4_t*)&src[(x)*line],*(int16x4_t *)&g_t32[x][k],l)
++#define MULK(x,l) vmull_lane_s16(*(int16x4_t*)&src[x*line],*(int16x4_t *)&g_t32[x][k],l);
++#define ODD31(k) FMAK(3,k);FMAK(5,k);FMAK(7,k);FMAK(9,k);FMAK(11,k);FMAK(13,k);FMAK(15,k);FMAK(17,k);FMAK(19,k);FMAK(21,k);FMAK(23,k);FMAK(25,k);FMAK(27,k);FMAK(29,k);FMAK(31,k);
++
++#define ODD15(k) FMAK(6,k);FMAK(10,k);FMAK(14,k);FMAK(18,k);FMAK(22,k);FMAK(26,k);FMAK(30,k);
++#define ODD7(k) FMAK(12,k);FMAK(20,k);FMAK(28,k);
++
++
++    int j, k;
++    int32x4_t E[16], O[16];
++    int32x4_t EE[8], EO[8];
++    int32x4_t EEE[4], EEO[4];
++    int32x4_t EEEE[2], EEEO[2];
++    int16x4_t dst[32];
++    int add = 1 << (shift - 1);
++    
++#pragma unroll (8)
++    for (j = 0; j < line; j+=4)
++    {
++#pragma unroll (4)
++        for (k = 0; k < 16; k+=4)
++        {
++            int32x4_t s[4];
++            s[0] = MULK(1,0);
++            s[1] = MULK(1,1);
++            s[2] = MULK(1,2);
++            s[3] = MULK(1,3);
++            ODD31(0);
++            ODD31(1);
++            ODD31(2);
++            ODD31(3);
++            O[k] = s[0];
++            O[k+1] = s[1];
++            O[k+2] = s[2];
++            O[k+3] = s[3];
++            
++            
++        }
++        
++        
++#pragma unroll (2)
++        for (k = 0; k < 8; k+=4)
++        {
++            int32x4_t s[4];
++            s[0] = MULK(2,0);
++            s[1] = MULK(2,1);
++            s[2] = MULK(2,2);
++            s[3] = MULK(2,3);
++            
++            ODD15(0);
++            ODD15(1);
++            ODD15(2);
++            ODD15(3);
++            
++            EO[k] = s[0];
++            EO[k+1] = s[1];
++            EO[k+2] = s[2];
++            EO[k+3] = s[3];
++        }
++        
++        
++        for (k = 0; k < 4; k+=4)
++        {
++            int32x4_t s[4];
++            s[0] = MULK(4,0);
++            s[1] = MULK(4,1);
++            s[2] = MULK(4,2);
++            s[3] = MULK(4,3);
++            
++            ODD7(0);
++            ODD7(1);
++            ODD7(2);
++            ODD7(3);
++            
++            EEO[k] = s[0];
++            EEO[k+1] = s[1];
++            EEO[k+2] = s[2];
++            EEO[k+3] = s[3];
++        }
++        
++#pragma unroll (2)
++        for (k=0;k<2;k++) {
++            int32x4_t s;
++            s = MUL(8);
++            EEEO[k] = FMA(24);
++            s = MUL(0);
++            EEEE[k] = FMA(16);
++        }
++        /* Combining even and odd terms at each hierarchy levels to calculate the final spatial domain vector */
++        EEE[0] = vaddq_s32(EEEE[0],EEEO[0]);
++        EEE[3] = vsubq_s32(EEEE[0],EEEO[0]);
++        EEE[1] = vaddq_s32(EEEE[1],EEEO[1]);
++        EEE[2] = vsubq_s32(EEEE[1],EEEO[1]);
++        
++#pragma unroll (4)
++        for (k = 0; k < 4; k++)
++        {
++            EE[k] = vaddq_s32(EEE[k],EEO[k]);
++            EE[k + 4] = vsubq_s32((EEE[3 - k]), (EEO[3 - k]));
++        }
++        
++#pragma unroll (8)
++        for (k = 0; k < 8; k++)
++        {
++            E[k] = vaddq_s32(EE[k],EO[k]);
++            E[k + 8] = vsubq_s32((EE[7 - k]),(EO[7 - k]));
++        }
++        
++        static const int32x4_t min = vdupq_n_s32(-32768);
++        static const int32x4_t max = vdupq_n_s32(32767);
++        
++        
++        
++#pragma unroll (16)
++        for (k = 0; k < 16; k++)
++        {
++            int32x4_t adde = vaddq_s32(vdupq_n_s32(add),E[k]);
++            int32x4_t s = vaddq_s32(adde,O[k]);
++            s = vshlq_s32(s,vdupq_n_s32(-shift));
++            s = vmaxq_s32(s,min);
++            s = vminq_s32(s,max);
++            
++            
++            
++            dst[k] = vmovn_s32(s);
++            adde = vaddq_s32(vdupq_n_s32(add),(E[15-k]));
++            s  =vsubq_s32(adde,(O[15-k]));
++            s = vshlq_s32(s,vdupq_n_s32(-shift));
++            s = vmaxq_s32(s,min);
++            s = vminq_s32(s,max);
++            
++            dst[k+16] = vmovn_s32(s);
++        }
++        
++
++#pragma unroll (8)
++        for (k = 0; k < 32; k+=4)
++        {
++            int16x4_t x0 = dst[k+0];
++            int16x4_t x1 = dst[k+1];
++            int16x4_t x2 = dst[k+2];
++            int16x4_t x3 = dst[k+3];
++            transpose_4x4x16(x0,x1,x2,x3);
++            *(int16x4_t*)&orig_dst[0*32+k] = x0;
++            *(int16x4_t*)&orig_dst[1*32+k] = x1;
++            *(int16x4_t*)&orig_dst[2*32+k] = x2;
++            *(int16x4_t*)&orig_dst[3*32+k] = x3;
++        }
++        orig_dst += 4*32;
++        src += 4;
++    }
++#undef MUL
++#undef FMA
++#undef FMAK
++#undef MULK
++#undef ODD31
++#undef ODD15
++#undef ODD7
++
++}
++
++
++static void dct8_neon(const int16_t* src, int16_t* dst, intptr_t srcStride)
++{
++    const int shift_1st = 2 + X265_DEPTH - 8;
++    const int shift_2nd = 9;
++
++    ALIGN_VAR_32(int16_t, coef[8 * 8]);
++    ALIGN_VAR_32(int16_t, block[8 * 8]);
++
++    for (int i = 0; i < 8; i++)
++    {
++        memcpy(&block[i * 8], &src[i * srcStride], 8 * sizeof(int16_t));
++    }
++
++    partialButterfly8(block, coef, shift_1st, 8);
++    partialButterfly8(coef, dst, shift_2nd, 8);
++}
++
++static void dct16_neon(const int16_t* src, int16_t* dst, intptr_t srcStride)
++{
++    const int shift_1st = 3 + X265_DEPTH - 8;
++    const int shift_2nd = 10;
++
++    ALIGN_VAR_32(int16_t, coef[16 * 16]);
++    ALIGN_VAR_32(int16_t, block[16 * 16]);
++
++    for (int i = 0; i < 16; i++)
++    {
++        memcpy(&block[i * 16], &src[i * srcStride], 16 * sizeof(int16_t));
++    }
++
++    partialButterfly16(block, coef, shift_1st, 16);
++    partialButterfly16(coef, dst, shift_2nd, 16);
++}
++
++static void dct32_neon(const int16_t* src, int16_t* dst, intptr_t srcStride)
++{
++    const int shift_1st = 4 + X265_DEPTH - 8;
++    const int shift_2nd = 11;
++
++    ALIGN_VAR_32(int16_t, coef[32 * 32]);
++    ALIGN_VAR_32(int16_t, block[32 * 32]);
++
++    for (int i = 0; i < 32; i++)
++    {
++        memcpy(&block[i * 32], &src[i * srcStride], 32 * sizeof(int16_t));
++    }
++
++    partialButterfly32(block, coef, shift_1st, 32);
++    partialButterfly32(coef, dst, shift_2nd, 32);
++}
++
++static void idct4_neon(const int16_t* src, int16_t* dst, intptr_t dstStride)
++{
++    const int shift_1st = 7;
++    const int shift_2nd = 12 - (X265_DEPTH - 8);
++
++    ALIGN_VAR_32(int16_t, coef[4 * 4]);
++    ALIGN_VAR_32(int16_t, block[4 * 4]);
++
++    partialButterflyInverse4(src, coef, shift_1st, 4); // Forward DST BY FAST ALGORITHM, block input, coef output
++    partialButterflyInverse4(coef, block, shift_2nd, 4); // Forward DST BY FAST ALGORITHM, coef input, coeff output
++
++    for (int i = 0; i < 4; i++)
++    {
++        memcpy(&dst[i * dstStride], &block[i * 4], 4 * sizeof(int16_t));
++    }
++}
++
++static void idct16_neon(const int16_t* src, int16_t* dst, intptr_t dstStride)
++{
++    const int shift_1st = 7;
++    const int shift_2nd = 12 - (X265_DEPTH - 8);
++
++    ALIGN_VAR_32(int16_t, coef[16 * 16]);
++    ALIGN_VAR_32(int16_t, block[16 * 16]);
++
++    partialButterflyInverse16_neon(src, coef, shift_1st, 16);
++    partialButterflyInverse16_neon(coef, block, shift_2nd, 16);
++
++    for (int i = 0; i < 16; i++)
++    {
++        memcpy(&dst[i * dstStride], &block[i * 16], 16 * sizeof(int16_t));
++    }
++}
++
++static void idct32_neon(const int16_t* src, int16_t* dst, intptr_t dstStride)
++{
++    const int shift_1st = 7;
++    const int shift_2nd = 12 - (X265_DEPTH - 8);
++
++    ALIGN_VAR_32(int16_t, coef[32 * 32]);
++    ALIGN_VAR_32(int16_t, block[32 * 32]);
++
++    partialButterflyInverse32_neon(src, coef, shift_1st, 32);
++    partialButterflyInverse32_neon(coef, block, shift_2nd, 32);
++
++    for (int i = 0; i < 32; i++)
++    {
++        memcpy(&dst[i * dstStride], &block[i * 32], 32 * sizeof(int16_t));
++    }
++}
++
++
++
++}
++
++namespace X265_NS {
++// x265 private namespace
++void setupDCTPrimitives_neon(EncoderPrimitives& p) {
++    p.cu[BLOCK_4x4].nonPsyRdoQuant   = nonPsyRdoQuant_neon<2>;
++    p.cu[BLOCK_8x8].nonPsyRdoQuant   = nonPsyRdoQuant_neon<3>;
++    p.cu[BLOCK_16x16].nonPsyRdoQuant = nonPsyRdoQuant_neon<4>;
++    p.cu[BLOCK_32x32].nonPsyRdoQuant = nonPsyRdoQuant_neon<5>;
++    p.cu[BLOCK_4x4].psyRdoQuant = psyRdoQuant_neon<2>;
++    p.cu[BLOCK_8x8].psyRdoQuant = psyRdoQuant_neon<3>;
++    p.cu[BLOCK_16x16].psyRdoQuant = psyRdoQuant_neon<4>;
++    p.cu[BLOCK_32x32].psyRdoQuant = psyRdoQuant_neon<5>;
++    p.cu[BLOCK_8x8].dct   = dct8_neon;
++    p.cu[BLOCK_16x16].dct = dct16_neon;
++    p.cu[BLOCK_32x32].dct = dct32_neon;
++    p.cu[BLOCK_4x4].idct   = idct4_neon;
++    p.cu[BLOCK_16x16].idct = idct16_neon;
++    p.cu[BLOCK_32x32].idct = idct32_neon;
++    p.cu[BLOCK_4x4].count_nonzero = count_nonzero_neon<4>;
++    p.cu[BLOCK_8x8].count_nonzero = count_nonzero_neon<8>;
++    p.cu[BLOCK_16x16].count_nonzero = count_nonzero_neon<16>;
++    p.cu[BLOCK_32x32].count_nonzero = count_nonzero_neon<32>;
++
++    p.cu[BLOCK_4x4].copy_cnt   = copy_count_neon<4>;
++    p.cu[BLOCK_8x8].copy_cnt   = copy_count_neon<8>;
++    p.cu[BLOCK_16x16].copy_cnt = copy_count_neon<16>;
++    p.cu[BLOCK_32x32].copy_cnt = copy_count_neon<32>;
++    p.cu[BLOCK_4x4].psyRdoQuant_1p = nonPsyRdoQuant_neon<2>;
++    p.cu[BLOCK_4x4].psyRdoQuant_2p = psyRdoQuant_neon<2>;
++    p.cu[BLOCK_8x8].psyRdoQuant_1p = nonPsyRdoQuant_neon<3>;
++    p.cu[BLOCK_8x8].psyRdoQuant_2p = psyRdoQuant_neon<3>;
++    p.cu[BLOCK_16x16].psyRdoQuant_1p = nonPsyRdoQuant_neon<4>;
++    p.cu[BLOCK_16x16].psyRdoQuant_2p = psyRdoQuant_neon<4>;
++    p.cu[BLOCK_32x32].psyRdoQuant_1p = nonPsyRdoQuant_neon<5>;
++    p.cu[BLOCK_32x32].psyRdoQuant_2p = psyRdoQuant_neon<5>;
++    
++    p.scanPosLast  =scanPosLast_opt;
++
++}
++};
++
++
++
++#endif
+diff --git a/source/common/arm64/dct-prim.h b/source/common/arm64/dct-prim.h
+new file mode 100644
+index 0000000..598bb33
+--- /dev/null
++++ b/source/common/arm64/dct-prim.h
+@@ -0,0 +1,18 @@
++#ifndef __DCT_PRIM_NEON_H__
++#define __DCT_PRIM_NEON_H__
++
++
++#include "common.h"
++#include "primitives.h"
++#include "contexts.h"   // costCoeffNxN_c
++#include "threading.h"  // CLZ
++
++namespace X265_NS {
++// x265 private namespace
++void setupDCTPrimitives_neon(EncoderPrimitives& p);
++};
++
++
++
++#endif
++
+diff --git a/source/common/arm64/filter-prim.cpp b/source/common/arm64/filter-prim.cpp
+new file mode 100644
+index 0000000..d22489c
+--- /dev/null
++++ b/source/common/arm64/filter-prim.cpp
+@@ -0,0 +1,797 @@
++
++#if HAVE_NEON
++
++#include "filter-prim.h"
++#include <arm_neon.h>
++
++namespace {
++
++using namespace X265_NS;
++
++
++template<int width, int height>
++void filterPixelToShort_neon(const pixel* src, intptr_t srcStride, int16_t* dst, intptr_t dstStride)
++{
++    const int shift = IF_INTERNAL_PREC - X265_DEPTH;
++    int row, col;
++    const int16x8_t off = vdupq_n_s16(IF_INTERNAL_OFFS);
++    for (row = 0; row < height; row++)
++    {
++      
++        for (col = 0; col < width; col+=8)
++        {
++          int16x8_t in;
++          
++#if HIGH_BIT_DEPTH
++          in = *(int16x8_t *)&src[col];
++#else
++          in = vmovl_u8(*(uint8x8_t *)&src[col]);
++#endif
++          
++          int16x8_t tmp = vshlq_n_s16(in,shift);
++          tmp = vsubq_s16(tmp,off);
++          *(int16x8_t *)&dst[col] = tmp;
++          
++        }
++
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++
++template<int N, int width, int height>
++void interp_horiz_pp_neon(const pixel* src, intptr_t srcStride, pixel* dst, intptr_t dstStride, int coeffIdx)
++{
++    const int16_t* coeff = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    int headRoom = IF_FILTER_PREC;
++    int offset =  (1 << (headRoom - 1));
++    uint16_t maxVal = (1 << X265_DEPTH) - 1;
++    int cStride = 1;
++
++    src -= (N / 2 - 1) * cStride;
++    int16x8_t vc;
++    vc = *(int16x8_t *)coeff;
++    int16x4_t low_vc = vget_low_s16(vc);
++    int16x4_t high_vc = vget_high_s16(vc);
++
++    const int32x4_t voffset = vdupq_n_s32(offset);
++    const int32x4_t vhr = vdupq_n_s32(-headRoom);
++    
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=8)
++        {
++            int32x4_t vsum1,vsum2;
++            
++            int16x8_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++#if HIGH_BIT_DEPTH
++                input[i] = *(int16x8_t *)&src[col+i];
++#else
++                input[i] = vmovl_u8(*(uint8x8_t *)&src[col+i]);
++#endif
++            }
++            vsum1 = voffset;
++            vsum2 = voffset;
++            
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[0]),low_vc,0);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[0],low_vc,0);
++            
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[1]),low_vc,1);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[1],low_vc,1);
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[2]),low_vc,2);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[2],low_vc,2);
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[3]),low_vc,3);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[3],low_vc,3);
++
++            if (N == 8)
++            {
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[4]),high_vc,0);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[4],high_vc,0);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[5]),high_vc,1);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[5],high_vc,1);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[6]),high_vc,2);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[6],high_vc,2);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[7]),high_vc,3);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[7],high_vc,3);
++                
++            }
++            
++            vsum1 = vshlq_s32(vsum1, vhr);
++            vsum2 = vshlq_s32(vsum2, vhr);
++            
++            int16x8_t vsum = vuzp1q_s16(vsum1,vsum2);
++            vsum = vminq_s16(vsum,vdupq_n_s16(maxVal));
++            vsum = vmaxq_s16(vsum,vdupq_n_s16(0));
++#if HIGH_BIT_DEPTH
++            *(int16x8_t *)&dst[col] = vsum;
++#else
++            uint8x16_t usum = vuzp1q_u8(vsum,vsum);
++            *(uint8x8_t *)&dst[col] = vget_low_u8(usum);
++#endif
++          
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++#if HIGH_BIT_DEPTH
++
++template<int N, int width, int height>
++void interp_horiz_ps_neon(const uint16_t * src, intptr_t srcStride, int16_t* dst, intptr_t dstStride, int coeffIdx, int isRowExt)
++{
++    const int16_t* coeff = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    const int headRoom = IF_INTERNAL_PREC - X265_DEPTH;
++    const int shift = IF_FILTER_PREC - headRoom;
++    const int offset = (unsigned)-IF_INTERNAL_OFFS << shift;
++
++    int blkheight = height;
++    src -= N / 2 - 1;
++
++    if (isRowExt)
++    {
++        src -= (N / 2 - 1) * srcStride;
++        blkheight += N - 1;
++    }
++    int32x4_t vc0 = vmovl_s16(*(int16x4_t *)coeff);
++    int32x4_t vc1;
++    
++    if (N ==8) {
++        vc1 = vmovl_s16(*(int16x4_t *)(coeff + 4));
++    }
++    
++    const int32x4_t voffset = vdupq_n_s32(offset);
++    const int32x4_t vhr = vdupq_n_s32(-shift);
++    
++    int row, col;
++    for (row = 0; row < blkheight; row++)
++    {
++        for (col = 0; col < width; col+=4)
++        {
++            int32x4_t vsum;
++            
++            int32x4_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_s16(*(int16x4_t *)&src[col+i]);
++            }
++            vsum = voffset;
++            vsum = vmlaq_laneq_s32(vsum,(input[0]),vc0,0);
++            vsum = vmlaq_laneq_s32(vsum,(input[1]),vc0,1);
++            vsum = vmlaq_laneq_s32(vsum,(input[2]),vc0,2);
++            vsum = vmlaq_laneq_s32(vsum,(input[3]),vc0,3);
++
++
++            if (N == 8)
++            {
++                vsum = vmlaq_laneq_s32(vsum,(input[4]),vc1,0);
++                vsum = vmlaq_laneq_s32(vsum,(input[5]),vc1,1);
++                vsum = vmlaq_laneq_s32(vsum,(input[6]),vc1,2);
++                vsum = vmlaq_laneq_s32(vsum,(input[7]),vc1,3);
++                
++            }
++            
++            vsum = vshlq_s32(vsum, vhr);
++            *(int16x4_t *)&dst[col] = vmovn_u32(vsum);
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++  }
++
++
++#else
++
++template<int N, int width, int height>
++void interp_horiz_ps_neon(const uint8_t* src, intptr_t srcStride, int16_t* dst, intptr_t dstStride, int coeffIdx, int isRowExt)
++{
++    const int16_t* coeff = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    const int headRoom = IF_INTERNAL_PREC - X265_DEPTH;
++    const int shift = IF_FILTER_PREC - headRoom;
++    const int offset = (unsigned)-IF_INTERNAL_OFFS << shift;
++
++    int blkheight = height;
++    src -= N / 2 - 1;
++
++    if (isRowExt)
++    {
++        src -= (N / 2 - 1) * srcStride;
++        blkheight += N - 1;
++    }
++    int16x8_t vc;
++    vc = *(int16x8_t *)coeff;
++
++    const int16x8_t voffset = vdupq_n_s16(offset);
++    const int16x8_t vhr = vdupq_n_s16(-shift);
++    
++    int row, col;
++    for (row = 0; row < blkheight; row++)
++    {
++        for (col = 0; col < width; col+=8)
++        {
++            int16x8_t vsum;
++            
++            int16x8_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_u8(*(uint8x8_t *)&src[col+i]);
++            }
++            vsum = voffset;
++            vsum = vmlaq_laneq_s16(vsum,(input[0]),vc,0);
++            vsum = vmlaq_laneq_s16(vsum,(input[1]),vc,1);
++            vsum = vmlaq_laneq_s16(vsum,(input[2]),vc,2);
++            vsum = vmlaq_laneq_s16(vsum,(input[3]),vc,3);
++
++
++            if (N == 8)
++            {
++                vsum = vmlaq_laneq_s16(vsum,(input[4]),vc,4);
++                vsum = vmlaq_laneq_s16(vsum,(input[5]),vc,5);
++                vsum = vmlaq_laneq_s16(vsum,(input[6]),vc,6);
++                vsum = vmlaq_laneq_s16(vsum,(input[7]),vc,7);
++                
++            }
++            
++            vsum = vshlq_s16(vsum, vhr);
++            *(int16x8_t *)&dst[col] = vsum;
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++  }
++
++#endif
++
++
++template<int N, int width, int height>
++void interp_vert_ss_neon(const int16_t* src, intptr_t srcStride, int16_t* dst, intptr_t dstStride, int coeffIdx)
++{
++    const int16_t* c = (N == 8 ? g_lumaFilter[coeffIdx] : g_chromaFilter[coeffIdx]);
++    int shift = IF_FILTER_PREC;
++    src -= (N / 2 - 1) * srcStride;
++      int16x8_t vc;
++      vc = *(int16x8_t *)c;
++      int16x4_t low_vc = vget_low_s16(vc);
++      int16x4_t high_vc = vget_high_s16(vc);
++
++      const int32x4_t vhr = vdupq_n_s32(-shift);
++      
++      int row, col;
++      for (row = 0; row < height; row++)
++      {
++          for (col = 0; col < width; col+=8)
++          {
++              int32x4_t vsum1,vsum2;
++              
++              int16x8_t input[N];
++              
++              for (int i=0;i<N;i++)
++              {
++                  input[i] = *(int16x8_t *)&src[col+i*srcStride];
++              }
++              
++              vsum1 = vmull_lane_s16(vget_low_s16(input[0]),low_vc,0);
++              vsum2 = vmull_high_lane_s16(input[0],low_vc,0);
++              
++              vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[1]),low_vc,1);
++              vsum2 = vmlal_high_lane_s16(vsum2,input[1],low_vc,1);
++
++              vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[2]),low_vc,2);
++              vsum2 = vmlal_high_lane_s16(vsum2,input[2],low_vc,2);
++
++              vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[3]),low_vc,3);
++              vsum2 = vmlal_high_lane_s16(vsum2,input[3],low_vc,3);
++
++              if (N == 8)
++              {
++                  vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[4]),high_vc,0);
++                  vsum2 = vmlal_high_lane_s16(vsum2,input[4],high_vc,0);
++                  vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[5]),high_vc,1);
++                  vsum2 = vmlal_high_lane_s16(vsum2,input[5],high_vc,1);
++                  vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[6]),high_vc,2);
++                  vsum2 = vmlal_high_lane_s16(vsum2,input[6],high_vc,2);
++                  vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[7]),high_vc,3);
++                  vsum2 = vmlal_high_lane_s16(vsum2,input[7],high_vc,3);
++                  
++              }
++              
++              vsum1 = vshlq_s32(vsum1, vhr);
++              vsum2 = vshlq_s32(vsum2, vhr);
++              
++              int16x8_t vsum = vuzp1q_s16(vsum1,vsum2);
++              *(int16x8_t *)&dst[col] = vsum;
++          }
++          
++          src += srcStride;
++          dst += dstStride;
++      }
++
++}
++
++
++#if HIGH_BIT_DEPTH
++
++template<int N, int width, int height>
++void interp_vert_pp_neon(const uint16_t* src, intptr_t srcStride, uint16_t* dst, intptr_t dstStride, int coeffIdx)
++{
++    
++    const int16_t* c = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    int shift = IF_FILTER_PREC;
++    int offset = 1 << (shift - 1);
++    const uint16_t maxVal = (1 << X265_DEPTH) - 1;
++
++    src -= (N / 2 - 1) * srcStride;
++    int16x8_t vc;
++    vc = *(int16x8_t *)c;
++    int32x4_t low_vc = vmovl_s16(vget_low_s16(vc));
++    int32x4_t high_vc = vmovl_s16(vget_high_s16(vc));
++
++    const int32x4_t voffset = vdupq_n_s32(offset);
++    const int32x4_t vhr = vdupq_n_s32(-shift);
++    
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=4)
++        {
++            int32x4_t vsum;
++            
++            int32x4_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_u16(*(uint16x4_t *)&src[col+i*srcStride]);
++            }
++            vsum = voffset;
++            
++            vsum = vmlaq_laneq_s32(vsum,(input[0]),low_vc,0);
++            vsum = vmlaq_laneq_s32(vsum,(input[1]),low_vc,1);
++            vsum = vmlaq_laneq_s32(vsum,(input[2]),low_vc,2);
++            vsum = vmlaq_laneq_s32(vsum,(input[3]),low_vc,3);
++
++            if (N == 8)
++            {
++              vsum = vmlaq_laneq_s32(vsum,(input[4]),high_vc,0);
++              vsum = vmlaq_laneq_s32(vsum,(input[5]),high_vc,1);
++              vsum = vmlaq_laneq_s32(vsum,(input[6]),high_vc,2);
++              vsum = vmlaq_laneq_s32(vsum,(input[7]),high_vc,3);
++            }
++            
++            vsum = vshlq_s32(vsum, vhr);
++            vsum = vminq_s32(vsum,vdupq_n_s32(maxVal));
++            vsum = vmaxq_s32(vsum,vdupq_n_s32(0));
++            *(uint16x4_t *)&dst[col] = vmovn_u32(vsum);
++        }
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++
++
++
++#else
++
++template<int N, int width, int height>
++void interp_vert_pp_neon(const uint8_t* src, intptr_t srcStride, uint8_t* dst, intptr_t dstStride, int coeffIdx)
++{
++    
++    const int16_t* c = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    int shift = IF_FILTER_PREC;
++    int offset = 1 << (shift - 1);
++    const uint16_t maxVal = (1 << X265_DEPTH) - 1;
++
++    src -= (N / 2 - 1) * srcStride;
++    int16x8_t vc;
++    vc = *(int16x8_t *)c;
++
++    const int16x8_t voffset = vdupq_n_s16(offset);
++    const int16x8_t vhr = vdupq_n_s16(-shift);
++    
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=8)
++        {
++            int16x8_t vsum;
++            
++            int16x8_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_u8(*(uint8x8_t *)&src[col+i*srcStride]);
++            }
++            vsum = voffset;
++            
++            vsum = vmlaq_laneq_s16(vsum,(input[0]),vc,0);
++            vsum = vmlaq_laneq_s16(vsum,(input[1]),vc,1);
++            vsum = vmlaq_laneq_s16(vsum,(input[2]),vc,2);
++            vsum = vmlaq_laneq_s16(vsum,(input[3]),vc,3);
++
++            if (N == 8)
++            {
++              vsum = vmlaq_laneq_s16(vsum,(input[4]),vc,4);
++              vsum = vmlaq_laneq_s16(vsum,(input[5]),vc,5);
++              vsum = vmlaq_laneq_s16(vsum,(input[6]),vc,6);
++              vsum = vmlaq_laneq_s16(vsum,(input[7]),vc,7);
++
++            }
++            
++            vsum = vshlq_s16(vsum, vhr);
++            
++            vsum = vminq_s16(vsum,vdupq_n_s16(maxVal));
++            vsum = vmaxq_s16(vsum,vdupq_n_s16(0));
++            uint8x16_t usum = vuzp1q_u8(vsum,vsum);
++            *(uint8x8_t *)&dst[col] = vget_low_u8(usum);
++          
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++
++#endif
++
++
++#if HIGH_BIT_DEPTH
++
++template<int N, int width, int height>
++void interp_vert_ps_neon(const uint16_t* src, intptr_t srcStride, int16_t* dst, intptr_t dstStride, int coeffIdx)
++{
++    const int16_t* c = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    int headRoom = IF_INTERNAL_PREC - X265_DEPTH;
++    int shift = IF_FILTER_PREC - headRoom;
++    int offset = (unsigned)-IF_INTERNAL_OFFS << shift;
++    src -= (N / 2 - 1) * srcStride;
++
++    int16x8_t vc;
++    vc = *(int16x8_t *)c;
++    int32x4_t low_vc = vmovl_s16(vget_low_s16(vc));
++    int32x4_t high_vc = vmovl_s16(vget_high_s16(vc));
++
++    const int32x4_t voffset = vdupq_n_s32(offset);
++    const int32x4_t vhr = vdupq_n_s32(-shift);
++    
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=4)
++        {
++            int16x8_t vsum;
++            
++            int16x8_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_u16(*(uint16x4_t *)&src[col+i*srcStride]);
++            }
++            vsum = voffset;
++            
++            vsum = vmlaq_laneq_s32(vsum,(input[0]),low_vc,0);
++            vsum = vmlaq_laneq_s32(vsum,(input[1]),low_vc,1);
++            vsum = vmlaq_laneq_s32(vsum,(input[2]),low_vc,2);
++            vsum = vmlaq_laneq_s32(vsum,(input[3]),low_vc,3);
++
++            if (N == 8)
++            {
++                int16x8_t  vsum1 = vmulq_laneq_s32((input[4]),high_vc,0);
++                vsum1 = vmlaq_laneq_s32(vsum1,(input[5]),high_vc,1);
++                vsum1 = vmlaq_laneq_s32(vsum1,(input[6]),high_vc,2);
++                vsum1 = vmlaq_laneq_s32(vsum1,(input[7]),high_vc,3);
++                vsum = vaddq_s32(vsum,vsum1);
++            }
++            
++            vsum = vshlq_s32(vsum, vhr);
++            
++            *(uint16x4_t *)&dst[col] = vmovn_s32(vsum);
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++#else
++
++template<int N, int width, int height>
++void interp_vert_ps_neon(const uint8_t* src, intptr_t srcStride, int16_t* dst, intptr_t dstStride, int coeffIdx)
++{
++    const int16_t* c = (N == 4) ? g_chromaFilter[coeffIdx] : g_lumaFilter[coeffIdx];
++    int headRoom = IF_INTERNAL_PREC - X265_DEPTH;
++    int shift = IF_FILTER_PREC - headRoom;
++    int offset = (unsigned)-IF_INTERNAL_OFFS << shift;
++    src -= (N / 2 - 1) * srcStride;
++
++    int16x8_t vc;
++    vc = *(int16x8_t *)c;
++
++    const int16x8_t voffset = vdupq_n_s16(offset);
++    const int16x8_t vhr = vdupq_n_s16(-shift);
++    
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=8)
++        {
++            int16x8_t vsum;
++            
++            int16x8_t input[N];
++            
++            for (int i=0;i<N;i++)
++            {
++                input[i] = vmovl_u8(*(uint8x8_t *)&src[col+i*srcStride]);
++            }
++            vsum = voffset;
++            
++            vsum = vmlaq_laneq_s16(vsum,(input[0]),vc,0);
++            vsum = vmlaq_laneq_s16(vsum,(input[1]),vc,1);
++            vsum = vmlaq_laneq_s16(vsum,(input[2]),vc,2);
++            vsum = vmlaq_laneq_s16(vsum,(input[3]),vc,3);
++
++            if (N == 8)
++            {
++                int16x8_t  vsum1 = vmulq_laneq_s16((input[4]),vc,4);
++                vsum1 = vmlaq_laneq_s16(vsum1,(input[5]),vc,5);
++                vsum1 = vmlaq_laneq_s16(vsum1,(input[6]),vc,6);
++                vsum1 = vmlaq_laneq_s16(vsum1,(input[7]),vc,7);
++                vsum = vaddq_s16(vsum,vsum1);
++            }
++            
++            vsum = vshlq_s32(vsum, vhr);
++            *(int16x8_t *)&dst[col] = vsum;
++        }
++        
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++#endif
++
++
++
++template<int N, int width, int height>
++void interp_vert_sp_neon(const int16_t* src, intptr_t srcStride, pixel* dst, intptr_t dstStride, int coeffIdx)
++{
++    int headRoom = IF_INTERNAL_PREC - X265_DEPTH;
++    int shift = IF_FILTER_PREC + headRoom;
++    int offset = (1 << (shift - 1)) + (IF_INTERNAL_OFFS << IF_FILTER_PREC);
++    uint16_t maxVal = (1 << X265_DEPTH) - 1;
++    const int16_t* coeff = (N == 8 ? g_lumaFilter[coeffIdx] : g_chromaFilter[coeffIdx]);
++
++    src -= (N / 2 - 1) * srcStride;
++
++    int16x8_t vc;
++    vc = *(int16x8_t *)coeff;
++    int16x4_t low_vc = vget_low_s16(vc);
++    int16x4_t high_vc = vget_high_s16(vc);
++
++    const int32x4_t voffset = vdupq_n_s32(offset);
++    const int32x4_t vhr = vdupq_n_s32(-shift);
++
++    int row, col;
++    for (row = 0; row < height; row++)
++    {
++        for (col = 0; col < width; col+=8)
++        {
++            int32x4_t vsum1,vsum2;
++
++            int16x8_t input[N];
++
++            for (int i=0;i<N;i++)
++            {
++                input[i] = *(int16x8_t *)&src[col+i*srcStride];
++            }
++            vsum1 = voffset;
++            vsum2 = voffset;
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[0]),low_vc,0);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[0],low_vc,0);
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[1]),low_vc,1);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[1],low_vc,1);
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[2]),low_vc,2);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[2],low_vc,2);
++
++            vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[3]),low_vc,3);
++            vsum2 = vmlal_high_lane_s16(vsum2,input[3],low_vc,3);
++
++            if (N == 8)
++            {
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[4]),high_vc,0);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[4],high_vc,0);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[5]),high_vc,1);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[5],high_vc,1);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[6]),high_vc,2);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[6],high_vc,2);
++                vsum1 = vmlal_lane_s16(vsum1,vget_low_s16(input[7]),high_vc,3);
++                vsum2 = vmlal_high_lane_s16(vsum2,input[7],high_vc,3);
++            }
++
++            vsum1 = vshlq_s32(vsum1, vhr);
++            vsum2 = vshlq_s32(vsum2, vhr);
++
++            int16x8_t vsum = vuzp1q_s16(vsum1,vsum2);
++            vsum = vminq_s16(vsum,vdupq_n_s16(maxVal));
++            vsum = vmaxq_s16(vsum,vdupq_n_s16(0));
++#if HIGH_BIT_DEPTH
++            *(int16x8_t *)&dst[col] = vsum;
++#else
++            uint8x16_t usum = vuzp1q_u8(vsum,vsum);
++            *(uint8x8_t *)&dst[col] = vget_low_u8(usum);
++#endif
++
++        }
++          
++        src += srcStride;
++        dst += dstStride;
++    }
++}
++
++
++
++
++
++
++template<int N, int width, int height>
++void interp_hv_pp_neon(const pixel* src, intptr_t srcStride, pixel* dst, intptr_t dstStride, int idxX, int idxY)
++{
++    ALIGN_VAR_32(int16_t, immed[width * (height + N - 1)]);
++
++    interp_horiz_ps_neon<N, width, height>(src, srcStride, immed, width, idxX, 1);
++    interp_vert_sp_neon<N,width,height>(immed + (N / 2 - 1) * width, width, dst, dstStride, idxY);
++}
++
++
++
++}
++
++
++
++
++namespace X265_NS {
++   #define CHROMA_420(W, H) \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_hpp = interp_horiz_pp_neon<4, W, H>; \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_hps = interp_horiz_ps_neon<4, W, H>; \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_vpp = interp_vert_pp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_vps = interp_vert_ps_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_vsp = interp_vert_sp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].filter_vss = interp_vert_ss_neon<4, W, H>; \
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].p2s[NONALIGNED] = filterPixelToShort_neon<W, H>;\
++       p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].p2s[ALIGNED] = filterPixelToShort_neon<W, H>;
++
++   #define CHROMA_422(W, H) \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_hpp = interp_horiz_pp_neon<4, W, H>; \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_hps = interp_horiz_ps_neon<4, W, H>; \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_vpp = interp_vert_pp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_vps = interp_vert_ps_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_vsp = interp_vert_sp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].filter_vss = interp_vert_ss_neon<4, W, H>; \
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].p2s[NONALIGNED] = filterPixelToShort_neon<W, H>;\
++       p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].p2s[ALIGNED] = filterPixelToShort_neon<W, H>;
++
++   #define CHROMA_444(W, H) \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_hpp = interp_horiz_pp_neon<4, W, H>; \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_hps = interp_horiz_ps_neon<4, W, H>; \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_vpp = interp_vert_pp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_vps = interp_vert_ps_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_vsp = interp_vert_sp_neon<4, W, H>;  \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].filter_vss = interp_vert_ss_neon<4, W, H>; \
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].p2s[NONALIGNED] = filterPixelToShort_neon<W, H>;\
++       p.chroma[X265_CSP_I444].pu[LUMA_ ## W ## x ## H].p2s[ALIGNED] = filterPixelToShort_neon<W, H>;
++
++   #define LUMA(W, H) \
++       p.pu[LUMA_ ## W ## x ## H].luma_hpp     = interp_horiz_pp_neon<8, W, H>; \
++       p.pu[LUMA_ ## W ## x ## H].luma_hps     = interp_horiz_ps_neon<8, W, H>; \
++       p.pu[LUMA_ ## W ## x ## H].luma_vpp     = interp_vert_pp_neon<8, W, H>;  \
++       p.pu[LUMA_ ## W ## x ## H].luma_vps     = interp_vert_ps_neon<8, W, H>;  \
++       p.pu[LUMA_ ## W ## x ## H].luma_vsp     = interp_vert_sp_neon<8, W, H>;  \
++       p.pu[LUMA_ ## W ## x ## H].luma_vss     = interp_vert_ss_neon<8, W, H>;  \
++       p.pu[LUMA_ ## W ## x ## H].luma_hvpp    = interp_hv_pp_neon<8, W, H>; \
++       p.pu[LUMA_ ## W ## x ## H].convert_p2s[NONALIGNED] = filterPixelToShort_neon<W, H>;\
++       p.pu[LUMA_ ## W ## x ## H].convert_p2s[ALIGNED] = filterPixelToShort_neon<W, H>;
++
++  
++void setupFilterPrimitives_neon(EncoderPrimitives &p)
++{
++  
++  // All neon functions assume width of multiple of 8, (2,4,12 variants are not optimized)
++  
++  LUMA(8, 8);
++  LUMA(8, 4);
++  LUMA(16, 16);
++  CHROMA_420(8,  8);
++  LUMA(16,  8);
++  CHROMA_420(8,  4);
++  LUMA(8, 16);
++  LUMA(16, 12);
++  CHROMA_420(8,  6);
++  LUMA(16,  4);
++  CHROMA_420(8,  2);
++  LUMA(32, 32);
++  CHROMA_420(16, 16);
++  LUMA(32, 16);
++  CHROMA_420(16, 8);
++  LUMA(16, 32);
++  CHROMA_420(8,  16);
++  LUMA(32, 24);
++  CHROMA_420(16, 12);
++  LUMA(24, 32);
++  LUMA(32,  8);
++  CHROMA_420(16, 4);
++  LUMA(8, 32);
++  LUMA(64, 64);
++  CHROMA_420(32, 32);
++  LUMA(64, 32);
++  CHROMA_420(32, 16);
++  LUMA(32, 64);
++  CHROMA_420(16, 32);
++  LUMA(64, 48);
++  CHROMA_420(32, 24);
++  LUMA(48, 64);
++  CHROMA_420(24, 32);
++  LUMA(64, 16);
++  CHROMA_420(32, 8);
++  LUMA(16, 64);
++  CHROMA_420(8,  32);
++  CHROMA_422(8,  16);
++  CHROMA_422(8,  8);
++  CHROMA_422(8,  12);
++  CHROMA_422(8,  4);
++  CHROMA_422(16, 32);
++  CHROMA_422(16, 16);
++  CHROMA_422(8,  32);
++  CHROMA_422(16, 24);
++  CHROMA_422(16, 8);
++  CHROMA_422(32, 64);
++  CHROMA_422(32, 32);
++  CHROMA_422(16, 64);
++  CHROMA_422(32, 48);
++  CHROMA_422(24, 64);
++  CHROMA_422(32, 16);
++  CHROMA_422(8,  64);
++  CHROMA_444(8,  8);
++  CHROMA_444(8,  4);
++  CHROMA_444(16, 16);
++  CHROMA_444(16, 8);
++  CHROMA_444(8,  16);
++  CHROMA_444(16, 12);
++  CHROMA_444(16, 4);
++  CHROMA_444(32, 32);
++  CHROMA_444(32, 16);
++  CHROMA_444(16, 32);
++  CHROMA_444(32, 24);
++  CHROMA_444(24, 32);
++  CHROMA_444(32, 8);
++  CHROMA_444(8,  32);
++  CHROMA_444(64, 64);
++  CHROMA_444(64, 32);
++  CHROMA_444(32, 64);
++  CHROMA_444(64, 48);
++  CHROMA_444(48, 64);
++  CHROMA_444(64, 16);
++  CHROMA_444(16, 64);
++
++}
++
++};
++
++
++#endif
++
++
+diff --git a/source/common/arm64/filter-prim.h b/source/common/arm64/filter-prim.h
+new file mode 100644
+index 0000000..30b7bca
+--- /dev/null
++++ b/source/common/arm64/filter-prim.h
+@@ -0,0 +1,20 @@
++#ifndef _FILTER_PRIM_ARM64_H__
++#define _FILTER_PRIM_ARM64_H__
++
++
++#include "common.h"
++#include "slicetype.h"      // LOWRES_COST_MASK
++#include "primitives.h"
++#include "x265.h"
++
++
++namespace X265_NS {
++   
++  
++void setupFilterPrimitives_neon(EncoderPrimitives &p);
++
++};
++
++
++#endif
++
+diff --git a/source/common/arm64/intrapred-prim.cpp b/source/common/arm64/intrapred-prim.cpp
+new file mode 100644
+index 0000000..f4bd9aa
+--- /dev/null
++++ b/source/common/arm64/intrapred-prim.cpp
+@@ -0,0 +1,266 @@
++/*****************************************************************************
++ * Copyright (C) 2013-2017 MulticoreWare, Inc
++ *
++ * Authors: Min Chen <chenm003@163.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111, USA.
++ *
++ * This program is also available under a commercial proprietary license.
++ * For more information, contact us at license @ x265.com.
++ *****************************************************************************/
++
++
++#include "common.h"
++#include "primitives.h"
++
++
++#if 1
++#include "arm64-utils.h"
++#include <arm_neon.h>
++
++using namespace X265_NS;
++
++namespace {
++
++
++
++template<int width>
++void intra_pred_ang_neon(pixel* dst, intptr_t dstStride, const pixel *srcPix0, int dirMode, int bFilter)
++{
++    int width2 = width << 1;
++    // Flip the neighbours in the horizontal case.
++    int horMode = dirMode < 18;
++    pixel neighbourBuf[129];
++    const pixel *srcPix = srcPix0;
++
++    if (horMode)
++    {
++        neighbourBuf[0] = srcPix[0];
++        //for (int i = 0; i < width << 1; i++)
++        //{
++        //    neighbourBuf[1 + i] = srcPix[width2 + 1 + i];
++        //    neighbourBuf[width2 + 1 + i] = srcPix[1 + i];
++        //}
++        memcpy(&neighbourBuf[1],&srcPix[width2+1],sizeof(pixel)*(width << 1));
++        memcpy(&neighbourBuf[width2 + 1],&srcPix[1],sizeof(pixel)*(width << 1));
++        srcPix = neighbourBuf;
++    }
++
++    // Intra prediction angle and inverse angle tables.
++    const int8_t angleTable[17] = { -32, -26, -21, -17, -13, -9, -5, -2, 0, 2, 5, 9, 13, 17, 21, 26, 32 };
++    const int16_t invAngleTable[8] = { 4096, 1638, 910, 630, 482, 390, 315, 256 };
++
++    // Get the prediction angle.
++    int angleOffset = horMode ? 10 - dirMode : dirMode - 26;
++    int angle = angleTable[8 + angleOffset];
++
++    // Vertical Prediction.
++    if (!angle)
++    {
++        for (int y = 0; y < width; y++) {
++            memcpy(&dst[y * dstStride],srcPix + 1,sizeof(pixel)*width);
++        }
++        if (bFilter)
++        {
++            int topLeft = srcPix[0], top = srcPix[1];
++            for (int y = 0; y < width; y++)
++                dst[y * dstStride] = x265_clip((int16_t)(top + ((srcPix[width2 + 1 + y] - topLeft) >> 1)));
++        }
++    }
++    else // Angular prediction.
++    {
++        // Get the reference pixels. The reference base is the first pixel to the top (neighbourBuf[1]).
++        pixel refBuf[64];
++        const pixel *ref;
++
++        // Use the projected left neighbours and the top neighbours.
++        if (angle < 0)
++        {
++            // Number of neighbours projected.
++            int nbProjected = -((width * angle) >> 5) - 1;
++            pixel *ref_pix = refBuf + nbProjected + 1;
++
++            // Project the neighbours.
++            int invAngle = invAngleTable[- angleOffset - 1];
++            int invAngleSum = 128;
++            for (int i = 0; i < nbProjected; i++)
++            {
++                invAngleSum += invAngle;
++                ref_pix[- 2 - i] = srcPix[width2 + (invAngleSum >> 8)];
++            }
++
++            // Copy the top-left and top pixels.
++            //for (int i = 0; i < width + 1; i++)
++                //ref_pix[-1 + i] = srcPix[i];
++            
++            memcpy(&ref_pix[-1],srcPix,(width+1)*sizeof(pixel));
++            ref = ref_pix;
++        }
++        else // Use the top and top-right neighbours.
++            ref = srcPix + 1;
++
++        // Pass every row.
++        int angleSum = 0;
++        for (int y = 0; y < width; y++)
++        {
++            angleSum += angle;
++            int offset = angleSum >> 5;
++            int fraction = angleSum & 31;
++
++            if (fraction) // Interpolate
++            {
++                if (width >= 8 && sizeof(pixel) == 1)
++                {
++                    const int16x8_t f0 = vdupq_n_s16(32-fraction);
++                    const int16x8_t f1 = vdupq_n_s16(fraction);
++                    for (int x = 0;x<width;x+=8) {
++                        uint8x8_t in0 = *(uint8x8_t *)&ref[offset + x];
++                        uint8x8_t in1 = *(uint8x8_t *)&ref[offset+ x + 1];
++                        int16x8_t lo = vmlaq_s16(vdupq_n_s16(16),vmovl_u8(in0),f0);
++                        lo = vmlaq_s16(lo,vmovl_u8(in1),f1);
++                        lo = vshrq_n_s16(lo,5);
++                        *(uint8x8_t *)&dst[y * dstStride + x] = vmovn_u16(lo);
++                    }
++                }
++                else if (width >= 4 && sizeof(pixel) == 2)
++                {
++                    const int32x4_t f0 = vdupq_n_s32(32-fraction);
++                    const int32x4_t f1 = vdupq_n_s32(fraction);
++                    for (int x = 0;x<width;x+=4) {
++                        uint16x4_t in0 = *(uint16x4_t *)&ref[offset + x];
++                        uint16x4_t in1 = *(uint16x4_t *)&ref[offset+ x + 1];
++                        int32x4_t lo = vmlaq_s32(vdupq_n_s32(16),vmovl_u16(in0),f0);
++                        lo = vmlaq_s32(lo,vmovl_u16(in1),f1);
++                        lo = vshrq_n_s32(lo,5);
++                        *(uint16x4_t *)&dst[y * dstStride + x] = vmovn_u32(lo);
++                    }
++                }
++                else {
++                    for (int x = 0; x < width; x++)
++                        dst[y * dstStride + x] = (pixel)(((32 - fraction) * ref[offset + x] + fraction * ref[offset + x + 1] + 16) >> 5);
++                }
++            }
++            else // Copy.
++            {
++                memcpy(&dst[y * dstStride],&ref[offset],sizeof(pixel)*width);
++            }
++        }
++    }
++
++    // Flip for horizontal.
++    if (horMode)
++    {
++        if (width == 8)  transpose8x8(dst,dst,dstStride,dstStride);
++        else if (width == 16) transpose16x16(dst,dst,dstStride,dstStride);
++        else if (width == 32) transpose32x32(dst,dst,dstStride,dstStride);
++        else {
++            for (int y = 0; y < width - 1; y++)
++            {
++                for (int x = y + 1; x < width; x++)
++                {
++                    pixel tmp              = dst[y * dstStride + x];
++                    dst[y * dstStride + x] = dst[x * dstStride + y];
++                    dst[x * dstStride + y] = tmp;
++                }
++            }
++        }
++    }
++}
++
++template<int log2Size>
++void all_angs_pred_neon(pixel *dest, pixel *refPix, pixel *filtPix, int bLuma)
++{
++    const int size = 1 << log2Size;
++    for (int mode = 2; mode <= 34; mode++)
++    {
++        pixel *srcPix  = (g_intraFilterFlags[mode] & size ? filtPix  : refPix);
++        pixel *out = dest + ((mode - 2) << (log2Size * 2));
++
++        intra_pred_ang_neon<size>(out, size, srcPix, mode, bLuma);
++
++        // Optimize code don't flip buffer
++        bool modeHor = (mode < 18);
++
++        // transpose the block if this is a horizontal mode
++        if (modeHor)
++        {
++            if (size == 8) transpose8x8(out,out,size,size);
++            else if (size == 16) transpose16x16(out,out,size,size);
++            else if (size == 32) transpose32x32(out,out,size,size);
++            else {
++                for (int k = 0; k < size - 1; k++)
++                {
++                    for (int l = k + 1; l < size; l++)
++                    {
++                        pixel tmp         = out[k * size + l];
++                        out[k * size + l] = out[l * size + k];
++                        out[l * size + k] = tmp;
++                    }
++                }
++            }
++        }
++    }
++}
++}
++
++namespace X265_NS {
++// x265 private namespace
++
++void setupIntraPrimitives_neon(EncoderPrimitives& p)
++{
++//    p.cu[BLOCK_4x4].intra_filter = intraFilter<4>;
++//    p.cu[BLOCK_8x8].intra_filter = intraFilter<8>;
++//    p.cu[BLOCK_16x16].intra_filter = intraFilter<16>;
++//    p.cu[BLOCK_32x32].intra_filter = intraFilter<32>;
++
++//    p.cu[BLOCK_4x4].intra_pred[PLANAR_IDX] = planar_pred_neon<2>;
++//    p.cu[BLOCK_8x8].intra_pred[PLANAR_IDX] = planar_pred_neon<3>;
++//    p.cu[BLOCK_16x16].intra_pred[PLANAR_IDX] = planar_pred_neon<4>;
++//    p.cu[BLOCK_32x32].intra_pred[PLANAR_IDX] = planar_pred_neon<5>;
++//
++//    p.cu[BLOCK_4x4].intra_pred[DC_IDX] = intra_pred_dc_neon<4>;
++//    p.cu[BLOCK_8x8].intra_pred[DC_IDX] = intra_pred_dc_neon<8>;
++//    p.cu[BLOCK_16x16].intra_pred[DC_IDX] = intra_pred_dc_neon<16>;
++//    p.cu[BLOCK_32x32].intra_pred[DC_IDX] = intra_pred_dc_neon<32>;
++
++    for (int i = 2; i < NUM_INTRA_MODE; i++)
++    {
++        p.cu[BLOCK_4x4].intra_pred[i] = intra_pred_ang_neon<4>;
++        p.cu[BLOCK_8x8].intra_pred[i] = intra_pred_ang_neon<8>;
++        p.cu[BLOCK_16x16].intra_pred[i] = intra_pred_ang_neon<16>;
++        p.cu[BLOCK_32x32].intra_pred[i] = intra_pred_ang_neon<32>;
++    }
++
++    p.cu[BLOCK_4x4].intra_pred_allangs = all_angs_pred_neon<2>;
++    p.cu[BLOCK_8x8].intra_pred_allangs = all_angs_pred_neon<3>;
++    p.cu[BLOCK_16x16].intra_pred_allangs = all_angs_pred_neon<4>;
++    p.cu[BLOCK_32x32].intra_pred_allangs = all_angs_pred_neon<5>;
++}
++}
++
++
++
++#else
++
++namespace X265_NS {
++// x265 private namespace
++void setupIntraPrimitives_neon(EncoderPrimitives& p)
++{}
++}
++
++#endif
++
++
++
+diff --git a/source/common/arm64/intrapred-prim.h b/source/common/arm64/intrapred-prim.h
+new file mode 100644
+index 0000000..fd7a471
+--- /dev/null
++++ b/source/common/arm64/intrapred-prim.h
+@@ -0,0 +1,14 @@
++#ifndef INTRAPRED_PRIM_H__
++
++#if defined(__aarch64__)
++
++namespace X265_NS {
++// x265 private namespace
++
++void setupIntraPrimitives_neon(EncoderPrimitives& p);
++}
++
++#endif
++
++#endif
++
+diff --git a/source/common/arm64/loopfilter-prim.cpp b/source/common/arm64/loopfilter-prim.cpp
+new file mode 100644
+index 0000000..285a089
+--- /dev/null
++++ b/source/common/arm64/loopfilter-prim.cpp
+@@ -0,0 +1,305 @@
++/*****************************************************************************
++* Copyright (C) 2013-2017 MulticoreWare, Inc
++*
++* Authors: Praveen Kumar Tiwari <praveen@multicorewareinc.com>
++*          Dnyaneshwar Gorade <dnyaneshwar@multicorewareinc.com>
++*          Min Chen <chenm003@163.com>
++*
++* This program is free software; you can redistribute it and/or modify
++* it under the terms of the GNU General Public License as published by
++* the Free Software Foundation; either version 2 of the License, or
++* (at your option) any later version.
++*
++* This program is distributed in the hope that it will be useful,
++* but WITHOUT ANY WARRANTY; without even the implied warranty of
++* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++* GNU General Public License for more details.
++*
++* You should have received a copy of the GNU General Public License
++* along with this program; if not, write to the Free Software
++* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111, USA.
++*
++* This program is also available under a commercial proprietary license.
++* For more information, contact us at license @ x265.com.
++*****************************************************************************/
++#include "loopfilter-prim.h"
++
++#define PIXEL_MIN 0
++
++
++
++#if !(HIGH_BIT_DEPTH) && defined(HAVE_NEON)
++#include<arm_neon.h>
++
++namespace {
++
++
++/* get the sign of input variable (TODO: this is a dup, make common) */
++static inline int8_t signOf(int x)
++{
++    return (x >> 31) | ((int)((((uint32_t)-x)) >> 31));
++}
++
++static inline int8x8_t sign_diff_neon(const uint8x8_t in0, const uint8x8_t in1)
++{
++  int16x8_t in = vsubl_u8(in0,in1);
++  return vmovn_s16(vmaxq_s16(vminq_s16(in,vdupq_n_s16(1)),vdupq_n_s16(-1)));
++}
++
++static void calSign_neon(int8_t *dst, const pixel *src1, const pixel *src2, const int endX)
++{
++  int x = 0;
++  for (; (x + 8) <= endX; x += 8) {
++    *(int8x8_t *)&dst[x]  = sign_diff_neon(*(uint8x8_t *)&src1[x],*(uint8x8_t *)&src2[x]);
++  }
++
++    for (; x < endX; x++)
++        dst[x] = signOf(src1[x] - src2[x]);
++}
++
++static void processSaoCUE0_neon(pixel * rec, int8_t * offsetEo, int width, int8_t* signLeft, intptr_t stride)
++{
++
++  
++    int y;
++    int8_t signRight, signLeft0;
++    int8_t edgeType;
++
++    for (y = 0; y < 2; y++)
++    {
++        signLeft0 = signLeft[y];
++        int x = 0;
++
++        if (width >= 8) {
++            int8x8_t vsignRight;
++            int8x8x2_t shifter;
++            shifter.val[1][0] = signLeft0;
++            static const int8x8_t index = {8,0,1,2,3,4,5,6};
++            int8x8_t tbl = *(int8x8_t *)offsetEo;
++            for (; (x+8) <= width; x+=8)
++            {
++                uint8x8_t in = *(uint8x8_t *)&rec[x];
++                vsignRight = sign_diff_neon(in,*(uint8x8_t *)&rec[x+1]);
++                shifter.val[0] = vneg_s8(vsignRight);
++                int8x8_t tmp = shifter.val[0];
++                int8x8_t edge = vtbl2_s8(shifter,index);
++                int8x8_t vedgeType = vadd_s8(vadd_s8(vsignRight,edge),vdup_n_s8(2));
++                shifter.val[1][0] = tmp[7];
++                int16x8_t t1 = vmovl_s8(vtbl1_s8(tbl,vedgeType));
++                t1 = vaddw_u8(t1,in);
++                t1 = vmaxq_s16(t1,vdupq_n_s16(0));
++                t1 = vminq_s16(t1,vdupq_n_s16(255));
++                *(uint8x8_t *)&rec[x] = vmovn_u16(t1);
++            }
++            signLeft0 = shifter.val[1][0];
++        }
++        for (; x < width; x++)
++        {
++            signRight = ((rec[x] - rec[x + 1]) < 0) ? -1 : ((rec[x] - rec[x + 1]) > 0) ? 1 : 0;
++            edgeType = signRight + signLeft0 + 2;
++            signLeft0 = -signRight;
++            rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);
++        }
++        rec += stride;
++    }
++}
++
++static void processSaoCUE1_neon(pixel* rec, int8_t* upBuff1, int8_t* offsetEo, intptr_t stride, int width)
++{
++    int x = 0;
++    int8_t signDown;
++    int edgeType;
++
++    if (width >= 8) {
++        int8x8_t tbl = *(int8x8_t *)offsetEo;
++        for (; (x+8) <= width; x+=8)
++        {
++            uint8x8_t in0 = *(uint8x8_t *)&rec[x];
++            uint8x8_t in1 = *(uint8x8_t *)&rec[x+stride];
++            int8x8_t vsignDown = sign_diff_neon(in0,in1);
++            int8x8_t vedgeType = vadd_s8(vadd_s8(vsignDown,*(int8x8_t *)&upBuff1[x]),vdup_n_s8(2));
++            *(int8x8_t *)&upBuff1[x] = vneg_s8(vsignDown);
++            int16x8_t t1 = vmovl_s8(vtbl1_s8(tbl,vedgeType));
++            t1 = vaddw_u8(t1,in0);
++            *(uint8x8_t *)&rec[x] = vqmovun_s16(t1);
++      }
++    }
++    for (; x < width; x++)
++    {
++        signDown = signOf(rec[x] - rec[x + stride]);
++        edgeType = signDown + upBuff1[x] + 2;
++        upBuff1[x] = -signDown;
++        rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);
++    }
++}
++
++static void processSaoCUE1_2Rows_neon(pixel* rec, int8_t* upBuff1, int8_t* offsetEo, intptr_t stride, int width)
++{
++    int y;
++    int8_t signDown;
++    int edgeType;
++
++    for (y = 0; y < 2; y++)
++    {
++      int x=0;
++      if (width >= 8) {
++        int8x8_t tbl = *(int8x8_t *)offsetEo;
++        for (; (x+8) <= width; x+=8)
++        {
++          uint8x8_t in0 = *(uint8x8_t *)&rec[x];
++          uint8x8_t in1 = *(uint8x8_t *)&rec[x+stride];
++          int8x8_t vsignDown = sign_diff_neon(in0,in1);
++          int8x8_t vedgeType = vadd_s8(vadd_s8(vsignDown,*(int8x8_t *)&upBuff1[x]),vdup_n_s8(2));
++          *(int8x8_t *)&upBuff1[x] = vneg_s8(vsignDown);
++          int16x8_t t1 = vmovl_s8(vtbl1_s8(tbl,vedgeType));
++          t1 = vaddw_u8(t1,in0);
++          t1 = vmaxq_s16(t1,vdupq_n_s16(0));
++          t1 = vminq_s16(t1,vdupq_n_s16(255));
++          *(uint8x8_t *)&rec[x] = vmovn_u16(t1);
++
++        }
++      }
++      for (; x < width; x++)
++      {
++          signDown = signOf(rec[x] - rec[x + stride]);
++          edgeType = signDown + upBuff1[x] + 2;
++          upBuff1[x] = -signDown;
++          rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);
++      }
++      rec += stride;
++  }
++}
++
++static void processSaoCUE2_neon(pixel * rec, int8_t * bufft, int8_t * buff1, int8_t * offsetEo, int width, intptr_t stride)
++{
++    int x;
++  
++    if (abs(buff1-bufft) < 16)
++    {
++      for (x = 0; x < width; x++)
++      {
++          int8_t signDown = signOf(rec[x] - rec[x + stride + 1]);
++          int edgeType = signDown + buff1[x] + 2;
++          bufft[x + 1] = -signDown;
++          rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);;
++      }
++    }
++    else
++    {
++      int8x8_t tbl = *(int8x8_t *)offsetEo;
++      x=0;
++      for (; (x + 8) <= width; x+=8)
++      {
++          uint8x8_t in0 = *(uint8x8_t *)&rec[x];
++          uint8x8_t in1 = *(uint8x8_t *)&rec[x+stride+1];
++          int8x8_t vsignDown = sign_diff_neon(in0,in1);
++          int8x8_t vedgeType = vadd_s8(vadd_s8(vsignDown,*(int8x8_t *)&buff1[x]),vdup_n_s8(2));
++          *(int8x8_t *)&bufft[x+1] = vneg_s8(vsignDown);
++          int16x8_t t1 = vmovl_s8(vtbl1_s8(tbl,vedgeType));
++          t1 = vaddw_u8(t1,in0);
++          t1 = vmaxq_s16(t1,vdupq_n_s16(0));
++          t1 = vminq_s16(t1,vdupq_n_s16(255));
++          *(uint8x8_t *)&rec[x] = vmovn_u16(t1);
++      }
++      for (; x < width; x++)
++      {
++          int8_t signDown = signOf(rec[x] - rec[x + stride + 1]);
++          int edgeType = signDown + buff1[x] + 2;
++          bufft[x + 1] = -signDown;
++          rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);;
++      }
++
++    }
++}
++ 
++
++static void processSaoCUE3_neon(pixel *rec, int8_t *upBuff1, int8_t *offsetEo, intptr_t stride, int startX, int endX)
++{
++    int8_t signDown;
++    int8_t edgeType;
++  int8x8_t tbl = *(int8x8_t *)offsetEo;
++
++    int x = startX + 1;
++  for (; (x+8) <= endX; x+=8 )
++  {
++    uint8x8_t in0 = *(uint8x8_t *)&rec[x];
++    uint8x8_t in1 = *(uint8x8_t *)&rec[x+stride];
++    int8x8_t vsignDown = sign_diff_neon(in0,in1);
++    int8x8_t vedgeType = vadd_s8(vadd_s8(vsignDown,*(int8x8_t *)&upBuff1[x]),vdup_n_s8(2));
++    *(int8x8_t *)&upBuff1[x-1] = vneg_s8(vsignDown);
++    int16x8_t t1 = vmovl_s8(vtbl1_s8(tbl,vedgeType));
++    t1 = vaddw_u8(t1,in0);
++    t1 = vmaxq_s16(t1,vdupq_n_s16(0));
++    t1 = vminq_s16(t1,vdupq_n_s16(255));
++    *(uint8x8_t *)&rec[x] = vmovn_u16(t1);
++
++  }
++    for (; x < endX; x++)
++    {
++        signDown = signOf(rec[x] - rec[x + stride]);
++        edgeType = signDown + upBuff1[x] + 2;
++        upBuff1[x - 1] = -signDown;
++        rec[x] = x265_clip(rec[x] + offsetEo[edgeType]);
++    }
++}
++
++static void processSaoCUB0_neon(pixel* rec, const int8_t* offset, int ctuWidth, int ctuHeight, intptr_t stride)
++{
++    #define SAO_BO_BITS 5
++    const int boShift = X265_DEPTH - SAO_BO_BITS;
++    int x, y;
++  int8x8x4_t table;
++  table = *(int8x8x4_t *)offset;
++  
++    for (y = 0; y < ctuHeight; y++)
++    {
++      
++        for (x = 0; (x+8) <= ctuWidth; x+=8)
++        {
++          int8x8_t in = *(int8x8_t*)&rec[x];
++          int8x8_t offsets = vtbl4_s8(table,vshr_n_u8(in,boShift));
++          int16x8_t tmp = vmovl_s8(offsets);
++          tmp = vaddw_u8(tmp,in);
++          tmp = vmaxq_s16(tmp,vdupq_n_s16(0));
++          tmp = vminq_s16(tmp,vdupq_n_s16(255));
++          *(uint8x8_t *)&rec[x] = vmovn_u16(tmp);
++        }
++        for (; x < ctuWidth; x++)
++        {
++            rec[x] = x265_clip(rec[x] + offset[rec[x] >> boShift]);
++        }
++        rec += stride;
++    }
++}
++
++}
++
++
++
++namespace X265_NS {
++void setupLoopFilterPrimitives_neon(EncoderPrimitives &p)
++{
++    p.saoCuOrgE0 = processSaoCUE0_neon;
++    p.saoCuOrgE1 = processSaoCUE1_neon;
++    p.saoCuOrgE1_2Rows = processSaoCUE1_2Rows_neon;
++    p.saoCuOrgE2[0] = processSaoCUE2_neon;
++    p.saoCuOrgE2[1] = processSaoCUE2_neon;
++    p.saoCuOrgE3[0] = processSaoCUE3_neon;
++    p.saoCuOrgE3[1] = processSaoCUE3_neon;
++    p.saoCuOrgB0 = processSaoCUB0_neon;
++    p.sign = calSign_neon;
++
++}
++
++#else //HIGH_BIT_DEPTH
++
++
++namespace X265_NS {
++void setupLoopFilterPrimitives_neon(EncoderPrimitives &)
++{
++}
++
++#endif
++
++
++}
+diff --git a/source/common/arm64/loopfilter-prim.h b/source/common/arm64/loopfilter-prim.h
+new file mode 100644
+index 0000000..f652d1f
+--- /dev/null
++++ b/source/common/arm64/loopfilter-prim.h
+@@ -0,0 +1,43 @@
++#ifndef _LOOPFILTER_NEON_H__
++#define _LOOPFILTER_NEON_H__
++
++
++/*****************************************************************************
++* Copyright (C) 2013-2017 MulticoreWare, Inc
++*
++* Authors: Praveen Kumar Tiwari <praveen@multicorewareinc.com>
++*          Dnyaneshwar Gorade <dnyaneshwar@multicorewareinc.com>
++*          Min Chen <chenm003@163.com>
++*
++* This program is free software; you can redistribute it and/or modify
++* it under the terms of the GNU General Public License as published by
++* the Free Software Foundation; either version 2 of the License, or
++* (at your option) any later version.
++*
++* This program is distributed in the hope that it will be useful,
++* but WITHOUT ANY WARRANTY; without even the implied warranty of
++* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++* GNU General Public License for more details.
++*
++* You should have received a copy of the GNU General Public License
++* along with this program; if not, write to the Free Software
++* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111, USA.
++*
++* This program is also available under a commercial proprietary license.
++* For more information, contact us at license @ x265.com.
++*****************************************************************************/
++
++
++
++#include "common.h"
++#include "primitives.h"
++
++#define PIXEL_MIN 0
++
++namespace X265_NS {
++void setupLoopFilterPrimitives_neon(EncoderPrimitives &p);
++
++};
++
++
++#endif
+diff --git a/source/common/arm64/pixel-prim.cpp b/source/common/arm64/pixel-prim.cpp
+new file mode 100644
+index 0000000..5e252b7
+--- /dev/null
++++ b/source/common/arm64/pixel-prim.cpp
+@@ -0,0 +1,1940 @@
++#include "common.h"
++#include "slicetype.h"      // LOWRES_COST_MASK
++#include "primitives.h"
++#include "x265.h"
++
++#include "pixel-prim.h"
++#include "arm64-utils.h"
++#if HAVE_NEON
++
++#include <arm_neon.h>
++
++using namespace X265_NS;
++
++
++
++namespace  {
++
++
++/* SATD SA8D variants - based on x264 */
++static inline void SUMSUB_AB(int16x8_t& sum, int16x8_t& sub, const int16x8_t a, const int16x8_t b)
++{
++    sum = vaddq_s16(a,b);
++    sub = vsubq_s16(a,b);
++}
++
++static inline void transpose_8h(int16x8_t& t1, int16x8_t& t2, const int16x8_t s1, const int16x8_t s2)
++{
++    t1 = vtrn1q_s16(s1, s2);
++    t2 = vtrn2q_s16(s1, s2);
++}
++
++static inline void transpose_4s(int16x8_t& t1, int16x8_t& t2, const int16x8_t s1, const int16x8_t s2)
++{
++    t1 = vtrn1q_s32(s1, s2);
++    t2 = vtrn2q_s32(s1, s2);
++}
++
++#if (X265_DEPTH <= 10)
++static inline void transpose_2d(int16x8_t& t1, int16x8_t& t2, const int16x8_t s1, const int16x8_t s2)
++{
++    t1 = vtrn1q_s64(s1, s2);
++    t2 = vtrn2q_s64(s1, s2);
++}
++#endif
++
++
++static inline void SUMSUB_ABCD(int16x8_t& s1, int16x8_t& d1, int16x8_t& s2, int16x8_t& d2,
++                        int16x8_t a,int16x8_t  b,int16x8_t  c,int16x8_t  d)
++{
++    SUMSUB_AB(s1,d1,a,b);
++    SUMSUB_AB(s2,d2,c,d);
++}
++
++static inline void HADAMARD4_V(int16x8_t& r1,int16x8_t& r2,int16x8_t& r3,int16x8_t& r4,
++                        int16x8_t& t1,int16x8_t& t2,int16x8_t& t3,int16x8_t& t4)
++{
++    SUMSUB_ABCD(t1, t2, t3, t4, r1, r2, r3, r4);
++    SUMSUB_ABCD(r1, r3, r2, r4, t1, t3, t2, t4);
++}
++
++
++static int _satd_4x8_8x4_end_neon(int16x8_t v0,int16x8_t v1,int16x8_t v2, int16x8_t v3)
++                                 
++{
++    
++    int16x8_t v4,v5,v6,v7,v16,v17,v18,v19;
++
++    
++    SUMSUB_AB   (v16, v17, v0,  v1);
++    SUMSUB_AB   (v18, v19, v2,  v3);
++
++    SUMSUB_AB   (v4 , v6 , v16, v18);
++    SUMSUB_AB   (v5 , v7 , v17, v19);
++
++    v0 = vtrn1q_s16(v4, v5);
++    v1 = vtrn2q_s16(v4, v5);
++    v2 = vtrn1q_s16(v6, v7);
++    v3 = vtrn2q_s16(v6, v7);
++
++    SUMSUB_AB   (v16, v17, v0,  v1);
++    SUMSUB_AB   (v18, v19, v2,  v3);
++
++    v0 = vtrn1q_s32(v16, v18);
++    v1 = vtrn2q_s32(v16, v18);
++    v2 = vtrn1q_s32(v17, v19);
++    v3 = vtrn2q_s32(v17, v19);
++
++    v0 = vabsq_s16(v0);
++    v1 = vabsq_s16(v1);
++    v2 = vabsq_s16(v2);
++    v3 = vabsq_s16(v3);
++    
++    v0 = vmaxq_u16(v0, v1);
++    v1 = vmaxq_u16(v2, v3);
++
++    v0 = vaddq_u16(v0, v1);
++    return vaddlvq_u16(v0);
++}
++
++static inline int _satd_4x4_neon(int16x8_t v0, int16x8_t v1)
++{
++    int16x8_t v2,v3;
++    SUMSUB_AB   (v2,  v3,  v0,  v1);
++
++    v0 = vzip1q_s64(v2,v3);
++    v1 = vzip2q_s64(v2,v3);
++    SUMSUB_AB   (v2,  v3,  v0,  v1);
++
++    v0 = vtrn1q_s16(v2,v3);
++    v1 = vtrn2q_s16(v2,v3);
++    SUMSUB_AB   (v2,  v3,  v0,  v1);
++
++    v0 = vtrn1q_s32(v2,v3);
++    v1 = vtrn2q_s32(v2,v3);
++
++    v0 = vabsq_s16(v0);
++    v1 = vabsq_s16(v1);
++    v0 = vmaxq_u16(v0, v1);
++    
++    return vaddlvq_s16(v0);
++}
++
++static void _satd_8x4v_8x8h_neon(int16x8_t& v0,int16x8_t& v1, int16x8_t&v2,int16x8_t& v3,int16x8_t& v20,int16x8_t& v21, int16x8_t&v22,int16x8_t& v23)
++{
++    int16x8_t v16,v17,v18,v19,v4,v5,v6,v7;
++    
++    SUMSUB_AB(v16, v18, v0,  v2);
++    SUMSUB_AB(v17, v19, v1,  v3);
++
++    HADAMARD4_V (v20, v21, v22, v23, v0,  v1, v2, v3);
++
++    transpose_8h(   v0,  v1,  v16, v17);
++    transpose_8h(   v2,  v3,  v18, v19);
++    transpose_8h(   v4,  v5,  v20, v21);
++    transpose_8h(   v6,  v7,  v22, v23);
++
++    SUMSUB_AB   (v16, v17, v0,  v1);
++    SUMSUB_AB   (v18, v19, v2,  v3);
++    SUMSUB_AB   (v20, v21, v4,  v5);
++    SUMSUB_AB   (v22, v23, v6,  v7);
++
++    transpose_4s(   v0,  v2,  v16, v18);
++    transpose_4s(   v1,  v3,  v17, v19);
++    transpose_4s(   v4,  v6,  v20, v22);
++    transpose_4s(   v5,  v7,  v21, v23);
++
++    v0 = vabsq_s16(v0);
++    v1 = vabsq_s16(v1);
++    v2 = vabsq_s16(v2);
++    v3 = vabsq_s16(v3);
++    v4 = vabsq_s16(v4);
++    v5 = vabsq_s16(v5);
++    v6 = vabsq_s16(v6);
++    v7 = vabsq_s16(v7);
++
++    v0 = vmaxq_u16(v0,v2);
++    v1 = vmaxq_u16(v1,v3);
++    v2 = vmaxq_u16(v4,v6);
++    v3 = vmaxq_u16(v5,v7);
++
++}
++
++#if HIGH_BIT_DEPTH
++
++#if (X265_DEPTH > 10)
++static inline void transpose_2d(int32x4_t& t1, int32x4_t& t2, const int32x4_t s1, const int32x4_t s2)
++{
++    t1 = vtrn1q_s64(s1, s2);
++    t2 = vtrn2q_s64(s1, s2);
++}
++
++static inline void ISUMSUB_AB(int32x4_t& sum, int32x4_t& sub, const int32x4_t a, const int32x4_t b)
++{
++    sum = vaddq_s32(a,b);
++    sub = vsubq_s32(a,b);
++}
++
++static inline void ISUMSUB_AB_FROM_INT16(int32x4_t& suml, int32x4_t& sumh, int32x4_t& subl, int32x4_t& subh, const int16x8_t a, const int16x8_t b)
++{
++    suml = vaddl_s16(vget_low_s16(a),vget_low_s16(b));
++    sumh = vaddl_high_s16(a,b);
++    subl = vsubl_s16(vget_low_s16(a),vget_low_s16(b));
++    subh = vsubl_high_s16(a, b);
++}
++
++#endif
++
++static inline void _sub_8x8_fly(const uint16_t* pix1, intptr_t stride_pix1, const uint16_t* pix2, intptr_t stride_pix2,
++                            int16x8_t& v0,int16x8_t& v1, int16x8_t& v2,int16x8_t& v3,
++                            int16x8_t& v20,int16x8_t& v21, int16x8_t& v22,int16x8_t& v23)
++{
++    uint16x8_t r0,r1,r2,r3;
++    uint16x8_t t0,t1,t2,t3;
++    int16x8_t v16,v17;
++    int16x8_t v18,v19;
++    
++    r0 = *(uint16x8_t*)(pix1 + 0*stride_pix1);
++    r1 = *(uint16x8_t*)(pix1 + 1*stride_pix1);
++    r2 = *(uint16x8_t*)(pix1 + 2*stride_pix1);
++    r3 = *(uint16x8_t*)(pix1 + 3*stride_pix1);
++
++    t0 = *(uint16x8_t*)(pix2 + 0*stride_pix2);
++    t1 = *(uint16x8_t*)(pix2 + 1*stride_pix2);
++    t2 = *(uint16x8_t*)(pix2 + 2*stride_pix2);
++    t3 = *(uint16x8_t*)(pix2 + 3*stride_pix2);
++
++    v16 = vsubq_u16(r0,t0);
++    v17 = vsubq_u16(r1,t1);
++    v18 = vsubq_u16(r2,t2);
++    v19 = vsubq_u16(r3,t3);
++
++    r0 = *(uint16x8_t*)(pix1 + 4*stride_pix1);
++    r1 = *(uint16x8_t*)(pix1 + 5*stride_pix1);
++    r2 = *(uint16x8_t*)(pix1 + 6*stride_pix1);
++    r3 = *(uint16x8_t*)(pix1 + 7*stride_pix1);
++
++    t0 = *(uint16x8_t*)(pix2 + 4*stride_pix2);
++    t1 = *(uint16x8_t*)(pix2 + 5*stride_pix2);
++    t2 = *(uint16x8_t*)(pix2 + 6*stride_pix2);
++    t3 = *(uint16x8_t*)(pix2 + 7*stride_pix2);
++    
++    v20 = vsubq_u16(r0,t0);
++    v21 = vsubq_u16(r1,t1);
++    v22 = vsubq_u16(r2,t2);
++    v23 = vsubq_u16(r3,t3);
++
++    SUMSUB_AB   (v0,  v1,  v16, v17);
++    SUMSUB_AB   (v2,  v3,  v18, v19);
++ 
++}
++
++
++
++
++static void _satd_16x4_neon(const uint16_t* pix1, intptr_t stride_pix1, const uint16_t* pix2, intptr_t stride_pix2,
++                            int16x8_t& v0,int16x8_t&v1, int16x8_t&v2,int16x8_t&v3)
++{
++    uint8x16_t r0,r1,r2,r3;
++    uint8x16_t t0,t1,t2,t3;
++    int16x8_t v16,v17,v20,v21;
++    int16x8_t v18,v19,v22,v23;
++    
++    r0 = *(int16x8_t*)(pix1 + 0*stride_pix1);
++    r1 = *(int16x8_t*)(pix1 + 1*stride_pix1);
++    r2 = *(int16x8_t*)(pix1 + 2*stride_pix1);
++    r3 = *(int16x8_t*)(pix1 + 3*stride_pix1);
++
++    t0 = *(int16x8_t*)(pix2 + 0*stride_pix2);
++    t1 = *(int16x8_t*)(pix2 + 1*stride_pix2);
++    t2 = *(int16x8_t*)(pix2 + 2*stride_pix2);
++    t3 = *(int16x8_t*)(pix2 + 3*stride_pix2);
++  
++    
++    v16 = vsubq_u16((r0),(t0) );
++    v17 = vsubq_u16((r1),(t1) );
++    v18 = vsubq_u16((r2),(t2) );
++    v19 = vsubq_u16((r3),(t3) );
++
++    r0 = *(int16x8_t*)(pix1 + 0*stride_pix1 + 8);
++    r1 = *(int16x8_t*)(pix1 + 1*stride_pix1 + 8);
++    r2 = *(int16x8_t*)(pix1 + 2*stride_pix1 + 8);
++    r3 = *(int16x8_t*)(pix1 + 3*stride_pix1 + 8);
++
++    t0 = *(int16x8_t*)(pix2 + 0*stride_pix2 + 8);
++    t1 = *(int16x8_t*)(pix2 + 1*stride_pix2 + 8);
++    t2 = *(int16x8_t*)(pix2 + 2*stride_pix2 + 8);
++    t3 = *(int16x8_t*)(pix2 + 3*stride_pix2 + 8);
++
++    
++    v20 = vsubq_u16(r0,t0);
++    v21 = vsubq_u16(r1,t1);
++    v22 = vsubq_u16(r2,t2);
++    v23 = vsubq_u16(r3,t3);
++
++    SUMSUB_AB   (v0,  v1,  v16, v17);
++    SUMSUB_AB   (v2,  v3,  v18, v19);
++    
++    _satd_8x4v_8x8h_neon(v0,v1,v2,v3,v20,v21,v22,v23);
++    
++}
++
++
++int pixel_satd_4x4_neon(const uint16_t* pix1, intptr_t stride_pix1, const uint16_t* pix2, intptr_t stride_pix2)
++{
++    uint64x2_t t0,t1,r0,r1;
++    t0[0] = *(uint64_t *)(pix1 + 0*stride_pix1);
++    t1[0] = *(uint64_t *)(pix1 + 1*stride_pix1);
++    t0[1] = *(uint64_t *)(pix1 + 2*stride_pix1);
++    t1[1] = *(uint64_t *)(pix1 + 3*stride_pix1);
++
++    r0[0] = *(uint64_t *)(pix2 + 0*stride_pix1);
++    r1[0] = *(uint64_t *)(pix2 + 1*stride_pix2);
++    r0[1] = *(uint64_t *)(pix2 + 2*stride_pix2);
++    r1[1] = *(uint64_t *)(pix2 + 3*stride_pix2);
++    
++    return _satd_4x4_neon(vsubq_u16(t0,r0), vsubq_u16(r1,t1));
++}
++
++
++
++
++
++
++int pixel_satd_8x4_neon(const uint16_t* pix1, intptr_t stride_pix1, const uint16_t* pix2, intptr_t stride_pix2)
++{
++    uint16x8_t i0,i1,i2,i3,i4,i5,i6,i7;
++    
++    i0 = *(uint16x8_t *)(pix1 + 0*stride_pix1);
++    i1 = *(uint16x8_t *)(pix2 + 0*stride_pix2);
++    i2 = *(uint16x8_t *)(pix1 + 1*stride_pix1);
++    i3 = *(uint16x8_t *)(pix2 + 1*stride_pix2);
++    i4 = *(uint16x8_t *)(pix1 + 2*stride_pix1);
++    i5 = *(uint16x8_t *)(pix2 + 2*stride_pix2);
++    i6 = *(uint16x8_t *)(pix1 + 3*stride_pix1);
++    i7 = *(uint16x8_t *)(pix2 + 3*stride_pix2);
++
++    int16x8_t v0 = vsubq_u16(i0,i1);
++    int16x8_t v1 = vsubq_u16(i2,i3);
++    int16x8_t v2 = vsubq_u16(i4,i5);
++    int16x8_t v3 = vsubq_u16(i6,i7);
++
++    return _satd_4x8_8x4_end_neon(v0,v1,v2,v3);
++}
++
++
++int pixel_satd_16x16_neon(const uint16_t* pix1, intptr_t stride_pix1, const uint16_t* pix2, intptr_t stride_pix2)
++{
++    int32x4_t v30 = vdupq_n_u32(0),v31= vdupq_n_u32(0);
++    int16x8_t v0,v1,v2,v3;
++    
++    _satd_16x4_neon(pix1,stride_pix1,pix2,stride_pix2,v0,v1,v2,v3);
++    v30 = vpadalq_u16(v30,v0);
++    v30 = vpadalq_u16(v30,v1);
++    v31 = vpadalq_u16(v31,v2);
++    v31 = vpadalq_u16(v31,v3);
++
++    _satd_16x4_neon(pix1 + 4*stride_pix1,stride_pix1,pix2+4*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v30 = vpadalq_u16(v30,v0);
++    v30 = vpadalq_u16(v30,v1);
++    v31 = vpadalq_u16(v31,v2);
++    v31 = vpadalq_u16(v31,v3);
++
++    _satd_16x4_neon(pix1 + 8*stride_pix1,stride_pix1,pix2+8*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v30 = vpadalq_u16(v30,v0);
++    v30 = vpadalq_u16(v30,v1);
++    v31 = vpadalq_u16(v31,v2);
++    v31 = vpadalq_u16(v31,v3);
++
++    _satd_16x4_neon(pix1 + 12*stride_pix1,stride_pix1,pix2+12*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v30 = vpadalq_u16(v30,v0);
++    v30 = vpadalq_u16(v30,v1);
++    v31 = vpadalq_u16(v31,v2);
++    v31 = vpadalq_u16(v31,v3);
++
++    return vaddvq_s32(vaddq_s32(v30,v31));
++    
++}
++
++#else       //HIGH_BIT_DEPTH
++
++static void _satd_16x4_neon(const uint8_t* pix1, intptr_t stride_pix1, const uint8_t* pix2, intptr_t stride_pix2,
++                            int16x8_t& v0,int16x8_t&v1, int16x8_t&v2,int16x8_t&v3)
++{
++    uint8x16_t r0,r1,r2,r3;
++    uint8x16_t t0,t1,t2,t3;
++    int16x8_t v16,v17,v20,v21;
++    int16x8_t v18,v19,v22,v23;
++    
++    r0 = *(uint8x16_t*)(pix1 + 0*stride_pix1);
++    r1 = *(uint8x16_t*)(pix1 + 1*stride_pix1);
++    r2 = *(uint8x16_t*)(pix1 + 2*stride_pix1);
++    r3 = *(uint8x16_t*)(pix1 + 3*stride_pix1);
++
++    t0 = *(uint8x16_t*)(pix2 + 0*stride_pix2);
++    t1 = *(uint8x16_t*)(pix2 + 1*stride_pix2);
++    t2 = *(uint8x16_t*)(pix2 + 2*stride_pix2);
++    t3 = *(uint8x16_t*)(pix2 + 3*stride_pix2);
++
++    
++    
++    v16 = vsubl_u8(vget_low_u8(r0),vget_low_u8(t0) );
++    v20 = vsubl_high_u8(r0,t0);
++    v17 = vsubl_u8(vget_low_u8(r1),vget_low_u8(t1) );
++    v21 = vsubl_high_u8(r1,t1);
++    v18 = vsubl_u8(vget_low_u8(r2),vget_low_u8(t2) );
++    v22 = vsubl_high_u8(r2,t2);
++    v19 = vsubl_u8(vget_low_u8(r3),vget_low_u8(t3) );
++    v23 = vsubl_high_u8(r3,t3);
++
++    SUMSUB_AB   (v0,  v1,  v16, v17);
++    SUMSUB_AB   (v2,  v3,  v18, v19);
++    
++    _satd_8x4v_8x8h_neon(v0,v1,v2,v3,v20,v21,v22,v23);
++    
++}
++
++
++static inline void _sub_8x8_fly(const uint8_t* pix1, intptr_t stride_pix1, const uint8_t* pix2, intptr_t stride_pix2,
++                            int16x8_t& v0,int16x8_t& v1, int16x8_t& v2,int16x8_t& v3,
++                            int16x8_t& v20,int16x8_t& v21, int16x8_t& v22,int16x8_t& v23)
++{
++    uint8x8_t r0,r1,r2,r3;
++    uint8x8_t t0,t1,t2,t3;
++    int16x8_t v16,v17;
++    int16x8_t v18,v19;
++    
++    r0 = *(uint8x8_t*)(pix1 + 0*stride_pix1);
++    r1 = *(uint8x8_t*)(pix1 + 1*stride_pix1);
++    r2 = *(uint8x8_t*)(pix1 + 2*stride_pix1);
++    r3 = *(uint8x8_t*)(pix1 + 3*stride_pix1);
++
++    t0 = *(uint8x8_t*)(pix2 + 0*stride_pix2);
++    t1 = *(uint8x8_t*)(pix2 + 1*stride_pix2);
++    t2 = *(uint8x8_t*)(pix2 + 2*stride_pix2);
++    t3 = *(uint8x8_t*)(pix2 + 3*stride_pix2);
++
++    v16 = vsubl_u8(r0,t0);
++    v17 = vsubl_u8(r1,t1);
++    v18 = vsubl_u8(r2,t2);
++    v19 = vsubl_u8(r3,t3);
++
++    r0 = *(uint8x8_t*)(pix1 + 4*stride_pix1);
++    r1 = *(uint8x8_t*)(pix1 + 5*stride_pix1);
++    r2 = *(uint8x8_t*)(pix1 + 6*stride_pix1);
++    r3 = *(uint8x8_t*)(pix1 + 7*stride_pix1);
++
++    t0 = *(uint8x8_t*)(pix2 + 4*stride_pix2);
++    t1 = *(uint8x8_t*)(pix2 + 5*stride_pix2);
++    t2 = *(uint8x8_t*)(pix2 + 6*stride_pix2);
++    t3 = *(uint8x8_t*)(pix2 + 7*stride_pix2);
++    
++    v20 = vsubl_u8(r0,t0);
++    v21 = vsubl_u8(r1,t1);
++    v22 = vsubl_u8(r2,t2);
++    v23 = vsubl_u8(r3,t3);
++
++
++    SUMSUB_AB   (v0,  v1,  v16, v17);
++    SUMSUB_AB   (v2,  v3,  v18, v19);
++    
++}
++
++int pixel_satd_4x4_neon(const uint8_t* pix1, intptr_t stride_pix1, const uint8_t* pix2, intptr_t stride_pix2)
++{
++    uint32x2_t t0,t1,r0,r1;
++    t0[0] = *(uint32_t *)(pix1 + 0*stride_pix1);
++    t1[0] = *(uint32_t *)(pix1 + 1*stride_pix1);
++    t0[1] = *(uint32_t *)(pix1 + 2*stride_pix1);
++    t1[1] = *(uint32_t *)(pix1 + 3*stride_pix1);
++
++    r0[0] = *(uint32_t *)(pix2 + 0*stride_pix1);
++    r1[0] = *(uint32_t *)(pix2 + 1*stride_pix2);
++    r0[1] = *(uint32_t *)(pix2 + 2*stride_pix2);
++    r1[1] = *(uint32_t *)(pix2 + 3*stride_pix2);
++    
++    return _satd_4x4_neon(vsubl_u8(t0,r0), vsubl_u8(r1,t1));
++}
++
++
++int pixel_satd_8x4_neon(const uint8_t* pix1, intptr_t stride_pix1, const uint8_t* pix2, intptr_t stride_pix2)
++{
++    uint8x8_t i0,i1,i2,i3,i4,i5,i6,i7;
++    
++    i0 = *(uint8x8_t *)(pix1 + 0*stride_pix1);
++    i1 = *(uint8x8_t *)(pix2 + 0*stride_pix2);
++    i2 = *(uint8x8_t *)(pix1 + 1*stride_pix1);
++    i3 = *(uint8x8_t *)(pix2 + 1*stride_pix2);
++    i4 = *(uint8x8_t *)(pix1 + 2*stride_pix1);
++    i5 = *(uint8x8_t *)(pix2 + 2*stride_pix2);
++    i6 = *(uint8x8_t *)(pix1 + 3*stride_pix1);
++    i7 = *(uint8x8_t *)(pix2 + 3*stride_pix2);
++
++    int16x8_t v0 = vsubl_u8(i0,i1);
++    int16x8_t v1 = vsubl_u8(i2,i3);
++    int16x8_t v2 = vsubl_u8(i4,i5);
++    int16x8_t v3 = vsubl_u8(i6,i7);
++
++    return _satd_4x8_8x4_end_neon(v0,v1,v2,v3);
++}
++
++int pixel_satd_16x16_neon(const uint8_t* pix1, intptr_t stride_pix1, const uint8_t* pix2, intptr_t stride_pix2)
++{
++    int16x8_t v30,v31;
++    int16x8_t v0,v1,v2,v3;
++    
++    _satd_16x4_neon(pix1,stride_pix1,pix2,stride_pix2,v0,v1,v2,v3);
++    v30 = vaddq_s16(v0,v1);
++    v31 = vaddq_s16(v2,v3);
++    
++    _satd_16x4_neon(pix1 + 4*stride_pix1,stride_pix1,pix2+4*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v0 = vaddq_s16(v0,v1);
++    v1 = vaddq_s16(v2,v3);
++    v30 = vaddq_s16(v30, v0);
++    v31 = vaddq_s16(v31, v1);
++
++    _satd_16x4_neon(pix1 + 8*stride_pix1,stride_pix1,pix2+8*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v0 = vaddq_s16(v0,v1);
++    v1 = vaddq_s16(v2,v3);
++    v30 = vaddq_s16(v30, v0);
++    v31 = vaddq_s16(v31, v1);
++
++    _satd_16x4_neon(pix1 + 12*stride_pix1,stride_pix1,pix2+12*stride_pix2,stride_pix2,v0,v1,v2,v3);
++    v0 = vaddq_s16(v0,v1);
++    v1 = vaddq_s16(v2,v3);
++    v30 = vaddq_s16(v30, v0);
++    v31 = vaddq_s16(v31, v1);
++
++    int32x4_t sum0 = vpaddlq_u16(v30);
++    int32x4_t sum1 = vpaddlq_u16(v31);
++    sum0 = vaddq_s32(sum0,sum1);
++    return vaddvq_s32(sum0);
++    
++}
++#endif      //HIGH_BIT_DEPTH
++
++
++static inline void _sa8d_8x8_neon_end(int16x8_t& v0,int16x8_t& v1,int16x8_t v2,int16x8_t v3,
++                                     int16x8_t v20,int16x8_t v21,int16x8_t v22,int16x8_t v23)
++{
++    int16x8_t v16,v17,v18,v19;
++    int16x8_t v4,v5,v6,v7;
++    
++    SUMSUB_AB   (v16, v18, v0,  v2);
++    SUMSUB_AB   (v17, v19, v1,  v3);
++
++    HADAMARD4_V (v20, v21, v22, v23, v0,  v1, v2, v3);
++
++    SUMSUB_AB   (v0,  v16, v16, v20);
++    SUMSUB_AB   (v1,  v17, v17, v21);
++    SUMSUB_AB   (v2,  v18, v18, v22);
++    SUMSUB_AB   (v3,  v19, v19, v23);
++
++    transpose_8h   (v20, v21, v16, v17);
++    transpose_8h   (v4,  v5,  v0,  v1);
++    transpose_8h   (v22, v23, v18, v19);
++    transpose_8h   (v6,  v7,  v2,  v3);
++    
++#if (X265_DEPTH <= 10)
++
++    int16x8_t v24,v25;
++
++    SUMSUB_AB   (v2,  v3,  v20, v21);
++    SUMSUB_AB   (v24, v25, v4,  v5);
++    SUMSUB_AB   (v0,  v1,  v22, v23);
++    SUMSUB_AB   (v4,  v5,  v6,  v7);
++
++    transpose_4s   (v20, v22, v2,  v0);
++    transpose_4s   (v21, v23, v3,  v1);
++    transpose_4s   (v16, v18, v24, v4);
++    transpose_4s   (v17, v19, v25, v5);
++
++    SUMSUB_AB   (v0,  v2,  v20, v22);
++    SUMSUB_AB   (v1,  v3,  v21, v23);
++    SUMSUB_AB   (v4,  v6,  v16, v18);
++    SUMSUB_AB   (v5,  v7,  v17, v19);
++
++    transpose_2d   (v16, v20,  v0,  v4);
++    transpose_2d   (v17, v21,  v1,  v5);
++    transpose_2d   (v18, v22,  v2,  v6);
++    transpose_2d   (v19, v23,  v3,  v7);
++
++    
++    v16 = vabsq_s16(v16);
++    v17 = vabsq_s16(v17);
++    v18 = vabsq_s16(v18);
++    v19 = vabsq_s16(v19);
++    v20 = vabsq_s16(v20);
++    v21 = vabsq_s16(v21);
++    v22 = vabsq_s16(v22);
++    v23 = vabsq_s16(v23);
++
++    v16 = vmaxq_u16(v16,v20);
++    v17 = vmaxq_u16(v17,v21);
++    v18 = vmaxq_u16(v18,v22);
++    v19 = vmaxq_u16(v19,v23);
++
++#if HIGH_BIT_DEPTH
++    v0 = vpaddlq_u16(v16);
++    v1 = vpaddlq_u16(v17);
++    v0 = vpadalq_u16(v0,v18);
++    v1 = vpadalq_u16(v1,v19);
++    
++#else //HIGH_BIT_DEPTH
++    
++    v0 = vaddq_u16(v16,v17);
++    v1 = vaddq_u16(v18,v19);
++
++#endif //HIGH_BIT_DEPTH
++    
++#else // HIGH_BIT_DEPTH 12 bit only, switching math to int32, each int16x8 is up-convreted to 2 int32x4 (low and high)
++
++    int32x4_t v2l,v2h,v3l,v3h,v24l,v24h,v25l,v25h,v0l,v0h,v1l,v1h;
++    int32x4_t v22l,v22h,v23l,v23h;
++    int32x4_t v4l,v4h,v5l,v5h;
++    int32x4_t v6l,v6h,v7l,v7h;
++    int32x4_t v16l,v16h,v17l,v17h;
++    int32x4_t v18l,v18h,v19l,v19h;
++    int32x4_t v20l,v20h,v21l,v21h;
++
++    ISUMSUB_AB_FROM_INT16(v2l, v2h, v3l, v3h, v20, v21);
++    ISUMSUB_AB_FROM_INT16(v24l, v24h, v25l, v25h, v4, v5);
++
++    v22l = vmovl_s16(vget_low_s16(v22));
++    v22h = vmovl_high_s16(v22);
++    v23l = vmovl_s16(vget_low_s16(v23));
++    v23h = vmovl_high_s16(v23);
++    
++    ISUMSUB_AB(v0l,  v1l,  v22l, v23l);
++    ISUMSUB_AB(v0h,  v1h,  v22h, v23h);
++
++    v6l = vmovl_s16(vget_low_s16(v6));
++    v6h = vmovl_high_s16(v6);
++    v7l = vmovl_s16(vget_low_s16(v7));
++    v7h = vmovl_high_s16(v7);
++
++    ISUMSUB_AB   (v4l,  v5l,  v6l,  v7l);
++    ISUMSUB_AB   (v4h,  v5h,  v6h,  v7h);
++
++    transpose_2d   (v20l, v22l, v2l,  v0l);
++    transpose_2d   (v21l, v23l, v3l,  v1l);
++    transpose_2d   (v16l, v18l, v24l, v4l);
++    transpose_2d   (v17l, v19l, v25l, v5l);
++
++    transpose_2d   (v20h, v22h, v2h,  v0h);
++    transpose_2d   (v21h, v23h, v3h,  v1h);
++    transpose_2d   (v16h, v18h, v24h, v4h);
++    transpose_2d   (v17h, v19h, v25h, v5h);
++
++    ISUMSUB_AB   (v0l,  v2l,  v20l, v22l);
++    ISUMSUB_AB   (v1l,  v3l,  v21l, v23l);
++    ISUMSUB_AB   (v4l,  v6l,  v16l, v18l);
++    ISUMSUB_AB   (v5l,  v7l,  v17l, v19l);
++
++    ISUMSUB_AB   (v0h,  v2h,  v20h, v22h);
++    ISUMSUB_AB   (v1h,  v3h,  v21h, v23h);
++    ISUMSUB_AB   (v4h,  v6h,  v16h, v18h);
++    ISUMSUB_AB   (v5h,  v7h,  v17h, v19h);
++
++    v16l = v0l;
++    v16h = v4l;
++    v20l = v0h;
++    v20h = v4h;
++    
++    v17l = v1l;
++    v17h = v5l;
++    v21l = v1h;
++    v21h = v5h;
++    
++    v18l = v2l;
++    v18h = v6l;
++    v22l = v2h;
++    v22h = v6h;
++    
++    v19l = v3l;
++    v19h = v7l;
++    v23l = v3h;
++    v23h = v7h;
++
++    v16l = vabsq_s32(v16l);
++    v17l = vabsq_s32(v17l);
++    v18l = vabsq_s32(v18l);
++    v19l = vabsq_s32(v19l);
++    v20l = vabsq_s32(v20l);
++    v21l = vabsq_s32(v21l);
++    v22l = vabsq_s32(v22l);
++    v23l = vabsq_s32(v23l);
++
++    v16h = vabsq_s32(v16h);
++    v17h = vabsq_s32(v17h);
++    v18h = vabsq_s32(v18h);
++    v19h = vabsq_s32(v19h);
++    v20h = vabsq_s32(v20h);
++    v21h = vabsq_s32(v21h);
++    v22h = vabsq_s32(v22h);
++    v23h = vabsq_s32(v23h);
++
++    v16l = vmaxq_u32(v16l,v20l);
++    v17l = vmaxq_u32(v17l,v21l);
++    v18l = vmaxq_u32(v18l,v22l);
++    v19l = vmaxq_u32(v19l,v23l);
++
++    v16h = vmaxq_u32(v16h,v20h);
++    v17h = vmaxq_u32(v17h,v21h);
++    v18h = vmaxq_u32(v18h,v22h);
++    v19h = vmaxq_u32(v19h,v23h);
++
++    v16l = vaddq_u32(v16l,v16h);
++    v17l = vaddq_u32(v17l,v17h);
++    v18l = vaddq_u32(v18l,v18h);
++    v19l = vaddq_u32(v19l,v19h);
++
++    v0 = vaddq_u32(v16l, v17l);
++    v1 = vaddq_u32(v18l,v19l);
++    
++    
++#endif
++    
++}
++
++
++
++static inline void _satd_8x8_neon(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2,
++                            int16x8_t& v0,int16x8_t&v1, int16x8_t&v2,int16x8_t&v3)
++{
++    
++    int16x8_t v20,v21,v22,v23;
++    _sub_8x8_fly(pix1,stride_pix1,pix2,stride_pix2,v0,v1,v2,v3,v20,v21,v22,v23);
++    _satd_8x4v_8x8h_neon(v0,v1,v2,v3,v20,v21,v22,v23);
++    
++}
++
++
++
++int pixel_satd_8x8_neon(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++    int16x8_t v30,v31;
++    int16x8_t v0,v1,v2,v3;
++    
++    _satd_8x8_neon(pix1,stride_pix1,pix2,stride_pix2,v0,v1,v2,v3);
++#if !(HIGH_BIT_DEPTH)
++    v30 = vaddq_u16(v0,v1);
++    v31 = vaddq_u16(v2,v3);
++    
++    uint16x8_t sum = vaddq_u16(v30,v31);
++    return vaddvq_s32(vpaddlq_u16(sum));
++#else
++    
++    v30 = vaddq_u16(v0,v1);
++    v31 = vaddq_u16(v2,v3);
++
++    int32x4_t sum = vpaddlq_u16(v30);
++    sum = vpadalq_u16(sum, v31);
++    return vaddvq_s32(sum);
++#endif
++}
++
++
++int pixel_sa8d_8x8_neon(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++    int16x8_t v0,v1,v2,v3;
++    int16x8_t v20,v21,v22,v23;
++    
++    _sub_8x8_fly(pix1, stride_pix1, pix2, stride_pix2, v0, v1, v2, v3, v20, v21, v22, v23);
++    _sa8d_8x8_neon_end(v0, v1, v2, v3, v20, v21, v22, v23);
++
++#if HIGH_BIT_DEPTH
++//#if 1//HIGH_BIT_DEPTH
++    int32x4_t s = vaddq_u32(v0,v1);
++    return (vaddvq_u32(s) + 1) >> 1;
++#else
++    return (vaddlvq_s16(vaddq_u16(v0, v1)) + 1) >> 1;
++#endif
++}
++
++
++
++
++
++int pixel_sa8d_16x16_neon(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++    int16x8_t v0,v1,v2,v3;
++    int16x8_t v20,v21,v22,v23;
++    int32x4_t v30,v31;
++    
++    _sub_8x8_fly(pix1, stride_pix1, pix2, stride_pix2, v0, v1, v2, v3, v20, v21, v22, v23);
++    _sa8d_8x8_neon_end(v0, v1, v2, v3, v20, v21, v22, v23);
++
++#if !(HIGH_BIT_DEPTH)
++    v30 = vpaddlq_u16(v0);
++    v31 = vpaddlq_u16(v1);
++#else
++    v30 = vaddq_s32(v0,v1);
++#endif
++    
++    _sub_8x8_fly(pix1 + 8, stride_pix1, pix2 + 8, stride_pix2, v0, v1, v2, v3, v20, v21, v22, v23);
++    _sa8d_8x8_neon_end(v0, v1, v2, v3, v20, v21, v22, v23);
++
++#if !(HIGH_BIT_DEPTH)
++     v30 = vpadalq_u16(v30,v0);
++     v31 = vpadalq_u16(v31,v1);
++#else
++     v31 = vaddq_s32(v0,v1);
++#endif
++
++
++    _sub_8x8_fly(pix1 + 8*stride_pix1, stride_pix1, pix2 + 8*stride_pix2, stride_pix2, v0, v1, v2, v3, v20, v21, v22, v23);
++    _sa8d_8x8_neon_end(v0, v1, v2, v3, v20, v21, v22, v23);
++
++#if !(HIGH_BIT_DEPTH)
++    v30 = vpadalq_u16(v30,v0);
++    v31 = vpadalq_u16(v31,v1);
++#else
++    v30 = vaddq_s32(v30,v0);
++    v31 = vaddq_s32(v31,v1);
++#endif
++
++    _sub_8x8_fly(pix1 + 8*stride_pix1 + 8, stride_pix1, pix2 + 8*stride_pix2 + 8, stride_pix2, v0, v1, v2, v3, v20, v21, v22, v23);
++    _sa8d_8x8_neon_end(v0, v1, v2, v3, v20, v21, v22, v23);
++
++#if !(HIGH_BIT_DEPTH)
++     v30 = vpadalq_u16(v30,v0);
++     v31 = vpadalq_u16(v31,v1);
++#else
++     v30 = vaddq_s32(v30,v0);
++     v31 = vaddq_s32(v31,v1);
++#endif
++
++    v30 = vaddq_u32(v30,v31);
++    
++    return (vaddvq_u32(v30) + 1) >> 1;
++}
++
++
++
++
++
++
++
++
++template<int size>
++void blockfill_s_neon(int16_t* dst, intptr_t dstride, int16_t val)
++{
++  for (int y = 0; y < size; y++) {
++    int x = 0;
++    int16x8_t v = vdupq_n_s16(val);
++    for (; (x + 8) <= size; x+=8) {
++        *(int16x8_t*)&dst[y * dstride + x] = v;
++    }
++    for (; x < size; x++) {
++        dst[y * dstride + x] = val;
++    }
++  }
++}
++
++template<int lx, int ly>
++int sad_pp_neon(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++  int sum = 0;
++
++
++  for (int y = 0; y < ly; y++)
++  {
++#if HIGH_BIT_DEPTH
++      int x=0;
++      uint16x8_t vsum16_1 = vdupq_n_u16(0);
++      for (; (x + 8) <= lx; x+=8) {
++        uint16x8_t p1 = *(uint16x8_t*)&pix1[x];
++        uint16x8_t p2 = *(uint16x8_t*)&pix2[x];
++        vsum16_1 = vabaq_s16(vsum16_1,p1,p2);
++              
++      }
++      if (lx & 4) {
++        uint16x4_t p1 = *(uint16x4_t*)&pix1[x];
++        uint16x4_t p2 = *(uint16x4_t*)&pix2[x];
++        sum += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p2));
++        x += 4;
++      }
++      if (lx >= 4) {
++        sum += vaddlvq_s16(vsum16_1);
++      }
++
++#else
++
++    int x=0;
++    uint16x8_t vsum16_1 = vdupq_n_u16(0);
++    uint16x8_t vsum16_2 = vdupq_n_u16(0);
++
++    for (; (x + 16) <= lx; x+=16) {
++      uint8x16_t p1 = *(uint8x16_t*)&pix1[x];
++      uint8x16_t p2 = *(uint8x16_t*)&pix2[x];
++      vsum16_1 = vabal_u8(vsum16_1,vget_low_u8(p1),vget_low_u8(p2));
++      vsum16_2 = vabal_high_u8(vsum16_2,p1,p2);
++    }
++    if (lx & 8) {
++      uint8x8_t p1 = *(uint8x8_t*)&pix1[x];
++      uint8x8_t p2 = *(uint8x8_t*)&pix2[x];
++      vsum16_1 = vabal_u8(vsum16_1,p1,p2);
++      x += 8;
++    }
++    if (lx & 4) {
++      uint32x2_t p1 = vdup_n_u32(0);
++      p1[0] = *(uint32_t*)&pix1[x];
++      uint32x2_t p2 = vdup_n_u32(0);
++      p2[0] = *(uint32_t*)&pix2[x];
++      vsum16_1 = vabal_u8(vsum16_1,p1,p2);
++      x += 4;
++    }
++    if (lx >= 16) {
++      vsum16_1 = vaddq_u16(vsum16_1,vsum16_2);
++    }
++    if (lx >= 4) {
++      sum += vaddvq_u16(vsum16_1);
++    }
++
++#endif
++    if (lx & 3) for (; x < lx; x++) {
++        sum += abs(pix1[x] - pix2[x]);
++    }
++    
++    pix1 += stride_pix1;
++    pix2 += stride_pix2;
++  }
++
++  return sum;
++}
++
++template<int lx, int ly>
++void sad_x3_neon(const pixel* pix1, const pixel* pix2, const pixel* pix3, const pixel* pix4, intptr_t frefstride, int32_t* res)
++{
++  res[0] = 0;
++  res[1] = 0;
++  res[2] = 0;
++  for (int y = 0; y < ly; y++)
++  {
++    int x = 0;
++    uint16x8_t vsum16_0 = vdupq_n_u16(0);
++    uint16x8_t vsum16_1 = vdupq_n_u16(0);
++    uint16x8_t vsum16_2 = vdupq_n_u16(0);
++#if HIGH_BIT_DEPTH
++      for (; (x + 8) <= lx; x+=8) {
++        uint16x8_t p1 = *(uint16x8_t*)&pix1[x];
++        uint16x8_t p2 = *(uint16x8_t*)&pix2[x];
++        uint16x8_t p3 = *(uint16x8_t*)&pix3[x];
++        uint16x8_t p4 = *(uint16x8_t*)&pix4[x];
++        vsum16_0 = vabaq_s16(vsum16_0,p1,p2);
++        vsum16_1 = vabaq_s16(vsum16_1,p1,p3);
++        vsum16_2 = vabaq_s16(vsum16_2,p1,p4);
++
++      }
++      if (lx & 4) {
++        uint16x4_t p1 = *(uint16x4_t*)&pix1[x];
++        uint16x4_t p2 = *(uint16x4_t*)&pix2[x];
++        uint16x4_t p3 = *(uint16x4_t*)&pix3[x];
++        uint16x4_t p4 = *(uint16x4_t*)&pix4[x];
++        res[0] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p2));
++        res[1] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p3));
++        res[2] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p4));
++        x += 4;
++      }
++      if (lx >= 4) {
++        res[0] += vaddlvq_s16(vsum16_0);
++        res[1] += vaddlvq_s16(vsum16_1);
++        res[2] += vaddlvq_s16(vsum16_2);
++      }
++#else
++    
++    for (; (x + 16) <= lx; x+=16) {
++      uint8x16_t p1 = *(uint8x16_t*)&pix1[x];
++      uint8x16_t p2 = *(uint8x16_t*)&pix2[x];
++      uint8x16_t p3 = *(uint8x16_t*)&pix3[x];
++      uint8x16_t p4 = *(uint8x16_t*)&pix4[x];
++      vsum16_0 = vabal_u8(vsum16_0,vget_low_u8(p1),vget_low_u8(p2));
++      vsum16_0 = vabal_high_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,vget_low_u8(p1),vget_low_u8(p3));
++      vsum16_1 = vabal_high_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,vget_low_u8(p1),vget_low_u8(p4));
++      vsum16_2 = vabal_high_u8(vsum16_2,p1,p4);
++    }
++    if (lx & 8) {
++      uint8x8_t p1 = *(uint8x8_t*)&pix1[x];
++      uint8x8_t p2 = *(uint8x8_t*)&pix2[x];
++      uint8x8_t p3 = *(uint8x8_t*)&pix3[x];
++      uint8x8_t p4 = *(uint8x8_t*)&pix4[x];
++      vsum16_0 = vabal_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,p1,p4);
++      x += 8;
++    }
++    if (lx & 4) {
++      uint32x2_t p1 = vdup_n_u32(0);
++      p1[0] = *(uint32_t*)&pix1[x];
++      uint32x2_t p2 = vdup_n_u32(0);
++      p2[0] = *(uint32_t*)&pix2[x];
++      uint32x2_t p3 = vdup_n_u32(0);
++      p3[0] = *(uint32_t*)&pix3[x];
++      uint32x2_t p4 = vdup_n_u32(0);
++      p4[0] = *(uint32_t*)&pix4[x];
++      vsum16_0 = vabal_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,p1,p4);
++      x += 4;
++    }
++    if (lx >= 4) {
++      res[0] += vaddvq_u16(vsum16_0);
++      res[1] += vaddvq_u16(vsum16_1);
++      res[2] += vaddvq_u16(vsum16_2);
++    }
++
++#endif
++    if (lx & 3) for (; x < lx; x++)
++    {
++      res[0] += abs(pix1[x] - pix2[x]);
++      res[1] += abs(pix1[x] - pix3[x]);
++      res[2] += abs(pix1[x] - pix4[x]);
++    }
++
++    pix1 += FENC_STRIDE;
++    pix2 += frefstride;
++    pix3 += frefstride;
++    pix4 += frefstride;
++  }
++}
++
++template<int lx, int ly>
++void sad_x4_neon(const pixel* pix1, const pixel* pix2, const pixel* pix3, const pixel* pix4, const pixel* pix5, intptr_t frefstride, int32_t* res)
++{
++  res[0] = 0;
++  res[1] = 0;
++  res[2] = 0;
++  res[3] = 0;
++  for (int y = 0; y < ly; y++)
++  {
++    int x=0;
++    uint16x8_t vsum16_0 = vdupq_n_u16(0);
++    uint16x8_t vsum16_1 = vdupq_n_u16(0);
++    uint16x8_t vsum16_2 = vdupq_n_u16(0);
++    uint16x8_t vsum16_3 = vdupq_n_u16(0);
++#if HIGH_BIT_DEPTH
++      for (; (x + 8) <= lx; x+=8) {
++        uint16x8_t p1 = *(uint16x8_t*)&pix1[x];
++        uint16x8_t p2 = *(uint16x8_t*)&pix2[x];
++        uint16x8_t p3 = *(uint16x8_t*)&pix3[x];
++        uint16x8_t p4 = *(uint16x8_t*)&pix4[x];
++        uint16x8_t p5 = *(uint16x8_t*)&pix5[x];
++        vsum16_0 = vabaq_s16(vsum16_0,p1,p2);
++        vsum16_1 = vabaq_s16(vsum16_1,p1,p3);
++        vsum16_2 = vabaq_s16(vsum16_2,p1,p4);
++        vsum16_3 = vabaq_s16(vsum16_3,p1,p5);
++
++      }
++      if (lx & 4) {
++        uint16x4_t p1 = *(uint16x4_t*)&pix1[x];
++        uint16x4_t p2 = *(uint16x4_t*)&pix2[x];
++        uint16x4_t p3 = *(uint16x4_t*)&pix3[x];
++        uint16x4_t p4 = *(uint16x4_t*)&pix4[x];
++        uint16x4_t p5 = *(uint16x4_t*)&pix5[x];
++        res[0] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p2));
++        res[1] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p3));
++        res[2] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p4));
++        res[3] += vaddlv_s16(vaba_s16(vdup_n_s16(0),p1,p5));
++        x += 4;
++      }
++      if (lx >= 4) {
++        res[0] += vaddlvq_s16(vsum16_0);
++        res[1] += vaddlvq_s16(vsum16_1);
++        res[2] += vaddlvq_s16(vsum16_2);
++        res[3] += vaddlvq_s16(vsum16_3);
++      }
++
++#else
++    
++    for (; (x + 16) <= lx; x+=16) {
++      uint8x16_t p1 = *(uint8x16_t*)&pix1[x];
++      uint8x16_t p2 = *(uint8x16_t*)&pix2[x];
++      uint8x16_t p3 = *(uint8x16_t*)&pix3[x];
++      uint8x16_t p4 = *(uint8x16_t*)&pix4[x];
++      uint8x16_t p5 = *(uint8x16_t*)&pix5[x];
++      vsum16_0 = vabal_u8(vsum16_0,vget_low_u8(p1),vget_low_u8(p2));
++      vsum16_0 = vabal_high_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,vget_low_u8(p1),vget_low_u8(p3));
++      vsum16_1 = vabal_high_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,vget_low_u8(p1),vget_low_u8(p4));
++      vsum16_2 = vabal_high_u8(vsum16_2,p1,p4);
++      vsum16_3 = vabal_u8(vsum16_3,vget_low_u8(p1),vget_low_u8(p5));
++      vsum16_3 = vabal_high_u8(vsum16_3,p1,p5);
++    }
++    if (lx & 8) {
++      uint8x8_t p1 = *(uint8x8_t*)&pix1[x];
++      uint8x8_t p2 = *(uint8x8_t*)&pix2[x];
++      uint8x8_t p3 = *(uint8x8_t*)&pix3[x];
++      uint8x8_t p4 = *(uint8x8_t*)&pix4[x];
++      uint8x8_t p5 = *(uint8x8_t*)&pix5[x];
++      vsum16_0 = vabal_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,p1,p4);
++      vsum16_3 = vabal_u8(vsum16_3,p1,p5);
++      x += 8;
++    }
++    if (lx & 4) {
++      uint32x2_t p1 = vdup_n_u32(0);
++      p1[0] = *(uint32_t*)&pix1[x];
++      uint32x2_t p2 = vdup_n_u32(0);
++      p2[0] = *(uint32_t*)&pix2[x];
++      uint32x2_t p3 = vdup_n_u32(0);
++      p3[0] = *(uint32_t*)&pix3[x];
++      uint32x2_t p4 = vdup_n_u32(0);
++      p4[0] = *(uint32_t*)&pix4[x];
++      uint32x2_t p5 = vdup_n_u32(0);
++      p5[0] = *(uint32_t*)&pix5[x];
++      vsum16_0 = vabal_u8(vsum16_0,p1,p2);
++      vsum16_1 = vabal_u8(vsum16_1,p1,p3);
++      vsum16_2 = vabal_u8(vsum16_2,p1,p4);
++      vsum16_3 = vabal_u8(vsum16_3,p1,p5);
++      x += 4;
++    }
++    if (lx >= 4) {
++      res[0] += vaddvq_u16(vsum16_0);
++      res[1] += vaddvq_u16(vsum16_1);
++      res[2] += vaddvq_u16(vsum16_2);
++      res[3] += vaddvq_u16(vsum16_3);
++    }
++
++#endif
++    if (lx & 3) for (; x < lx; x++)
++    {
++      res[0] += abs(pix1[x] - pix2[x]);
++      res[1] += abs(pix1[x] - pix3[x]);
++      res[2] += abs(pix1[x] - pix4[x]);
++      res[3] += abs(pix1[x] - pix5[x]);
++    }
++
++    pix1 += FENC_STRIDE;
++    pix2 += frefstride;
++    pix3 += frefstride;
++    pix4 += frefstride;
++    pix5 += frefstride;
++  }
++}
++
++
++template<int lx, int ly, class T1, class T2>
++sse_t sse_neon(const T1* pix1, intptr_t stride_pix1, const T2* pix2, intptr_t stride_pix2)
++{
++    sse_t sum = 0;
++
++    int32x4_t vsum1 = vdupq_n_s32(0);
++    int32x4_t vsum2 = vdupq_n_s32(0);
++    for (int y = 0; y < ly; y++)
++    {
++      int x = 0;
++        for (; (x+8) <= lx; x+=8)
++        {
++          int16x8_t tmp;
++          if (sizeof(T1) == 2 && sizeof(T2) == 2) {
++            tmp = vsubq_s16(*(int16x8_t *)&pix1[x],*(int16x8_t *)&pix2[x]);
++          } else if (sizeof(T1) == 1 && sizeof(T2) == 1){
++            tmp = vsubl_u8(*(uint8x8_t *)&pix1[x],*(uint8x8_t *)&pix2[x]);
++          }
++          else {
++            X265_CHECK(false,"unsupported sse");
++          }
++          vsum1 = vmlal_s16(vsum1,vget_low_s16(tmp),vget_low_s16(tmp));
++          vsum2 = vmlal_high_s16(vsum2,tmp,tmp);
++        }
++        for (; x < lx; x++)
++        {
++            int tmp = pix1[x] - pix2[x];
++            sum += (tmp * tmp);
++        }
++        
++        if (sizeof(T1) == 2 && sizeof(T2) == 2)
++        {
++            int32x4_t vsum = vaddq_u32(vsum1,vsum2);;
++            sum += vaddvq_u32(vsum);
++            vsum1 = vsum2 = vdupq_n_u16(0);
++        }
++
++        pix1 += stride_pix1;
++        pix2 += stride_pix2;
++    }
++    int32x4_t vsum = vaddq_u32(vsum1,vsum2);
++
++    return sum + vaddvq_u32(vsum);
++}
++
++
++template<int bx, int by>
++void blockcopy_ps_neon(int16_t* a, intptr_t stridea, const pixel* b, intptr_t strideb)
++{
++    for (int y = 0; y < by; y++)
++    {
++      int x= 0;
++      for (; (x + 8) <= bx; x+=8)
++      {
++#if HIGH_BIT_DEPTH
++        *(int16x8_t *)&a[x] = *(int16x8_t *)&b[x];
++#else
++        *(int16x8_t *)&a[x] = vmovl_u8(*(int8x8_t *)&b[x]);
++#endif
++      }
++      for (; x < bx; x++) {
++          a[x] = (int16_t)b[x];
++      }
++      
++      a += stridea;
++      b += strideb;
++    }
++}
++
++
++template<int bx, int by>
++void blockcopy_pp_neon(pixel* a, intptr_t stridea, const pixel* b, intptr_t strideb)
++{
++    for (int y = 0; y < by; y++)
++    {
++      int x = 0;
++#if HIGH_BIT_DEPTH
++      for (; (x + 8) <= bx; x+=8)
++      {
++        *(int16x8_t *)&a[x] = *(int16x8_t *)&b[x];
++      }
++      if (bx & 4)
++      {
++        *(uint64_t *)&a[x] = *(uint64_t *)&b[x];
++        x += 4;
++      }
++#else
++      for (; (x + 16) <= bx; x+=16)
++      {
++        *(uint8x16_t *)&a[x] = *(uint8x16_t *)&b[x];
++      }
++      if (bx & 8)
++      {
++          *(uint8x8_t *)&a[x] = *(uint8x8_t *)&b[x];
++          x += 8;
++      }
++      if (bx & 4)
++      {
++          *(uint32_t *)&a[x] = *(uint32_t *)&b[x];
++          x += 4;
++      }
++#endif
++      for (; x < bx; x++) {
++          a[x] = b[x];
++      }
++
++      a += stridea;
++      b += strideb;
++    }
++}
++
++
++template<int bx, int by>
++void pixel_sub_ps_neon(int16_t* a, intptr_t dstride, const pixel* b0, const pixel* b1, intptr_t sstride0, intptr_t sstride1)
++{
++    for (int y = 0; y < by; y++)
++    {
++      int x = 0;
++      for (; (x + 8) <= bx; x+=8) {
++#if HIGH_BIT_DEPTH
++        *(int16x8_t *)&a[x] = vsubq_s16(*(int16x8_t *)&b0[x], *(int16x8_t *)&b1[x]);
++#else
++        *(int16x8_t *)&a[x] = vsubl_u8(*(uint8x8_t *)&b0[x], *(uint8x8_t *)&b1[x]);
++#endif
++      }
++      for (; x < bx; x++)
++          a[x] = (int16_t)(b0[x] - b1[x]);
++
++        b0 += sstride0;
++        b1 += sstride1;
++        a += dstride;
++    }
++}
++
++template<int bx, int by>
++void pixel_add_ps_neon(pixel* a, intptr_t dstride, const pixel* b0, const int16_t* b1, intptr_t sstride0, intptr_t sstride1)
++{
++        for (int y = 0; y < by; y++)
++        {
++          int x = 0;
++          for (; (x + 8) <= bx; x+=8) {
++            int16x8_t t;
++            int16x8_t b1e = *(int16x8_t *)&b1[x];
++            int16x8_t b0e;
++#if HIGH_BIT_DEPTH
++            b0e = *(int16x8_t *)&b0[x];
++            t = vaddq_s16(b0e,b1e);
++            t = vminq_s16(t,vdupq_n_s16((1 << X265_DEPTH) - 1));
++            t = vmaxq_s16(t,vdupq_n_s16(0));
++            *(int16x8_t *)&a[x] = t;
++#else
++            b0e = vmovl_u8(*(uint8x8_t *)&b0[x]);
++            t = vaddq_s16(b0e,b1e);
++            *(uint8x8_t *)&a[x] = vqmovun_s16(t);
++#endif
++          }
++          for (; x < bx; x++)
++              a[x] = (int16_t)x265_clip(b0[x] + b1[x]);
++
++          b0 += sstride0;
++          b1 += sstride1;
++          a += dstride;
++        }
++}
++
++template<int bx, int by>
++void addAvg_neon(const int16_t* src0, const int16_t* src1, pixel* dst, intptr_t src0Stride, intptr_t src1Stride, intptr_t dstStride)
++{
++
++    const int shiftNum = IF_INTERNAL_PREC + 1 - X265_DEPTH;
++    const int offset = (1 << (shiftNum - 1)) + 2 * IF_INTERNAL_OFFS;
++
++    const int32x4_t addon = vdupq_n_s32(offset);
++    for (int y = 0; y < by; y++)
++    {
++      int x = 0;
++      
++        for (; (x + 8) <= bx; x += 8)
++        {
++          int16x8_t in0 = *(int16x8_t*)&src0[x];
++          int16x8_t in1 = *(int16x8_t*)&src1[x];
++          int32x4_t t1 = vaddl_s16(vget_low_s16(in0),vget_low_s16(in1));
++          int32x4_t t2 = vaddl_high_s16(in0,in1);
++          t1 = vaddq_s32(t1,addon);
++          t2 = vaddq_s32(t2,addon);
++          t1 = vshrq_n_s32(t1,shiftNum);
++          t2 = vshrq_n_s32(t2,shiftNum);
++          int16x8_t t = vuzp1q_s16(t1,t2);
++#if HIGH_BIT_DEPTH
++          t = vminq_s16(t,vdupq_n_s16((1 << X265_DEPTH) - 1));
++          t = vmaxq_s16(t,vdupq_n_s16(0));
++          *(int16x8_t *)&dst[x] = t;
++#else
++          *(uint8x8_t *)&dst[x] = vqmovun_s16(t);
++#endif
++        }
++      for (; x < bx; x += 2)
++      {
++          dst[x + 0] = x265_clip((src0[x + 0] + src1[x + 0] + offset) >> shiftNum);
++          dst[x + 1] = x265_clip((src0[x + 1] + src1[x + 1] + offset) >> shiftNum);
++      }
++
++        src0 += src0Stride;
++        src1 += src1Stride;
++        dst  += dstStride;
++    }
++}
++
++template<int lx, int ly>
++void pixelavg_pp_neon(pixel* dst, intptr_t dstride, const pixel* src0, intptr_t sstride0, const pixel* src1, intptr_t sstride1, int)
++{
++    for (int y = 0; y < ly; y++)
++    {
++      int x = 0;
++      for (; (x+8) <= lx; x+=8) {
++#if HIGH_BIT_DEPTH
++        int16x8_t in0 = *(int16x8_t *)&src0[x];
++        int16x8_t in1 = *(int16x8_t *)&src1[x];
++        int16x8_t t = vaddq_s16(in0,in1);
++        t = vaddq_s16(t,vdupq_n_s16(1));
++        t = vshrq_n_s16(t,1);
++        *(int16x8_t *)&dst[x] = t;
++#else
++        int16x8_t in0 = vmovl_u8(*(uint8x8_t *)&src0[x]);
++        int16x8_t in1 = vmovl_u8(*(uint8x8_t *)&src1[x]);
++        int16x8_t t = vaddq_s16(in0,in1);
++        t = vaddq_s16(t,vdupq_n_s16(1));
++        t = vshrq_n_s16(t,1);
++        *(uint8x8_t *)&dst[x] = vmovn_u16(t);
++#endif
++      }
++      for (; x < lx; x++)
++          dst[x] = (src0[x] + src1[x] + 1) >> 1;
++
++      src0 += sstride0;
++      src1 += sstride1;
++      dst += dstride;
++    }
++}
++
++
++template<int size>
++void cpy1Dto2D_shl_neon(int16_t* dst, const int16_t* src, intptr_t dstStride, int shift)
++{
++    X265_CHECK((((intptr_t)dst | (dstStride * sizeof(*dst))) & 15) == 0 || size == 4, "dst alignment error\n");
++    X265_CHECK(((intptr_t)src & 15) == 0, "src alignment error\n");
++    X265_CHECK(shift >= 0, "invalid shift\n");
++
++    for (int i = 0; i < size; i++)
++    {
++        int j = 0;
++        for (; (j+8) <= size; j+=8)
++        {
++          *(int16x8_t *)&dst[j] = vshlq_s16(*(int16x8_t*)&src[j],vdupq_n_s16(shift));
++        }
++        for (; j < size; j++)
++        {
++            dst[j] = src[j] << shift;
++        }
++        src += size;
++        dst += dstStride;
++    }
++}
++
++
++template<int size>
++uint64_t pixel_var_neon(const uint8_t* pix, intptr_t i_stride)
++{
++    uint32_t sum = 0, sqr = 0;
++
++    int32x4_t vsqr = vdupq_n_s32(0);
++    for (int y = 0; y < size; y++)
++    {
++      int x = 0;
++      int16x8_t vsum = vdupq_n_s16(0);
++      for (; (x + 8) <= size; x+=8)
++      {
++        int16x8_t in;
++        in = vmovl_u8(*(uint8x8_t*)&pix[x]);
++        vsum = vaddq_u16(vsum,in);
++        vsqr = vmlal_s16(vsqr,vget_low_s16(in),vget_low_s16(in));
++        vsqr = vmlal_high_s16(vsqr,in,in);
++      }
++      for (; x < size; x++)
++      {
++          sum += pix[x];
++          sqr += pix[x] * pix[x];
++      }
++      sum += vaddvq_s16(vsum);
++
++      pix += i_stride;
++    }
++    sqr += vaddvq_u32(vsqr);
++    return sum + ((uint64_t)sqr << 32);
++}
++
++template<int blockSize>
++void getResidual_neon(const pixel* fenc, const pixel* pred, int16_t* residual, intptr_t stride)
++{
++    for (int y = 0; y < blockSize; y++)
++    {
++      int x = 0;
++      for (; (x + 8) < blockSize; x+=8) {
++        int16x8_t vfenc,vpred;
++#if HIGH_BIT_DEPTH
++        vfenc = *(int16x8_t *)&fenc[x];
++        vpred = *(int16x8_t *)&pred[x];
++#else
++        vfenc = vmovl_u8(*(uint8x8_t *)&fenc[x]);
++        vpred = vmovl_u8(*(uint8x8_t *)&pred[x]);
++#endif
++        *(int16x8_t*)&residual[x] = vsubq_s16(vfenc,vpred);
++      }
++      for (; x < blockSize; x++) {
++            residual[x] = static_cast<int16_t>(fenc[x]) - static_cast<int16_t>(pred[x]);
++      }
++      fenc += stride;
++      residual += stride;
++      pred += stride;
++  }
++}
++
++#if 1//!(HIGH_BIT_DEPTH)
++template<int size>
++int psyCost_pp_neon(const pixel* source, intptr_t sstride, const pixel* recon, intptr_t rstride)
++{
++    static pixel zeroBuf[8] /* = { 0 } */;
++
++    if (size)
++    {
++        int dim = 1 << (size + 2);
++        uint32_t totEnergy = 0;
++        for (int i = 0; i < dim; i += 8)
++        {
++            for (int j = 0; j < dim; j+= 8)
++            {
++                /* AC energy, measured by sa8d (AC + DC) minus SAD (DC) */
++                int sourceEnergy = pixel_sa8d_8x8_neon(source + i * sstride + j, sstride, zeroBuf, 0) -
++                                   (sad_pp_neon<8, 8>(source + i * sstride + j, sstride, zeroBuf, 0) >> 2);
++                int reconEnergy =  pixel_sa8d_8x8_neon(recon + i * rstride + j, rstride, zeroBuf, 0) -
++                                   (sad_pp_neon<8, 8>(recon + i * rstride + j, rstride, zeroBuf, 0) >> 2);
++
++                totEnergy += abs(sourceEnergy - reconEnergy);
++            }
++        }
++        return totEnergy;
++    }
++    else
++    {
++        /* 4x4 is too small for sa8d */
++        int sourceEnergy = pixel_satd_4x4_neon(source, sstride, zeroBuf, 0) - (sad_pp_neon<4, 4>(source, sstride, zeroBuf, 0) >> 2);
++        int reconEnergy = pixel_satd_4x4_neon(recon, rstride, zeroBuf, 0) - (sad_pp_neon<4, 4>(recon, rstride, zeroBuf, 0) >> 2);
++        return abs(sourceEnergy - reconEnergy);
++    }
++}
++
++
++template<int w, int h>
++// Calculate sa8d in blocks of 8x8
++int sa8d8(const pixel* pix1, intptr_t i_pix1, const pixel* pix2, intptr_t i_pix2)
++{
++    int cost = 0;
++
++    for (int y = 0; y < h; y += 8)
++        for (int x = 0; x < w; x += 8)
++            cost += pixel_sa8d_8x8_neon(pix1 + i_pix1 * y + x, i_pix1, pix2 + i_pix2 * y + x, i_pix2);
++
++    return cost;
++}
++
++template<int w, int h>
++// Calculate sa8d in blocks of 16x16
++int sa8d16(const pixel* pix1, intptr_t i_pix1, const pixel* pix2, intptr_t i_pix2)
++{
++    int cost = 0;
++
++    for (int y = 0; y < h; y += 16)
++        for (int x = 0; x < w; x += 16)
++            cost += pixel_sa8d_16x16_neon(pix1 + i_pix1 * y + x, i_pix1, pix2 + i_pix2 * y + x, i_pix2);
++
++    return cost;
++}
++#endif
++
++template<int size>
++void cpy2Dto1D_shl_neon(int16_t* dst, const int16_t* src, intptr_t srcStride, int shift)
++{
++    X265_CHECK(((intptr_t)dst & 15) == 0, "dst alignment error\n");
++    X265_CHECK((((intptr_t)src | (srcStride * sizeof(*src))) & 15) == 0 || size == 4, "src alignment error\n");
++    X265_CHECK(shift >= 0, "invalid shift\n");
++
++    for (int i = 0; i < size; i++)
++    {
++        for (int j = 0; j < size; j++)
++            dst[j] = src[j] << shift;
++
++        src += srcStride;
++        dst += size;
++    }
++}
++
++
++#if 1//!(HIGH_BIT_DEPTH)
++template<int w, int h>
++// calculate satd in blocks of 4x4
++int satd4(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++    int satd = 0;
++
++    for (int row = 0; row < h; row += 4)
++        for (int col = 0; col < w; col += 4)
++            satd += pixel_satd_4x4_neon(pix1 + row * stride_pix1 + col, stride_pix1,
++                             pix2 + row * stride_pix2 + col, stride_pix2);
++
++    return satd;
++}
++
++template<int w, int h>
++// calculate satd in blocks of 8x4
++int satd8(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t stride_pix2)
++{
++    int satd = 0;
++
++    if (((w | h) & 15) == 0)
++    {
++        for (int row = 0; row < h; row += 16)
++            for (int col = 0; col < w; col += 16)
++                satd += pixel_satd_16x16_neon(pix1 + row * stride_pix1 + col, stride_pix1,
++                                            pix2 + row * stride_pix2 + col, stride_pix2);
++
++    }
++    else
++    if (((w | h) & 7) == 0)
++    {
++        for (int row = 0; row < h; row += 8)
++            for (int col = 0; col < w; col += 8)
++                satd += pixel_satd_8x8_neon(pix1 + row * stride_pix1 + col, stride_pix1,
++                                            pix2 + row * stride_pix2 + col, stride_pix2);
++
++    }
++    else
++    {
++        for (int row = 0; row < h; row += 4)
++            for (int col = 0; col < w; col += 8)
++                satd += pixel_satd_8x4_neon(pix1 + row * stride_pix1 + col, stride_pix1,
++                                            pix2 + row * stride_pix2 + col, stride_pix2);
++    }
++
++    return satd;
++}
++#endif
++
++
++template<int blockSize>
++void transpose_neon(pixel* dst, const pixel* src, intptr_t stride)
++{
++    for (int k = 0; k < blockSize; k++)
++        for (int l = 0; l < blockSize; l++)
++            dst[k * blockSize + l] = src[l * stride + k];
++}
++
++
++template<>
++void transpose_neon<8>(pixel* dst, const pixel* src, intptr_t stride)
++{
++    transpose8x8(dst,src,8,stride);
++}
++
++template<>
++void transpose_neon<16>(pixel* dst, const pixel* src, intptr_t stride)
++{
++    transpose16x16(dst,src,16,stride);
++}
++
++template<>
++void transpose_neon<32>(pixel* dst, const pixel* src, intptr_t stride)
++{
++    transpose32x32(dst,src,32,stride);
++}
++
++
++template<>
++void transpose_neon<64>(pixel* dst, const pixel* src, intptr_t stride)
++{
++    transpose32x32(dst,src,64,stride);
++    transpose32x32(dst+32*64+32,src+32*stride+32,64,stride);
++    transpose32x32(dst+32*64,src+32,64,stride);
++    transpose32x32(dst+32,src+32*stride,64,stride);
++}
++
++
++template<int size>
++sse_t pixel_ssd_s_neon(const int16_t* a, intptr_t dstride)
++{
++    sse_t sum = 0;
++    
++    
++  int32x4_t vsum = vdupq_n_s32(0);
++
++    for (int y = 0; y < size; y++)
++    {
++      int x = 0;
++      
++      for (; (x + 8) <= size; x+=8) {
++        int16x8_t in = *(int16x8_t*)&a[x];
++        vsum = vmlal_s16(vsum,vget_low_s16(in),vget_low_s16(in));
++        vsum = vmlal_high_s16(vsum,(in),(in));
++      }
++      for (; x < size; x++) {
++            sum += a[x] * a[x];
++      }
++
++        a += dstride;
++    }
++    return sum + vaddvq_s32(vsum);
++}
++
++
++};
++
++
++
++
++namespace X265_NS {
++   
++  
++void setupPixelPrimitives_neon(EncoderPrimitives &p)
++{
++  #define LUMA_PU(W, H) \
++      p.pu[LUMA_ ## W ## x ## H].copy_pp = blockcopy_pp_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].addAvg[NONALIGNED] = addAvg_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].addAvg[ALIGNED] = addAvg_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].sad = sad_pp_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].sad_x3 = sad_x3_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].sad_x4 = sad_x4_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].pixelavg_pp[NONALIGNED] = pixelavg_pp_neon<W, H>; \
++      p.pu[LUMA_ ## W ## x ## H].pixelavg_pp[ALIGNED] = pixelavg_pp_neon<W, H>;
++  
++#if !(HIGH_BIT_DEPTH)
++
++#define LUMA_CU(W, H) \
++      p.cu[BLOCK_ ## W ## x ## H].sub_ps        = pixel_sub_ps_neon<W, H>; \
++      p.cu[BLOCK_ ## W ## x ## H].add_ps[NONALIGNED]    = pixel_add_ps_neon<W, H>; \
++      p.cu[BLOCK_ ## W ## x ## H].add_ps[ALIGNED] = pixel_add_ps_neon<W, H>; \
++      p.cu[BLOCK_ ## W ## x ## H].copy_ps       = blockcopy_ps_neon<W, H>; \
++      p.cu[BLOCK_ ## W ## x ## H].copy_pp       = blockcopy_pp_neon<W, H>; \
++      p.cu[BLOCK_ ## W ## x ## H].blockfill_s[NONALIGNED] = blockfill_s_neon<W>;  \
++      p.cu[BLOCK_ ## W ## x ## H].blockfill_s[ALIGNED]    = blockfill_s_neon<W>;  \
++      p.cu[BLOCK_ ## W ## x ## H].cpy2Dto1D_shl = cpy2Dto1D_shl_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].cpy1Dto2D_shl[NONALIGNED] = cpy1Dto2D_shl_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].cpy1Dto2D_shl[ALIGNED] = cpy1Dto2D_shl_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].psy_cost_pp   = psyCost_pp_neon<BLOCK_ ## W ## x ## H>; \
++      p.cu[BLOCK_ ## W ## x ## H].transpose     = transpose_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].var           = pixel_var_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].calcresidual[NONALIGNED]  = getResidual_neon<W>; \
++      p.cu[BLOCK_ ## W ## x ## H].calcresidual[ALIGNED]     = getResidual_neon<W>; \
++
++#else
++    
++    #define LUMA_CU(W, H) \
++    p.cu[BLOCK_ ## W ## x ## H].sub_ps        = pixel_sub_ps_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].add_ps[NONALIGNED]    = pixel_add_ps_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].add_ps[ALIGNED] = pixel_add_ps_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].copy_pp       = blockcopy_pp_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].copy_ps       = blockcopy_ps_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].copy_pp       = blockcopy_pp_neon<W, H>; \
++    p.cu[BLOCK_ ## W ## x ## H].blockfill_s[NONALIGNED] = blockfill_s_neon<W>;  \
++    p.cu[BLOCK_ ## W ## x ## H].blockfill_s[ALIGNED]    = blockfill_s_neon<W>;  \
++    p.cu[BLOCK_ ## W ## x ## H].cpy2Dto1D_shl = cpy2Dto1D_shl_neon<W>; \
++    p.cu[BLOCK_ ## W ## x ## H].cpy1Dto2D_shl[NONALIGNED] = cpy1Dto2D_shl_neon<W>; \
++    p.cu[BLOCK_ ## W ## x ## H].cpy1Dto2D_shl[ALIGNED] = cpy1Dto2D_shl_neon<W>; \
++    p.cu[BLOCK_ ## W ## x ## H].psy_cost_pp   = psyCost_pp_neon<BLOCK_ ## W ## x ## H>; \
++    p.cu[BLOCK_ ## W ## x ## H].transpose     = transpose_neon<W>; \
++    /*p.cu[BLOCK_ ## W ## x ## H].var           = pixel_var_neon<W>;*/ \
++    p.cu[BLOCK_ ## W ## x ## H].calcresidual[NONALIGNED]  = getResidual_neon<W>; \
++    p.cu[BLOCK_ ## W ## x ## H].calcresidual[ALIGNED]     = getResidual_neon<W>; \
++
++    
++    
++#endif
++    
++    
++      LUMA_PU(4, 4);
++      LUMA_PU(8, 8);
++      LUMA_PU(16, 16);
++      LUMA_PU(32, 32);
++      LUMA_PU(64, 64);
++      LUMA_PU(4, 8);
++      LUMA_PU(8, 4);
++      LUMA_PU(16,  8);
++      LUMA_PU(8, 16);
++      LUMA_PU(16, 12);
++      LUMA_PU(12, 16);
++      LUMA_PU(16,  4);
++      LUMA_PU(4, 16);
++      LUMA_PU(32, 16);
++      LUMA_PU(16, 32);
++      LUMA_PU(32, 24);
++      LUMA_PU(24, 32);
++      LUMA_PU(32,  8);
++      LUMA_PU(8, 32);
++      LUMA_PU(64, 32);
++      LUMA_PU(32, 64);
++      LUMA_PU(64, 48);
++      LUMA_PU(48, 64);
++      LUMA_PU(64, 16);
++      LUMA_PU(16, 64);
++
++      p.pu[LUMA_4x4].satd   = pixel_satd_4x4_neon;
++      p.pu[LUMA_8x8].satd   = satd8<8, 8>;
++      p.pu[LUMA_8x4].satd   = pixel_satd_8x4_neon;
++      p.pu[LUMA_4x8].satd   = satd4<4, 8>;
++      p.pu[LUMA_16x16].satd = satd8<16, 16>;
++      p.pu[LUMA_16x8].satd  = satd8<16, 8>;
++      p.pu[LUMA_8x16].satd  = satd8<8, 16>;
++      p.pu[LUMA_16x12].satd = satd8<16, 12>;
++      p.pu[LUMA_12x16].satd = satd4<12, 16>;
++      p.pu[LUMA_16x4].satd  = satd8<16, 4>;
++      p.pu[LUMA_4x16].satd  = satd4<4, 16>;
++      p.pu[LUMA_32x32].satd = satd8<32, 32>;
++      p.pu[LUMA_32x16].satd = satd8<32, 16>;
++      p.pu[LUMA_16x32].satd = satd8<16, 32>;
++      p.pu[LUMA_32x24].satd = satd8<32, 24>;
++      p.pu[LUMA_24x32].satd = satd8<24, 32>;
++      p.pu[LUMA_32x8].satd  = satd8<32, 8>;
++      p.pu[LUMA_8x32].satd  = satd8<8, 32>;
++      p.pu[LUMA_64x64].satd = satd8<64, 64>;
++      p.pu[LUMA_64x32].satd = satd8<64, 32>;
++      p.pu[LUMA_32x64].satd = satd8<32, 64>;
++      p.pu[LUMA_64x48].satd = satd8<64, 48>;
++      p.pu[LUMA_48x64].satd = satd8<48, 64>;
++      p.pu[LUMA_64x16].satd = satd8<64, 16>;
++      p.pu[LUMA_16x64].satd = satd8<16, 64>;
++
++    
++      LUMA_CU(4, 4);
++      LUMA_CU(8, 8);
++      LUMA_CU(16, 16);
++      LUMA_CU(32, 32);
++      LUMA_CU(64, 64);
++
++
++      p.cu[BLOCK_4x4].sa8d   = pixel_satd_4x4_neon;
++      p.cu[BLOCK_8x8].sa8d   = pixel_sa8d_8x8_neon;
++      p.cu[BLOCK_16x16].sa8d = pixel_sa8d_16x16_neon;
++      p.cu[BLOCK_32x32].sa8d = sa8d16<32, 32>;
++      p.cu[BLOCK_64x64].sa8d = sa8d16<64, 64>;
++
++    
++  #define CHROMA_PU_420(W, H) \
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].addAvg[NONALIGNED]  = addAvg_neon<W, H>;         \
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].addAvg[ALIGNED]  = addAvg_neon<W, H>;         \
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_ ## W ## x ## H].copy_pp = blockcopy_pp_neon<W, H>; \
++
++
++      CHROMA_PU_420(4, 4);
++      CHROMA_PU_420(8, 8);
++      CHROMA_PU_420(16, 16);
++      CHROMA_PU_420(32, 32);
++      CHROMA_PU_420(4, 2);
++      CHROMA_PU_420(8, 4);
++      CHROMA_PU_420(4, 8);
++      CHROMA_PU_420(8, 6);
++      CHROMA_PU_420(6, 8);
++      CHROMA_PU_420(8, 2);
++      CHROMA_PU_420(2, 8);
++      CHROMA_PU_420(16, 8);
++      CHROMA_PU_420(8,  16);
++      CHROMA_PU_420(16, 12);
++      CHROMA_PU_420(12, 16);
++      CHROMA_PU_420(16, 4);
++      CHROMA_PU_420(4,  16);
++      CHROMA_PU_420(32, 16);
++      CHROMA_PU_420(16, 32);
++      CHROMA_PU_420(32, 24);
++      CHROMA_PU_420(24, 32);
++      CHROMA_PU_420(32, 8);
++      CHROMA_PU_420(8,  32);
++
++    
++
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_2x2].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].satd   = pixel_satd_4x4_neon;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].satd   = satd8<8, 8>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].satd = satd8<16, 16>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].satd = satd8<32, 32>;
++
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_2x4].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].satd   = pixel_satd_8x4_neon;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].satd   = satd4<4, 8>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].satd  = satd8<16, 8>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].satd  = satd8<8, 16>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].satd = satd8<32, 16>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].satd = satd8<16, 32>;
++
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_2x8].satd   = NULL;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].satd = satd4<16, 12>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].satd = satd4<12, 16>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].satd  = satd4<16, 4>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].satd  = satd4<4, 16>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].satd = satd8<32, 24>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].satd = satd8<24, 32>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].satd  = satd8<32, 8>;
++      p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].satd  = satd8<8, 32>;
++
++    
++  #define CHROMA_CU_420(W, H) \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].sse_pp  = sse_neon<W, H, pixel, pixel>; \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].copy_pp = blockcopy_pp_neon<W, H>; \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].copy_ps = blockcopy_ps_neon<W, H>; \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].sub_ps = pixel_sub_ps_neon<W, H>;  \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].add_ps[NONALIGNED] = pixel_add_ps_neon<W, H>; \
++      p.chroma[X265_CSP_I420].cu[BLOCK_420_ ## W ## x ## H].add_ps[ALIGNED] = pixel_add_ps_neon<W, H>;
++
++
++      CHROMA_CU_420(4, 4)
++      CHROMA_CU_420(8, 8)
++      CHROMA_CU_420(16, 16)
++      CHROMA_CU_420(32, 32)
++
++
++      p.chroma[X265_CSP_I420].cu[BLOCK_8x8].sa8d   = p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].satd;
++      p.chroma[X265_CSP_I420].cu[BLOCK_16x16].sa8d = sa8d8<8, 8>;
++      p.chroma[X265_CSP_I420].cu[BLOCK_32x32].sa8d = sa8d16<16, 16>;
++      p.chroma[X265_CSP_I420].cu[BLOCK_64x64].sa8d = sa8d16<32, 32>;
++
++    
++  #define CHROMA_PU_422(W, H) \
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].addAvg[NONALIGNED]  = addAvg_neon<W, H>;         \
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].addAvg[ALIGNED]  = addAvg_neon<W, H>;         \
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_ ## W ## x ## H].copy_pp = blockcopy_pp_neon<W, H>; \
++
++
++      CHROMA_PU_422(4, 8);
++      CHROMA_PU_422(8, 16);
++      CHROMA_PU_422(16, 32);
++      CHROMA_PU_422(32, 64);
++      CHROMA_PU_422(4, 4);
++      CHROMA_PU_422(2, 8);
++      CHROMA_PU_422(8, 8);
++      CHROMA_PU_422(4, 16);
++      CHROMA_PU_422(8, 12);
++      CHROMA_PU_422(6, 16);
++      CHROMA_PU_422(8, 4);
++      CHROMA_PU_422(2, 16);
++      CHROMA_PU_422(16, 16);
++      CHROMA_PU_422(8, 32);
++      CHROMA_PU_422(16, 24);
++      CHROMA_PU_422(12, 32);
++      CHROMA_PU_422(16, 8);
++      CHROMA_PU_422(4,  32);
++      CHROMA_PU_422(32, 32);
++      CHROMA_PU_422(16, 64);
++      CHROMA_PU_422(32, 48);
++      CHROMA_PU_422(24, 64);
++      CHROMA_PU_422(32, 16);
++      CHROMA_PU_422(8,  64);
++
++
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_2x4].satd   = NULL;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].satd   = satd4<4, 8>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].satd  = satd8<8, 16>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].satd = satd8<16, 32>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].satd = satd8<32, 64>;
++
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_4x4].satd   = pixel_satd_4x4_neon;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_2x8].satd   = NULL;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].satd   = satd8<8, 8>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].satd  = satd4<4, 16>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].satd = satd8<16, 16>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].satd  = satd8<8, 32>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].satd = satd8<32, 32>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].satd = satd8<16, 64>;
++
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].satd  = satd4<8, 12>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].satd  = NULL;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].satd   = satd4<8, 4>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_2x16].satd  = NULL;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].satd = satd8<16, 24>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].satd = satd4<12, 32>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].satd  = satd8<16, 8>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].satd  = satd4<4, 32>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].satd = satd8<32, 48>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].satd = satd8<24, 64>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].satd = satd8<32, 16>;
++      p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].satd  = satd8<8, 64>;
++
++    
++  #define CHROMA_CU_422(W, H) \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].sse_pp  = sse_neon<W, H, pixel, pixel>;  \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].copy_pp = blockcopy_pp_neon<W, H>; \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].copy_ps = blockcopy_ps_neon<W, H>; \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].sub_ps = pixel_sub_ps_neon<W, H>; \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].add_ps[NONALIGNED] = pixel_add_ps_neon<W, H>; \
++      p.chroma[X265_CSP_I422].cu[BLOCK_422_ ## W ## x ## H].add_ps[ALIGNED] = pixel_add_ps_neon<W, H>;
++
++
++      CHROMA_CU_422(4, 8)
++      CHROMA_CU_422(8, 16)
++      CHROMA_CU_422(16, 32)
++      CHROMA_CU_422(32, 64)
++
++      p.chroma[X265_CSP_I422].cu[BLOCK_8x8].sa8d   = p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].satd;
++      p.chroma[X265_CSP_I422].cu[BLOCK_16x16].sa8d = sa8d8<8, 16>;
++      p.chroma[X265_CSP_I422].cu[BLOCK_32x32].sa8d = sa8d16<16, 32>;
++      p.chroma[X265_CSP_I422].cu[BLOCK_64x64].sa8d = sa8d16<32, 64>;
++
++    
++}
++  
++  
++}
++
++
++#endif
++
+diff --git a/source/common/arm64/pixel-prim.h b/source/common/arm64/pixel-prim.h
+new file mode 100644
+index 0000000..fd3509d
+--- /dev/null
++++ b/source/common/arm64/pixel-prim.h
+@@ -0,0 +1,22 @@
++#ifndef PIXEL_PRIM_NEON_H__
++#define PIXEL_PRIM_NEON_H__
++
++#include "common.h"
++#include "slicetype.h"      // LOWRES_COST_MASK
++#include "primitives.h"
++#include "x265.h"
++
++
++
++namespace X265_NS {
++  
++  
++  
++void setupPixelPrimitives_neon(EncoderPrimitives &p);
++  
++  
++}
++
++
++#endif
++
+diff --git a/source/common/arm64/pixel.h b/source/common/arm64/pixel.h
+new file mode 100644
+index 0000000..e356e6c
+--- /dev/null
++++ b/source/common/arm64/pixel.h
+@@ -0,0 +1,134 @@
++/*****************************************************************************
++ * pixel.h: aarch64 pixel metrics
++ *****************************************************************************
++ * Copyright (C) 2009-2019 x265 project
++ *
++ * Authors: David Conrad <lessen42@gmail.com>
++ *          Janne Grunau <janne-x265@jannau.net>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02111, USA.
++ *
++ * This program is also available under a commercial proprietary license.
++ * For more information, contact us at licensing@x265.com.
++ *****************************************************************************/
++
++#ifndef x265_AARCH64_PIXEL_H
++#define x265_AARCH64_PIXEL_H
++
++#define x265_pixel_sad_16x16_neon x265_template(pixel_sad_16x16_neon)
++#define x265_pixel_sad_16x8_neon x265_template(pixel_sad_16x8_neon)
++#define x265_pixel_sad_4x16_neon x265_template(pixel_sad_4x16_neon)
++#define x265_pixel_sad_4x4_neon x265_template(pixel_sad_4x4_neon)
++#define x265_pixel_sad_4x8_neon x265_template(pixel_sad_4x8_neon)
++#define x265_pixel_sad_8x16_neon x265_template(pixel_sad_8x16_neon)
++#define x265_pixel_sad_8x4_neon x265_template(pixel_sad_8x4_neon)
++#define x265_pixel_sad_8x8_neon x265_template(pixel_sad_8x8_neon)
++#define x265_pixel_sad_x3_16x16_neon x265_template(pixel_sad_x3_16x16_neon)
++#define x265_pixel_sad_x3_16x8_neon x265_template(pixel_sad_x3_16x8_neon)
++#define x265_pixel_sad_x3_4x4_neon x265_template(pixel_sad_x3_4x4_neon)
++#define x265_pixel_sad_x3_4x8_neon x265_template(pixel_sad_x3_4x8_neon)
++#define x265_pixel_sad_x3_8x16_neon x265_template(pixel_sad_x3_8x16_neon)
++#define x265_pixel_sad_x3_8x4_neon x265_template(pixel_sad_x3_8x4_neon)
++#define x265_pixel_sad_x3_8x8_neon x265_template(pixel_sad_x3_8x8_neon)
++#define x265_pixel_sad_x4_16x16_neon x265_template(pixel_sad_x4_16x16_neon)
++#define x265_pixel_sad_x4_16x8_neon x265_template(pixel_sad_x4_16x8_neon)
++#define x265_pixel_sad_x4_4x4_neon x265_template(pixel_sad_x4_4x4_neon)
++#define x265_pixel_sad_x4_4x8_neon x265_template(pixel_sad_x4_4x8_neon)
++#define x265_pixel_sad_x4_8x16_neon x265_template(pixel_sad_x4_8x16_neon)
++#define x265_pixel_sad_x4_8x4_neon x265_template(pixel_sad_x4_8x4_neon)
++#define x265_pixel_sad_x4_8x8_neon x265_template(pixel_sad_x4_8x8_neon)
++#define x265_pixel_satd_16x16_neon x265_template(pixel_satd_16x16_neon)
++#define x265_pixel_satd_16x8_neon x265_template(pixel_satd_16x8_neon)
++#define x265_pixel_satd_4x16_neon x265_template(pixel_satd_4x16_neon)
++#define x265_pixel_satd_4x4_neon x265_template(pixel_satd_4x4_neon)
++#define x265_pixel_satd_4x8_neon x265_template(pixel_satd_4x8_neon)
++#define x265_pixel_satd_8x16_neon x265_template(pixel_satd_8x16_neon)
++#define x265_pixel_satd_8x4_neon x265_template(pixel_satd_8x4_neon)
++#define x265_pixel_satd_8x8_neon x265_template(pixel_satd_8x8_neon)
++#define x265_pixel_ssd_16x16_neon x265_template(pixel_ssd_16x16_neon)
++#define x265_pixel_ssd_16x8_neon x265_template(pixel_ssd_16x8_neon)
++#define x265_pixel_ssd_4x16_neon x265_template(pixel_ssd_4x16_neon)
++#define x265_pixel_ssd_4x4_neon x265_template(pixel_ssd_4x4_neon)
++#define x265_pixel_ssd_4x8_neon x265_template(pixel_ssd_4x8_neon)
++#define x265_pixel_ssd_8x16_neon x265_template(pixel_ssd_8x16_neon)
++#define x265_pixel_ssd_8x4_neon x265_template(pixel_ssd_8x4_neon)
++#define x265_pixel_ssd_8x8_neon x265_template(pixel_ssd_8x8_neon)
++#define DECL_PIXELS( ret, name, suffix, args ) \
++    ret x265_pixel_##name##_16x16_##suffix args;\
++    ret x265_pixel_##name##_16x8_##suffix args;\
++    ret x265_pixel_##name##_8x16_##suffix args;\
++    ret x265_pixel_##name##_8x8_##suffix args;\
++    ret x265_pixel_##name##_8x4_##suffix args;\
++    ret x265_pixel_##name##_4x16_##suffix args;\
++    ret x265_pixel_##name##_4x8_##suffix args;\
++    ret x265_pixel_##name##_4x4_##suffix args;\
++
++#define DECL_X1( name, suffix ) \
++    DECL_PIXELS( int, name, suffix, ( uint8_t *, intptr_t, uint8_t *, intptr_t ) )
++
++#define DECL_X4( name, suffix ) \
++    DECL_PIXELS( void, name##_x3, suffix, ( uint8_t *, uint8_t *, uint8_t *, uint8_t *, intptr_t, int * ) )\
++    DECL_PIXELS( void, name##_x4, suffix, ( uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, intptr_t, int * ) )
++
++DECL_X1( sad, neon )
++DECL_X4( sad, neon )
++DECL_X1( satd, neon )
++DECL_X1( ssd, neon )
++
++
++#define x265_pixel_ssd_nv12_core_neon x265_template(pixel_ssd_nv12_core_neon)
++void x265_pixel_ssd_nv12_core_neon( uint8_t *, intptr_t, uint8_t *, intptr_t, int, int, uint64_t *, uint64_t * );
++
++#define x265_pixel_vsad_neon x265_template(pixel_vsad_neon)
++int x265_pixel_vsad_neon( uint8_t *, intptr_t, int );
++
++#define x265_pixel_sa8d_8x8_neon x265_template(pixel_sa8d_8x8_neon)
++int x265_pixel_sa8d_8x8_neon  ( uint8_t *, intptr_t, uint8_t *, intptr_t );
++#define x265_pixel_sa8d_16x16_neon x265_template(pixel_sa8d_16x16_neon)
++int x265_pixel_sa8d_16x16_neon( uint8_t *, intptr_t, uint8_t *, intptr_t );
++#define x265_pixel_sa8d_satd_16x16_neon x265_template(pixel_sa8d_satd_16x16_neon)
++uint64_t x265_pixel_sa8d_satd_16x16_neon( uint8_t *, intptr_t, uint8_t *, intptr_t );
++
++#define x265_pixel_var_8x8_neon x265_template(pixel_var_8x8_neon)
++uint64_t x265_pixel_var_8x8_neon  ( uint8_t *, intptr_t );
++#define x265_pixel_var_8x16_neon x265_template(pixel_var_8x16_neon)
++uint64_t x265_pixel_var_8x16_neon ( uint8_t *, intptr_t );
++#define x265_pixel_var_16x16_neon x265_template(pixel_var_16x16_neon)
++uint64_t x265_pixel_var_16x16_neon( uint8_t *, intptr_t );
++#define x265_pixel_var2_8x8_neon x265_template(pixel_var2_8x8_neon)
++int x265_pixel_var2_8x8_neon ( uint8_t *, uint8_t *, int * );
++#define x265_pixel_var2_8x16_neon x265_template(pixel_var2_8x16_neon)
++int x265_pixel_var2_8x16_neon( uint8_t *, uint8_t *, int * );
++
++#define x265_pixel_hadamard_ac_8x8_neon x265_template(pixel_hadamard_ac_8x8_neon)
++uint64_t x265_pixel_hadamard_ac_8x8_neon  ( uint8_t *, intptr_t );
++#define x265_pixel_hadamard_ac_8x16_neon x265_template(pixel_hadamard_ac_8x16_neon)
++uint64_t x265_pixel_hadamard_ac_8x16_neon ( uint8_t *, intptr_t );
++#define x265_pixel_hadamard_ac_16x8_neon x265_template(pixel_hadamard_ac_16x8_neon)
++uint64_t x265_pixel_hadamard_ac_16x8_neon ( uint8_t *, intptr_t );
++#define x265_pixel_hadamard_ac_16x16_neon x265_template(pixel_hadamard_ac_16x16_neon)
++uint64_t x265_pixel_hadamard_ac_16x16_neon( uint8_t *, intptr_t );
++
++#define x265_pixel_ssim_4x4x2_core_neon x265_template(pixel_ssim_4x4x2_core_neon)
++void x265_pixel_ssim_4x4x2_core_neon( const uint8_t *, intptr_t,
++                                      const uint8_t *, intptr_t,
++                                      int sums[2][4] );
++#define x265_pixel_ssim_end4_neon x265_template(pixel_ssim_end4_neon)
++float x265_pixel_ssim_end4_neon( int sum0[5][4], int sum1[5][4], int width );
++
++#define x265_pixel_asd8_neon x265_template(pixel_asd8_neon)
++int x265_pixel_asd8_neon( uint8_t *, intptr_t,  uint8_t *, intptr_t, int );
++
++#endif
+diff --git a/source/common/cpu.cpp b/source/common/cpu.cpp
+index b01575c..544dd4b 100644
+--- a/source/common/cpu.cpp
++++ b/source/common/cpu.cpp
+@@ -102,7 +102,8 @@ const cpu_name_t cpu_names[] =
+     { "ARMv6",           X265_CPU_ARMV6 },
+     { "NEON",            X265_CPU_NEON },
+     { "FastNeonMRC",     X265_CPU_FAST_NEON_MRC },
+-
++#elif X265_ARCH_ARM64
++    { "NEON",            X265_CPU_NEON },
+ #elif X265_ARCH_POWER8
+     { "Altivec",         X265_CPU_ALTIVEC },
+ 
+@@ -370,6 +371,18 @@ uint32_t cpu_detect(bool benableavx512)
+ #endif // if HAVE_ARMV6
+     return flags;
+ }
++#elif X265_ARCH_ARM64
++
++uint32_t cpu_detect(bool benableavx512)
++{
++    int flags = 0;
++
++#if HAVE_NEON
++    flags |= X265_CPU_NEON;
++#endif
++
++    return flags;
++}
+ 
+ #elif X265_ARCH_POWER8
+ 
+diff --git a/source/test/testharness.h b/source/test/testharness.h
+index 3c250b9..79999f4 100644
+--- a/source/test/testharness.h
++++ b/source/test/testharness.h
+@@ -63,7 +63,6 @@ protected:
+ 
+     uint64_t m_rand;
+ };
+-
+ #ifdef _MSC_VER
+ #include <intrin.h>
+ #elif HAVE_RDTSC
+@@ -72,7 +71,7 @@ protected:
+ #include <x86intrin.h>
+ #elif ( !defined(__APPLE__) && defined (__GNUC__) && defined(__ARM_NEON__))
+ #include <arm_neon.h>
+-#elif defined(__GNUC__) && (!defined(__clang__) || __clang_major__ < 4)
++#else
+ /* fallback for older GCC/MinGW */
+ static inline uint32_t __rdtsc(void)
+ {
+@@ -84,6 +83,12 @@ static inline uint32_t __rdtsc(void)
+     // TOD-DO: verify following inline asm to get cpu Timestamp Counter for ARM arch
+     // asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(a));
+ 
++    // TO-DO: replace clock() function with appropriate ARM cpu instructions
++    a = clock();
++#elif X265_ARCH_ARM64
++    // TOD-DO: verify following inline asm to get cpu Timestamp Counter for ARM arch
++    // asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(a));
++
+     // TO-DO: replace clock() function with appropriate ARM cpu instructions
+     a = clock();
+ #endif
+@@ -135,7 +140,7 @@ int PFX(stack_pagealign)(int (*func)(), int align);
+  * needs an explicit asm check because it only sometimes crashes in normal use. */
+ intptr_t PFX(checkasm_call)(intptr_t (*func)(), int *ok, ...);
+ float PFX(checkasm_call_float)(float (*func)(), int *ok, ...);
+-#elif X265_ARCH_ARM == 0
++#elif (X265_ARCH_ARM == 0 && X265_ARCH_ARM64 == 0)
+ #define PFX(stack_pagealign)(func, align) func()
+ #endif
+ 
+-- 
+2.24.3 (Apple Git-128)
+
