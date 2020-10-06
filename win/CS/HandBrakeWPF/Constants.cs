@@ -28,8 +28,10 @@ namespace HandBrakeWPF
         public const string Quality = "{quality}";
         public const string Date = "{date}";
         public const string Time = "{time}";
-        public const string CretaionDate = "{creation-date}";
+        public const string CreationDate = "{creation-date}";
         public const string CreationTime = "{creation-time}";
+        public const string ModificationDate = "{modification-date}";
+        public const string ModificationTime = "{modification-time}";
         public const string Bitrate = "{bitrate}";
         public const string Preset = "{preset}";
         public const string Source = "{source}";
