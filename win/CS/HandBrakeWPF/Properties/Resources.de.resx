@@ -337,7 +337,7 @@ Trotzdem fortfahren?</value>
     <value>Das Format der Ausgabedatei. Zusätzlich zu allen unterstützten Dateisystemzeichen können die folgenden Platzhalter verwendet werden, die ersetzt werden, wenn der Titel geändert oder eine Quelle überprüft wird.
 
 Live-Update-Optionen: {source} {title} {chapters}  
-Nicht-Live-Optionen: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
+Nicht-Live-Optionen: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} oder {source}</value>
@@ -1894,7 +1894,7 @@ Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Echtzeit-Update Optionen: {source} {title} {chapters} 
-Nicht-Echtzeit Optionen: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Diese werden nur geändert, wenn eine neue Quelle gescannt, Titel oder Kapitel geändert werden)</value>
+Nicht-Echtzeit Optionen: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Diese werden nur geändert, wenn eine neue Quelle gescannt, Titel oder Kapitel geändert werden)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Verfügbare Optionen: {source_path} {source_folder_name} {source}</value>

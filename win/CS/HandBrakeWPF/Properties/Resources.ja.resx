@@ -332,7 +332,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>出力ファイルの形式です。通常のファイル名のほかに、ソースのスキャンやタイトルの変更をするごとに変わる次のプレースホルダを使用することができます。
 
 リアルタイムオプション: {source} {title} {chapters} 
-リアルタイムでないオプション: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更したときのみ変わります。)</value>
+リアルタイムでないオプション: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更したときのみ変わります。)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>次のオプションも利用可能です: {source_path}  {source_folder_name}  {source}</value>
@@ -1890,7 +1890,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>自動更新オプション: {source} {title} {chapters} 
-自動更新でないオプション: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更した時のみ更新されます。)</value>
+自動更新でないオプション: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更した時のみ更新されます。)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>利用可能なオプション: {source_path} {source_folder_name} {source}</value>

@@ -2107,7 +2107,7 @@ msgstr "自动命名模板"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 "可用选项:  {source} {title} {preset} {chapters} {date} {time} {creation-date} "
 "{creation-time} {quality} {bitrate}"

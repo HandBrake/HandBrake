@@ -2119,10 +2119,10 @@ msgstr "Plantilla para la asignación automática"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 "Opciones disponibles: {source} {title} {preset} {chapters} {date} {time} "
-"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 
 #: ../src/ghb.m4.h:625
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"

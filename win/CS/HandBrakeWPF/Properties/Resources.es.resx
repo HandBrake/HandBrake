@@ -336,7 +336,7 @@ Puede no ser posible el importar todos los valores de este ajuste.
     <value>El formato del archivo de salida.  Además de cualquier carácter de sistema de archivos compatible, puede utilizar los siguientes marcadores de posición que se reemplazarán al cambiar el título o escanear un origen.
     
      Opciones de actualización en vivo: {source} {title} {chapters} 
-	 Opciones no en vivo:  {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} ( Estos solo cambiarán si escanea un nuevo origen, cambia el título o los capítulos) </value>
+	 Opciones no en vivo:  {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} ( Estos solo cambiarán si escanea un nuevo origen, cambia el título o los capítulos) </value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Opciones adicionales disponibles: {source_path} o {source_folder_name} o {source}</value>
@@ -1893,7 +1893,7 @@ Actualice los controladores de GPU para cualquier gráfico integrado y/o discret
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Opciones de actualización en vivo: {source} {title} {chapters} 
-Opciones no en vivo: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Estos solo cambian si escanea un nuevo origen, cambia el título o los capítulos)</value>
+Opciones no en vivo: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Estos solo cambian si escanea un nuevo origen, cambia el título o los capítulos)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Opciones disponibles: {source_path} {source_folder_name} {source}</value>

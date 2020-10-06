@@ -2140,10 +2140,10 @@ msgstr "Template für die automatische Benennung"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 "Verfügbare Optionen: {source} {title} {preset} {chapters} {date} {time} "
-"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 
 #: ../src/ghb.m4.h:625
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"

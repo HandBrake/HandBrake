@@ -334,7 +334,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Формат выходного файла. В добавку к любому поддерживаемому символу файловой системы, вы можете использовать данные заполнители которые будут заменены когда вы меняете заголовок или сканируете источник.
 
 Опции Обновления в реальном времени: {source} {title} {chapters}
-Опции Нереального Обновления: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Они только меняются если вы сканируете новый источник, изменяете заголовок или главы)</value>
+Опции Нереального Обновления: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Они только меняются если вы сканируете новый источник, изменяете заголовок или главы)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Доступные дополнительные опции: {source_path} либо {source_folder_name} либо {source}</value>
@@ -1892,7 +1892,7 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Опции живого обновления: {source} {title} {chapters}
-Опции неживого обновления: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Они меняются только если вы сканируете новый источник, изменяете заголовок или главы)</value>
+Опции неживого обновления: {date} {time} {modification-iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Они меняются только если вы сканируете новый источник, изменяете заголовок или главы)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Доступные опции: {source_path} {source_folder_name} {source}</value>
