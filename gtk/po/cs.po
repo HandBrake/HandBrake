@@ -2123,7 +2123,7 @@ msgstr "Pojmenovat předlohu automaticky"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 
 #: ../src/ghb.m4.h:625

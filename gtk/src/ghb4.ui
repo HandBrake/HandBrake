@@ -6184,7 +6184,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             </child>
                             <child>
                               <object class="GtkEntry" id="auto_name_template">
-                                <property name="tooltip_text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}</property>
+                                <property name="tooltip_text" translatable="yes">Available Options: {source-path} {source} {title} {preset} {chapters} {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>

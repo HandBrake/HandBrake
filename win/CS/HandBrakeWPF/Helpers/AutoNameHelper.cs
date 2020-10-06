@@ -71,11 +71,12 @@ namespace HandBrakeWPF.Helpers
                 string createTime = creationDateTime.ToString("HH-mm");
                 string modifyDate = modificationDateTime.Date.ToShortDateString().Replace('/', '-');
                 string modifyTime = modificationDateTime.ToString("HH-mm");
+                string isoDateTime = $"{ modificationDateTime:yyyy-MM-ddTHH-mm-ss}";
 
                 /*
                  * Generate the full path and filename
                  */
-                string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, createDate, createTime, modifyDate, modifyTime);
+                string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, createDate, createTime, modifyDate, modifyTime, isoDateTime);
                 string autoNamePath = GetAutonamePath(userSettingService, task, sourceName);
                 string finalPath = Path.Combine(autoNamePath, destinationFilename);
 
@@ -133,7 +134,7 @@ namespace HandBrakeWPF.Helpers
             return sourceName;
         }
 
-        private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, string createDate, string createTime, string modifiDate, string modifyTime)
+        private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, string createDate, string createTime, string modifyDate, string modifyTime, string isoDate)
         {
             string destinationFilename;
             if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != string.Empty)
@@ -148,8 +149,9 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
                         .Replace(Constants.CreationDate, createDate)
                         .Replace(Constants.CreationTime, createTime)
-                        .Replace(Constants.ModificationDate, modifiDate)
-                        .Replace(Constants.ModificationTime, modifyTime);
+                        .Replace(Constants.ModificationDate, modifyDate)
+                        .Replace(Constants.ModificationTime, modifyTime)
+                        .Replace(Constants.ISODateTime, isoDate);
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                 {

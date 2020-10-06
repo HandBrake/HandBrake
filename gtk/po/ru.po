@@ -2152,10 +2152,10 @@ msgstr "Шаблон автонаименования"
 #: ../src/ghb.m4.h:624
 msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
-"{creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 msgstr ""
 "Доступные параметры: {source} {title} {preset} {chapters} {date} {time} "
-"{creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
+"{iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate}"
 
 #: ../src/ghb.m4.h:625
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"

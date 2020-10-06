@@ -334,7 +334,7 @@ Voulez-vous continuer ?</value>
     <value>Format du fichier de sortie. En plus des caractères pris en charge par le système de fichier, vous pouvez utiliser les champs de substitution suivants qui seront remplacés lorsque vous changez de titre ou scannez une source.
 
 Options mises à jour en direct : {source} {title} {chapters}
-Options en différé : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Ceux-ci changent uniquement quand vous scannez une nouvelle source, changez de titre ou de chapitres)</value>
+Options en différé : {date} {time} {iso-datetime} {creation-date} {creation-time} {quality} {bitrate} (Ceux-ci changent uniquement quand vous scannez une nouvelle source, changez de titre ou de chapitres)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Options supplémentaires disponibles : {source_path} or {source_folder_name} or {source}</value>

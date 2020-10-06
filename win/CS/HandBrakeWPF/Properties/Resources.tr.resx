@@ -334,7 +334,7 @@ Devam etmek istiyor musunuz?</value>
     <value>Çıktı dosyasının biçimi. Desteklenen herhangi bir dosya sistemi karakterine ek olarak, başlığı değiştirdiğinizde veya bir kaynağı taradığınızda değiştirilecek aşağıdaki yer tutucuları da kullanabilirsiniz.
 
 Canlı güncelleme seçenekleri: {source} {title} {chapters} 
-Canlı olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
+Canlı olmayan Seçenekler: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Mevcut ek Seçenekler: {source_path} veya {source_folder_name} veya {source}</value>
@@ -1892,7 +1892,7 @@ Kalan Süre: {5},  Geçen: {6} {7}</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Canlı Güncelleme Seçenekleri: {source} {title} {chapters} 
-Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
+Canlı Olmayan Seçenekler: {date} {time} {iso-datetime} {creation-date} {creation-time} {modification-date} {modification-time} {quality} {bitrate} (Bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Mevcut Seçenekler: {source_path} {source_folder_name} {source}</value>
