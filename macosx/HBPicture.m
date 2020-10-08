@@ -169,8 +169,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
                 self.maxHeight = 480;
                 break;
             case HBPictureResolutionLimitModeCustom:
-                self.maxWidth = self.sourceWidth;
-                self.maxHeight = self.sourceHeight;
                 break;
         }
     }
