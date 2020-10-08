@@ -1868,7 +1868,7 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     // Calculate default job geometry settings
     hb_geometry_t srcGeo, resultGeo;
     hb_geometry_settings_t geo;
-    int keep_aspect;
+    int keep_aspect, allow_upscaling, use_maximum_size;
 
     srcGeo = title->geometry;
     if (!hb_value_get_bool(hb_dict_get(preset, "PictureAutoCrop")))
@@ -1937,10 +1937,16 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     geo.geometry = title->geometry;
     int width = hb_value_get_int(hb_dict_get(preset, "PictureForceWidth"));
     int height = hb_value_get_int(hb_dict_get(preset, "PictureForceHeight"));
+    allow_upscaling = hb_value_get_bool(hb_dict_get(preset, "PictureAllowUpscaling"));
+    use_maximum_size = hb_value_get_bool(hb_dict_get(preset, "PictureUseMaximumSize"));
     if (width > 0)
     {
         geo.geometry.width = width;
         geo.keep |= HB_KEEP_WIDTH;
+    }
+    else if (allow_upscaling && use_maximum_size)
+    {
+        geo.geometry.width = geo.maxWidth;
     }
     else
     {
@@ -1950,6 +1956,10 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     {
         geo.geometry.height = height;
         geo.keep |= HB_KEEP_HEIGHT;
+    }
+    else if (allow_upscaling && use_maximum_size)
+    {
+        geo.geometry.height = geo.maxHeight;
     }
     else
     {
