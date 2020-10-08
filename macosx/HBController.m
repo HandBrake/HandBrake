@@ -235,7 +235,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     self.presetsPopover = [[NSPopover alloc] init];
 
     self.presetsPopover.contentViewController = fPresetsView;
-    self.presetsPopover.contentSize = NSMakeSize(294, 580);
+    self.presetsPopover.contentSize = NSMakeSize(300, 580);
     self.presetsPopover.animates = YES;
 
     // AppKit will close the popover when the user interacts with a user interface element outside the popover.

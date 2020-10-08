@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17147" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="11000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17147"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
             <connections>
+                <outlet property="actionsControl" destination="K9F-81-kPO" id="cAi-q4-950"/>
                 <outlet property="outlineView" destination="00W-tb-wgY" id="T3u-ix-uIb"/>
                 <outlet property="treeController" destination="ohT-Pp-wBT" id="YGP-sN-dS3"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="xR8-5v-xDQ"/>
@@ -17,26 +17,26 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="239" height="329"/>
+            <rect key="frame" x="0.0" y="0.0" width="227" height="328"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uad-bt-uKD">
-                    <rect key="frame" x="3" y="37" width="233" height="266"/>
+                    <rect key="frame" x="6" y="36" width="215" height="266"/>
                     <string key="toolTip">Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
 
 Overrides all encode settings. Settings may be further adjusted after selecting a preset.</string>
                     <clipView key="contentView" id="Rcx-jI-nnq">
-                        <rect key="frame" x="1" y="1" width="231" height="264"/>
+                        <rect key="frame" x="1" y="1" width="213" height="264"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="14" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY">
-                                <rect key="frame" x="0.0" y="0.0" width="231" height="264"/>
+                                <rect key="frame" x="0.0" y="0.0" width="213" height="264"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="name" width="210" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
+                                    <tableColumn identifier="name" width="201" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -97,7 +97,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RAh-Ad-miy">
-                        <rect key="frame" x="1" y="250" width="222" height="15"/>
+                        <rect key="frame" x="1" y="250" width="213" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="xU9-j2-UAo">
@@ -106,29 +106,33 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </scroller>
                     <accessibility description="Presets"/>
                 </scrollView>
-                <button toolTip="Create a new custom preset based on the currently selected settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kfi-wq-mgV">
-                    <rect key="frame" x="3" y="7" width="24" height="23"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="CJg-Q0-O5t"/>
-                        <constraint firstAttribute="width" constant="24" id="p55-di-frd"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="3" id="OJ3-1k-3DY">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
+                    <rect key="frame" x="90" y="308" width="47" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="r4V-6L-SO8">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K9F-81-kPO">
+                    <rect key="frame" x="3" y="6" width="71" height="24"/>
+                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="0di-xq-jgi">
                         <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <accessibility description="New Preset"/>
+                        <segments>
+                            <segment toolTip="Create a new custom preset based on the currently selected settings." image="NSAddTemplate" width="32"/>
+                            <segment toolTip="Delete the selected preset." image="NSRemoveTemplate" width="32" tag="1"/>
+                        </segments>
+                    </segmentedCell>
                     <connections>
-                        <action selector="addNewPreset:" target="-2" id="TYV-vH-8hk"/>
-                        <binding destination="-2" name="enabled" keyPath="self.enabled" id="lmV-Y3-JoF"/>
+                        <action selector="segmentedActions:" target="-2" id="uIz-ng-DTh"/>
                     </connections>
-                </button>
+                </segmentedControl>
                 <popUpButton toolTip="Show additional options." translatesAutoresizingMaskIntoConstraints="NO" id="Ybq-Zt-sta">
-                    <rect key="frame" x="58" y="7" width="35" height="23"/>
+                    <rect key="frame" x="76" y="4" width="47" height="25"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="35" id="ROP-Ic-SbK"/>
-                        <constraint firstAttribute="height" constant="21" id="nJ2-eJ-MTY"/>
+                        <constraint firstAttribute="width" constant="40" id="ROP-Ic-SbK"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
+                    <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
                         <menu key="menu" title="Presets Action Menu" id="LQk-kD-5sj">
@@ -166,45 +170,19 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </popUpButtonCell>
                     <accessibility description="Additional Options"/>
                 </popUpButton>
-                <button toolTip="Delete the selected preset." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3V-8w-euU">
-                    <rect key="frame" x="26" y="7" width="24" height="23"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="24" id="B0h-bJ-KtI"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="Kb1-6u-550">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <accessibility description="Delete Preset"/>
-                    <connections>
-                        <action selector="deletePreset:" target="-2" id="b6N-h7-25y"/>
-                        <binding destination="ohT-Pp-wBT" name="enabled" keyPath="canRemove" id="WNd-yX-UEH"/>
-                    </connections>
-                </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
-                    <rect key="frame" x="96" y="309" width="47" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="r4V-6L-SO8">
-                        <font key="font" metaFont="smallSystemBold"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="kfi-wq-mgV" firstAttribute="bottom" secondItem="b3V-8w-euU" secondAttribute="bottom" id="1dB-xo-p39"/>
-                <constraint firstItem="b3V-8w-euU" firstAttribute="top" secondItem="Ybq-Zt-sta" secondAttribute="top" id="6P9-lr-Dic"/>
-                <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="3" id="Awe-NX-Pxq"/>
+                <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="K9F-81-kPO" secondAttribute="trailing" constant="8" symbolic="YES" id="0fg-bb-Kxm"/>
+                <constraint firstItem="K9F-81-kPO" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="13f-Rt-TWz"/>
+                <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="6" id="Awe-NX-Pxq"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="20" id="MTA-L0-QDh"/>
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="NYS-NA-dEh"/>
-                <constraint firstAttribute="bottom" secondItem="kfi-wq-mgV" secondAttribute="bottom" constant="8" id="Rsn-71-jKi"/>
-                <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="UV6-xv-JfW"/>
-                <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="b3V-8w-euU" secondAttribute="top" id="Vji-my-7O6"/>
-                <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="VuV-22-Ur9"/>
+                <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="6" id="UV6-xv-JfW"/>
+                <constraint firstItem="K9F-81-kPO" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="6" id="VW4-WQ-izC"/>
                 <constraint firstItem="jCz-Aw-giC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="WCV-tV-CtJ"/>
-                <constraint firstItem="b3V-8w-euU" firstAttribute="leading" secondItem="kfi-wq-mgV" secondAttribute="trailing" constant="-1" id="bhQ-Pb-gsQ"/>
-                <constraint firstItem="kfi-wq-mgV" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="dhx-Bz-GhP"/>
+                <constraint firstItem="Ybq-Zt-sta" firstAttribute="centerY" secondItem="K9F-81-kPO" secondAttribute="centerY" id="cKG-ER-z11"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="jCz-Aw-giC" secondAttribute="bottom" constant="6" id="jy6-AG-t3l"/>
-                <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="b3V-8w-euU" secondAttribute="trailing" constant="8" id="k1Z-q1-OXB"/>
+                <constraint firstAttribute="bottom" secondItem="K9F-81-kPO" secondAttribute="bottom" constant="8" id="y22-EC-5uA"/>
             </constraints>
             <point key="canvasLocation" x="21" y="276"/>
         </customView>

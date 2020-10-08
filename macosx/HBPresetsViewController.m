@@ -48,6 +48,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 @property (nonatomic, strong) HBPresetsManager *presets;
 @property (nonatomic, readwrite) HBPreset *selectedPresetInternal;
 @property (nonatomic, unsafe_unretained) IBOutlet NSTreeController *treeController;
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *actionsControl;
 
 /**
  *  Helper var for drag & drop
@@ -98,6 +99,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.selectedPreset]];
     [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
+
+    [self.actionsControl setEnabled:self.enabled forSegment:0];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -110,6 +113,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             self.selectedPresetInternal = selectedNode;
             [self.delegate selectionDidChange];
         }
+        [self.actionsControl setEnabled:selectedNode != nil forSegment:1];
     }
     else
     {
@@ -138,6 +142,12 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
 
     return YES;
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    _enabled = enabled;
+    [self.actionsControl setEnabled:enabled forSegment:0];
 }
 
 #pragma mark - Import Export Preset(s)
@@ -305,6 +315,18 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     if (self.delegate && [self.treeController.selectedObjects.firstObject isLeaf])
     {
         [self.delegate selectionDidChange];
+    }
+}
+
+- (IBAction)segmentedActions:(NSSegmentedControl *)sender
+{
+    if (sender.selectedSegment == 0)
+    {
+        [self addNewPreset:self];
+    }
+    else
+    {
+        [self deletePreset:self];
     }
 }
 
