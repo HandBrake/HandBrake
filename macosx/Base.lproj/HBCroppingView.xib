@@ -49,7 +49,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
                             <subviews>
                                 <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="Td7-sa-0TV">
-                                    <rect key="frame" x="-3" y="21" width="36" height="19"/>
+                                    <rect key="frame" x="0.0" y="21" width="36" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iF7-Kp-18L">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="4eK-Cz-G5y"/>
@@ -72,7 +72,7 @@
                                     </connections>
                                 </textField>
                                 <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="6Gj-ZU-E1E">
-                                    <rect key="frame" x="51" y="2" width="36" height="19"/>
+                                    <rect key="frame" x="54" y="2" width="36" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XSa-sK-bkZ">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Ob3-hm-TP9"/>
@@ -95,7 +95,7 @@
                                     </connections>
                                 </textField>
                                 <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="php-p6-Nz6">
-                                    <rect key="frame" x="105" y="21" width="36" height="19"/>
+                                    <rect key="frame" x="108" y="21" width="36" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XLL-Lm-ivc">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="KaO-A4-kXq"/>
@@ -118,7 +118,7 @@
                                     </connections>
                                 </textField>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="y7P-yk-q46">
-                                    <rect key="frame" x="140" y="18" width="15" height="23"/>
+                                    <rect key="frame" x="143" y="18" width="15" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="SA2-eh-4Jb">
                                         <font key="font" metaFont="smallSystem"/>
@@ -138,7 +138,7 @@
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="8e5-zI-IBg">
-                                    <rect key="frame" x="86" y="38" width="15" height="22"/>
+                                    <rect key="frame" x="89" y="38" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="c11-EG-77U">
                                         <font key="font" metaFont="smallSystem"/>
@@ -158,7 +158,7 @@
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Yua-R6-mWU">
-                                    <rect key="frame" x="32" y="18" width="15" height="23"/>
+                                    <rect key="frame" x="35" y="18" width="15" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="yPe-lP-KfM">
                                         <font key="font" metaFont="smallSystem"/>
@@ -178,7 +178,7 @@
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="sWf-fq-lvl">
-                                    <rect key="frame" x="86" y="-1" width="15" height="22"/>
+                                    <rect key="frame" x="89" y="-1" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="w45-AO-bJL">
                                         <font key="font" metaFont="smallSystem"/>
@@ -198,7 +198,7 @@
                                     </connections>
                                 </stepper>
                                 <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="Cp5-xz-x1h">
-                                    <rect key="frame" x="51" y="40" width="36" height="19"/>
+                                    <rect key="frame" x="54" y="40" width="36" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="WKu-TR-fzG">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Zhe-d6-XZG"/>

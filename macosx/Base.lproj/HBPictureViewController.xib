@@ -156,7 +156,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
                                                     <subviews>
                                                         <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="LTu-ic-Ty9">
-                                                            <rect key="frame" x="-3" y="21" width="36" height="19"/>
+                                                            <rect key="frame" x="0.0" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="WoC-YC-H5L"/>
@@ -189,7 +189,7 @@
                                                             </connections>
                                                         </textField>
                                                         <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="1Z0-JT-vst">
-                                                            <rect key="frame" x="51" y="2" width="36" height="19"/>
+                                                            <rect key="frame" x="54" y="2" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="r1c-KK-4uF"/>
@@ -222,7 +222,7 @@
                                                             </connections>
                                                         </textField>
                                                         <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="wsq-TS-cC6">
-                                                            <rect key="frame" x="105" y="21" width="36" height="19"/>
+                                                            <rect key="frame" x="108" y="21" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="rtx-vd-c05"/>
@@ -255,7 +255,7 @@
                                                             </connections>
                                                         </textField>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                                                            <rect key="frame" x="140" y="18" width="15" height="23"/>
+                                                            <rect key="frame" x="143" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -281,7 +281,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                                                            <rect key="frame" x="86" y="38" width="15" height="22"/>
+                                                            <rect key="frame" x="89" y="38" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -307,7 +307,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                                                            <rect key="frame" x="32" y="18" width="15" height="23"/>
+                                                            <rect key="frame" x="35" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -333,7 +333,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                                                            <rect key="frame" x="86" y="-1" width="15" height="22"/>
+                                                            <rect key="frame" x="89" y="-1" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -359,7 +359,7 @@
                                                             </connections>
                                                         </stepper>
                                                         <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
-                                                            <rect key="frame" x="51" y="40" width="36" height="19"/>
+                                                            <rect key="frame" x="54" y="40" width="36" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="FyD-ad-rqf"/>
@@ -982,7 +982,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                     <rect key="frame" x="54" y="51" width="158" height="60"/>
                                     <subviews>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="09f-sT-7la">
-                                            <rect key="frame" x="90" y="38" width="15" height="22"/>
+                                            <rect key="frame" x="89" y="38" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="atZ-cf-YyH">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1004,7 +1004,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </stepper>
                                         <textField toolTip="Top edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
-                                            <rect key="frame" x="55" y="40" width="36" height="19"/>
+                                            <rect key="frame" x="54" y="40" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0yJ-2J-ept">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="P5C-Bq-g5Y"/>
@@ -1033,7 +1033,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <textField toolTip="Bottom edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WfM-tx-rC5">
-                                            <rect key="frame" x="55" y="2" width="36" height="19"/>
+                                            <rect key="frame" x="54" y="2" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="Wfu-ZW-M6N">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="87o-Sq-Vz0"/>
@@ -1062,7 +1062,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <textField toolTip="Right edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ck0-Gu-lGg">
-                                            <rect key="frame" x="109" y="21" width="36" height="19"/>
+                                            <rect key="frame" x="108" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="TIQ-pu-KHa">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="2oO-Js-S4B"/>
@@ -1091,7 +1091,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZc-Ks-efB">
-                                            <rect key="frame" x="36" y="19" width="15" height="22"/>
+                                            <rect key="frame" x="35" y="19" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Rzf-mS-h9z">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1113,7 +1113,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </stepper>
                                         <textField toolTip="Left edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
-                                            <rect key="frame" x="1" y="21" width="36" height="19"/>
+                                            <rect key="frame" x="0.0" y="21" width="36" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="iYd-5t-kFE">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="qgq-Hw-brX"/>
@@ -1142,7 +1142,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uoH-Hv-lNp">
-                                            <rect key="frame" x="144" y="19" width="15" height="22"/>
+                                            <rect key="frame" x="143" y="19" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="xS2-KN-fds">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1164,7 +1164,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </stepper>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVm-0W-Jxg">
-                                            <rect key="frame" x="90" y="0.0" width="15" height="22"/>
+                                            <rect key="frame" x="89" y="0.0" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="tcI-lL-sqJ">
                                                 <font key="font" metaFont="smallSystem"/>
