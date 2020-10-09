@@ -114,10 +114,3 @@ jobs:
       with:
         name:  HandBrake-x86_64-Win_GUI-MSI
         path: win/CS/HandBrakeWPF/bin/x64/Debug/HandBrake-Nightly-x86_64-Win_GUI.msi
-        
-    - name: Tidy up past artifacts
-      uses: kolpav/purge-artifacts-action@v1
-      if: github.event_name != 'pull_request'
-      with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          expire-in: 3days

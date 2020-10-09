@@ -44,11 +44,3 @@ jobs:
       with:
         name: HandBrake-macos
         path: ./build/pkg
-        
-    - name: Tidy up past artifacts
-      uses: kolpav/purge-artifacts-action@v1
-      if: github.event_name != 'pull_request'
-      with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          expire-in: 3days
-
