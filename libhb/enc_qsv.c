@@ -2104,6 +2104,11 @@ static int qsv_enc_work(hb_work_private_t *pv,
 
             if (sts == MFX_ERR_MORE_DATA)
             {
+                if(!pv->is_sys_mem && surface)
+                {
+                    hb_qsv_release_surface_from_pool_by_surface_pointer(frames_ctx, surface);
+                }
+
                 if (qsv_atom != NULL)
                 {
                     hb_list_add(pv->delayed_processing, qsv_atom);
@@ -2131,6 +2136,11 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 new_stage->out.p_bs            = task->bs;
                 task->stage                    = new_stage;
                 pv->async_depth++;
+
+                if(!pv->is_sys_mem && surface)
+                {
+                    hb_qsv_release_surface_from_pool_by_surface_pointer(frames_ctx, surface);
+                }
 
                 if (qsv_atom != NULL)
                 {
@@ -2175,13 +2185,6 @@ static int qsv_enc_work(hb_work_private_t *pv,
 
                 /* perform a sync operation to get the output bitstream */
                 hb_qsv_wait_on_sync(qsv_ctx, task->stage);
-
-                mfxFrameSurface1   *surface    = task->stage->in.p_surface;
-                HBQSVFramesContext *frames_ctx = task->stage->in.p_frames_ctx;
-                if(!pv->is_sys_mem && surface)
-                {
-                    hb_qsv_release_surface_from_pool_by_surface_pointer(frames_ctx, surface);
-                }
 
                 if (task->bs->DataLength > 0)
                 {
@@ -2270,7 +2273,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         else
         {
             // Create black buffer in the begining of the encoding, usually first 2 frames
-            hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, HB_QSV_POOL_SURFACE_SIZE - HB_QSV_POOL_ENCODER_SIZE, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
+            hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
             frames_ctx = pv->job->qsv.ctx->hb_dec_qsv_frames_ctx;
         }
         hb_qsv_replace_surface_mid(frames_ctx, mid, surface);
