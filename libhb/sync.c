@@ -2296,6 +2296,13 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->in_queue        = hb_list_init();
     pv->stream->scr_delay_queue = hb_list_init();
     pv->stream->max_len         = SYNC_MAX_VIDEO_QUEUE_LEN;
+#if HB_PROJECT_FEATURE_QSV
+    // Fix of LA case allowing use of LA up to 40 in full encode path,
+    // as currently for such support we cannot allocate >64 slices per texture
+    // due to MSFT limitation, not impacting other cases
+    if (hb_qsv_full_path_is_enabled(job))
+        pv->stream->max_len     = SYNC_MIN_VIDEO_QUEUE_LEN;
+#endif
     pv->stream->min_len         = SYNC_MIN_VIDEO_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
     pv->stream->delta_list      = hb_list_init();

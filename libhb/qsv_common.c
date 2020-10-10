@@ -3016,7 +3016,7 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
     }
     else
     {
-        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE - HB_QSV_POOL_ENCODER_SIZE, &mid, &output_surface);
+        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &output_surface);
     }
 
     if (device_manager_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
@@ -3228,7 +3228,9 @@ int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum
     frames_ctx->height            = FFALIGN(coded_height, 32);
     frames_ctx->format            = AV_PIX_FMT_QSV;
     frames_ctx->sw_format         = sw_pix_fmt;
-    frames_ctx->initial_pool_size = pool_size + extra_hw_frames;
+    frames_ctx->initial_pool_size = pool_size;
+    if (extra_hw_frames >= 0)
+        frames_ctx->initial_pool_size += extra_hw_frames;
     frames_hwctx->frame_type      = MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET;
 
     ret = av_hwframe_ctx_init(hw_frames_ctx);
