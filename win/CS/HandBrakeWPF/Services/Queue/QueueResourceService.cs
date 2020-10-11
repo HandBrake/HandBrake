@@ -162,6 +162,12 @@ namespace HandBrakeWPF.Services.Queue
             {
                 return; // Multi-Process encoding is disabled.
             }
+
+            if (this.qsvInstances.Count == 0)
+            {
+                // Reset to -1 if we have no encoders currently in use.
+                this.intelGpuCounter = -1; 
+            }
             
             this.intelGpuCounter = this.intelGpuCounter + 1;
             int modulus = this.intelGpuCounter % 2;
