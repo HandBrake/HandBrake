@@ -58,7 +58,7 @@ namespace HandBrakeWPF.Services.Queue
         private readonly string queueFile;
         private readonly object queueFileLock = new object();
 
-        private readonly QueueResourceService hardwareEncoderResourceManager = new QueueResourceService();
+        private readonly QueueResourceService hardwareEncoderResourceManager;
 
         private int allowedInstances;
         private int jobIdCounter = 0;
@@ -69,6 +69,7 @@ namespace HandBrakeWPF.Services.Queue
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
             this.userSettingService = userSettingService;
+            this.hardwareEncoderResourceManager = new QueueResourceService(userSettingService);
             this.logService = logService;
             this.errorService = errorService;
             this.logInstanceManager = logInstanceManager;
@@ -353,7 +354,7 @@ namespace HandBrakeWPF.Services.Queue
                 QueueTask task = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
                 if (task != null)
                 {
-                    task.HardwareResourceToken = this.hardwareEncoderResourceManager.GetHardwareLock(task.Task.VideoEncoder);
+                    task.HardwareResourceToken = this.hardwareEncoderResourceManager.GetHardwareLock(task.Task);
                     return task;
                 }
             }
@@ -687,10 +688,7 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = false;
             
             EventHandler handler = this.QueuePaused;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         private string GetQueueJson(List<EncodeTask> tasks, HBConfiguration configuration)
