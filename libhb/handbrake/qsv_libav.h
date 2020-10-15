@@ -212,6 +212,7 @@ typedef struct QSVFrame {
 
 #define HB_QSV_POOL_FFMPEG_SURFACE_SIZE (64)
 #define HB_QSV_POOL_SURFACE_SIZE (64)
+#define HB_QSV_POOL_ENCODER_SIZE (8)
 
 typedef struct HBQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
@@ -330,6 +331,7 @@ typedef struct hb_qsv_context {
     void *qsv_config;
 
     int num_cpu_filters;
+    int la_is_enabled;
     int qsv_filters_are_enabled;
     char *qsv_device;
     int dx_index;
