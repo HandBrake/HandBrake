@@ -126,6 +126,15 @@ function die_gracefully {
     trap - TERM && kill -- -$$
 }
 
+# tests whether a string is an exact match for an array item
+function in_array {  # in_array needle haystack[@]
+    local e
+    for e in "${@:2}"; do
+        [[ "${e}" == "${1}" ]] && return 0
+    done
+    return 1
+}
+
 # builds toolchain components
 function mac_toolchain_build {
     set -o pipefail
@@ -145,11 +154,11 @@ function mac_toolchain_build {
     # versions
     local AUTOCONF_VER AUTOMAKE_VER CMAKE_VER LIBTOOL_VER MESON_VER NASM_VER NINJA_VER PKGCONFIG_VER VERSIONS
     AUTOCONF_VER="2.69"
-    AUTOMAKE_VER="1.16.1"
-    CMAKE_VER="3.16.3"
+    AUTOMAKE_VER="1.16.2"
+    CMAKE_VER="3.18.0"
     LIBTOOL_VER="2.4.6"
-    MESON_VER="0.53.1"
-    NASM_VER="2.14.02"
+    MESON_VER="0.55.0"
+    NASM_VER="2.15.03"
     NINJA_VER="1.10.0"
     PKGCONFIG_VER="0.29.2"
     VERSIONS=("${AUTOCONF_VER}" "${AUTOMAKE_VER}" "${CMAKE_VER}" "${LIBTOOL_VER}" "${MESON_VER}" "${NASM_VER}" "${NINJA_VER}" "${PKGCONFIG_VER}")
@@ -181,11 +190,11 @@ function mac_toolchain_build {
     # checksums
     local AUTOCONF_SHA256 AUTOMAKE_SHA256 CMAKE_SHA256 LIBTOOL_SHA256 MESON_SHA256 NASM_SHA256 NINJA_SHA256 PKGCONFIG_SHA256 CHECKSUMS
     AUTOCONF_SHA256="954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969"
-    AUTOMAKE_SHA256="608a97523f97db32f1f5d5615c98ca69326ced2054c9f82e65bade7fc4c9dea8"
-    CMAKE_SHA256="e54f16df9b53dac30fd626415833a6e75b0e47915393843da1825b096ee60668"
+    AUTOMAKE_SHA256="b2f361094b410b4acbf4efba7337bdb786335ca09eb2518635a09fb7319ca5c1"
+    CMAKE_SHA256="83b4ffcb9482a73961521d2bafe4a16df0168f03f56e6624c419c461e5317e29"
     LIBTOOL_SHA256="e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3"
-    MESON_SHA256="f69ff8ce6cb52cbfb9bcc844086fade76920a292a017e68201317eeacd3ab943"
-    NASM_SHA256="34fd26c70a277a9fdd54cb5ecf389badedaf48047b269d1008fbc819b24e80bc"
+    MESON_SHA256="9034c943c8cf4d734c0e18e5ba038dd762fcdcc614c45b41703305da8382e90c"
+    NASM_SHA256="04e7343d9bf112bffa9fda86f6c7c8b120c2ccd700b882e2db9f57484b1bd778"
     NINJA_SHA256="3810318b08489435f8efc19c05525e80a993af5a55baa0dfeae0465a9d45f99f"
     PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
     CHECKSUMS=("${AUTOCONF_SHA256}" "${AUTOMAKE_SHA256}" "${CMAKE_SHA256}" "${LIBTOOL_SHA256}" "${MESON_SHA256}" "${NASM_SHA256}" "${NINJA_SHA256}" "${PKGCONFIG_SHA256}")
@@ -193,7 +202,7 @@ function mac_toolchain_build {
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="2.1.0"
+    VERSION="2.5.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -355,9 +364,6 @@ default install-dir: /usr/local"
     CPU_COUNT="${CPU_COUNT:-1}"
     [[ "${JOBS}" -eq 0 ]] && JOBS="${CPU_COUNT}"
 
-    # begin output
-    echo "${NAME} ${VERSION} (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
-
     # list components
     if [[ "${LIST}" == true ]]; then
         local COMPONENTS COMPONENTS_TEMP
@@ -369,12 +375,16 @@ default install-dir: /usr/local"
         IFS=$'\n'
         COMPONENTS=($(sort <<< "${COMPONENTS_TEMP[*]}"))
         IFS="${OIFS}"
+        echo "${NAME} ${VERSION}"
         echo "Components:"
         for I in "${!COMPONENTS[@]}"; do
             echo "  ${COMPONENTS[$I]}"
         done
         return 0
     fi
+
+    # begin output
+    echo "${NAME} ${VERSION} (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
 
     # mac only
     if [[ "${SYS_NAME}" != "darwin" ]]; then
@@ -384,7 +394,7 @@ default install-dir: /usr/local"
 
     # dependencies
     local DEPS
-    DEPS=("curl" "shasum|sha256sum")
+    DEPS=("curl" "python3" "sed" "shasum|sha256sum")
     check_dependencies "${DEPS[@]}" || return 1
 
     # sha256 binary
@@ -401,17 +411,12 @@ default install-dir: /usr/local"
     PREFIX="${1:-/usr/local}"
 
     # check installed tool versions, skip if adequate
-    local INSTALLED_VERSIONS SKIP NOT_SKIPPED_TOTAL TOOL_PATH
+    local INSTALLED_VERSIONS SKIP NOT_SKIPPED_TOTAL
     INSTALLED_VERSIONS=()
     SKIP=()
     NOT_SKIPPED_TOTAL=0
     for I in "${!NAMES[@]}"; do
-        if [[ "${NAMES[I]}" == "meson" ]]; then
-            TOOL_PATH=
-        else
-            TOOL_PATH="${PREFIX}/bin/"
-        fi
-        INSTALLED_VERSIONS[$I]=$("${TOOL_PATH}${NAMES[I]}" --version 2>&1 | head -n 1 | grep -Eo '[0-9]+\.[0-9]+(\.[0-9]+)?' 2>&1 | head -n 1)
+        INSTALLED_VERSIONS[$I]=$("${PREFIX}/bin/${NAMES[I]}" --version 2>&1 | head -n 1 | grep -Eo '[0-9]+\.[0-9]+(\.[0-9]+)?' 2>&1 | head -n 1)
         if [[ "${FORCE}" == false ]] && check_version_gte "${INSTALLED_VERSIONS[I]}" "${VERSIONS[I]}"; then
             SKIP[$I]=true
         else
@@ -572,7 +577,13 @@ default install-dir: /usr/local"
         touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}"
-        ${SUDO} python3 setup.py install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} python3 setup.py --no-user-cfg install --root="${PREFIX}" --prefix=/ --install-scripts=/bin --install-lib=/bin --single-version-externally-managed --no-compile --force >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} sed -i.bak '1s:.*:#!/usr/bin/env python3:' "${PREFIX}/bin/${NAMES[$INDEX]}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} rm -f "${PREFIX}/bin/${NAMES[$INDEX]}.bak" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} rm -rf "${PREFIX}/bin/${NAMES[$INDEX]}build/__pycache__" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} rm -rf "${PREFIX}/bin/${NAMES[$INDEX]}-${VERSIONS[$INDEX]}.dist-info" 2>&1 || return 1
+        ${SUDO} mv "${PREFIX}/bin/${NAMES[$INDEX]}-${VERSIONS[$INDEX]}"*.egg-info "${PREFIX}/bin/${NAMES[$INDEX]}-${VERSIONS[$INDEX]}.dist-info" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} mv "${PREFIX}/bin/${NAMES[$INDEX]}-${VERSIONS[$INDEX]}.dist-info/PKG-INFO" "${PREFIX}/bin/${NAMES[$INDEX]}-${VERSIONS[$INDEX]}.dist-info/METADATA" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
 
