@@ -127,6 +127,7 @@ enum
     QSV_G5, // Skylake or equivalent
     QSV_G6, // Kaby Lake or equivalent
     QSV_G7, // Ice Lake or equivalent
+    QSV_G8, // Tiger Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 

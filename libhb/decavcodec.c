@@ -2113,7 +2113,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
                     info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
                 }
                 break;
-
+            case AV_CODEC_ID_AV1:
+                if ((qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G8) &&
+                    (pv->context->pix_fmt == AV_PIX_FMT_YUV420P  ||
+                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P ||
+                    pv->context->pix_fmt == AV_PIX_FMT_YUV420P10LE))
+                {
+                    info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+                }
+                break;
             default:
                 break;
         }

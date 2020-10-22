@@ -133,6 +133,8 @@ int qsv_hardware_generation(int cpu_platform)
             return QSV_G6;
         case HB_CPU_PLATFORM_INTEL_ICL:
             return QSV_G7;
+        case HB_CPU_PLATFORM_INTEL_TGL:
+            return QSV_G8;
         default:
             return QSV_FU;
     }
@@ -387,10 +389,6 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                     {
                         info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
                     }
-                }
-                else
-                {
-                    hb_error("query_capabilities: adapters_info->NumActual=%d", adapters_info->NumActual);
                 }
 #endif
             }
@@ -1030,6 +1028,9 @@ const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 
         case AV_CODEC_ID_MPEG2VIDEO:
             return "mpeg2_qsv";
+
+        case AV_CODEC_ID_AV1:
+            return "av1_qsv";
 
         default:
             return NULL;

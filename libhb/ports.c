@@ -285,6 +285,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Kaby Lake";
         case HB_CPU_PLATFORM_INTEL_ICL:
             return "Intel microarchitecture Ice Lake";
+        case HB_CPU_PLATFORM_INTEL_TGL:
+            return "Intel microarchitecture Tiger Lake";
         default:
             return NULL;
     }
@@ -377,6 +379,10 @@ static void init_cpu_info()
                         break;
                     case 0x7E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_ICL;
+                        break;
+                    case 0x8C:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_TGL;
+                        break;
                     default:
                         break;
                 }
