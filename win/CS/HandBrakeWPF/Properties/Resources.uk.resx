@@ -1299,7 +1299,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
     <value>Цей шлях використовується лише для функції попереднього перегляду відео.
-Підтримують програвачі VLC та MPC-HC. Інші програвачі також можуть працювати, але їх перевірка не здійснювалась.</value>
+Підтримуються програвачі VLC та MPC-HC. Інші програвачі також можуть працювати, але їх перевірка не здійснювалась.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Переглянути каталог журналів</value>
