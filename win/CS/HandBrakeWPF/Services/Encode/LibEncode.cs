@@ -47,8 +47,9 @@ namespace HandBrakeWPF.Services.Encode
         private HBConfiguration currentConfiguration;
         private bool isPreviewInstance;
         private bool isLoggingInitialised;
+        private bool isEncodeComplete;
         private int encodeCounter;
-
+        
         public LibEncode(IUserSettingService userSettingService, ILogInstanceManager logInstanceManager, int encodeCounter, IPortService portService) : base(userSettingService)
         {
             this.userSettingService = userSettingService;
@@ -222,6 +223,13 @@ namespace HandBrakeWPF.Services.Encode
         private void InstanceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.IsEncoding = false;
+
+            if (isEncodeComplete)
+            {
+                return; // Prevent phantom events bubbling up the stack. 
+            }
+
+            this.isEncodeComplete = true;
 
             string completeMessage = "Job Completed!";
             switch (e.Error)

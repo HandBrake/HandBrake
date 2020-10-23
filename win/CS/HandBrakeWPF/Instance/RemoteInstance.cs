@@ -45,6 +45,7 @@ namespace HandBrakeWPF.Instance
         private Process workerProcess;
         private Timer encodePollTimer;
         private int retryCount = 0;
+        private bool encodeCompleteFired;
 
         public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
@@ -219,15 +220,23 @@ namespace HandBrakeWPF.Instance
 
         private async void PollEncodeProgress()
         {
+            if (encodeCompleteFired)
+            {
+                this.encodePollTimer?.Stop();
+                this.encodePollTimer.Dispose();
+                return;
+            }
+
             ServerResponse response = null;
             try
             {
                 if (this.retryCount > 5)
                 {
-                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(4));
-
+                    encodeCompleteFired = true;
                     this.encodePollTimer?.Stop();
 
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(-11));
+                    
                     if (this.workerProcess != null && !this.workerProcess.HasExited)
                     {
                         this.workerProcess?.Kill();
@@ -277,6 +286,8 @@ namespace HandBrakeWPF.Instance
             else if (taskState != null && taskState == TaskState.WorkDone)
             {
                 this.encodePollTimer.Stop();
+                encodeCompleteFired = true;
+
                 if (this.workerProcess != null && !this.workerProcess.HasExited)
                 {
                     try
