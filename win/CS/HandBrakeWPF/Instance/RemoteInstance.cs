@@ -223,7 +223,7 @@ namespace HandBrakeWPF.Instance
             if (encodeCompleteFired)
             {
                 this.encodePollTimer?.Stop();
-                this.encodePollTimer.Dispose();
+                this.encodePollTimer?.Dispose();
                 return;
             }
 
