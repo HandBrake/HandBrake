@@ -3784,11 +3784,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of simultaneous encodes:.
+        ///   Looks up a localized string similar to Maximum number of simultaneous encodes:.
         /// </summary>
         public static string OptionsView_SimultaneousEncodes {
             get {
                 return ResourceManager.GetString("OptionsView_SimultaneousEncodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding..
+        /// </summary>
+        public static string OptionsView_SimultaneousHardwareLimitNotice {
+            get {
+                return ResourceManager.GetString("OptionsView_SimultaneousHardwareLimitNotice", resourceCulture);
             }
         }
         

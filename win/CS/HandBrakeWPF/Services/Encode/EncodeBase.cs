@@ -19,17 +19,14 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeCompletedStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeCompletedStatus;
-    using EncodeProgessStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeProgessStatus;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
-    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using EncodeCompletedEventArgs = EventArgs.EncodeCompletedEventArgs;
+    using EncodeCompletedStatus = Interfaces.EncodeCompletedStatus;
+    using EncodeProgessStatus = Interfaces.EncodeProgessStatus;
+    using EncodeProgressEventArgs = EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = Model.EncodeTask;
+    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using ILog = Logging.Interfaces.ILog;
 
-    /// <summary>
-    /// A Base Class for the Encode Services.
-    /// </summary>
     public class EncodeBase
     {
         protected ILog encodeLogService;
@@ -41,90 +38,33 @@ namespace HandBrakeWPF.Services.Encode
             this.userSettingService = userSettingService;
         }
 
-        #region Events
-
-        /// <summary>
-        /// Fires when a new QueueTask starts
-        /// </summary>
         public event EventHandler EncodeStarted;
 
-        /// <summary>
-        /// Fires when a QueueTask finishes.
-        /// </summary>
         public event EncodeCompletedStatus EncodeCompleted;
 
-        /// <summary>
-        /// Encode process has progressed
-        /// </summary>
         public event EncodeProgessStatus EncodeStatusChanged;
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsEncoding.
-        /// </summary>
         public bool IsEncoding { get; protected set; }
 
-        #endregion
-
-        #region Invoke Events
-
-        /// <summary>
-        /// Invoke the Encode Status Changed Event.
-        /// </summary>
-        /// <param name="e">
-        /// The EncodeProgressEventArgs.
-        /// </param>
         public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
             EncodeProgessStatus handler = this.EncodeStatusChanged;
             handler?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// Invoke the Encode Completed Event
-        /// </summary>
-        /// <param name="e">
-        /// The EncodeCompletedEventArgs.
-        /// </param>
         public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
             EncodeCompletedStatus handler = this.EncodeCompleted;
             handler?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// Invoke the Encode Started Event
-        /// </summary>
-        /// <param name="e">
-        /// The EventArgs.
-        /// </param>
         public void InvokeEncodeStarted(System.EventArgs e)
         {
             EventHandler handler = this.EncodeStarted;
             handler?.Invoke(this, e);
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Save a copy of the log to the users desired location or a default location
-        /// if this feature is enabled in options.
-        /// </summary>
-        /// <param name="destination">
-        /// The Destination File Path
-        /// </param>
-        /// <param name="isPreview">
-        /// The is Preview.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        public string ProcessLogs(string destination, bool isPreview, HBConfiguration configuration)
+        public string ProcessLogs(string destination)
         {
             try
             {
@@ -165,15 +105,6 @@ namespace HandBrakeWPF.Services.Encode
             return null;
         }
 
-        /// <summary>
-        /// Verify the Encode Destination path exists and if not, create it.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        /// <exception cref="Exception">
-        /// If the creation fails, an exception is thrown.
-        /// </exception>
         protected void VerifyEncodeDestinationPath(EncodeTask task)
         {
             // Make sure the path exists, attempt to create it if it doesn't
@@ -192,15 +123,6 @@ namespace HandBrakeWPF.Services.Encode
             }
         }
 
-        /// <summary>
-        /// The write file.
-        /// </summary>
-        /// <param name="content">
-        /// The content.
-        /// </param>
-        /// <param name="fileName">
-        /// The file name.
-        /// </param>
         private void WriteFile(string content, string fileName)
         {
             try
@@ -215,7 +137,5 @@ namespace HandBrakeWPF.Services.Encode
                 Debug.WriteLine(exc);
             }
         }
-
-        #endregion
     }
 }

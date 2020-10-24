@@ -23,7 +23,9 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode;
     using HandBrakeWPF.Services.Encode.Factories;
+    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
@@ -58,7 +60,7 @@ namespace HandBrakeWPF.Services.Queue
         private readonly string queueFile;
         private readonly object queueFileLock = new object();
 
-        private readonly QueueResourceService hardwareEncoderResourceManager;
+        private readonly QueueResourceService hardwareResourceManager;
 
         private int allowedInstances;
         private int jobIdCounter = 0;
@@ -69,7 +71,7 @@ namespace HandBrakeWPF.Services.Queue
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
             this.userSettingService = userSettingService;
-            this.hardwareEncoderResourceManager = new QueueResourceService(userSettingService);
+            this.hardwareResourceManager = new QueueResourceService(userSettingService);
             this.logService = logService;
             this.errorService = errorService;
             this.logInstanceManager = logInstanceManager;
@@ -83,7 +85,7 @@ namespace HandBrakeWPF.Services.Queue
 
             this.encodeTaskFactory = new EncodeTaskFactory(this.userSettingService);
 
-            this.hardwareEncoderResourceManager.Init();
+            this.hardwareResourceManager.Init();
         }
 
         public event EventHandler<QueueProgressEventArgs> JobProcessingStarted;
@@ -354,7 +356,7 @@ namespace HandBrakeWPF.Services.Queue
                 QueueTask task = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
                 if (task != null)
                 {
-                    task.HardwareResourceToken = this.hardwareEncoderResourceManager.GetHardwareLock(task.Task);
+                    task.TaskToken = this.hardwareResourceManager.GetToken(task.Task);
                     return task;
                 }
             }
@@ -606,7 +608,7 @@ namespace HandBrakeWPF.Services.Queue
             if (job != null)
             {
                 // Hardware encoders can typically only have 1 or two instances running at any given time. As such, we must have a  HardwareResourceToken to continue.
-                if (job.HardwareResourceToken == Guid.Empty)
+                if (job.TaskToken == Guid.Empty)
                 {
                     return; // Hardware is busy, we'll try again later when another job completes.
                 }
@@ -617,13 +619,14 @@ namespace HandBrakeWPF.Services.Queue
                 }
 
                 this.jobIdCounter = this.jobIdCounter + 1;
-                ActiveJob activeJob = new ActiveJob(job, this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
+                IEncode libEncode = new LibEncode(this.userSettingService, this.logInstanceManager, this.jobIdCounter, this.portService);
+                ActiveJob activeJob = new ActiveJob(job, libEncode);
                 activeJob.JobFinished += this.ActiveJob_JobFinished;
                 activeJob.JobStatusUpdated += this.ActiveJob_JobStatusUpdated;
                 this.activeJobs.Add(activeJob);
                 
                 activeJob.Start();
-
+                
                 this.IsProcessing = true;
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
@@ -650,7 +653,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void ActiveJob_JobFinished(object sender, ActiveJobCompletedEventArgs e)
         {
-            this.hardwareEncoderResourceManager.UnlockHardware(e.Job.Job.Task.VideoEncoder, e.Job.Job.HardwareResourceToken);
+            this.hardwareResourceManager.ReleaseToken(e.Job.Job.Task.VideoEncoder, e.Job.Job.TaskToken);
 
             this.activeJobs.Remove(e.Job);
             this.OnEncodeCompleted(e.EncodeEventArgs);

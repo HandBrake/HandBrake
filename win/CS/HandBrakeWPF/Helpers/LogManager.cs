@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Helpers
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using ILog = Services.Logging.Interfaces.ILog;
 
     public static class LogManager
     {
@@ -29,13 +29,12 @@ namespace HandBrakeWPF.Helpers
         {
             generalAppLogger = IoC.Get<ILog>();
             string logDir = DirectoryUtilities.GetLogDirectory();
-            string filename = string.Format("activity_log.{0}.txt", GeneralUtilities.ProcessId);
+            string filename = string.Format("activity_log_main.{0}.txt", GeneralUtilities.ProcessId);
             string logFile = Path.Combine(logDir, filename);
             generalAppLogger.ConfigureLogging(logFile);
 
-            IoC.Get<ILogInstanceManager>().RegisterLoggerInstance(filename, generalAppLogger, true);
+            IoC.Get<ILogInstanceManager>().Register(filename, generalAppLogger, true);
             
-
             HandBrakeUtils.MessageLogged += HandBrakeUtils_MessageLogged;
             HandBrakeUtils.ErrorLogged += HandBrakeUtils_ErrorLogged;
         }

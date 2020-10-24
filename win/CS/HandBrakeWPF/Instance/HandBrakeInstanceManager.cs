@@ -25,11 +25,12 @@ namespace HandBrakeWPF.Instance
     /// </summary>
     public static class HandBrakeInstanceManager
     {
+        private static readonly object ProcessingLock = new object();
         private static IEncodeInstance encodeInstance;
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance previewInstance;
         private static bool noHardware;
-
+       
         public static void Init(bool noHardwareMode)
         {
             noHardware = noHardwareMode;
@@ -39,32 +40,37 @@ namespace HandBrakeWPF.Instance
 
         public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
-            if (!HandBrakeUtils.IsInitialised())
+            lock (ProcessingLock)
             {
-                throw new Exception("Please call Init before Using!");
-            }
-
-            IEncodeInstance newInstance;
-
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
-            {
-                newInstance = new RemoteInstance(logService, userSettingService, portService);
-            }
-            else
-            {
-                if (encodeInstance != null && !encodeInstance.IsRemoteInstance)
+                if (!HandBrakeUtils.IsInitialised())
                 {
-                    encodeInstance.Dispose();
-                    encodeInstance = null;
+                    throw new Exception("Please call Init before Using!");
                 }
 
-                newInstance = new HandBrakeInstance();
-                HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
-                encodeInstance = newInstance;
-            }
+                IEncodeInstance newInstance;
 
-            newInstance.Initialize(verbosity, noHardware);
-            return newInstance;
+                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled)
+                    && Portable.IsProcessIsolationEnabled())
+                {
+                    newInstance = new RemoteInstance(logService, userSettingService, portService);
+                }
+                else
+                {
+                    if (encodeInstance != null && !encodeInstance.IsRemoteInstance)
+                    {
+                        encodeInstance.Dispose();
+                        encodeInstance = null;
+                    }
+
+                    newInstance = new HandBrakeInstance();
+                    HandBrakeUtils.SetDvdNav(
+                        !userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
+                    encodeInstance = newInstance;
+                }
+
+                newInstance.Initialize(verbosity, noHardware);
+                return newInstance;
+            }
         }
 
         /// <summary>

@@ -71,7 +71,7 @@ namespace HandBrakeWPF.Services.Queue.Model
         public string ScannedSourcePath { get; set; }
 
         [JsonIgnore]
-        public Guid? HardwareResourceToken { get; set; }
+        public Guid? TaskToken { get; set; }
 
         [JsonProperty]
         public QueueItemStatus Status

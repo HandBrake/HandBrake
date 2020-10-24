@@ -44,7 +44,6 @@ namespace HandBrakeWPF.Services.Encode
         private IEncodeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
-        private HBConfiguration currentConfiguration;
         private bool isPreviewInstance;
         private bool isLoggingInitialised;
         private bool isEncodeComplete;
@@ -74,12 +73,11 @@ namespace HandBrakeWPF.Services.Encode
                 // Setup
                 this.startTime = DateTime.Now;
                 this.currentTask = task;
-                this.currentConfiguration = configuration;
-
+                this.isPreviewInstance = task.IsPreviewEncode;
 
                 if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
                 {
-                    this.InitLogging(task.IsPreviewEncode);
+                    this.InitLogging();
                 }
                 else
                 {
@@ -120,7 +118,6 @@ namespace HandBrakeWPF.Services.Encode
                     this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
                     this.IsEncoding = true;
-                    this.isPreviewInstance = task.IsPreviewEncode;
 
                     // Verify the Destination Path Exists, and if not, create it.
                     this.VerifyEncodeDestinationPath(task);
@@ -252,8 +249,10 @@ namespace HandBrakeWPF.Services.Encode
             
             this.ServiceLogMessage(completeMessage);
 
+            this.logInstanceManager.Deregister(this.GetLogFilename());
+
             // Handling Log Data 
-            string hbLog = this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
+            string hbLog = this.ProcessLogs(this.currentTask.Destination);
             long filesize = this.GetFilesize(this.currentTask.Destination);
 
             // Raise the Encode Completed Event.
@@ -283,19 +282,27 @@ namespace HandBrakeWPF.Services.Encode
             return 0;
         }
 
-        private void InitLogging(bool isPreview)
+        private void InitLogging()
         {
             if (!isLoggingInitialised)
             {
-                string logType = isPreview ? "preview" : "encode";
-                string filename = string.Format("activity_log.{0}.{1}.{2}.txt", encodeCounter, logType, GeneralUtilities.ProcessId);
-                string logFile = Path.Combine(DirectoryUtilities.GetLogDirectory(), filename);
                 this.encodeLogService = new LogService();
-                this.encodeLogService.ConfigureLogging(logFile);
+                this.encodeLogService.ConfigureLogging(GetFullLogPath());
                 this.encodeLogService.SetId(this.encodeCounter);
-                this.logInstanceManager.RegisterLoggerInstance(filename, this.encodeLogService, false);
+                this.logInstanceManager.Register(this.GetLogFilename(), this.encodeLogService, false);
                 isLoggingInitialised = true;
             }
+        }
+
+        private string GetLogFilename()
+        {
+            string logType = this.isPreviewInstance ? "preview" : "encode";
+            return string.Format("activity_log.{0}.{1}.{2}.txt", encodeCounter, logType, GeneralUtilities.ProcessId);
+        }
+
+        private string GetFullLogPath()
+        {
+            return Path.Combine(DirectoryUtilities.GetLogDirectory(), GetLogFilename());
         }
     }
 }
