@@ -45,7 +45,6 @@ gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
-void ghb_udev_init(void);
 void ghb_countdown_dialog(GtkMessageType type, const gchar *message,
     const gchar *action, const gchar *cancel, GSourceFunc action_func,
     signal_user_data_t *ud, gint timeout);

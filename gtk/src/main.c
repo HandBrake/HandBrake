@@ -1065,8 +1065,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_resource_init();
     ghb_load_icons();
 
-    ghb_udev_init();
-
     // Override user config dir
     if (arg_config_dir != NULL)
     {

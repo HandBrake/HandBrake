@@ -158,16 +158,6 @@ HB_LIBS="$HB_LIBS $GHB_LIBS"
 HB_CPPFLAGS="$HB_CPPFLAGS $GHB_CFLAGS"
 
 
-pkg_gudev="gudev-1.0"
-PKG_CHECK_MODULES([gudev], [$pkg_gudev], have_gudev=yes, have_gudev=no)
-if test "x$have_gudev" = "xyes" ; then
-	HB_LIBS="$HB_LIBS $gudev_LIBS"
-	HB_CPPFLAGS="$HB_CPPFLAGS $gudev_CFLAGS"
-
-	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
-	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
-fi
-
 pkg_libxml2="libxml-2.0"
 PKG_CHECK_MODULES([libxml2], [$pkg_libxml2], have_libxml2=yes, have_libxml2=no)
 if test "x$have_libxml2" = "xyes" ; then
