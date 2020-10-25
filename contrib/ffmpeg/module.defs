@@ -8,6 +8,9 @@ endif
 ifeq (1,$(FEATURE.nvenc))
 __deps__ += NVENC
 endif
+ifeq (1,$(FEATURE.rav1e))
+__deps__ += LIBRAV1E
+endif
 
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
@@ -77,6 +80,12 @@ FFMPEG.CONFIGURE.extra += \
     --enable-nonfree \
     --enable-libfdk-aac \
     --enable-encoder=libfdk_aac
+endif
+
+ifeq (1,$(FEATURE.rav1e))
+FFMPEG.CONFIGURE.extra += \
+    --enable-librav1e \
+    --enable-encoder=librav1e
 endif
 
 FFMPEG.CONFIGURE.extra += \
