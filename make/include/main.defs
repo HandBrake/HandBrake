@@ -49,6 +49,7 @@ endif
 
 ifeq (1,$(FEATURE.rav1e))
     MODULES += contrib/cargo-c
+    MODULES += contrib/librav1e
 endif
 
 MODULES += contrib/libdav1d
