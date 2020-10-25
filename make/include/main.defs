@@ -47,6 +47,10 @@ ifeq (1,$(FEATURE.x265))
     MODULES += contrib/x265_12bit
 endif
 
+ifeq (1,$(FEATURE.rav1e))
+    MODULES += contrib/cargo-c
+endif
+
 MODULES += contrib/libdav1d
 MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread

@@ -1446,6 +1446,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = IfHost( 'FFmpeg rav1e video encoder', '*-*-*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-ffmpeg-rav1e', dest="enable_rav1e", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-ffmpeg-rav1e', dest="enable_rav1e", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     cli.add_argument_group( grp )
 
     ## add launch options
@@ -2055,6 +2059,7 @@ int main()
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
+    doc.add( 'FEATURE.rav1e',      int( options.enable_rav1e ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
