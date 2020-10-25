@@ -1591,6 +1591,7 @@ try:
     arch_gcc = None
     cross    = None
     xcode_opts = { 'disabled': False, 'config': None }
+    rav1e_enabled = False
     for i in range(len(sys.argv)):
         if re.compile( '^--arch=(.+)$' ).match( sys.argv[i] ):
             arch_gcc = sys.argv[i][7:]
@@ -1618,6 +1619,9 @@ try:
             continue
         elif re.compile( '^--disable-xcode$' ).match( sys.argv[i] ):
             xcode_opts['disabled'] = True
+            continue
+        elif re.compile( '^--enable-rav1e$' ).match( sys.argv[i] ):
+            rav1e_enabled = True
             continue
 
     ## create tools in a scope
@@ -1653,6 +1657,7 @@ try:
         meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,47,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
+        cargo      = ToolProbe( 'CARGO.exe',      'cargo',      'cargo', abort=rav1e_enabled )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_opts['disabled'] and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
