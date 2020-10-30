@@ -6,3 +6,10 @@ JANSSON.FETCH.url    += http://www.digip.org/jansson/releases/jansson-2.12.tar.b
 JANSSON.FETCH.sha256  = 645d72cc5dbebd4df608d33988e55aa42a7661039e19a379fcbe5c79d1aee1d2
 
 JANSSON.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; mkdir m4; autoreconf -fiv;
+
+ifeq (darwin,$(HOST.system))
+    ifneq ($(HOST.machine),$(BUILD.machine))
+        JANSSON.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
+        JANSSON.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
+    endif
+endif

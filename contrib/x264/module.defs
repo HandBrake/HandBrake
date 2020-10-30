@@ -14,9 +14,14 @@ X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-sw
 
 ifeq (1,$(HOST.cross))
     X264.CONFIGURE.build  =
-    X264.CONFIGURE.extra += --cross-prefix=$(HOST.spec)-
+    ifneq ($(HOST.system),darwin)
+        X264.CONFIGURE.extra += --cross-prefix=$(HOST.spec)-
+    endif
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
+    ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
+        X264.CONFIGURE.extra += --extra-asflags="-arch $(HOST.arch)"
+    endif
 endif
 
 ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))

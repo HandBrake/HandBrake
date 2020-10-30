@@ -8,3 +8,10 @@ LIBVORBIS.FETCH.sha256  = 6ed40e0241089a42c48604dc00e362beee00036af2d8b3f4633803
 LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
 
 LIBVORBIS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
+
+ifeq (darwin,$(HOST.system))
+    ifneq ($(HOST.machine),$(BUILD.machine))
+        LIBVORBIS.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
+        LIBVORBIS.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
+    endif
+endif

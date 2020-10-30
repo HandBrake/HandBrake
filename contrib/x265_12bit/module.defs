@@ -29,6 +29,9 @@ endif
 ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
         X265_12.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=arm64
 endif
+ifeq (x86_64-darwin,$(HOST.machine)-$(HOST.system))
+        X265_12.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=x86_64
+endif
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
@@ -51,6 +54,8 @@ ifeq (1,$(HOST.cross))
         X265_12.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    else ifeq ($(HOST.system),darwin)
+        X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
     else
         X265_12.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     endif

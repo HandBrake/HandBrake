@@ -97,6 +97,10 @@ ifeq (darwin,$(HOST.system))
     else ifeq (arm64,$(HOST.arch))
         FFMPEG.CONFIGURE.extra += --arch=arm64
     endif
+
+    ifeq (1,$(HOST.cross))
+        FFMPEG.CONFIGURE.extra += --enable-cross-compile
+    endif
 endif
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag

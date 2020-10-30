@@ -18,15 +18,17 @@ LIBVPX.CONFIGURE.extra =  \
     --disable-unit-tests
 
 ifeq (1,$(HOST.cross))
-    LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(HOST.spec)-"
     LIBVPX.CONFIGURE.args.build =
-    LIBVPX.CONFIGURE.extra += --enable-static-msvcrt
-    ifeq (i686,$(HOST.machine))
-        LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
-    else ifeq (x86_64,$(HOST.machine))
-        LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
-    else ifeq (aarch64,$(HOST.machine))
-        LIBVPX.CONFIGURE.extra += --target=arm64-win64-gcc
+    ifneq ($(HOST.system),darwin)
+        LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(HOST.spec)-"
+        LIBVPX.CONFIGURE.extra += --enable-static-msvcrt
+        ifeq (i686,$(HOST.machine))
+            LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
+        else ifeq (x86_64,$(HOST.machine))
+            LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+        else ifeq (aarch64,$(HOST.machine))
+            LIBVPX.CONFIGURE.extra += --target=arm64-win64-gcc
+        endif
     endif
 endif
 
