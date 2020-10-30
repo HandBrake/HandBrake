@@ -201,8 +201,10 @@ for TARGET in "${@}"; do
         echo "  Validating App Bundle"
         verify "${TARGET}" deep
 
-        echo "  Validating Execution Privileges"
-        spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+		if [ "${IDENTITY}" != "-" ]; then
+        	echo "  Validating Execution Privileges"
+	        spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+	    fi
     elif [[ "${TARGET##*/}" == 'HandBrakeCLI' ]]; then
         echo "${TARGET}:"
 
