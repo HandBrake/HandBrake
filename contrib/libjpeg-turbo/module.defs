@@ -26,6 +26,13 @@ else
     endif
 endif
 
+ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=arm64
+endif
+ifeq (x86_64-darwin,$(HOST.machine)-$(HOST.system))
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=x86_64
+endif
+
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
         LIBJPEGTURBO.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON
@@ -37,6 +44,8 @@ ifeq (1,$(HOST.cross))
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBJPEGTURBO.GCC.gxx)
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    else ifeq ($(HOST.system),darwin)
+        LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
     else
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(LIBJPEGTURBO.CONFIGURE.host)"
     endif

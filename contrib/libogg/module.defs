@@ -6,3 +6,10 @@ LIBOGG.FETCH.url    += https://downloads.xiph.org/releases/ogg/libogg-1.3.4.tar.
 LIBOGG.FETCH.sha256  = fe5670640bd49e828d64d2879c31cb4dde9758681bb664f9bdbf159a01b0c76e
 
 LIBOGG.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
+
+ifeq (darwin,$(HOST.system))
+    ifneq ($(HOST.machine),$(BUILD.machine))
+        LIBOGG.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
+        LIBOGG.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
+    endif
+endif
