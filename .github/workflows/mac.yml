@@ -2,6 +2,9 @@ name: macOS build
 
 on: [push, pull_request]
 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+
 jobs:
   handle_forks:
     name: Forked Repo
@@ -15,7 +18,7 @@ jobs:
 
   build:
     name: Build on macOS
-    runs-on: macOS-latest
+    runs-on: macos-11.0
     if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
@@ -35,8 +38,10 @@ jobs:
     - name: Build HandBrake
       run: |
         git submodule update --init --recursive
-        ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
+        mkdir build
         cd build
+        ../configure --sandbox --harden
+        make ub
         make pkg.create
     
     - name: Upload Assets
