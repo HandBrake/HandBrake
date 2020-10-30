@@ -550,15 +550,26 @@ class BuildTupleProbe( ShellProbe, list ):
 ###############################################################################
 
 class HostTupleAction( Action, list ):
-    def __init__( self, cross=None ):
+    def __init__( self, cross=None, arch_gcc=None, xcode_opts=None ):
         super( HostTupleAction, self ).__init__( 'compute', 'host tuple', abort=True )
         # Initialize, but allow to be reset by options
-        self.setHost(cross)
+        self.setHost(cross, arch_gcc, xcode_opts)
 
-    def setHost( self, cross ):
+    def setHost( self, cross=None, arch_gcc=None, xcode_opts=None ):
         ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
+
+        ## special mapping for Apple Silicon
+        ## config.guess returns aarch64, we need arm64
+        if build_tuple.vendor == 'apple' and build_tuple.system == 'darwin':
+            if build_tuple.spec.startswith('aarch64'):
+                build_tuple.spec = 'arm64' + build_tuple.spec.lstrip('aarch64')
+
         if cross is not None:
             self.spec = os.path.basename( cross ).rstrip( '-' )
+        elif arch_gcc is not None:
+            self.spec = arch_gcc + build_tuple.spec.lstrip(build_tuple.machine)
+        elif xcode_opts is not None and xcode_opts['config'] is not None and not xcode_opts['disabled']:
+            self.spec = xcode_opts['config'].split(".")[-1] + build_tuple.spec.lstrip(build_tuple.machine)
         else:
             self.spec = build_tuple.spec
 
@@ -581,12 +592,6 @@ class HostTupleAction( Action, list ):
         self.extra   = self[4]
         self.systemf = build_tuple.systemf
 
-        ## special mapping for Apple Silicon
-        ## config.guess returns aarch64, we need arm64
-        if self.vendor == 'apple' and self.system == 'darwin':
-            if self.machine == 'aarch64':
-                self[0] = self.machine = 'arm64'
-
         try:
             self.machine = arch.mode.mode
         except NameError:
@@ -607,9 +612,9 @@ class HostTupleAction( Action, list ):
 
     def _action( self ):
         try:
-            self.setHost(options.cross)
+            self.setHost(options.cross,arch_gcc,xcode_opts)
         except NameError:
-            self.setHost(None)
+            self.setHost()
 
     ## glob-match against spec
     def match( self, *specs ):
@@ -1579,11 +1584,20 @@ try:
 
     # options is created by parse_known_args(), which is called directly after
     # createCLI(). we need some options info earlier and cannot parse args
-    # twice, so extract the info we need here
-    cross = None
-    xcode_disabled = False
+    # twice, so extract the info we need here from sys.argv
+    arch_gcc = None
+    cross    = None
+    xcode_opts = { 'disabled': False, 'config': None }
     for i in range(len(sys.argv)):
-        if re.compile( '^--cross=(.+)$' ).match( sys.argv[i] ):
+        if re.compile( '^--arch=(.+)$' ).match( sys.argv[i] ):
+            arch_gcc = sys.argv[i][7:]
+            continue
+        elif re.compile( '^--arch$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+            arch_gcc = sys.argv[i+1]
+            arch_gcc = None if arch_gcc == '' else arch_gcc
+            i = i + 1
+            continue
+        elif re.compile( '^--cross=(.+)$' ).match( sys.argv[i] ):
             cross = sys.argv[i][8:]
             continue
         elif re.compile( '^--cross$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
@@ -1591,8 +1605,16 @@ try:
             cross = None if cross == '' else cross
             i = i + 1
             continue
+        elif re.compile( '^--xcode-config=(.+)$' ).match( sys.argv[i] ):
+            xcode_opts['config'] = sys.argv[i][15:]
+            continue
+        elif re.compile( '^--xcode-config$' ).match( sys.argv[i] ) and ((i + 1) < len(sys.argv)):
+            xcode_opts['config'] = sys.argv[i+1]
+            xcode_opts['config'] = None if xcode_opts['config'] == '' else xcode_opts['config']
+            i = i + 1
+            continue
         elif re.compile( '^--disable-xcode$' ).match( sys.argv[i] ):
-            xcode_disabled = True
+            xcode_opts['disabled'] = True
             continue
 
     ## create tools in a scope
@@ -1629,7 +1651,7 @@ try:
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
 
-        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_disabled and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
+        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (not xcode_opts['disabled'] and (build_tuple.match('*-*-darwin*') and cross is None)) else False), versionopt='-version', minversion=[10,3,0] )
 
     ## run tool probes
     for tool in ToolProbe.tools:
@@ -1665,7 +1687,7 @@ try:
         optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
 
     # run host tuple and arch actions
-    host_tuple = HostTupleAction(cross)
+    host_tuple = HostTupleAction(cross,arch_gcc,xcode_opts)
     arch       = ArchAction(); arch.run()
 
     # create CLI and parse
@@ -1990,7 +2012,7 @@ int main()
     doc.add( 'HOST.extra',   host_tuple.extra )
     doc.add( 'HOST.title',   host_tuple.title )
 
-    doc.add( 'HOST.cross', int(options.cross != None or arch.mode.mode != arch.mode.default) )
+    doc.add( 'HOST.cross', int(options.cross != None or arch.mode.mode != arch.mode.default or build_tuple.machine != host_tuple.machine) )
     if options.cross:
         doc.add( 'HOST.cross.prefix', '%s-' % (options.cross) )
     else:
@@ -2138,7 +2160,7 @@ int main()
     stdout.write( 'Build system:       %s\n' % build_tuple.spec.rstrip('-') )
     stdout.write( 'Host system:        %s\n' % host_tuple.spec.rstrip('-') )
     stdout.write( 'Target platform:    %s' % host_tuple.system )
-    stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
+    stdout.write( ' (cross-compile)\n' ) if options.cross or build_tuple.machine != host_tuple.machine else stdout.write( '\n' )
     stdout.write( 'Harden:             %s\n' % options.enable_harden )
     stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
     stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
