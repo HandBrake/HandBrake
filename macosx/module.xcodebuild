@@ -6,8 +6,8 @@ macosx.build:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,build)
 
 macosx.ub:
-	$(call UB.BUILD.SERIAL)
-	$(call UB.COMBINE)
+	$(call MACOSX.UB.BUILD.SERIAL)
+	$(call MACOSX.UB.COMBINE)
 	$(call MACOSX.SIGN)
 
 macosx.sign:

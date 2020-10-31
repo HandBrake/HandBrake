@@ -87,65 +87,65 @@ MACOSX.NOTARIZE = $(strip $(MACOSX.src/)hbnotarize '$(USERNAME)' $(MACOSX.xroot/
 ##
 ###############################################################################
 
-UB.xcconfigs = osx1011.arm64 osx1011.x86_64
-UB.builds    = $(wildcard $(foreach n,$(UB.xcconfigs),$(SRC/)build.$n))
-UB.first     = $(word 1,$(UB.xcconfigs))
-UB.more      = $(wordlist 2,999,$(UB.xcconfigs))
+MACOSX.UB.xcconfigs = osx1011.arm64 osx1011.x86_64
+MACOSX.UB.builds    = $(wildcard $(foreach n,$(MACOSX.UB.xcconfigs),$(SRC/)build.$n))
+MACOSX.UB.first     = $(word 1,$(MACOSX.UB.xcconfigs))
+MACOSX.UB.more      = $(wordlist 2,999,$(MACOSX.UB.xcconfigs))
 
-UB.products/ = $(MACOSX.xroot/)
+MACOSX.UB.products/ = $(MACOSX.xroot/)
 
-UB.app/         = HandBrake.app/Contents/
-UB.frameworks/  = $(UB.app/)Frameworks/
-UB.xpcServices/ = $(UB.app/)XPCServices/
+MACOSX.UB.app/         = HandBrake.app/Contents/
+MACOSX.UB.frameworks/  = $(MACOSX.UB.app/)Frameworks/
+MACOSX.UB.xpcServices/ = $(MACOSX.UB.app/)XPCServices/
 
-UB.contents = $(UB.app/)MacOS/HandBrake \
-              $(UB.frameworks/)HandBrakeKit.framework/Versions/A/HandBrakeKit \
-              $(UB.frameworks/)Sparkle.framework/Versions/A/Sparkle \
-              $(UB.frameworks/)Sparkle.framework/Versions/A/Resources/Autoupdate \
-              $(UB.xpcServices/)HandBrakeXPCService.xpc/Contents/MacOS/HandBrakeXPCService \
-              $(UB.xpcServices/)HandBrakeXPCService2.xpc/Contents/MacOS/HandBrakeXPCService2 \
-              $(UB.xpcServices/)HandBrakeXPCService3.xpc/Contents/MacOS/HandBrakeXPCService3 \
-              $(UB.xpcServices/)HandBrakeXPCService4.xpc/Contents/MacOS/HandBrakeXPCService4 \
-              $(UB.xpcServices/)org.sparkle-project.Downloader.xpc/Contents/MacOS/org.sparkle-project.Downloader \
-              $(UB.xpcServices/)org.sparkle-project.InstallerConnection.xpc/Contents/MacOS/org.sparkle-project.InstallerConnection \
-              $(UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/org.sparkle-project.InstallerLauncher \
-              $(UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate \
-              $(UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app/Contents/MacOS/Updater \
-              $(UB.xpcServices/)org.sparkle-project.InstallerStatus.xpc/Contents/MacOS/org.sparkle-project.InstallerStatus
+MACOSX.UB.contents = $(MACOSX.UB.app/)MacOS/HandBrake \
+              $(MACOSX.UB.frameworks/)HandBrakeKit.framework/Versions/A/HandBrakeKit \
+              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Sparkle \
+              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Resources/Autoupdate \
+              $(MACOSX.UB.xpcServices/)HandBrakeXPCService.xpc/Contents/MacOS/HandBrakeXPCService \
+              $(MACOSX.UB.xpcServices/)HandBrakeXPCService2.xpc/Contents/MacOS/HandBrakeXPCService2 \
+              $(MACOSX.UB.xpcServices/)HandBrakeXPCService3.xpc/Contents/MacOS/HandBrakeXPCService3 \
+              $(MACOSX.UB.xpcServices/)HandBrakeXPCService4.xpc/Contents/MacOS/HandBrakeXPCService4 \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.Downloader.xpc/Contents/MacOS/org.sparkle-project.Downloader \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerConnection.xpc/Contents/MacOS/org.sparkle-project.InstallerConnection \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/org.sparkle-project.InstallerLauncher \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app/Contents/MacOS/Updater \
+              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerStatus.xpc/Contents/MacOS/org.sparkle-project.InstallerStatus
 
-UB.BUILD = $(SRC/)configure --force --build=$(BUILD/)ub.$(1) --xcode-config=$(1) $(CONF.args) --launch
+MACOSX.UB.BUILD = $(SRC/)configure --force --build=$(BUILD/)ub.$(1) --xcode-config=$(1) $(CONF.args) --launch
 
 ## linefeed is important
-define UB.BUILD.item
-    $(call UB.BUILD,$(1)) --launch-jobs=0
+define MACOSX.UB.BUILD.item
+    $(call MACOSX.UB.BUILD,$(1)) --launch-jobs=0
 
 endef
 
-define UB.BUILD.SERIAL
-    $(foreach n,$(UB.xcconfigs),$(call UB.BUILD.item,$n))
+define MACOSX.UB.BUILD.SERIAL
+    $(foreach n,$(MACOSX.UB.xcconfigs),$(call MACOSX.UB.BUILD.item,$n))
 endef
 
-define UB.BUILD.lipo
-    $(LIPO.exe) $(foreach n,$(UB.xcconfigs),ub.$n/$(UB.products/)$1) -create -output $(UB.products/)$1
+define MACOSX.UB.BUILD.lipo
+    $(LIPO.exe) $(foreach n,$(MACOSX.UB.xcconfigs),ub.$n/$(MACOSX.UB.products/)$1) -create -output $(MACOSX.UB.products/)$1
 
 endef
 
-define UB.COMBINE
-    $(RM.exe) -fr $(UB.products/)
-    $(MKDIR.exe) -p $(UB.products/)
+define MACOSX.UB.COMBINE
+    $(RM.exe) -fr $(MACOSX.UB.products/)
+    $(MKDIR.exe) -p $(MACOSX.UB.products/)
 
-    $(CP.exe) ub.$(UB.first)/$(UB.products/)HandBrakeCLI $(UB.products/).
-    $(LIPO.exe) $(foreach n,$(UB.xcconfigs),ub.$n/$(UB.products/)HandBrakeCLI) -create -output $(UB.products/)HandBrakeCLI
+    $(CP.exe) ub.$(MACOSX.UB.first)/$(MACOSX.UB.products/)HandBrakeCLI $(MACOSX.UB.products/).
+    $(LIPO.exe) $(foreach n,$(MACOSX.UB.xcconfigs),ub.$n/$(MACOSX.UB.products/)HandBrakeCLI) -create -output $(MACOSX.UB.products/)HandBrakeCLI
 
-    $(CP.exe) -R ub.$(UB.first)/$(UB.products/)HandBrake.app $(UB.products/).
-    $(foreach n,$(UB.contents),$(call UB.BUILD.lipo,$n))
+    $(CP.exe) -R ub.$(MACOSX.UB.first)/$(MACOSX.UB.products/)HandBrake.app $(MACOSX.UB.products/).
+    $(foreach n,$(MACOSX.UB.contents),$(call MACOSX.UB.BUILD.lipo,$n))
 
     @sync
     @echo ""
-    @echo "$@: { $(UB.xcconfigs) } combined -> $(UB.products/)HandBrakeCLI"
-    @echo "$@: UB executable size: `du -sh $(UB.products/)HandBrakeCLI | awk '{ print $$1 }'`"
+    @echo "$@: { $(MACOSX.UB.xcconfigs) } combined -> $(MACOSX.UB.products/)HandBrakeCLI"
+    @echo "$@: UB executable size: `du -sh $(MACOSX.UB.products/)HandBrakeCLI | awk '{ print $$1 }'`"
     @echo ""
-    @echo "$@: { $(UB.xcconfigs) } combined -> $(UB.products/)HandBrake.app"
-    @echo "$@: UB executable size: `du -sh $(UB.products/)$(1) | awk '{ print $$1 }'`"
+    @echo "$@: { $(MACOSX.UB.xcconfigs) } combined -> $(MACOSX.UB.products/)HandBrake.app"
+    @echo "$@: UB executable size: `du -sh $(MACOSX.UB.products/)$(1) | awk '{ print $$1 }'`"
     @echo ""
 endef
