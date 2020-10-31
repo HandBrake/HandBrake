@@ -536,7 +536,7 @@ Are you sure you wish to exit HandBrake?</value>
     <value>Picture Preview</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may need to restart the application.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>You must first scan a source and setup your encode before creating a preview.</value>

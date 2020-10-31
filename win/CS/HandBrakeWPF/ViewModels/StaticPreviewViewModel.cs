@@ -32,20 +32,24 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
+    using EncodeCompletedEventArgs = Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using IEncode = Services.Encode.Interfaces.IEncode;
+    using LibEncode = Services.Encode.LibEncode;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
+    using PointToPointMode = Services.Encode.Model.Models.PointToPointMode;
 
     public class StaticPreviewViewModel : ViewModelBase, IStaticPreviewViewModel
     {
         private readonly IScan scanService;
-        private readonly IEncode encodeService;
         private readonly IErrorService errorService;
+        private readonly ILog logService;
+        private readonly ILogInstanceManager logInstanceManager;
+        private readonly IPortService portService;
         private readonly IUserSettingService userSettingService;
+
+        private IEncode encodeService;
         private int height;
         private BitmapSource previewImage;
         private int selectedPreviewImage;
@@ -67,7 +71,9 @@ namespace HandBrakeWPF.ViewModels
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
-            this.encodeService = new LibEncode(userSettingService, logInstanceManager, 0, portService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.logService = logService;
+            this.logInstanceManager = logInstanceManager;
+            this.portService = portService;
 
             this.Title = "Preview";
             this.Percentage = "0.00%";
@@ -476,6 +482,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IsEncoding = false;
                 this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
@@ -605,12 +612,13 @@ namespace HandBrakeWPF.ViewModels
         private void CreatePreview(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
-            if (encodeService.IsEncoding)
+            if (this.encodeService != null && encodeService.IsEncoding)
             {
-                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            this.encodeService = new LibEncode(userSettingService, logInstanceManager, 0, portService); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.encodeService.EncodeCompleted += this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
