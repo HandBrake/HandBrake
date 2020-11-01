@@ -23,7 +23,6 @@ FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
 FFMPEG.CONFIGURE.build =
 FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
 ifneq (,$(filter $(HOST.system),freebsd netbsd))
 	FFMPEG.CONFIGURE.env += CFLAGS=-I$(LOCALBASE)/include
