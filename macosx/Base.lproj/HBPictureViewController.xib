@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -26,7 +26,7 @@
                             <rect key="frame" x="0.0" y="59" width="218" height="128"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uev-zj-FIR">
-                                    <rect key="frame" x="0.0" y="112" width="163" height="16"/>
+                                    <rect key="frame" x="0.0" y="112" width="161" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="0rN-RP-Om4">
                                             <rect key="frame" x="-2" y="1" width="56" height="14"/>
@@ -40,10 +40,10 @@
                                             </connections>
                                         </textField>
                                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WTL-cc-yu9">
-                                            <rect key="frame" x="60" y="0.0" width="103" height="16"/>
+                                            <rect key="frame" x="60" y="0.0" width="101" height="16"/>
                                             <subviews>
                                                 <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ffe-SL-kPm">
-                                                    <rect key="frame" x="-4" y="-4" width="60" height="22"/>
+                                                    <rect key="frame" x="-4" y="-4" width="58" height="22"/>
                                                     <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qsi-r7-kNQ" id="rYp-cI-T3D">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
@@ -67,7 +67,7 @@
                                                     </connections>
                                                 </popUpButton>
                                                 <button toolTip="Flips (mirrors) the picture on the horizontal axis." translatesAutoresizingMaskIntoConstraints="NO" id="pdM-bf-meC">
-                                                    <rect key="frame" x="63" y="1" width="40" height="16"/>
+                                                    <rect key="frame" x="61" y="1" width="40" height="16"/>
                                                     <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="a6O-RP-1cw">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
@@ -436,7 +436,7 @@
                             <rect key="frame" x="245" y="0.0" width="252" height="187"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uO6-48-Dmb">
-                                    <rect key="frame" x="0.0" y="171" width="223" height="16"/>
+                                    <rect key="frame" x="0.0" y="171" width="221" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="PJL-Y6-9ZV">
                                             <rect key="frame" x="-2" y="1" width="92" height="14"/>
@@ -450,7 +450,7 @@
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="the-i1-S1D">
-                                            <rect key="frame" x="92" y="-4" width="135" height="22"/>
+                                            <rect key="frame" x="92" y="-4" width="133" height="22"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gWL-mx-RIK" id="pzu-rp-72l">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
@@ -587,7 +587,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ZE-cV-x9d">
                                     <rect key="frame" x="0.0" y="73" width="252" height="19"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
+                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
                                             <rect key="frame" x="-2" y="2" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -748,7 +748,7 @@
                                     </connections>
                                 </button>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTO-xc-fNR">
-                                    <rect key="frame" x="0.0" y="27" width="163" height="16"/>
+                                    <rect key="frame" x="0.0" y="27" width="161" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
                                             <rect key="frame" x="-2" y="1" width="92" height="14"/>
@@ -762,7 +762,7 @@
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w1f-3S-up0">
-                                            <rect key="frame" x="92" y="-4" width="75" height="22"/>
+                                            <rect key="frame" x="92" y="-4" width="73" height="22"/>
                                             <string key="toolTip">Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
 Off disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
@@ -807,7 +807,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lle-QN-4aa">
                                     <rect key="frame" x="0.0" y="0.0" width="222" height="19"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
+                                        <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
                                             <rect key="frame" x="-2" y="2" width="92" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -931,7 +931,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                             <rect key="frame" x="524" y="52" width="212" height="135"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i16-mF-pVp">
-                                    <rect key="frame" x="0.0" y="119" width="195" height="16"/>
+                                    <rect key="frame" x="0.0" y="119" width="193" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="omM-pe-wBc">
                                             <rect key="frame" x="-2" y="1" width="50" height="14"/>
@@ -945,7 +945,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vKr-fn-Ujh">
-                                            <rect key="frame" x="50" y="-4" width="149" height="22"/>
+                                            <rect key="frame" x="50" y="-4" width="147" height="22"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6Qy-ik-hiE" id="pIS-xy-kBb">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1192,7 +1192,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                     </constraints>
                                 </customView>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="65d-Xd-JdE">
-                                    <rect key="frame" x="0.0" y="27" width="121" height="16"/>
+                                    <rect key="frame" x="0.0" y="27" width="119" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="kJM-a0-qcw">
                                             <rect key="frame" x="-2" y="1" width="50" height="14"/>
@@ -1206,7 +1206,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BjH-qa-mJM">
-                                            <rect key="frame" x="50" y="-4" width="75" height="22"/>
+                                            <rect key="frame" x="50" y="-4" width="73" height="22"/>
                                             <popUpButtonCell key="cell" type="push" title="Black" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EM5-tR-x3U" id="5s0-hb-jQV">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>

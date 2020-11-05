@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -128,9 +128,9 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                     </connections>
                 </segmentedControl>
                 <popUpButton toolTip="Show additional options." translatesAutoresizingMaskIntoConstraints="NO" id="Ybq-Zt-sta">
-                    <rect key="frame" x="76" y="4" width="47" height="25"/>
+                    <rect key="frame" x="76" y="4" width="51" height="25"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="40" id="ROP-Ic-SbK"/>
+                        <constraint firstAttribute="width" constant="44" id="ROP-Ic-SbK"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="2JY-O9-FR6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

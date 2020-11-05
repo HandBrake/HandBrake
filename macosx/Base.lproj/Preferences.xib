@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -219,7 +219,7 @@
                             </connections>
                         </popUpButton>
                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="491">
-                            <rect key="frame" x="92" y="317" width="155" height="22"/>
+                            <rect key="frame" x="92" y="317" width="153" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="Notification" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="499" id="492">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu" size="11"/>
@@ -373,7 +373,7 @@
                     <rect key="frame" x="16" y="0.0" width="422" height="348"/>
                     <subviews>
                         <popUpButton toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="363">
-                            <rect key="frame" x="167" y="169" width="88" height="22"/>
+                            <rect key="frame" x="167" y="169" width="86" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="369" id="364">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu" size="11"/>
@@ -391,7 +391,7 @@
                             </connections>
                         </popUpButton>
                         <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="387">
-                            <rect key="frame" x="287" y="309" width="58" height="22"/>
+                            <rect key="frame" x="287" y="309" width="56" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu" size="11"/>
@@ -457,7 +457,7 @@
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="350">
+                        <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="350">
                             <rect key="frame" x="-2" y="174" width="75" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Activity Logs:" id="351">
                                 <font key="font" metaFont="menu" size="11"/>
@@ -578,7 +578,7 @@
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
                             <rect key="frame" x="0.0" y="237" width="422" height="5"/>
                         </box>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
                             <rect key="frame" x="-2" y="96" width="75" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Queue:" id="FKi-zh-5gc">
                                 <font key="font" metaFont="menu" size="11"/>
@@ -629,7 +629,7 @@
                                 <binding destination="61" name="value" keyPath="values.HBQueueAutoClearCompletedItems" id="REM-0C-RXQ"/>
                             </connections>
                         </button>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="6NP-6w-Wa6">
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="6NP-6w-Wa6">
                             <rect key="frame" x="-2" y="20" width="75" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Summary:" id="GQJ-go-PoN">
                                 <font key="font" metaFont="menu" size="11"/>
