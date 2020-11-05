@@ -29,12 +29,8 @@ else
     endif
 endif
 
-ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
-    LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))/arm64-darwin-gcc.meson -Dc_args="-arch arm64"
-endif
-
-ifeq (x86_64-darwin,$(HOST.machine)-$(HOST.system))
-    LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))/x86_64-darwin-gcc.meson -Dc_args="-arch x86_64"
+ifeq (darwin,$(HOST.system))
+        LIBDAV1D.CONFIGURE.extra += --cross-file=$(call fn.ABSOLUTE,$(LIBDAV1D.EXTRACT.dir/))/$(HOST.machine)-darwin-gcc.meson -Dc_args="-arch $(HOST.machine)"
 endif
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))

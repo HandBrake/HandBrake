@@ -26,11 +26,8 @@ else
     endif
 endif
 
-ifeq (arm64-darwin,$(HOST.machine)-$(HOST.system))
-    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=arm64
-endif
-ifeq (x86_64-darwin,$(HOST.machine)-$(HOST.system))
-    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=x86_64
+ifeq (darwin,$(HOST.system))
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
 endif
 
 ifeq (1,$(HOST.cross))
