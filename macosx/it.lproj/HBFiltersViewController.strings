@@ -1,6 +1,3 @@
-/* Class = "NSTextFieldCell"; title = "Rotate:"; ObjectID = "1nr-nE-3a6"; */
-"1nr-nE-3a6.title" = "Rotazione:";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Tune"; ObjectID = "1XQ-md-5cQ"; */
 "1XQ-md-5cQ.ibExternalAccessibilityDescription" = "Regolazione Denoise";
 
@@ -37,9 +34,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen filter preset. Sets the strength of the filter."; ObjectID = "bac-vC-bD4"; */
 "bac-vC-bD4.ibShadowedToolTip" = "Sharpen filtro Denoise. Imposta la forza del filtro.";
 
-/* Class = "NSMenuItem"; title = "180°"; ObjectID = "bEe-EV-Q73"; */
-"bEe-EV-Q73.title" = "180°";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
 "bRd-Km-Wa8.ibExternalAccessibilityDescription" = "Regolazione Sharpen";
 
@@ -67,14 +61,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
 "DI9-Ed-acp.ibShadowedToolTip" = "Parametri Deblock personalizzati.\n\nstrength=s:thresh=t:blocksize=b";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "dsH-ZQ-dBs"; */
-"dsH-ZQ-dBs.ibShadowedToolTip" = "Ruota l'immagine in senso orario in incrementi di 90 gradi.";
-
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "DvX-m9-Q6u"; */
 "DvX-m9-Q6u.title" = "Personalizzato:";
-
-/* Class = "NSMenuItem"; title = "0°"; ObjectID = "eZj-V7-e0o"; */
-"eZj-V7-e0o.title" = "0°";
 
 /* Class = "NSTextFieldCell"; title = "Sharpen:"; ObjectID = "Gg8-cE-gaL"; */
 "Gg8-cE-gaL.title" = "Sharpen:";
@@ -103,9 +91,6 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
 "IQG-Nn-HTb.ibShadowedToolTip" = "Rilevamento interlacciato, quando abilitato, consente dal filtro di deinterlacciamento di elaborare solo i fotogrammi video interlacciati.";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis."; ObjectID = "IWV-25-FSC"; */
-"IWV-25-FSC.ibShadowedToolTip" = "Specchia l'immagine sull'asse orizzontale.";
-
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "jmH-62-gce"; */
 "jmH-62-gce.title" = "OtherViews";
 
@@ -121,17 +106,11 @@
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oqh-kd-lEw"; */
 "oqh-kd-lEw.title" = "Personalizzato:";
 
-/* Class = "NSMenuItem"; title = "90°"; ObjectID = "OyA-fK-x19"; */
-"OyA-fK-x19.title" = "90°";
-
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "pIO-dE-81w"; */
 "pIO-dE-81w.title" = "OtherViews";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
 "Psx-nN-XiT.ibShadowedToolTip" = "Scala di grigi rimuove le componenti dei colori del video. Conosciuto anche come video in bianco e nero.";
-
-/* Class = "NSMenuItem"; title = "270°"; ObjectID = "PY6-PT-J4z"; */
-"PY6-PT-J4z.title" = "270°";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.\n\nUnsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.\n\nLapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking."; ObjectID = "pYa-Af-F47"; */
 "pYa-Af-F47.ibShadowedToolTip" = "La nitidezza migliora l'aspetto dei dettagli, in particolare i bordi. Le impostazioni di nitidezza eccessivamente forti possono danneggiare la qualità delle immagini creando artefatti che squillano e migliorando il rumore, che può ridurre l'efficienza di compressione.\n\nUnsharp è un filtro per maschere di contrasto generico. Aumenta la nitidezza sfocando, quindi calcola la differenza tra l'immagine sfocata e l'originale.\n\nLapsharp aumenta la nitidezza usando i nuclei di convoluzione che si avvicinano ai filtri di bordo laplaciani, a volte producendo risultati di qualità superiore rispetto al mascheramento di contrasto.";
@@ -165,9 +144,6 @@
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tlc-kS-W8X"; */
 "tlc-kS-W8X.title" = "OtherViews";
-
-/* Class = "NSButtonCell"; title = "Flip"; ObjectID = "Tvl-40-1Tc"; */
-"Tvl-40-1Tc.title" = "Specchia";
 
 /* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "uDH-ts-vs5"; */
 "uDH-ts-vs5.title" = "Colore:";

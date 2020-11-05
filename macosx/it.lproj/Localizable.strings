@@ -17,13 +17,31 @@
 "(Modified)" = "(Modificato)";
 
 /* Queue status */
-"%d encode pending" = "%d conversione in sospeso";
+"%lu encode pending" = "%lu conversione in sospeso";
 
 /* Queue status */
-"%d encodes pending" = "%d conversioni in sospeso";
+"%lu encodes pending" = "%lu conversioni in sospeso";
 
 /* No comment provided by engineer. */
-"%llu jobs selected" = "%llu lavori selezionati";
+"%lu jobs selected" = "%lu lavori selezionati";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -132,21 +150,12 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode canceled" = "Conversione annullata";
 
-/* Queue status */
-"Encode Canceled." = "Conversione annullata.";
-
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode complete" = "Conversione completata";
 
 /* HBQueueItemView -> Encode state accessibility label
    Queue done notification failed message */
 "Encode failed" = "Conversione fallita";
-
-/* Queue status */
-"Encode Failed." = "Conversione fallita.";
-
-/* Queue status */
-"Encode Finished." = "Conversione completata.";
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode ready" = "Conversione pronta";
@@ -155,7 +164,10 @@
 "Encode working" = "Conversione in corso";
 
 /* No comment provided by engineer. */
-"Encoding %@\n%@" = "Converto %1$@\n%2$@";
+"Encoding %lu Jobs" = "Converto %lu lavori";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Converto lavoro: %@";
 
 /* Job statistics */
 "Ended at:" = "Completato alle:";
@@ -205,6 +217,9 @@
 
 /* Queue undo action name */
 "Move Jobs in Queue" = "sposta lavori nella coda";
+
+/* Queue status */
+"No encode pending" = "Nessuna conversione in sospeso";
 
 /* Preview -> accessibility label */
 "No image" = "Nessuna immagine";
@@ -310,6 +325,9 @@
 /* Queue undo action name */
 "Remove Jobs From Queue" = "rimuovi lavori dalla coda";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Analizzo per rendere modificabile";
+
 /* Toolbar Pause Item */
 "Resume" = "Riprendi";
 
@@ -360,9 +378,6 @@
 /* Preferences -> Output Name Token */
 "Source" = "Sorgente";
 
-/* Add preset window -> picture setting */
-"Source Maximum" = "Massimo della sorgente";
-
 /* Toolbar Start/Stop Item */
 "Start" = "Avvia";
 
@@ -380,8 +395,12 @@
 /* Job statistics */
 "Started at:" = "Avviato alle:";
 
-/* Toolbar Start/Stop Item */
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
 "Stop" = "Interrompi";
+
+/* Queue -> Stop action */
+"Stop action." = "Azione di interruzione.";
 
 /* Queue Alert -> cancel rip third button */
 "Stop After Current Job" = "Interrompi dopo il lavoro attuale";
@@ -427,14 +446,8 @@
    Rename preset window -> name alert message */
 "The preset name cannot be empty." = "Il nome del preset non può essere vuoto.";
 
-/* Queue -> Multiple instances alert informative text */
-"The queue will be shared between the instances." = "La coda sarà condivisa tra le istanze.";
-
 /* File already exists in queue alert -> message */
 "There is already a queue item for this destination." = "Un elemento della coda è già presente per questa destinazione.";
-
-/* Queue -> Multiple instances alert message */
-"There is already an instance of HandBrake running." = "Un'altra istanza di HandBrake è già in esecuzione.";
 
 /* Invalid destination alert -> informative text */
 "This is not a valid destination directory!" = "La cartella di destinazione non è valida!";
@@ -453,6 +466,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Attenzione!";
+
+/* No comment provided by engineer. */
+"Working" = "Lavoro";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "Attualmente stai convertendo. Come preferisci continuare?";

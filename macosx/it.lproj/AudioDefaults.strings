@@ -154,20 +154,11 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Mostra tutte";
-
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Codec";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
 "PtB-Wp-B9X.title" = "OtherViews";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all audio languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Mostra tutte le lingue";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all audio languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Mostra tutte le lingue nell'elenco delle Lingue.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Frequenza di campionamento";
