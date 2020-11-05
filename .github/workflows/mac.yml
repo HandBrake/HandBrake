@@ -38,9 +38,8 @@ jobs:
     - name: Build HandBrake
       run: |
         git submodule update --init --recursive
-        mkdir build
+        ./configure --sandbox --harden
         cd build
-        ../configure --sandbox --harden
         make ub
         make pkg.create
     
