@@ -23,7 +23,7 @@
 "K6c-HW-um8.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
-"Pps-jm-zcd.title" = "Zeige Quelle im Finder";
+"Pps-jm-zcd.title" = "Quelle im Finder anzeigen";
 
 /* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
 "xMs-43-lL0.title" = "Zurücksetzen";

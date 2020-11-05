@@ -17,13 +17,31 @@
 "(Modified)" = "(Modifiziert)";
 
 /* Queue status */
-"%d encode pending" = "%d Encodierung anstehend";
+"%lu encode pending" = "%lu Encodierung anstehend";
 
 /* Queue status */
-"%d encodes pending" = "%d Encodierungen anstehend";
+"%lu encodes pending" = "%lu Encodierungen anstehend";
 
 /* No comment provided by engineer. */
-"%llu jobs selected" = "%llu Aufgaben ausgewählt";
+"%lu jobs selected" = "%lu Aufgaben ausgewählt";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -132,21 +150,12 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode canceled" = "Encodierung abgebrochen";
 
-/* Queue status */
-"Encode Canceled." = "Encodierung abgebrochen.";
-
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode complete" = "Encodierung abgeschlossen";
 
 /* HBQueueItemView -> Encode state accessibility label
    Queue done notification failed message */
 "Encode failed" = "Encodierung fehlgeschlagen";
-
-/* Queue status */
-"Encode Failed." = "Encodierung fehlgeschlagen.";
-
-/* Queue status */
-"Encode Finished." = "Encodierung beendet.";
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode ready" = "Bereit zum Encodieren";
@@ -155,7 +164,10 @@
 "Encode working" = "Encodierung in Arbeit";
 
 /* No comment provided by engineer. */
-"Encoding %@\n%@" = "Encodiere %1$@\n%2$@";
+"Encoding %lu Jobs" = "Encodiere %lu Aufgaben";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Encodierung: %@";
 
 /* Job statistics */
 "Ended at:" = "Beendet um:";
@@ -205,6 +217,9 @@
 
 /* Queue undo action name */
 "Move Jobs in Queue" = "Aufgaben zu Warteschlange hinzufügen";
+
+/* Queue status */
+"No encode pending" = "Keine Encodierungen anstehend";
 
 /* Preview -> accessibility label */
 "No image" = "Kein Bild";
@@ -310,6 +325,9 @@
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Aufgaben aus der Warteschlange entfernen";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Neuüberprüfung zur Bearbeitung";
+
 /* Toolbar Pause Item */
 "Resume" = "Fortsetzen";
 
@@ -360,9 +378,6 @@
 /* Preferences -> Output Name Token */
 "Source" = "Quelle";
 
-/* Add preset window -> picture setting */
-"Source Maximum" = "Quellenmaximum";
-
 /* Toolbar Start/Stop Item */
 "Start" = "Start";
 
@@ -380,8 +395,12 @@
 /* Job statistics */
 "Started at:" = "Gestartet um:";
 
-/* Toolbar Start/Stop Item */
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
 "Stop" = "Stop";
+
+/* Queue -> Stop action */
+"Stop action." = "Aktion stoppen";
 
 /* Queue Alert -> cancel rip third button */
 "Stop After Current Job" = "Nach momentaner Aufgabe stoppen";
@@ -418,7 +437,7 @@
 "The CSV file is not a valid chapters CSV file." = "Die CSV-Datei ist keine gültige Kapitel-Datei.";
 
 /* Destination same as source alert -> informative text */
-"The destination is the same as the source, you can not overwrite your source file!" = "Das Ziel ist mit der Quelle identisch, die Quelle kann nicht überschrieben werden!";
+"The destination is the same as the source, you can not overwrite your source file!" = "Die Ausgabe ist mit der Quelle identisch, die Quelle kann nicht überschrieben werden!";
 
 /* Chapters import -> invalid CSV line count recovery suggestion */
 "The line count in the chapters CSV file does not match the number of chapters in the movie." = "Der Zeilenzähler der Kapitel-CSV-Datei stimmt nicht mit der Anzahl der Kapitel des Films überein.";
@@ -427,17 +446,11 @@
    Rename preset window -> name alert message */
 "The preset name cannot be empty." = "Der Name der Voreinstellung kann nicht leer sein.";
 
-/* Queue -> Multiple instances alert informative text */
-"The queue will be shared between the instances." = "Die Warteschlange wird zwischen den Instanzen geteilt.";
-
 /* File already exists in queue alert -> message */
 "There is already a queue item for this destination." = "Es existiert schon ein Objekt für dieses Ziel in der Warteschlange.";
 
-/* Queue -> Multiple instances alert message */
-"There is already an instance of HandBrake running." = "Es läuft schon eine Instanz von HandBrake.";
-
 /* Invalid destination alert -> informative text */
-"This is not a valid destination directory!" = "Dies ist kein gültiges Zielverzeichnis.";
+"This is not a valid destination directory!" = "Dies ist kein gültiges Ausgabeverzeichnis.";
 
 /* Preferences -> Output Name Token */
 "Time" = "Zeit";
@@ -453,6 +466,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Warnung!";
+
+/* No comment provided by engineer. */
+"Working" = "Arbeiten";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "Sie sind momentan am encodieren. Was wollen Sie tun?";
@@ -470,7 +486,7 @@
 "You need to make more space available on your destination disk." = "Der Speicherplatz auf dem Zielmedium ist nicht ausreichend.";
 
 /* Queue -> disk almost full alert message */
-"Your destination disk is almost full." = "Ihr Ziel-Speichermedium ist fast voll.";
+"Your destination disk is almost full." = "Ihr Zielmedium ist fast voll.";
 
 /* Queue done notification message */
 "Your encode %@ couldn't be completed." = "Die Encodierung %@ konnte nicht ausgeführt werden.";
