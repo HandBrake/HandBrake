@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17147" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="11000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17147"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +19,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="157" y="863" width="584" height="424"/>
+            <rect key="contentRect" x="157" y="515" width="584" height="424"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <value key="minSize" type="size" width="320" height="240"/>
             <view key="contentView" id="2577">
@@ -44,7 +43,7 @@
                     <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Action" paletteLabel="Action" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="Wfu-Hw-JBC">
-                            <rect key="frame" x="0.0" y="14" width="41" height="23"/>
+                            <rect key="frame" x="0.0" y="14" width="54" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Zxj-rr-UnA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -84,7 +83,7 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." sizingBehavior="auto" id="a3c-kV-98E">
                         <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
-                            <rect key="frame" x="0.0" y="14" width="165" height="23"/>
+                            <rect key="frame" x="0.0" y="14" width="177" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pch-jl-VXA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -108,7 +107,7 @@
                     <toolbarItem implicitItemIdentifier="963C2AD9-6708-4781-9411-3111E9713E3B" label="Details" paletteLabel="Details" image="details" sizingBehavior="auto" id="DfN-Iw-bzy">
                         <nil key="toolTip"/>
                         <button key="view" verticalHuggingPriority="750" id="KyK-r0-0eJ">
-                            <rect key="frame" x="12" y="14" width="21" height="23"/>
+                            <rect key="frame" x="9" y="14" width="27" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="details" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BjZ-aR-Hpe">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -123,10 +122,9 @@
                 <defaultToolbarItems>
                     <toolbarItem reference="SX6-mq-Hck"/>
                     <toolbarItem reference="s7o-pK-heI"/>
-                    <toolbarItem reference="rHN-a0-oZQ"/>
-                    <toolbarItem reference="DCB-WP-NRs"/>
-                    <toolbarItem reference="a3c-kV-98E"/>
                     <toolbarItem reference="QuV-M8-cet"/>
+                    <toolbarItem reference="a3c-kV-98E"/>
+                    <toolbarItem reference="DCB-WP-NRs"/>
                     <toolbarItem reference="DfN-Iw-bzy"/>
                 </defaultToolbarItems>
             </toolbar>

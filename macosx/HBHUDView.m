@@ -15,7 +15,15 @@
     if (self)
     {
         self.wantsLayer = YES;
-        self.layer.cornerRadius = 4;
+
+        CGFloat radius = 4;
+#if defined(__MAC_11_0)
+    if (@available (macOS 11, *))
+    {
+        radius = 10;
+    }
+#endif
+        self.layer.cornerRadius = radius;
 
         self.blendingMode = NSVisualEffectBlendingModeWithinWindow;
         self.material = NSVisualEffectMaterialDark;

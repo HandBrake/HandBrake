@@ -28,7 +28,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uev-zj-FIR">
                                     <rect key="frame" x="0.0" y="112" width="161" height="16"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="0rN-RP-Om4">
+                                        <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="0rN-RP-Om4">
                                             <rect key="frame" x="-2" y="1" width="56" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Rotation:" id="vb2-DA-Pgr">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -104,7 +104,7 @@
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZkN-1w-lLe">
                                     <rect key="frame" x="0.0" y="0.0" width="218" height="104"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="753" verticalHuggingPriority="750" horizontalCompressionResistancePriority="753" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-Uc-JnZ">
+                                        <textField horizontalHuggingPriority="753" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Aea-Uc-JnZ">
                                             <rect key="frame" x="-2" y="90" width="56" height="14"/>
                                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="zsq-Le-41g">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -118,7 +118,7 @@
                                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Bc-mZ-CrZ">
                                             <rect key="frame" x="60" y="0.0" width="158" height="104"/>
                                             <subviews>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pvq-R5-nb1">
+                                                <button toolTip="Automatic detects and removes black borders from the video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pvq-R5-nb1">
                                                     <rect key="frame" x="-1" y="89.5" width="75" height="15"/>
                                                     <buttonCell key="cell" type="radio" title="Automatic" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="MF1-tQ-h6G">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -133,7 +133,7 @@
                                                         <binding destination="-2" name="value" keyPath="self.picture.autocrop" id="dT5-bj-gI5"/>
                                                     </connections>
                                                 </button>
-                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D2o-1f-y4u">
+                                                <button toolTip="Custom allows for manual settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D2o-1f-y4u">
                                                     <rect key="frame" x="-1" y="67.5" width="65" height="15"/>
                                                     <buttonCell key="cell" type="radio" title="Custom:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="0Mh-nC-WXA">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1012,7 +1012,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <accessibility description="Crop top"/>
+                                            <accessibility description="Pad top"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="G8T-un-iNV" id="dMy-dF-OgT">
                                                     <dictionary key="options">
@@ -1041,7 +1041,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <accessibility description="Crop bottom"/>
+                                            <accessibility description="Pad bottom"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="wg5-IO-SPl" id="zn2-0d-8Hg">
                                                     <dictionary key="options">
@@ -1070,7 +1070,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <accessibility description="Crop right"/>
+                                            <accessibility description="Pad right"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Eev-Ta-QyS" id="XAB-2Q-0y9">
                                                     <dictionary key="options">
@@ -1121,7 +1121,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <accessibility description="Crop left"/>
+                                            <accessibility description="Pad left"/>
                                             <connections>
                                                 <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="gqZ-hT-AOC" id="ikL-R1-v3s">
                                                     <dictionary key="options">
