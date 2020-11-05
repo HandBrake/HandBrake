@@ -91,7 +91,7 @@ static int hb_vt_is_hardware_encoder_available(CMVideoCodecType codecType)
 
 static int hb_vt_is_constant_quality_available(CMVideoCodecType codecType)
 {
-#if defined(__MAC_11_0)
+#if defined(__MAC_11_0) && defined(__aarch64__)
     if (@available (macOS 11, *))
     {
         CFStringRef encoderIDOut;
