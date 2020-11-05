@@ -4,8 +4,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
 "8kl-Sh-Gh7.ibShadowedToolTip" = "Gib eine Beschreibung für die neue Voreinstellung ein. Die Beschreibung wird angezeigt, wenn in der Liste mit dem Mauszeiger darübergefahren wird.";
 
-/* Class = "NSTextFieldCell"; title = "Dimensions:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Bildgröße:";
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "Auflösungslimit:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
 "a0j-nw-n23.title" = "Auswahlverhalten …";

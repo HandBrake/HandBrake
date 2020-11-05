@@ -44,9 +44,6 @@
 /* Format description */
 ", iPod 5G Support" = ", iPod 5G-Unterstützung";
 
-/* HBPicture -> summary */
-", Modulus: %d" = ", Modulus: %d";
-
 /* Format description */
 ", Web Optimized" = ", Web-optimiert";
 
@@ -168,7 +165,7 @@
 "Denoise" = "Entrauschen";
 
 /* Destination description */
-"Destination:" = "Ziel:";
+"Destination:" = "Ausgabe:";
 
 /* Dimensions description
    HBJob -> filters short description */

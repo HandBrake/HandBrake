@@ -211,20 +211,41 @@
 /* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
 "GQJ-go-PoN.title" = "Übersicht:";
 
+/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
+"iGS-b5-ip7.title" = "Anzahl simultaner Encodierungen:";
+
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
+"JcO-br-AXz.title" = "2";
+
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "Sekunden";
+
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
+"l8v-ns-6UR.title" = "1";
 
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Alte Aktivitätsprotokolle nach 30 Tagen löschen";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "MLd-Te-AbW"; */
+"MLd-Te-AbW.ibShadowedToolTip" = "Anzahl der zu überprüfenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
+"nTJ-DB-eOd.title" = "4";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
-"PaR-zw-opS.ibShadowedToolTip" = "Minimaler freier Speicherplatz auf dem Zielvolume in GB.";
+"PaR-zw-opS.ibShadowedToolTip" = "Minimaler freier Speicherplatz auf dem Ausgabevolume in GB.";
 
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
 "pUi-lK-cHw.title" = "Unterstriche durch Leerzeichen ersetzen";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "qkp-nA-8ES"; */
+"qkp-nA-8ES.ibShadowedToolTip" = "Anzahl der zu überprüfenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
 "Tk3-Ig-fFI.ibShadowedToolTip" = "Labels in das Formatfenster ziehen, um das Benennungsschema festzulegen.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
+"TpU-3v-fhx.title" = "OtherViews";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
 "Uxv-oN-c1r.title" = "Bei jedem Start auf „Nichts tun“ zurücksetzen";
@@ -234,6 +255,9 @@
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "Warteschlange anhalten, wenn der verfügbare Speicherplatz kleiner ist als (GB):";
+
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
+"ZGL-FR-zSW.title" = "3";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
 "Zqz-Kn-xOS.title" = "Öffnen-Dialog anzeigen";
