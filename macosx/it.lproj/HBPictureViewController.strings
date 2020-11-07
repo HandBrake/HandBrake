@@ -140,7 +140,7 @@
 "l2V-GK-BgU.ibShadowedToolTip" = "Quantità di riempimento del bordo sinistro in pixel.";
 
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "L7V-2e-qf9"; */
-"L7V-2e-qf9.title" = "Dim. di archiviazione:";
+"L7V-2e-qf9.title" = "Dim. archiviazione:";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Ritaglia a sinistra";
@@ -206,7 +206,7 @@
 "S29-WR-idr.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "SPg-s0-Oh0"; */
-"SPg-s0-Oh0.title" = "Dim. di visualizzazione:";
+"SPg-s0-Oh0.title" = "Dim. visualizzazione:";
 
 /* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
 "tIU-4H-3Xm.title" = "270°";

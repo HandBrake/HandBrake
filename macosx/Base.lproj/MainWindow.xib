@@ -412,7 +412,7 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5181">
+                    <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5181">
                         <rect key="frame" x="417" y="537" width="46" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="38" id="xGF-g4-jWh"/>
@@ -454,7 +454,7 @@ IA
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="270" id="Kfe-4R-KRB"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Kfe-4R-KRB"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>

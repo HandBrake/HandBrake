@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +15,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="qs9-Xl-pXA">
-            <rect key="frame" x="0.0" y="0.0" width="719" height="322"/>
+            <rect key="frame" x="0.0" y="0.0" width="970" height="322"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button toolTip="Add a chapter markers track to the video." translatesAutoresizingMaskIntoConstraints="NO" id="7Xf-c0-jsr">
@@ -34,7 +34,7 @@
                     </connections>
                 </button>
                 <button toolTip="Import a list of chapter names from a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-3B-rYg">
-                    <rect key="frame" x="463" y="283" width="123" height="27"/>
+                    <rect key="frame" x="714" y="283" width="123" height="27"/>
                     <buttonCell key="cell" type="push" title="Import Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PM3-Ue-0kW">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -49,7 +49,7 @@
                     </connections>
                 </button>
                 <button toolTip="Export the list of chapter names to a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3SP-6e-RPS">
-                    <rect key="frame" x="582" y="283" width="123" height="27"/>
+                    <rect key="frame" x="833" y="283" width="123" height="27"/>
                     <buttonCell key="cell" type="push" title="Export Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h0O-zg-OF9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -64,13 +64,13 @@
                     </connections>
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="0.0" verticalLineScroll="18" verticalPageScroll="0.0" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqY-aE-MZi">
-                    <rect key="frame" x="20" y="20" width="679" height="260"/>
+                    <rect key="frame" x="20" y="20" width="930" height="260"/>
                     <clipView key="contentView" id="3Pi-zz-fFg">
-                        <rect key="frame" x="1" y="1" width="677" height="258"/>
+                        <rect key="frame" x="1" y="1" width="928" height="258"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" headerView="0rK-Rs-NTb" viewBased="YES" id="InF-gR-Lia">
-                                <rect key="frame" x="0.0" y="0.0" width="677" height="235"/>
+                                <rect key="frame" x="0.0" y="0.0" width="928" height="235"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -210,7 +210,7 @@
                                             </binding>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="title" width="470" minWidth="77.217290000000006" maxWidth="1000" id="Z6H-lJ-ipr">
+                                    <tableColumn identifier="title" width="721" minWidth="77.217290000000006" maxWidth="1000" id="Z6H-lJ-ipr">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Title">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -223,11 +223,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="yZu-QP-dyq">
-                                                <rect key="frame" x="201" y="1" width="474" height="17"/>
+                                                <rect key="frame" x="201" y="1" width="725" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rpj-MP-nnZ">
-                                                        <rect key="frame" x="0.0" y="1" width="474" height="15"/>
+                                                        <rect key="frame" x="0.0" y="1" width="725" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Title" id="UjY-nz-uSt">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -269,7 +269,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" wantsLayer="YES" id="0rK-Rs-NTb">
-                        <rect key="frame" x="0.0" y="0.0" width="677" height="23"/>
+                        <rect key="frame" x="0.0" y="0.0" width="928" height="23"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
@@ -288,7 +288,7 @@
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="lqY-aE-MZi" secondAttribute="leading" id="xvS-rd-BVF"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="qs9-Xl-pXA" secondAttribute="leading" constant="20" symbolic="YES" id="zIR-UV-LXe"/>
             </constraints>
-            <point key="canvasLocation" x="-52.5" y="149"/>
+            <point key="canvasLocation" x="73" y="149"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="coy-s6-QLx"/>
         <arrayController objectClassName="HBChapter" editable="NO" id="Gv0-qM-nu4">
