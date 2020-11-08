@@ -181,13 +181,28 @@ DQ
                                                             <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="scB-D1-Zvp"/>
                                                         </connections>
                                                     </button>
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="GHJ-25-kZl">
+                                                        <rect key="frame" x="-3" y="-3" width="46" height="18"/>
+                                                        <string key="toolTip">Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled.</string>
+                                                        <buttonCell key="cell" type="check" title="MP2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="Z8O-AS-UdA">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="i2Z-jt-9Zf"/>
+                                                            <binding destination="-2" name="value" keyPath="self.settings.allowMP2Passthru" id="tWz-Ef-iMQ"/>
+                                                            <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="PRg-PI-p5Z"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
+                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
