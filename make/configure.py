@@ -1375,9 +1375,12 @@ def createCLI( cross = None ):
 
     ## add security options
     grp = cli.add_argument_group( 'Security Options' )
-    grp.add_argument( '--harden', dest="enable_harden", default=False, action='store_true', help='harden app to protect against buffer overflows' )
-    h = IfHost( 'sandbox app to limit host system access (macOS only)', '*-*-darwin*', none=argparse.SUPPRESS).value
-    grp.add_argument( '--sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'hardening to protect against buffer overflows', '*-*-*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--harden', dest="enable_harden", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--no-harden', dest="enable_harden", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'sandboxing to limit host system access (macOS only)', '*-*-darwin*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--sandbox', dest="enable_sandbox", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--no-sandbox', dest="enable_sandbox", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
     cli.add_argument_group( grp )
 
     ## add Xcode options
