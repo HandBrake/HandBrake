@@ -212,12 +212,25 @@ CGColorSpaceRef copyColorSpace(int primaries, int transfer, int matrix)
             matrixValue = kCVImageBufferYCbCrMatrix_ITU_R_709_2;
     }
 
-    const void *keys[4] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey, kCVImageBufferGammaLevelKey };
-    const void *values[4] = { primariesValue, transferValue, matrixValue, gammaValue};
-    CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CGColorSpaceRef colorSpace = NULL;
+    if (transferValue == kCVImageBufferTransferFunction_UseGamma)
+    {
+        const void *keys[4] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey, kCVImageBufferGammaLevelKey };
+        const void *values[4] = { primariesValue, transferValue, matrixValue, gammaValue };
+        CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 4, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    CGColorSpaceRef colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
-    CFRelease(attachments);
+        colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
+        CFRelease(attachments);
+    }
+    else
+    {
+        const void *keys[3] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey };
+        const void *values[3] = { primariesValue, transferValue, matrixValue };
+        CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+        colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
+        CFRelease(attachments);
+    }
 
     return colorSpace;
 }
