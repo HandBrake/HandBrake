@@ -600,14 +600,14 @@
                                                 <outlet property="nextKeyView" destination="9hH-As-JSa" id="XO3-A3-WZr"/>
                                             </connections>
                                         </textField>
-                                        <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8L9-DZ-yiv">
-                                            <rect key="frame" x="96" y="0.0" width="156" height="19"/>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8L9-DZ-yiv">
+                                            <rect key="frame" x="96" y="0.0" width="152" height="19"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hH-As-JSa">
-                                                    <rect key="frame" x="0.0" y="0.0" width="56" height="19"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings.</string>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="56" id="wh9-zM-6T3"/>
+                                                        <constraint firstAttribute="width" constant="54" id="wh9-zM-6T3"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
                                                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="6jd-2b-RPM"/>
@@ -632,8 +632,8 @@
                                                     </connections>
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FwZ-6T-zJe">
-                                                    <rect key="frame" x="58" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                                                    <rect key="frame" x="56" y="-2" width="15" height="22"/>
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Width"/>
@@ -658,10 +658,10 @@
                                                     <accessibility description=" "/>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-7Z-J2e">
-                                                    <rect key="frame" x="85" y="0.0" width="56" height="19"/>
+                                                    <rect key="frame" x="83" y="0.0" width="54" height="19"/>
                                                     <string key="toolTip">Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings.</string>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="56" id="tPa-O8-VxI"/>
+                                                        <constraint firstAttribute="width" constant="54" id="tPa-O8-VxI"/>
                                                     </constraints>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
                                                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Ts7-R5-Oye"/>
@@ -686,8 +686,8 @@
                                                     </connections>
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2s0-5k-fjU">
-                                                    <rect key="frame" x="143" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                                                    <rect key="frame" x="139" y="-2" width="15" height="22"/>
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Height"/>
