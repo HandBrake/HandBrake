@@ -279,6 +279,13 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     else
     {
         int count = hb_list_count(job->title->list_chapter);
+
+        if (job->chapter_end > count || job->chapter_start > count || job->chapter_start > job->chapter_end)
+        {
+            hb_error("Invalid chapter start/end indexes");
+            return 1;
+        }
+
         if (count == 0 || count <= job->chapter_end)
         {
             r->duration = job->title->duration;
