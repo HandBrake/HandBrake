@@ -85,6 +85,9 @@
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"2160p 4K Ultra HD", @"Add preset window -> picture setting")];
     [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode4K];
 
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"1440p 2.5K Quad HD", @"Add preset window -> picture setting")];
+    [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode1440p];
+
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"1080p HD", @"Add preset window -> picture setting")];
     [self.picSettingsPopUp.lastItem setTag:HBPictureResolutionLimitMode1080p];
 
@@ -221,6 +224,10 @@
             case HBPictureResolutionLimitMode4K:
                 newPreset[@"PictureWidth"] = @(3840);
                 newPreset[@"PictureHeight"] = @(2160);
+                break;
+            case HBPictureResolutionLimitMode1440p:
+                newPreset[@"PictureWidth"] = @(2560);
+                newPreset[@"PictureHeight"] = @(1440);
                 break;
             case HBPictureResolutionLimitMode1080p:
                 newPreset[@"PictureWidth"] = @(1920);

@@ -152,6 +152,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
                 self.maxWidth = 3840;
                 self.maxHeight = 2160;
                 break;
+            case HBPictureResolutionLimitMode1440p:
+                self.maxWidth = 2560;
+                self.maxHeight = 1440;
+                break;
             case HBPictureResolutionLimitMode1080p:
                 self.maxWidth = 1920;
                 self.maxHeight = 1080;
@@ -1102,6 +1106,10 @@ fail:
     else if (self.maxWidth == 3840 && self.maxHeight == 2160)
     {
         self.resolutionLimitMode = HBPictureResolutionLimitMode4K;
+    }
+    else if (self.maxWidth == 2560 && self.maxHeight == 1440)
+    {
+        self.resolutionLimitMode = HBPictureResolutionLimitMode1440p;
     }
     else if (self.maxWidth == 1920 && self.maxHeight == 1080)
     {

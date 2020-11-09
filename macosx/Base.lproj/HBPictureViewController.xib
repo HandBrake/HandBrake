@@ -459,6 +459,7 @@
                                                         <menuItem title="None" state="on" id="gWL-mx-RIK"/>
                                                         <menuItem title="4320p 8K Ultra HD" tag="1" id="Vrx-BH-ry2"/>
                                                         <menuItem title="2160p 4K Ultra HD" tag="2" id="1Zm-mM-8Tb"/>
+                                                        <menuItem title="1440p 2.5K Quad HD" tag="3" id="2ax-HE-Amt"/>
                                                         <menuItem title="1080p HD" tag="3" id="qzy-K8-2tY"/>
                                                         <menuItem title="720p HD" tag="4" id="Xao-1P-xPT"/>
                                                         <menuItem title="576p PAL SD" tag="5" id="yue-jq-T1X"/>

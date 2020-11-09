@@ -15,6 +15,7 @@ typedef NS_ENUM(NSUInteger, HBPictureResolutionLimitMode) {
     HBPictureResolutionLimitModeNone,
     HBPictureResolutionLimitMode8K,
     HBPictureResolutionLimitMode4K,
+    HBPictureResolutionLimitMode1440p,
     HBPictureResolutionLimitMode1080p,
     HBPictureResolutionLimitMode720p,
     HBPictureResolutionLimitMode576p,
