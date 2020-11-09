@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.defs,FRIBIDI,fribidi))
 $(eval $(call import.CONTRIB.defs,FRIBIDI))
 
-FRIBIDI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/fribidi-1.0.7.tar.gz
-FRIBIDI.FETCH.url     += https://github.com/fribidi/fribidi/archive/v1.0.7.tar.gz
-FRIBIDI.FETCH.sha256   = 4352e95aa26bc0c4a45a224d606df0aba5f17f8cadcbcde36dd976e585a320e8
-FRIBIDI.FETCH.basename = fribidi-1.0.7.tar.gz
+FRIBIDI.FETCH.url      = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/fribidi-1.0.10.tar.gz
+FRIBIDI.FETCH.url     += https://github.com/fribidi/fribidi/archive/v1.0.10.tar.gz
+FRIBIDI.FETCH.sha256   = 3ebb19c4184ed6dc324d2e291d7465bc6108a20be019f053f33228e07e879c4f
+FRIBIDI.FETCH.basename = fribidi-1.0.10.tar.gz
 
 FRIBIDI.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
