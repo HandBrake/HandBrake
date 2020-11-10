@@ -11,13 +11,13 @@ LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/
 LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.15.0/libass-0.15.0.tar.gz
 LIBASS.FETCH.sha256  = 9cbddee5e8c87e43a5fe627a19cd2aa4c36552156eb4edcf6c5a30bd4934fe58
 
-# Tell configure where to find our version of freetype
+# Tell configure where to find our versions of these libs
 LIBASS.CONFIGURE.extra = \
-    --enable-asm --enable-harfbuzz \
+    --enable-asm \
     HARFBUZZ_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lharfbuzz" \
     HARFBUZZ_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/harfbuzz" \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
-    FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
+    FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2"
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     # Tell configure where to find our version of fontconfig
