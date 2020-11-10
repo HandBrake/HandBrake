@@ -433,10 +433,10 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3sU-eh-1ja">
-                            <rect key="frame" x="245" y="0.0" width="252" height="187"/>
+                            <rect key="frame" x="247" y="0.0" width="248" height="187"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uO6-48-Dmb">
-                                    <rect key="frame" x="0.0" y="171" width="221" height="16"/>
+                                    <rect key="frame" x="0.0" y="171" width="231" height="16"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="PJL-Y6-9ZV">
                                             <rect key="frame" x="-2" y="1" width="92" height="14"/>
@@ -450,7 +450,7 @@
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="the-i1-S1D">
-                                            <rect key="frame" x="92" y="-4" width="133" height="22"/>
+                                            <rect key="frame" x="92" y="-4" width="143" height="22"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gWL-mx-RIK" id="pzu-rp-72l">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
@@ -460,11 +460,11 @@
                                                         <menuItem title="4320p 8K Ultra HD" tag="1" id="Vrx-BH-ry2"/>
                                                         <menuItem title="2160p 4K Ultra HD" tag="2" id="1Zm-mM-8Tb"/>
                                                         <menuItem title="1440p 2.5K Quad HD" tag="3" id="2ax-HE-Amt"/>
-                                                        <menuItem title="1080p HD" tag="3" id="qzy-K8-2tY"/>
-                                                        <menuItem title="720p HD" tag="4" id="Xao-1P-xPT"/>
-                                                        <menuItem title="576p PAL SD" tag="5" id="yue-jq-T1X"/>
-                                                        <menuItem title="480p NTSC SD" tag="6" id="21C-Hg-mk4"/>
-                                                        <menuItem title="Custom" tag="7" id="Xun-U2-N6F"/>
+                                                        <menuItem title="1080p HD" tag="4" id="qzy-K8-2tY"/>
+                                                        <menuItem title="720p HD" tag="5" id="Xao-1P-xPT"/>
+                                                        <menuItem title="576p PAL SD" tag="6" id="yue-jq-T1X"/>
+                                                        <menuItem title="480p NTSC SD" tag="7" id="21C-Hg-mk4"/>
+                                                        <menuItem title="Custom" tag="8" id="Xun-U2-N6F"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -586,7 +586,7 @@
                                     </connections>
                                 </button>
                                 <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ZE-cV-x9d">
-                                    <rect key="frame" x="0.0" y="73" width="252" height="19"/>
+                                    <rect key="frame" x="0.0" y="73" width="248" height="19"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
                                             <rect key="frame" x="-2" y="2" width="92" height="14"/>
@@ -633,7 +633,7 @@
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FwZ-6T-zJe">
                                                     <rect key="frame" x="56" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Width"/>
@@ -649,7 +649,7 @@
                                                     </connections>
                                                 </stepper>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="uqQ-uA-3xF">
-                                                    <rect key="frame" x="73" y="2" width="10" height="14"/>
+                                                    <rect key="frame" x="71" y="3" width="10" height="14"/>
                                                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -687,7 +687,7 @@
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2s0-5k-fjU">
                                                     <rect key="frame" x="139" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Height"/>
@@ -985,7 +985,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="09f-sT-7la">
                                             <rect key="frame" x="89" y="38" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="atZ-cf-YyH">
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="atZ-cf-YyH">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
                                             <accessibility description="Pad top"/>
@@ -1000,8 +1000,11 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customPaddingEnabled" id="N8A-F4-7bg"/>
-                                                <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopPadding" id="0Ue-21-yg9"/>
-                                                <binding destination="-2" name="value" keyPath="self.picture.paddingTop" previousBinding="0Ue-21-yg9" id="Fh6-i2-D7o"/>
+                                                <binding destination="-2" name="value" keyPath="self.picture.paddingTop" id="uML-vk-eYQ">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </stepper>
                                         <textField toolTip="Top edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Jp-gt-DbX">
@@ -1094,7 +1097,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZc-Ks-efB">
                                             <rect key="frame" x="35" y="19" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Rzf-mS-h9z">
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="Rzf-mS-h9z">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
                                             <accessibility description="Pad left"/>
@@ -1109,8 +1112,11 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customPaddingEnabled" id="WJd-cO-An1"/>
-                                                <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightPadding" id="Wuh-bv-zBN"/>
-                                                <binding destination="-2" name="value" keyPath="self.picture.paddingLeft" previousBinding="Wuh-bv-zBN" id="EtJ-Yg-edZ"/>
+                                                <binding destination="-2" name="value" keyPath="self.picture.paddingLeft" id="IH1-Pa-5Ie">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </stepper>
                                         <textField toolTip="Left edge padding amount in pixels." verticalHuggingPriority="750" fixedFrame="YES" preferredMaxLayoutWidth="36" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2V-GK-BgU">
@@ -1145,7 +1151,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uoH-Hv-lNp">
                                             <rect key="frame" x="143" y="19" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="xS2-KN-fds">
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="xS2-KN-fds">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
                                             <accessibility description="Pad right"/>
@@ -1160,14 +1166,17 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customPaddingEnabled" id="I7b-pp-RRE"/>
-                                                <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftPadding" id="rzI-fx-xqC"/>
-                                                <binding destination="-2" name="value" keyPath="self.picture.paddingRight" previousBinding="rzI-fx-xqC" id="cNM-mb-52I"/>
+                                                <binding destination="-2" name="value" keyPath="self.picture.paddingRight" id="qeh-Sm-JDb">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </stepper>
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVm-0W-Jxg">
                                             <rect key="frame" x="89" y="0.0" width="15" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="tcI-lL-sqJ">
+                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="tcI-lL-sqJ">
                                                 <font key="font" metaFont="smallSystem"/>
                                             </stepperCell>
                                             <accessibility description="Pad bottom"/>
@@ -1182,8 +1191,11 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customPaddingEnabled" id="fZW-aV-Qw9"/>
-                                                <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomPadding" id="nh2-GD-4d4"/>
-                                                <binding destination="-2" name="value" keyPath="self.picture.paddingBottom" previousBinding="nh2-GD-4d4" id="YP4-zx-aYV"/>
+                                                <binding destination="-2" name="value" keyPath="self.picture.paddingBottom" id="qTD-Vx-Nc1">
+                                                    <dictionary key="options">
+                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </stepper>
                                     </subviews>

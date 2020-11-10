@@ -680,7 +680,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMaxTopPadding
 {
-    return [NSSet setWithObjects:@"paddingBottom", nil];
+    return [NSSet setWithObjects:@"paddingBottom, maxHeight, height", nil];
 }
 
 - (int)maxTopPadding
@@ -690,7 +690,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMaxBottomPadding
 {
-    return [NSSet setWithObjects:@"paddingTop", nil];
+    return [NSSet setWithObjects:@"paddingTop, maxHeight, height", nil];
 }
 
 - (int)maxBottomPadding
@@ -700,7 +700,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMaxLeftPadding
 {
-    return [NSSet setWithObjects:@"paddingRight", nil];
+    return [NSSet setWithObjects:@"paddingRight, maxWidth, width", nil];
 }
 
 - (int)maxLeftPadding
@@ -710,12 +710,12 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingMaxRightPadding
 {
-    return [NSSet setWithObjects:@"paddingLeft", nil];
+    return [NSSet setWithObjects:@"paddingLeft, maxWidth, width", nil];
 }
 
 - (int)maxRightPadding
 {
-    return self.maxWidth - self.width - self.maxLeftPadding;
+    return self.maxWidth - self.width - self.paddingLeft;
 }
 
 - (int)sourceDisplayWidth
