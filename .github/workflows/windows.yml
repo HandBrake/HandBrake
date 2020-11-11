@@ -65,15 +65,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: Environment Setup
-      run: |
-        choco install wget
-        wget https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip
-        mkdir plugins
-        move Inetc.zip plugins
-        cd plugins
-        7z x Inetc.zip
-
     - name: NuGet Restore
       run: |
          choco install nuget.commandline

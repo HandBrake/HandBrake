@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-    <UseWPF>true</UseWPF>
+    <TargetFramework>net5.0</TargetFramework>
     <PackageId>HandBrake.Worker</PackageId>
     <Authors>HandBrake Team</Authors>
     <Company>HandBrake Team</Company>
@@ -14,8 +13,8 @@
     <RepositoryUrl>https://github.com/HandBrake/HandBrake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <Platforms>x64</Platforms>
-    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU</Platforms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
     <StartupObject />
     <AssemblyName>HandBrake.Worker</AssemblyName>

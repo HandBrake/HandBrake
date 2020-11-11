@@ -52,7 +52,6 @@ namespace HandBrakeWPF.Views
             {
                 INotifyIconService notifyIconService = IoC.Get<INotifyIconService>();
                 this.notifyIcon = new NotifyIcon();
-                this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick) });
                 notifyIconService.RegisterNotifyIcon(this.notifyIcon);
 
                 StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));

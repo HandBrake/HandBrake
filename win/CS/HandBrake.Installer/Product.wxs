@@ -53,11 +53,6 @@
       <![CDATA[Installed OR (VersionNT64 >= 603) OR (VersionNT64 = 601)]]>
     </Condition>
 
-    <PropertyRef Id='WIXNETFX4RELEASEINSTALLED'/>
-    <Condition Message='This setup requires the Microsoft .NET Framework 4.8 (or greater) to be installed.'>
-      <![CDATA[Installed OR (WIXNETFX4RELEASEINSTALLED >= "#528040")]]>
-    </Condition>
-
     <!-- Install Files -->
     <Directory Id="TARGETDIR" Name="SourceDir">
 
@@ -72,6 +67,8 @@
               <File Source="$(var.packagePath)\HandBrake.Worker.exe" />
               <File Source="$(var.packagePath)\HandBrake.Worker.exe.config"/>
               <File Source="$(var.packagePath)\HandBrake.Interop.dll"/>
+              <File Source="$(var.packagePath)\HandBrake.Worker.dll"/>
+              <File Source="$(var.packagePath)\HandBrake.dll"/>
               <File Source="$(var.packagePath)\hb.dll"/>
               <File Source="$(var.packagePath)\portable.ini.template"/>
 
@@ -83,6 +80,16 @@
               <File Source="$(var.packagePath)\Ookii.Dialogs.Wpf.dll"/>
               <File Source="$(var.packagePath)\System.Windows.Interactivity.dll"/>
               <File Source="$(var.packagePath)\Newtonsoft.Json.dll"/>
+              <File Source="$(var.packagePath)\System.Management.dll"/>
+
+
+              <File Source="$(var.packagePath)\HandBrake.deps.json"/>
+              <File Source="$(var.packagePath)\HandBrake.runtimeconfig.dev.json"/>
+              <File Source="$(var.packagePath)\HandBrake.runtimeconfig.json"/>
+              <File Source="$(var.packagePath)\HandBrake.Worker.deps.json"/>
+              <File Source="$(var.packagePath)\HandBrake.Worker.runtimeconfig.dev.json"/>
+              <File Source="$(var.packagePath)\HandBrake.Worker.runtimeconfig.json"/>
+
             </Component>
 
             <Directory Id="de_lang" Name="de">

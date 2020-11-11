@@ -11,15 +11,8 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
-;Required .NET framework for 4.7.1
-!define MIN_FRAMEWORK_VER 461308  
-
 SetCompressor lzma
 ManifestDPIAware true
-
-; Required for Github Actions (or local builds were inetc is not part of the installed NSIS)
-; Extract inetc.zip to the HandBrake root directory into a folder called plugins.
-!addplugindir /x86-ansi "..\..\..\..\..\..\plugins\Plugins\x86-ansi"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -122,37 +115,13 @@ Section "HandBrake" SectionApp
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   SectionIn RO ; Read only, always installed
-
-  ; Begin Check .NET version
-  StrCpy $InstallDotNET "No"
-  Call CheckFramework
-     StrCmp $0 "1" +3
-        StrCpy $InstallDotNET "Yes"
-      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the Microsoft .NET Framework 4.8 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
-     Pop $0
-
-  ; Get .NET if required
-  ${If} $InstallDotNET == "Yes"
-     SetDetailsView hide
-     inetc::get /caption "Downloading Microsoft .NET Framework 4.8" /canceltext "Cancel" "https://go.microsoft.com/fwlink/?linkid=2088631" "$INSTDIR\dotnetfx.exe" /end
-     Pop $1
-
-     ${If} $1 != "OK"
-           Delete "$INSTDIR\dotnetfx.exe"
-           Abort "Installation cancelled, ${PRODUCT_NAME} requires the Microsoft .NET 4.8 Framework"
-     ${EndIf}
-
-     ExecWait "$INSTDIR\dotnetfx.exe"
-     Delete "$INSTDIR\dotnetfx.exe"
-
-     SetDetailsView show
-  ${EndIf}
   
   ; Install Files
   File "*.exe"
   File "*.dll"
   File "*.template"
   File "*.config"
+  File "*.json"
   File "HandBrake*.pdb"
 
  ; Copy the languages
@@ -290,19 +259,4 @@ Function "desktopShortcut"
     CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
 FunctionEnd
 
-;Check for .NET framework
-Function CheckFrameWork
-  ; Magic numbers from http://msdn.microsoft.com/en-us/library/ee942965.aspx
-    ClearErrors
-    ReadRegDWORD $0 HKLM "SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" "Release"
 
-    IfErrors NotDetected
-
-    ${If} $0 >= MIN_FRAMEWORK_VER
-        StrCpy $0 "1"
-    ${Else}
-		NotDetected:
-		  StrCpy $0 "2"
-    ${EndIf}
-
-FunctionEnd
