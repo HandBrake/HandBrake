@@ -63,8 +63,6 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
-Var InstallDotNET
-
 Function .onInit
 
   IfSilent 0 +2

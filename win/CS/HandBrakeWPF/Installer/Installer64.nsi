@@ -64,8 +64,6 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
-Var InstallDotNET
-
 Function .onInit
 
   ; For Silent Installs, Assume All Users
