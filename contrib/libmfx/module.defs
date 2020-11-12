@@ -3,7 +3,7 @@ $(eval $(call import.CONTRIB.defs,LIBMFX))
 
 LIBMFX.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/mfx_dispatch-1.34.tar.gz
 LIBMFX.FETCH.url      += https://github.com/lu-zero/mfx_dispatch/archive/1.34.tar.gz
-LIBMFX.FETCH.sha256    = 904D8F3ED14F583E0202DB558532B64A8B1F6460D4AB5F68AE1562A00FBB3C5D
+LIBMFX.FETCH.sha256    = 904d8f3ed14f583e0202db558532b64a8b1f6460d4ab5f68ae1562a00fbb3c5d
 LIBMFX.FETCH.basename  = mfx_dispatch-1.34.tar.gz
 LIBMFX.EXTRACT.tarbase = mfx_dispatch-1.34
 
