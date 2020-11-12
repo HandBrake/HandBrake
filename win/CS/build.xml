@@ -103,7 +103,7 @@
   </Target>
 
   <Target Name="Cleanup">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\x64\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" Condition="'$(Configuration)'=='Debug'" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" Condition="'$(Configuration)'=='Debug'" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\x64\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\HandBrake-Version-x86_64-Win_GUI.msi /Y" Condition="'$(Configuration)'=='Release'" />
   </Target>
 
