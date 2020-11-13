@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,16 +24,15 @@
                         <rect key="frame" x="1" y="1" width="543" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="22" viewBased="YES" id="VV7-t7-Ufd" customClass="HBTableView">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="22" viewBased="YES" id="VV7-t7-Ufd" customClass="HBTableView">
                                 <rect key="frame" x="0.0" y="0.0" width="543" height="150"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn width="540" minWidth="40" maxWidth="3000" id="QfC-OR-ahq">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -71,7 +70,7 @@
                                                         </buttonCell>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="7OO-Ut-UrC">
-                                                        <rect key="frame" x="3" y="35" width="16" height="16"/>
+                                                        <rect key="frame" x="3" y="32" width="16" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="V3u-Yw-S0G"/>
                                                             <constraint firstAttribute="width" constant="16" id="dDq-xC-fYL"/>
@@ -141,7 +140,7 @@
                                                         </buttonCell>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kNw-fy-iYB">
-                                                        <rect key="frame" x="3" y="3" width="16" height="16"/>
+                                                        <rect key="frame" x="3" y="0.0" width="16" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="16" id="Sg7-eg-u2l"/>
                                                             <constraint firstAttribute="height" constant="16" id="udI-Cr-8CG"/>
@@ -254,6 +253,6 @@
     <resources>
         <image name="Delete" width="16" height="16"/>
         <image name="DeleteHighlightPressed" width="16" height="16"/>
-        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSActionTemplate" width="15" height="15"/>
     </resources>
 </document>
