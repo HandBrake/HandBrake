@@ -84,13 +84,22 @@
 
 
               <File Source="$(var.packagePath)\HandBrake.deps.json"/>
-              <File Source="$(var.packagePath)\HandBrake.runtimeconfig.dev.json"/>
               <File Source="$(var.packagePath)\HandBrake.runtimeconfig.json"/>
               <File Source="$(var.packagePath)\HandBrake.Worker.deps.json"/>
-              <File Source="$(var.packagePath)\HandBrake.Worker.runtimeconfig.dev.json"/>
               <File Source="$(var.packagePath)\HandBrake.Worker.runtimeconfig.json"/>
-
             </Component>
+
+            <Directory Id="runtime" Name="runtimes">
+              <Directory Id="runtime_win" Name="win">
+                <Directory Id="runtime_lib" Name="lib">
+                  <Directory Id="runtime_netcore2" Name="netcoreapp2.0">
+                    <Component Win64="yes" Id="runtime" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42193">
+                      <File Id="runtime_system_management" Source="$(var.packagePath)\runtimes\win\lib\netcoreapp2.0\System.Management.dll" />
+                    </Component>
+                  </Directory>
+                </Directory>
+              </Directory>
+            </Directory>
 
             <Directory Id="de_lang" Name="de">
               <Component Win64="yes" Id="de_lang" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42182">
@@ -191,6 +200,8 @@
     <Feature Id="DefaultFeature" Level="1">
       <ComponentRef Id="ApplicationFiles"/>
       <ComponentRef Id="AppShortcuts"/>
+
+      <ComponentRef Id="runtime"/>
 
       <ComponentRef Id="de_lang"/>
       <ComponentRef Id="co_lang"/>

@@ -123,6 +123,12 @@ Section "HandBrake" SectionApp
   File "*.config"
   File "*.pdb"
   File "*.config"
+  File "*.deps.json"
+  File "*.runtimeconfig.json"
+
+  SetOutPath "$INSTDIR\runtimes\win\lib\netcoreapp2.0"
+  SetOverwrite ifnewer
+  File "runtimes\win\lib\netcoreapp2.0\*.*"
 
  ; Copy the languages
   SetOutPath "$INSTDIR\de"
@@ -236,6 +242,12 @@ Section Uninstall
   RMDir  "$INSTDIR\co"
   Delete "$INSTDIR\uk\*.*"
   RMDir  "$INSTDIR\uk"
+  
+  Delete "$INSTDIR\runtimes\win\lib\netcoreapp2.0\*.*"
+  RMDir  "$INSTDIR\runtimes\win\lib\netcoreapp2.0"
+  RMDir  "$INSTDIR\runtimes\win\lib"
+  RMDir  "$INSTDIR\runtimes\win"
+  RMDir  "$INSTDIR\runtimes"
 
   RMDir  "$INSTDIR"
 

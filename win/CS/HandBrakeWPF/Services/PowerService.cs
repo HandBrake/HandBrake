@@ -9,9 +9,6 @@
 
 namespace HandBrakeWPF.Services
 {
-    using System;
-    using System.Management;
-
     using HandBrakeWPF.Utilities;
 
     public class PowerService
@@ -26,22 +23,6 @@ namespace HandBrakeWPF.Services
             }
 
             return true;
-        }
-
-        private void GetPowerState()
-        {
-            System.Management.ObjectQuery query = new ObjectQuery("Select * FROM Win32_Battery");
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-
-            ManagementObjectCollection collection = searcher.Get();
-
-            foreach (ManagementObject mo in collection)
-            {
-                foreach (PropertyData property in mo.Properties)
-                {
-                    Console.WriteLine("Property {0}: Value is {1}", property.Name, property.Value);
-                }
-            }
         }
     }
 }
