@@ -427,8 +427,8 @@ void hb_display_job_info(hb_job_t *job)
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s",
-               hb_qsv_decode_get_codec_name(title->video_codec_param));
+        hb_log("   + decoder: %s %d-bit",
+               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->pix_fmt));
     }
     else
 #endif
@@ -804,7 +804,27 @@ static int bit_depth_is_supported(hb_job_t * job, int bit_depth)
 static int get_best_pix_ftm(hb_job_t * job)
 {
     int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+    if (hb_qsv_info_get(job->vcodec))
+    {
+        if (hb_qsv_full_path_is_enabled(job))
+        {
+            if (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H265_10BIT)
+            {
+                return AV_PIX_FMT_P010LE;
+            }
+            else
+            {
+                return AV_PIX_FMT_NV12;
+            }
+        }
+        else
+        {
+            // system memory usage: QSV encoder only or QSV decoder + SW filters + QSV encoder
+            return AV_PIX_FMT_YUV420P;
+        }
+    }
+#endif
     if (bit_depth >= 12 && bit_depth_is_supported(job, 12))
     {
         return AV_PIX_FMT_YUV420P12;
@@ -1365,7 +1385,22 @@ static void do_job(hb_job_t *job)
         memset(interjob, 0, sizeof(*interjob));
         interjob->sequence_id = job->sequence_id;
     }
-
+#if HB_PROJECT_FEATURE_QSV
+    if (hb_qsv_is_enabled(job))
+    {
+        job->qsv.ctx = hb_qsv_context_init();
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+        if (hb_qsv_full_path_is_enabled(job))
+        {
+            // Temporary workaround for the driver in case when low_power mode is disabled, should be removed later
+            if (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H265)
+            {
+                job->vcodec = HB_VCODEC_QSV_H265_10BIT;
+            }
+        }
+#endif
+    }
+#endif
     job->list_work = hb_list_init();
     w = hb_get_work(job->h, WORK_READER);
     hb_list_add(job->list_work, w);
@@ -1392,14 +1427,6 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
-
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_is_enabled(job))
-    {
-        job->qsv.ctx = hb_qsv_context_init();
-    }
-#endif
-
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if (job->list_filter && hb_list_count(job->list_filter))

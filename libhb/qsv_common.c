@@ -1062,6 +1062,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     static int device_check_completed = 0;
     static int device_check_succeded = 0;
+    int codecs_exceptions = 0;
     int qsv_full_path_is_enabled = 0;
 
     if(!device_check_completed)
@@ -1070,9 +1071,11 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
        device_check_completed = 1;
     }
 
+    codecs_exceptions = (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H264);
+
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         hb_qsv_info_get(job->vcodec) &&
-        device_check_succeded && !job->qsv.ctx->num_cpu_filters);
+        device_check_succeded && !job->qsv.ctx->num_cpu_filters) && !codecs_exceptions;
     return qsv_full_path_is_enabled;
 }
 
