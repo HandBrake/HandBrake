@@ -118,17 +118,17 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     if (hb_qsv_hw_filters_are_enabled(graph->job))
     {
         par = av_buffersrc_parameters_alloc();
-        init->pix_fmt = AV_PIX_FMT_QSV;
         filter_args = hb_strdup_printf(
                 "video_size=%dx%d:pix_fmt=%d:sar=%d/%d:"
                 "time_base=%d/%d:frame_rate=%d/%d",
-                init->geometry.width, init->geometry.height, init->pix_fmt,
+                init->geometry.width, init->geometry.height, AV_PIX_FMT_QSV,
                 init->geometry.par.num, init->geometry.par.den,
                 init->time_base.num, init->time_base.den,
                 init->vrate.num, init->vrate.den);
 
         AVBufferRef *hb_hw_frames_ctx = NULL;
-        result = hb_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, AV_PIX_FMT_NV12, 32, 0, &hb_hw_frames_ctx);
+
+        result = hb_create_ffmpeg_pool(graph->job, init->geometry.width, init->geometry.height, init->pix_fmt, 32, 0, &hb_hw_frames_ctx);
         if (result < 0)
         {
             hb_error("hb_create_ffmpeg_pool failed");
