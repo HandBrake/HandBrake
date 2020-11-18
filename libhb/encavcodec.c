@@ -422,7 +422,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->pix_fmt   = AV_PIX_FMT_YUV420P;
+    context->pix_fmt   = job->pix_fmt;
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;

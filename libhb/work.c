@@ -433,7 +433,7 @@ void hb_display_job_info(hb_job_t *job)
     else
 #endif
     {
-        hb_log("   + decoder: %s", title->video_codec_name);
+        hb_log("   + decoder: %s %d-bit", title->video_codec_name, hb_get_bit_depth(job->pix_fmt));
     }
 
     if( title->video_bitrate )
@@ -771,6 +771,49 @@ void correct_framerate( hb_interjob_t * interjob, hb_job_t * job )
                job->orig_vrate.num, job->orig_vrate.den,
                job->vrate.num, job->vrate.den);
     }
+}
+
+static int bit_depth_is_supported(hb_job_t * job, int bit_depth)
+{
+    for (int i = 0; i < hb_list_count(job->list_filter); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+
+        switch (filter->id) {
+            case HB_FILTER_DETELECINE:
+            case HB_FILTER_COMB_DETECT:
+            case HB_FILTER_DECOMB:
+            case HB_FILTER_DENOISE:
+            case HB_FILTER_NLMEANS:
+            case HB_FILTER_CHROMA_SMOOTH:
+            case HB_FILTER_LAPSHARP:
+            case HB_FILTER_UNSHARP:
+            case HB_FILTER_GRAYSCALE:
+                return 0;
+        }
+    }
+
+    if (hb_video_encoder_get_depth(job->vcodec) < bit_depth)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+static int get_best_pix_ftm(hb_job_t * job)
+{
+    int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
+
+    if (bit_depth >= 12 && bit_depth_is_supported(job, 12))
+    {
+        return AV_PIX_FMT_YUV420P12;
+    }
+    if (bit_depth >= 10 && bit_depth_is_supported(job, 10))
+    {
+        return AV_PIX_FMT_YUV420P10;
+    }
+    return AV_PIX_FMT_YUV420P;
 }
 
 static void analyze_subtitle_scan( hb_job_t * job )
@@ -1383,11 +1426,7 @@ static void do_job(hb_job_t *job)
         init.time_base.num = 1;
         init.time_base.den = 90000;
         init.job = job;
-        // TODO: When more complete pix format support is complete this
-        // needs to be updated to reflect the pix_fmt output by
-        // decavcodec.c.  This may be different than title->pix_fmt
-        // since we will likely only support planar YUV color formats.
-        init.pix_fmt = AV_PIX_FMT_YUV420P;
+        init.pix_fmt = get_best_pix_ftm(job);
         init.color_range = AVCOL_RANGE_MPEG;
 
         init.color_prim = title->color_prim;
@@ -1416,6 +1455,7 @@ static void do_job(hb_job_t *job)
             }
             i++;
         }
+        job->pix_fmt = init.pix_fmt;
         job->width = init.geometry.width;
         job->height = init.geometry.height;
         job->par = init.geometry.par;

@@ -371,7 +371,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     {
         if (buf == NULL)
         {
-            buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
+            buf = hb_frame_buffer_init(stream->common->job->pix_fmt,
                                    stream->common->job->title->geometry.width,
                                    stream->common->job->title->geometry.height);
             memset(buf->plane[0].data, 0x00, buf->plane[0].size);

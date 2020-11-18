@@ -5959,3 +5959,21 @@ const char * hb_get_color_range_name(int range)
             return "mpeg";
     }
 }
+
+int hb_get_bit_depth(int format)
+{
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(format);
+    int i, min, max;
+
+    if (!desc || !desc->nb_components) {
+        min = max = 0;
+    }
+
+    min = INT_MAX, max = -INT_MAX;
+    for (i = 0; i < desc->nb_components; i++) {
+        min = FFMIN(desc->comp[i].depth, min);
+        max = FFMAX(desc->comp[i].depth, max);
+    }
+
+    return max;
+}

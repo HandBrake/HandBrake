@@ -172,9 +172,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     if (!hb_qsv_hw_filters_are_enabled(init->job))
 #endif
     {
-        // TODO: Support other pix formats
-        // Force output to YUV420P for until other formats are supported
-        hb_dict_set(avsettings, "pix_fmts", hb_value_string("yuv420p"));
+        hb_dict_set(avsettings, "pix_fmts", hb_value_string(hb_get_format_name(init->pix_fmt)));
         hb_dict_set(avfilter, "format", avsettings);
         hb_value_array_append(avfilters, avfilter);
     }
