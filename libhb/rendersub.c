@@ -579,7 +579,7 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
     }
 
     ass_set_use_margins( pv->renderer, 0 );
-    ass_set_hinting( pv->renderer, ASS_HINTING_LIGHT ); // VLC 1.0.4 uses this
+    ass_set_hinting( pv->renderer, ASS_HINTING_NONE );
     ass_set_font_scale( pv->renderer, 1.0 );
     ass_set_line_spacing( pv->renderer, 1.0 );
 
