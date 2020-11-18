@@ -60,6 +60,7 @@ struct hb_work_private_s
 
     // Multiple bit-depth
     const x265_api     * api;
+    int                  bit_depth;
 };
 
 static int param_parse(hb_work_private_t *pv, x265_param *param,
@@ -193,6 +194,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         goto fail;
     }
+
+    /* Bit depth */
+    pv->bit_depth = hb_get_bit_depth(job->pix_fmt);
 
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
@@ -477,7 +481,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pic_in.planes[2] = in->plane[2].data;
     pic_in.poc       = pv->frames_in++;
     pic_in.pts       = in->s.start;
-    pic_in.bitDepth  = 8;
+    pic_in.bitDepth  = pv->bit_depth;
 
     if (in->s.new_chap && job->chapter_markers)
     {

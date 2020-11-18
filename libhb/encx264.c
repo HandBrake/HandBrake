@@ -755,7 +755,8 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     hb_buffer_t       *tmp = NULL;
 
     /* Point x264 at our current buffers Y(UV) data.  */
-    if (pv->pic_in.img.i_csp & X264_CSP_HIGH_DEPTH)
+    if (pv->pic_in.img.i_csp & X264_CSP_HIGH_DEPTH &&
+        job->pix_fmt == AV_PIX_FMT_YUV420P)
     {
         tmp = expand_buf(pv->api->bit_depth, in);
         pv->pic_in.img.i_stride[0] = tmp->plane[0].stride;

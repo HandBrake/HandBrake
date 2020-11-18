@@ -188,13 +188,112 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
     }
 }
 
-// applies subtitle 'sub' YUVA420P buffer into destination 'buf'
-// 'buf' is currently YUV420P, but in future will be other formats as well
+static void blend8on1x( hb_buffer_t *dst, hb_buffer_t *src, int left, int top, int shift )
+{
+    int xx, yy;
+    int ww, hh;
+    int x0, y0;
+    int max;
+
+    uint8_t *y_in;
+    uint8_t *u_in;
+    uint8_t *v_in;
+    uint8_t *a_in;
+
+    uint16_t *y_out;
+    uint16_t *u_out;
+    uint16_t *v_out;
+    uint16_t alpha;
+
+    x0 = y0 = 0;
+    if( left < 0 )
+    {
+        x0 = -left;
+    }
+    if( top < 0 )
+    {
+        y0 = -top;
+    }
+
+    ww = src->f.width;
+    if( src->f.width - x0 > dst->f.width - left )
+    {
+        ww = dst->f.width - left + x0;
+    }
+    hh = src->f.height;
+    if( src->f.height - y0 > dst->f.height - top )
+    {
+        hh = dst->f.height - top + y0;
+    }
+
+    max = (256 << shift) -1;
+
+    // Blend luma
+    for( yy = y0; yy < hh; yy++ )
+    {
+        y_in   = src->plane[0].data + yy * src->plane[0].stride;
+        y_out   = (uint16_t*)(dst->plane[0].data + ( yy + top ) * dst->plane[0].stride);
+        a_in = src->plane[3].data + yy * src->plane[3].stride;
+        for( xx = x0; xx < ww; xx++ )
+        {
+            alpha = a_in[xx] << shift;
+            /*
+             * Merge the luminance and alpha with the picture
+             */
+            y_out[left + xx] =
+                ( (uint32_t)y_out[left + xx] * ( max - alpha ) +
+                     ((uint32_t)y_in[xx] << shift) * alpha ) / max;
+        }
+    }
+
+    // Blend U & V
+    int hshift = 0;
+    int wshift = 0;
+    if( dst->plane[1].height < dst->plane[0].height )
+        hshift = 1;
+    if( dst->plane[1].width < dst->plane[0].width )
+        wshift = 1;
+
+    for( yy = y0 >> hshift; yy < hh >> hshift; yy++ )
+    {
+        u_in = src->plane[1].data + yy * src->plane[1].stride;
+        u_out = (uint16_t*)(dst->plane[1].data + ( yy + ( top >> hshift ) ) * dst->plane[1].stride);
+        v_in = src->plane[2].data + yy * src->plane[2].stride;
+        v_out = (uint16_t*)(dst->plane[2].data + ( yy + ( top >> hshift ) ) * dst->plane[2].stride);
+        a_in = src->plane[3].data + ( yy << hshift ) * src->plane[3].stride;
+
+        for( xx = x0 >> wshift; xx < ww >> wshift; xx++ )
+        {
+            alpha = a_in[xx << wshift] << shift;
+
+            // Blend averge U and alpha
+            u_out[(left >> wshift) + xx] =
+                ( (uint32_t)u_out[(left >> wshift) + xx] * ( max - alpha ) +
+                  ((uint32_t)u_in[xx] << shift) * alpha ) / max;
+
+            // Blend V and alpha
+            v_out[(left >> wshift) + xx] =
+                ( (uint32_t)v_out[(left >> wshift) + xx] * ( max - alpha ) +
+                  ((uint32_t)v_in[xx] << shift) * alpha ) / max;
+        }
+    }
+}
+
 // Assumes that the input destination buffer has the same dimensions
 // as the original title dimensions
 static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t * sub )
 {
-    blend( buf, sub, sub->f.x, sub->f.y );
+    switch (pv->output.pix_fmt) {
+        case AV_PIX_FMT_YUV420P10:
+            blend8on1x(buf, sub, sub->f.x, sub->f.y, 2);
+            break;
+        case AV_PIX_FMT_YUV420P12:
+            blend8on1x(buf, sub, sub->f.x, sub->f.y, 4);
+            break;
+        default:
+            blend(buf, sub, sub->f.x, sub->f.y);
+            break;
+    }
 }
 
 static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
@@ -604,7 +703,7 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
     ass_set_frame_size( pv->renderer, width, height);
 
     double par = (double)job->par.num / job->par.den;
-    ass_set_aspect_ratio( pv->renderer, 1, par );
+    ass_set_pixel_aspect( pv->renderer, par );
 
     return 0;
 }
