@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -532,7 +532,7 @@ Site sicuru di vulè esce d’HandBrake ?</value>
     <value>Previsualizazione di a fiura</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Impussibule di squassà u schedariu di previsualizazione precedente. Forse, ci vulerà à rilancià l’appiecazione.</value>
+    <value>Impussibule di squassà u schedariu di previsualizazione precedente. Forse, avete un schedariu di previsualizazione sempre apertu in u vostru lettore multimedia. Ci vole à chjodelu.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Prima, ci vole à analizà una fonte è definisce a vostra cudificazione nanzu di creà una previsualizazione.</value>
@@ -1027,7 +1027,7 @@ Vulete rimpiazzallu ?</value>
     <value>Dimensioni</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Rinumà a prerigatura</value>
+    <value>Rinuminà a prerigatura</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Listinu cuntestuale di l’ozzioni di prerigatura</value>
@@ -1896,7 +1896,7 @@ Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Dumandà nanzu di rimpiazzà</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Pruvà di rinumà autumaticamente u schedariu</value>
+    <value>Pruvà di rinuminà autumaticamente u schedariu</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
     <value>Rimpiazzà senza dumandà</value>
@@ -2166,7 +2166,7 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Una nova versione d’HandBrake hè dispunibule !</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+    <value>Diritti di copia (C) 2003-2020 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Livellu di batteria debule :</value>
@@ -2213,7 +2213,7 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>S’è u portu definitu hè dighjà impiegatu, si truverà u primu portu liberu in un intervallu massimu di 100 à partesi di u portu definitu.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Numeru di cudificazioni simultanei :</value>
+    <value>Numeru massimu di cudificazioni simultanei :</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Abbandunà</value>
@@ -2378,5 +2378,8 @@ I campi sò limitati à :
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
     <value>Livellu quandu l’alerte nant’à u spaziu discu debule s’affissenu :</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Nota : Ghjè a limitazione alta di i travaglii simultanei. Certe limitazioni materiale ponu fà diminuisce u numeru attuale di travaglii simultanei durante a cudificazione.</value>
   </data>
 </root>

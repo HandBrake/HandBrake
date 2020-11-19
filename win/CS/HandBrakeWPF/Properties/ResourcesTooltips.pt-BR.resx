@@ -163,15 +163,15 @@ O HQDN3D é um filtro passagem-baixa adaptável, mais rápido que o NLMeans, por
 As fontes de Blu-ray e DVD geralmente têm vários títulos, o maior dos quais é geralmente o principal recurso</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamórfico permite dimensões arbitrárias de armazenamento, preservando o aspecto original durante a reprodução.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Off desativa o anamórfico. As dimensões de armazenamento de vídeo e as dimensões de exibição serão idênticas. Útil apenas para compatibilidade com determinados dispositivos herdados.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Auto maximiza a resolução de armazenamento, preservando a proporção original da tela. Recomendado.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose é semelhante a Auto, mas tenta preservar a proporção de armazenamento. Isso pode resultar em uma leve perda de resolução de armazenamento em comparação com o Auto.
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Personalizado permite definir manualmente todos os parâmetros. Útil para corrigir um aspecto incorreto da exibição da fonte e para profissionais que precisam de controle avançado na pós-produção.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Corte automaticamente bordas pretas em torno das bordas do vídeo.</value>

@@ -533,7 +533,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
     <value>图片预览</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>无法删除以前的预览文件。您可能需要重新启动应用程序。</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>在创建预览之前，必须先扫描源并设置编码。</value>
@@ -2211,7 +2211,7 @@ Please choose a different preset.</value>
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Number of simultaneous encodes:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>取消</value>
@@ -2373,5 +2373,11 @@ Fields are limited to:
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Export all user presets</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level at which low disk space alerts show:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>

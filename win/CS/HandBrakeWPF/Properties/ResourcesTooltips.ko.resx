@@ -163,15 +163,15 @@ HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항�
 Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic은 재생하는 동안 원래의 가로 세로를 보존하면서 임의의 저장 공간을 허용합니다.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Off는 anamorphic을 비활성화합니다. 비디오 저장 공간과 화면의 크기는 동일할 것입니다. 특정한 오래된 기기들과의 호환성에만 유용합니다.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Auto는 원본 화면의 가로 세로 비율을 유지하면서 저장물의 해상도를 최대로 높입니다. 추천합니다.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose는 Auto와 유사하지만 저장물의 가로 세로 비율을 유지하려 합니다. 이것은 Auto에 비해 저장물의 해상도가 약간 떨어질 수 있습니다.
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘못된 원본 화면의 가로 세로를 수정하고 후반 작업에서 고급 컨트롤을 필요로 하는 전문가들에게 유용합니다.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>

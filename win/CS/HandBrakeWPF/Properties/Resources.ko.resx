@@ -535,7 +535,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>사진 미리보기</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>이전 미리보기 파일 삭제가 불가능합니다. 프로그램을 다시 시작해야 할 수 있습니다.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>미리보기를 만들기 전에 먼저 파일을 스캔하고 인코딩을 설정하십시오.</value>
@@ -1427,7 +1427,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>파일 사이즈:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>절전 모드</value>
+    <value>최대 절전 모드</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
     <value>시스템 잠금</value>
@@ -1472,7 +1472,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>재설정</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>멈춤</value>
+    <value>컴퓨터 종료</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
     <value>원본 파일:</value>
@@ -2217,7 +2217,7 @@ Please choose a different preset.</value>
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Number of simultaneous encodes:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>취소</value>
@@ -2379,5 +2379,11 @@ Fields are limited to:
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Export all user presets</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level at which low disk space alerts show:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>

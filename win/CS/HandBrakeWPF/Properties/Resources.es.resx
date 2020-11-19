@@ -127,7 +127,7 @@
 Actívelo si a su dispositivo le cuesta reproducir la salida. (Por ej.: pierde cuadros)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Advertencia: RF 0 no tiene perdida</value>
+    <value>Advertencia: RF 0 es sin pérdida</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>Un valor de 0 significa sin pérdida y resultará en un tamaño de archivo más grande que el original,
@@ -537,7 +537,7 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>Vista previa de la imagen </value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>No se puede eliminar el archivo de vista previa anterior. Es posible que deba reiniciar la aplicación.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Primero debe escanear un origen y configurar su codificación antes de crear una vista previa.</value>
@@ -1247,7 +1247,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Directorio:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Ruta del reproductor de medios</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Evitar que el sistema hiberne mientras se codifica</value>
@@ -1298,8 +1298,8 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Esta ruta es usada solo para la funcionalidad de previsualización del video.
+VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han sido validados.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Ver carpeta de registro</value>
@@ -1581,7 +1581,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Seleccione una imagen de previzualización</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Preferir el reproductor por defecto del sistema</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Añadir subtítulos cuando estén disponibles</value>
@@ -2221,7 +2221,7 @@ Por favor, elija un ajuste preestablecido diferente.</value>
     <value>Si el puerto está en uso, se usará el primer puerto libre hasta un rango +100 del puerto configurado.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Número de procesos simultáneos:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Cancelar</value>
@@ -2382,6 +2382,12 @@ Los campos son:
     <value>No hay preset seleccionado.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Exportar todos los preajustes del usuario.</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level at which low disk space alerts show:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>
