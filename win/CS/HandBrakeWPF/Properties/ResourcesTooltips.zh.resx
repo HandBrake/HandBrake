@@ -163,15 +163,15 @@ HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节�
 蓝光和DVD源通常有多个标题，通常时间最长的是正片。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>变形允许任意存储尺寸，同时在回放期间保留原始高宽。
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-None 禁用变形。视频存储尺寸和显示尺寸将相同。仅对与某些传统设备兼容有用。
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Auto 最大化存储分辨率，同时保留原始显示宽高比。（推荐）
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose 与Auto类似，但尝试保留存储宽高比。与Auto相比，这可能导致轻微的存储分辨率损失。
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Custom 允许手动设置所有参数。 用于纠正不正确的源显示高宽以及在后期制作中需要高级控制的专业人员。</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>自动参见视频周围的黑边。</value>

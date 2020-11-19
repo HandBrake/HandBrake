@@ -536,7 +536,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Попередній перегляд зображення</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Не вдалося видалити наявний файл попереднього перегляду. Можливо, вам доведеться перезапустити програму.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Перед створенням файлу попереднього перегляду слід просканувати джерело та налаштувати параметри кодування.</value>
@@ -634,7 +634,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
 Ваш файл наборів буде заархівовано та створено новий. Вам потрібно буде заново створити власні набори.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
+    <value>Будь-які ваші зміни в налаштуваннях можуть бути скинути при наступних запусках HandBrake.</value>
   </data>
   <data name="UserSettings_AnErrorOccured" xml:space="preserve">
     <value>Виникла проблема при спробі зберегти налаштування.</value>
@@ -827,10 +827,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Тривалість</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Екпортувати</value>
+    <value>Експорт</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>Імпортувати</value>
+    <value>Імпорт</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
     <value>Експортувати назви</value>
@@ -1175,7 +1175,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Автоматично іменувати вихідні файли</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Перевірити наявність оновлень</value>
+    <value>Шукати оновлення</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
     <value>Завжди очищати завершені елементи черги після закінчення кодування</value>
@@ -1247,13 +1247,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Шлях: </value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Шлях до програвача</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Вимикати системний режим сну під час кодування</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Скільки зображень сканувати для попереднього перегляду:</value>
+    <value>Сканувати зображень попереднього перегляду:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>Пріоритет процесу:</value>
@@ -1298,8 +1298,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Відео</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Цей шлях використовується лише для функції попереднього перегляду відео.
+Підтримуються програвачі VLC та MPC-HC. Інші програвачі також можуть працювати, але їх перевірка не здійснювалась.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Переглянути каталог журналів</value>
@@ -1473,7 +1473,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Скинути</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>Вимикання живлення</value>
+    <value>Вимкнути живлення</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
     <value>Джерело:</value>
@@ -1581,7 +1581,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Виберіть зображення для попереднього перегляду</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Надавати перевагу стандартному відеопрогравачу</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Додавати приховані субтитри, при наявності</value>
@@ -1611,7 +1611,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Додаткові доріжки субтитрів</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Burned</value>
+    <value>Вбудована</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
     <value>Маркери глав</value>
@@ -1623,7 +1623,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Видалення «гребінки»</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>display</value>
+    <value>вивід</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
     <value>Відтінки сірого</value>
@@ -1653,7 +1653,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Поворот</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>storage</value>
+    <value>зберігання</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
     <value>2-прохідне кодування</value>
@@ -1689,7 +1689,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Швидке декодування</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Частота кадрів (FPS):</value>
+    <value>Частота кадрів(FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
     <value>Оптимізація відео:</value>
@@ -1713,7 +1713,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Мова:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Використовувати мову системи</value>
+    <value>Системна мова</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
     <value>Про HandBrake</value>
@@ -1797,7 +1797,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>_Інструменти</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Перевірка наявності оновлень…</value>
+    <value>Пошук оновлень…</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Дійсно хочете очистити каталог файлів журналу?</value>
@@ -1898,7 +1898,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Доступні опції: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Запитувати про перезапис файлу</value>
+    <value>Питати про перезапис файлу</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
     <value>Пробувати автоматично перейменовувати файл</value>
@@ -1940,7 +1940,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock Tune</value>
+    <value>Настроювання Deblock</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
     <value>Вибір кодувальника буде доступний на вкладці «Відео».</value>
@@ -2050,7 +2050,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Загальні</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Клацніть «Перевірити наявність оновлень», щоб перевірити наявність нових версій</value>
+    <value>Клацніть «Шукати оновлення», щоб перевірити наявність нових версій</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
     <value>&lt; Назад</value>
@@ -2190,7 +2190,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Виявлені дублікати</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Увімкнути енергозбереження для апаратного забезпечення QuickSync (якщо підтримується)</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Щоб переглянути відомості виберіть якесь завдання.</value>
@@ -2218,7 +2218,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Якщо порт вже використовується, програма знайде перший вільний порт у межі +100 від вказаного порту.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Кількість одночасних кодувань:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Скасувати</value>
@@ -2275,7 +2275,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Стандартно</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>Forced</value>
+    <value>Форсована</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2344,41 +2344,47 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Метадані</value>
   </data>
   <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+    <value>Передати основні метадані з файлу джерела у файл призначення (якщо підтримується)</value>
   </data>
   <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
+    <value>Цей параметр дозволяє передавати основні поля метаданих від джерела до файлу призначення.
+Метадані обмежені наступними полями:
+- Назва (Name)
+- Виконавець (Artist)
+- Виконавець альбому (Album Artist)
+- Композитор (Composer)
+- Дата випуску (Release Date)
+- Коментар (Comment)
+- Альбом (Album)
+- Жанр (Genre)
+- Опис (Description)
+- Довгий опис (Long Description)</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetManagerView_DefaultPreset" xml:space="preserve">
-    <value>(Default Preset)</value>
+    <value>(Стандартний набір)</value>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>Введена назва категорії вже існує. Виберіть іншу назву.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>Назва категорії порожня. Будь ласка, вкажіть назву.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>Введіть назву:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>Не вибрано жодного набору.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Експортувати всі набори користувача</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Значення, коли показуються сповіщення про брак дискового простору:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>

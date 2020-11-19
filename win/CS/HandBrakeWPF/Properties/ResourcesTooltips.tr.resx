@@ -163,15 +163,15 @@ HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az et
 Blu-ray ve DVD kaynakları genellikle birden fazla başlığa sahiptir, en uzun olanı tipik olarak ana özelliktir.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorfik, oynatma sırasında orijinal yönü korurken, rastgele saklama boyutlarına izin verir.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Kapalı anamorfik devre dışı bırakır. Video depolama boyutları ve ekran boyutları aynı olacaktır. Sadece belirli eski cihazlarla uyumluluk için kullanışlıdır.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Orijinal ekran en boy oranını korurken, Otomatik depolama çözünürlüğünü maksimuma çıkarır. Tavsiye edilen.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Gevşek, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Özel, tüm parametrelerin elle ayarlanmasına izin verir. Hatalı bir kaynak gösterimi yönünü düzeltmek ve post-prodüksiyonda ileri kontrol gerektiren profesyoneller için kullanışlıdır.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Videonun kenarlarında siyah kenarlıkları otomatik olarak kırp.</value>

@@ -164,15 +164,15 @@ HQDN3D - адаптивный низкочастотный фильтр, он б
 Источники в виде Blu-ray и DVD часто имеют несколько заголовков, самый продолжительный из которых обычно является основной частью.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Анаморфирование позволяет хранить произвольные размеры при сохранении исходного соотношения сторон во время воспроизведения.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Off (Выкл.) выключает анаморфирование. Размеры видео при хранении и выводе будут одинаковыми. Полезно только для совместимости с некоторыми старыми устройствами.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Auto (Авто) максимизирует разрешение хранения при сохранении исходного соотношения сторон. Рекомендованная настойка.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose (Свободная) схожа с Auto (Авто), но пытается сохранить исходное соотношение сторон при хранении. Это может привести к небольшой потере разрешения хранения по сравнению с Auto (Авто).
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Custom (Пользовательский) позволяет вручную настроить все параметры. Полезно для коррекции неправильного выходного соотношения сторон и для профессиональных нужд в постпроизводстве.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Автоматически обрезает черные линии вокруг видео.</value>

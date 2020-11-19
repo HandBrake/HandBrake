@@ -539,7 +539,7 @@ Soll HandBrake wirklich beendet werden?</value>
     <value>Bildvorschau</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Das Entfernen früherer Vorschaudateien ist fehlgeschlagen. Das Programm muss möglicherweise neu gestartet werden.</value>
+    <value>Das Entfernen einer früheren Vorschaudatei ist fehlgeschlagen. Es ist womöglich noch eine Vorschau im Media-Player geöffnet. Diese bitte schließen.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Bevor eine Vorschau erstellt werden kann, muss die Quelle überprüft und eine Encodierung festgelegt werden.</value>
@@ -694,7 +694,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
   <data name="Main_LowDiskspace" xml:space="preserve">
     <value>Das Ausgabeverzeichnis hat wenig freien Speicherplatz.
 
-In den Einstellungen kann definiert werden, ab welchem Batterielevel diese Warnung erscheint.
+In den Einstellungen kann definiert werden, ab welcher Batteriekapazität diese Warnung erscheint.
 
 Soll fortgefahren werden?</value>
   </data>
@@ -2220,7 +2220,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Wenn der eingestellte Port verwendet wird, findet er den ersten freien Port innerhalb von +100 vom definierten Port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Anzahl gleichzeitiger Encodierungen:</value>
+    <value>Maximale Anzahl gleichzeitiger Encodierungen:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Abbrechen</value>
@@ -2241,16 +2241,16 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Eigene (unbegrenzt)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Füllen (bis zur Auflösungsgrenze füllen)</value>
+    <value>Füllen (bis zum Auflösungslimit füllen)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Höhe (bis zur Auflösungsgrenze füllen)</value>
+    <value>Höhe (bis zum Auflösungslimit füllen)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Keine</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Breite (bis zur Auflösungsgrenze füllen)</value>
+    <value>Breite (bis zum Auflösungslimit füllen)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Padding:</value>
@@ -2307,7 +2307,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Maximale Breite:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Auflösunglimit:</value>
+    <value>Auflösungslimit:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
     <value>Keine</value>
@@ -2382,5 +2382,11 @@ Dies ist auf folgende Felder begrenzt:
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Alle eigenen Voreinstellungen exportieren</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level ab der Warnungen wegen geringem Speicherplatz erscheinen:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Bemerkung: Dies ist das obere Limit gleichzeitiger Enkodierungen. Möglicherweise treten Hardware-Beschränkungen in Kraft, die die tatsächliche Anzahl gleichzeitiger Aufgaben während der Kodierung verringern.</value>
   </data>
 </root>

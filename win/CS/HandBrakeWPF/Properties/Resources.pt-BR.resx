@@ -537,7 +537,7 @@ Por favor, verifique as Notas de Versão no site.</value>
     <value>Pré-visualização da Imagem</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Não foi possível excluir o arquivo anterior de pré-visualização. Talvez você precise reiniciar o aplicativo.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Você deve primeiro analisar uma origem e configurar a codificação antes de pré-visualizar.</value>
@@ -2217,7 +2217,7 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>Se a porta definida estiver em uso, ela encontrará a primeira porta livre dentre de +100 à partir da porta definida.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Número de conversões simultâneas:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Cancelar</value>
@@ -2379,5 +2379,11 @@ Fields are limited to:
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Export all user presets</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level at which low disk space alerts show:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>

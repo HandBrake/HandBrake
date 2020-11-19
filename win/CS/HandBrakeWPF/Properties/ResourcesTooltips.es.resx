@@ -163,15 +163,15 @@ HQDN3D es un filtro de paso bajo adaptativo, más rápido que NLMeans, pero meno
 Los orígenes de Blu-ray y DVD a menudo tienen múltiples títulos, el más largo de los cuales es por lo general el principal.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamórfico permite dimensiones de almacenamiento indiferentes, conservando el aspecto original durante la reproducción.
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
-Off deshabilita la función anamórfica. Las dimensiones de almacenamiento de video y las dimensiones de la pantalla serán idénticas. Sólo es útil para la compatibilidad con determinados dispositivos antiguos.
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
 
-Auto maximiza la resolución de almacenamiento al tiempo que preserva la relación de aspecto original de visualización. Recomendado.
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
 
-Loose es similar a Auto, pero intenta conservar la relación de aspecto de almacenamiento. Esto puede resultar en una ligera pérdida de resolución de almacenamiento en comparación con Auto.
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
-Custom permite la configuración manual de todos los parámetros. Útil para corregir un aspecto incorrecto de la visualización del original y para profesionales que necesitan un control avanzado en la postproducción.</value>
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Recortar automáticamente los bordes negros alrededor del video.</value>

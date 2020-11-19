@@ -165,11 +165,11 @@ Les sources Blu-ray et DVD ont souvent plusieurs titres, le plus long étant gé
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
     <value>Anamorphique permet des dimensions de stockage arbitraires tout en préservant l'aspect d'origine pendant la lecture.
 
-Arrêt désactive l'anamorphose. Les dimensions de stockage vidéo et les dimensions d'affichage seront identiques. Utile uniquement pour la compatibilité avec certains appareils anciens.
+Aucun désactive l'anamorphose. Les dimensions de stockage vidéo et les dimensions d'affichage seront identiques. Utile uniquement pour la compatibilité avec certains appareils anciens.
 
-Auto maximise la résolution de stockage tout en préservant le format d'affichage original. Conseillé.
+Automatique maximise la résolution de stockage tout en préservant le format d'affichage original. Conseillé.
 
-Perte est similaire à Auto, mais tente de préserver le rapport de format de stockage. Cela peut entraîner une légère perte de résolution de stockage par rapport à Auto.
+Perte est similaire à Automatique, mais tente de préserver le rapport de format de stockage. Cela peut entraîner une légère perte de résolution de stockage par rapport à Automatique.
 
 Personnalisé permet de définir manuellement tous les paramètres. Utile pour corriger un aspect d'affichage source incorrect et pour les professionnels ayant besoin d'un contrôle avancé en post-production.</value>
   </data>

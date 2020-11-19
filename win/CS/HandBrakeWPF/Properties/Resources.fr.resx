@@ -209,7 +209,7 @@ Souhaitez-vous continuer ?</value>
     <value>Il y a des travaux dans la file avec le même chemin de destination. Veuillez choisir un chemin différent pour ce travail.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>{0}Travaux en attente</value>
+    <value>{0} travaux en attente</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>Nouveau préréglage par défaut : {0}</value>
@@ -283,7 +283,7 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
     <value>Sélectionnez "Ouvrir source" pour continuer</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Travaux en attente </value>
+    <value>{0} travaux en attente </value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Remarque</value>
@@ -526,7 +526,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>File démarrée</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Encodage : Passage {0} sur {1},  {2:00.00}%, IPS :  {3:000.0}, Moy IPS :  {4:000.0},  Temps Restant : {5}, Écoulé : {6:j\:hh\:mm\:ss}</value>
+    <value>Encodage : Passage {0} sur {1},  {2:00.00}%, IPS :  {3:000.0}, Moy IPS :  {4:000.0},  Temps restant : {5}, Écoulé : {6:j\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
     <value>Un encodage est en cours d'exécution. La fermeture d'HandBrake arrêtera cet encodage.
@@ -536,7 +536,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Aperçu de l'image</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Impossible de supprimer le fichier de prévisualisation précédent. Vous devrez peut-être redémarrer l'application.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Vous devez d'abord analyser une source et configurer votre encodage avant de créer un aperçu.</value>
@@ -557,7 +557,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Revenir aux pistes</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Sélectionner Comportement</value>
+    <value>Sélectionner comportement</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Fichier archivé :</value>
@@ -571,7 +571,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
 Votre ancien fichier de préréglages a été archivé:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>avec {0} erreur·s ou annulation·s détectée·s.</value>
+    <value> avec {0} erreur·s ou annulation·s détectée·s.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Espace disque faible</value>
@@ -1151,7 +1151,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Afficher les aperçus sur l'onglet Résumé.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>Afficher l'état de l'encodage dans la bar de titre du l'application.</value>
+    <value>Afficher l'état de l'encodage dans la barre de titre de l'application.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
     <value>Effacer les fichiers du journal de plus de 7 jours</value>
@@ -1247,7 +1247,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Chemin d'accès :</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Chemin d'accès au lecteur multimédia</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Empêcher le système de se mettre en veille pendant l'encodage</value>
@@ -1298,8 +1298,8 @@ Souhaitez-vous l'écraser ?</value>
     <value>Vidéo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Ce chemin est utilisé uniquement pour la fonction de prévisualisation de la vidéo.
+VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonctionner mais sans certitude.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Voir le répertoire du journal</value>
@@ -1581,7 +1581,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Sélectionner un aperçu d'image</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Préférer le lecteur vidéo par défaut du système</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Ajouter les sous-titres si disponnibles</value>
@@ -1713,7 +1713,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Langue : </value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Utiliser la Langue Système</value>
+    <value>Utiliser la langue système</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
     <value>À propos d'Handbrake</value>
@@ -1934,7 +1934,7 @@ Options en différé : {date} {heure} {date-de-création} {heure-de-création} 
     <value>Préfixe</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Apposer un numéro</value>
+    <value>Ajouter un numéro</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
@@ -1946,7 +1946,7 @@ Options en différé : {date} {heure} {date-de-création} {heure-de-création} 
     <value>Le choix de l'encodeur sera disponible dans l'onglet 'Vidéo'.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake a détecté plusieurs fichiers de file d'attente inachevés. Celles-ci proviennent de plusieurs instances d'HandBrake. Souhaitez-vous récupérer tous les travaux inachevés ?</value>
+    <value>HandBrake a détecté plusieurs fichiers de file d'attente inachevés. Ceux-ci proviennent de plusieurs instances d'HandBrake. Souhaitez-vous récupérer tous les travaux inachevés ?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
     <value>HandBrake a détecté des éléments inachevés dans la file d'attente de la dernière session de l'application. Voulez-vous les récupérer ?</value>
@@ -2218,7 +2218,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Si le port défini est utilisé, il trouvera le premier port libre dans un intervalle maximum de 100 à partir du port défini.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Nombre d'encodages simultanés :</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Annuler</value>
@@ -2323,7 +2323,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Importer des préréglages à partir d'un fichier</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Preset Information:</value>
+    <value>Information sur le préréglage :</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
     <value>Les préréglages intégrés ne peuvent pas être modifiés.</value>
@@ -2379,6 +2379,12 @@ Les champs sont limités à :
     <value>Il n'y a pas de préréglage sélectionné.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Exporter toutes les préréglages utilisateur</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Niveau auquel les alertes de faible espace disque s'affichent :</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>

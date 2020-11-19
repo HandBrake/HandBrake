@@ -536,7 +536,7 @@ HandBrake'den çıkmak istediğinize emin misiniz?</value>
     <value>Resim Önizlemesi</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Önceki önizleme dosyası silinemedi. Uygulamayı yeniden başlatmanız gerekebilir.</value>
+    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodunuzu ayarlamalısınız.</value>
@@ -2218,7 +2218,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Ayarlanan bağlantı noktası kullanımdaysa, tanımlanan bağlantı noktasından +100 içinde ilk boş bağlantı noktasını bulur.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Eşzamanlı kodlama sayısı:</value>
+    <value>Maximum number of simultaneous encodes:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>İptal</value>
@@ -2380,5 +2380,11 @@ Fields are limited to:
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Export all user presets</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Level at which low disk space alerts show:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
   </data>
 </root>
