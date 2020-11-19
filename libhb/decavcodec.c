@@ -1190,7 +1190,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_avfilter_append_dict(filters, "scale", settings);
 
             settings = hb_dict_init();
-            hb_dict_set(settings, "pix_fmts", hb_value_string(hb_get_format_name(pix_fmt)));
+            hb_dict_set(settings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
             hb_avfilter_append_dict(filters, "format", settings);
         }
     }
