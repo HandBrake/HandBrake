@@ -1645,7 +1645,7 @@ msgid "Filter short DVD and Blu-ray titles (seconds)"
 msgstr ""
 
 #: src/ghb3.ui:7425
-msgid "Clear completed queue items after and encode completes"
+msgid "Clear completed queue items after an encode completes"
 msgstr ""
 
 #: src/ghb3.ui:7429
