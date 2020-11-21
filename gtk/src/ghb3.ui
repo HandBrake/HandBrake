@@ -7422,7 +7422,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="RemoveFinishedJobs">
-                        <property name="label" translatable="yes">Clear completed queue items after and encode completes</property>
+                        <property name="label" translatable="yes">Clear completed queue items after an encode completes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
