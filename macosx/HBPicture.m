@@ -197,6 +197,27 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
+- (BOOL)validateMaxWidth:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        int value = [*ioValue intValue];
+
+        if (value >= HB_MAX_WIDTH)
+        {
+            *ioValue = @(HB_MAX_WIDTH);
+        }
+        else if (value <= HB_MIN_WIDTH)
+        {
+            *ioValue = @(HB_MIN_WIDTH);
+        }
+    }
+
+    return retval;
+}
+
 - (void)setMaxHeight:(int)maxHeight
 {
     if (maxHeight != _maxHeight)
@@ -209,6 +230,27 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     {
         [self validateSettings];
     }
+}
+
+- (BOOL)validateMaxHeight:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        int value = [*ioValue intValue];
+
+        if (value >= HB_MAX_HEIGHT)
+        {
+            *ioValue = @(HB_MAX_HEIGHT);
+        }
+        else if (value <= HB_MIN_HEIGHT)
+        {
+            *ioValue = @(HB_MIN_HEIGHT);
+        }
+    }
+
+    return retval;
 }
 
 - (void)setAllowUpscaling:(BOOL)allowUpscaling
@@ -1017,8 +1059,8 @@ fail:
 {
     preset[@"PictureRotate"] = [NSString stringWithFormat:@"angle=%d:hflip=%d", self.rotate, self.flip];
 
-    preset[@"PictureWidth"] = @(self.maxWidth);
-    preset[@"PictureHeight"] = @(self.maxHeight);
+    preset[@"PictureWidth"] = @(self.maxWidth == HB_MAX_WIDTH ? 0 : self.maxWidth);
+    preset[@"PictureHeight"] = @(self.maxHeight == HB_MAX_HEIGHT ? 0 : self.maxHeight);
 
     preset[@"PictureAllowUpscaling"] = @(self.allowUpscaling);
     preset[@"PictureUseMaximumSize"] = @(self.useMaximumSize);
