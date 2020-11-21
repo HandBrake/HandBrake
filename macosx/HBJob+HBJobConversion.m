@@ -559,12 +559,36 @@
                 color = self.picture.paddingColorCustom;
                 break;
         }
+        int width, height, paddingLeft, paddingTop;
+        switch (self.picture.rotate) {
+            case 90:
+                width = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
+                height = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
+                paddingLeft = self.picture.paddingBottom;
+                paddingTop = self.picture.paddingLeft;
+                break;
+            case 180:
+                width = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
+                height = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
+                paddingLeft = self.picture.paddingRight;
+                paddingTop = self.picture.paddingBottom;
+                break;
+            case 270:
+                width = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
+                height = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
+                paddingLeft = self.picture.paddingTop;
+                paddingTop = self.picture.paddingRight;
+                break;
+            case 0:
+            default:
+                width = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
+                height = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
+                paddingLeft = self.picture.paddingLeft;
+                paddingTop = self.picture.paddingTop;
+                break;
+        }
         NSString *settings = [NSString stringWithFormat:@"width=%d:height=%d:color=%@:x=%d:y=%d",
-                              self.picture.width + self.picture.paddingLeft + self.picture.paddingRight,
-                              self.picture.height + self.picture.paddingTop + self.picture.paddingBottom,
-                              color,
-                              self.picture.paddingLeft,
-                              self.picture.paddingTop];
+                              width, height, color, paddingLeft, paddingTop];
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id, NULL, NULL, settings.UTF8String);
 
         filter = hb_filter_init(filter_id);
