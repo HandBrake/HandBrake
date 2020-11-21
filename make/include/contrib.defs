@@ -132,7 +132,7 @@ define import.CONTRIB.defs
 
     $(1).CONFIGURE.target = $$($(1).build/).stamp.$$($(1).name).configure
     define $(1).CONFIGURE
-        $$(call fn.ARGS,$(1).CONFIGURE,$$($(1).CONFIGURE.args))
+        $$(call fn.ARGS,$(1).CONFIGURE,$$($(1).CONFIGURE.args)) || (cat ./ffbuild/config.log; exit 1)
         $$(TOUCH.exe) $$@
     endef
 
