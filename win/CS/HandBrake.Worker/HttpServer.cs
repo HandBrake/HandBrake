@@ -17,35 +17,53 @@ namespace HandBrake.Worker
     using System.Text;
     using System.Threading;
 
+    using HandBrake.Worker.Services.Interfaces;
+
     public class HttpServer
     {
-        private readonly string uiToken;
+        private readonly ITokenService tokenService;
+
         private readonly HttpListener httpListener = new HttpListener();
         private readonly Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers;
-        
-        private bool failedStart = false;
 
-        public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, string token)
+        private readonly bool failedStart;
+
+        public HttpServer(Dictionary<string, Func<HttpListenerRequest, string>> apiCalls, int port, ITokenService tokenService)
         {
             if (!HttpListener.IsSupported)
             {
                 throw new NotSupportedException("HttpListener not supported on this computer.");
             }
 
-            this.uiToken = token;
+            this.tokenService = tokenService;
 
             // Store the Handlers
             this.apiHandlers = new Dictionary<string, Func<HttpListenerRequest, string>>(apiCalls);
 
-            Debug.WriteLine(Environment.NewLine + "Available APIs: ");
+            if (!tokenService.IsTokenSet())
+            {
+                Console.WriteLine("Worker: No Token Set.");
+
+                Console.WriteLine();
+                Console.WriteLine("API Information: ");
+                Console.WriteLine("All calls require a 'token' in the HTTP header ");
+            }
+
             foreach (KeyValuePair<string, Func<HttpListenerRequest, string>> api in apiCalls)
             {
                 string url = string.Format("http://127.0.0.1:{0}/{1}/", port, api.Key);
                 this.httpListener.Prefixes.Add(url);
-                Debug.WriteLine(url);
+
+                if (!tokenService.IsTokenSet())
+                {
+                    Console.WriteLine(url);
+                }
             }
 
-            Debug.WriteLine(Environment.NewLine);
+            if (!tokenService.IsTokenSet())
+            {
+                Console.WriteLine();
+            }
 
             try
             {
@@ -53,8 +71,9 @@ namespace HandBrake.Worker
             }
             catch (Exception e)
             {
-                failedStart = true;
-                Console.WriteLine(string.Format("Worker: Unable to start HTTP Server. Mabye the port {0} is in use?", port));
+                this.failedStart = true;
+
+                Console.WriteLine("Worker: Unable to start HTTP Server. Mabye the port {0} is in use?", port);
                 Console.WriteLine("Worker Exception: " + e);
             }
         }
@@ -86,7 +105,7 @@ namespace HandBrake.Worker
                                         string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
                                         string token = context.Request.Headers.Get("token");
 
-                                        if (!this.IsAuthenticated(token))
+                                        if (!tokenService.IsAuthenticated(token))
                                         {
                                             string rstr = "Worker: Access Denied. The token provided in the HTTP header was not valid.";
                                             Console.WriteLine(rstr);
@@ -96,7 +115,7 @@ namespace HandBrake.Worker
                                             context.Response.OutputStream.Write(buf, 0, buf.Length);
                                             return;
                                         }
-                                        
+
                                         Debug.WriteLine("Handling call to: " + path);
 
                                         if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
@@ -142,21 +161,6 @@ namespace HandBrake.Worker
         {
             this.httpListener.Stop();
             this.httpListener.Close();
-        }
-
-        public bool IsAuthenticated(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                return false;
-            }
-
-            if (token != this.uiToken)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

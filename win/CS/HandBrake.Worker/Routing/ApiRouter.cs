@@ -27,7 +27,6 @@ namespace HandBrake.Worker.Routing
 
     public class ApiRouter
     {
-        private readonly string token = Guid.NewGuid().ToString();
         private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
         private JsonState completedState;
@@ -36,11 +35,6 @@ namespace HandBrake.Worker.Routing
         private InstanceWatcher instanceWatcher;
 
         public event EventHandler TerminationEvent; 
-
-        public string GetInstanceToken(HttpListenerRequest request)
-        {
-            return JsonConvert.SerializeObject(token, Formatting.Indented, this.jsonNetSettings);
-        }
 
         public string GetVersionInfo(HttpListenerRequest request)
         {

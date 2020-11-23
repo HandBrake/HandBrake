@@ -16,9 +16,14 @@ namespace HandBrake.Worker
 
     using HandBrake.Interop.Interop;
     using HandBrake.Worker.Routing;
+    using HandBrake.Worker.Services;
+    using HandBrake.Worker.Services.Interfaces;
+    using HandBrake.Worker.Utilities;
 
     public class Program
     {
+        private static readonly ITokenService TokenService = new TokenService();
+
         private static ApiRouter router;
         private static ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
@@ -26,8 +31,18 @@ namespace HandBrake.Worker
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
+            Portable.Initialise();
+
+            if (!Portable.IsProcessIsolationEnabled())
+            {
+                Console.WriteLine("Worker is disabled in portable.ini");
+                Console.WriteLine("Press 'Enter' to exit");
+                Console.Read();
+                return;
+            }
+
             int port = 8037; // Default Port;
-            string token = null;
+            string token;
             
             if (args.Length != 0)
             {
@@ -45,6 +60,7 @@ namespace HandBrake.Worker
                     if (argument.StartsWith("--token"))
                     {
                         token = argument.TrimStart("--token=".ToCharArray());
+                        TokenService.RegisterToken(token);
                     }
                 }
             }
@@ -55,7 +71,7 @@ namespace HandBrake.Worker
             
             Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
-            HttpServer webServer = new HttpServer(apiHandlers, port, token);
+            HttpServer webServer = new HttpServer(apiHandlers, port, TokenService);
             if (webServer.Run())
             {
                 Console.WriteLine("Worker: Server Started");
@@ -68,7 +84,7 @@ namespace HandBrake.Worker
             }
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, System.EventArgs e)
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             HandBrakeUtils.DisposeGlobal();
         }
@@ -80,7 +96,8 @@ namespace HandBrake.Worker
 
             // Process Handling
             apiHandlers.Add("Shutdown", ShutdownServer);
-            apiHandlers.Add("GetInstanceToken", router.GetInstanceToken);
+            apiHandlers.Add("IsTokenSet", IsTokenSet);
+            apiHandlers.Add("RegisterToken", RegisterToken);
             apiHandlers.Add("Version", router.GetVersionInfo);
 
             // Logging
@@ -96,6 +113,23 @@ namespace HandBrake.Worker
             apiHandlers.Add("PollEncodeProgress", router.PollEncodeProgress);
             
             return apiHandlers;
+        }
+
+        private static string RegisterToken(HttpListenerRequest request)
+        {
+            string requestPostData = HttpUtilities.GetRequestPostData(request);
+            if (!string.IsNullOrEmpty(requestPostData))
+            {
+                TokenService.RegisterToken(requestPostData);
+                return true.ToString();
+            }
+
+            return false.ToString();
+        }
+
+        private static string IsTokenSet(HttpListenerRequest arg)
+        {
+            return TokenService.IsTokenSet().ToString();
         }
 
         private static void Router_TerminationEvent(object sender, EventArgs e)
