@@ -44,8 +44,9 @@ namespace HandBrakeWPF.Instance
 
         private Process workerProcess;
         private Timer encodePollTimer;
-        private int retryCount = 0;
+        private int retryCount;
         private bool encodeCompleteFired;
+        private bool serverStarted;
 
         public RemoteInstance(ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
@@ -74,8 +75,15 @@ namespace HandBrakeWPF.Instance
 
         public void StartEncode(JsonEncodeObject jobToStart)
         {
-           Thread thread1 = new Thread(() => RunEncodeInitProcess(jobToStart));
-           thread1.Start();
+            if (this.IsServerRunning())
+            {
+                Thread thread1 = new Thread(() => RunEncodeInitProcess(jobToStart));
+                thread1.Start();
+            }
+            else
+            {
+                this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(-10));
+            }
         }
 
         public async void StopEncode()
@@ -132,8 +140,7 @@ namespace HandBrakeWPF.Instance
                     workerProcess.BeginErrorReadLine();
 
                     // Set Process Priority
-                    switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(
-                        UserSettingConstants.ProcessPriorityInt))
+                    switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
                     {
                         case ProcessPriority.High:
                             workerProcess.PriorityClass = ProcessPriorityClass.High;
@@ -307,7 +314,9 @@ namespace HandBrakeWPF.Instance
 
         private void RunEncodeInitProcess(JsonEncodeObject jobToStart)
         {
-            InitCommand initCommand = new InitCommand
+            if (this.IsServerRunning())
+            {
+                InitCommand initCommand = new InitCommand
                                       {
                                           EnableDiskLogging = false,
                                           AllowDisconnectedWorker = false,
@@ -317,15 +326,57 @@ namespace HandBrakeWPF.Instance
                                           LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)
                                       };
 
-            initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
+                initCommand.LogFile = Path.Combine(initCommand.LogDirectory, string.Format("activity_log.worker.{0}.txt", GeneralUtilities.ProcessId));
 
-            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+                JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
-            string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
+                string job = JsonConvert.SerializeObject(new EncodeCommand { InitialiseCommand = initCommand, EncodeJob = jobToStart }, Formatting.None, settings);
 
-            var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
-            task.Wait();
-            this.MonitorEncodeProgress();
+                var task = Task.Run(async () => await this.MakeHttpJsonPostRequest("StartEncode", job));
+                task.Wait();
+                this.MonitorEncodeProgress();
+            }
+        }
+
+        private bool IsServerRunning()
+        {
+            // Poll the server until it's started up. This allows us to prevent failures in upstream methods.
+            if (this.serverStarted)
+            {
+                return this.serverStarted;  
+            }
+
+            int count = 0;
+            while (!this.serverStarted)
+            {
+                if (count > 10)
+                {
+                    logService.LogMessage("Unable to connect to the HandBrake Worker instance after 10 attempts. Try disabling this option in Tools -> Preferences -> Advanced.");
+                    return false;
+                }
+
+                try
+                {
+                    var task = Task.Run(async () => await this.MakeHttpGetRequest("IsTokenSet"));
+                    task.Wait(2000);
+
+                    if (string.Equals(task.Result.JsonResponse, "True", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        this.serverStarted = true;
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Do nothing. We'll try again. The service isn't ready yet.
+                }
+                finally
+                {
+                    count = count + 1;
+                }
+            }
+
+            return true;
         }
     }
 }
