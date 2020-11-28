@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.repository == 'HandBrake/HandBrake'
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
 
     - name: Setup Environment

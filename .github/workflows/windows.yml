@@ -7,7 +7,7 @@ jobs:
     name: CLI / LibHB
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     - name: Environment Setup
       run: |
@@ -63,7 +63,7 @@ jobs:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     - name: NuGet Restore
       run: |

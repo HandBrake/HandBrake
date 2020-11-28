@@ -20,7 +20,7 @@ jobs:
     runs-on: macos-11.0
     if: github.repository == 'HandBrake/HandBrake'
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     - name: Toolchain Cache
       id: mac-toolchain
