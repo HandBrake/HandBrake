@@ -15,7 +15,7 @@ jobs:
 
   build:
     name: Build on Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
