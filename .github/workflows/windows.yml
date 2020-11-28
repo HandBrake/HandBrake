@@ -8,13 +8,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
 
     - name: Environment Setup
       run: |
-        sudo apt-get install automake autoconf build-essential cmake curl gcc git intltool libtool libtool-bin m4 make nasm patch pkg-config python tar yasm zlib1g-dev ninja-build zip
-        sudo apt-get install bison bzip2 flex g++ gzip pax
-        sudo apt-get install python3-pip
-        sudo apt-get install python3-setuptools
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax
         sudo pip3 install meson
 
     - name: Setup Toolchain
