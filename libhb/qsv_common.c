@@ -3036,6 +3036,8 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
         mfxHDLPair* input_pair = (mfxHDLPair*)input_surface->Data.MemId;
         // copy all surface fields
         *output_surface = *input_surface;
+        output_surface->Info.CropW = frame->width;
+        output_surface->Info.CropH = frame->height;
         if (hb_qsv_hw_filters_are_enabled(job))
         {
             output_surface->Data.MemId = mid->handle_pair;
@@ -3077,6 +3079,8 @@ hb_buffer_t* hb_qsv_copy_frame(hb_job_t *job, AVFrame *frame, int is_vpp)
         int output_index = (int)(intptr_t)mid->handle_pair->second == MFX_INFINITE ? 0 : (int)(intptr_t)mid->handle_pair->second;
         // copy all surface fields
         *output_surface = *input_surface;
+        output_surface->Info.CropW = frame->width;
+        output_surface->Info.CropH = frame->height;
         if (hb_qsv_hw_filters_are_enabled(job))
         {
             // Make sure that we pass handle_pair to scale_qsv
