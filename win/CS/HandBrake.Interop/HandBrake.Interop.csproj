@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <FileVersion>1.4.0.0</FileVersion>
     <Version>1.4.0</Version>
     <Authors>HandBrake Team</Authors>
     <Description>HandBrake is an open-source, GPL-licensed, multiplatform,video transcoder.</Description>
@@ -12,13 +13,9 @@
     <PackageTags>Video Transcoder</PackageTags>
     <Platforms>AnyCPU</Platforms>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Compile Remove="Interop\HbLib\Wrappers\**" />
-    <EmbeddedResource Remove="Interop\HbLib\Wrappers\**" />
-    <None Remove="Interop\HbLib\Wrappers\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
