@@ -3,20 +3,9 @@ name: Linux Build
 on: [push, pull_request]
 
 jobs:
-
-  handle_forks:
-    name: Forked Repo
-    runs-on: ubuntu-20.04
-    if: github.repository != 'HandBrake/HandBrake'
-    steps:
-    - name: Print Warning
-      run: |
-        echo "Builds are disabled for forked repositories."
-
   build:
     name: Build on Ubuntu
     runs-on: ubuntu-20.04
-    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
