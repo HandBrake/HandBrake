@@ -66,6 +66,19 @@ static hb_triplet_t hb_qsv_h265_profiles[] =
     { "Main Still Picture", "mainstillpicture", MFX_PROFILE_HEVC_MAINSP, },
     { NULL,                                                              },
 };
+static hb_triplet_t hb_qsv_vpp_scale_modes[] =
+{
+    { "lowpower",          "low_power",         MFX_SCALING_MODE_LOWPOWER, },
+    { "hq",                "hq",                MFX_SCALING_MODE_QUALITY,  },
+    { NULL,                                                                },
+};
+static hb_triplet_t hb_qsv_vpp_interpolation_methods[] =
+{
+    { "nearest",            "nearest",          MFX_INTERPOLATION_NEAREST_NEIGHBOR, },
+    { "bilinear",           "bilinear",         MFX_INTERPOLATION_BILINEAR,         },
+    { "advanced",           "advanced",         MFX_INTERPOLATION_ADVANCED,         },
+    { NULL,                                                                         },
+};
 static hb_triplet_t hb_qsv_h264_levels[] =
 {
     { "1.0", "1.0", MFX_LEVEL_AVC_1,  },
@@ -647,6 +660,20 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 fprintf(stderr,
                         "hb_qsv_info_init: mfxExtCodingOption2 check failed (0x%"PRIX32", 0x%"PRIX32", %d)\n",
                         info->codec_id, info->implementation, status);
+            }
+        }
+        if (HB_CHECK_MFX_VERSION(version, 1, 19))
+        {
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
+            {
+                info->capabilities |= HB_QSV_CAP_VPP_SCALING;
+            }
+        }
+        if (HB_CHECK_MFX_VERSION(version, 1, 33))
+        {
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
+            {
+                info->capabilities |= HB_QSV_CAP_VPP_INTERPOLATION;
             }
         }
     }
@@ -1721,7 +1748,42 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
                 hb_qsv_param_parse_dx_index(job, gpu_index);
             }
         }
-        return HB_QSV_PARAM_OK;
+    }
+    else if (!strcasecmp(key, "scalingmode") ||
+             !strcasecmp(key, "vpp-sm"))
+    {
+        // Already parsed it in decoder but need to check support
+        if (info->capabilities & HB_QSV_CAP_VPP_SCALING)
+        {
+            hb_triplet_t *mode = NULL;
+            mode = hb_triplet4key(hb_qsv_vpp_scale_modes, value);
+            if (!mode)
+            {
+                error = HB_QSV_PARAM_BAD_VALUE;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
+    else if (!strcasecmp(key, "interpolationmethod") ||
+             !strcasecmp(key, "vpp-im"))
+    {
+        // Already parsed it in decoder but need to check support
+        if (info->capabilities & HB_QSV_CAP_VPP_INTERPOLATION)
+        {
+            hb_triplet_t *method = NULL;
+            method = hb_triplet4key(hb_qsv_vpp_interpolation_methods, value);
+            if (!method)
+            {
+                error = HB_QSV_PARAM_BAD_VALUE;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
     }
     else
     {
@@ -3216,6 +3278,42 @@ int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum
                     if (!ret)
                     {
                         hb_qsv_param_parse_dx_index(job, dx_index);
+                    }
+                }
+                if ((!strcasecmp(key, "scalingmode") || !strcasecmp(key, "vpp-sm")) && hb_qsv_hw_filters_are_enabled(job))
+                {
+                    hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
+                    if (info && (info->capabilities & HB_QSV_CAP_VPP_SCALING))
+                    {
+                        hb_value_t *value = hb_dict_iter_value(iter);
+                        char *mode_key = hb_value_get_string_xform(value);
+                        hb_triplet_t *mode = NULL;
+                        if (mode_key != NULL)
+                        {
+                            mode = hb_triplet4key(hb_qsv_vpp_scale_modes, mode_key);
+                        }
+                        if (mode != NULL)
+                        {
+                            job->qsv.ctx->vpp_scale_mode = mode->key;
+                        }
+                    }
+                }
+                if ((!strcasecmp(key, "interpolationmethod") || !strcasecmp(key, "vpp-im")) && hb_qsv_hw_filters_are_enabled(job))
+                {
+                    hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
+                    if (info && (info->capabilities & HB_QSV_CAP_VPP_INTERPOLATION))
+                    {
+                        hb_value_t *value = hb_dict_iter_value(iter);
+                        char *mode_key = hb_value_get_string_xform(value);
+                        hb_triplet_t *mode = NULL;
+                        if (mode_key != NULL)
+                        {
+                            mode = hb_triplet4key(hb_qsv_vpp_interpolation_methods, mode_key);
+                        }
+                        if (mode != NULL)
+                        {
+                            job->qsv.ctx->vpp_interpolation_method = mode->key;
+                        }
                     }
                 }
             }

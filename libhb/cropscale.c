@@ -94,15 +94,26 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     if (hb_qsv_hw_filters_are_enabled(init->job))
     {
-        hb_dict_set_int(avsettings, "w", width);
-        hb_dict_set_int(avsettings, "h", height);
-        hb_dict_set(avfilter, "scale_qsv", avsettings);
         int result = hb_create_ffmpeg_pool(init->job, width, height, init->pix_fmt, HB_QSV_POOL_SURFACE_SIZE, 0, &init->job->qsv.ctx->hb_vpp_qsv_frames_ctx->hw_frames_ctx);
         if (result < 0)
         {
             hb_error("hb_create_ffmpeg_pool vpp allocation failed");
             return result;
         }
+
+        hb_dict_set_int(avsettings, "w", width);
+        hb_dict_set_int(avsettings, "h", height);
+        if (init->job->qsv.ctx->vpp_scale_mode)
+        {
+            hb_dict_set_string(avsettings, "mode", init->job->qsv.ctx->vpp_scale_mode);
+        }
+        if (init->job->qsv.ctx->vpp_interpolation_method)
+        {
+            hb_dict_set_string(avsettings, "method", init->job->qsv.ctx->vpp_interpolation_method);
+        }
+        hb_log("qsv: scaling filter mode %s", init->job->qsv.ctx->vpp_scale_mode ? init->job->qsv.ctx->vpp_scale_mode : "default");
+        hb_log("qsv: scaling filter interpolation method %s", init->job->qsv.ctx->vpp_interpolation_method ? init->job->qsv.ctx->vpp_interpolation_method : "default");
+        hb_dict_set(avfilter, "scale_qsv", avsettings);
 
         AVHWFramesContext *frames_ctx;
         AVQSVFramesContext *frames_hwctx;
