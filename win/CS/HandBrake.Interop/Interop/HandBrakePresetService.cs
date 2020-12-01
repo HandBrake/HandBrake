@@ -13,13 +13,13 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.InteropServices;
+    using System.Text.Json;
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Interop.Model;
-
-    using Newtonsoft.Json;
+    using HandBrake.Interop.Json;
 
     /// <summary>
     /// The hand brake preset service.
@@ -37,7 +37,7 @@ namespace HandBrake.Interop.Interop
         {
             IntPtr presets = HBFunctions.hb_presets_builtin_get_json();
             string presetJson = Marshal.PtrToStringAnsi(presets);
-            IList<HBPresetCategory> presetList = JsonConvert.DeserializeObject<IList<HBPresetCategory>>(presetJson);
+            IList<HBPresetCategory> presetList = JsonSerializer.Deserialize<IList<HBPresetCategory>>(presetJson, JsonSettings.Options);
 
             return presetList;
         }
@@ -64,7 +64,7 @@ namespace HandBrake.Interop.Interop
                     presetJson = "{ \"PresetList\":" + presetJson + " } ";
                 }
 
-                PresetTransportContainer preset = JsonConvert.DeserializeObject<PresetTransportContainer>(presetJson);
+                PresetTransportContainer preset = JsonSerializer.Deserialize<PresetTransportContainer>(presetJson, JsonSettings.Options);
 
                 return preset;
             }
@@ -83,7 +83,7 @@ namespace HandBrake.Interop.Interop
         /// </param>
         public static void ExportPreset(string filename, PresetTransportContainer container)
         {
-            string preset = JsonConvert.SerializeObject(container, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            string preset = JsonSerializer.Serialize(container, JsonSettings.Options);
             using (StreamWriter writer = new StreamWriter(filename))
             {
                 writer.Write(preset);

@@ -70,7 +70,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the quality.
         /// </summary>
-        public double? Quality { get; set; }
+        public decimal? Quality { get; set; }
 
         /// <summary>
         /// Gets or sets the tune.

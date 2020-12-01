@@ -15,7 +15,9 @@ namespace HandBrake.Interop.Interop
     using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
+    using System.Text.Json;
     using System.Timers;
+    using System.Xml;
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Factories;
@@ -27,8 +29,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Interop.Model.Preview;
-
-    using Newtonsoft.Json;
+    using HandBrake.Interop.Json;
 
     public class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {
@@ -260,12 +261,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void StartEncode(JsonEncodeObject encodeObject)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
-            string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
+            string encode = JsonSerializer.Serialize(encodeObject, JsonSettings.Options);
             this.StartEncode(encode);
         }
 
@@ -349,7 +345,7 @@ namespace HandBrake.Interop.Interop
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
 
-            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
             return state;
         }
 
@@ -411,7 +407,7 @@ namespace HandBrake.Interop.Interop
             JsonState state = null;
             if (!string.IsNullOrEmpty(statusJson))
             {
-                state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+                state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
             }
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
@@ -432,7 +428,7 @@ namespace HandBrake.Interop.Interop
 
                 if (!string.IsNullOrEmpty(this.TitlesJson))
                 { 
-                    this.Titles = JsonConvert.DeserializeObject<JsonScanObject>(this.TitlesJson);
+                    this.Titles = JsonSerializer.Deserialize<JsonScanObject>(this.TitlesJson, JsonSettings.Options);
                     if (this.Titles != null)
                     {
                         this.FeatureTitle = this.Titles.MainFeature;
@@ -455,7 +451,7 @@ namespace HandBrake.Interop.Interop
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
 
-            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+            JsonState state = JsonSerializer.Deserialize<JsonState>(statusJson, JsonSettings.Options);
 
             TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
 

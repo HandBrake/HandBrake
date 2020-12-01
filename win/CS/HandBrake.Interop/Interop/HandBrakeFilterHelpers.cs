@@ -13,13 +13,13 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Text.Json;
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Json.Filters;
     using HandBrake.Interop.Interop.Model.Encoding;
-
-    using Newtonsoft.Json;
+    using HandBrake.Interop.Json;
 
     /// <summary>
     /// The hand brake filter helpers.
@@ -39,7 +39,7 @@ namespace HandBrake.Interop.Interop
         {
             IntPtr ptr = HBFunctions.hb_filter_get_presets_json(filter);
             string result = Marshal.PtrToStringAnsi(ptr);
-            List<PresetTune> list = JsonConvert.DeserializeObject<List<PresetTune>>(result);
+            List<PresetTune> list = JsonSerializer.Deserialize<List<PresetTune>>(result, JsonSettings.Options);
 
             return list.Select(item => new HBPresetTune(item.Name, item.Short_Name)).ToList();
         }
@@ -57,7 +57,7 @@ namespace HandBrake.Interop.Interop
         {
             IntPtr ptr = HBFunctions.hb_filter_get_tunes_json(filter);
             string result = Marshal.PtrToStringAnsi(ptr);
-            List<PresetTune> list = JsonConvert.DeserializeObject<List<PresetTune>>(result);
+            List<PresetTune> list = JsonSerializer.Deserialize<List<PresetTune>>(result, JsonSettings.Options);
 
             return list.Select(item => new HBPresetTune(item.Name, item.Short_Name)).ToList();
         }
@@ -98,7 +98,7 @@ namespace HandBrake.Interop.Interop
 
             IntPtr ptr = HBFunctions.hb_generate_filter_settings_json(filter, presetName, null, null);
             string result = Marshal.PtrToStringAnsi(ptr);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+            return JsonSerializer.Deserialize<Dictionary<string, string>>(result, JsonSettings.Options);
         }
 
         public static string GenerateFilterSettingJson(int filterId, string preset, string tune, string custom)

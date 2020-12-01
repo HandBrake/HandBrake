@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text.Json;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
@@ -234,7 +235,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
             {
-                video.Quality = job.Quality;
+                video.Quality = (decimal?)job.Quality;
             }
 
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
@@ -351,7 +352,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DETELECINE, null, null, job.CustomDetelecine);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -364,7 +365,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DEINTERLACE, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken root = JObject.Parse(unparsedJson);
+                    JsonDocument root = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = root };
                     filter.FilterList.Add(filterItem);
@@ -377,7 +378,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DECOMB, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -391,7 +392,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_COMB_DETECT, EnumHelper<CombDetect>.GetShortName(job.CombDetect), null, job.CustomCombDetect);
                     if (!string.IsNullOrEmpty(unparsedJson))
                     {
-                        JToken settings = JObject.Parse(unparsedJson);
+                        JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                         Filter filterItem = new Filter
                                                 {
@@ -414,7 +415,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)id, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -432,7 +433,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)id, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -445,7 +446,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DEBLOCK, job.DeblockPreset.Key, job.DeblockTune.Key, job.CustomDeblock);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -457,7 +458,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             string unparsedCropSettingsJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_CROP_SCALE, null, null, cropSettings);
             if (!string.IsNullOrEmpty(unparsedCropSettingsJson))
             {
-                JToken cropSettingsJson = JObject.Parse(unparsedCropSettingsJson);
+                JsonDocument cropSettingsJson = JsonDocument.Parse(unparsedCropSettingsJson);
 
                 Filter cropScale = new Filter
                                        {
@@ -474,7 +475,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedPadSettingsJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_PAD, null, null, padSettings);
                 if (!string.IsNullOrEmpty(unparsedPadSettingsJson))
                 {
-                    JToken PadSettingsJson = JObject.Parse(unparsedPadSettingsJson);
+                    JsonDocument PadSettingsJson = JsonDocument.Parse(unparsedPadSettingsJson);
 
                     Filter padding = new Filter
                                        {
@@ -499,7 +500,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_ROTATE, null, null, rotateSettings);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
-                    JToken settings = JObject.Parse(unparsedJson);
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
 
                     Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = settings };
                     filter.FilterList.Add(filterItem);
@@ -524,7 +525,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             string unparsedFramerateJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_VFR, null, null, framerateString);
             if (!string.IsNullOrEmpty(unparsedFramerateJson))
             {
-                JToken framerateSettings = JObject.Parse(unparsedFramerateJson);
+                JsonDocument framerateSettings = JsonDocument.Parse(unparsedFramerateJson);
 
                 Filter framerateShaper = new Filter
                                              {

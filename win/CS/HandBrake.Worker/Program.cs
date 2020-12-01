@@ -134,7 +134,9 @@ namespace HandBrake.Worker
 
         private static void Router_TerminationEvent(object sender, EventArgs e)
         {
-            ShutdownServer(null);
+            Console.WriteLine("Worker: Termination event received. ");
+            manualResetEvent.Set();
+            Environment.Exit(0);
         }
         
         private static string ShutdownServer(HttpListenerRequest request)

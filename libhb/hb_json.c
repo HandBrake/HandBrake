@@ -1061,7 +1061,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       ColorPrimaries, ColorTransfer, ColorMatrix,
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
     //       QSV {Decode, AsyncDepth}}
-    "s:{s:o, s?f, s?i, s?s, s?s, s?s, s?s, s?s,"
+    "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b,"
     "   s?i, s?i,"
     "   s?i, s?i, s?i,"

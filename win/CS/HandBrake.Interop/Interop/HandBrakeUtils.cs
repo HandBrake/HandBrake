@@ -13,13 +13,14 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
+    using System.Text.Json;
+    using System.Xml;
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Json.Anamorphic;
     using HandBrake.Interop.Interop.Json.Shared;
-
-    using Newtonsoft.Json;
+    using HandBrake.Interop.Json;
 
     /// <summary>
     /// HandBrake Interop Utilities
@@ -294,10 +295,10 @@ namespace HandBrake.Interop.Interop
         /// <returns>The final size and PAR of the video.</returns>
         public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
         {
-            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            string encode = JsonSerializer.Serialize(anamorphicGeometry, JsonSettings.Options);
             IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
             string result = Marshal.PtrToStringAnsi(json);
-            return JsonConvert.DeserializeObject<Geometry>(result);
+            return JsonSerializer.Deserialize<Geometry>(result, JsonSettings.Options);
         }
 
         public static void Reduce(long den, long num, out long x, out long y)

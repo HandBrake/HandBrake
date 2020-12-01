@@ -9,11 +9,11 @@
 
 namespace HandBrake.Interop.Interop.Json.Scan
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public class SubtitleAttributes
     {
-        [JsonProperty(PropertyName = "4By3")]
+        [JsonPropertyName("4By3")]
         public bool FourByThree { get; set; }
 
         public bool Children { get; set; }

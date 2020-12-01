@@ -13,10 +13,6 @@
     <description>$description$</description>
     <copyright>Copyright © 2003-2020 HandBrake Team</copyright>
     <tags>Open-Source Video Transcoder</tags>
-
-    <dependencies>
-      <dependency id="Newtonsoft.Json" version="12.0.2" />
-    </dependencies>
   </metadata>
 
   <files>
