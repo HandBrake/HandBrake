@@ -74,6 +74,8 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 35)
 #define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 36)
 #define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
+#define HB_QSV_CAP_VPP_SCALING       (1LL << 38)
+#define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
