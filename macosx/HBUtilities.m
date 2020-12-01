@@ -97,7 +97,10 @@ static BOOL hb_resolveBookmarks = YES;
     NSError *error;
     BOOL isStale;
 
-    NSURL *url = [NSURL URLByResolvingBookmarkData:bookmark options:NSURLBookmarkResolutionWithSecurityScope relativeToURL:nil bookmarkDataIsStale:&isStale error:&error];
+    NSURL *url = [NSURL URLByResolvingBookmarkData:bookmark
+                                           options:NSURLBookmarkResolutionWithSecurityScope | NSURLBookmarkResolutionWithoutMounting
+                                     relativeToURL:nil
+                               bookmarkDataIsStale:&isStale error:&error];
 
     if (error)
     {
