@@ -205,6 +205,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     {
         NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.itemsInternal.count, itemsToAdd.count)];
         [self addItems:itemsToAdd atIndexes:indexes];
+
+        if (self.isEncoding && self.countOfEncodings < self.workersCount)
+        {
+            [self encodeNextQueueItem];
+        }
     }
 }
 
