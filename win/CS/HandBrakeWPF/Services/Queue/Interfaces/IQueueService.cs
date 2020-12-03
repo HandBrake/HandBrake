@@ -153,6 +153,12 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         void ClearCompleted();
 
         /// <summary>
+        /// Get the log file paths for jobs still on the queue. (Including completed) 
+        /// </summary>
+        /// <returns>List of filepaths</returns>
+        List<string> GetLogFilePaths();
+
+        /// <summary>
         /// Get the first job on the queue for processing.
         /// This also removes the job from the Queue and sets the LastProcessedJob
         /// </summary>

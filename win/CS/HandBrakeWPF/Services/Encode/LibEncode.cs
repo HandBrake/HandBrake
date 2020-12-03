@@ -249,8 +249,6 @@ namespace HandBrakeWPF.Services.Encode
             
             this.ServiceLogMessage(completeMessage);
 
-            this.logInstanceManager.Deregister(this.GetLogFilename());
-
             // Handling Log Data 
             string hbLog = this.ProcessLogs(this.currentTask.Destination);
             long filesize = this.GetFilesize(this.currentTask.Destination);
@@ -260,6 +258,8 @@ namespace HandBrakeWPF.Services.Encode
                 e.Error != 0
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, e.Error.ToString(), this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize));
+
+            this.logInstanceManager.Deregister(this.GetLogFilename());
         }
 
         private long GetFilesize(string destination)

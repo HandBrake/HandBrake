@@ -349,6 +349,24 @@ namespace HandBrakeWPF.Services.Queue
                 });
         }
 
+        public List<string> GetLogFilePaths()
+        {
+            List<string> logPaths = new List<string>();
+            lock (QueueLock)
+            {
+                foreach (QueueTask task in this.Queue)
+                {
+                    if (!string.IsNullOrEmpty(task.Statistics.CompletedActivityLogPath))
+                    {
+                        logPaths.Add(task.Statistics.CompletedActivityLogPath);
+                    }
+                }
+            }
+
+            return logPaths;
+        }
+
+
         public QueueTask GetNextJobForProcessing()
         {
             if (this.queue.Count > 0)
