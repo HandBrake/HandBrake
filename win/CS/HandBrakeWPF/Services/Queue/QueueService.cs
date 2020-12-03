@@ -12,8 +12,10 @@ namespace HandBrakeWPF.Services.Queue
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Timers;
     using System.Windows;
 
     using HandBrake.Interop.Interop.Json.Queue;
@@ -35,6 +37,8 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
+
+    using Ookii.Dialogs.Wpf;
 
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
@@ -67,6 +71,8 @@ namespace HandBrakeWPF.Services.Queue
         private bool processIsolationEnabled;
 
         private EncodeTaskFactory encodeTaskFactory;
+
+        private Timer queueTaskPoller;
 
         public QueueService(IUserSettingService userSettingService, ILog logService, IErrorService errorService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
@@ -124,13 +130,7 @@ namespace HandBrakeWPF.Services.Queue
 
         public bool IsEncoding => this.activeJobs.Any(service => service.IsEncoding);
 
-        public ObservableCollection<QueueTask> Queue
-        {
-            get
-            {
-                return this.queue;
-            }
-        }
+        public ObservableCollection<QueueTask> Queue => this.queue;
         
         public void Add(QueueTask job)
         {
@@ -138,11 +138,6 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.queue.Add(job);
                 this.InvokeQueueChanged(EventArgs.Empty);
-
-                if (this.IsEncoding)
-                {
-                    this.ProcessNextJob();
-                }
             }
         }
 
@@ -156,11 +151,6 @@ namespace HandBrakeWPF.Services.Queue
                 }
                
                 this.InvokeQueueChanged(EventArgs.Empty);
-
-                if (this.IsEncoding)
-                {
-                    this.ProcessNextJob();
-                }
             }
         }
 
@@ -365,8 +355,7 @@ namespace HandBrakeWPF.Services.Queue
 
             return logPaths;
         }
-
-
+        
         public QueueTask GetNextJobForProcessing()
         {
             if (this.queue.Count > 0)
@@ -509,6 +498,9 @@ namespace HandBrakeWPF.Services.Queue
             
             this.IsProcessing = false;
             this.IsPaused = true;
+
+            this.StopJobPolling();
+
             this.InvokeQueuePaused(EventArgs.Empty);
         }
 
@@ -550,6 +542,8 @@ namespace HandBrakeWPF.Services.Queue
 
             this.IsProcessing = false;
             this.IsPaused = false;
+
+            this.StopJobPolling();
 
             if (stopExistingJobs || this.activeJobs.Count == 0)
             {
@@ -604,8 +598,30 @@ namespace HandBrakeWPF.Services.Queue
                 handler(this, e);
             }
         }
-        
+
         private void ProcessNextJob()
+        {
+            this.StopJobPolling();
+            this.CheckAndHandleWork(); // Kick the first job off right away.
+
+            this.queueTaskPoller = new Timer();
+
+            this.queueTaskPoller.Interval = this.allowedInstances > 1 ? 3500 : 1000;
+
+            this.queueTaskPoller.Elapsed += (o, e) => { CheckAndHandleWork(); };
+            this.queueTaskPoller.Start();
+        }
+
+        private void StopJobPolling()
+        {
+            if (this.queueTaskPoller != null)
+            {
+                this.queueTaskPoller.Stop();
+                this.queueTaskPoller = null;
+            }
+        }
+        
+        private void CheckAndHandleWork()
         {
             if (!this.processIsolationEnabled)
             {
@@ -649,8 +665,6 @@ namespace HandBrakeWPF.Services.Queue
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.BackupQueue(string.Empty);
-
-                this.ProcessNextJob();
             }
             else
             {
@@ -658,6 +672,8 @@ namespace HandBrakeWPF.Services.Queue
 
                 if (!this.activeJobs.Any(a => a.IsEncoding))
                 {
+                    this.StopJobPolling();
+
                     // Fire the event to tell connected services.
                     this.InvokeQueueCompleted(new QueueCompletedEventArgs(false));
                 }
@@ -676,15 +692,7 @@ namespace HandBrakeWPF.Services.Queue
             this.activeJobs.Remove(e.Job);
             this.OnEncodeCompleted(e.EncodeEventArgs);
 
-            if (!this.IsPaused && this.IsProcessing)
-            {
-                this.ProcessNextJob();
-            }
-            else
-            {
-                this.InvokeQueueChanged(EventArgs.Empty);
-                this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
-            }
+            this.InvokeQueueChanged(EventArgs.Empty);
         }
 
         private void InvokeQueueCompleted(QueueCompletedEventArgs e)

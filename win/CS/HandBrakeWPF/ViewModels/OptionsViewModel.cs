@@ -964,7 +964,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new BindingList<int> { 1, 2, 3, 4, 5, 6 };
+                return new BindingList<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
             }
         }
 
@@ -1257,6 +1257,10 @@ namespace HandBrakeWPF.ViewModels
             this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
             this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
             this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+            if (this.SimultaneousEncodes > 8)
+            {
+                this.SimultaneousEncodes = 8;
+            }
         }
 
         public void UpdateSettings()

@@ -65,7 +65,7 @@ namespace HandBrakeWPF.Services.Queue
             this.totalNvidiaInstances = 3;
 
             // VCE Support still TBD
-            this.totalVceInstances = 1;
+            this.totalVceInstances = 3;
 
             // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
             if (this.maxAllowedInstances > Utilities.SystemInfo.GetCpuCoreCount)

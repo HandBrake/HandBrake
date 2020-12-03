@@ -63,17 +63,23 @@ namespace HandBrakeWPF.Instance
 
         public async void PauseEncode()
         {
-            await this.MakeHttpGetRequest("PauseEncode");
-            this.StopPollingProgress();
+            if (this.IsServerRunning())
+            {
+                await this.MakeHttpGetRequest("PauseEncode");
+                this.StopPollingProgress();
+            }
         }
 
         public async void ResumeEncode()
         {
-            await this.MakeHttpGetRequest("ResumeEncode");
-            this.MonitorEncodeProgress();
+            if (this.IsServerRunning())
+            {
+                await this.MakeHttpGetRequest("ResumeEncode");
+                this.MonitorEncodeProgress();
+            }
         }
 
-        public void StartEncode(JsonEncodeObject jobToStart)
+        public async void StartEncode(JsonEncodeObject jobToStart)
         {
             if (this.IsServerRunning())
             {
@@ -88,7 +94,10 @@ namespace HandBrakeWPF.Instance
 
         public async void StopEncode()
         {
-            await this.MakeHttpGetRequest("StopEncode");
+            if (this.IsServerRunning())
+            {
+                await this.MakeHttpGetRequest("StopEncode");
+            }
         }
 
         public JsonState GetEncodeProgress()
