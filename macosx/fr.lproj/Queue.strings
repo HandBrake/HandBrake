@@ -1,5 +1,5 @@
 /* Class = "NSMenuItem"; title = "Reset Failed Jobs"; ObjectID = "0zn-7P-JbR"; */
-"0zn-7P-JbR.title" = "Recommencer les tâches échoués";
+"0zn-7P-JbR.title" = "Réinitialiser les tâches échouées";
 
 /* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "9tg-YJ-DuI"; */
 "9tg-YJ-DuI.title" = "Supprimer les tâches terminées";
@@ -41,7 +41,7 @@
 "jDL-sB-8e3.title" = "Notification";
 
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
-"kPX-am-UX1.title" = "Recommencer toutes les tâches";
+"kPX-am-UX1.title" = "Réinitialiser toutes les tâches";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Éteindre l'ordinateur";

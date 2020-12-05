@@ -2,7 +2,7 @@
 "0UB-bG-kwS.label" = "Filtres";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
-"2vD-zN-YMe.ibShadowedToolTip" = "Sauvegarder le nouveau préréglage";
+"2vD-zN-YMe.ibShadowedToolTip" = "Sauvegarder le nouveau préréglage…";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
 "3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "";
@@ -77,7 +77,7 @@
 "1554.ibExternalAccessibilityDescription" = "Durée";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Duration of the selected source range in Hours:Minutes:Seconds."; ObjectID = "1554"; */
-"1554.ibShadowedToolTip" = "Durée de la source sélectionnée au format Heures:Minutes:Secondes";
+"1554.ibShadowedToolTip" = "Durée de la source sélectionnée au format Heures:Minutes:Secondes.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Output filename"; ObjectID = "1561"; */
 "1561.ibExternalAccessibilityDescription" = "Nom de fichier de la sortie";
@@ -94,8 +94,8 @@
 /* Class = "NSTabViewItem"; label = "Chapters"; ObjectID = "1989"; */
 "1989.label" = "Chapitres";
 
-/* Class = "NSTextFieldCell"; title = "DO NOT TRANSLATE THIS NIB FILE"; ObjectID = "4846"; */
-"4846.title" = "DO NOT TRANSLATE↵THIS NIB FILE";
+/* Class = "NSTextFieldCell"; title = "Encoding Job 1: Test.mp4"; ObjectID = "4846"; */
+"4846.title" = "Encodage de la tâche 1 : Test.mp4";
 
 /* Class = "NSTextFieldCell"; title = "Source:"; ObjectID = "4905"; */
 "4905.title" = "Source :";
@@ -230,10 +230,13 @@
 "INL-y9-Gwp.title" = "Ajouter tous les titres à la file d'attente";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
-"IOU-3L-nvB.title" = "Sauvegarder le nouveau préréglage";
+"IOU-3L-nvB.title" = "Sauvegarder le nouveau préréglage…";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "Plage :";
+
+/* Class = "NSTextFieldCell"; title = "Progress"; ObjectID = "KUR-YZ-Da8"; */
+"KUR-YZ-Da8.title" = "Progression";
 
 /* Class = "NSMenuItem"; title = "Add Title To Queue"; ObjectID = "L8z-c6-E1u"; */
 "L8z-c6-E1u.title" = "Ajouter le titre à la file d'attente";

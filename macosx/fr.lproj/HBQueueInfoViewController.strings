@@ -5,7 +5,7 @@
 "cx1-rC-AMC.title" = "Résumé";
 
 /* Class = "NSButtonCell"; title = "Edit"; ObjectID = "erY-5X-50l"; */
-"erY-5X-50l.title" = "Édition";
+"erY-5X-50l.title" = "Modifier";
 
 /* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "GaR-qk-UW7"; */
 "GaR-qk-UW7.title" = "Résumé";

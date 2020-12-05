@@ -1,5 +1,5 @@
 /* Preview -> size info label */
-" Scaled To Screen" = "À l'échelle de l'écran";
+" Scaled To Screen" = " À l'échelle de l'écran";
 
 /* No comment provided by engineer. */
 "- --:--" = "- --:--";
@@ -17,13 +17,31 @@
 "(Modified)" = "(Modifié)";
 
 /* Queue status */
-"%d encode pending" = "%d tâche en attente";
+"%lu encode pending" = "%lu encodage en attente";
 
 /* Queue status */
-"%d encodes pending" = "%d tâches en attente";
+"%lu encodes pending" = "%lu encodages en attente";
 
 /* No comment provided by engineer. */
-"%llu jobs selected" = "%llu tâches sélectionnées";
+"%lu jobs selected" = "%lu tâches sélectionnées";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -57,10 +75,10 @@
 "Are you sure you want to permanently delete the selected preset?" = "Êtes-vous sûr de vouloir supprimer définitivement le préréglage sélectionné ?";
 
 /* Delete preset alert -> message */
-"Are you sure you want to permanently delete the selected presets?" = "Êtes-vous sûr de vouloir supprimer définitivement les préréglages sélectionnés ?";
+"Are you sure you want to permanently delete the selected presets?" = "Êtes-vous sûr de vouloir supprimer définitivement les préréglages sélectionnés ?";
 
 /* Quit Alert -> message */
-"Are you sure you want to quit HandBrake?" = "Êtes-vous sûr(e) de vouloir quitter HandBrake ?";
+"Are you sure you want to quit HandBrake?" = "Êtes-vous sûr(e) de vouloir quitter HandBrake ?";
 
 /* Copy Protection Alert -> first button */
 "Attempt Scan Anyway" = "Tenter quand même la numérisation";
@@ -132,21 +150,12 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode canceled" = "Encodage interrompu";
 
-/* Queue status */
-"Encode Canceled." = "Encodage interrompu.";
-
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode complete" = "Encodage terminé";
 
 /* HBQueueItemView -> Encode state accessibility label
    Queue done notification failed message */
 "Encode failed" = "Échec de l'encodage";
-
-/* Queue status */
-"Encode Failed." = "Échec de l'encodage";
-
-/* Queue status */
-"Encode Finished." = "Encodage terminé.";
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode ready" = "Prêt à encoder";
@@ -155,10 +164,13 @@
 "Encode working" = "Encodage en cours";
 
 /* No comment provided by engineer. */
-"Encoding %@\n%@" = "Encodage %1$@\n%2$@";
+"Encoding %lu Jobs" = "Encodage de %lu tâches";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Encodage de la tâche : %@";
 
 /* Job statistics */
-"Ended at:" = "Fini à : ";
+"Ended at:" = "Fini à :";
 
 /* Export presets save panel title */
 "Export preset" = "Exporter préréglage";
@@ -176,7 +188,7 @@
 "HandBrake" = "HandBrake";
 
 /* Preview -> live preview alert message */
-"HandBrake can't open the preview." = "HandBrake ne peut pas ouvrir l'aperçu";
+"HandBrake can't open the preview." = "HandBrake ne peut pas ouvrir l'aperçu.";
 
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake ne peut pas lire cette combinaison de format video/audio/conteneur. Voulez-vous l'ouvrir dans un lecteur externe ?";
@@ -205,6 +217,9 @@
 
 /* Queue undo action name */
 "Move Jobs in Queue" = "Déplacer les tâches dans la file d'attente";
+
+/* Queue status */
+"No encode pending" = "Aucun encodage en cours";
 
 /* Preview -> accessibility label */
 "No image" = "Pas d'image";
@@ -248,7 +263,7 @@
 "Pause/Resume Encoding" = "Mettre en pause/Reprendre l'encodage";
 
 /* Job statistics */
-"Paused time:" = "Temps de pause :";
+"Paused time:" = "Temps de pause :";
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Fréquence de pointe (VFR)";
@@ -284,7 +299,7 @@
 
 /* Queue done alert message
    Queue notification alert message */
-"Put down that cocktail…" = "Reposez ce cocktail...";
+"Put down that cocktail…" = "Reposez ce cocktail…";
 
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualité/Débit";
@@ -310,6 +325,9 @@
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Supprimer les tâches de la file d'attente";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Nouveau scan pour modification";
+
 /* Toolbar Pause Item */
 "Resume" = "Reprendre";
 
@@ -318,10 +336,10 @@
 "Resume Encoding" = "Reprendre l'encodage";
 
 /* HBQueueItemView -> Reveal button accessibility label */
-"Reveal destination in Finder" = "Révéler la destination dans Finder";
+"Reveal destination in Finder" = "Révéler la destination dans le Finder";
 
 /* Job statistics */
-"Run time:" = "Temps d'exécution :";
+"Run time:" = "Temps d'exécution :";
 
 /* Export presets panel prompt */
 "Save" = "Enregistrer";
@@ -360,9 +378,6 @@
 /* Preferences -> Output Name Token */
 "Source" = "Source";
 
-/* Add preset window -> picture setting */
-"Source Maximum" = "Maximum de la source";
-
 /* Toolbar Start/Stop Item */
 "Start" = "Démarrer";
 
@@ -378,10 +393,14 @@
 "Start/Stop Encoding" = "Démarrer/Arrêter l'encodage";
 
 /* Job statistics */
-"Started at:" = "Commencé à :";
+"Started at:" = "Commencé à :";
 
-/* Toolbar Start/Stop Item */
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
 "Stop" = "Arrêter";
+
+/* Queue -> Stop action */
+"Stop action." = "Arrêter l'action en cours.";
 
 /* Queue Alert -> cancel rip third button */
 "Stop After Current Job" = "Arrêter après l'encodage actuel";
@@ -418,7 +437,7 @@
 "The CSV file is not a valid chapters CSV file." = "Ce fichier CSV n'est pas un fichier de chapitres valide.";
 
 /* Destination same as source alert -> informative text */
-"The destination is the same as the source, you can not overwrite your source file!" = "La destination est la même que celle de votre fichier source, vous ne pouvez pas écraser votre fichier source ! ";
+"The destination is the same as the source, you can not overwrite your source file!" = "La destination est la même que celle de votre fichier source, vous ne pouvez pas écraser votre fichier source !";
 
 /* Chapters import -> invalid CSV line count recovery suggestion */
 "The line count in the chapters CSV file does not match the number of chapters in the movie." = "Le nombre de lignes du fichier CSV des chapitres ne correspond pas au nombre de chapitres pour ce film.";
@@ -427,14 +446,8 @@
    Rename preset window -> name alert message */
 "The preset name cannot be empty." = "Le nom du préréglage ne peut être vide.";
 
-/* Queue -> Multiple instances alert informative text */
-"The queue will be shared between the instances." = "La file d'attente sera partagée entre les instances.";
-
 /* File already exists in queue alert -> message */
-"There is already a queue item for this destination." = "Il existe déjà un élément dans la file d'attente pour cette destination. ";
-
-/* Queue -> Multiple instances alert message */
-"There is already an instance of HandBrake running." = "Il y a déjà une instance d'HandBrake lancée.";
+"There is already a queue item for this destination." = "Il existe déjà un élément dans la file d'attente pour cette destination.";
 
 /* Invalid destination alert -> informative text */
 "This is not a valid destination directory!" = "Le dossier de destination n'est pas valide !";
@@ -453,6 +466,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Attention !";
+
+/* No comment provided by engineer. */
+"Working" = "Travail en cours";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "Un encodage est en cours. Que voulez-vous faire ?";

@@ -1,11 +1,11 @@
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[0]" = "Créer un nouveau préréglage personnalisé à partir des paramètres sélectionnés.";
+
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[1]" = "Effacer le préréglage sélectionné.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
 "4tC-UE-40G.title" = "Cellule de texte";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Delete Preset"; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibExternalAccessibilityDescription" = "Effacer le préréglage";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Delete the selected preset."; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibShadowedToolTip" = "Effacer le préréglage sélectionné.";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Réinitialiser les préréglages officiels";
@@ -16,12 +16,6 @@
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Nouvelle Catégorie";
 
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "New Preset"; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibExternalAccessibilityDescription" = "Nouveau préréglage";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Create a new custom preset based on the currently selected settings."; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibShadowedToolTip" = "Créer un nouveau préréglage personnalisé à partir des paramètres sélectionnés.";
-
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
 "LQk-kD-5sj.title" = "Menu préréglage des actions";
 
@@ -29,7 +23,7 @@
 "LUl-ag-Iu6.title" = "Importer…";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
-"oBC-Nh-TwB.title" = "Vue des cellules du tableau ";
+"oBC-Nh-TwB.title" = "Vue des cellules du tableau";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
 "r4V-6L-SO8.title" = "Préréglages";
@@ -47,5 +41,5 @@
 "Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Options additionnelles";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibShadowedToolTip" = "Afficher les options additionnelles";
+"Ybq-Zt-sta.ibShadowedToolTip" = "Afficher les options additionnelles.";
 

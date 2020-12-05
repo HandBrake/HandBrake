@@ -92,7 +92,7 @@
 "mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Défaut";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
-"mdO-Qu-3Pb.ibShadowedToolTip" = "Drapeau par défaut. Marque la piste de sous-titres sélectionnée comme la piste par défaut à afficher lors de la lecture. ";
+"mdO-Qu-3Pb.ibShadowedToolTip" = "Drapeau par défaut. Marque la piste de sous-titres sélectionnée comme la piste par défaut à afficher lors de la lecture.";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
 "mVi-zH-KUq.title" = "Supprimer toutes les pistes";
@@ -170,5 +170,5 @@
 "zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Incrustés";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
-"zpm-9Z-Hsq.ibShadowedToolTip" = "Incrustés. Rendez les sous-titres sélectionnés permanents en les superposant à la piste vidéo. ";
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Incrustés. Rendez les sous-titres sélectionnés permanents en les superposant à la piste vidéo.";
 

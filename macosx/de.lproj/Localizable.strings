@@ -234,7 +234,7 @@
 "No Valid Source Found" = "Keine gültige Quelle gefunden";
 
 /* Add preset window -> picture setting */
-"None" = "Keine";
+"None" = "Ohne";
 
 /* Queue Done Alert -> shut down first button
    Queue Done Alert -> sleep first button */

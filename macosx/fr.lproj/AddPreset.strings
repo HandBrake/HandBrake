@@ -4,8 +4,8 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
 "8kl-Sh-Gh7.ibShadowedToolTip" = "Entrer une description pour le nouveau préréglage. Cette description s'affichera lorsque vous passez votre curseur au-dessus du préréglage dans la liste des préréglages.";
 
-/* Class = "NSTextFieldCell"; title = "Dimensions:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Dimensions :";
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "Limite de la résolution :";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
 "a0j-nw-n23.title" = "Comportement de la sélection…";
@@ -29,7 +29,7 @@
 "gOg-oO-8ar.ibExternalAccessibilityDescription" = "Largeur de l'image";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
-"gOg-oO-8ar.ibShadowedToolTip" = "Stockage maximal en largeur de la vidéo suivant le préréglage autorisé en pixels. Réglez sur 0 pour une largeur illimitée. ";
+"gOg-oO-8ar.ibShadowedToolTip" = "Stockage maximal en largeur de la vidéo suivant le préréglage autorisé en pixels. Réglez sur 0 pour une largeur illimitée.";
 
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
 "hc8-1h-Jye.title" = "Description :";

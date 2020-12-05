@@ -29,7 +29,7 @@
 "ej8-4k-1vd.title" = "Aucune";
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
-"GbM-vm-RC2.title" = "Suivre le comportement de la sélection : ";
+"GbM-vm-RC2.title" = "Suivre le comportement de la sélection :";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Toutes les langues sélectionnées";
@@ -70,26 +70,17 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
 "OOC-GZ-OFA.ibShadowedToolTip" = "\"Recherche langue étrangère\" scanne la source à la recherche d'éventuelles courtes séquences audio en langue étrangère ou inconnue, qui seront affichées par défaut.";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Tout afficher";
-
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
 "Px8-G6-NVX.ibShadowedToolTip" = "Incruste la première piste de sous-titre Blu-ray sélectionnée. Toutes les autres pistes de sous-titres Blu-ray seront rejetées. Utilisez cette option si votre logiciel ou appareil de lecture ne supporte pas les sous-titres Blu-ray.\n\nIl n'est possible d'incruster qu'une seule piste de sous-titres.";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Afficher toutes les langues des sous-titres";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all subtitles languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Afficher tous les langages de sous-titres dans la liste \"Langues\".";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
 "QRd-XH-6TH.title" = "Piste de sous-titres audio étrangers";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Vue des cellules du tableau ";
+"qVQ-fS-w1S.title" = "Vue des cellules du tableau";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Ajoutez des sous-titres codés en tant que piste de sous-titres souples (non intégrés). ";
+"uF5-6E-EIe.ibShadowedToolTip" = "Ajoutez des sous-titres codés en tant que piste de sous-titres souples (non intégrés).";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
 "vNY-OC-hTJ.title" = "Ajouter une recherche audio étrangère";

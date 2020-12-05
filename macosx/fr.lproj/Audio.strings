@@ -146,5 +146,5 @@
 "yPh-4R-HRQ.ibShadowedToolTip" = "Compression de la Plage Dynamique (alias DRC). Réduit la différence de volume entre les sons forts et calmes. S'applique uniquement aux sources AC-3, lorsqu'elles sont encodées vers un autre format.\n\n0 : Ne pas appliquer de DRC.\n1 : Appliquer une DRC selon les éventuels indices présents dans la piste source.\n\nUne valeur supérieure à 1 augmente le volume des sons calmes. Une valeur supérieure à 2.5 n'est pas recommandée car elle peut introduire une distorsion audible.";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog."; ObjectID = "Yzu-Rk-hTv"; */
-"Yzu-Rk-hTv.ibShadowedToolTip" = "Liste des pistes audio. Le comportement et les paramètres de sélection de piste sont chargés à partir des préréglages sélectionnés et peuvent être configurés à l'aide de la boîte de dialogue audio. ";
+"Yzu-Rk-hTv.ibShadowedToolTip" = "Liste des pistes audio. Le comportement et les paramètres de sélection de piste sont chargés à partir des préréglages sélectionnés et peuvent être configurés à l'aide de la boîte de dialogue audio.";
 
