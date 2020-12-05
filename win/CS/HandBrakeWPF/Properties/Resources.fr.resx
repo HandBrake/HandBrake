@@ -536,7 +536,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Aperçu de l'image</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>Impossible d'effacer le fichier de prévisualisation précédent. Vous avez peut-être une prévisualisation ouverte dans un lecteur multimédia. Veuillez le fermer.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Vous devez d'abord analyser une source et configurer votre encodage avant de créer un aperçu.</value>
@@ -2218,7 +2218,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Si le port défini est utilisé, il trouvera le premier port libre dans un intervalle maximum de 100 à partir du port défini.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Nombre maximum d'encodages simultanés :</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Annuler</value>
@@ -2385,6 +2385,6 @@ Les champs sont limités à :
     <value>Niveau auquel les alertes de faible espace disque s'affichent :</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>Attention : Il s'agit de la limite maximale de tâches simultanées. Des limitations matérielles peuvent entrer en compte, ce qui diminuerait le nombre de tâches simultanées pendant l'encodage.</value>
   </data>
 </root>

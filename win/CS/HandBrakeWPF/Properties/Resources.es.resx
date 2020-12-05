@@ -537,7 +537,7 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>Vista previa de la imagen </value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>No se puede eliminar el archivo de vista previa anterior. Es posible que aún tenga una vista previa abierta en su reproductor multimedia. Cierra esta.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Primero debe escanear un origen y configurar su codificación antes de crear una vista previa.</value>
@@ -2221,7 +2221,7 @@ Por favor, elija un ajuste preestablecido diferente.</value>
     <value>Si el puerto está en uso, se usará el primer puerto libre hasta un rango +100 del puerto configurado.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Número máximo de codificaciones simultáneas:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Cancelar</value>
@@ -2385,9 +2385,9 @@ Los campos son:
     <value>Exportar todos los preajustes del usuario.</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>Nivel para mostrar alerta de espacio bajo en disco </value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>Aviso: Este es el límite superior de trabajos simultáneos. Es posible que se apliquen limitaciones de hardware que reduzcan el número real de trabajos simultáneos durante la codificación.</value>
   </data>
 </root>
