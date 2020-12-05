@@ -163,15 +163,15 @@ HQDN3D es un filtro de paso bajo adaptativo, más rápido que NLMeans, pero meno
 Los orígenes de Blu-ray y DVD a menudo tienen múltiples títulos, el más largo de los cuales es por lo general el principal.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorfico permite dimensiones de almacenamiento arbitrarias al tiempo que conserva el aspecto original durante la reproducción.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+Ninguno desactiva anamórfico. Las dimensiones de almacenamiento de video y las dimensiones de la pantalla serán idénticas. Solo es útil para la compatibilidad con ciertos dispositivos heredados.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automático maximiza la resolución de almacenamiento al tiempo que conserva la relación de aspecto de la pantalla original. Recomendado.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Loose es similar a Auto, pero intenta preservar la relación de aspecto de almacenamiento. Esto puede resultar en una ligera pérdida de resolución de almacenamiento en comparación con Auto.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Personalizado permite configurar manualmente todos los parámetros. Útil para corregir un aspecto de visualización de fuente incorrecto y para profesionales que necesitan un control avanzado en posproducción.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Recortar automáticamente los bordes negros alrededor del video.</value>
