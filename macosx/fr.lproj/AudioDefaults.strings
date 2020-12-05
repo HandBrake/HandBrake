@@ -80,7 +80,7 @@
 "fzd-MO-xaB.ibShadowedToolTip" = "Activez-le si l'appareil de lecture supporte l'AAC. Cela permet de copier la piste AAC lorsque la copie de la piste audio est sélectionnée.";
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
-"GbM-vm-RC2.title" = "Suivre le comportement de la sélection : ";
+"GbM-vm-RC2.title" = "Suivre le comportement de la sélection :";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Toutes les langues correspodnandantes sélectionnées";
@@ -154,29 +154,20 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Tout afficher";
-
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Codec";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
 "PtB-Wp-B9X.title" = "AutresVues";
 
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all audio languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Afficher toutes les langues audio";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all audio languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Afficher toutes les langues audio de la liste des langues.";
-
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Fréquence d'échantillonnage";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
-"r80-yv-59n.ibShadowedToolTip" = "Fréquence d'échantillonnage audio en kilohertz (kHz). Automatique est recommandé. ";
+"r80-yv-59n.ibShadowedToolTip" = "Fréquence d'échantillonnage audio en kilohertz (kHz). Automatique est recommandé.";
 
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
-"s6s-EH-5CB.title" = "Copie automatique : ";
+"s6s-EH-5CB.title" = "Copie automatique :";
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
 "sdZ-Rx-JoG.title" = "MP3";
@@ -185,7 +176,7 @@
 "u9h-dn-wcK.title" = "E-AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Seule la piste audio principale sera codée avec la liste complète des encodeurs. Toutes les pistes audio seront encodées avec le premier encodeur uniquement. ";
+"uF5-6E-EIe.ibShadowedToolTip" = "Seule la piste audio principale sera codée avec la liste complète des encodeurs. Toutes les pistes audio seront encodées avec le premier encodeur uniquement.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
 "uFK-z7-8Yj.title" = "Cellule de texte";

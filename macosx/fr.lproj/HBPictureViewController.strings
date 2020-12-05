@@ -1,5 +1,14 @@
+/* Class = "NSButtonCell"; title = "Allow Upscaling"; ObjectID = "0kU-Uy-P4P"; */
+"0kU-Uy-P4P.title" = "Autoriser l'upscaling";
+
+/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "0Mh-nC-WXA"; */
+"0Mh-nC-WXA.title" = "Personnalisé :";
+
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
 "1O3-th-4M5.title" = "Off";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "1yF-dh-GYw"; */
+"1yF-dh-GYw.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Recadrer en bas";
@@ -7,14 +16,32 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibShadowedToolTip" = "Taille du recadrage de la bordure basse, en pixels.";
 
+/* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
+"1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
+"1zy-53-Bvd.title" = "180°";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
 "2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "2s0-5k-fjU"; */
 "2s0-5k-fjU.ibExternalAccessibilityDescription" = "Hauteur Stockage";
 
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "5Tj-xw-QuU"; */
+"5Tj-xw-QuU.title" = "x";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture."; ObjectID = "6G0-MW-iVa"; */
 "6G0-MW-iVa.ibShadowedToolTip" = "\"Maintien du ratio\" conserve le rapport d'aspect d'affichage de la source. Désactiver cette fonctionnalité peut engendrer une image étirée ou compressée.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "Bordure haute";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge padding amount in pixels."; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibShadowedToolTip" = "Taille du recadrage de la bordure haute, en pixels.";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
+"6Qy-ik-hiE.title" = "Aucun";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
 "6W6-RI-fBx.ibExternalAccessibilityDescription" = "Recadrer en bas";
@@ -22,11 +49,17 @@
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
 "8vS-Mw-bny.title" = "Anamorphique :";
 
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
+"09f-sT-7la.ibExternalAccessibilityDescription" = "Bordure haute";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "9hH-As-JSa"; */
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Largeur Stockage";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings."; ObjectID = "9hH-As-JSa"; */
 "9hH-As-JSa.ibShadowedToolTip" = "Largeur du stockage vidéo. Représente la largeur à encoder, en nombre de pixels. La Largeur de stockage peut différer de la largeur d'affichage, en fonction de réglages anamorphiques.";
+
+/* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
+"21C-Hg-mk4.title" = "480p NTSC SD";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "Recadrer en haut";
@@ -34,26 +67,47 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibShadowedToolTip" = "Taille du recadrage de la bordure haute, en pixels.";
 
-/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "b3y-yE-sYc"; */
-"b3y-yE-sYc.title" = "Automatique";
+/* Class = "NSButtonCell"; title = "Flip"; ObjectID = "a6O-RP-1cw"; */
+"a6O-RP-1cw.title" = "Retourner";
 
-/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "cNr-IZ-H9j"; */
-"cNr-IZ-H9j.title" = "x";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "axd-ol-uoX"; */
+"axd-ol-uoX.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "Bordure de droite";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge padding amount in pixels."; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibShadowedToolTip" = "Padding de la bordure de droite en pixels.";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
+"d0T-QG-WXU.title" = "Limite de la résolution :";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Custom allows for manual settings."; ObjectID = "D2o-1f-y4u"; */
+"D2o-1f-y4u.ibShadowedToolTip" = "La personnalisation permet de choisir les réglages.";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "Ddg-4D-el9"; */
 "Ddg-4D-el9.ibExternalAccessibilityDescription" = "Recadrer à droite";
 
+/* Class = "NSMenuItem"; title = "Black"; ObjectID = "EM5-tR-x3U"; */
+"EM5-tR-x3U.title" = "Noir";
+
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
 "f12-Dh-fDw.title" = "Personnaliser";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "ffe-SL-kPm"; */
+"ffe-SL-kPm.ibShadowedToolTip" = "Tourner l'image de 90 degrés dans le sens horaire.";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "fNq-Nm-ba8"; */
+"fNq-Nm-ba8.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSButtonCell"; title = "Use Maximum Size"; ObjectID = "FUA-5p-imC"; */
+"FUA-5p-imC.title" = "Utiliser la taille maximale";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "FwZ-6T-zJe"; */
 "FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Largeur Stockage";
 
-/* Class = "NSTextFieldCell"; title = "PAR:"; ObjectID = "gVj-RG-PcL"; */
-"gVj-RG-PcL.title" = "PAR :";
-
-/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "haC-cO-jDm"; */
-"haC-cO-jDm.title" = "Recadrage :";
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "gWL-mx-RIK"; */
+"gWL-mx-RIK.title" = "Aucun";
 
 /* Class = "NSButtonCell"; title = "Keep Aspect Ratio"; ObjectID = "hcF-CZ-p0E"; */
 "hcF-CZ-p0E.title" = "Conserver le ratio d'aspect";
@@ -62,19 +116,16 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Hauteur Stockage";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings."; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Hauteur de stockage vidéo. C'est le nombre de pixels de hauteur à coder. La hauteur de stockage peut différer de la hauteur d'affichage en fonction des paramètres anamorphiques. ";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Hauteur de stockage vidéo. C'est le nombre de pixels de hauteur à coder. La hauteur de stockage peut différer de la hauteur d'affichage en fonction des paramètres anamorphiques.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Ration Numerator"; ObjectID = "JC3-5O-BXA"; */
-"JC3-5O-BXA.ibExternalAccessibilityDescription" = "Numérateur du format d'image en pixels";
+/* Class = "NSTextFieldCell"; title = "Padding:"; ObjectID = "iqM-GW-fCe"; */
+"iqM-GW-fCe.title" = "Padding :";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback."; ObjectID = "JC3-5O-BXA"; */
-"JC3-5O-BXA.ibShadowedToolTip" = "Le format des pixels définit la forme des pixels de stockage ou la mise à l'échelle de la vidéo anamorphique pour créer le format et les dimensions adéquates de l'affichage. La vidéo non anamorphique (1:1 PAR) n'est pas mise à l'échelle pendant la lecture.";
-
-/* Class = "NSTextFieldCell"; title = "Modulus:"; ObjectID = "jXn-fo-wNU"; */
-"jXn-fo-wNU.title" = "Module :";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "iZc-Ks-efB"; */
+"iZc-Ks-efB.ibExternalAccessibilityDescription" = "Bordure de gauche";
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "JyN-AK-Hae"; */
 "JyN-AK-Hae.title" = "Auto";
@@ -82,11 +133,14 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
 "krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibExternalAccessibilityDescription" = "Bordure de gauche";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge padding amount in pixels."; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibShadowedToolTip" = "Padding de la bordure de gauche en pixels.";
+
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "L7V-2e-qf9"; */
 "L7V-2e-qf9.title" = "Taille du stockage :";
-
-/* Class = "NSMenuItem"; title = "8"; ObjectID = "Lbl-i2-YJg"; */
-"Lbl-i2-YJg.title" = "8";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
 "LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Recadrer à gauche";
@@ -100,14 +154,14 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect."; ObjectID = "LWv-Y9-b0S"; */
 "LWv-Y9-b0S.ibShadowedToolTip" = "Largeur d'affichage. Représente la largeur, en nombre de pixels, de votre vidéo dans sa résolution native, et est le résultat d'une mise à l'échelle des dimensions, suivant l'aspect des pixels.";
 
-/* Class = "NSMenuItem"; title = "4"; ObjectID = "MgF-Gw-0fD"; */
-"MgF-Gw-0fD.title" = "4";
+/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "MF1-tQ-h6G"; */
+"MF1-tQ-h6G.title" = "Automatique";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Mke-9L-LvB"; */
 "Mke-9L-LvB.ibExternalAccessibilityDescription" = "Recadrer en haut";
 
-/* Class = "NSView"; ibExternalAccessibilityDescription = "Cropping"; ObjectID = "Mri-4y-8rX"; */
-"Mri-4y-8rX.ibExternalAccessibilityDescription" = "Recadrage";
+/* Class = "NSMenuItem"; title = "Fill (Surround)"; ObjectID = "N5d-nG-TZV"; */
+"N5d-nG-TZV.title" = "Remplir l'image (Surround)";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display Height"; ObjectID = "nQe-Vq-Og2"; */
 "nQe-Vq-Og2.ibExternalAccessibilityDescription" = "Hauteur de l'affichage";
@@ -115,53 +169,83 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect."; ObjectID = "nQe-Vq-Og2"; */
 "nQe-Vq-Og2.ibShadowedToolTip" = "Hauteur d'affichage. Représente la hauteur, en nombre de pixels, de votre vidéo dans sa résolution native, et est le résultat d'une mise à l'échelle des dimensions, suivant l'aspect des pixels.";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Ensure storage dimensions are multiples of this value. Higher values are only necessary for compatibility with certain legacy devices. Set to 2 unless you have a specific compatibility concern."; ObjectID = "ns0-ar-I7c"; */
-"ns0-ar-I7c.ibShadowedToolTip" = "Assurez-vous que les dimensions de stockage sont des multiples de cette valeur. Des valeurs plus élevées ne sont pas nécessaires pour que la compatibilité avec certains anciens appareils. Définissez la valeur sur 2 sauf si vous avez un problème de compatibilité spécifique.";
-
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
 "ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSMenuItem"; title = "2"; ObjectID = "OWb-6v-ggg"; */
-"OWb-6v-ggg.title" = "2";
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "OCX-n7-THw"; */
+"OCX-n7-THw.title" = "Couleur :";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "owa-gb-koC"; */
+"owa-gb-koC.title" = "Personnaliser";
+
+/* Class = "NSMenuItem"; title = "Fill Height (Letterbox)"; ObjectID = "p7U-Ee-kt4"; */
+"p7U-Ee-kt4.title" = "Remplir la hauteur (Letterbox)";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis."; ObjectID = "pdM-bf-meC"; */
+"pdM-bf-meC.ibShadowedToolTip" = "Retourne (en mode miroir) l'image selon l'axe horizontal.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Automatic detects and removes black borders from the video."; ObjectID = "Pvq-R5-nb1"; */
+"Pvq-R5-nb1.ibShadowedToolTip" = "Détecte et supprime les bordures noires de la vidéo.";
+
+/* Class = "NSMenuItem"; title = "White"; ObjectID = "pWs-NL-FVO"; */
+"pWs-NL-FVO.title" = "Blanc";
+
+/* Class = "NSMenuItem"; title = "0°"; ObjectID = "qsi-r7-kNQ"; */
+"qsi-r7-kNQ.title" = "0°";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qSV-uB-Iup"; */
 "qSV-uB-Iup.title" = "AutresVues";
 
-/* Class = "NSStepper"; ibExternalAccessibilityDescription = "v"; ObjectID = "r9l-cH-pFW"; */
-"r9l-cH-pFW.ibExternalAccessibilityDescription" = "v";
+/* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
+"qzy-K8-2tY.title" = "1080p HD";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Ratio Denominator"; ObjectID = "rFi-0b-3BX"; */
-"rFi-0b-3BX.ibExternalAccessibilityDescription" = "Dénominateur du format d'image en pixels";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
+"r9l-cH-pFW.ibExternalAccessibilityDescription" = "Recadrer à gauche";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback."; ObjectID = "rFi-0b-3BX"; */
-"rFi-0b-3BX.ibShadowedToolTip" = "Le format des pixels définit la forme des pixels de stockage oui la mise à l'échelle de la vidéo anamorphique pour créer le format et les dimensions corrects de l'affichage. La vidéo non anamorphique (1:1 PAR) n'est pas mise à l'échelle pendant la lecture.";
-
-/* Class = "NSMatrix"; ibShadowedToolTip = "Cropping mode.\n\nAutomatic detects and removes black borders from the video.\n\nCustom allows for manual settings."; ObjectID = "RTr-3u-52l"; */
-"RTr-3u-52l.ibShadowedToolTip" = "Mode de recadrage.\n\n\"Automatique\" détecte et supprime les bordures noires de la vidéo.\n\n\"Personnalisé\" autorise des réglages manuels.";
-
-/* Class = "NSButtonCell"; title = "Radio"; ObjectID = "S7K-vF-t1n"; */
-"S7K-vF-t1n.title" = "Radio";
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "S29-WR-idr"; */
+"S29-WR-idr.ibShadowedIsNilPlaceholder" = "0";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "SPg-s0-Oh0"; */
 "SPg-s0-Oh0.title" = "Taille de l'écran :";
 
+/* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
+"tIU-4H-3Xm.title" = "270°";
+
 /* Class = "NSMenuItem"; title = "Loose"; ObjectID = "Uiw-Nb-u5X"; */
 "Uiw-Nb-u5X.title" = "Perte";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "und-OA-MLn"; */
-"und-OA-MLn.title" = "AutresVues";
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "uoH-Hv-lNp"; */
+"uoH-Hv-lNp.ibExternalAccessibilityDescription" = "Bordure de droite";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
 "uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
 
-/* Class = "NSMenuItem"; title = "16"; ObjectID = "uTT-yC-MFJ"; */
-"uTT-yC-MFJ.title" = "16";
-
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "uuL-JR-73C"; */
 "uuL-JR-73C.title" = "x";
 
+/* Class = "NSMenuItem"; title = "90°"; ObjectID = "V1G-sQ-eqd"; */
+"V1G-sQ-eqd.title" = "90°";
+
+/* Class = "NSTextFieldCell"; title = "Rotation:"; ObjectID = "vb2-DA-Pgr"; */
+"vb2-DA-Pgr.title" = "Rotation :";
+
+/* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
+"Vrx-BH-ry2.title" = "4320p 8K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
+"vzz-ej-1nx.title" = "Personnaliser";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nOff disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nAuto maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nLoose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
 "w1f-3S-up0.ibShadowedToolTip" = "\"Anamorphique\" permet des dimensions arbitraires tout en préservant l'aspect originel durant la lecture.\n\n\"Off\" désactive l'anamorphisme. Les dimensions de la vidéo stockée et celles de la vidéo à afficher seront identiques. Utile seulement pour la compatibilité avec des anciens appareils.\n\n\"Auto\" maximise la résolution de stockage, en préservant le rapport d'aspect d'origine. Recommandé.\n\n\"Perte\" est similaire à \"Auto\" mais tente de conserver le rapport d'aspect au stockage. Ceci peut provoquer une perte de résolution de stockage, par rapport au mode \"Auto\".\n\n\"Personnalisé\" permet de personnaliser manuellement tous les réglages. Utile pour corriger un rapport d'aspect erroné ou pour les professionnels nécessitant des contrôles avancés en post-production.";
+
+/* Class = "NSMenuItem"; title = "Fill Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
+"W5p-nd-4WK.title" = "Remplir la largeur (Pillarbox)";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibExternalAccessibilityDescription" = "Bordure du bas";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge padding amount in pixels."; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibShadowedToolTip" = "Padding de la bordure du bas en pixels.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
 "wsq-TS-cC6.ibExternalAccessibilityDescription" = "Recadrer à droite";
@@ -172,6 +256,18 @@
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
 "x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
 
-/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "zmf-MM-j1I"; */
-"zmf-MM-j1I.title" = "Personnalisé :";
+/* Class = "NSMenuItem"; title = "720p HD"; ObjectID = "Xao-1P-xPT"; */
+"Xao-1P-xPT.title" = "720p HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
+"Xun-U2-N6F.title" = "Personnaliser";
+
+/* Class = "NSMenuItem"; title = "576p PAL SD"; ObjectID = "yue-jq-T1X"; */
+"yue-jq-T1X.title" = "576p PAL SD";
+
+/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "zsq-Le-41g"; */
+"zsq-Le-41g.title" = "Recadrage :";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "zVm-0W-Jxg"; */
+"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "Bordure du bas";
 

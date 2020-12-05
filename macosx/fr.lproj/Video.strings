@@ -25,12 +25,6 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "c27-4i-SiJ"; */
-"c27-4i-SiJ.ibShadowedIsNilPlaceholder" = "0";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedNotApplicablePlaceholder = "0"; ObjectID = "c27-4i-SiJ"; */
-"c27-4i-SiJ.ibShadowedNotApplicablePlaceholder" = "0";
-
 /* Class = "NSTextFieldCell"; title = "Unparse:"; ObjectID = "CLk-dp-1b7"; */
 "CLk-dp-1b7.title" = "Non analysé :";
 
@@ -41,7 +35,7 @@
 "CRz-On-Jen.ibShadowedIsNilPlaceholder" = "automatique";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "cXd-X7-OhB"; */
-"cXd-X7-OhB.ibShadowedToolTip" = "Réglage de l'encodage vidéo. Ajuste le préréglage de l'encodeur pour aligner ses réglages à un scénario spécifique.";
+"cXd-X7-OhB.ibShadowedToolTip" = "Réglage de l'encodage vidéo. Ajuste le préréglage de l'encodeur pour optimiser les réglages à des scénarii spécifiques.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "dwn-bf-Ua0"; */
 "dwn-bf-Ua0.ibShadowedToolTip" = "Affiche toutes les options de l'encodeur vidéo interne.";
@@ -53,13 +47,13 @@
 "F3s-qR-qeE.title" = "Qualité :";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "fue-2d-Bjn"; */
-"fue-2d-Bjn.ibShadowedToolTip" = "Encodeur vidéo prédéfini. Ajuste les paramètres du codeur pour équilibrer l'efficacité de la compression et la vitesse de codage. Les préréglages d'encodeur plus lents peuvent utiliser des paramètres moins compatibles avec certains appareils. ";
+"fue-2d-Bjn.ibShadowedToolTip" = "Préréglage de l'encodeur vidéo. Ajuste les paramètres de l'encodeur pour ajuster l'efficacité de la compression et la vitesse de codage. Les préréglages d'encodeur plus lents peuvent utiliser des paramètres moins compatibles avec certains appareils.";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "fzT-im-zKN"; */
 "fzT-im-zKN.title" = "Régler :";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "gEp-lv-YUY"; */
-"gEp-lv-YUY.ibShadowedToolTip" = "Options supplémentaire d'encodeur vidéo. Pour utilisation avancée seulement. \n\nSyntaxe : option-1=foo:opt2=bar";
+"gEp-lv-YUY.ibShadowedToolTip" = "Options supplémentaire d'encodeur vidéo. Pour une utilisation avancée seulement. \n\nSyntaxe : option-1=foo:opt2=bar";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "gIJ-Xs-uVF"; */
 "gIJ-Xs-uVF.title" = "AutresVues";
@@ -89,7 +83,7 @@
 "nPA-nO-Eik.title" = "Encodage en 2 passes";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "Turbo premier passage accélère le premier passage d'un encodage à 2 passes pour une légère pénalité d'analyse. ";
+"olm-zg-k9Y.ibShadowedToolTip" = "Turbo premier passage accélère le premier passage d'un encodage à 2 passes pour une légère pénalité d'analyse.";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "QWu-rv-zfM"; */
 "QWu-rv-zfM.title" = "Préréglage :";
@@ -110,7 +104,7 @@
 "sTM-lk-DBC.title" = "Niveau :";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "stU-Fo-Avu"; */
-"stU-Fo-Avu.ibShadowedToolTip" = "Le décodage rapide utilise des paramètres qui réduisent l'utilisation du processeur lors de la lecture de la vidéo encodée. Utile pour les appareils qui ont du mal à lire des vidéos sans lague. ";
+"stU-Fo-Avu.ibShadowedToolTip" = "Le décodage rapide utilise des paramètres qui réduisent l'utilisation du processeur lors de la lecture de la vidéo encodée. Utile pour les appareils qui ont du mal à lire des vidéos sans lague.";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
 "VQe-CK-YDR.title" = "Débit moyen (kbps) :";

@@ -5,10 +5,10 @@
 "5Rl-P0-bhc.title" = "Cellule Vue Table";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
-"c1Z-ZC-b8b.title" = "Afficher la destination dans Finder";
+"c1Z-ZC-b8b.title" = "Afficher la destination dans le Finder";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
-"DTF-om-j0l.title" = "Édition";
+"DTF-om-j0l.title" = "Modifier";
 
 /* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
 "eEU-Dr-Qh8.title" = "État de l'encodage";
@@ -32,5 +32,5 @@
 "xSd-Hl-5Qk.title" = "Cellule Vue Table";
 
 /* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
-"zA7-r8-i4L.title" = "Afficher le journal d'activité dans Finder";
+"zA7-r8-i4L.title" = "Afficher le journal d'activité dans le Finder";
 
