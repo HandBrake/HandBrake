@@ -52,7 +52,7 @@
 
             </ToolBar>
 
-            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText">
+            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText" VerticalContentAlignment="Top">
 
                 <TextBox.ContextMenu>
                     <ContextMenu>

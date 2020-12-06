@@ -14,12 +14,9 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
 
     using HandBrake.Worker.Logging.Models;
 
-    using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
+    using LogEventArgs = EventArgs.LogEventArgs;
 
-    /// <summary>
-    /// The Log interface.
-    /// </summary>
-    public interface ILog
+    public interface ILog : IDisposable
     {
         /// <summary>
         /// The message logged.
@@ -47,10 +44,13 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// <param name="filename">
         /// The filename.
         /// </param>
+        /// <param name="fullLogPath">
+        /// The full Log Path.
+        /// </param>
         /// <remarks>
         /// If this is not called, all log messages from libhb will be ignored.
         /// </remarks>
-        void ConfigureLogging(string filename);
+        void ConfigureLogging(string filename, string fullLogPath);
 
         /// <summary>
         /// Log a message.

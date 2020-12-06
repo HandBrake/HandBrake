@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.EventArgs;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -37,7 +38,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
         private readonly ILogInstanceManager logInstanceManager;
         private readonly IQueueService queueService;
-        private readonly Dictionary<string, string> inactiveLogs = new Dictionary<string, string>();
         private readonly object readLockObject = new object();
 
         private ILog logService;
@@ -102,7 +102,7 @@ namespace HandBrakeWPF.ViewModels
             this.logInstanceManager.NewLogInstanceRegistered += this.LogInstanceManager_NewLogInstanceRegistered;
             this.queueService.QueueChanged += this.QueueService_QueueChanged;
 
-            this.CollectLogFiles();
+            this.CollectLogFiles(null);
             
             base.OnActivate();
         }
@@ -142,24 +142,27 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
+            string logDir = DirectoryUtilities.GetLogDirectory();
+            string logFile = Path.Combine(logDir, this.selectedLogFile);
 
             // This is not an active log, so read from disk.
             if (this.logService == null)
             {
                 try
                 {
-                    if (this.inactiveLogs.ContainsKey(this.SelectedLogFile) && File.Exists(this.inactiveLogs[this.selectedLogFile]))
+                    if (File.Exists(logFile))
                     {
                         this.log.Clear();
-                        using (StreamReader logReader = new StreamReader(this.inactiveLogs[this.selectedLogFile]))
+                        using (StreamReader logReader = new StreamReader(logFile))
                         {
                             string logContent = logReader.ReadToEnd();
                             this.log.AppendLine(logContent);
                         }
-                    }
+                    } 
                     else
                     {
-                        this.log.AppendLine("Log file not found.");
+                        this.log.Clear();
+                        this.log.AppendLine("Sorry, The log file was not found.");
                     }
                 }
                 catch (Exception exc)
@@ -230,17 +233,17 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        private void LogInstanceManager_NewLogInstanceRegistered(object sender, EventArgs e)
+        private void LogInstanceManager_NewLogInstanceRegistered(object sender, LogFileEventArgs e)
         {
-            this.CollectLogFiles();
+            this.CollectLogFiles(e.FileName);
         }
         
         private void QueueService_QueueChanged(object sender, EventArgs e)
         {
-            this.CollectLogFiles();
+            this.CollectLogFiles(null);
         }
 
-        private void CollectLogFiles()
+        private void CollectLogFiles(string filename)
         {
             lock (readLockObject)
             {
@@ -248,10 +251,8 @@ namespace HandBrakeWPF.ViewModels
                 BindingList<string> logfiles = new BindingList<string>();
 
                 // Add Inactive Logs First.
-                inactiveLogs.Clear();
                 foreach (string logFile in this.queueService.GetLogFilePaths())
                 {
-                    this.inactiveLogs.Add(Path.GetFileName(logFile), logFile);
                     logfiles.Add(Path.GetFileName(logFile));
                 }
 
@@ -264,7 +265,15 @@ namespace HandBrakeWPF.ViewModels
                 this.LogFiles = logfiles;
                 this.NotifyOfPropertyChange(() => this.LogFiles);
 
-                this.SelectedLogFile = this.LogFiles.LastOrDefault(c => !c.Contains("activity_log_main"));
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    this.SelectedLogFile = this.LogFiles.FirstOrDefault(c => c.Equals(filename, StringComparison.InvariantCultureIgnoreCase));
+                }
+                else
+                {
+                    this.SelectedLogFile = this.LogFiles.LastOrDefault(c => !c.Contains("activity_log_main"));
+                }
+
                 if (this.SelectedLogFile == null)
                 {
                     this.SelectedLogFile = this.LogFiles.LastOrDefault();

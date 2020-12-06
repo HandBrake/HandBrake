@@ -20,11 +20,11 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Interop.Model.Preview;
-    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Factories;
     using HandBrakeWPF.Services.Scan.Interfaces;
@@ -32,17 +32,14 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Utilities;
 
     using ILog = Logging.Interfaces.ILog;
-    using LogService = Logging.LogService;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.EventArgs.ScanProgressEventArgs;
     using Title = Model.Title;
 
-    /// <summary>
-    /// Scan a Source
-    /// </summary>
     public class LibScan : IScan, IDisposable
     {
         private readonly ILog log = null;
         private readonly IUserSettingService userSettingService;
+        private readonly ILogInstanceManager logInstanceManager;
 
         private TitleFactory titleFactory = new TitleFactory();
         private string currentSourceScanPath;
@@ -50,14 +47,14 @@ namespace HandBrakeWPF.Services.Scan
         private Action<bool, Source> postScanOperation;
         private bool isCancelled = false;
 
-        public LibScan(ILog logService, IUserSettingService userSettingService)
+        public LibScan(ILog logService, IUserSettingService userSettingService, ILogInstanceManager logInstanceManager)
         {
             this.log = logService;
             this.userSettingService = userSettingService;
+            this.logInstanceManager = logInstanceManager;
             this.IsScanning = false;
         }
-
-
+        
         public event EventHandler ScanStarted;
 
         public event ScanCompletedStatus ScanCompleted;
@@ -95,6 +92,9 @@ namespace HandBrakeWPF.Services.Scan
             }
 
             this.isCancelled = false;
+
+            // Reset the log
+            this.logInstanceManager.ResetApplicationLog();
 
             // Handle the post scan operation.
             this.postScanOperation = postAction;
