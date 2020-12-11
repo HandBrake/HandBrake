@@ -31,6 +31,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowEAC3Pass = true;
             this.AudioAllowTrueHDPass = true;
             this.AudioAllowFlacPass = true;
+            this.AudioAllowMP2Pass = true;
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
 
@@ -50,6 +51,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowEAC3Pass = initialValue;
             this.AudioAllowTrueHDPass = initialValue;
             this.AudioAllowFlacPass = initialValue;
+            this.AudioAllowMP2Pass = initialValue;
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
 
@@ -71,6 +73,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowTrueHDPass = initialValue.AudioAllowTrueHDPass;
             this.AudioAllowFlacPass = initialValue.AudioAllowFlacPass;
             this.AudioEncoderFallback = initialValue.AudioEncoderFallback;
+            this.AudioAllowMP2Pass = initialValue.AudioAllowMP2Pass;
         }
 
         #endregion
@@ -118,6 +121,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         public bool AudioAllowEAC3Pass { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether AudioAllowMP2Pass.
+        /// </summary>
+        public bool AudioAllowMP2Pass { get; set; }
+
+        /// <summary>
         /// Gets or sets AudioEncoderFallback.
         /// </summary>
         public AudioEncoder AudioEncoderFallback { get; set; }
@@ -162,6 +170,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 {
                     audioEncoders.Add(AudioEncoder.EAc3Passthrough);
                 }
+                if (this.AudioAllowMP2Pass)
+                {
+                    audioEncoders.Add(AudioEncoder.Mp2Passthru);
+                }
 
                 return audioEncoders;
             }
@@ -180,6 +192,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowEAC3Pass = false;
             this.AudioAllowTrueHDPass = false;
             this.AudioAllowFlacPass = false;
+            this.AudioAllowMP2Pass = false;
         }
 
         #endregion

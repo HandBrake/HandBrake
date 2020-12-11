@@ -367,6 +367,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                         case AudioEncoder.FlacPassthru:
                             preset.Task.AllowedPassthruOptions.AudioAllowFlacPass = true;
                             break;
+                        case AudioEncoder.Mp2Passthru:
+                            preset.Task.AllowedPassthruOptions.AudioAllowMP2Pass = true;
+                            break;
                         case AudioEncoder.Mp3Passthru:
                             preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass = true;
                             break;

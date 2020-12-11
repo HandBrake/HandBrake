@@ -139,6 +139,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="10,10,0,0" Orientation="Vertical" Grid.Column="0">
+                    <CheckBox Margin="0,0,5,0" Content="MP2" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP2Pass}" />
                     <CheckBox Margin="0,0,5,0" Content="MP3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP3Pass}" />
                     <CheckBox Margin="0,0,5,0" Content="AAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAACPass}" />
                     <CheckBox Margin="0,0,5,0" Content="AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAC3Pass}" />

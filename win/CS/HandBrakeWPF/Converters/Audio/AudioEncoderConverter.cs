@@ -18,19 +18,13 @@ namespace HandBrakeWPF.Converters.Audio
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Utilities;
-
-    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
 
-    /// <summary>
-    /// Audio Encoder Converter
-    /// </summary>
     public class AudioEncoderConverter : IMultiValueConverter
     {
         /// <summary>
@@ -91,6 +85,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.AacPassthru);
                     encoders.Remove(AudioEncoder.Ac3Passthrough);
                     encoders.Remove(AudioEncoder.Mp3Passthru);
+                    encoders.Remove(AudioEncoder.Mp2Passthru);
                     encoders.Remove(AudioEncoder.Passthrough);
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
                     encoders.Remove(AudioEncoder.FlacPassthru);
@@ -111,6 +106,7 @@ namespace HandBrakeWPF.Converters.Audio
                     RemoveIfNotSupported(AudioEncoder.Mp3Passthru, sourceTrack, encoders);
                     RemoveIfNotSupported(AudioEncoder.TrueHDPassthrough, sourceTrack, encoders);
                     RemoveIfNotSupported(AudioEncoder.FlacPassthru, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.Mp2Passthru, sourceTrack, encoders);
                 }
 
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);

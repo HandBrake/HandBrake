@@ -72,6 +72,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [ShortName("copy:aac")]
         AacPassthru,
 
+        [DisplayName("MP2 Passthru")]
+        [ShortName("copy:mp2")]
+        Mp2Passthru,
+
         [DisplayName("MP3 Passthru")]
         [ShortName("copy:mp3")]
         Mp3Passthru,

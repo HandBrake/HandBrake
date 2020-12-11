@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Linq;
 
     using Caliburn.Micro;
@@ -29,12 +28,11 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-    using HandBrakeWPF.Views;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
+    using AudioTrack = Services.Encode.Model.Models.AudioTrack;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// The Audio View Model
@@ -294,6 +292,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return false;
                 }
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowMP2Pass != this.Task.AllowedPassthruOptions.AudioAllowMP2Pass)
+            {
+                return false;
             }
 
             if (preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass != this.Task.AllowedPassthruOptions.AudioAllowMP3Pass)
