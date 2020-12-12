@@ -174,3 +174,8 @@ Simon L (Nomis101)
 - Internationalization / UI translations lead
 - Build system and toolchains fixes and enhancements
 - Miscellaneous fixes and enhancements
+
+Artem Galin (agalin89)
+
+- Hardware acceleration and presets / Intel QSV
+- Miscellaneous fixes and enhancements
