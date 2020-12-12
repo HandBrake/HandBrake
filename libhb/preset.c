@@ -189,17 +189,14 @@ static int preset_hw_scrub(hb_value_t *preset)
         {
             if (vcodec & HB_VCODEC_QSV_MASK)
             {
+                disabled = 1;
+#if HB_PROJECT_FEATURE_QSV
                 if(hb_qsv_available())
                 {
-#if HB_PROJECT_FEATURE_QSV
                     // check the qsv codec is supported by hw
                     disabled = hb_qsv_video_encoder_is_enabled(vcodec) ? 0 : 1;
+                }
 #endif
-                }
-                else
-                {
-                    disabled = 1;
-                }
             }
             // TODO: other hw codecs for non Intel platforms
         }
