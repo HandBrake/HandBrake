@@ -29,8 +29,7 @@ jobs:
         git submodule update --init --recursive
         ./configure
         cd build
-        make ub
-        make pkg.create
+        make ub && make pkg.create
 
     - name: Upload Assets
       uses: actions/upload-artifact@v2
