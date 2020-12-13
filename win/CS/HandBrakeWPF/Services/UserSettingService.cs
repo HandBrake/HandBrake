@@ -218,12 +218,7 @@ namespace HandBrakeWPF.Services
                     this.Save();
                 }
 
-                // Legacy Settings forced Reset.
-                this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
-                if (!SystemInfo.IsWindows10())
-                {
-                    this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
-                }
+                this.ResetUnsupportedSettings();
             }
             catch (Exception exc)
             {
@@ -243,6 +238,18 @@ namespace HandBrakeWPF.Services
                 {
                     throw new GeneralApplicationException(string.Format(Resources.UserSettings_UnableToLoad, this.settingsFile), Resources.UserSettings_UnableToLoadSolution, exc);
                 }
+            }
+        }
+
+        private void ResetUnsupportedSettings()
+        {
+            // Legacy Settings forced Reset.
+            this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
+
+            if (!SystemInfo.IsWindows10() || SystemInfo.GetCpuCoreCount < 4)
+            {
+                this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
+                this.userSettings[UserSettingConstants.SimultaneousEncodes] = 1;
             }
         }
         
