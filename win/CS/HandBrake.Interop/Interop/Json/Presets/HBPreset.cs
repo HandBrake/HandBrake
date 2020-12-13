@@ -411,5 +411,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets a value indicating whether x 264 use advanced options.
         /// </summary>
         public bool x264UseAdvancedOptions { get; set; }
+
+        public bool PresetDisabled { get; set; }
     }
 }

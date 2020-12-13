@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Xps.Serialization;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Presets;
@@ -433,7 +434,7 @@ namespace HandBrakeWPF.Services.Presets
                     preset.IsBuildIn = true;
                     preset.Category = category.PresetName;
                     preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
-                    preset.IsPresetDisabled = this.IsPresetDisabled(preset);
+                    preset.IsPresetDisabled = this.IsPresetDisabled(preset) || hbpreset.PresetDisabled;
 
                     this.Add(preset, true);
                 }
@@ -826,37 +827,46 @@ namespace HandBrakeWPF.Services.Presets
 
         private bool IsPresetDisabled(Preset preset)
         {
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSync && !SystemInfo.IsQsvAvailable)
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265)
+            {
+                Console.Write("tets");
+            }
+
+            bool isQsvEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
+            bool isNvencEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
+            bool isVcnEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
+
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSync && (!SystemInfo.IsQsvAvailable || !isQsvEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 && !SystemInfo.IsQsvAvailableH265)
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 && (!SystemInfo.IsQsvAvailableH265 || !isQsvEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b && !SystemInfo.IsQsvAvailableH265)
+            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b && (!SystemInfo.IsQsvAvailableH265 || !isQsvEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.VceH264 && !SystemInfo.IsVceH264Available)
+            if (preset.Task.VideoEncoder == VideoEncoder.VceH264 && (!SystemInfo.IsVceH264Available || !isVcnEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.VceH265 && !SystemInfo.IsVceH265Available)
+            if (preset.Task.VideoEncoder == VideoEncoder.VceH265 && (!SystemInfo.IsVceH265Available || !isVcnEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.NvencH264 && !SystemInfo.IsNVEncH264Available)
+            if (preset.Task.VideoEncoder == VideoEncoder.NvencH264 && (!SystemInfo.IsNVEncH264Available || !isNvencEnabled))
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.NvencH265 && !SystemInfo.IsNVEncH265Available)
+            if (preset.Task.VideoEncoder == VideoEncoder.NvencH265 && (!SystemInfo.IsNVEncH265Available || !isNvencEnabled))
             {
                 return true;
             }

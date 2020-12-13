@@ -4401,6 +4401,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Not Available).
+        /// </summary>
+        public static string Preset_NotAvailable {
+            get {
+                return ResourceManager.GetString("Preset_NotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Official.
         /// </summary>
         public static string Preset_Official {

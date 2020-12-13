@@ -48,6 +48,8 @@ namespace HandBrakeWPF.Services.Presets.Model
             }
         }
 
+        public bool IsPresetDisabled => false;
+
         public bool IsSelected
         {
             get => this.isSelected;

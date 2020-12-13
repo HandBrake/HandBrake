@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Controls;
     using System.Windows.Data;
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
@@ -75,28 +76,40 @@ namespace HandBrakeWPF.Converters
         {
             if (groupedMenu.ContainsKey(preset.Category))
             {
-                MenuItem newMeuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset) };
-                if (preset.IsDefault)
+                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled };
+
+                if (preset.IsPresetDisabled)
                 {
-                    newMeuItem.FontStyle = FontStyles.Italic;
-                    newMeuItem.FontSize = 14;
+                    newMenuItem.Header = string.Format("{0} {1}", preset.Name, Resources.Preset_NotAvailable);
                 }
 
-                groupedMenu[preset.Category].Items.Add(newMeuItem);
+                if (preset.IsDefault)
+                {
+                    newMenuItem.FontStyle = FontStyles.Italic;
+                    newMenuItem.FontSize = 14;
+                }
+
+                groupedMenu[preset.Category].Items.Add(newMenuItem);
             }
             else
             {
                 MenuItem group = new MenuItem();
                 group.Header = preset.Category;
 
-                MenuItem newMeuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset) };
-                if (preset.IsDefault)
+                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled };
+
+                if (preset.IsPresetDisabled)
                 {
-                    newMeuItem.FontStyle = FontStyles.Italic;
-                    newMeuItem.FontSize = 14;
+                    newMenuItem.Header = string.Format("{0} {1}", preset.Name, Resources.Preset_NotAvailable);
                 }
 
-                group.Items.Add(newMeuItem);
+                if (preset.IsDefault)
+                {
+                    newMenuItem.FontStyle = FontStyles.Italic;
+                    newMenuItem.FontSize = 14;
+                }
+
+                group.Items.Add(newMenuItem);
                 groupedMenu[preset.Category] = group;
             }
         }
