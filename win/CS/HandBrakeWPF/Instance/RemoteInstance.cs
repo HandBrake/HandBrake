@@ -167,8 +167,9 @@ namespace HandBrakeWPF.Instance
                             workerProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
                             break;
                     }
-                    
-                    this.logService.LogMessage(string.Format("Remote Process started with Process ID: {0} and port: {1}", this.workerProcess.Id, port));
+
+                    int maxAllowed = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+                    this.logService.LogMessage(string.Format("Remote Process started with Process ID: {0} using port: {1}. Max Allowed Instances: {2}", this.workerProcess.Id, port, maxAllowed));
                 }
             }
             catch (Exception e)
