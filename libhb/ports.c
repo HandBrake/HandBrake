@@ -283,6 +283,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Airmont";
         case HB_CPU_PLATFORM_INTEL_KBL:
             return "Intel microarchitecture Kaby Lake";
+        case HB_CPU_PLATFORM_INTEL_CML:
+            return "Intel microarchitecture Comet Lake";
         case HB_CPU_PLATFORM_INTEL_ICL:
             return "Intel microarchitecture Ice Lake";
         case HB_CPU_PLATFORM_INTEL_TGL:
@@ -377,10 +379,16 @@ static void init_cpu_info()
                     case 0x9E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_KBL;
                         break;
+                    case 0xA5:
+                    case 0xA6:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_CML;
+                        break;
+                    case 0x7D:
                     case 0x7E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_ICL;
                         break;
                     case 0x8C:
+                    case 0x8D:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_TGL;
                         break;
                     default:
