@@ -130,6 +130,7 @@ int qsv_hardware_generation(int cpu_platform)
         case HB_CPU_PLATFORM_INTEL_SKL:
             return QSV_G5;
         case HB_CPU_PLATFORM_INTEL_KBL:
+        case HB_CPU_PLATFORM_INTEL_CML:
             return QSV_G6;
         case HB_CPU_PLATFORM_INTEL_ICL:
             return QSV_G7;
