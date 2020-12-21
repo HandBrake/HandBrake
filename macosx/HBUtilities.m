@@ -149,7 +149,7 @@ static BOOL hb_resolveBookmarks = YES;
             NSUInteger n = [[URL.path stringByAppendingString: @"/"]
                             completePathIntoString: &mpgname caseSensitive: YES
                             matchesIntoArray: nil
-                            filterTypes: @[@"mpg"]];
+                            filterTypes: @[@"mpg", @"ts"]];
             if (n > 0)
             {
                 // Found an mpeg inside the eyetv package, make it our scan path
