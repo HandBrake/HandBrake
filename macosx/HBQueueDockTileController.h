@@ -3,7 +3,7 @@
 //  HandBrake
 //
 //  Created by Damiano Galassi on 09/04/2020.
-//  Copyright © 2020 HandBrake. All rights reserved.
+//  Copyright © 2021 HandBrake. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

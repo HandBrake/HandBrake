@@ -2169,7 +2169,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>新しいバージョンのHandBrakeが利用できます！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>バッテリー残量低下:</value>

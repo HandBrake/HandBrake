@@ -3,7 +3,7 @@
 //  HandBrake
 //
 //  Created by Damiano Galassi on 04/10/20.
-//  Copyright © 2020 HandBrake. All rights reserved.
+//  Copyright © 2021 HandBrake. All rights reserved.
 //
 
 #import "HBPasteboardItem.h"

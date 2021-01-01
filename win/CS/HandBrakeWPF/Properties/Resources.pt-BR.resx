@@ -2171,7 +2171,7 @@ Onde suportado, quaisquer predefinições de usuário serão importadas.</value>
     <value>Uma nova versão do HandBrake está disponível!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Baixo nível de bateria:</value>

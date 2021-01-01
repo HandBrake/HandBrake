@@ -2164,7 +2164,7 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
     <value>有新版本的 HandBrake 可供使用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Low battery level:</value>

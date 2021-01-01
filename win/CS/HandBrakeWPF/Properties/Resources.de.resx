@@ -2173,7 +2173,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Eine neue Version von HandBrake ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003–2020 The HandBrake Team</value>
+    <value>Copyright (C) 2003–2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>

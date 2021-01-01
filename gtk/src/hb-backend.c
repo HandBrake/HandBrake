@@ -1,6 +1,6 @@
 /*
  * hb-backend.c
- * Copyright (C) John Stebbins 2008-2020 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2021 <stebbins@stebbins>
  *
  * hb-backend.c is free software.
  *

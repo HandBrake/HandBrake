@@ -1,6 +1,6 @@
 /*
  * appcast.h
- * Copyright (C) John Stebbins 2008-2020 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2021 <stebbins@stebbins>
  *
  * appcast.h is free software.
  *

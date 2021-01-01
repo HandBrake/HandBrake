@@ -2170,7 +2170,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>저전력 단계:</value>
