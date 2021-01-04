@@ -30,10 +30,18 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         {
             self.textField.textColor = [NSColor selectedControlTextColor];
         }
+        else if ([self.objectValue isSupported] == NO)
+        {
+            self.textField.textColor = [NSColor disabledControlTextColor];
+        }
         else
         {
             self.textField.textColor = [NSColor systemBlueColor];
         }
+    }
+    else if ([self.objectValue isSupported] == NO)
+    {
+        self.textField.textColor = [NSColor disabledControlTextColor];
     }
     else
     {
@@ -108,7 +116,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     if (context == HBPresetsViewControllerContext)
     {
         HBPreset *selectedNode = self.treeController.selectedObjects.firstObject;
-        if (selectedNode && selectedNode.isLeaf && selectedNode != self.selectedPresetInternal)
+        if (selectedNode && selectedNode.isLeaf && selectedNode.isSupported && selectedNode != self.selectedPresetInternal)
         {
             self.selectedPresetInternal = selectedNode;
             [self.delegate selectionDidChange];
@@ -304,7 +312,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)clicked:(id)sender
 {
-    if (self.delegate && [self.treeController.selectedObjects.firstObject isLeaf])
+    if (self.delegate && [self.treeController.selectedObjects.firstObject isLeaf] && [self.treeController.selectedObjects.firstObject isSupported])
     {
         [self.delegate selectionDidChange];
     }

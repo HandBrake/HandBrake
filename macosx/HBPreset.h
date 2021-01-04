@@ -65,6 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL isDefault;
 
 /**
+ *  Whether the preset is the supported. Presets using unsupported video encoder are disabled.
+ */
+@property (nonatomic) BOOL isSupported;
+
+/**
  *  Returns the value associated with a given key.
  *
  *  @param key The key for which to return the corresponding value.

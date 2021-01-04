@@ -342,6 +342,11 @@
     [self.delegate nodeDidChange:self];
 }
 
+- (BOOL)isSupported
+{
+    return [_content[@"PresetDisabled"] boolValue] == NO;
+}
+
 #pragma mark - Keys
 
 - (id)objectForKey:(NSString *)key
