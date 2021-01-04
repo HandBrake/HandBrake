@@ -370,6 +370,7 @@ void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
+int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);

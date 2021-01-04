@@ -245,6 +245,7 @@ typedef struct
 {
     hb_encoder_t  item;
     hb_encoder_t *next;
+    int deprecated;
     int enabled;
     int gid;
 } hb_encoder_internal_t;
@@ -253,31 +254,31 @@ hb_encoder_t *hb_video_encoders_last_item  = NULL;
 hb_encoder_internal_t hb_video_encoders[]  =
 {
     // legacy encoders, back to HB 0.9.4 whenever possible (disabled)
-    { { "FFmpeg",              "ffmpeg",     NULL,                      HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
-    { { "MPEG-4 (FFmpeg)",     "ffmpeg4",    NULL,                      HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG4,  },
-    { { "MPEG-2 (FFmpeg)",     "ffmpeg2",    NULL,                      HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_MPEG2,  },
-    { { "VP3 (Theora)",        "libtheora",  NULL,                      HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_VCODEC_THEORA, },
+    { { "FFmpeg",              "ffmpeg",     NULL,                      HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-4 (FFmpeg)",     "ffmpeg4",    NULL,                      HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-2 (FFmpeg)",     "ffmpeg2",    NULL,                      HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_VCODEC_MPEG2,  },
+    { { "VP3 (Theora)",        "libtheora",  NULL,                      HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, },      NULL, 1, 0, HB_GID_VCODEC_THEORA, },
     // actual encoders
-    { { "H.264 (x264)",        "x264",       "H.264 (libx264)",         HB_VCODEC_X264_8BIT,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_X264,   },
-    { { "H.264 10-bit (x264)", "x264_10bit", "H.264 10-bit (libx264)",  HB_VCODEC_X264_10BIT,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_X264,   },
-    { { "H.264 (Intel QSV)",   "qsv_h264",   "H.264 (Intel Media SDK)", HB_VCODEC_QSV_H264,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_QSV,   },
-    { { "H.264 (AMD VCE)",     "vce_h264",   "H.264 (AMD VCE)",      HB_VCODEC_FFMPEG_VCE_H264,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_VCE,   },
-    { { "H.264 (NVEnc)",       "nvenc_h264", "H.264 (NVEnc)",      HB_VCODEC_FFMPEG_NVENC_H264, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_NVENC,   },
-    { { "H.264 (VideoToolbox)","vt_h264",    "H.264 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H264,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H264_VT,   },
-    { { "H.265 (x265)",        "x265",       "H.265 (libx265)",         HB_VCODEC_X265_8BIT,         HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 1, HB_GID_VCODEC_H265_X265,   },
-    { { "H.265 10-bit (x265)", "x265_10bit", "H.265 10-bit (libx265)",  HB_VCODEC_X265_10BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 1, HB_GID_VCODEC_H265_X265,   },
-    { { "H.265 12-bit (x265)", "x265_12bit", "H.265 12-bit (libx265)",  HB_VCODEC_X265_12BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 1, HB_GID_VCODEC_H265_X265,   },
-    { { "H.265 16-bit (x265)", "x265_16bit", "H.265 16-bit (libx265)",  HB_VCODEC_X265_16BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   }, NULL, 1, HB_GID_VCODEC_H265_X265,   },
-    { { "H.265 (Intel QSV)",   "qsv_h265",   "H.265 (Intel Media SDK)", HB_VCODEC_QSV_H265,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265_QSV,   },
-    { { "H.265 10-bit (Intel QSV)","qsv_h265_10bit", "H.265 10-bit (Intel Media SDK)", HB_VCODEC_QSV_H265_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265_QSV,   },
-    { { "H.265 (AMD VCE)",     "vce_h265",   "H.265 (AMD VCE)",      HB_VCODEC_FFMPEG_VCE_H265,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265_VCE,   },
-    { { "H.265 (NVEnc)",       "nvenc_h265", "H.265 (NVEnc)",      HB_VCODEC_FFMPEG_NVENC_H265, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265_NVENC,   },
-    { { "H.265 (VideoToolbox)","vt_h265",    "H.265 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265_VT,   },
-    { { "MPEG-4",              "mpeg4",      "MPEG-4 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
-    { { "MPEG-2",              "mpeg2",      "MPEG-2 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
-    { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,       HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP8,    },
-    { { "VP9",                 "VP9",        "VP9 (libvpx)",            HB_VCODEC_FFMPEG_VP9,       HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP9,    },
-    { { "Theora",              "theora",     "Theora (libtheora)",      HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
+    { { "H.264 (x264)",        "x264",       "H.264 (libx264)",         HB_VCODEC_X264_8BIT,         HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
+    { { "H.264 10-bit (x264)", "x264_10bit", "H.264 10-bit (libx264)",  HB_VCODEC_X264_10BIT,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_X264,  },
+    { { "H.264 (Intel QSV)",   "qsv_h264",   "H.264 (Intel Media SDK)", HB_VCODEC_QSV_H264,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_QSV,   },
+    { { "H.264 (AMD VCE)",     "vce_h264",   "H.264 (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H264,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VCE,   },
+    { { "H.264 (NVEnc)",       "nvenc_h264", "H.264 (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H264, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_NVENC, },
+    { { "H.264 (VideoToolbox)","vt_h264",    "H.264 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H264,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VT,    },
+    { { "H.265 (x265)",        "x265",       "H.265 (libx265)",         HB_VCODEC_X265_8BIT,         HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
+    { { "H.265 10-bit (x265)", "x265_10bit", "H.265 10-bit (libx265)",  HB_VCODEC_X265_10BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
+    { { "H.265 12-bit (x265)", "x265_12bit", "H.265 12-bit (libx265)",  HB_VCODEC_X265_12BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
+    { { "H.265 16-bit (x265)", "x265_16bit", "H.265 16-bit (libx265)",  HB_VCODEC_X265_16BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
+    { { "H.265 (Intel QSV)",   "qsv_h265",   "H.265 (Intel Media SDK)", HB_VCODEC_QSV_H265,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV,   },
+    { { "H.265 10-bit (Intel QSV)","qsv_h265_10bit", "H.265 10-bit (Intel Media SDK)", HB_VCODEC_QSV_H265_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV, },
+    { { "H.265 (AMD VCE)",     "vce_h265",   "H.265 (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H265,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VCE,   },
+    { { "H.265 (NVEnc)",       "nvenc_h265", "H.265 (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H265, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_NVENC, },
+    { { "H.265 (VideoToolbox)","vt_h265",    "H.265 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VT,    },
+    { { "MPEG-4",              "mpeg4",      "MPEG-4 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_MPEG4,  },
+    { { "MPEG-2",              "mpeg2",      "MPEG-2 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_MPEG2,  },
+    { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,    },
+    { { "VP9",                 "VP9",        "VP9 (libvpx)",            HB_VCODEC_FFMPEG_VP9,        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP9,    },
+    { { "Theora",              "theora",     "Theora (libtheora)",      HB_VCODEC_THEORA,                             HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_THEORA, },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
 static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
@@ -1469,6 +1470,18 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
+int hb_video_encoder_is_supported(int encoder)
+{
+    const hb_encoder_t *video_encoder = NULL;
+    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
+    {
+        if (video_encoder->codec == encoder)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 int hb_video_encoder_get_depth(int encoder)
 {
@@ -2250,12 +2263,12 @@ const char* hb_video_encoder_get_name(int encoder)
     if (!(encoder & HB_VCODEC_MASK))
         goto fail;
 
-    const hb_encoder_t *video_encoder = NULL;
-    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
     {
-        if (video_encoder->codec == encoder)
+        if (hb_video_encoders[i].item.codec == encoder && hb_video_encoders[i].deprecated == 0)
         {
-            return video_encoder->name;
+            return hb_video_encoders[i].item.name;
         }
     }
 
@@ -2268,12 +2281,12 @@ const char* hb_video_encoder_get_short_name(int encoder)
     if (!(encoder & HB_VCODEC_MASK))
         goto fail;
 
-    const hb_encoder_t *video_encoder = NULL;
-    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
     {
-        if (video_encoder->codec == encoder)
+        if (hb_video_encoders[i].item.codec == encoder && hb_video_encoders[i].deprecated == 0)
         {
-            return video_encoder->short_name;
+            return hb_video_encoders[i].item.short_name;
         }
     }
 
@@ -2286,12 +2299,12 @@ const char* hb_video_encoder_get_long_name(int encoder)
     if (!(encoder & HB_VCODEC_MASK))
         goto fail;
 
-    const hb_encoder_t *video_encoder = NULL;
-    while ((video_encoder = hb_video_encoder_get_next(video_encoder)) != NULL)
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
     {
-        if (video_encoder->codec == encoder)
+        if (hb_video_encoders[i].item.codec == encoder && hb_video_encoders[i].deprecated == 0)
         {
-            return video_encoder->long_name;
+            return hb_video_encoders[i].item.long_name;
         }
     }
 
