@@ -2,9 +2,6 @@ name: macOS build
 
 on: [push, pull_request]
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
-
 jobs:
   build:
     name: Build on macOS
