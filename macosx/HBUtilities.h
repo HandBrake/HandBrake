@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSURL *)appSupportURL;
 
 /**
+ *  Returns the default destination URL
+ */
++ (nullable NSURL *)defaultDestinationURL;
+
+
+/**
  * Returns the url of the current version documentation.
  */
 @property (nonatomic, readonly, class) NSURL *documentationURL;

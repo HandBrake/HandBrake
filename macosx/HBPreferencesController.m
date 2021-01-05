@@ -5,6 +5,8 @@
 
 #import "HBPreferencesController.h"
 
+@import HandBrakeKit.HBUtilities;
+
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
 NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
 
@@ -77,8 +79,7 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
  */
 + (void)registerUserDefaults
 {
-    NSString *moviesDirectory = [NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject];
-    NSURL *moviesURL = [NSURL fileURLWithPath:moviesDirectory isDirectory:YES];
+    NSURL *moviesURL = HBUtilities.defaultDestinationURL;
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
