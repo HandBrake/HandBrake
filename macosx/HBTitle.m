@@ -497,7 +497,8 @@ fail:
                 {
                     title = @(chapter->title);
                 }
-                else
+
+                if (title == NULL)
                 {
                     title = [NSString stringWithFormat:HBKitLocalizedString(@"Chapter %d", "Title -> chapter name"), i + 1];
                 }
