@@ -2623,7 +2623,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Build in presets can not be modified..
+        ///   Looks up a localized string similar to Built in presets can not be modified..
         /// </summary>
         public static string ManagePresetView_RestrictedPreset {
             get {

@@ -700,7 +700,7 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
                     preset.Category = UserPresetCatgoryName;
-                    preset.IsBuildIn = hbPreset.Type == 1;
+                    preset.IsBuildIn = hbPreset.Type == 0;
                     preset.IsPresetDisabled = this.IsPresetDisabled(preset);
 
                     this.Add(preset, true);
