@@ -236,6 +236,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
@@ -243,7 +244,12 @@
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static Properties:Resources.AddPresetView_Name}" />
                         <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1">
                             <TextBlock HorizontalAlignment="Stretch" Text="{Binding SelectedPreset.Name, UpdateSourceTrigger=PropertyChanged}" TextTrimming="CharacterEllipsis" />
-                            <TextBlock HorizontalAlignment="Stretch" Text="{x:Static Properties:Resources.PresetManagerView_DefaultPreset}" FontWeight="Bold" Margin="15,0,0,0" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}}" />
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static Properties:Resources.AddPresetView_IsDefault}"  Margin="0,10,0,0"  />
+                        <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="1"  Margin="0,10,0,0" >
+                            <TextBlock HorizontalAlignment="Stretch" Text="{x:Static Properties:Resources.Yes}" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=False}" />
+                            <TextBlock HorizontalAlignment="Stretch" Text="{x:Static Properties:Resources.No}" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=True}" />
                         </StackPanel>
 
                         <!--  Description  -->

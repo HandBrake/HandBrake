@@ -158,6 +158,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Default:.
+        /// </summary>
+        public static string AddPresetView_IsDefault {
+            get {
+                return ResourceManager.GetString("AddPresetView_IsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name:.
         /// </summary>
         public static string AddPresetView_Name {
@@ -2749,6 +2758,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Additional Information.
         /// </summary>
         public static string NoAdditionalInformation {
@@ -4454,15 +4472,6 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_UnableToImport_Message {
             get {
                 return ResourceManager.GetString("Preset_UnableToImport_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (Default Preset).
-        /// </summary>
-        public static string PresetManagerView_DefaultPreset {
-            get {
-                return ResourceManager.GetString("PresetManagerView_DefaultPreset", resourceCulture);
             }
         }
         
@@ -6669,6 +6678,15 @@ namespace HandBrakeWPF.Properties {
         public static string WindowTitleStatus {
             get {
                 return ResourceManager.GetString("WindowTitleStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
