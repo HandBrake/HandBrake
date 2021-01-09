@@ -12,7 +12,9 @@ namespace HandBrakeWPF.Views
     using System;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Forms;
     using System.Windows.Input;
@@ -21,12 +23,14 @@ namespace HandBrakeWPF.Views
     using Caliburn.Micro;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
     using Execute = Caliburn.Micro.Execute;
+    using FlowDirection = System.Windows.FlowDirection;
 
     /// <summary>
     /// Interaction logic for ShellView.xaml
@@ -93,6 +97,23 @@ namespace HandBrakeWPF.Views
             if (this.TaskbarItemInfo == null)
             {
                 this.TaskbarItemInfo = Win7.WindowsTaskbar;
+            }
+
+            // Setup the UI Language
+            string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
+            if (!string.IsNullOrEmpty(culture))
+            {
+                InterfaceLanguage language = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
+                if (language != null)
+                {
+                    if (language.RightToLeft)
+                    {
+                        if (Application.Current.MainWindow != null)
+                        {
+                            Application.Current.MainWindow.FlowDirection = FlowDirection.RightToLeft;
+                        }
+                    }
+                }
             }
         }
 

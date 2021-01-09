@@ -11,18 +11,18 @@ namespace HandBrakeWPF.Model
 {
     public class InterfaceLanguage
     {
-        public InterfaceLanguage()
-        {
-        }
+  
 
-        public InterfaceLanguage(string culture, string name)
+        public InterfaceLanguage(string culture, string name, bool rtl = false)
         {
             this.Culture = culture;
             this.Name = name;
+            this.RightToLeft = rtl;
         }
 
         public string Culture { get; set; }
         public string Name { get; set; }
+        public bool RightToLeft { get; set; }
 
         protected bool Equals(InterfaceLanguage other)
         {
