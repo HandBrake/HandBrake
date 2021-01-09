@@ -74,9 +74,6 @@
                                     <DataTrigger Binding="{Binding IsDefault}" Value="False" >
                                         <Setter Property="FontStyle" Value="Normal" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
