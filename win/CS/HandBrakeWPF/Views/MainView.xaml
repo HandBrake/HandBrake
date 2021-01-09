@@ -103,6 +103,8 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
+                    <MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" cal:Message.Attach="[Event Click] = [Action OpenPresetWindow]" />
+                    <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
@@ -180,7 +182,7 @@
                         </StackPanel>
 
                         <Grid x:Name="dropdown" Background="Transparent" >
-                            <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
                         </Grid>
@@ -307,16 +309,23 @@
                     </StackPanel>
                 </Button>
 
-
-                <Button Name="PresetPane" AutomationProperties.Name="Show Preset Pane" cal:Message.Attach="[Event Click] = [Action OpenPresetWindow]">
+                <Button PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
-                               Height="32"
-                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}"/>
-                        <Label Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Content="{x:Static Properties:Resources.MainView_Presets}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
+                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_Presets}" />
+                        </StackPanel>
+
+                        <Grid x:Name="presetsDropdown" Background="Transparent" >
+                            <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource GlyphBrush}" x:Name="presetsDropdownArrow" />
+                        </Grid>
                     </StackPanel>
+
+                    <Button.ContextMenu>
+                        <ContextMenu ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}, ConverterParameter=true}" />
+                    </Button.ContextMenu>
                 </Button>
             </ToolBar>
         </StackPanel>

@@ -70,6 +70,7 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True" >
                                         <Setter Property="FontStyle" Value="Italic" />
+                                        <Setter Property="FontSize" Value="14" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="False" >
                                         <Setter Property="FontStyle" Value="Normal" />

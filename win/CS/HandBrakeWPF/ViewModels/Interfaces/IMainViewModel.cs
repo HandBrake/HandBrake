@@ -55,6 +55,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void AddAllToQueue();
         void AddSelectionToQueue();
 
+        void OpenPresetWindow();
+
         /// <summary>
         /// The launch help.
         /// </summary>
