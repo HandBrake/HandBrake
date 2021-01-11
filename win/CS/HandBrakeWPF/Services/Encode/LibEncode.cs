@@ -280,13 +280,13 @@ namespace HandBrakeWPF.Services.Encode
             string hbLog = this.ProcessLogs(this.currentTask.Destination);
             long filesize = this.GetFilesize(this.currentTask.Destination);
 
+            this.logInstanceManager.Deregister(Path.GetFileName(hbLog));
+
             // Raise the Encode Completed Event.
             this.InvokeEncodeCompleted(
                 e.Error != 0
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, e.Error.ToString(), this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize));
-
-            this.logInstanceManager.Deregister(Path.GetFileName(hbLog));
         }
 
         private long GetFilesize(string destination)
