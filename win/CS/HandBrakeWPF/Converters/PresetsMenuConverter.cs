@@ -90,7 +90,7 @@ namespace HandBrakeWPF.Converters
         {
             if (groupedMenu.ContainsKey(preset.Category))
             {
-                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled };
+                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled, ToolTip = preset.Description };
 
                 if (preset.IsPresetDisabled)
                 {
@@ -111,7 +111,7 @@ namespace HandBrakeWPF.Converters
                 MenuItem group = new MenuItem();
                 group.Header = preset.Category;
 
-                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled };
+                MenuItem newMenuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset), IsEnabled = !preset.IsPresetDisabled, ToolTip = preset.Description };
 
                 if (preset.IsPresetDisabled)
                 {

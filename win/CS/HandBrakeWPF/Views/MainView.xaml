@@ -46,6 +46,9 @@
             <Setter Property="MaxWidth" Value="500" />
         </Style>
 
+        <Style TargetType="MenuItem">
+            <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
+        </Style>
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
