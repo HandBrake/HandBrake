@@ -29,6 +29,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Microsoft.Win32;
 
+    using Action = System.Action;
+
     public class PresetManagerViewModel : ViewModelBase, IPresetManagerViewModel
     {
         private readonly IPresetService presetService;
@@ -39,6 +41,7 @@ namespace HandBrakeWPF.ViewModels
         private IPresetObject selectedPresetCategory;
         private Preset selectedPreset;
         private PictureSettingsResLimitModes selectedPictureSettingsResLimitMode;
+        private Action mainWindowCallback;
 
         public PresetManagerViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager)
         {
@@ -214,8 +217,9 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsCustomMaxRes { get; private set; }
 
-        public void SetupWindow()
+        public void SetupWindow(Action mainwindowCallback)
         {
+            this.mainWindowCallback = mainwindowCallback;
             this.PresetsCategories = this.presetService.Presets;
             this.NotifyOfPropertyChange(() => this.PresetsCategories);
             this.presetService.LoadCategoryStates();
@@ -416,7 +420,12 @@ namespace HandBrakeWPF.ViewModels
         {
             this.presetService.Save();
             this.IsOpen = false;
-            this.presetService.PresetCollectionChanged -= this.PresetService_PresetCollectionChanged; 
+            this.presetService.PresetCollectionChanged -= this.PresetService_PresetCollectionChanged;
+
+            if (this.mainWindowCallback != null)
+            {
+                mainWindowCallback();
+            }
         }
 
         public void SetCurrentPresetAsDefault()
