@@ -52,6 +52,7 @@ namespace HandBrakeWPF.ViewModels
         public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel)
         {
             this.StaticPreviewViewModel = staticPreviewViewModel;
+            this.StaticPreviewViewModel.SetPictureSettingsInstance(this);
             this.sourceResolution = new Size(0, 0);
             this.Task = new EncodeTask();
             this.PaddingFilter = new PadFilter(this.Task, () => this.OnTabStatusChanged(null));
@@ -260,6 +261,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
+                if (!ValidCropTB(value, this.CropTop))
+                {
+                    return; // Don't accept user input.
+                }
+
                 this.Task.Cropping.Bottom = value;
                 this.NotifyOfPropertyChange(() => this.CropBottom);
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
@@ -272,6 +278,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
+                if (!ValidCropLR(value, this.CropRight))
+                {
+                    return; // Don't accept user input.
+                }
+
                 this.Task.Cropping.Left = value;
                 this.NotifyOfPropertyChange(() => this.CropLeft);
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
@@ -284,6 +295,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
+                if (!ValidCropLR(value, this.CropLeft))
+                {
+                    return; // Don't accept user input.
+                }
+
                 this.Task.Cropping.Right = value;
                 this.NotifyOfPropertyChange(() => this.CropRight);
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
@@ -296,12 +312,21 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
+                if (!ValidCropTB(value, this.CropBottom))
+                {
+                    return; // Don't accept user input.
+                }
+
                 this.Task.Cropping.Top = value;
                 this.NotifyOfPropertyChange(() => this.CropTop);
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
+        public int MaxCropLR => currentTitle?.Resolution.Width - 8 ?? 0;
+        
+        public int MaxCropTB => currentTitle?.Resolution.Height - 8 ?? 0;
+        
         public bool IsCustomCrop
         {
             get => this.Task.HasCropping;
@@ -867,6 +892,28 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.Custom;
             }
+        }
+
+        private bool ValidCropTB(int value, int value2)
+        {
+            int totalCrop = value + value2;
+            if (totalCrop >= this.currentTitle.Resolution.Height)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidCropLR(int value, int value2)
+        {
+            int totalCrop = value + value2;
+            if (totalCrop >= this.currentTitle.Resolution.Width)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 

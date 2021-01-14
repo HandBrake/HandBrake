@@ -61,6 +61,8 @@ namespace HandBrakeWPF.ViewModels
         private bool useSystemDefaultPlayer;
         private bool previewRotateFlip;
 
+        private bool showPictureSettingControls;
+
         public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, ILog logService, ILogInstanceManager logInstanceManager, IPortService portService)
         {
             this.scanService = scanService;
@@ -82,14 +84,14 @@ namespace HandBrakeWPF.ViewModels
             this.CanPlay = true;
 
             this.useSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
+            this.showPictureSettingControls = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewShowPictureSettingsOverlay);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
             this.previewRotateFlip = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewRotationFlip);
             this.NotifyOfPropertyChange(() => this.previewRotateFlip); // Don't want to trigger an Update, so setting the backing variable. 
         }
         
-        /// <summary>
-        ///     Gets or sets the height.
-        /// </summary>
+        public IPictureSettingsViewModel PictureSettingsViewModel { get; private set; }
+
         public int Height
         {
             get
@@ -107,9 +109,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        ///     Gets or sets the preview image.
-        /// </summary>
         public BitmapSource PreviewImage
         {
             get
@@ -128,9 +127,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        ///     Gets or sets the selected preview image.
-        /// </summary>
         public int SelectedPreviewImage
         {
             get
@@ -168,19 +164,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        ///     Gets or sets the task.
-        /// </summary>
         public EncodeTask Task { get; set; }
 
-        /// <summary>
-        /// Gets or sets the scanned source.
-        /// </summary>
-        public Source ScannedSource { get; set; } 
+        public Source ScannedSource { get; set; }
 
-        /// <summary>
-        ///     Gets the total previews.
-        /// </summary>
         public int TotalPreviews
         {
             get
@@ -189,9 +176,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        ///     Gets or sets the width.
-        /// </summary>
         public int Width
         {
             get
@@ -209,9 +193,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether preview not available.
-        /// </summary>
         public bool PreviewNotAvailable
         {
             get
@@ -229,9 +210,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets AvailableDurations.
-        /// </summary>
         public IEnumerable<int> AvailableDurations
         {
             get
@@ -240,14 +218,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Duration.
-        /// </summary>
         public int Duration { get; set; }
 
-        /// <summary>
-        /// Gets or sets Percentage.
-        /// </summary>
         public string Percentage
         {
             get
@@ -262,9 +234,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets PercentageValue.
-        /// </summary>
         public double PercentageValue
         {
             get
@@ -279,9 +248,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets StartPoints.
-        /// </summary>
         public IEnumerable<int> StartPoints
         {
             get
@@ -298,9 +264,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether UseSystemDefaultPlayer.
-        /// </summary>
         public bool UseSystemDefaultPlayer
         {
             get
@@ -315,15 +278,13 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether IsEncoding.
-        /// </summary>
         public bool IsEncoding
         {
             get
             {
                 return this.isEncoding;
             }
+
             set
             {
                 this.isEncoding = value;
@@ -333,27 +294,23 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the Currently Playing / Encoding Filename.
-        /// </summary>
         public string CurrentlyPlaying { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether can play.
-        /// </summary>
         public bool CanPlay { get; set; }
 
         public bool IsOpen { get; set; }
 
-        /// <summary>
-        /// The update preview frame.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        /// <param name="scannedSource">
-        /// The scanned Source.
-        /// </param>
+        public bool ShowPictureSettingControls
+        {
+            get => this.showPictureSettingControls;
+            set
+            {
+                this.showPictureSettingControls = value;
+                this.NotifyOfPropertyChange(() => this.ShowPictureSettingControls);
+                this.userSettingService.SetUserSetting(UserSettingConstants.PreviewShowPictureSettingsOverlay, value);
+            }
+        }
+
         public void UpdatePreviewFrame(EncodeTask task, Source scannedSource)
         {
             this.Task = task;
@@ -384,9 +341,6 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreviewImage = this.SelectedPreviewImage - 1;
         }
 
-        /// <summary>
-        ///     The update preview frame.
-        /// </summary>
         [HandleProcessCorruptedStateExceptions]
         public void UpdatePreviewFrame()
         {
@@ -450,24 +404,20 @@ namespace HandBrakeWPF.ViewModels
             return height;
         }
 
-        /// <summary>
-        /// Close this window.
-        /// </summary>
         public void Close()
         {
             this.IsOpen = false;
         }
 
-        /// <summary>
-        /// Handle The Initialisation 
-        /// </summary>
+        public void SetPictureSettingsInstance(IPictureSettingsViewModel pictureSettingsViewModel)
+        {
+            this.PictureSettingsViewModel = pictureSettingsViewModel;
+        }
+
         public override void OnLoad()
         {
         }
 
-        /// <summary>
-        /// Encode and play a sample
-        /// </summary>
         public void Play()
         {
             try
@@ -563,10 +513,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
-        /// <summary>
-        /// Play the Encoded file
-        /// </summary>
         private void PlayFile()
         {
             // Launch VLC and Play video.
@@ -603,12 +549,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Create the Preview.
-        /// </summary>
-        /// <param name="state">
-        /// The state.
-        /// </param>
         private void CreatePreview(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
@@ -627,30 +567,12 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
 
-        /// <summary>
-        /// Handle Encode Progress Events
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The EncodeProgressEventArgs.
-        /// </param>
         private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             this.Percentage = string.Format("{0} %", Math.Round(e.PercentComplete, 2).ToString(CultureInfo.InvariantCulture));
             this.PercentageValue = e.PercentComplete;
         }
 
-        /// <summary>
-        /// Handle the Encode Completed Event
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The EncodeCompletedEventArgs.
-        /// </param>
         private void encodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.Percentage = "0.00%";

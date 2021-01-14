@@ -5694,6 +5694,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fine Tune Picture Settings.
+        /// </summary>
+        public static string StaticPreviewView_FineTuning {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_FineTuning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Live Preview.
         /// </summary>
         public static string StaticPreviewView_LivePreview {
@@ -5717,6 +5726,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreviewView_SelectPreviewImage {
             get {
                 return ResourceManager.GetString("StaticPreviewView_SelectPreviewImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show crop adjustment controls..
+        /// </summary>
+        public static string StaticPreviewView_ShowPictureSettingsAdjustment {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_ShowPictureSettingsAdjustment", resourceCulture);
             }
         }
         

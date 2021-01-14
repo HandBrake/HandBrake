@@ -156,6 +156,9 @@
     <Page Update="Themes\Controls\ToolbarDark.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Standalone\CropPanelView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 
 </Project>

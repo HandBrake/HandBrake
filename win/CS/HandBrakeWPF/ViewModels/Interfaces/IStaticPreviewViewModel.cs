@@ -13,32 +13,23 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 
     using HandBrakeWPF.Services.Scan.Model;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Static Preview View Model Interface
     /// </summary>
     public interface IStaticPreviewViewModel
     {
-        /// <summary>
-        /// The preview frame.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        /// <param name="scannedSource">
-        /// The scanned Source.
-        /// </param>
-        void UpdatePreviewFrame(EncodeTask task, Source scannedSource);
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is open.
-        /// </summary>
         bool IsOpen { get; set; }
 
         BitmapSource PreviewImage { get; }
 
+        void UpdatePreviewFrame(EncodeTask task, Source scannedSource);
+
         void PreviousPreview();
+
         void NextPreview();
+
+        void SetPictureSettingsInstance(IPictureSettingsViewModel pictureSettingsViewModel);
     }
 }

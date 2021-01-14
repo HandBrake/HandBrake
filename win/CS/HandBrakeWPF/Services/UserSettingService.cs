@@ -329,7 +329,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.DefaultPlayer, false);
 
             // Experimental
-            defaults.Add(UserSettingConstants.ProcessIsolationEnabled, SystemInfo.IsWindows10() ? true : false);
+            defaults.Add(UserSettingConstants.ProcessIsolationEnabled, SystemInfo.IsWindows10());
             defaults.Add(UserSettingConstants.ProcessIsolationPort, 8037);
             defaults.Add(UserSettingConstants.SimultaneousEncodes, 1);
 
@@ -337,7 +337,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ScalingMode, 0);
             defaults.Add(UserSettingConstants.ForcePresetReset, 3);
             defaults.Add(UserSettingConstants.MetadataPassthru, true);
-
+            defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
 
             return defaults;
         }

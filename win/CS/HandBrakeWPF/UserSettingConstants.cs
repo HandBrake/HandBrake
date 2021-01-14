@@ -78,5 +78,6 @@ namespace HandBrakeWPF
         public const string EnableQuickSyncLowPower = "EnableQuickSyncLowPower";
         public const string SimultaneousEncodes = "SimultaneousEncodes";
         public const string MetadataPassthru = "MetadataPassthru";
+        public const string PreviewShowPictureSettingsOverlay = "PreviewShowPictureSettingsOverlay";
     }
 }

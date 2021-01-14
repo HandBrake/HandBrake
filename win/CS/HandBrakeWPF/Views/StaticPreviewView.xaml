@@ -6,14 +6,19 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
+             xmlns:standalone="clr-namespace:HandBrakeWPF.Views.Standalone"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
              cal:Message.Attach="[Event Closing] = [Action Close]"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             MinHeight="550">
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+        <converters:BooleanConverter x:Key="boolConverter" />
+
     </Window.Resources>
     <Grid>
 
@@ -24,8 +29,14 @@
         <Image x:Name="previewImage" Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
 
 
+        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MinWidth="200" Background="Black" Opacity="0.8"
+                Visibility="{Binding ShowPictureSettingControls, Converter={StaticResource booleanToVisibilityConverter}}">
+
+            <standalone:CropPanelView DataContext="{Binding PictureSettingsViewModel}" />
+        </Border>
+
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
-                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="400" Background="Black" Opacity="0.70">
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="450" Background="Black" Opacity="0.8">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -40,7 +51,11 @@
                 HorizontalAlignment="Stretch"
                 Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
 
-                <CheckBox IsChecked="{Binding PreviewRotateFlip}" Content="{x:Static Properties:Resources.StaticPreviewView_PreviewRotationFlip}" Foreground="White" Grid.Row="1" Margin="0,0,0,10" />
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <CheckBox IsChecked="{Binding PreviewRotateFlip}" Content="{x:Static Properties:Resources.StaticPreviewView_PreviewRotationFlip}" Foreground="White" Margin="0,0,0,10" />
+                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Content="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" Margin="10,0,0,10" />
+
+                </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
                     <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
@@ -52,6 +67,7 @@
                       SelectedItem="{Binding Duration}" />
 
                     <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+
                 </StackPanel>
 
                 <Grid  Margin="0,10,10,0" Grid.Row="3" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">

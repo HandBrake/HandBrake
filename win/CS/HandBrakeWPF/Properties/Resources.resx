@@ -2396,4 +2396,10 @@ Fields are limited to:
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
 </root>
