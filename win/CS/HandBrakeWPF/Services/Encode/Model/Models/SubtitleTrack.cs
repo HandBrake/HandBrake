@@ -9,17 +9,12 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System;
-
     using Caliburn.Micro;
 
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
 
-    using Newtonsoft.Json;
-
-    [JsonObject(MemberSerialization.OptOut)]
     public class SubtitleTrack : PropertyChangedBase
     {
         #region Constants and Fields

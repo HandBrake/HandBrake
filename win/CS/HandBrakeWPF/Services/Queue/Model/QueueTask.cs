@@ -10,7 +10,7 @@
 namespace HandBrakeWPF.Services.Queue.Model
 {
     using System;
-    using System.Runtime.CompilerServices;
+    using System.Text.Json.Serialization;
 
     using Caliburn.Micro;
 
@@ -18,8 +18,6 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
-
-    using Newtonsoft.Json;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
@@ -61,19 +59,16 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.JobProgress = new QueueProgressStatus();
         }
 
-        [JsonProperty]
         public string TaskId { get; set; }
 
         [JsonIgnore]
         public string Id { get; }
 
-        [JsonProperty]
         public string ScannedSourcePath { get; set; }
 
         [JsonIgnore]
         public Guid? TaskToken { get; set; }
 
-        [JsonProperty]
         public QueueItemStatus Status
         {
             get
@@ -90,13 +85,10 @@ namespace HandBrakeWPF.Services.Queue.Model
             }
         }
 
-        [JsonProperty]
         public EncodeTask Task { get; set; }
 
-        [JsonProperty]
         public HBConfiguration Configuration { get; set; }
 
-        [JsonProperty]
         public QueueStats Statistics { get; set; }
 
         [JsonIgnore]

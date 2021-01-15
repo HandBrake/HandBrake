@@ -13,13 +13,13 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Text.Json.Serialization;
 
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
-    using Newtonsoft.Json;
     using Services.Encode.Model.Models;
     using Utilities;
 

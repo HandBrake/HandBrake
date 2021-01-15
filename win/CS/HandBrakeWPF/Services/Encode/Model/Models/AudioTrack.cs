@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Text.Json.Serialization;
 
     using Caliburn.Micro;
 
@@ -25,9 +26,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
-    using Newtonsoft.Json;
-
-    [JsonObject(MemberSerialization.OptOut)]
     public class AudioTrack : PropertyChangedBase
     {
         private int bitrate;

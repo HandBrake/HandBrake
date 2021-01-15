@@ -13,9 +13,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using Caliburn.Micro;
 
-    using Newtonsoft.Json;
-
-    [JsonObject(MemberSerialization.OptOut)]
     public class ChapterMarker : PropertyChangedBase
     {
         /// <summary>

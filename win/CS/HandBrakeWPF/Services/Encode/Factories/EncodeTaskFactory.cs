@@ -25,8 +25,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using Newtonsoft.Json.Linq;
-
     using AudioEncoder = Model.Models.AudioEncoder;
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
     using AudioTrack = Model.Models.AudioTrack;
@@ -210,7 +208,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return subtitle;
         }
 
-        private  Video CreateVideo(EncodeTask job, HBConfiguration configuration)
+        private Video CreateVideo(EncodeTask job, HBConfiguration configuration)
         {
             Video video = new Video();
 

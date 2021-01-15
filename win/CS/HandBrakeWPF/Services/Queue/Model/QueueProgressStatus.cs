@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.Services.Queue.Model
 {
     using System;
-    using System.Xaml;
 
     using Caliburn.Micro;
 

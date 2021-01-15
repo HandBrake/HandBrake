@@ -12,15 +12,17 @@ namespace HandBrakeWPF.Services.Queue
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using System.Timers;
     using System.Windows;
 
     using HandBrake.Interop.Interop.Json.Queue;
+    using HandBrake.Interop.Json;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
+    using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
@@ -35,11 +37,7 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Queue.JobEventArgs;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
-
-    using Newtonsoft.Json;
-
-    using Ookii.Dialogs.Wpf;
-
+    
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
     using GeneralApplicationException = Exceptions.GeneralApplicationException;
@@ -172,7 +170,8 @@ namespace HandBrakeWPF.Services.Queue
                 using (StreamWriter writer = new StreamWriter(tempPath))
                 {
                     List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
-                    string queueJson = JsonConvert.SerializeObject(tasks, Formatting.Indented);
+
+                    string queueJson = JsonSerializer.Serialize(tasks, JsonSettings.Options);
                     writer.Write(queueJson);
                 }
 
@@ -203,9 +202,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
 
-            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-
-            string json = JsonConvert.SerializeObject(jobs, Formatting.Indented, settings);
+            string json = JsonSerializer.Serialize(jobs, JsonSettings.Options);
 
             using (var strm = new StreamWriter(exportPath, false))
             {
@@ -225,7 +222,7 @@ namespace HandBrakeWPF.Services.Queue
                     return;
                 }
 
-                List<QueueTask> reloadedQueue = JsonConvert.DeserializeObject<List<QueueTask>>(fileContent);
+                List<QueueTask> reloadedQueue = JsonSerializer.Deserialize<List<QueueTask>>(fileContent);
 
                 if (reloadedQueue == null)
                 {
@@ -449,7 +446,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     try
                     {
-                        list = JsonConvert.DeserializeObject<List<QueueTask>>(queueJson);
+                        list = JsonSerializer.Deserialize<List<QueueTask>>(queueJson);
                     }
                     catch (Exception exc)
                     {
@@ -722,11 +719,6 @@ namespace HandBrakeWPF.Services.Queue
 
         private string GetQueueJson(List<EncodeTask> tasks, HBConfiguration configuration)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings
-                                              {
-                                                  NullValueHandling = NullValueHandling.Ignore,
-                                              };
-
             List<Task> queueJobs = new List<Task>();
             foreach (var item in tasks)
             {
@@ -734,7 +726,7 @@ namespace HandBrakeWPF.Services.Queue
                 queueJobs.Add(task);
             }
 
-            return JsonConvert.SerializeObject(queueJobs, Formatting.Indented, settings);
+            return JsonSerializer.Serialize(queueJobs, JsonSettings.Options);
         }
 
         private bool CheckDiskSpace(QueueTask job)

@@ -14,18 +14,18 @@ namespace HandBrakeWPF.Helpers
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using System.Text.RegularExpressions;
     using System.Windows;
 
+    using HandBrake.Interop.Json;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
-    using Newtonsoft.Json;
-
-    using IQueueService = HandBrakeWPF.Services.Queue.Interfaces.IQueueService;
+    using IQueueService = Services.Queue.Interfaces.IQueueService;
 
     public class QueueRecoveryHelper
     {
@@ -70,7 +70,7 @@ namespace HandBrakeWPF.Helpers
                     {
                         using (StreamReader stream = new StreamReader(file))
                         {
-                            List<QueueTask> list = list = JsonConvert.DeserializeObject<List<QueueTask>>(stream.ReadToEnd());
+                            List<QueueTask> list = list = JsonSerializer.Deserialize<List<QueueTask>>(stream.ReadToEnd(), JsonSettings.Options);
                             if (list != null && list.Count == 0)
                             {
                                 removeFiles.Add(file);
