@@ -307,7 +307,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         int value = [*ioValue intValue];
         int roundedValue = value - (value % self.modulus);
 
-        if (value >= self.maxWidth)
+        if (!self.allowUpscaling && value >= self.sourceWidth)
+        {
+            *ioValue = @(self.sourceWidth);
+        }
+        else if (value >= self.maxWidth)
         {
             *ioValue = @(self.maxWidth);
         }
@@ -330,6 +334,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     {
         [[self.undo prepareWithInvocationTarget:self] setHeight:_height];
     }
+
     _height = height;
     if (!self.isValidating)
     {
@@ -347,7 +352,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         int value = [*ioValue intValue];
         int roundedValue = value - (value % self.modulus);
 
-        if (value >= self.maxHeight)
+        if (!self.allowUpscaling && value >= self.sourceHeight)
+        {
+            *ioValue = @(self.sourceHeight);
+        }
+        else if (value >= self.maxHeight)
         {
             *ioValue = @(self.maxHeight);
         }
@@ -938,6 +947,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 {
     [coder encodeInt:2 forKey:@"HBPictureVersion"];
 
+    encodeInt(_sourceWidth);
+    encodeInt(_sourceHeight);
+    encodeInt(_sourceParNum);
+    encodeInt(_sourceParDen);
+
     encodeInt(_rotate);
     encodeBool(_flip);
 
@@ -975,16 +989,16 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     encodeInt(_paddingRight);
     encodeInteger(_paddingColorMode);
     encodeObject(_paddingColorCustom);
-
-    encodeInt(_sourceWidth);
-    encodeInt(_sourceHeight);
-    encodeInt(_sourceParNum);
-    encodeInt(_sourceParDen);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
+
+    decodeInt(_sourceWidth); if (_sourceWidth < 0) { goto fail; }
+    decodeInt(_sourceHeight); if (_sourceHeight < 0) { goto fail; }
+    decodeInt(_sourceParNum); if (_sourceParNum < 0) { goto fail; }
+    decodeInt(_sourceParDen); if (_sourceParDen < 0) { goto fail; }
 
     decodeInt(_rotate); if (_rotate != 0 && _rotate != 90 && _rotate != 180 && _rotate != 270) { goto fail; }
     decodeBool(_flip);
@@ -994,13 +1008,13 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     {
         goto fail;
     }
-    decodeInt(_maxWidth); if (_maxWidth < 0) { goto fail; }
-    decodeInt(_maxHeight); if (_maxHeight < 0) { goto fail; }
+    decodeInt(_maxWidth); if (_maxWidth < 0 || _maxWidth > HB_MAX_WIDTH) { goto fail; }
+    decodeInt(_maxHeight); if (_maxHeight < 0 || _maxHeight > HB_MAX_HEIGHT) { goto fail; }
     decodeBool(_allowUpscaling);
     decodeBool(_useMaximumSize);
 
-    decodeInt(_width); if (_width < 0) { goto fail; }
-    decodeInt(_height); if (_height < 0) { goto fail; }
+    decodeInt(_width); if (_width < 0 || _maxWidth > HB_MAX_WIDTH) { goto fail; }
+    decodeInt(_height); if (_height < 0 || _maxHeight > HB_MAX_HEIGHT) { goto fail; }
 
     decodeBool(_keepDisplayAspect);
     decodeInteger(_anamorphicMode);
@@ -1014,36 +1028,31 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     decodeInt(_parHeight); if (_parHeight < 0) { goto fail; }
 
     decodeBool(_autocrop);
-    decodeInt(_cropTop); if (_cropTop < 0) { goto fail; }
-    decodeInt(_cropBottom); if (_cropBottom < 0) { goto fail; }
-    decodeInt(_cropLeft); if (_cropLeft < 0) { goto fail; }
-    decodeInt(_cropRight); if (_cropRight < 0) { goto fail; }
+    decodeInt(_cropTop); if (_cropTop < 0 || _cropTop > _sourceHeight) { goto fail; }
+    decodeInt(_cropBottom); if (_cropBottom < 0 || _cropBottom > _sourceHeight) { goto fail; }
+    decodeInt(_cropLeft); if (_cropLeft < 0 || _cropLeft > _sourceWidth) { goto fail; }
+    decodeInt(_cropRight); if (_cropRight < 0 || _cropRight > _sourceWidth) { goto fail; }
 
-    decodeInt(_autoCropTop); if (_autoCropTop < 0) { goto fail; }
-    decodeInt(_autoCropBottom); if (_autoCropBottom < 0) { goto fail; }
-    decodeInt(_autoCropLeft); if (_autoCropLeft < 0) { goto fail; }
-    decodeInt(_autoCropRight); if (_autoCropRight < 0) { goto fail; }
+    decodeInt(_autoCropTop); if (_autoCropTop < 0 || _autoCropTop > _sourceHeight) { goto fail; }
+    decodeInt(_autoCropBottom); if (_autoCropBottom < 0 || _autoCropBottom > _sourceHeight) { goto fail; }
+    decodeInt(_autoCropLeft); if (_autoCropLeft < 0 || _autoCropLeft > _sourceWidth) { goto fail; }
+    decodeInt(_autoCropRight); if (_autoCropRight < 0 || _autoCropLeft > _sourceWidth) { goto fail; }
 
     decodeInteger(_paddingMode);
     if (_paddingMode < HBPicturePaddingModeNone || _paddingMode > HBPicturePaddingModeCustom)
     {
         goto fail;
     }
-    decodeInt(_paddingTop); if (_paddingTop < 0) { goto fail; }
-    decodeInt(_paddingBottom); if (_paddingBottom < 0) { goto fail; }
-    decodeInt(_paddingLeft); if (_paddingLeft < 0) { goto fail; }
-    decodeInt(_paddingRight); if (_paddingRight < 0) { goto fail; }
+    decodeInt(_paddingTop); if (_paddingTop < 0 || _paddingTop > HB_MAX_HEIGHT) { goto fail; }
+    decodeInt(_paddingBottom); if (_paddingBottom < 0 || _paddingBottom > HB_MAX_HEIGHT) { goto fail; }
+    decodeInt(_paddingLeft); if (_paddingLeft < 0 || _paddingLeft > HB_MAX_WIDTH) { goto fail; }
+    decodeInt(_paddingRight); if (_paddingRight < 0 || _paddingRight > HB_MAX_WIDTH) { goto fail; }
     decodeInteger(_paddingColorMode);
     if (_paddingColorMode < HBPicturePaddingColorModeBlack || _paddingColorMode > HBPicturePaddingColorModeCustom)
     {
         goto fail;
     }
     decodeObject(_paddingColorCustom, NSString);
-
-    decodeInt(_sourceWidth); if (_sourceWidth < 0) { goto fail; }
-    decodeInt(_sourceHeight); if (_sourceHeight < 0) { goto fail; }
-    decodeInt(_sourceParNum); if (_sourceParNum < 0) { goto fail; }
-    decodeInt(_sourceParDen); if (_sourceParDen < 0) { goto fail; }
 
     _notificationsEnabled = YES;
 
