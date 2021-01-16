@@ -214,36 +214,36 @@
 
         switch (self.picSettingsPopUp.selectedTag) {
             case HBPictureResolutionLimitModeNone:
-                newPreset[@"PictureWidth"] = @(0);
-                newPreset[@"PictureHeight"] = @(0);
+                newPreset[@"PictureWidth"] = @0;
+                newPreset[@"PictureHeight"] = @0;
                 break;
             case HBPictureResolutionLimitMode8K:
-                newPreset[@"PictureWidth"] = @(7680);
-                newPreset[@"PictureHeight"] = @(4320);
+                newPreset[@"PictureWidth"] = @7680;
+                newPreset[@"PictureHeight"] = @4320;
                 break;
             case HBPictureResolutionLimitMode4K:
-                newPreset[@"PictureWidth"] = @(3840);
-                newPreset[@"PictureHeight"] = @(2160);
+                newPreset[@"PictureWidth"] = @3840;
+                newPreset[@"PictureHeight"] = @2160;
                 break;
             case HBPictureResolutionLimitMode1440p:
-                newPreset[@"PictureWidth"] = @(2560);
-                newPreset[@"PictureHeight"] = @(1440);
+                newPreset[@"PictureWidth"] = @2560;
+                newPreset[@"PictureHeight"] = @1440;
                 break;
             case HBPictureResolutionLimitMode1080p:
-                newPreset[@"PictureWidth"] = @(1920);
-                newPreset[@"PictureHeight"] = @(1080);
+                newPreset[@"PictureWidth"] = @1920;
+                newPreset[@"PictureHeight"] = @1080;
                 break;
             case HBPictureResolutionLimitMode720p:
-                newPreset[@"PictureWidth"] = @(1280);
-                newPreset[@"PictureHeight"] = @(720);
+                newPreset[@"PictureWidth"] = @1280;
+                newPreset[@"PictureHeight"] = @720;
                 break;
             case HBPictureResolutionLimitMode576p:
-                newPreset[@"PictureWidth"] = @(720);
-                newPreset[@"PictureHeight"] = @(576);
+                newPreset[@"PictureWidth"] = @720;
+                newPreset[@"PictureHeight"] = @576;
                 break;
             case HBPictureResolutionLimitMode480p:
-                newPreset[@"PictureWidth"] = @(720);
-                newPreset[@"PictureHeight"] = @(480);
+                newPreset[@"PictureWidth"] = @720;
+                newPreset[@"PictureHeight"] = @480;
                 break;
             case HBPictureResolutionLimitModeCustom:
             default:

@@ -412,7 +412,7 @@
         [CATransaction begin];
         CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         fadeInAnimation.fromValue = @([hud.layer.presentationLayer opacity]);
-        fadeInAnimation.toValue = @(1.0);
+        fadeInAnimation.toValue = @1.0;
         fadeInAnimation.beginTime = 0.0;
         fadeInAnimation.duration = ANIMATION_DUR;
 
@@ -430,7 +430,7 @@
         [CATransaction begin];
         CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         fadeOutAnimation.fromValue = @([hud.layer.presentationLayer opacity]);
-        fadeOutAnimation.toValue = @(0.0);
+        fadeOutAnimation.toValue = @0.0;
         fadeOutAnimation.beginTime = 0.0;
         fadeOutAnimation.duration = ANIMATION_DUR;
 
