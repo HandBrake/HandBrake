@@ -1535,6 +1535,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         self.selectedPreset = preset;
         fPresetsView.selectedPreset = preset;
 
+        [presetManager savePresets];
         [self.window.undoManager removeAllActions];
     }
 }
