@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -108,7 +108,7 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
-                        <rect key="frame" x="18" y="543" width="34" height="14"/>
+                        <rect key="frame" x="18" y="543" width="33" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Title:" id="4907">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -449,7 +449,7 @@ IA
                         </connections>
                     </popUpButton>
                     <popUpButton horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="1541">
-                        <rect key="frame" x="54" y="537" width="311" height="22"/>
+                        <rect key="frame" x="53" y="537" width="312" height="22"/>
                         <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
@@ -739,41 +739,69 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <action selector="togglePauseResume:" target="-2" id="AN1-8V-lc1"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="3B6A53EE-F973-41A7-A0DF-AEBD73DAC28E" label="Add To Queue" paletteLabel="Add To Queue" toolTip="Add To Queue" tag="-1" image="addqueue" sizingBehavior="auto" id="DZZ-Fe-wjw">
-                        <connections>
-                            <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="A5F62853-5047-43C2-AD64-73654B0E34B2" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" toolTip="Add Titles To Queue" image="addtitlestoqueue" sizingBehavior="auto" id="38K-hd-P5J">
-                        <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
-                            <rect key="frame" x="29" y="14" width="56" height="35"/>
+                    <toolbarItem implicitItemIdentifier="E1B0B8C6-5C5C-460A-B432-3AB62BC9AB73" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" sizingBehavior="auto" id="Qoa-tj-Rj2">
+                        <nil key="toolTip"/>
+                        <box key="view" misplaced="YES" boxType="custom" borderType="none" cornerRadius="4" title="Box" titlePosition="noTitle" id="zcd-K2-F7w">
+                            <rect key="frame" x="41" y="14" width="0.0" height="0.0"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addtitlestoqueue" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="BAK-n3-eIN">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu"/>
-                                <menu key="menu" id="QCi-1O-Msg">
-                                    <items>
-                                        <menuItem state="on" image="addtitlestoqueue" hidden="YES" id="MCy-je-2nL"/>
-                                        <menuItem title="Add Title To Queue" id="L8z-c6-E1u">
-                                            <connections>
-                                                <action selector="addToQueue:" target="-2" id="0SF-Rk-zUS"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="skM-c5-4GF"/>
-                                        <menuItem title="Add Titles To Queue…" id="046-kc-MnL">
-                                            <connections>
-                                                <action selector="addTitlesToQueue:" target="-2" id="xaX-YI-n9f"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Add All Titles To Queue" id="INL-y9-Gwp">
-                                            <connections>
-                                                <action selector="addAllTitlesToQueue:" target="-2" id="su3-wU-Lps"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </popUpButtonCell>
-                        </popUpButton>
+                            <view key="contentView" id="NhD-WW-G5l">
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <button toolTip="Add To Queue" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3xl-Xh-n9j">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="addqueue" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="yzg-VQ-SnB">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="addToQueue:" target="-2" id="wLI-1P-AYf"/>
+                                            <binding destination="-2" name="enabled" keyPath="self.job" id="tDb-Oc-lDY">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </button>
+                                    <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="kRL-I4-HJp">
+                                        <rect key="frame" x="33" y="6" width="5" height="22"/>
+                                    </box>
+                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="gwb-YP-xyr">
+                                        <rect key="frame" x="32" y="7" width="20" height="20"/>
+                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="g0i-2U-hqb">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="0Xl-pO-QOe">
+                                                <items>
+                                                    <menuItem state="on" hidden="YES" id="JOe-MY-c1i"/>
+                                                    <menuItem title="Add Titles To Queue…" id="iVg-1G-9ym">
+                                                        <connections>
+                                                            <action selector="addTitlesToQueue:" target="-2" id="0po-as-L9y"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Add All Titles To Queue" id="a37-Yd-bYR">
+                                                        <connections>
+                                                            <action selector="addAllTitlesToQueue:" target="-2" id="mL6-rG-Pkm"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" constant="4" id="FO4-89-5ce"/>
+                                    <constraint firstItem="gwb-YP-xyr" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" constant="5" id="LBD-Qe-eLI"/>
+                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="centerY" secondItem="gwb-YP-xyr" secondAttribute="centerY" id="PxS-5j-xiL"/>
+                                    <constraint firstAttribute="trailing" secondItem="gwb-YP-xyr" secondAttribute="trailing" id="R7W-Eg-nl2"/>
+                                    <constraint firstAttribute="bottom" secondItem="gwb-YP-xyr" secondAttribute="bottom" constant="7" id="RZN-uF-6Cx"/>
+                                    <constraint firstAttribute="bottom" secondItem="3xl-Xh-n9j" secondAttribute="bottom" id="RjM-ni-SFx"/>
+                                    <constraint firstItem="kRL-I4-HJp" firstAttribute="leading" secondItem="3xl-Xh-n9j" secondAttribute="trailing" constant="3" id="dw2-v1-fKy"/>
+                                    <constraint firstItem="gwb-YP-xyr" firstAttribute="leading" secondItem="kRL-I4-HJp" secondAttribute="trailing" constant="1" id="fib-zk-9gL"/>
+                                    <constraint firstItem="3xl-Xh-n9j" firstAttribute="top" secondItem="NhD-WW-G5l" secondAttribute="top" id="kub-fW-5rb"/>
+                                    <constraint firstItem="3xl-Xh-n9j" firstAttribute="leading" secondItem="NhD-WW-G5l" secondAttribute="leading" id="sJy-TP-ETa"/>
+                                </constraints>
+                            </view>
+                        </box>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="29BB9965-48E8-4B07-97B2-3C3706F3D150" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" sizingBehavior="auto" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
                         <connections>
@@ -807,8 +835,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
+                    <toolbarItem reference="Qoa-tj-Rj2"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
-                    <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="byg-kj-sEM"/>
                     <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
@@ -821,7 +849,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="2173" y="-798"/>
+            <point key="canvasLocation" x="2346" y="-994"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
@@ -890,7 +918,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
     <resources>
         <image name="activity" width="32" height="32"/>
         <image name="addqueue" width="32" height="32"/>
-        <image name="addtitlestoqueue" width="32" height="31"/>
         <image name="encode" width="32" height="32"/>
         <image name="pauseencode" width="32" height="32"/>
         <image name="presets" width="32" height="32"/>
