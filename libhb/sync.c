@@ -1491,8 +1491,7 @@ static int OutputBuffer( sync_common_t * common )
                     out_stream->frame_count = 0;
                 }
             }
-            else if (common->wait_for_pts &&
-                     out_stream->type != SYNC_TYPE_SUBTITLE)
+            else if (common->wait_for_pts)
             {
                 if (buf->s.start >= common->pts_to_start)
                 {
