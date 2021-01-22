@@ -1832,7 +1832,7 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
         }
         param->videoParam->mfx.CodecProfile = profile->value;
     }
-    /* HEVC 10 bits defautls to Main 10 */
+    /* HEVC 10 bits defaults to Main 10 */
     else if (((profile_key != NULL && !strcasecmp(profile_key, "auto")) || profile_key == NULL) &&
               codec == HB_VCODEC_QSV_H265_10BIT &&
               param->videoParam->mfx.CodecId == MFX_CODEC_HEVC &&

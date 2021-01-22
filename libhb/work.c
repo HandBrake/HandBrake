@@ -2054,7 +2054,7 @@ void hb_work_loop( void * _w )
  * Loops calling work function for associated filter object.
  * Sleeps when fifo is full.
  * Monitors work done indicator.
- * Exits loop when work indiactor is set.
+ * Exits loop when work indicator is set.
  * @param _w Handle to work object.
  */
 static void filter_loop( void * _f )

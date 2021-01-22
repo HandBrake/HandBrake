@@ -699,7 +699,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void OnQueueJobStatusChanged()
         {
-            // TODO add support for delayed notificaitons here to avoid overloading the UI when we run multiple encodes. 
+            // TODO add support for delayed notifications here to avoid overloading the UI when we run multiple encodes. 
             this.QueueJobStatusChanged?.Invoke(this, EventArgs.Empty);
         }
 

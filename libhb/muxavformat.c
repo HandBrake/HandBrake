@@ -666,7 +666,7 @@ static int avformatInit( hb_mux_object_t * m )
                     ret = av_bsf_alloc(bsf, &ctx);
                     if (ret < 0)
                     {
-                        hb_error("AAC bistream filter: alloc failure");
+                        hb_error("AAC bitstream filter: alloc failure");
                         goto error;
                     }
                     ctx->time_base_in.num = 1;
@@ -690,7 +690,7 @@ static int avformatInit( hb_mux_object_t * m )
             ret = av_bsf_init(track->bitstream_context);
             if (ret < 0)
             {
-                hb_error("bistream filter: init failure");
+                hb_error("bitstream filter: init failure");
                 goto error;
             }
         }

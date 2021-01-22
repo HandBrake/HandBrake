@@ -44,7 +44,7 @@ int lang_to_code(const iso639_lang_t *lang);
 iso639_lang_t * lang_for_english( const char * english );
 
 /*
- * Get fake iso639 cooresponding to "Any"
+ * Get fake iso639 corresponding to "Any"
  * "Any" is used when a match for any language is desired.
  *
  * Calling lang_get_next() with pointer returned by lang_get_any()

@@ -589,7 +589,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 return null; // Null will allow Libhb to find and passthru any metadata it supports.
             }
 
-            return new Metadata(); // Empty Metatdata will not pass through to the destination.  
+            return new Metadata(); // Empty Metadata will not pass through to the destination.  
         }
     }
 }

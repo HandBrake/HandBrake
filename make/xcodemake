@@ -223,6 +223,6 @@ if [ "$EXTERNAL_DRIVER" == "terminal" -a ! -e "$SYMROOT/external" ]; then
 fi
 
 ## pull the trigger
-## must set XCODE.driver to prevent inifinite recursion
+## must set XCODE.driver to prevent infinite recursion
 set -x
 exec make -C "$EXTERNAL_BUILD" XCODE.driver=xcodemake $jobs $goals $EXTERNAL_VARS

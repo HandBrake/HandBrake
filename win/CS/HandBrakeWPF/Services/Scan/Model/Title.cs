@@ -191,7 +191,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         #endregion
 
         /// <summary>
-        /// Calcuate the Duration
+        /// Calculate the Duration
         /// </summary>
         /// <param name="startPoint">The Start Point (Chapters)</param>
         /// <param name="endPoint">The End Point (Chapters)</param>

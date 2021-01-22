@@ -893,7 +893,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 
         // compare results
         /*  The final cc score for a plane is the percentage of combed pixels it contains.
-            Because sensitivity goes down to hundreths of a percent, multiply by 1000
+            Because sensitivity goes down to hundredths of a percent, multiply by 1000
             so it will be easy to compare against the threshold value which is an integer. */
         cc[k] = (int)( ( cc_1 + cc_2 ) * 1000.0 / ( width * height ) );
     }

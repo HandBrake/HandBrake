@@ -351,7 +351,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     param->sourceHeight   = job->height;
 
     /*
-     * Let x265 determnine whether to use an aspect ratio
+     * Let x265 determine whether to use an aspect ratio
      * index vs. the extended SAR index + SAR width/height.
      */
     char sar[22];

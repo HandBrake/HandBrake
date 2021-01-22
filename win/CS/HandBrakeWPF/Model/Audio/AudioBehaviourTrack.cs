@@ -583,7 +583,7 @@ namespace HandBrakeWPF.Model.Audio
         }
 
         /// <summary>
-        /// Restrict the available mixdowns to those that the enocder actually supports.
+        /// Restrict the available mixdowns to those that the encoder actually supports.
         /// </summary>
         private void SetupMixdowns()
         {
