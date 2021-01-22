@@ -209,7 +209,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         // Currently, samplerate conversion is performed in sync.c
         // So set output samplerate to input samplerate
         // This should someday get reworked to be part of an audio
-        // filter pipleine.
+        // filter pipeline.
         pv->resample =
             hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
                                    w->audio->config.in.samplerate,

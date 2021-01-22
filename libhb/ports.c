@@ -658,7 +658,7 @@ char * hb_get_temporary_directory()
 }
 
 /************************************************************************
- * Get a tempory filename for HB
+ * Get a temporary filename for HB
  ***********************************************************************/
 char * hb_get_temporary_filename( char *fmt, ... )
 {

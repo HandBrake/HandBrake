@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   This is a service worker for the HandBrake app. It allows us to run encodes / scans in a seperate process easily.
+//   This is a service worker for the HandBrake app. It allows us to run encodes / scans in a separate process easily.
 //   All API's expose the ApplicationServices models as JSON.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------

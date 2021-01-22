@@ -20,7 +20,7 @@ While we wish to welcome contributions from people, we need to have some ground 
 
 ## Requesting a Language
 
-HandBrake is managed by a very small team of contributors and as such, we do not have the resources to support translations for every language that may be requested and keep all the user interfaces in sync. As such, we welcome anyone who is willing to help by submitting pull reuqests to keep the user interface language files in sync with the translations available on [Transifex](https://www.transifex.com/HandBrakeProject/public/).
+HandBrake is managed by a very small team of contributors and as such, we do not have the resources to support translations for every language that may be requested and keep all the user interfaces in sync. As such, we welcome anyone who is willing to help by submitting pull requests to keep the user interface language files in sync with the translations available on [Transifex](https://www.transifex.com/HandBrakeProject/public/).
 
 Languages that fall out of date or lack sufficient maintainers may be removed from the UI until such time they are in a suitable state.
 
