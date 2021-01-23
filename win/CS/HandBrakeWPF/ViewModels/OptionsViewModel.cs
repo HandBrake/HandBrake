@@ -102,7 +102,7 @@ namespace HandBrakeWPF.ViewModels
         private string prePostFilenameText;
         private bool showPrePostFilenameBox;
         private bool whenDonePerformActionImmediately;
-        private bool useDarkTheme;
+        private DarkThemeMode darkThemeMode;
         private bool alwaysUseDefaultPath;
         private bool pauseOnLowBattery;
         private int lowBatteryLevel;
@@ -344,14 +344,16 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool UseDarkTheme
+        public BindingList<DarkThemeMode> DarkThemeModes { get; } = new BindingList<DarkThemeMode>(EnumHelper<DarkThemeMode>.GetEnumList().ToList());
+
+        public DarkThemeMode DarkThemeMode
         {
-            get => this.useDarkTheme;
+            get => this.darkThemeMode;
             set
             {
-                if (value == this.useDarkTheme) return;
-                this.useDarkTheme = value;
-                this.NotifyOfPropertyChange(() => this.UseDarkTheme);
+                if (value == this.darkThemeMode) return;
+                this.darkThemeMode = value;
+                this.NotifyOfPropertyChange(() => this.DarkThemeMode);
             }
         }
 
@@ -1104,7 +1106,7 @@ namespace HandBrakeWPF.ViewModels
             this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
-            this.UseDarkTheme = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseDarkTheme);
+            this.DarkThemeMode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
 
             // #############################
             // When Done
@@ -1304,7 +1306,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
-            this.userSettingService.SetUserSetting(UserSettingConstants.UseDarkTheme, this.UseDarkTheme);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DarkThemeMode, this.DarkThemeMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);

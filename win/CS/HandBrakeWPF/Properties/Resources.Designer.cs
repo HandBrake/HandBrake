@@ -853,6 +853,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Dark.
+        /// </summary>
+        public static string DarkTheme_dark {
+            get {
+                return ResourceManager.GetString("DarkTheme_dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Light.
+        /// </summary>
+        public static string DarkTheme_light {
+            get {
+                return ResourceManager.GetString("DarkTheme_light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match System.
+        /// </summary>
+        public static string DarkTheme_system {
+            get {
+                return ResourceManager.GetString("DarkTheme_system", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Folder?.
         /// </summary>
         public static string DirectoryUtils_CreateFolder {
@@ -3529,6 +3556,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Theme:.
+        /// </summary>
+        public static string OptionsView_DarkThemeMode {
+            get {
+                return ResourceManager.GetString("OptionsView_DarkThemeMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloading....
         /// </summary>
         public static string OptionsView_Downloading {
@@ -3753,6 +3789,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_RemotePortLimit {
             get {
                 return ResourceManager.GetString("OptionsView_RemotePortLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Requires Restart).
+        /// </summary>
+        public static string OptionsView_RequiresRestart {
+            get {
+                return ResourceManager.GetString("OptionsView_RequiresRestart", resourceCulture);
             }
         }
         

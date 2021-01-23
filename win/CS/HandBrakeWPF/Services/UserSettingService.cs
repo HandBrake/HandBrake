@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Services
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Extensions;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -269,7 +270,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.UpdateStatus, true);
             defaults.Add(UserSettingConstants.LastUpdateCheckDate, DateTime.Now.Date.AddDays(-30));
             defaults.Add(UserSettingConstants.DaysBetweenUpdateCheck, 1);
-            defaults.Add(UserSettingConstants.UseDarkTheme, false);
+            defaults.Add(UserSettingConstants.DarkThemeMode, DarkThemeMode.Light);
             defaults.Add(UserSettingConstants.ShowPreviewOnSummaryTab, true);
             defaults.Add(UserSettingConstants.MainWindowMinimize, false);
             defaults.Add(UserSettingConstants.ClearCompletedFromQueue, false);

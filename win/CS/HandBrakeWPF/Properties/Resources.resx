@@ -2402,4 +2402,19 @@ Fields are limited to:
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
     <value>Show crop adjustment controls.</value>
   </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Use Dark</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Use Light</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Match System</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Requires Restart)</value>
+  </data>
 </root>

@@ -41,6 +41,7 @@
         <Options:ProcessPriorityConverter x:Key="ProcessPriorityConverter" />
         <Options:Mp4BehaviourConverter x:Key="Mp4BehaviourConverter" />
         <Options:UpdateCheckConverter x:Key="UpdateCheckConverter" />
+        <Options:ThemeSettingConverter x:Key="ThemeSettingConverter" />
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
@@ -137,8 +138,14 @@
                             <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding InterfaceLanguages}" SelectedItem="{Binding SelectedLanguage}" Margin="5,0,0,0" HorizontalAlignment="Left" Width="245" />
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_DarkThemeMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding DarkThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
+                                      IsEnabled="{Binding IsWindows10}" Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_RequiresRestart}" Margin="5,0,0,0" />
+                        </StackPanel>
+
                         <StackPanel Orientation="Vertical" Margin="20,5,0,0">
-                            <CheckBox Content="{x:Static Properties:Resources.Options_DarkTheme}" IsEnabled="{Binding IsWindows10}" IsChecked="{Binding UseDarkTheme}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />

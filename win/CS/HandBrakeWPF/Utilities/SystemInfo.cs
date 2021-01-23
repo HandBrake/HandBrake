@@ -149,5 +149,16 @@ namespace HandBrakeWPF.Utilities
 
             return false;
         }
+
+        public static bool IsAppsUsingDarkTheme()
+        {
+            object value = Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", null);
+            if (value != null)
+            {
+                return (int)value != 1;
+            }
+
+            return false;
+        }
     }
 }

@@ -30,6 +30,8 @@ namespace HandBrakeWPF
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using Microsoft.Win32;
+
     using GeneralApplicationException = Exceptions.GeneralApplicationException;
 
     /// <summary>
@@ -119,12 +121,26 @@ namespace HandBrakeWPF
                 }
             }
 
-            bool useDarkTheme = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseDarkTheme);
-            if (useDarkTheme && SystemInfo.IsWindows10())
+            DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+            if (SystemInfo.IsWindows10())
             {
                 ResourceDictionary darkTheme = new ResourceDictionary();
-                darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
-                Application.Current.Resources.MergedDictionaries.Add(darkTheme);
+                switch (useDarkTheme)
+                {
+                    case DarkThemeMode.System:
+                        if (SystemInfo.IsAppsUsingDarkTheme())
+                        {
+                            darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
+                            Application.Current.Resources.MergedDictionaries.Add(darkTheme);
+                        }
+                        break;
+                    case DarkThemeMode.Dark:
+                        darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
+                        Application.Current.Resources.MergedDictionaries.Add(darkTheme);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             // NO-Hardware Mode

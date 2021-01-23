@@ -12,11 +12,11 @@ namespace HandBrakeWPF.Converters
     using System;
     using System.Globalization;
     using System.Linq;
-    using System.Threading;
     using System.Windows.Data;
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
 
     public class ThemeImageConverter : IValueConverter
@@ -28,7 +28,12 @@ namespace HandBrakeWPF.Converters
         public ThemeImageConverter()
         {
             this.userSettingService = IoC.Get<IUserSettingService>();
-            this.isDarkTheme = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseDarkTheme);
+            DarkThemeMode mode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
+
+            if (mode == DarkThemeMode.Dark || (mode == DarkThemeMode.System && Utilities.SystemInfo.IsAppsUsingDarkTheme()))
+            {
+                this.isDarkTheme = true;
+            }
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,7 +41,6 @@ namespace HandBrakeWPF.Converters
             string image = parameter as string;
             if (!string.IsNullOrEmpty(image))
             {
-                
                 string direcotry = "Images/"; 
                 if (image.Contains("/"))
                 {
@@ -50,10 +54,8 @@ namespace HandBrakeWPF.Converters
                 {
                     return direcotry + "Dark/" + image;
                 }
-                else
-                {
-                    return direcotry + "Light/" + image;
-                }
+
+                return direcotry + "Light/" + image;
             }
 
             return null;
