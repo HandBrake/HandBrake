@@ -94,6 +94,7 @@ static hb_filter_param_t hqdn3d_presets[] =
 
 static hb_filter_param_t chroma_smooth_presets[] =
 {
+    { 0, "Off",         "off",        NULL              },
     { 1, "Custom",      "custom",     NULL              },
     { 2, "Ultralight",  "ultralight", NULL              },
     { 3, "Light",       "light",      NULL              },
@@ -113,6 +114,17 @@ static hb_filter_param_t chroma_smooth_tunes[] =
     { 4, "Wide",        "wide",       NULL              },
     { 5, "Very Wide",   "verywide",   NULL              },
     { 0, NULL,          NULL,         NULL              }
+};
+
+static hb_filter_param_t colorspace_presets[] =
+{
+    { 0, "Off",             "off",          NULL        },
+    { 1, "Custom",          "custom",       NULL        },
+    { 2, "BT.2020",         "bt2020",       "primaries=bt2020:transfer=bt2020-10:matrix=bt2020ncl:tonemap=hable:desat=0" },
+    { 3, "BT.709",          "bt709",        "primaries=bt709:transfer=bt709:matrix=bt709:tonemap=hable:desat=0"          },
+    { 4, "BT.601 SMPTE-C",  "bt601-6-525",  "primaries=smpte170m:transfer=bt709:matrix=smpte170m:tonemap=hable:desat=0"  },
+    { 5, "BT.601 EBU",      "bt601-6-625",  "primaries=bt470bg:transfer=bt709:matrix=smpte170m:tonemap=hable:desat=0"    },
+    { 0, NULL,              NULL,           NULL        }
 };
 
 static hb_filter_param_t unsharp_presets[] =
@@ -236,6 +248,9 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_CHROMA_SMOOTH, chroma_smooth_presets, chroma_smooth_tunes,
       sizeof(chroma_smooth_presets) / sizeof(hb_filter_param_t),
       sizeof(chroma_smooth_tunes)   / sizeof(hb_filter_param_t),  },
+
+    { HB_FILTER_COLORSPACE, colorspace_presets, NULL,
+      sizeof(colorspace_presets) / sizeof(hb_filter_param_t),  0, },
 
     { HB_FILTER_UNSHARP,     unsharp_presets,     unsharp_tunes,
       sizeof(unsharp_presets) / sizeof(hb_filter_param_t),
@@ -1239,7 +1254,6 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_RENDER_SUB:
         case HB_FILTER_GRAYSCALE:
         case HB_FILTER_QSV:
-        case HB_FILTER_COLORSPACE:
             settings = hb_parse_filter_settings(custom);
             break;
         case HB_FILTER_NLMEANS:
@@ -1260,6 +1274,7 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
         case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_COLORSPACE:
             settings = generate_generic_settings(filter_id, preset,
                                                  tune, custom);
             break;

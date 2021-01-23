@@ -14,8 +14,8 @@ static int colorspace_init(hb_filter_object_t * filter,
                            hb_filter_init_t * init);
 
 const char colorspace_template[] =
-    "format=^"HB_ALL_REG"$:range=^"HB_ALL_REG"$:primaries=^"HB_ALL_REG"$:"
-    "matrix=^"HB_ALL_REG"$:transfer=^"HB_ALL_REG"$";
+    "primaries=^"HB_ALL_REG"$:transfer=^"HB_ALL_REG"$:matrix=^"HB_ALL_REG"$:range=^"HB_ALL_REG"$:"
+    "tonemap=^"HB_ALL_REG"$:param=^"HB_FLOAT_REG"$:desat=^"HB_FLOAT_REG"$";
 
 hb_filter_object_t hb_filter_colorspace =
 {
@@ -29,6 +29,119 @@ hb_filter_object_t hb_filter_colorspace =
     .close             = hb_avfilter_alias_close,
     .settings_template = colorspace_template,
 };
+
+static const char * get_matrix_name(int colorspace)
+{
+    switch (colorspace) {
+    case AVCOL_SPC_RGB:
+        return "gbr";
+    case AVCOL_SPC_BT709:
+        return "bt709";
+    case AVCOL_SPC_UNSPECIFIED:
+        return "unknown";
+    case AVCOL_SPC_FCC:
+        return "fcc";
+    case AVCOL_SPC_BT470BG:
+        return "bt470bg";
+    case AVCOL_SPC_SMPTE170M:
+        return "smpte170m";
+    case AVCOL_SPC_SMPTE240M:
+        return "smpte2400m";
+    case AVCOL_SPC_YCGCO:
+        return "ycgco";
+    case AVCOL_SPC_BT2020_NCL:
+        return "bt2020nc";
+    case AVCOL_SPC_BT2020_CL:
+        return "bt2020c";
+    case AVCOL_SPC_CHROMA_DERIVED_NCL:
+        return "chroma-derived-nc";
+    case AVCOL_SPC_CHROMA_DERIVED_CL:
+        return "chroma-derived-c";
+    case AVCOL_SPC_ICTCP:
+        return "ictcp";
+    }
+    return "unspecified";
+}
+
+static const char * get_transfer_name(int color_trc)
+{
+    switch (color_trc) {
+    case AVCOL_TRC_UNSPECIFIED:
+        return "unspecified";
+    case AVCOL_TRC_BT709:
+        return "709";
+    case AVCOL_TRC_GAMMA22:
+        return "bt470m";
+    case AVCOL_TRC_GAMMA28:
+        return "bt470bg";
+    case AVCOL_TRC_SMPTE170M:
+        return "smpte170m";
+    case AVCOL_TRC_SMPTE240M:
+        return "240m"; // fixme
+    case AVCOL_TRC_LINEAR:
+        return "linear";
+    case AVCOL_TRC_LOG:
+        return "log100";
+    case AVCOL_TRC_LOG_SQRT:
+        return "log316";
+    case AVCOL_TRC_IEC61966_2_4:
+        return "iec61966-2-4";
+    case AVCOL_TRC_BT2020_10:
+        return "2020_10";
+    case AVCOL_TRC_BT2020_12:
+        return "2020_12";
+    case AVCOL_TRC_SMPTE2084:
+        return "smpte2084";
+    case AVCOL_TRC_ARIB_STD_B67:
+        return "arib-std-b67";
+    case AVCOL_TRC_IEC61966_2_1:
+        return "iec61966-2-1";
+    }
+    return "unspecified";
+}
+
+static const char * get_primaries_name(int color_primaries)
+{
+    switch (color_primaries) {
+    case AVCOL_PRI_UNSPECIFIED:
+        return "unspecified";
+    case AVCOL_PRI_BT709:
+        return "709";
+    case AVCOL_PRI_BT470M:
+        return "bt470m";
+    case AVCOL_PRI_BT470BG:
+        return "bt470bg";
+    case AVCOL_PRI_SMPTE170M:
+        return "smpte170m";
+    case AVCOL_PRI_SMPTE240M:
+        return "smpte240m";
+    case AVCOL_PRI_FILM:
+        return "film";
+    case AVCOL_PRI_BT2020:
+        return "bt2020";
+    case AVCOL_PRI_SMPTE428:
+        return "smpte428";
+    case AVCOL_PRI_SMPTE431:
+        return "smpte431";
+    case AVCOL_PRI_SMPTE432:
+        return "smpte432";
+    case AVCOL_PRI_JEDEC_P22:
+        return "jedec-p22";
+    }
+    return "unspecified";
+}
+
+static const char * get_range_name(int color_range)
+{
+    switch (color_range) {
+    case AVCOL_RANGE_UNSPECIFIED:
+    case AVCOL_RANGE_MPEG:
+        return "limited";
+    case AVCOL_RANGE_JPEG:
+        return "full";
+    }
+    return "limited";
+}
 
 static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 {
@@ -44,45 +157,139 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
     hb_dict_t        * settings = filter->settings;
 
-    char * format = NULL, * range = NULL;
+    char * range = NULL;
     char * primaries = NULL, * transfer = NULL, * matrix = NULL;
+    char * tonemap = NULL;
+    double param = 0, desat = 0;
 
-    hb_dict_extract_string(&format, settings, "format");
     hb_dict_extract_string(&range, settings, "range");
     hb_dict_extract_string(&primaries, settings, "primaries");
     hb_dict_extract_string(&transfer, settings, "transfer");
     hb_dict_extract_string(&matrix, settings, "matrix");
+    hb_dict_extract_string(&tonemap, settings, "tonemap");
+    hb_dict_extract_double(&param, settings, "param");
+    hb_dict_extract_double(&desat, settings, "desat");
 
-    if (!(format || range || primaries || transfer || matrix))
+    if (!(range || primaries || transfer || matrix))
     {
         return 0;
     }
 
-    hb_dict_t * avfilter   = hb_dict_init();
-    hb_dict_t * avsettings = hb_dict_init();
+    int color_prim, color_transfer, color_matrix, color_range;
 
-    if (format)
-    {
-        hb_dict_set_string(avsettings, "format", format);
-    }
-    if (range)
-    {
-        hb_dict_set_string(avsettings, "range", range);
-    }
+    color_prim = init->color_prim;
+    color_transfer = init->color_transfer;
+    color_matrix = init->color_matrix;
+    color_range = init->color_range;
+
     if (primaries)
     {
-        hb_dict_set_string(avsettings, "primaries", primaries);
+        color_prim = av_color_primaries_from_name(primaries);
     }
     if (transfer)
     {
-        hb_dict_set_string(avsettings, "trc", transfer);
+        color_transfer = av_color_transfer_from_name(transfer);
     }
     if (matrix)
     {
-        hb_dict_set_string(avsettings, "space", matrix);
+        color_matrix = av_color_space_from_name(matrix);
     }
-    hb_dict_set(avfilter, "colorspace", avsettings);
-    pv->avfilters = avfilter;
+    if (range)
+    {
+        color_range = av_color_range_from_name(range);
+    }
+
+    if (color_prim == init->color_prim && color_transfer == init->color_transfer &&
+        color_matrix == init->color_matrix && color_range == init->color_range)
+    {
+        return 0;
+    }
+
+    if (tonemap == NULL)
+    {
+        tonemap = "hable";
+    }
+
+    hb_value_array_t * avfilters = hb_value_array_init();
+    hb_dict_t * avfilter   = NULL;
+    hb_dict_t * avsettings = NULL;
+
+    if (transfer && init->color_transfer != color_transfer &&
+        (init->color_transfer == HB_COLR_TRA_SMPTEST2084 || init->color_transfer == HB_COLR_TRA_ARIB_STD_B67))
+    {
+        // Zscale
+        avfilter   = hb_dict_init();
+        avsettings = hb_dict_init();
+
+        hb_dict_set_string(avsettings, "transfer", "linear");
+        hb_dict_set_string(avsettings, "npl", "100");
+        hb_dict_set(avfilter, "zscale", avsettings);
+
+        hb_value_array_append(avfilters, avfilter);
+
+        // Format
+        avfilter   = hb_dict_init();
+        avsettings = hb_dict_init();
+
+        hb_dict_set_string(avsettings, "pix_fmts", "gbrpf32le");
+        hb_dict_set(avfilter, "format", avsettings);
+
+        hb_value_array_append(avfilters, avfilter);
+
+        // Tonemap
+        avfilter   = hb_dict_init();
+        avsettings = hb_dict_init();
+
+        hb_dict_set_string(avsettings, "tonemap", tonemap);
+        if (strcmp(tonemap, "hable") && strcmp(tonemap, "none") && param != 0)
+        {
+            hb_dict_set_double(avsettings, "param", param);
+        }
+        hb_dict_set_double(avsettings, "desat", desat);
+        hb_dict_set(avfilter, "tonemap", avsettings);
+
+        hb_value_array_append(avfilters, avfilter);
+    }
+
+    // Zscale
+    avfilter   = hb_dict_init();
+    avsettings = hb_dict_init();
+
+    if (primaries)
+    {
+        hb_dict_set_string(avsettings, "primaries", get_primaries_name(color_prim));
+    }
+    if (transfer)
+    {
+        hb_dict_set_string(avsettings, "transfer", get_transfer_name(color_transfer));
+    }
+    if (matrix)
+    {
+        hb_dict_set_string(avsettings, "matrix", get_matrix_name(color_matrix));
+    }
+    if (range)
+    {
+        hb_dict_set_string(avsettings, "range", get_range_name(color_range));
+    }
+
+    hb_dict_set(avfilter, "zscale", avsettings);
+    hb_value_array_append(avfilters, avfilter);
+
+    // Format
+    avfilter   = hb_dict_init();
+    avsettings = hb_dict_init();
+
+    hb_dict_set_string(avsettings, "pix_fmts", av_get_pix_fmt_name(init->pix_fmt));
+    hb_dict_set(avfilter, "format", avsettings);
+
+    hb_value_array_append(avfilters, avfilter);
+
+    pv->avfilters = avfilters;
+
+    init->color_prim = color_prim;
+    init->color_transfer = color_transfer;
+    init->color_matrix = color_matrix;
+    init->color_range = color_range;
 
     pv->output = *init;
 

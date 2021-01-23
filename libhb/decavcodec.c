@@ -962,6 +962,14 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
     }
 
+    // Make sure every frame is tagged.
+    if (out->f.color_prim == HB_COLR_PRI_UNDEF || out->f.color_transfer == HB_COLR_TRA_UNDEF || out->f.color_matrix == HB_COLR_MAT_UNDEF)
+    {
+        out->f.color_prim = pv->title->color_prim;
+        out->f.color_transfer = pv->title->color_transfer;
+        out->f.color_matrix = pv->title->color_matrix;
+    }
+
     if (pv->frame->pts != AV_NOPTS_VALUE)
     {
         reordered = reordered_hash_rem(pv, pv->frame->pts);
