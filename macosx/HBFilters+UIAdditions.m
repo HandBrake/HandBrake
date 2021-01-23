@@ -178,6 +178,30 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+@implementation HBChromaSmoothTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters chromaSmoothPresetDict];
+
+    return self;
+}
+
+@end
+
+@implementation HBChromaSmoothTuneTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters chromaSmoothTunesDict];
+
+    return self;
+}
+
+@end
+
 @implementation HBSharpenPresetTransformer
 
 - (instancetype)init
@@ -238,6 +262,18 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+@implementation HBColorspaceTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters colorspacePresetDict];
+
+    return self;
+}
+
+@end
+
 static NSDictionary *detelecinePresetsDict = nil;
 
 static NSDictionary *combDetectionPresetsDict = nil;
@@ -250,12 +286,17 @@ static NSDictionary *denoisePresetDict = nil;
 static NSDictionary *nlmeansTunesDict = nil;
 static NSDictionary *denoiseTypesDict = nil;
 
+static NSDictionary *chromaSmoothPresetDict = nil;
+static NSDictionary *chromaSmoothTunesDict = nil;
+
 static NSDictionary *sharpenPresetDict = nil;
 static NSDictionary *sharpenTunesDict = nil;
 static NSDictionary *sharpenTypesDict = nil;
 
 static NSDictionary *deblockPresetDict = nil;
 static NSDictionary *deblockTunesDict = nil;
+
+static NSDictionary *colorspacePresetDict = nil;
 
 @implementation HBFilters (UIAdditions)
 
@@ -343,6 +384,24 @@ static NSDictionary *deblockTunesDict = nil;
     return denoiseTypesDict;
 }
 
++ (NSDictionary *)chromaSmoothPresetDict
+{
+    if (!chromaSmoothPresetDict)
+    {
+        chromaSmoothPresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_CHROMA_SMOOTH);
+    }
+    return chromaSmoothPresetDict;
+}
+
++ (NSDictionary *)chromaSmoothTunesDict
+{
+    if (!chromaSmoothTunesDict)
+    {
+        chromaSmoothTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_CHROMA_SMOOTH);
+    }
+    return chromaSmoothTunesDict;
+}
+
 + (NSDictionary *)sharpenPresetDict
 {
     if (!sharpenPresetDict)
@@ -396,6 +455,15 @@ static NSDictionary *deblockTunesDict = nil;
     return deblockTunesDict;
 }
 
++ (NSDictionary *)colorspacePresetDict
+{
+    if (!colorspacePresetDict)
+    {
+        colorspacePresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_COLORSPACE);
+    }
+    return colorspacePresetDict;
+}
+
 - (NSArray *)detelecineSettings
 {
     return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
@@ -431,6 +499,16 @@ static NSDictionary *deblockTunesDict = nil;
 - (NSArray *)denoiseTunes
 {
     return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
+}
+
+- (NSArray *)chromaSmoothPresets
+{
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_CHROMA_SMOOTH);
+}
+
+- (NSArray *)chromaSmoothTunes
+{
+    return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_CHROMA_SMOOTH);
 }
 
 - (NSArray *)sharpenTypes
@@ -472,6 +550,11 @@ static NSDictionary *deblockTunesDict = nil;
     return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_DEBLOCK);
 }
 
+- (NSArray *)colorspacePresets
+{
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_COLORSPACE);
+}
+
 - (BOOL)customDetelecineSelected
 {
     return [self.detelecine isEqualToString:@"custom"] ? YES : NO;
@@ -490,6 +573,11 @@ static NSDictionary *deblockTunesDict = nil;
 - (BOOL)denoiseEnabled
 {
     return ![self.denoise isEqualToString:@"off"];
+}
+
+- (BOOL)chromaSmoothEnabled
+{
+    return ![self.chromaSmooth isEqualToString:@"off"];
 }
 
 - (BOOL)sharpenEnabled
@@ -512,6 +600,11 @@ static NSDictionary *deblockTunesDict = nil;
     return [self.denoise isEqualToString:@"nlmeans"] && ![self.denoisePreset isEqualToString:@"custom"];
 }
 
+- (BOOL)customChromaSmoothSelected
+{
+    return [self.chromaSmooth isEqualToString:@"custom"];
+}
+
 - (BOOL)customSharpenSelected
 {
     return [self.sharpenPreset isEqualToString:@"custom"] && [self sharpenEnabled];
@@ -530,6 +623,11 @@ static NSDictionary *deblockTunesDict = nil;
 - (BOOL)customDeblockSelected
 {
     return [self.deblock isEqualToString:@"custom"];
+}
+
+- (BOOL)customColorspaceSelected
+{
+    return [self.colorspace isEqualToString:@"custom"];
 }
 
 @end

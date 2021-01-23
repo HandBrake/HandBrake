@@ -38,6 +38,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _denoiseCustomString = @"";
         _denoisePreset = @"medium";
         _denoiseTune = @"none";
+        _chromaSmooth = @"off";
+        _chromaSmoothTune = @"off";
+        _chromaSmoothCustomString = @"";
         _sharpen = @"off";
         _sharpenCustomString = @"";
         _sharpenPreset = @"medium";
@@ -433,6 +436,92 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     return retval;
 }
 
+#pragma mark - Chroma Smooth
+
+- (void)setChromaSmooth:(NSString *)chromaSmooth
+{
+    if (![chromaSmooth isEqualToString:_chromaSmooth])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChromaSmooth:_chromaSmooth];
+    }
+    if (chromaSmooth)
+    {
+        _chromaSmooth = [chromaSmooth copy];
+    }
+    else
+    {
+        _chromaSmooth = @"off";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setChromaSmoothTune:(NSString *)chromaSmoothTune
+{
+    if (![chromaSmoothTune isEqualToString:_chromaSmoothTune])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChromaSmoothTune:_chromaSmoothTune];
+    }
+    if (chromaSmoothTune)
+    {
+        _chromaSmoothTune = [chromaSmoothTune copy];
+    }
+    else
+    {
+        _chromaSmoothTune = @"none";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setChromaSmoothCustomString:(NSString *)chromaSmoothCustomString
+{
+    if (![chromaSmoothCustomString isEqualToString:_chromaSmoothCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChromaSmoothCustomString:_chromaSmoothCustomString];
+    }
+    if (chromaSmoothCustomString)
+    {
+        _chromaSmoothCustomString = [chromaSmoothCustomString copy];
+    }
+    else
+    {
+        _chromaSmoothCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (BOOL)validateteChromaSmoothCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *customValue = *ioValue;
+
+        int filter_id = HB_FILTER_CHROMA_SMOOTH;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             "custom",
+                                                             NULL,
+                                                             customValue.UTF8String);
+
+        if (filter_dict == NULL)
+        {
+            retval = NO;
+            if (outError)
+            {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid chroma smooth custom settings.",
+                                                                                               @"HBFilters -> invalid chroma smooth custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"Chroma Smooth syntax: cb-strength=c:cb-size=c:cr-strength=c:cr-size=c",                                                                                                            @"HBJob -> invalid chroma smooth settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
+}
+
 #pragma mark - Sharpen
 
 - (void)setSharpen:(NSString *)sharpen
@@ -682,6 +771,74 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
+#pragma mark - Colorspace
+
+- (void)setColorspace:(NSString *)colorspace
+{
+    if (![colorspace isEqualToString:_colorspace])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setColorspace:_colorspace];
+    }
+    if (colorspace)
+    {
+        _colorspace = [colorspace copy];
+    }
+    else
+    {
+        _colorspace = @"off";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setColorspaceCustomString:(NSString *)colorspaceCustomString
+{
+    if (![colorspaceCustomString isEqualToString:_colorspaceCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setColorspaceCustomString:_colorspaceCustomString];
+    }
+    if (colorspaceCustomString)
+    {
+        _colorspaceCustomString = [colorspaceCustomString copy];
+    }
+    else
+    {
+        _colorspaceCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (BOOL)validateteColorspaceCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *customValue = *ioValue;
+
+        int filter_id = HB_FILTER_COLORSPACE;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             "custom",
+                                                             NULL,
+                                                             customValue.UTF8String);
+
+        if (filter_dict == NULL)
+        {
+            retval = NO;
+            if (outError)
+            {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid colorspace custom settings.",
+                                                                                               @"HBFilters -> invalid chroma smooth custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"Colorspace syntax: primaries=p:transfer=t:matrix=m:tonemap=t:param=p:desat=d",                                                                                                            @"HBJob -> invalid chroma smooth settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
+}
+
 #pragma mark - KVO
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
@@ -690,7 +847,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     if ([key isEqualToString:@"summary"])
     {
-        retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"deinterlace", @"deinterlacePreset", @"deinterlaceCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"deblockTune", @"deblockCustomString", @"grayscale", @"sharpen", @"sharpenPreset", @"sharpenTune", @"sharpenCustomString", nil];
+        retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"deinterlace", @"deinterlacePreset", @"deinterlaceCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"deblockTune", @"deblockCustomString", @"grayscale", @"sharpen", @"sharpenPreset", @"sharpenTune", @"sharpenCustomString", @"chromaSmooth", @"chromaSmoothTune", @"chromaSmoothCustomString", @"colorspace", @"colorspaceCustomString", nil];
     }
     else if ([key isEqualToString:@"customDetelecineSelected"])
     {
@@ -708,6 +865,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     else if ([key isEqualToString:@"denoiseEnabled"])
     {
         retval = [NSSet setWithObject:@"denoise"];
+    }
+    else if ([key isEqualToString:@"chromaSmoothEnabled"] ||
+             [key isEqualToString:@"customChromaSmoothSelected"])
+    {
+        retval = [NSSet setWithObject:@"chromaSmooth"];
     }
     else if ([key isEqualToString:@"sharpenTunesAvailable"] ||
              [key isEqualToString:@"customSharpenSelected"])
@@ -733,6 +895,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
              [key isEqualToString:@"deinterlacePresets"])
     {
         retval = [NSSet setWithObjects:@"deinterlace", @"deinterlacePreset", nil];
+    }
+    else if ([key isEqualToString:@"customColorspaceSelected"])
+    {
+        retval = [NSSet setWithObject:@"colorspace"];
     }
     else
     {
@@ -766,6 +932,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         copy->_denoiseTune = [_denoiseTune copy];
         copy->_denoiseCustomString = [_denoiseCustomString copy];
 
+        copy->_chromaSmooth = [_chromaSmooth copy];
+        copy->_chromaSmoothTune = [_chromaSmoothTune copy];
+        copy->_chromaSmoothCustomString = [_chromaSmoothCustomString copy];
+
         copy->_sharpen = [_sharpen copy];
         copy->_sharpenPreset = [_sharpenPreset copy];
         copy->_sharpenTune = [_sharpenTune copy];
@@ -776,6 +946,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         copy->_deblockCustomString = [_deblockCustomString copy];
 
         copy->_grayscale = _grayscale;
+
+        copy->_colorspace = [_colorspace copy];
+        copy->_colorspaceCustomString = [_colorspaceCustomString copy];
     }
 
     return copy;
@@ -807,6 +980,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_denoiseTune);
     encodeObject(_denoiseCustomString);
 
+    encodeObject(_chromaSmooth);
+    encodeObject(_chromaSmoothTune);
+    encodeObject(_chromaSmoothCustomString);
+
     encodeObject(_sharpen);
     encodeObject(_sharpenPreset);
     encodeObject(_sharpenTune);
@@ -817,6 +994,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_deblockCustomString);
 
     encodeBool(_grayscale);
+
+    encodeObject(_colorspace);
+    encodeObject(_colorspaceCustomString);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -838,6 +1018,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObjectOrFail(_denoiseTune, NSString);
     decodeObjectOrFail(_denoiseCustomString, NSString);
 
+    decodeObjectOrFail(_chromaSmooth, NSString);
+    decodeObjectOrFail(_chromaSmoothTune, NSString);
+    decodeObjectOrFail(_chromaSmoothCustomString, NSString);
+
     decodeObjectOrFail(_sharpen, NSString);
     decodeObjectOrFail(_sharpenPreset, NSString);
     decodeObjectOrFail(_sharpenTune, NSString);
@@ -848,6 +1032,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObjectOrFail(_deblockCustomString, NSString);
 
     decodeBool(_grayscale);
+
+    decodeObjectOrFail(_colorspace, NSString);
+    decodeObjectOrFail(_colorspaceCustomString, NSString);
 
     _notificationsEnabled = YES;
 
@@ -876,6 +1063,10 @@ fail:
     preset[@"PictureDenoiseTune"] = self.denoiseTune;
     preset[@"PictureDenoiseCustom"] = self.denoiseCustomString;
 
+    preset[@"PictureChromaSmoothPreset"] = self.chromaSmooth;
+    preset[@"PictureChromaSmoothTune"] = self.chromaSmoothTune;
+    preset[@"PictureChromaSmoothCustom"] = self.chromaSmoothCustomString;
+
     preset[@"PictureSharpenFilter"] = self.sharpen;
     preset[@"PictureSharpenPreset"] = self.sharpenPreset;
     preset[@"PictureSharpenTune"] = self.sharpenTune;
@@ -886,6 +1077,9 @@ fail:
     preset[@"PictureDeblockCustom"] = self.deblockCustomString;
 
     preset[@"VideoGrayScale"] = @(self.grayscale);
+
+    preset[@"PictureColorspacePreset"] = self.colorspace;
+    preset[@"PictureColorspaceCustom"] = self.colorspaceCustomString;
 }
 
 - (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
@@ -914,6 +1108,11 @@ fail:
         self.denoiseTune = preset[@"PictureDenoiseTune"];
         self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
 
+        // Chroma Smooth
+        self.chromaSmooth = preset[@"PictureChromaSmoothPreset"];
+        self.chromaSmoothTune = preset[@"PictureChromaSmoothTune"];
+        self.chromaSmoothCustomString = preset[@"PictureChromaSmoothCustom"];
+
         // Sharpen
         self.sharpen = preset[@"PictureSharpenFilter"];
         self.sharpenPreset = preset[@"PictureSharpenPreset"];
@@ -926,6 +1125,10 @@ fail:
         self.deblockCustomString = preset[@"PictureDeblockCustom"];
 
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
+
+        // Colorspace
+        self.colorspace = preset[@"PictureColorspacePreset"];
+        self.colorspaceCustomString = preset[@"PictureColorspaceCustom"];
     }
 
     self.notificationsEnabled = YES;

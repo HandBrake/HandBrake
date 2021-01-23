@@ -368,7 +368,22 @@ static HBMixdownTransformer    *mixdownTransformer;
         }
 
         [summary appendString:@")"];
+    }
 
+    // Chroma Smooth
+    if (![filters.chromaSmooth isEqualToString:@"off"])
+    {
+        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Chroma Smooth", @"Filters description"), [[[HBFilters chromaSmoothPresetDict] allKeysForObject:filters.chromaSmooth] firstObject]];
+        if (![filters.chromaSmooth isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@", %@", [[[HBFilters chromaSmoothTunesDict] allKeysForObject:filters.chromaSmoothTune] firstObject]];
+        }
+        else
+        {
+            [summary appendFormat:@", %@", filters.chromaSmoothCustomString];
+        }
+
+        [summary appendString:@")"];
     }
 
     // Sharpen
@@ -400,6 +415,18 @@ static HBMixdownTransformer    *mixdownTransformer;
     if (filters.grayscale)
     {
         [summary appendFormat:@", %@", HBKitLocalizedString(@"Grayscale", @"Filters description")];
+    }
+
+    // Colorspace
+    if (![filters.colorspace isEqualToString:@"off"])
+    {
+        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Colorspace", @"Filters description"), [[[HBFilters colorspacePresetDict] allKeysForObject:filters.colorspace] firstObject]];
+        if ([filters.colorspace isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@", %@", filters.colorspaceCustomString];
+        }
+
+        [summary appendString:@")"];
     }
 
     if ([summary hasPrefix:@", "])
@@ -927,6 +954,13 @@ static HBMixdownTransformer    *mixdownTransformer;
         }
     }
 
+    // Chroma Smooth
+    if (![filters.chromaSmooth isEqualToString:@"off"])
+    {
+        [summary appendString:HBKitLocalizedString(@"Chroma Smooth", @"HBJob -> filters short description")];
+        [summary appendString:@", "];
+    }
+
     // Sharpen
     if (![filters.sharpen isEqualToString:@"off"])
     {
@@ -942,6 +976,13 @@ static HBMixdownTransformer    *mixdownTransformer;
     if (filters.grayscale)
     {
         [summary appendString:HBKitLocalizedString(@"Grayscale", @"HBJob -> filters short description")];
+        [summary appendString:@", "];
+    }
+
+    // Colorspace
+    if (![filters.colorspace isEqualToString:@"off"])
+    {
+        [summary appendString:HBKitLocalizedString(@"Colorspace", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
