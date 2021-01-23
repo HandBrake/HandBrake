@@ -62,6 +62,8 @@
                     "PictureChromaSmoothCustom": "",
                     "PictureChromaSmoothPreset": "off",
                     "PictureChromaSmoothTune": "none",
+                    "PictureColorspaceCustom": "",
+                    "PictureColorspacePreset": "off",
                     "PictureSharpenCustom": "",
                     "PictureSharpenFilter": "off",
                     "PictureSharpenPreset": "medium",

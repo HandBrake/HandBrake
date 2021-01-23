@@ -1483,6 +1483,9 @@ static void do_job(hb_job_t *job)
             i++;
         }
         job->pix_fmt = init.pix_fmt;
+        job->color_prim = init.color_prim;
+        job->color_transfer = init.color_transfer;
+        job->color_matrix = init.color_matrix;
         job->width = init.geometry.width;
         job->height = init.geometry.height;
         job->par = init.geometry.par;
