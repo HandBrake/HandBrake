@@ -114,7 +114,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 LIBHB.dll.libs = $(foreach n, \
         ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg x264 xml2 \
-        bluray jansson harfbuzz opus speex dav1d turbojpeg, \
+        bluray jansson harfbuzz opus speex dav1d turbojpeg zimg, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifeq (1,$(FEATURE.fdk_aac))
