@@ -24,6 +24,9 @@
 + (NSDictionary *)nlmeansTunesDict;
 + (NSDictionary *)denoiseTypesDict;
 
++ (NSDictionary *)chromaSmoothPresetDict;
++ (NSDictionary *)chromaSmoothTunesDict;
+
 + (NSDictionary *)sharpenPresetDict;
 + (NSDictionary *)sharpenTunesDict;
 + (NSDictionary *)sharpenTypesDict;
@@ -31,33 +34,49 @@
 + (NSDictionary *)deblockPresetDict;
 + (NSDictionary *)deblockTunesDict;
 
-- (BOOL)customDetelecineSelected;
++ (NSDictionary *)colorspacePresetDict;
+
+@property (nonatomic, readonly) BOOL customDetelecineSelected;
 
 @property (nonatomic, readonly) BOOL customCombDetectionSelected;
 
-- (BOOL)deinterlaceEnabled;
-- (BOOL)customDeinterlaceSelected;
+@property (nonatomic, readonly) BOOL deinterlaceEnabled;
+@property (nonatomic, readonly) BOOL customDeinterlaceSelected;
 
-- (BOOL)sharpenEnabled;
-- (BOOL)customSharpenSelected;
-- (BOOL)sharpenTunesAvailable;
+@property (nonatomic, readonly) BOOL chromaSmoothEnabled;
+@property (nonatomic, readonly) BOOL customChromaSmoothSelected;
 
-- (BOOL)deblockTunesAvailable;
-- (BOOL)customDeblockSelected;
+@property (nonatomic, readonly) BOOL sharpenEnabled;
+@property (nonatomic, readonly) BOOL customSharpenSelected;
+@property (nonatomic, readonly) BOOL sharpenTunesAvailable;
 
-@property (nonatomic, readonly) NSArray *detelecineSettings;
+@property (nonatomic, readonly) BOOL deblockTunesAvailable;
+@property (nonatomic, readonly) BOOL customDeblockSelected;
 
-@property (nonatomic, readonly) NSArray *combDetectionSettings;
+@property (nonatomic, readonly) BOOL customColorspaceSelected;
 
-@property (nonatomic, readonly) NSArray *deinterlaceTypes;
-@property (nonatomic, readonly) NSArray *deinterlacePresets;
+@property (nonatomic, readonly) NSArray<NSString *> *detelecineSettings;
 
-@property (nonatomic, readonly) NSArray *sharpenTypes;
-@property (nonatomic, readonly) NSArray *sharpenPresets;
-@property (nonatomic, readonly) NSArray *sharpenTunes;
+@property (nonatomic, readonly) NSArray<NSString *> *combDetectionSettings;
 
-@property (nonatomic, readonly) NSArray *deblockPresets;
-@property (nonatomic, readonly) NSArray *deblockTunes;
+@property (nonatomic, readonly) NSArray<NSString *> *deinterlaceTypes;
+@property (nonatomic, readonly) NSArray<NSString *> *deinterlacePresets;
+
+@property (nonatomic, readonly) NSArray<NSString *> *denoiseTypes;
+@property (nonatomic, readonly) NSArray<NSString *> *denoisePresets;
+@property (nonatomic, readonly) NSArray<NSString *> *denoiseTunes;
+
+@property (nonatomic, readonly) NSArray<NSString *> *chromaSmoothPresets;
+@property (nonatomic, readonly) NSArray<NSString *> *chromaSmoothTunes;
+
+@property (nonatomic, readonly) NSArray<NSString *> *sharpenTypes;
+@property (nonatomic, readonly) NSArray<NSString *> *sharpenPresets;
+@property (nonatomic, readonly) NSArray<NSString *> *sharpenTunes;
+
+@property (nonatomic, readonly) NSArray<NSString *> *deblockPresets;
+@property (nonatomic, readonly) NSArray<NSString *> *deblockTunes;
+
+@property (nonatomic, readonly) NSArray<NSString *> *colorspacePresets;
 
 @end
 
@@ -91,6 +110,12 @@
 @interface HBDenoiseTransformer : HBGenericDictionaryTransformer
 @end
 
+@interface HBChromaSmoothTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBChromaSmoothTuneTransformer : HBGenericDictionaryTransformer
+@end
+
 @interface HBSharpenPresetTransformer : HBGenericDictionaryTransformer
 @end
 
@@ -104,4 +129,7 @@
 @end
 
 @interface HBDeblockTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBColorspaceTransformer : HBGenericDictionaryTransformer
 @end

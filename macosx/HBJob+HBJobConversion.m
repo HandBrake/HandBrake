@@ -419,10 +419,9 @@
     }
 
     // Now lets call the filters if applicable.
-    // The order of the filters is critical
+    hb_filter_object_t *filter;
 
     // Detelecine
-    hb_filter_object_t *filter;
     if (![self.filters.detelecine isEqualToString:@"off"])
     {
         int filter_id = HB_FILTER_DETELECINE;
@@ -466,6 +465,24 @@
         hb_value_free(&filter_dict);
     }
 
+    // Add framerate shaping filter
+    filter = hb_filter_init(HB_FILTER_VFR);
+    hb_add_filter(job, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
+                                 fps_mode, fps_num, fps_den] UTF8String]);
+
+    // Deblock
+    if (![self.filters.deblock isEqualToString:@"off"])
+    {
+        int filter_id = HB_FILTER_DEBLOCK;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             self.filters.deblock.UTF8String,
+                                                             self.filters.deblockTune.UTF8String,
+                                                             self.filters.deblockCustomString.UTF8String);
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
+    }
+
     // Denoise
     if (![self.filters.denoise isEqualToString:@"off"])
     {
@@ -484,14 +501,14 @@
         hb_dict_free(&filter_dict);
     }
 
-    // Deblock
-    if (![self.filters.deblock isEqualToString:@"off"])
+    // Chroma Smooth
+    if (![self.filters.chromaSmooth isEqualToString:@"off"])
     {
-        int filter_id = HB_FILTER_DEBLOCK;
+        int filter_id = HB_FILTER_CHROMA_SMOOTH;
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
-                                                             self.filters.deblock.UTF8String,
-                                                             self.filters.deblockTune.UTF8String,
-                                                             self.filters.deblockCustomString.UTF8String);
+                                                             self.filters.chromaSmooth.UTF8String,
+                                                             self.filters.chromaSmoothTune.UTF8String,
+                                                             self.filters.chromaSmoothCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
         hb_add_filter_dict(job, filter, filter_dict);
         hb_value_free(&filter_dict);
@@ -596,10 +613,18 @@
         hb_dict_free(&filter_dict);
     }
 
-    // Add framerate shaping filter
-    filter = hb_filter_init(HB_FILTER_VFR);
-    hb_add_filter(job, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
-                                 fps_mode, fps_num, fps_den] UTF8String]);
+    // Colorspace
+    if (![self.filters.colorspace isEqualToString:@"off"])
+    {
+        int filter_id = HB_FILTER_COLORSPACE;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             self.filters.colorspace.UTF8String,
+                                                             NULL,
+                                                             self.filters.colorspaceCustomString.UTF8String);
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
+    }
 
     return job;
 }

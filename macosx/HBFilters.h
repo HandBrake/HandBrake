@@ -31,6 +31,10 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite, copy) NSString *denoiseTune;
 @property (nonatomic, readwrite, copy) NSString *denoiseCustomString;
 
+@property (nonatomic, readwrite, copy) NSString *chromaSmooth;
+@property (nonatomic, readwrite, copy) NSString *chromaSmoothTune;
+@property (nonatomic, readwrite, copy) NSString *chromaSmoothCustomString;
+
 @property (nonatomic, readwrite, copy) NSString *sharpen;
 @property (nonatomic, readwrite, copy) NSString *sharpenPreset;
 @property (nonatomic, readwrite, copy) NSString *sharpenTune;
@@ -41,6 +45,9 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite, copy) NSString *deblockCustomString;
 
 @property (nonatomic, readwrite) BOOL grayscale;
+
+@property (nonatomic, readwrite, copy) NSString *colorspace;
+@property (nonatomic, readwrite, copy) NSString *colorspaceCustomString;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
