@@ -1667,7 +1667,7 @@ static void ShowHelp()
 "                           Dimensions will be made divisible by this number.\n"
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
-"                           Set the color space signaled by the output:\n"
+"                           Set the color space signaled by the input:\n"
 "                           Overrides color signalling with no conversion.\n"
 "                               2020\n"
 "                               709\n"

@@ -572,10 +572,6 @@ struct hb_job_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
-
-    int             color_prim_override;
-    int             color_transfer_override;
-    int             color_matrix_override;
 // see https://developer.apple.com/library/content/technotes/tn2162/_index.html
 //     https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap3/qtff3.html#//apple_ref/doc/uid/TP40000939-CH205-125526
 //     libav pixfmt.h

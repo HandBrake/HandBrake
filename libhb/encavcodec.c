@@ -441,9 +441,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             job->par.num, job->par.den );
 
     // set colorimetry
-    context->color_primaries = hb_output_color_prim(job);
-    context->color_trc       = hb_output_color_transfer(job);
-    context->colorspace      = hb_output_color_matrix(job);
+    context->color_primaries = job->color_prim;
+    context->color_trc       = job->color_transfer;
+    context->colorspace      = job->color_matrix;
 
     if (!job->inline_parameter_sets)
     {
@@ -656,9 +656,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
      * Reload colorimetry settings in case custom
      * values were set in the encoder_options string.
      */
-    job->color_prim_override     = context->color_primaries;
-    job->color_transfer_override = context->color_trc;
-    job->color_matrix_override   = context->colorspace;
+    job->color_prim     = context->color_primaries;
+    job->color_transfer = context->color_trc;
+    job->color_matrix   = context->colorspace;
 
     if (job->pass_id == HB_PASS_ENCODE_1ST &&
         context->stats_out != NULL)

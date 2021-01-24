@@ -1456,9 +1456,9 @@ static void do_job(hb_job_t *job)
         init.pix_fmt = get_best_pix_ftm(job);
         init.color_range = AVCOL_RANGE_MPEG;
 
-        init.color_prim = title->color_prim;
-        init.color_transfer = title->color_transfer;
-        init.color_matrix = title->color_matrix;
+        init.color_prim = job->color_prim;
+        init.color_transfer = job->color_transfer;
+        init.color_matrix = job->color_matrix;
         init.geometry.width = title->geometry.width;
         init.geometry.height = title->geometry.height;
 
