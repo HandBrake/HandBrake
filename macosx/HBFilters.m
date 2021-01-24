@@ -492,7 +492,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
-- (BOOL)validateteChromaSmoothCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
+- (BOOL)validateChromaSmoothCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 
@@ -809,7 +809,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
-- (BOOL)validateteColorspaceCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
+- (BOOL)validateColorspaceCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 
