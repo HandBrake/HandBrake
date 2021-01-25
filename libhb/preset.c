@@ -1731,11 +1731,11 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
                 break;
         }
 
-        hb_dict_set(video_dict, "ColorPrimaries",
+        hb_dict_set(video_dict, "ColorPrimariesOverride",
                     hb_value_int(color_prim));
-        hb_dict_set(video_dict, "ColorTransfer",
+        hb_dict_set(video_dict, "ColorTransferOverride",
                     hb_value_int(color_transfer));
-        hb_dict_set(video_dict, "ColorMatrix",
+        hb_dict_set(video_dict, "ColorMatrixOverride",
                     hb_value_int(color_matrix));
     }
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));

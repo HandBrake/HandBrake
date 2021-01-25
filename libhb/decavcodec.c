@@ -963,11 +963,11 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     }
 
     // Make sure every frame is tagged.
-    if (pv->job)
+    if (out->f.color_prim == HB_COLR_PRI_UNDEF || out->f.color_transfer == HB_COLR_TRA_UNDEF || out->f.color_matrix == HB_COLR_MAT_UNDEF)
     {
-        out->f.color_prim = pv->job->color_prim;
-        out->f.color_transfer = pv->job->color_transfer;
-        out->f.color_matrix = pv->job->color_matrix;
+        out->f.color_prim = pv->title->color_prim;
+        out->f.color_transfer = pv->title->color_transfer;
+        out->f.color_matrix = pv->title->color_matrix;
     }
 
     if (pv->frame->pts != AV_NOPTS_VALUE)

@@ -672,6 +672,21 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                 hb_value_int(job->color_transfer));
     hb_dict_set(video_dict, "ColorMatrix",
                 hb_value_int(job->color_matrix));
+    if (job->color_prim_override != HB_COLR_PRI_UNDEF)
+    {
+        hb_dict_set(video_dict, "ColorPrimariesOverride",
+                    hb_value_int(job->color_prim_override));
+    }
+    if (job->color_transfer_override != HB_COLR_TRA_UNDEF)
+    {
+        hb_dict_set(video_dict, "ColorTransferOverride",
+                    hb_value_int(job->color_transfer_override));
+    }
+    if (job->color_matrix_override != HB_COLR_MAT_UNDEF)
+    {
+        hb_dict_set(video_dict, "ColorMatrixOverride",
+                    hb_value_int(job->color_matrix_override));
+    }
 
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
@@ -1044,10 +1059,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       TwoPass, Turbo,
     //       ColorFormat, ColorRange,
     //       ColorPrimaries, ColorTransfer, ColorMatrix,
+    //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
     //       QSV {Decode, AsyncDepth}}
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b,"
     "   s?i, s?i,"
+    "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i,"
     "   s?{s?b, s?i}},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
@@ -1096,6 +1113,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorPrimaries",       unpack_i(&job->color_prim),
             "ColorTransfer",        unpack_i(&job->color_transfer),
             "ColorMatrix",          unpack_i(&job->color_matrix),
+            "ColorPrimariesOverride", unpack_i(&job->color_prim_override),
+            "ColorTransferOverride",  unpack_i(&job->color_transfer_override),
+            "ColorMatrixOverride",    unpack_i(&job->color_matrix_override),
             "QSV",
                 "Decode",           unpack_b(&job->qsv.decode),
                 "AsyncDepth",       unpack_i(&job->qsv.async_depth),

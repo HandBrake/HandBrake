@@ -3841,6 +3841,9 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->color_transfer = title->color_transfer;
     job->color_matrix   = title->color_matrix;
     job->color_range    = title->color_range;
+    job->color_prim_override     = HB_COLR_PRI_UNDEF;
+    job->color_transfer_override = HB_COLR_TRA_UNDEF;
+    job->color_matrix_override   = HB_COLR_MAT_UNDEF;
 
     job->mux = HB_MUX_MP4;
 
@@ -3857,6 +3860,30 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
+}
+
+int hb_output_color_prim(hb_job_t * job)
+{
+    if (job->color_prim_override != HB_COLR_PRI_UNDEF)
+        return job->color_prim_override;
+    else
+        return job->color_prim;
+}
+
+int hb_output_color_transfer(hb_job_t * job)
+{
+    if (job->color_transfer_override != HB_COLR_TRA_UNDEF)
+        return job->color_transfer_override;
+    else
+        return job->color_transfer;
+}
+
+int hb_output_color_matrix(hb_job_t * job)
+{
+    if (job->color_matrix_override != HB_COLR_MAT_UNDEF)
+        return job->color_matrix_override;
+    else
+        return job->color_matrix;
 }
 
 static void job_clean( hb_job_t * job )
