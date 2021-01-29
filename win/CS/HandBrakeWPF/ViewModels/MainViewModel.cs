@@ -1054,7 +1054,7 @@ namespace HandBrakeWPF.ViewModels
         {
             try
             {
-                Process.Start("https://handbrake.fr/docs");
+                Process.Start("explorer.exe", "https://handbrake.fr/docs");
             }
             catch (Exception exc)
             {
@@ -1575,7 +1575,7 @@ namespace HandBrakeWPF.ViewModels
                     string directory = Path.GetDirectoryName(this.Destination);
                     if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
                     {
-                        Process.Start(directory);
+                        Process.Start("explorer.exe", directory);
                     }
                     else
                     {
@@ -1588,7 +1588,7 @@ namespace HandBrakeWPF.ViewModels
                         if (result == MessageBoxResult.Yes)
                         {
                             Directory.CreateDirectory(directory);
-                            Process.Start(directory);
+                            Process.Start("explorer.exe", directory);
                         }
                     }
                 }

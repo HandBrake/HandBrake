@@ -69,7 +69,7 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private void Help_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://handbrake.fr/docs");
+            Process.Start("explorer.exe", "https://handbrake.fr/docs");
         }
 
         private void UpdateAvailable_OnRequestNavigate(object sender, RequestNavigateEventArgs e)

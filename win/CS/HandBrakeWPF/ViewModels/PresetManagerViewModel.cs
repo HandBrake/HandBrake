@@ -438,7 +438,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void LaunchHelp()
         {
-            Process.Start("https://handbrake.fr/docs/en/latest/advanced/custom-presets.html");
+            Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/advanced/custom-presets.html");
         }
 
         private void SetDefaultPreset()

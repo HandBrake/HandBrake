@@ -38,12 +38,12 @@ namespace HandBrakeWPF.Views
         /// </param>
         private void HandbrakeWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://handbrake.fr");
+            Process.Start("explorer.exe", "https://handbrake.fr");
         }
 
         private void GithubWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://github.com/HandBrake/HandBrake/issues");
+            Process.Start("explorer.exe", "https://github.com/HandBrake/HandBrake/issues");
         }
 
         private void AboutTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
