@@ -1162,6 +1162,20 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
+            // Always use the current settings when adding to the queue as best as possible.
+            Preset temporaryPreset = this.selectedPreset;
+            if (this.IsModifiedPreset)
+            {
+                temporaryPreset = new Preset(this.SelectedPreset);
+                temporaryPreset.Name = string.Format(
+                    "{0} {1}",
+                    temporaryPreset.Name,
+                    Resources.MainView_ModifiedPreset);
+                temporaryPreset.Task = new EncodeTask(this.CurrentTask);
+                temporaryPreset.AudioTrackBehaviours = this.AudioViewModel.AudioBehaviours.Clone();
+                temporaryPreset.SubtitleTrackBehaviours = this.SubtitleViewModel.SubtitleBehaviours.Clone();
+            }
+
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
@@ -1183,8 +1197,8 @@ namespace HandBrakeWPF.ViewModels
                             }
                         }
                     }
-                }, 
-                this.selectedPreset);
+                },
+                temporaryPreset);
 
             if (window != null)
             {

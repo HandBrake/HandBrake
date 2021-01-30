@@ -160,6 +160,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.MaxHeight = value;
                     this.NotifyOfPropertyChange(() => this.MaxHeight);
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -173,6 +174,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.MaxWidth = value;
                     this.NotifyOfPropertyChange(() => this.MaxWidth);
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -335,6 +337,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.HasCropping = value;
                 this.NotifyOfPropertyChange(() => this.IsCustomCrop);
+                this.OnTabStatusChanged(null);
 
                 if (!value && this.currentTitle != null)
                 {
@@ -579,16 +582,8 @@ namespace HandBrakeWPF.ViewModels
                 this.sourceParValues = title.ParVal;
                 this.sourceResolution = title.Resolution;
 
-                // Update the cropping values, preffering those in the presets.
-                if (!preset.Task.HasCropping)
-                {
-                    this.Task.Cropping.Top = title.AutoCropDimensions.Top;
-                    this.Task.Cropping.Bottom = title.AutoCropDimensions.Bottom;
-                    this.Task.Cropping.Left = title.AutoCropDimensions.Left;
-                    this.Task.Cropping.Right = title.AutoCropDimensions.Right;
-                    this.IsCustomCrop = false;
-                }
-                else
+                // Update the cropping values, preferring those in the presets.
+                if (preset.Task.HasCropping)
                 {
                     this.Task.Cropping.Left = preset.Task.Cropping.Left;
                     this.Task.Cropping.Right = preset.Task.Cropping.Right;
@@ -596,17 +591,20 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Cropping.Bottom = preset.Task.Cropping.Bottom;
                     this.IsCustomCrop = true;
                 }
-
-                // Setup the Maximum Width / Height with sane 4K fallback.
-                this.MaxWidth = preset.Task.MaxWidth ?? 3840;
-                this.MaxHeight = preset.Task.MaxHeight ?? 2160;
-                this.SetSelectedPictureSettingsResLimitMode();
-
+                else if (!this.IsCustomCrop)  
+                {
+                    // Only set Auto-crop values if we are in Automatic mode. If it's custom, assume the user has taken control.
+                    this.Task.Cropping.Top = title.AutoCropDimensions.Top;
+                    this.Task.Cropping.Bottom = title.AutoCropDimensions.Bottom;
+                    this.Task.Cropping.Left = title.AutoCropDimensions.Left;
+                    this.Task.Cropping.Right = title.AutoCropDimensions.Right;
+                    this.IsCustomCrop = false;
+                }
+                
                 // Set the W/H
                 // Set the width, then check the height doesn't breach the max height and correct if necessary.
                 this.Task.Width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), this.MaxWidth));
                 this.Task.Height = this.GetModulusValue(this.GetRes((this.sourceResolution.Height - this.CropTop - this.CropBottom), this.MaxHeight));
-                this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
                 // Set Screen Controls
                 this.SourceInfo = string.Format(
@@ -631,6 +629,21 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (preset.Task.Modulus != this.SelectedModulus)
+            {
+                return false;
+            }
+
+            if (preset.Task.MaxHeight != this.MaxHeight)
+            {
+                return false;
+            }
+
+            if (preset.Task.MaxWidth != this.MaxWidth)
+            {
+                return false;
+            }
+
+            if (!preset.Task.HasCropping && this.IsCustomCrop)
             {
                 return false;
             }
