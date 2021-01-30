@@ -468,4 +468,7 @@ When disabled, it will use the path in the destination box on the main window if
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Colourspace Filter.</value>
   </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth Filter</value>
+  </data>
 </root>

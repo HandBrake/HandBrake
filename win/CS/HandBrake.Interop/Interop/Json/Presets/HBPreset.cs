@@ -191,6 +191,12 @@ namespace HandBrake.Interop.Interop.Json.Presets
 
         public string PictureColorspaceCustom { get; set; }
 
+        public string PictureChromaSmoothPreset { get; set; }
+
+        public string PictureChromaSmoothTune { get; set; }
+
+        public string PictureChromaSmoothCustom { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether picture itu par.
         /// </summary>

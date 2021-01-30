@@ -93,6 +93,9 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Padding = task.Padding;
             this.Colourspace = task.Colourspace;
             this.CustomColourspace = task.CustomColourspace;
+            this.ChromaSmooth = task.ChromaSmooth;
+            this.ChromaSmoothTune = task.ChromaSmoothTune;
+            this.CustomChromaSmooth = task.CustomChromaSmooth;
 
             this.DisplayWidth = task.DisplayWidth;
             this.EndPoint = task.EndPoint;
@@ -243,7 +246,13 @@ namespace HandBrakeWPF.Services.Encode.Model
         public FilterPreset Colourspace { get; set; }
 
         public string CustomColourspace { get; set; }
- 
+
+        public FilterPreset ChromaSmooth { get; set; }
+
+        public FilterTune ChromaSmoothTune { get; set; }
+
+        public string CustomChromaSmooth { get; set; }
+
         /* Video */
 
         public VideoEncodeRateType VideoEncodeRateType { get; set; }

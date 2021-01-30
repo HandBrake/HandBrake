@@ -2417,6 +2417,9 @@ Fields are limited to:
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
     <value>(Requires Restart)</value>
   </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
     <value>Colourspace:</value>
   </data>

@@ -499,6 +499,18 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
+            if (job.ChromaSmooth != null && job.ChromaSmooth.Key != "off")
+            {
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH, job.ChromaSmooth.Key, job.ChromaSmoothTune?.Key, job.CustomChromaSmooth);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
+            }
+
 
             // Grayscale
             if (job.Grayscale)

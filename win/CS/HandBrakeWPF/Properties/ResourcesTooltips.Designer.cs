@@ -61,6 +61,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chroma Smooth Filter.
+        /// </summary>
+        public static string FiltersView_ChromaSmooth {
+            get {
+                return ResourceManager.GetString("FiltersView_ChromaSmooth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colourspace Filter..
         /// </summary>
         public static string FiltersView_ColourSpace {

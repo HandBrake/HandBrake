@@ -97,6 +97,17 @@ namespace HandBrakeWPF.Services.Presets.Factories
             {
                 preset.Task.Colourspace = new FilterPreset("Off", "off");
             }
+            
+            if (!string.IsNullOrEmpty(importedPreset.PictureChromaSmoothPreset))
+            {
+                preset.Task.ChromaSmooth = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothPreset));
+                preset.Task.ChromaSmoothTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_CHROMA_SMOOTH).FirstOrDefault(s => s.ShortName == importedPreset.PictureChromaSmoothTune));
+                preset.Task.CustomChromaSmooth = importedPreset.PictureChromaSmoothCustom;
+            }
+            else
+            {
+                preset.Task.ChromaSmooth = new FilterPreset("Off", "off");
+            }
 
             if (!string.IsNullOrEmpty(importedPreset.PictureDeblockPreset))
             {
@@ -648,6 +659,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureColorspacePreset = export.Task.Colourspace?.Key;
             preset.PictureColorspaceCustom = export.Task.CustomColourspace;
 
+            preset.PictureChromaSmoothPreset = export.Task.ChromaSmooth?.Key;
+            preset.PictureChromaSmoothTune = export.Task.ChromaSmoothTune?.Key;
+            preset.PictureChromaSmoothCustom = export.Task.CustomChromaSmooth;
+            
             // Video
             preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);
             preset.VideoFramerate = export.Task.Framerate.HasValue ? export.Task.Framerate.ToString() : null;

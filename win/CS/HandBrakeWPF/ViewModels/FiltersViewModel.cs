@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.GrayscaleFilter = new GrayscaleFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.ColourSpaceFilter = new ColourSpaceFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.ChromaSmoothFilter = new ChromaSmoothFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
@@ -52,6 +53,8 @@ namespace HandBrakeWPF.ViewModels
         public ColourSpaceFilter ColourSpaceFilter { get; set; }
 
         public GrayscaleFilter GrayscaleFilter { get; set; }
+
+        public ChromaSmoothFilter ChromaSmoothFilter { get; set; }
         
         public void SetPreset(Preset preset, EncodeTask task)
         {
@@ -63,6 +66,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeinterlaceFilter.SetPreset(preset, task);
             this.DeblockFilter.SetPreset(preset, task);
             this.ColourSpaceFilter.SetPreset(preset, task);
+            this.ChromaSmoothFilter.SetPreset(preset, task);
         }
 
         public void UpdateTask(EncodeTask task)
@@ -76,6 +80,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeblockFilter.UpdateTask(task);
             this.GrayscaleFilter.UpdateTask(task);
             this.ColourSpaceFilter.UpdateTask(task);
+            this.ChromaSmoothFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -115,6 +120,11 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (!this.ChromaSmoothFilter.MatchesPreset(preset))
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -128,6 +138,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeblockFilter.SetSource(source, title, preset, task);
             this.GrayscaleFilter.SetSource(source, title, preset, task);
             this.ColourSpaceFilter.SetSource(source, title, preset, task);
+            this.ChromaSmoothFilter.SetSource(source, title, preset, task);
         }
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
