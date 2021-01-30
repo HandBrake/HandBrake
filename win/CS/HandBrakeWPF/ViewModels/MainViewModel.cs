@@ -216,10 +216,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string WindowTitle
         {
-            get
-            {
-                return this.windowName;
-            }
+            get => this.windowName;
 
             set
             {
@@ -233,10 +230,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string ProgramStatusLabel
         {
-            get
-            {
-                return string.IsNullOrEmpty(this.programStatusLabel) ? Resources.State_Ready : this.programStatusLabel;
-            }
+            get => string.IsNullOrEmpty(this.programStatusLabel) ? Resources.State_Ready : this.programStatusLabel;
 
             set
             {
@@ -250,10 +244,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string StatusLabel
         {
-            get
-            {
-                return string.IsNullOrEmpty(this.statusLabel) ? Resources.State_Ready : this.statusLabel;
-            }
+            get => string.IsNullOrEmpty(this.statusLabel) ? Resources.State_Ready : this.statusLabel;
 
             set
             {
@@ -271,10 +262,7 @@ namespace HandBrakeWPF.ViewModels
 
         public Preset SelectedPreset
         {
-            get
-            {
-                return this.selectedPreset;
-            }
+            get => this.selectedPreset;
 
             set
             {
@@ -298,14 +286,15 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsModifiedPreset
         {
-            get
-            {
-                return this.isModifiedPreset;
-            }
+            get => this.isModifiedPreset;
 
             set
             {
-                if (value == this.isModifiedPreset) return;
+                if (value == this.isModifiedPreset)
+                {
+                    return;
+                }
+
                 this.isModifiedPreset = value;
                 this.NotifyOfPropertyChange();
             }
@@ -328,10 +317,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string SourceLabel
         {
-            get
-            {
-                return string.IsNullOrEmpty(this.sourceLabel) ? Resources.Main_SelectSource : this.sourceLabel;
-            }
+            get => string.IsNullOrEmpty(this.sourceLabel) ? Resources.Main_SelectSource : this.sourceLabel;
 
             set
             {
@@ -343,25 +329,13 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public BindingList<PointToPointMode> RangeMode
-        {
-            get
-            {
-                return new BindingList<PointToPointMode>
-                    {
-                        PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames
-                    };
-            }
-        }
+        public BindingList<PointToPointMode> RangeMode { get; } = new BindingList<PointToPointMode> { PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames };
 
         public bool ShowTextEntryForPointToPointMode => this.SelectedPointToPoint != PointToPointMode.Chapters;
 
         public IEnumerable<int> StartEndRangeItems
         {
-            get
-            {
-                return this.SelectedTitle?.Chapters.Select(item => item.ChapterNumber).Select(dummy => dummy).ToList();
-            }
+            get => this.SelectedTitle?.Chapters.Select(item => item.ChapterNumber).Select(dummy => dummy).ToList();
         }
 
         public IEnumerable<int> Angles
@@ -378,16 +352,14 @@ namespace HandBrakeWPF.ViewModels
                 {
                     items.Add(i);
                 }
+
                 return items;
             }
         }
 
         public string Duration
         {
-            get
-            {
-                return string.IsNullOrEmpty(duration) ? "--:--:--" : duration;
-            }
+            get => string.IsNullOrEmpty(duration) ? "--:--:--" : duration;
             set
             {
                 duration = value;
@@ -395,20 +367,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsEncoding
-        {
-            get
-            {
-                return this.queueProcessor.IsEncoding;
-            }
-        }
+        public bool IsEncoding => this.queueProcessor.IsEncoding;
 
         public bool ShowStatusWindow
         {
-            get
-            {
-                return this.showStatusWindow;
-            }
+            get => this.showStatusWindow;
 
             set
             {
@@ -421,10 +384,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string Destination
         {
-            get
-            {
-                return this.CurrentTask.Destination;
-            }
+            get => this.CurrentTask.Destination;
             set
             {
                 if (!Equals(this.CurrentTask.Destination, value))
@@ -482,10 +442,7 @@ namespace HandBrakeWPF.ViewModels
 
         public Title SelectedTitle
         {
-            get
-            {
-                return this.selectedTitle;
-            }
+            get => this.selectedTitle;
 
             set
             {
@@ -537,10 +494,7 @@ namespace HandBrakeWPF.ViewModels
 
         public int SelectedAngle
         {
-            get
-            {
-                return this.CurrentTask.Angle;
-            }
+            get => this.CurrentTask.Angle;
 
             set
             {
@@ -553,10 +507,7 @@ namespace HandBrakeWPF.ViewModels
 
         public long SelectedStartPoint
         {
-            get
-            {
-                return this.CurrentTask.StartPoint;
-            }
+            get => this.CurrentTask.StartPoint;
 
             set
             {
@@ -582,10 +533,7 @@ namespace HandBrakeWPF.ViewModels
 
         public long SelectedEndPoint
         {
-            get
-            {
-                return this.CurrentTask.EndPoint;
-            }
+            get => this.CurrentTask.EndPoint;
 
             set
             {
@@ -608,10 +556,7 @@ namespace HandBrakeWPF.ViewModels
 
         public PointToPointMode SelectedPointToPoint
         {
-            get
-            {
-                return this.CurrentTask.PointToPointMode;
-            }
+            get => this.CurrentTask.PointToPointMode;
             set
             {
                 this.CurrentTask.PointToPointMode = value;
@@ -673,10 +618,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool ShowSourceSelection
         {
-            get
-            {
-                return this.showSourceSelection;
-            }
+            get => this.showSourceSelection;
             set
             {
                 if (value.Equals(this.showSourceSelection))
@@ -711,10 +653,7 @@ namespace HandBrakeWPF.ViewModels
 
         public BindingList<SourceMenuItem> Drives
         {
-            get
-            {
-                return this.drives;
-            }
+            get => this.drives;
             set
             {
                 if (Equals(value, this.drives))
@@ -733,10 +672,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool ShowAlertWindow
         {
-            get
-            {
-                return this.showAlertWindow;
-            }
+            get => this.showAlertWindow;
             set
             {
                 if (value.Equals(this.showAlertWindow))
@@ -750,16 +686,14 @@ namespace HandBrakeWPF.ViewModels
 
         public string AlertWindowHeader
         {
-            get
-            {
-                return this.alertWindowHeader;
-            }
+            get => this.alertWindowHeader;
             set
             {
                 if (value == this.alertWindowHeader)
                 {
                     return;
                 }
+
                 this.alertWindowHeader = value;
                 this.NotifyOfPropertyChange(() => this.AlertWindowHeader);
             }
@@ -767,16 +701,14 @@ namespace HandBrakeWPF.ViewModels
 
         public string AlertWindowText
         {
-            get
-            {
-                return this.alertWindowText;
-            }
+            get => this.alertWindowText;
             set
             {
                 if (value == this.alertWindowText)
                 {
                     return;
                 }
+
                 this.alertWindowText = value;
                 this.NotifyOfPropertyChange(() => this.AlertWindowText);
             }
@@ -801,10 +733,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool HasSource
         {
-            get
-            {
-                return this.hasSource;
-            }
+            get => this.hasSource;
 
             set
             {
@@ -861,7 +790,11 @@ namespace HandBrakeWPF.ViewModels
             get => this.updateAvailable;
             set
             {
-                if (value == this.updateAvailable) return;
+                if (value == this.updateAvailable)
+                {
+                    return;
+                }
+
                 this.updateAvailable = value;
                 this.NotifyOfPropertyChange(() => this.UpdateAvailable);
             }
@@ -1034,7 +967,7 @@ namespace HandBrakeWPF.ViewModels
             if (!this.PresetManagerViewModel.IsOpen)
             {
                 this.PresetManagerViewModel.IsOpen = true;
-                this.PresetManagerViewModel.SetupWindow(PresetManageCallback);
+                this.PresetManagerViewModel.SetupWindow(() => this.NotifyOfPropertyChange(() => this.PresetsCategories));
                 this.windowManager.ShowWindow(this.PresetManagerViewModel);
             }
             else if (this.PresetManagerViewModel.IsOpen)
@@ -1043,13 +976,7 @@ namespace HandBrakeWPF.ViewModels
                 window?.Focus();
             }
         }
-
-
-        private void PresetManageCallback()
-        {
-            this.NotifyOfPropertyChange(() => this.PresetsCategories);
-        }
-
+        
         public void LaunchHelp()
         {
             try
