@@ -382,7 +382,11 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 linesizes[i] = buf->plane[i].stride;
             }
             av_image_fill_black(planes, linesizes, stream->common->job->pix_fmt,
-                                AVCOL_RANGE_JPEG, buf->f.width, buf->f.height);
+                                stream->common->job->color_range, buf->f.width, buf->f.height);
+            buf->f.color_prim = stream->common->job->title->color_prim;
+            buf->f.color_transfer = stream->common->job->title->color_transfer;
+            buf->f.color_matrix = stream->common->job->title->color_matrix;
+            buf->f.color_range = stream->common->job->color_range;
         }
         else
         {
