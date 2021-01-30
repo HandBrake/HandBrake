@@ -971,6 +971,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colourspace:.
+        /// </summary>
+        public static string FiltersView_ColourSpace {
+            get {
+                return ResourceManager.GetString("FiltersView_ColourSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom:.
         /// </summary>
         public static string FiltersView_Custom {
@@ -6138,6 +6147,15 @@ namespace HandBrakeWPF.Properties {
         public static string SummaryView_Chapters {
             get {
                 return ResourceManager.GetString("SummaryView_Chapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colourspace.
+        /// </summary>
+        public static string SummaryView_Colourspace {
+            get {
+                return ResourceManager.GetString("SummaryView_Colourspace", resourceCulture);
             }
         }
         

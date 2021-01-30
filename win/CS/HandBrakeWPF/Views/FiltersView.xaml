@@ -41,6 +41,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -191,8 +192,25 @@
                     <TextBox Width="240" Margin="0" Text="{Binding DeblockFilter.CustomDeblock, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" />
                 </StackPanel>
 
+
+
+                <!-- Colourspace -->
+                <TextBlock Text="{x:Static Properties:Resources.FiltersView_ColourSpace}" Grid.Row="6" Grid.Column="0"  VerticalAlignment="Center" Margin="0,10,0,10" />
+                <ComboBox Width="120" Grid.Row="6" Grid.Column="1" Margin="0,10,0,10"
+                          ItemsSource="{Binding ColourSpaceFilter.Presets}" DisplayMemberPath="DisplayName"
+                          SelectedItem="{Binding ColourSpaceFilter.SelectedPreset}" 
+                          AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_ColourSpace}"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ColourSpace}" />
+
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ColourSpaceFilter.ShowColourspaceCustom, Converter={StaticResource boolToVisConverter}}" Grid.Row="6"  Grid.Column="2" Margin="0,10,0,10" >
+                    <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" VerticalAlignment="Center" />
+                    <TextBox Width="240" Margin="0" Text="{Binding ColourSpaceFilter.CustomColourspace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" />
+                </StackPanel>
+
                 <!-- Grayscale -->
-                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,10,0,10"
+                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="7" Grid.Column="1" Margin="0,10,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}"  HorizontalAlignment="Left"  />
 
             </Grid>

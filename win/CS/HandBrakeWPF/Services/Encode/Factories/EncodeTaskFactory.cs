@@ -486,6 +486,20 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
+            // Colourspace
+            if (job.Colourspace != null && job.Colourspace.Key != "off")
+            {
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_COLORSPACE, job.Colourspace.Key, null, job.CustomColourspace);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_COLORSPACE, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
+            }
+
+
             // Grayscale
             if (job.Grayscale)
             {
