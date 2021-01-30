@@ -356,15 +356,22 @@
 
     [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
         NSInteger index = [self.queue.items indexOfObject:item];
-        [self.queue resetItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
-        if (result)
+        if (index != NSNotFound)
         {
-            // Now that source is loaded and settings applied, delete the queue item from the queue
-            [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+            [self.queue resetItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+            if (result)
+            {
+                // Now that source is loaded and settings applied, delete the queue item from the queue
+                [self.queue removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+            }
+            else
+            {
+                NSBeep();
+            }
         }
         else
         {
-            NSBeep();
+            item.state = HBQueueItemStateReady;
         }
     }];
 }
