@@ -23,4 +23,4 @@ jobs:
       run: |
         ./configure --disable-gtk-update-checks  --enable-qsv
         cd build
-        make -j 0
+        make -j 3
