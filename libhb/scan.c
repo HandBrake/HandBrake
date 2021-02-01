@@ -1084,12 +1084,33 @@ skip_preview:
         }
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "
-                "aspect %s, PAR %d:%d",
+                "aspect %s, PAR %d:%d, color profile: %d-%d-%d",
                 npreviews, title->geometry.width, title->geometry.height,
                 (float)title->vrate.num / title->vrate.den,
                 title->crop[0], title->crop[1], title->crop[2], title->crop[3],
                 aspect_to_string(&title->dar),
-                title->geometry.par.num, title->geometry.par.den);
+                title->geometry.par.num, title->geometry.par.den,
+                title->color_prim, title->color_transfer, title->color_matrix);
+
+        if (title->mastering.has_primaries || title->mastering.has_luminance)
+        {
+            hb_log("scan: mastering display metadata: r(%5.4f,%5.4f) g(%5.4f,%5.4f) b(%5.4f %5.4f) wp(%5.4f, %5.4f) min_luminance=%f, max_luminance=%f",
+                   hb_q2d(title->mastering.display_primaries[0][0]),
+                   hb_q2d(title->mastering.display_primaries[0][1]),
+                   hb_q2d(title->mastering.display_primaries[1][0]),
+                   hb_q2d(title->mastering.display_primaries[1][1]),
+                   hb_q2d(title->mastering.display_primaries[2][0]),
+                   hb_q2d(title->mastering.display_primaries[2][1]),
+                   hb_q2d(title->mastering.white_point[0]), hb_q2d(title->mastering.white_point[1]),
+                   hb_q2d(title->mastering.min_luminance), hb_q2d(title->mastering.max_luminance));
+        }
+
+        if (title->coll.max_cll || title->coll.max_fall)
+        {
+            hb_log("scan: content light level: max_cll=%u, max_fall=%u",
+                   title->coll.max_cll,
+                   title->coll.max_fall);
+        }
 
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
         {

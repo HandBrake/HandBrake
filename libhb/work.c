@@ -593,6 +593,28 @@ void hb_display_job_info(hb_job_t *job)
 
         hb_log("     + color profile: %d-%d-%d",
                job->color_prim, job->color_transfer, job->color_matrix);
+
+        if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+        {
+            if (job->mastering.has_primaries || job->mastering.has_luminance)
+            {
+                hb_log("     + mastering display metadata: r(%5.4f,%5.4f) g(%5.4f,%5.4f) b(%5.4f %5.4f) wp(%5.4f, %5.4f) min_luminance=%f, max_luminance=%f",
+                       hb_q2d(job->mastering.display_primaries[0][0]),
+                       hb_q2d(job->mastering.display_primaries[0][1]),
+                       hb_q2d(job->mastering.display_primaries[1][0]),
+                       hb_q2d(job->mastering.display_primaries[1][1]),
+                       hb_q2d(job->mastering.display_primaries[2][0]),
+                       hb_q2d(job->mastering.display_primaries[2][1]),
+                       hb_q2d(job->mastering.white_point[0]), hb_q2d(job->mastering.white_point[1]),
+                       hb_q2d(job->mastering.min_luminance), hb_q2d(job->mastering.max_luminance));
+            }
+            if (job->coll.max_cll && job->coll.max_fall)
+            {
+                hb_log("     + content light level: max_cll=%u, max_fall=%u",
+                       job->coll.max_cll,
+                       job->coll.max_fall);
+            }
+        }
     }
 
     if (job->indepth_scan)

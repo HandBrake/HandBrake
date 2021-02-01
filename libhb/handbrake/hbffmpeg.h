@@ -19,6 +19,7 @@
 #include "libavutil/avutil.h"
 #include "libavutil/downmix_info.h"
 #include "libavutil/display.h"
+#include "libavutil/mastering_display_metadata.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "handbrake/common.h"
@@ -40,6 +41,9 @@ int hb_colr_mat_hb_to_ff(int colr_mat);
 int hb_colr_pri_ff_to_hb(int colr_prim);
 int hb_colr_tra_ff_to_hb(int colr_tra);
 int hb_colr_mat_ff_to_hb(int colr_mat);
+
+hb_mastering_display_metadata_t hb_mastering_ff_to_hb(AVMasteringDisplayMetadata mastering);
+AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t mastering);
 
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,

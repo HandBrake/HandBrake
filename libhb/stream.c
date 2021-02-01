@@ -5831,6 +5831,19 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                         }
                         break;
                     }
+                    case AV_PKT_DATA_MASTERING_DISPLAY_METADATA:
+                    {
+                        AVMasteringDisplayMetadata *mastering = (AVMasteringDisplayMetadata *)sd.data;
+                        title->mastering = hb_mastering_ff_to_hb(*mastering);
+                        break;
+                    }
+                    case AV_PKT_DATA_CONTENT_LIGHT_LEVEL:
+                    {
+                        AVContentLightMetadata *coll = (AVContentLightMetadata *)sd.data;
+                        title->coll.max_cll = coll->MaxCLL;
+                        title->coll.max_fall = coll->MaxFALL;
+                        break;
+                    }
                     default:
                         break;
                 }

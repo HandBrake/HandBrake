@@ -254,6 +254,16 @@ struct hb_rational_s
     int den;
 };
 
+static inline hb_rational_t hb_make_q(int num, int den)
+{
+    hb_rational_t r = { num, den };
+    return r;
+}
+
+static inline double hb_q2d(hb_rational_t a){
+    return a.num / (double) a.den;
+}
+
 struct hb_geometry_s
 {
     int width;
@@ -307,6 +317,20 @@ struct hb_subtitle_config_s
     const char * src_filename;
     char         src_codeset[40];
     int64_t      offset;
+};
+
+struct hb_mastering_display_metadata_s {
+    hb_rational_t display_primaries[3][2];
+    hb_rational_t white_point[2];
+    hb_rational_t min_luminance;
+    hb_rational_t max_luminance;
+    int has_primaries;
+    int has_luminance;
+};
+
+struct hb_content_light_metadata_s {
+    unsigned max_cll;
+    unsigned max_fall;
 };
 
 /*******************************************************************************
@@ -625,6 +649,9 @@ struct hb_job_s
 #define HB_COLR_MAT_CD_CL        13 // chromaticity derived constant lum
 #define HB_COLR_MAT_ICTCP        14 // ITU-R BT.2100-0, ICtCp
 // 0, 3-5, 8, 11-65535: reserved/not implemented
+
+    hb_mastering_display_metadata_t mastering;
+    hb_content_light_metadata_t coll;
 
     hb_list_t     * list_chapter;
 
@@ -1090,6 +1117,8 @@ struct hb_title_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    hb_mastering_display_metadata_t mastering;
+    hb_content_light_metadata_t     coll;
     hb_rational_t   vrate;
     int             crop[4];
     enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
