@@ -143,6 +143,22 @@ static const char * get_range_name(int color_range)
     return "limited";
 }
 
+#define REFERENCE_WHITE 100.0f
+
+static double determine_signal_peak(hb_filter_init_t * init)
+{
+    double peak = init->job->coll.max_cll / REFERENCE_WHITE;
+    if (!peak && init->job->mastering.has_luminance)
+    {
+        peak = hb_q2d(init->job->mastering.max_luminance) / REFERENCE_WHITE;
+    }
+    if (!peak || peak < 1)
+    {
+        peak = init->color_transfer == HB_COLR_TRA_SMPTEST2084 ? 100.0f : 10.0f;
+    }
+    return peak;
+}
+
 static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 {
     hb_filter_private_t * pv = NULL;
@@ -246,6 +262,9 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hb_dict_set_double(avsettings, "param", param);
         }
         hb_dict_set_double(avsettings, "desat", desat);
+        // FIXME: this could be automated by passing through side data.
+        double peak = determine_signal_peak(init);
+        hb_dict_set_double(avsettings, "peak", peak);
         hb_dict_set(avfilter, "tonemap", avsettings);
 
         hb_value_array_append(avfilters, avfilter);

@@ -154,9 +154,9 @@ static int avformatInit( hb_mux_object_t * m )
 
             av_dict_set(&av_opts, "brand", "mp42", 0);
             if (job->mp4_optimize)
-                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl", 0);
+                av_dict_set(&av_opts, "movflags", "faststart+disable_chpl+write_colr", 0);
             else
-                av_dict_set(&av_opts, "movflags", "+disable_chpl", 0);
+                av_dict_set(&av_opts, "movflags", "+disable_chpl+write_colr", 0);
             break;
 
         case HB_MUX_AV_MKV:
@@ -444,6 +444,42 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codecpar->width                   = job->width;
     track->st->codecpar->height                  = job->height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
+
+    track->st->codecpar->color_primaries = job->color_prim;
+    track->st->codecpar->color_trc       = job->color_transfer;
+    track->st->codecpar->color_space     = job->color_matrix;
+    track->st->codecpar->color_range     = job->color_range;
+
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    {
+        if (job->mastering.has_primaries || job->mastering.has_luminance)
+        {
+            AVMasteringDisplayMetadata mastering = hb_mastering_hb_to_ff(job->mastering);
+
+            uint8_t *mastering_data = av_malloc(sizeof(AVMasteringDisplayMetadata));
+            memcpy(mastering_data, &mastering, sizeof(AVMasteringDisplayMetadata));
+
+            av_stream_add_side_data(track->st,
+                                    AV_PKT_DATA_MASTERING_DISPLAY_METADATA,
+                                    mastering_data,
+                                    sizeof(AVMasteringDisplayMetadata));
+        }
+
+        if (job->coll.max_cll && job->coll.max_fall)
+        {
+            AVContentLightMetadata coll;
+            coll.MaxCLL = job->coll.max_cll;
+            coll.MaxFALL = job->coll.max_fall;
+
+            uint8_t *coll_data = av_malloc(sizeof(AVContentLightMetadata));
+            memcpy(coll_data, &coll, sizeof(AVContentLightMetadata));
+
+            av_stream_add_side_data(track->st,
+                                    AV_PKT_DATA_CONTENT_LIGHT_LEVEL,
+                                    coll_data,
+                                    sizeof(AVContentLightMetadata));
+        }
+    }
 
     hb_rational_t vrate = job->vrate;
 

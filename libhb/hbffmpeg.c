@@ -423,6 +423,62 @@ int hb_colr_mat_ff_to_hb(int colr_mat)
     }
 }
 
+static hb_rational_t hb_rational_ff_to_hb(AVRational rational)
+{
+    hb_rational_t hb_rational = {rational.num, rational.den};
+    return hb_rational;
+}
+
+static AVRational hb_rational_hb_to_ff(hb_rational_t rational)
+{
+    AVRational ff_rational = {rational.num, rational.den};
+    return ff_rational;
+}
+
+hb_mastering_display_metadata_t hb_mastering_ff_to_hb(AVMasteringDisplayMetadata mastering)
+{
+    hb_mastering_display_metadata_t hb_mastering;
+
+    for (int i = 0; i < 3; i++)
+    {
+        hb_mastering.display_primaries[i][0] = hb_rational_ff_to_hb(mastering.display_primaries[i][0]);
+        hb_mastering.display_primaries[i][1] = hb_rational_ff_to_hb(mastering.display_primaries[i][1]);
+    }
+
+    hb_mastering.white_point[0] = hb_rational_ff_to_hb(mastering.white_point[0]);
+    hb_mastering.white_point[1] = hb_rational_ff_to_hb(mastering.white_point[1]);
+
+    hb_mastering.min_luminance = hb_rational_ff_to_hb(mastering.min_luminance);
+    hb_mastering.max_luminance = hb_rational_ff_to_hb(mastering.max_luminance);
+
+    hb_mastering.has_primaries = mastering.has_primaries;
+    hb_mastering.has_luminance = mastering.has_luminance;
+
+    return hb_mastering;
+}
+
+AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t mastering)
+{
+    AVMasteringDisplayMetadata ff_mastering;
+
+    for (int i = 0; i < 3; i++)
+    {
+        ff_mastering.display_primaries[i][0] = hb_rational_hb_to_ff(mastering.display_primaries[i][0]);
+        ff_mastering.display_primaries[i][1] = hb_rational_hb_to_ff(mastering.display_primaries[i][1]);
+    }
+
+    ff_mastering.white_point[0] = hb_rational_hb_to_ff(mastering.white_point[0]);
+    ff_mastering.white_point[1] = hb_rational_hb_to_ff(mastering.white_point[1]);
+
+    ff_mastering.min_luminance = hb_rational_hb_to_ff(mastering.min_luminance);
+    ff_mastering.max_luminance = hb_rational_hb_to_ff(mastering.max_luminance);
+
+    ff_mastering.has_primaries = mastering.has_primaries;
+    ff_mastering.has_luminance = mastering.has_luminance;
+
+    return ff_mastering;
+}
+
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 {
     uint64_t ff_layout = 0;

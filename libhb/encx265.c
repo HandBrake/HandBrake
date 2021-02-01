@@ -34,6 +34,9 @@ hb_work_object_t hb_encx265 =
 #define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
 #define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
 
+#define MASTERING_CHROMA_DEN 50000
+#define MASTERING_LUMA_DEN 10000
+
 static const char * const hb_x265_encopt_synonyms[][2] =
 {
     { "me", "motion", },
@@ -62,6 +65,11 @@ struct hb_work_private_s
     const x265_api     * api;
     int                  bit_depth;
 };
+
+static inline int64_t rescale(hb_rational_t q, int b)
+{
+    return av_rescale(q.num, b, q.den);
+}
 
 static int param_parse(hb_work_private_t *pv, x265_param *param,
                        const char *key, const char *value)
@@ -106,6 +114,7 @@ int apply_h265_level(hb_work_private_t *pv,  x265_param *param,
     hb_error("apply_h265_level: invalid level %s", h265_level);
     return X265_PARAM_BAD_VALUE;
 }
+
 
 /***********************************************************************
  * hb_work_encx265_init
@@ -195,11 +204,67 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         goto fail;
     }
 
+    /*
+     * HDR10 Static metadata
+     */
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    {
+        if (depth > 8)
+        {
+            if (param_parse(pv, param, "hdr-opt", "1"))
+            {
+                goto fail;
+            }
+        }
+
+        /*
+         * Mastering display metadata.
+         */
+        if (job->mastering.has_primaries && job->mastering.has_luminance)
+        {
+            char masteringDisplayColorVolume[256];
+            snprintf(masteringDisplayColorVolume, sizeof(masteringDisplayColorVolume),
+                     "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
+                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN),
+                     (unsigned)rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN),
+                     (unsigned)rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN));
+
+            if (param_parse(pv, param, "master-display",   masteringDisplayColorVolume))
+            {
+                goto fail;
+            }
+        }
+
+        /*
+         * Content light level.
+         */
+        if (job->coll.max_cll && job->coll.max_fall)
+        {
+            char contentLightLevel[256];
+            snprintf(contentLightLevel, sizeof(contentLightLevel),
+                     "%hu,%hu",
+                     (unsigned short)job->coll.max_cll, (unsigned short)job->coll.max_fall);
+
+            if (param_parse(pv, param, "max-cll", contentLightLevel))
+            {
+                goto fail;
+            }
+        }
+    }
+
     /* Bit depth */
     pv->bit_depth = hb_get_bit_depth(job->pix_fmt);
 
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
+    int override_mastering = 0, override_coll = 0;
     x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
     hb_dict_iter_t iter;
@@ -210,6 +275,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         const char *key = hb_dict_iter_key(iter);
         hb_value_t *value = hb_dict_iter_value(iter);
         char *str = hb_value_get_string_xform(value);
+
+        if (!strcmp(key, "master-display"))
+        {
+            override_mastering = 1;
+        }
+        if (!strcmp(key, "max-cll"))
+        {
+            override_coll = 1;
+        }
 
         // here's where the strings are passed to libx265 for parsing
         // unknown options or bad values are non-fatal, see encx264.c
@@ -225,6 +299,48 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     job->color_prim_override     = param->vui.colorPrimaries;
     job->color_transfer_override = param->vui.transferCharacteristics;
     job->color_matrix_override   = param->vui.matrixCoeffs;
+
+    /*
+     * Reload mastering settings in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_mastering)
+    {
+        uint16_t display_primaries_x[3];
+        uint16_t display_primaries_y[3];
+        uint16_t white_point_x, white_point_y;
+        uint32_t max_luminance, min_luminance;
+
+        if (sscanf(param->masteringDisplayColorVolume, "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
+                      &display_primaries_x[0], &display_primaries_y[0],
+                      &display_primaries_x[1], &display_primaries_y[1],
+                      &display_primaries_x[2], &display_primaries_y[2],
+                      &white_point_x, &white_point_y,
+                      &max_luminance, &min_luminance) == 10)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                job->mastering.display_primaries[i][0] = hb_make_q(display_primaries_x[i], MASTERING_CHROMA_DEN);
+                job->mastering.display_primaries[i][1] = hb_make_q(display_primaries_y[i], MASTERING_CHROMA_DEN);
+            }
+
+            job->mastering.white_point[0] = hb_make_q(white_point_x, MASTERING_CHROMA_DEN);
+            job->mastering.white_point[1] = hb_make_q(white_point_y, MASTERING_CHROMA_DEN);
+
+            job->mastering.min_luminance = hb_make_q(min_luminance, MASTERING_LUMA_DEN);
+            job->mastering.max_luminance = hb_make_q(max_luminance, MASTERING_LUMA_DEN);
+        }
+    }
+
+    /*
+     * Reload content light level settings in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_coll)
+    {
+        job->coll.max_fall = param->maxFALL;
+        job->coll.max_cll  = param->maxCLL;
+    }
 
     /*
      * Settings which can't be overridden in the encodeer_options string

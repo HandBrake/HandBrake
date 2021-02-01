@@ -43,5 +43,7 @@ typedef struct hb_buffer_settings_s hb_buffer_settings_t;
 typedef struct hb_image_format_s hb_image_format_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
+typedef struct hb_mastering_display_metadata_s hb_mastering_display_metadata_t;
+typedef struct hb_content_light_metadata_s hb_content_light_metadata_t;
 
 #endif // HANDBRAKE_TYPES_H
