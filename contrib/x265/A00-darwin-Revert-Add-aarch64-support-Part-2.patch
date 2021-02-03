@@ -1,0 +1,728 @@
+From f554daa098526e91c6440d29b1ddc213bd01ad0f Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Tue, 26 Jan 2021 19:40:27 +0100
+Subject: [PATCH] Revert "Add aarch64 support - Part 2"
+
+This reverts commit ec7396adaa6afd2c8aab1918cfe4bb6e384740c3.
+---
+ build/aarch64-linux/crosscompile.cmake  |  15 --
+ build/aarch64-linux/make-Makefiles.bash |   4 -
+ source/CMakeLists.txt                   |  38 +---
+ source/common/CMakeLists.txt            |  35 +--
+ source/common/arm/asm-primitives.cpp    | 291 ++++++++++++------------
+ source/common/cpu.cpp                   |   4 -
+ source/common/pixel.cpp                 |   9 -
+ source/common/primitives.h              |  11 -
+ source/test/CMakeLists.txt              |  16 +-
+ source/test/testbench.cpp               |  16 --
+ source/test/testharness.h               |   5 -
+ 11 files changed, 170 insertions(+), 274 deletions(-)
+ delete mode 100644 build/aarch64-linux/crosscompile.cmake
+ delete mode 100644 build/aarch64-linux/make-Makefiles.bash
+
+diff --git a/build/aarch64-linux/crosscompile.cmake b/build/aarch64-linux/crosscompile.cmake
+deleted file mode 100644
+index 41c8217f2..000000000
+--- a/build/aarch64-linux/crosscompile.cmake
++++ /dev/null
+@@ -1,15 +0,0 @@
+-# CMake toolchain file for cross compiling x265 for aarch64
+-# This feature is only supported as experimental. Use with caution.
+-# Please report bugs on bitbucket
+-# Run cmake with: cmake -DCMAKE_TOOLCHAIN_FILE=crosscompile.cmake -G "Unix Makefiles" ../../source && ccmake ../../source
+-
+-set(CROSS_COMPILE_ARM 1)
+-set(CMAKE_SYSTEM_NAME Linux)
+-set(CMAKE_SYSTEM_PROCESSOR aarch64)
+-
+-# specify the cross compiler
+-set(CMAKE_C_COMPILER aarch64-linux-gnu-gcc)
+-set(CMAKE_CXX_COMPILER aarch64-linux-gnu-g++)
+-
+-# specify the target environment
+-SET(CMAKE_FIND_ROOT_PATH  /usr/aarch64-linux-gnu)
+diff --git a/build/aarch64-linux/make-Makefiles.bash b/build/aarch64-linux/make-Makefiles.bash
+deleted file mode 100644
+index c9582da0a..000000000
+--- a/build/aarch64-linux/make-Makefiles.bash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#!/bin/bash
+-# Run this from within a bash shell
+-
+-cmake -DCMAKE_TOOLCHAIN_FILE="crosscompile.cmake" -G "Unix Makefiles" ../../source && ccmake ../../source
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 95218f5dc..2ed5c24e3 100755
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -40,7 +40,7 @@ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
+ # System architecture detection
+ string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
+ set(X86_ALIASES x86 i386 i686 x86_64 amd64)
+-set(ARM_ALIASES armv6l armv7l aarch64)
++set(ARM_ALIASES armv6l armv7l)
+ list(FIND X86_ALIASES "${SYSPROC}" X86MATCH)
+ list(FIND ARM_ALIASES "${SYSPROC}" ARMMATCH)
+ set(POWER_ALIASES ppc64 ppc64le)
+@@ -70,15 +70,9 @@ elseif(ARMMATCH GREATER "-1")
+     else()
+         set(CROSS_COMPILE_ARM 0)
+     endif()
++    message(STATUS "Detected ARM target processor")
+     set(ARM 1)
+-    if("${CMAKE_SIZEOF_VOID_P}" MATCHES 8)
+-        message(STATUS "Detected ARM64 target processor")
+-        set(ARM64 1)
+-        add_definitions(-DX265_ARCH_ARM=1 -DX265_ARCH_ARM64=1 -DHAVE_ARMV6=0)
+-    else()
+-        message(STATUS "Detected ARM target processor")
+-        add_definitions(-DX265_ARCH_ARM=1 -DX265_ARCH_ARM64=0 -DHAVE_ARMV6=1)
+-    endif()
++    add_definitions(-DX265_ARCH_ARM=1 -DHAVE_ARMV6=1)
+ else()
+     message(STATUS "CMAKE_SYSTEM_PROCESSOR value `${CMAKE_SYSTEM_PROCESSOR}` is unknown")
+     message(STATUS "Please add this value near ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE}")
+@@ -239,24 +233,14 @@ if(GCC)
+         endif()
+     endif()
+     if(ARM AND CROSS_COMPILE_ARM)
+-        if(ARM64)
+-            set(ARM_ARGS -fPIC)
+-        else()
+-            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+-        endif()
+-        message(STATUS "cross compile arm")
++        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+     elseif(ARM)
+-        if(ARM64)
+-            set(ARM_ARGS -fPIC)
++        find_package(Neon)
++        if(CPU_HAS_NEON)
++            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+             add_definitions(-DHAVE_NEON)
+         else()
+-            find_package(Neon)
+-            if(CPU_HAS_NEON)
+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+-                add_definitions(-DHAVE_NEON)
+-            else()
+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+-            endif()
++            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+         endif()
+     endif()
+     add_definitions(${ARM_ARGS})
+@@ -536,11 +520,7 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+     # compile ARM arch asm files here
+         enable_language(ASM)
+         foreach(ASM ${ARM_ASMS})
+-            if(ARM64)
+-                set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/aarch64/${ASM})
+-            else()
+-                set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/arm/${ASM})
+-            endif()
++            set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/arm/${ASM})
+             list(APPEND ASM_SRCS ${ASM_SRC})
+             list(APPEND ASM_OBJS ${ASM}.${SUFFIX})
+             add_custom_command(
+diff --git a/source/common/CMakeLists.txt b/source/common/CMakeLists.txt
+index 12b643ad5..c34064b2f 100644
+--- a/source/common/CMakeLists.txt
++++ b/source/common/CMakeLists.txt
+@@ -14,7 +14,7 @@ if(EXTRA_LIB)
+ endif(EXTRA_LIB)
+ 
+ if(ENABLE_ASSEMBLY)
+-    set_source_files_properties(threading.cpp primitives.cpp pixel.cpp PROPERTIES COMPILE_FLAGS -DENABLE_ASSEMBLY=1)
++    set_source_files_properties(threading.cpp primitives.cpp PROPERTIES COMPILE_FLAGS -DENABLE_ASSEMBLY=1)
+     list(APPEND VFLAGS "-DENABLE_ASSEMBLY=1")
+ endif(ENABLE_ASSEMBLY)
+ 
+@@ -84,33 +84,16 @@ if(ENABLE_ASSEMBLY AND X86)
+ endif(ENABLE_ASSEMBLY AND X86)
+ 
+ if(ENABLE_ASSEMBLY AND (ARM OR CROSS_COMPILE_ARM))
+-    if(ARM64)
+-        if(GCC AND (CMAKE_CXX_FLAGS_RELEASE MATCHES "-O3"))
+-            message(STATUS "Detected CXX compiler using -O3 optimization level")
+-            add_definitions(-DAUTO_VECTORIZE=1)
+-        endif()
+-        set(C_SRCS asm-primitives.cpp pixel.h ipfilter8.h)
+-
+-        # add ARM assembly/intrinsic files here
+-        set(A_SRCS asm.S mc-a.S sad-a.S pixel-util.S ipfilter8.S)
+-        set(VEC_PRIMITIVES)
+-
+-        set(ARM_ASMS "${A_SRCS}" CACHE INTERNAL "ARM Assembly Sources")
+-        foreach(SRC ${C_SRCS})
+-            set(ASM_PRIMITIVES ${ASM_PRIMITIVES} aarch64/${SRC})
+-        endforeach()
+-    else()
+-        set(C_SRCS asm-primitives.cpp pixel.h mc.h ipfilter8.h blockcopy8.h dct8.h loopfilter.h)
++    set(C_SRCS asm-primitives.cpp pixel.h mc.h ipfilter8.h blockcopy8.h dct8.h loopfilter.h)
+ 
+-        # add ARM assembly/intrinsic files here
+-        set(A_SRCS asm.S cpu-a.S mc-a.S sad-a.S pixel-util.S ssd-a.S blockcopy8.S ipfilter8.S dct-a.S)
+-        set(VEC_PRIMITIVES)
++    # add ARM assembly/intrinsic files here
++    set(A_SRCS asm.S cpu-a.S mc-a.S sad-a.S pixel-util.S ssd-a.S blockcopy8.S ipfilter8.S dct-a.S)
++    set(VEC_PRIMITIVES)
+ 
+-        set(ARM_ASMS "${A_SRCS}" CACHE INTERNAL "ARM Assembly Sources")
+-        foreach(SRC ${C_SRCS})
+-            set(ASM_PRIMITIVES ${ASM_PRIMITIVES} arm/${SRC})
+-        endforeach()
+-    endif()
++    set(ARM_ASMS "${A_SRCS}" CACHE INTERNAL "ARM Assembly Sources")
++    foreach(SRC ${C_SRCS})
++        set(ASM_PRIMITIVES ${ASM_PRIMITIVES} arm/${SRC})
++    endforeach()
+     source_group(Assembly FILES ${ASM_PRIMITIVES})
+ endif(ENABLE_ASSEMBLY AND (ARM OR CROSS_COMPILE_ARM))
+ 
+diff --git a/source/common/arm/asm-primitives.cpp b/source/common/arm/asm-primitives.cpp
+index 7f11503f9..422217845 100644
+--- a/source/common/arm/asm-primitives.cpp
++++ b/source/common/arm/asm-primitives.cpp
+@@ -5,7 +5,6 @@
+  *          Praveen Kumar Tiwari <praveen@multicorewareinc.com>
+  *          Min Chen <chenm003@163.com> <min.chen@multicorewareinc.com>
+  *          Dnyaneshwar Gorade <dnyaneshwar@multicorewareinc.com>
+- *          Hongbin Liu<liuhongbin1@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -49,77 +48,77 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.ssim_4x4x2_core = PFX(ssim_4x4x2_core_neon);
+ 
+         // addAvg
+-         p.pu[LUMA_4x4].addAvg[NONALIGNED]   = PFX(addAvg_4x4_neon);
+-         p.pu[LUMA_4x8].addAvg[NONALIGNED]   = PFX(addAvg_4x8_neon);
+-         p.pu[LUMA_4x16].addAvg[NONALIGNED]  = PFX(addAvg_4x16_neon);
+-         p.pu[LUMA_8x4].addAvg[NONALIGNED]   = PFX(addAvg_8x4_neon);
+-         p.pu[LUMA_8x8].addAvg[NONALIGNED]   = PFX(addAvg_8x8_neon);
+-         p.pu[LUMA_8x16].addAvg[NONALIGNED]  = PFX(addAvg_8x16_neon);
+-         p.pu[LUMA_8x32].addAvg[NONALIGNED]  = PFX(addAvg_8x32_neon);
+-         p.pu[LUMA_12x16].addAvg[NONALIGNED] = PFX(addAvg_12x16_neon);
+-         p.pu[LUMA_16x4].addAvg[NONALIGNED]  = PFX(addAvg_16x4_neon);
+-         p.pu[LUMA_16x8].addAvg[NONALIGNED]  = PFX(addAvg_16x8_neon);
+-         p.pu[LUMA_16x12].addAvg[NONALIGNED] = PFX(addAvg_16x12_neon);
+-         p.pu[LUMA_16x16].addAvg[NONALIGNED] = PFX(addAvg_16x16_neon);
+-         p.pu[LUMA_16x32].addAvg[NONALIGNED] = PFX(addAvg_16x32_neon);
+-         p.pu[LUMA_16x64].addAvg[NONALIGNED] = PFX(addAvg_16x64_neon);
+-         p.pu[LUMA_24x32].addAvg[NONALIGNED] = PFX(addAvg_24x32_neon);
+-         p.pu[LUMA_32x8].addAvg[NONALIGNED]  = PFX(addAvg_32x8_neon);
+-         p.pu[LUMA_32x16].addAvg[NONALIGNED] = PFX(addAvg_32x16_neon);
+-         p.pu[LUMA_32x24].addAvg[NONALIGNED] = PFX(addAvg_32x24_neon);
+-         p.pu[LUMA_32x32].addAvg[NONALIGNED] = PFX(addAvg_32x32_neon);
+-         p.pu[LUMA_32x64].addAvg[NONALIGNED] = PFX(addAvg_32x64_neon);
+-         p.pu[LUMA_48x64].addAvg[NONALIGNED] = PFX(addAvg_48x64_neon);
+-         p.pu[LUMA_64x16].addAvg[NONALIGNED] = PFX(addAvg_64x16_neon);
+-         p.pu[LUMA_64x32].addAvg[NONALIGNED] = PFX(addAvg_64x32_neon);
+-         p.pu[LUMA_64x48].addAvg[NONALIGNED] = PFX(addAvg_64x48_neon);
+-         p.pu[LUMA_64x64].addAvg[NONALIGNED] = PFX(addAvg_64x64_neon);
++         p.pu[LUMA_4x4].addAvg   = PFX(addAvg_4x4_neon);
++         p.pu[LUMA_4x8].addAvg   = PFX(addAvg_4x8_neon);
++         p.pu[LUMA_4x16].addAvg  = PFX(addAvg_4x16_neon);
++         p.pu[LUMA_8x4].addAvg   = PFX(addAvg_8x4_neon);
++         p.pu[LUMA_8x8].addAvg   = PFX(addAvg_8x8_neon);
++         p.pu[LUMA_8x16].addAvg  = PFX(addAvg_8x16_neon);
++         p.pu[LUMA_8x32].addAvg  = PFX(addAvg_8x32_neon);
++         p.pu[LUMA_12x16].addAvg = PFX(addAvg_12x16_neon);
++         p.pu[LUMA_16x4].addAvg  = PFX(addAvg_16x4_neon);
++         p.pu[LUMA_16x8].addAvg  = PFX(addAvg_16x8_neon);
++         p.pu[LUMA_16x12].addAvg = PFX(addAvg_16x12_neon);
++         p.pu[LUMA_16x16].addAvg = PFX(addAvg_16x16_neon);
++         p.pu[LUMA_16x32].addAvg = PFX(addAvg_16x32_neon);
++         p.pu[LUMA_16x64].addAvg = PFX(addAvg_16x64_neon);
++         p.pu[LUMA_24x32].addAvg = PFX(addAvg_24x32_neon);
++         p.pu[LUMA_32x8].addAvg  = PFX(addAvg_32x8_neon);
++         p.pu[LUMA_32x16].addAvg = PFX(addAvg_32x16_neon);
++         p.pu[LUMA_32x24].addAvg = PFX(addAvg_32x24_neon);
++         p.pu[LUMA_32x32].addAvg = PFX(addAvg_32x32_neon);
++         p.pu[LUMA_32x64].addAvg = PFX(addAvg_32x64_neon);
++         p.pu[LUMA_48x64].addAvg = PFX(addAvg_48x64_neon);
++         p.pu[LUMA_64x16].addAvg = PFX(addAvg_64x16_neon);
++         p.pu[LUMA_64x32].addAvg = PFX(addAvg_64x32_neon);
++         p.pu[LUMA_64x48].addAvg = PFX(addAvg_64x48_neon);
++         p.pu[LUMA_64x64].addAvg = PFX(addAvg_64x64_neon);
+ 
+         // chroma addAvg
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg[NONALIGNED]   = PFX(addAvg_4x2_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg[NONALIGNED]   = PFX(addAvg_4x4_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg[NONALIGNED]   = PFX(addAvg_4x8_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg[NONALIGNED]  = PFX(addAvg_4x16_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg[NONALIGNED]   = PFX(addAvg_6x8_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg[NONALIGNED]   = PFX(addAvg_8x2_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg[NONALIGNED]   = PFX(addAvg_8x4_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg[NONALIGNED]   = PFX(addAvg_8x6_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg[NONALIGNED]   = PFX(addAvg_8x8_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg[NONALIGNED]  = PFX(addAvg_8x16_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg[NONALIGNED]  = PFX(addAvg_8x32_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg[NONALIGNED] = PFX(addAvg_12x16_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg[NONALIGNED]  = PFX(addAvg_16x4_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg[NONALIGNED]  = PFX(addAvg_16x8_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg[NONALIGNED] = PFX(addAvg_16x12_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg[NONALIGNED] = PFX(addAvg_16x16_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg[NONALIGNED] = PFX(addAvg_16x32_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg[NONALIGNED] = PFX(addAvg_24x32_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg[NONALIGNED]  = PFX(addAvg_32x8_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg[NONALIGNED] = PFX(addAvg_32x16_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg[NONALIGNED] = PFX(addAvg_32x24_neon);
+-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg[NONALIGNED] = PFX(addAvg_32x32_neon);
+-
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg[NONALIGNED]   = PFX(addAvg_4x8_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg[NONALIGNED]  = PFX(addAvg_4x16_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg[NONALIGNED]  = PFX(addAvg_4x32_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg[NONALIGNED]  = PFX(addAvg_6x16_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg[NONALIGNED]   = PFX(addAvg_8x4_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg[NONALIGNED]   = PFX(addAvg_8x8_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg[NONALIGNED]  = PFX(addAvg_8x12_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg[NONALIGNED]  = PFX(addAvg_8x16_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg[NONALIGNED]  = PFX(addAvg_8x32_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg[NONALIGNED]  = PFX(addAvg_8x64_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg[NONALIGNED] = PFX(addAvg_12x32_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg[NONALIGNED]  = PFX(addAvg_16x8_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg[NONALIGNED] = PFX(addAvg_16x16_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg[NONALIGNED] = PFX(addAvg_16x24_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg[NONALIGNED] = PFX(addAvg_16x32_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg[NONALIGNED] = PFX(addAvg_16x64_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg[NONALIGNED] = PFX(addAvg_24x64_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg[NONALIGNED] = PFX(addAvg_32x16_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg[NONALIGNED] = PFX(addAvg_32x32_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg[NONALIGNED] = PFX(addAvg_32x48_neon);
+-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg[NONALIGNED] = PFX(addAvg_32x64_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg   = PFX(addAvg_4x2_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg   = PFX(addAvg_4x4_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg   = PFX(addAvg_4x8_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg  = PFX(addAvg_4x16_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg   = PFX(addAvg_6x8_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg   = PFX(addAvg_8x2_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg   = PFX(addAvg_8x4_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg   = PFX(addAvg_8x6_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg   = PFX(addAvg_8x8_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg  = PFX(addAvg_8x16_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg  = PFX(addAvg_8x32_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg = PFX(addAvg_12x16_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg  = PFX(addAvg_16x4_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg  = PFX(addAvg_16x8_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg = PFX(addAvg_16x12_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg = PFX(addAvg_16x16_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg = PFX(addAvg_16x32_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg = PFX(addAvg_24x32_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg  = PFX(addAvg_32x8_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg = PFX(addAvg_32x16_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg = PFX(addAvg_32x24_neon);
++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg = PFX(addAvg_32x32_neon);
++
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg   = PFX(addAvg_4x8_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg  = PFX(addAvg_4x16_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg  = PFX(addAvg_4x32_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg  = PFX(addAvg_6x16_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg   = PFX(addAvg_8x4_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg   = PFX(addAvg_8x8_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg  = PFX(addAvg_8x12_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg  = PFX(addAvg_8x16_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg  = PFX(addAvg_8x32_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg  = PFX(addAvg_8x64_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg = PFX(addAvg_12x32_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg  = PFX(addAvg_16x8_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg = PFX(addAvg_16x16_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg = PFX(addAvg_16x24_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg = PFX(addAvg_16x32_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg = PFX(addAvg_16x64_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg = PFX(addAvg_24x64_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg = PFX(addAvg_32x16_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg = PFX(addAvg_32x32_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg = PFX(addAvg_32x48_neon);
++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg = PFX(addAvg_32x64_neon);
+ 
+         // quant
+          p.quant = PFX(quant_neon);
+@@ -403,7 +402,7 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.scale2D_64to32  = PFX(scale2D_64to32_neon);
+ 
+         // scale1D_128to64
+-        p.scale1D_128to64[NONALIGNED] = PFX(scale1D_128to64_neon);
++        p.scale1D_128to64 = PFX(scale1D_128to64_neon);
+ 
+         // copy_count
+         p.cu[BLOCK_4x4].copy_cnt     = PFX(copy_cnt_4_neon);
+@@ -412,37 +411,37 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.cu[BLOCK_32x32].copy_cnt   = PFX(copy_cnt_32_neon);
+ 
+         // filterPixelToShort
+-        p.pu[LUMA_4x4].convert_p2s[NONALIGNED]   = PFX(filterPixelToShort_4x4_neon);
+-        p.pu[LUMA_4x8].convert_p2s[NONALIGNED]   = PFX(filterPixelToShort_4x8_neon);
+-        p.pu[LUMA_4x16].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_4x16_neon);
+-        p.pu[LUMA_8x4].convert_p2s[NONALIGNED]   = PFX(filterPixelToShort_8x4_neon);
+-        p.pu[LUMA_8x8].convert_p2s[NONALIGNED]   = PFX(filterPixelToShort_8x8_neon);
+-        p.pu[LUMA_8x16].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_8x16_neon);
+-        p.pu[LUMA_8x32].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_8x32_neon);
+-        p.pu[LUMA_12x16].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_12x16_neon);
+-        p.pu[LUMA_16x4].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_16x4_neon);
+-        p.pu[LUMA_16x8].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_16x8_neon);
+-        p.pu[LUMA_16x12].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_16x12_neon);
+-        p.pu[LUMA_16x16].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_16x16_neon);
+-        p.pu[LUMA_16x32].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_16x32_neon);
+-        p.pu[LUMA_16x64].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_16x64_neon);
+-        p.pu[LUMA_24x32].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_24x32_neon);
+-        p.pu[LUMA_32x8].convert_p2s[NONALIGNED]  = PFX(filterPixelToShort_32x8_neon);
+-        p.pu[LUMA_32x16].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_32x16_neon);
+-        p.pu[LUMA_32x24].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_32x24_neon);
+-        p.pu[LUMA_32x32].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_32x32_neon);
+-        p.pu[LUMA_32x64].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_32x64_neon);
+-        p.pu[LUMA_48x64].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_48x64_neon);
+-        p.pu[LUMA_64x16].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_64x16_neon);
+-        p.pu[LUMA_64x32].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_64x32_neon);
+-        p.pu[LUMA_64x48].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_64x48_neon);
+-        p.pu[LUMA_64x64].convert_p2s[NONALIGNED] = PFX(filterPixelToShort_64x64_neon);
++        p.pu[LUMA_4x4].convert_p2s   = PFX(filterPixelToShort_4x4_neon);
++        p.pu[LUMA_4x8].convert_p2s   = PFX(filterPixelToShort_4x8_neon);
++        p.pu[LUMA_4x16].convert_p2s  = PFX(filterPixelToShort_4x16_neon);
++        p.pu[LUMA_8x4].convert_p2s   = PFX(filterPixelToShort_8x4_neon);
++        p.pu[LUMA_8x8].convert_p2s   = PFX(filterPixelToShort_8x8_neon);
++        p.pu[LUMA_8x16].convert_p2s  = PFX(filterPixelToShort_8x16_neon);
++        p.pu[LUMA_8x32].convert_p2s  = PFX(filterPixelToShort_8x32_neon);
++        p.pu[LUMA_12x16].convert_p2s = PFX(filterPixelToShort_12x16_neon);
++        p.pu[LUMA_16x4].convert_p2s  = PFX(filterPixelToShort_16x4_neon);
++        p.pu[LUMA_16x8].convert_p2s  = PFX(filterPixelToShort_16x8_neon);
++        p.pu[LUMA_16x12].convert_p2s = PFX(filterPixelToShort_16x12_neon);
++        p.pu[LUMA_16x16].convert_p2s = PFX(filterPixelToShort_16x16_neon);
++        p.pu[LUMA_16x32].convert_p2s = PFX(filterPixelToShort_16x32_neon);
++        p.pu[LUMA_16x64].convert_p2s = PFX(filterPixelToShort_16x64_neon);
++        p.pu[LUMA_24x32].convert_p2s = PFX(filterPixelToShort_24x32_neon);
++        p.pu[LUMA_32x8].convert_p2s  = PFX(filterPixelToShort_32x8_neon);
++        p.pu[LUMA_32x16].convert_p2s = PFX(filterPixelToShort_32x16_neon);
++        p.pu[LUMA_32x24].convert_p2s = PFX(filterPixelToShort_32x24_neon);
++        p.pu[LUMA_32x32].convert_p2s = PFX(filterPixelToShort_32x32_neon);
++        p.pu[LUMA_32x64].convert_p2s = PFX(filterPixelToShort_32x64_neon);
++        p.pu[LUMA_48x64].convert_p2s = PFX(filterPixelToShort_48x64_neon);
++        p.pu[LUMA_64x16].convert_p2s = PFX(filterPixelToShort_64x16_neon);
++        p.pu[LUMA_64x32].convert_p2s = PFX(filterPixelToShort_64x32_neon);
++        p.pu[LUMA_64x48].convert_p2s = PFX(filterPixelToShort_64x48_neon);
++        p.pu[LUMA_64x64].convert_p2s = PFX(filterPixelToShort_64x64_neon);
+ 
+         // Block_fill
+-        p.cu[BLOCK_4x4].blockfill_s[NONALIGNED]   = PFX(blockfill_s_4x4_neon);
+-        p.cu[BLOCK_8x8].blockfill_s[NONALIGNED]   = PFX(blockfill_s_8x8_neon);
+-        p.cu[BLOCK_16x16].blockfill_s[NONALIGNED] = PFX(blockfill_s_16x16_neon);
+-        p.cu[BLOCK_32x32].blockfill_s[NONALIGNED] = PFX(blockfill_s_32x32_neon);
++        p.cu[BLOCK_4x4].blockfill_s   = PFX(blockfill_s_4x4_neon);
++        p.cu[BLOCK_8x8].blockfill_s   = PFX(blockfill_s_8x8_neon);
++        p.cu[BLOCK_16x16].blockfill_s = PFX(blockfill_s_16x16_neon);
++        p.cu[BLOCK_32x32].blockfill_s = PFX(blockfill_s_32x32_neon);
+ 
+         // Blockcopy_ss
+         p.cu[BLOCK_4x4].copy_ss   = PFX(blockcopy_ss_4x4_neon);
+@@ -496,21 +495,21 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].copy_sp = PFX(blockcopy_sp_32x64_neon);
+ 
+         // pixel_add_ps
+-        p.cu[BLOCK_4x4].add_ps[NONALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+-        p.cu[BLOCK_8x8].add_ps[NONALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+-        p.cu[BLOCK_16x16].add_ps[NONALIGNED] = PFX(pixel_add_ps_16x16_neon);
+-        p.cu[BLOCK_32x32].add_ps[NONALIGNED] = PFX(pixel_add_ps_32x32_neon);
+-        p.cu[BLOCK_64x64].add_ps[NONALIGNED] = PFX(pixel_add_ps_64x64_neon);
++        p.cu[BLOCK_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
++        p.cu[BLOCK_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
++        p.cu[BLOCK_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
++        p.cu[BLOCK_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
++        p.cu[BLOCK_64x64].add_ps = PFX(pixel_add_ps_64x64_neon);
+ 
+         // chroma add_ps
+-        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps[NONALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+-        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps[NONALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+-        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps[NONALIGNED] = PFX(pixel_add_ps_16x16_neon);
+-        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps[NONALIGNED] = PFX(pixel_add_ps_32x32_neon);
+-        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps[NONALIGNED]   = PFX(pixel_add_ps_4x8_neon);
+-        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps[NONALIGNED]  = PFX(pixel_add_ps_8x16_neon);
+-        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps[NONALIGNED] = PFX(pixel_add_ps_16x32_neon);
+-        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps[NONALIGNED] = PFX(pixel_add_ps_32x64_neon);
++        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
++        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
++        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
++        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
++        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps   = PFX(pixel_add_ps_4x8_neon);
++        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps  = PFX(pixel_add_ps_8x16_neon);
++        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps = PFX(pixel_add_ps_16x32_neon);
++        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps = PFX(pixel_add_ps_32x64_neon);
+ 
+         // cpy2Dto1D_shr
+         p.cu[BLOCK_4x4].cpy2Dto1D_shr   = PFX(cpy2Dto1D_shr_4x4_neon);
+@@ -519,10 +518,10 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.cu[BLOCK_32x32].cpy2Dto1D_shr = PFX(cpy2Dto1D_shr_32x32_neon);
+ 
+         // ssd_s
+-        p.cu[BLOCK_4x4].ssd_s[NONALIGNED]   = PFX(pixel_ssd_s_4x4_neon);
+-        p.cu[BLOCK_8x8].ssd_s[NONALIGNED]   = PFX(pixel_ssd_s_8x8_neon);
+-        p.cu[BLOCK_16x16].ssd_s[NONALIGNED] = PFX(pixel_ssd_s_16x16_neon);
+-        p.cu[BLOCK_32x32].ssd_s[NONALIGNED] = PFX(pixel_ssd_s_32x32_neon);
++        p.cu[BLOCK_4x4].ssd_s   = PFX(pixel_ssd_s_4x4_neon);
++        p.cu[BLOCK_8x8].ssd_s   = PFX(pixel_ssd_s_8x8_neon);
++        p.cu[BLOCK_16x16].ssd_s = PFX(pixel_ssd_s_16x16_neon);
++        p.cu[BLOCK_32x32].ssd_s = PFX(pixel_ssd_s_32x32_neon);
+ 
+         // sse_ss
+         p.cu[BLOCK_4x4].sse_ss   = PFX(pixel_sse_ss_4x4_neon);
+@@ -549,10 +548,10 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].sub_ps = PFX(pixel_sub_ps_32x64_neon);
+ 
+         // calc_Residual
+-        p.cu[BLOCK_4x4].calcresidual[NONALIGNED]   = PFX(getResidual4_neon);
+-        p.cu[BLOCK_8x8].calcresidual[NONALIGNED]   = PFX(getResidual8_neon);
+-        p.cu[BLOCK_16x16].calcresidual[NONALIGNED] = PFX(getResidual16_neon);
+-        p.cu[BLOCK_32x32].calcresidual[NONALIGNED] = PFX(getResidual32_neon);
++        p.cu[BLOCK_4x4].calcresidual   = PFX(getResidual4_neon);
++        p.cu[BLOCK_8x8].calcresidual   = PFX(getResidual8_neon);
++        p.cu[BLOCK_16x16].calcresidual = PFX(getResidual16_neon);
++        p.cu[BLOCK_32x32].calcresidual = PFX(getResidual32_neon);
+ 
+         // sse_pp
+         p.cu[BLOCK_4x4].sse_pp   = PFX(pixel_sse_pp_4x4_neon);
+@@ -723,31 +722,31 @@ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask)
+         p.pu[LUMA_64x64].sad_x4 = PFX(sad_x4_64x64_neon);
+ 
+         // pixel_avg_pp
+-        p.pu[LUMA_4x4].pixelavg_pp[NONALIGNED]   = PFX(pixel_avg_pp_4x4_neon);
+-        p.pu[LUMA_4x8].pixelavg_pp[NONALIGNED]   = PFX(pixel_avg_pp_4x8_neon);
+-        p.pu[LUMA_4x16].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_4x16_neon);
+-        p.pu[LUMA_8x4].pixelavg_pp[NONALIGNED]   = PFX(pixel_avg_pp_8x4_neon);
+-        p.pu[LUMA_8x8].pixelavg_pp[NONALIGNED]   = PFX(pixel_avg_pp_8x8_neon);
+-        p.pu[LUMA_8x16].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_8x16_neon);
+-        p.pu[LUMA_8x32].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_8x32_neon);
+-        p.pu[LUMA_12x16].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_12x16_neon);
+-        p.pu[LUMA_16x4].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_16x4_neon);
+-        p.pu[LUMA_16x8].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_16x8_neon);
+-        p.pu[LUMA_16x12].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_16x12_neon);
+-        p.pu[LUMA_16x16].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_16x16_neon);
+-        p.pu[LUMA_16x32].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_16x32_neon);
+-        p.pu[LUMA_16x64].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_16x64_neon);
+-        p.pu[LUMA_24x32].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_24x32_neon);
+-        p.pu[LUMA_32x8].pixelavg_pp[NONALIGNED]  = PFX(pixel_avg_pp_32x8_neon);
+-        p.pu[LUMA_32x16].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_32x16_neon);
+-        p.pu[LUMA_32x24].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_32x24_neon);
+-        p.pu[LUMA_32x32].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_32x32_neon);
+-        p.pu[LUMA_32x64].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_32x64_neon);
+-        p.pu[LUMA_48x64].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_48x64_neon);
+-        p.pu[LUMA_64x16].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_64x16_neon);
+-        p.pu[LUMA_64x32].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_64x32_neon);
+-        p.pu[LUMA_64x48].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_64x48_neon);
+-        p.pu[LUMA_64x64].pixelavg_pp[NONALIGNED] = PFX(pixel_avg_pp_64x64_neon);
++        p.pu[LUMA_4x4].pixelavg_pp   = PFX(pixel_avg_pp_4x4_neon);
++        p.pu[LUMA_4x8].pixelavg_pp   = PFX(pixel_avg_pp_4x8_neon);
++        p.pu[LUMA_4x16].pixelavg_pp  = PFX(pixel_avg_pp_4x16_neon);
++        p.pu[LUMA_8x4].pixelavg_pp   = PFX(pixel_avg_pp_8x4_neon);
++        p.pu[LUMA_8x8].pixelavg_pp   = PFX(pixel_avg_pp_8x8_neon);
++        p.pu[LUMA_8x16].pixelavg_pp  = PFX(pixel_avg_pp_8x16_neon);
++        p.pu[LUMA_8x32].pixelavg_pp  = PFX(pixel_avg_pp_8x32_neon);
++        p.pu[LUMA_12x16].pixelavg_pp = PFX(pixel_avg_pp_12x16_neon);
++        p.pu[LUMA_16x4].pixelavg_pp  = PFX(pixel_avg_pp_16x4_neon);
++        p.pu[LUMA_16x8].pixelavg_pp  = PFX(pixel_avg_pp_16x8_neon);
++        p.pu[LUMA_16x12].pixelavg_pp = PFX(pixel_avg_pp_16x12_neon);
++        p.pu[LUMA_16x16].pixelavg_pp = PFX(pixel_avg_pp_16x16_neon);
++        p.pu[LUMA_16x32].pixelavg_pp = PFX(pixel_avg_pp_16x32_neon);
++        p.pu[LUMA_16x64].pixelavg_pp = PFX(pixel_avg_pp_16x64_neon);
++        p.pu[LUMA_24x32].pixelavg_pp = PFX(pixel_avg_pp_24x32_neon);
++        p.pu[LUMA_32x8].pixelavg_pp  = PFX(pixel_avg_pp_32x8_neon);
++        p.pu[LUMA_32x16].pixelavg_pp = PFX(pixel_avg_pp_32x16_neon);
++        p.pu[LUMA_32x24].pixelavg_pp = PFX(pixel_avg_pp_32x24_neon);
++        p.pu[LUMA_32x32].pixelavg_pp = PFX(pixel_avg_pp_32x32_neon);
++        p.pu[LUMA_32x64].pixelavg_pp = PFX(pixel_avg_pp_32x64_neon);
++        p.pu[LUMA_48x64].pixelavg_pp = PFX(pixel_avg_pp_48x64_neon);
++        p.pu[LUMA_64x16].pixelavg_pp = PFX(pixel_avg_pp_64x16_neon);
++        p.pu[LUMA_64x32].pixelavg_pp = PFX(pixel_avg_pp_64x32_neon);
++        p.pu[LUMA_64x48].pixelavg_pp = PFX(pixel_avg_pp_64x48_neon);
++        p.pu[LUMA_64x64].pixelavg_pp = PFX(pixel_avg_pp_64x64_neon);
+ 
+         // planecopy
+         p.planecopy_cp = PFX(pixel_planecopy_cp_neon);
+diff --git a/source/common/cpu.cpp b/source/common/cpu.cpp
+index 2eacfe4a9..26c82ea50 100644
+--- a/source/common/cpu.cpp
++++ b/source/common/cpu.cpp
+@@ -5,8 +5,6 @@
+  *          Laurent Aimar <fenrir@via.ecp.fr>
+  *          Fiona Glaser <fiona@x264.com>
+  *          Steve Borho <steve@borho.org>
+- *          Hongbin Liu <liuhongbin1@huawei.com>
+- *          Yimeng Su <yimeng.su@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -369,8 +367,6 @@ uint32_t cpu_detect(bool benableavx512)
+     flags |= PFX(cpu_fast_neon_mrc_test)() ? X265_CPU_FAST_NEON_MRC : 0;
+ #endif
+     // TODO: write dual issue test? currently it's A8 (dual issue) vs. A9 (fast mrc)
+-#elif X265_ARCH_ARM64
+-    flags |= X265_CPU_NEON;
+ #endif // if HAVE_ARMV6
+     return flags;
+ }
+diff --git a/source/common/pixel.cpp b/source/common/pixel.cpp
+index e4f890cd5..99b84449c 100644
+--- a/source/common/pixel.cpp
++++ b/source/common/pixel.cpp
+@@ -5,7 +5,6 @@
+  *          Mandar Gurav <mandar@multicorewareinc.com>
+  *          Mahesh Pittala <mahesh@multicorewareinc.com>
+  *          Min Chen <min.chen@multicorewareinc.com>
+- *          Hongbin Liu<liuhongbin1@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -266,10 +265,6 @@ int satd4(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t s
+ {
+     int satd = 0;
+ 
+-#if ENABLE_ASSEMBLY && X265_ARCH_ARM64
+-    pixelcmp_t satd_4x4 = x265_pixel_satd_4x4_neon;
+-#endif
+-
+     for (int row = 0; row < h; row += 4)
+         for (int col = 0; col < w; col += 4)
+             satd += satd_4x4(pix1 + row * stride_pix1 + col, stride_pix1,
+@@ -284,10 +279,6 @@ int satd8(const pixel* pix1, intptr_t stride_pix1, const pixel* pix2, intptr_t s
+ {
+     int satd = 0;
+ 
+-#if ENABLE_ASSEMBLY && X265_ARCH_ARM64
+-    pixelcmp_t satd_8x4 = x265_pixel_satd_8x4_neon;
+-#endif
+-
+     for (int row = 0; row < h; row += 4)
+         for (int col = 0; col < w; col += 8)
+             satd += satd_8x4(pix1 + row * stride_pix1 + col, stride_pix1,
+diff --git a/source/common/primitives.h b/source/common/primitives.h
+index 0b52f84de..5c64952fb 100644
+--- a/source/common/primitives.h
++++ b/source/common/primitives.h
+@@ -8,8 +8,6 @@
+  *          Rajesh Paulraj <rajesh@multicorewareinc.com>
+  *          Praveen Kumar Tiwari <praveen@multicorewareinc.com>
+  *          Min Chen <chenm003@163.com>
+- *          Hongbin Liu<liuhongbin1@huawei.com>
+- *          Yimeng Su <yimeng.su@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -469,9 +467,6 @@ void setupCPrimitives(EncoderPrimitives &p);
+ void setupInstrinsicPrimitives(EncoderPrimitives &p, int cpuMask);
+ void setupAssemblyPrimitives(EncoderPrimitives &p, int cpuMask);
+ void setupAliasPrimitives(EncoderPrimitives &p);
+-#if X265_ARCH_ARM64
+-void setupAliasCPrimitives(EncoderPrimitives &cp, EncoderPrimitives &asmp, int cpuMask);
+-#endif
+ #if HAVE_ALTIVEC
+ void setupPixelPrimitives_altivec(EncoderPrimitives &p);
+ void setupDCTPrimitives_altivec(EncoderPrimitives &p);
+@@ -486,10 +481,4 @@ extern const char* PFX(version_str);
+ extern const char* PFX(build_info_str);
+ #endif
+ 
+-#if ENABLE_ASSEMBLY && X265_ARCH_ARM64
+-extern "C" {
+-#include "aarch64/pixel-util.h"
+-}
+-#endif
+-
+ #endif // ifndef X265_PRIMITIVES_H
+diff --git a/source/test/CMakeLists.txt b/source/test/CMakeLists.txt
+index 9abaf31ff..260195f53 100644
+--- a/source/test/CMakeLists.txt
++++ b/source/test/CMakeLists.txt
+@@ -23,15 +23,13 @@ endif(X86)
+ 
+ # add ARM assembly files
+ if(ARM OR CROSS_COMPILE_ARM)
+-    if(NOT ARM64)
+-        enable_language(ASM)
+-        set(NASM_SRC checkasm-arm.S)
+-        add_custom_command(
+-            OUTPUT checkasm-arm.obj
+-            COMMAND ${CMAKE_CXX_COMPILER}
+-            ARGS ${NASM_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/checkasm-arm.S -o checkasm-arm.obj
+-            DEPENDS checkasm-arm.S)
+-    endif()
++    enable_language(ASM)
++    set(NASM_SRC checkasm-arm.S)
++    add_custom_command(
++        OUTPUT checkasm-arm.obj
++        COMMAND ${CMAKE_CXX_COMPILER}
++        ARGS ${NASM_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/checkasm-arm.S -o checkasm-arm.obj
++        DEPENDS checkasm-arm.S)
+ endif(ARM OR CROSS_COMPILE_ARM)
+ 
+ # add PowerPC assembly files
+diff --git a/source/test/testbench.cpp b/source/test/testbench.cpp
+index 8db8c0c25..ac14f9710 100644
+--- a/source/test/testbench.cpp
++++ b/source/test/testbench.cpp
+@@ -5,7 +5,6 @@
+  *          Mandar Gurav <mandar@multicorewareinc.com>
+  *          Mahesh Pittala <mahesh@multicorewareinc.com>
+  *          Min Chen <chenm003@163.com>
+- *          Yimeng Su <yimeng.su@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -209,14 +208,6 @@ int main(int argc, char *argv[])
+         EncoderPrimitives asmprim;
+         memset(&asmprim, 0, sizeof(asmprim));
+         setupAssemblyPrimitives(asmprim, test_arch[i].flag);
+-
+-#if X265_ARCH_ARM64
+-        /* Temporary workaround because luma_vsp assembly primitive has not been completed
+-         * but interp_8tap_hv_pp_cpu uses mixed C primitive and assembly primitive.
+-         * Otherwise, segment fault occurs. */
+-        setupAliasCPrimitives(cprim, asmprim, test_arch[i].flag);
+-#endif
+-
+         setupAliasPrimitives(asmprim);
+         memcpy(&primitives, &asmprim, sizeof(EncoderPrimitives));
+         for (size_t h = 0; h < sizeof(harness) / sizeof(TestHarness*); h++)
+@@ -241,13 +232,6 @@ int main(int argc, char *argv[])
+ #endif
+     setupAssemblyPrimitives(optprim, cpuid);
+ 
+-#if X265_ARCH_ARM64
+-    /* Temporary workaround because luma_vsp assembly primitive has not been completed
+-     * but interp_8tap_hv_pp_cpu uses mixed C primitive and assembly primitive.
+-     * Otherwise, segment fault occurs. */
+-    setupAliasCPrimitives(cprim, optprim, cpuid);
+-#endif
+-
+     /* Note that we do not setup aliases for performance tests, that would be
+      * redundant. The testbench only verifies they are correctly aliased */
+ 
+diff --git a/source/test/testharness.h b/source/test/testharness.h
+index 6e680953f..771551583 100644
+--- a/source/test/testharness.h
++++ b/source/test/testharness.h
+@@ -3,7 +3,6 @@
+  *
+  * Authors: Steve Borho <steve@borho.org>
+  *          Min Chen <chenm003@163.com>
+- *          Yimeng Su <yimeng.su@huawei.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -82,15 +81,11 @@ static inline uint32_t __rdtsc(void)
+ #if X265_ARCH_X86
+     asm volatile("rdtsc" : "=a" (a) ::"edx");
+ #elif X265_ARCH_ARM
+-#if X265_ARCH_ARM64
+-    asm volatile("mrs %0, cntvct_el0" : "=r"(a));
+-#else
+     // TOD-DO: verify following inline asm to get cpu Timestamp Counter for ARM arch
+     // asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r"(a));
+ 
+     // TO-DO: replace clock() function with appropriate ARM cpu instructions
+     a = clock();
+-#endif
+ #endif
+     return a;
+ }
+-- 
+2.24.3 (Apple Git-128)
+
