@@ -1,10 +1,10 @@
---- a/x264.h.orig	2018-11-20 06:39:30.000000000 -0500
-+++ b/x264.h	2018-11-20 06:39:07.000000000 -0500
-@@ -45,7 +45,24 @@
+--- a/x264.h
++++ b/x264.h
+@@ -45,7 +45,24 @@ extern "C" {
  
  #include "x264_config.h"
  
--#define X264_BUILD 157
+-#define X264_BUILD 161
 +/*
 + * Define the full version explicitly so that it survives a git --archive.
 + *
@@ -20,9 +20,9 @@
 +#ifdef  X264_POINTVER
 +#undef  X264_POINTVER
 +#endif
-+#define X264_BUILD    157
-+#define X264_VERSION " r2935 545de2f"
-+#define X264_POINTVER "0.157.2935 545de2f"
++#define X264_BUILD    161
++#define X264_VERSION " r3043 59c06095"
++#define X264_POINTVER "0.161.3043 59c06095"
  
- /* Application developers planning to link against a shared library version of
-  * libx264 from a Microsoft Visual Studio or similar development environment
+ #ifdef _WIN32
+ #   define X264_DLL_IMPORT __declspec(dllimport)
