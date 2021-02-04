@@ -64,38 +64,12 @@ namespace HandBrakeWPF.Services.Scan.Factories
             int currentSubtitleTrack = 1;
             foreach (SourceSubtitleTrack track in title.SubtitleList)
             {
-                SubtitleType convertedType = new SubtitleType();
-
-                switch (track.Source)
-                {
-                    case (int)hb_subtitle_s_subsource.VOBSUB:
-                        convertedType = SubtitleType.VobSub;
-                        break;
-                    case (int)hb_subtitle_s_subsource.CC608SUB:
-                    case (int)hb_subtitle_s_subsource.CC708SUB:
-                        convertedType = SubtitleType.CC;
-                        break;
-                    case (int)hb_subtitle_s_subsource.IMPORTSRT:
-                        convertedType = SubtitleType.SRT;
-                        break;
-                    case (int)hb_subtitle_s_subsource.UTF8SUB:
-                        convertedType = SubtitleType.UTF8Sub;
-                        break;
-                    case (int)hb_subtitle_s_subsource.TX3GSUB:
-                        convertedType = SubtitleType.TX3G;
-                        break;
-                    case (int)hb_subtitle_s_subsource.SSASUB:
-                        convertedType = SubtitleType.SSA;
-                        break;
-                    case (int)hb_subtitle_s_subsource.PGSSUB:
-                        convertedType = SubtitleType.PGS;
-                        break;
-                }
-
+                SubtitleType convertedType = (SubtitleType)track.Source;
+    
                 bool canBurn = HandBrakeSubtitleHelpers.CheckCanBurnSubtitle(track.Source) > 0;
                 bool canSetForcedOnly = HandBrakeSubtitleHelpers.CheckCanForceSubtitle(track.Source) > 0;
 
-                converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly, track.Name));
+                converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly, track.Name, false));
                 currentSubtitleTrack++;
             }
 

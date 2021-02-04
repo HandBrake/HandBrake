@@ -72,7 +72,7 @@ namespace HandBrakeWPF.ViewModels
             this.Langauges = LanguageUtilities.MapLanguages().Keys;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
 
-            this.foreignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = Resources.SubtitleViewModel_ForeignAudioSearch };
+            this.foreignAudioSearchTrack = new Subtitle { IsFakeForeignAudioScanTrack = true, Language = Resources.SubtitleViewModel_ForeignAudioSearch };
             this.SourceTracks = new List<Subtitle> { this.foreignAudioSearchTrack };
         }
 
@@ -177,7 +177,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddAllClosedCaptions()
         {
-            foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC608 || s.SubtitleType == SubtitleType.CC708))
             {
                 this.Add(subtitle);
             }
@@ -376,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
                     case SubtitleBurnInBehaviourModes.None:
                         foreach (var track in this.Task.SubtitleTracks)
                         {
-                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            if (track.SourceTrack.IsFakeForeignAudioScanTrack)
                             {
                                 track.Forced = true;
                                 break;
@@ -388,7 +388,7 @@ namespace HandBrakeWPF.ViewModels
                         foreach (var track in this.Task.SubtitleTracks)
                         {
                             // Set the Foreign Audio Track to burned-in
-                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            if (track.SourceTrack.IsFakeForeignAudioScanTrack)
                             {
                                 track.Burned = true;
                                 track.Forced = true;
@@ -402,7 +402,7 @@ namespace HandBrakeWPF.ViewModels
                         foreach (var track in this.Task.SubtitleTracks)
                         {
                             // Foreign Audio Search is always first in the list.
-                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch) 
+                            if (track.SourceTrack.IsFakeForeignAudioScanTrack) 
                             {
                                 track.Forced = true;
                                 continue;
@@ -429,7 +429,7 @@ namespace HandBrakeWPF.ViewModels
                             }
 
                             // But if there is a foreign audio track, prefer this to the first.
-                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            if (track.SourceTrack.IsFakeForeignAudioScanTrack)
                             {
                                 track.Burned = true;
                                 track.Forced = true;
@@ -654,7 +654,7 @@ namespace HandBrakeWPF.ViewModels
                               ?? ((this.SourceTracks != null)
                                       ? (this.SourceTracks.FirstOrDefault(l => l.Language == this.GetPreferredSubtitleTrackLanguage())
                                          ?? this.SourceTracks.FirstOrDefault(
-                                             s => s.SubtitleType != SubtitleType.ForeignAudioSearch))
+                                             s => !s.IsFakeForeignAudioScanTrack))
                                       : null);
 
             if (source == null)
@@ -672,7 +672,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
                   || this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudioPreferred)
             {
-                if (subtitle != null && subtitle.SubtitleType == SubtitleType.ForeignAudioSearch)
+                if (subtitle != null && subtitle.IsFakeForeignAudioScanTrack)
                 {
                     track.Burned = true;
                     this.SetBurnedToFalseForAllExcept(track);
@@ -775,7 +775,7 @@ namespace HandBrakeWPF.ViewModels
                                               SrtOffset = 0,
                                               SrtCharCode = "UTF-8",
                                               SrtLang = "English",
-                                              SubtitleType = SubtitleType.SRT,
+                                              SubtitleType = SubtitleType.IMPORTSRT,
                                               SrtPath = srtFile
                                           };
                 this.Task.SubtitleTracks.Add(track);

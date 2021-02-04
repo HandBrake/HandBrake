@@ -7,7 +7,7 @@
 
 namespace HandBrake.Interop.Interop.HbLib
 {
-    public enum hb_subtitle_s_subsource
+    internal enum hb_subtitle_s_subsource
     {
         VOBSUB,
 

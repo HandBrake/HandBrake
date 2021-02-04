@@ -184,11 +184,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Error" xml:space="preserve">
     <value>에러</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>경고: 대기열에 있는 각각의 항목에 자막을 추가하고 싶다면 자막 탭에서 자막 기본 값이 올바르게 설정되었는지 확인하십시오.
-
-계속하시겠습니까?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>대기열에 추가하려면 우선적으로 자동 파일 이름 설정을 켜고 기본 경로를 설정해야만 합니다.</value>
   </data>

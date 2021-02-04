@@ -185,11 +185,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
   <data name="Error" xml:space="preserve">
     <value>Erro</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Aviso: Se você quer adicionar legendas em cada item a ser enfileirado, verifique se a configuração de legenda padrão está correta na guia "Legendas".
- 
-Você deseja continuar?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Você deve ativar a renomeação automática de arquivos E definir um caminho padrão nas preferências antes de poder adicionar à fila.</value>
   </data>

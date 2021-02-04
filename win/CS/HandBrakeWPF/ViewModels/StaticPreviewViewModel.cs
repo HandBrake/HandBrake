@@ -489,7 +489,7 @@ namespace HandBrakeWPF.ViewModels
             SubtitleTrack scanTrack = null;
             foreach (var track in encodeTask.SubtitleTracks)
             {
-                if (track.SourceTrack != null && track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                if (track.SourceTrack != null && track.SourceTrack.IsFakeForeignAudioScanTrack)
                 {
                     scanTrack = track;
                     break;

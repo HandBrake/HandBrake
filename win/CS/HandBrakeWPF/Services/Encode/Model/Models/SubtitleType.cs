@@ -12,27 +12,35 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.ComponentModel;
 
     /// <summary>
-    /// Subtitle Type. 
+    /// Note this must be kept up to date with HandBrake.Interop.Interop.HbLib.hb_subtitle_s_subsource
     /// </summary>
     public enum SubtitleType
     {
-        [Description("SSA")]
-        SSA,
-        [Description("SRT")]
-        SRT,
         [Description("VobSub")]
         VobSub,
-        [Description("CC")]
-        CC,
+
+        [Description("CC608SUB")]
+        CC608,
+
+        [Description("CC708SUB")]
+        CC708,
+
         [Description("UTF8")]
         UTF8Sub,
+
         [Description("TX3G")]
         TX3G,
+
+        [Description("SSA")]
+        SSA,
+
         [Description("PGS")]
         PGS,
-        [Description("Unknown")]
-        Unknown,
-        [Description("Foreign Audio Search")]
-        ForeignAudioSearch, // Special Type for Foreign Audio Search
+
+        [Description("IMPORTED SRT")]
+        IMPORTSRT,
+
+        [Description("IMPORTED SSA")]
+        IMPORTSSA,
     }
 }

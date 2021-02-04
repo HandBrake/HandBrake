@@ -1340,17 +1340,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
-        ///    
-        ///Do you wish to continue?.
-        /// </summary>
-        public static string Main_AutoAdd_AudioAndSubWarning {
-            get {
-                return ResourceManager.GetString("Main_AutoAdd_AudioAndSubWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do you wish to proceed trying to add the rest?.
         /// </summary>
         public static string Main_ContinueAddingToQueue {

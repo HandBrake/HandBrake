@@ -185,11 +185,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Advertencia: Si desea agregar subtítulos a todos lo que está por ser puesto en cola, por favor verifique si los ajustes son correctos en la pestaña de subtítulos.
-
-¿Desea continuar?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Debe activar el nombrado automático de archivos Y TAMBIÉN establecer un directorio por defecto en los ajustes antes de poder agregar a la cola.</value>
   </data>

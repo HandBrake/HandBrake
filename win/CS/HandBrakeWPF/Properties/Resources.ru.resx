@@ -186,9 +186,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Внимание: Если вы хотите добавить субтитры для каждого из файлов, которые вы поместите в очередь, пожалуйста, убедитесь, что стандартные настройки правильно выбраны на вкладке субтитров.</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Вы должны включить автоматическое именование файлов, А ТАКЖЕ указать стандартный путь для сохранения в настройках перед добавлением заданий в очередь.</value>
   </data>

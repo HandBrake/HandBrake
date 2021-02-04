@@ -185,11 +185,6 @@ avec ce programme; sinon écrivez à la Free Software Foundation, Inc.,
   <data name="Error" xml:space="preserve">
     <value>Erreur</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Attention : Si vous souhaitez que des sous-titres soient ajoutés à chaque élément que vous êtes sur le point de mettre en file d'attente, vérifiez que les paramètres par défaut des sous-titres soient correctement configurés dans l'onglet Sous-titres.
-
-Souhaitez-vous continuer ?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Vous devez activer le nommage automatique des fichiers ET définir un chemin par défaut dans les préférences avant de pouvoir ajouter à la file.</value>
   </data>

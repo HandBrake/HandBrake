@@ -185,11 +185,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Error" xml:space="preserve">
     <value>Помилка</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Попередження: якщо ви хочете, щоб субтитри додались до кожного елемента що ви збираєтеся поставити в чергу, переконайтесь, що на вкладці субтитрів правильно налаштовано параметри за замовчуванням.
-    
-Хочете продовжити?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Ви повинні увімкнути у налаштуваннях автоматичне іменування файлів ТА встановити стандартний шлях, перш ніж зможете додати в чергу.</value>
   </data>

@@ -23,9 +23,6 @@ namespace HandBrakeWPF.Services.Scan.Model
     /// </summary>
     public class Subtitle
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Subtitle"/> class.
-        /// </summary>
         public Subtitle()
         {
         }
@@ -35,10 +32,7 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.SourceId = sourceId;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Subtitle"/> class.
-        /// </summary>
-        public Subtitle(int sourceId, int trackNumber, string language, string languageCode, SubtitleType subtitleType, bool canBurn, bool canForce, string name)
+        public Subtitle(int sourceId, int trackNumber, string language, string languageCode, SubtitleType subtitleType, bool canBurn, bool canForce, string name, bool isFakeForeignAudioScanTrack)
         {
             this.SourceId = sourceId;
             this.TrackNumber = trackNumber;
@@ -48,32 +42,17 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.CanBurnIn = canBurn;
             this.CanForce = canForce;
             this.Name = name;
+            this.IsFakeForeignAudioScanTrack = isFakeForeignAudioScanTrack;
         }
 
-        /// <summary>
-        /// Gets or sets the source id.
-        /// </summary>
         public int SourceId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the track number of this Subtitle
-        /// </summary>
         public int TrackNumber { get; set; }
 
-        /// <summary>
-        /// Gets or sets the The language (if detected) of this Subtitle
-        /// </summary>
         public string Language { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Language Code
-        /// </summary>
         public string LanguageCode { get; set; }
 
-        /// <summary>
-        /// Gets the language code clean.
-        /// TODO Remove this after fixing language code.
-        /// </summary>
         public string LanguageCodeClean
         {
             get
@@ -87,28 +66,16 @@ namespace HandBrakeWPF.Services.Scan.Model
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether can burn in.
-        /// </summary>
-        [XmlIgnore]
         public bool CanBurnIn { get; private set; }
 
-        /// <summary>
-        /// Gets a value indicating whether can force.
-        /// </summary>
-        [XmlIgnore]
         public bool CanForce { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the Subtitle Type
-        /// </summary>
         public SubtitleType SubtitleType { get; set; }
 
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets Subtitle Type
-        /// </summary>
+        public bool IsFakeForeignAudioScanTrack { get; set; }
+
         public string TypeString
         {
             get
@@ -117,44 +84,26 @@ namespace HandBrakeWPF.Services.Scan.Model
             }
         }
 
-        /// <summary>
-        /// Override of the ToString method to make this object easier to use in the UI
-        /// </summary>
-        /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? Resources.Subtitle_ForeignAudioScan : string.Format("{0} {1}", this.TrackNumber, this.Language);
+            return this.IsFakeForeignAudioScanTrack ? Resources.Subtitle_ForeignAudioScan : string.Format("{0} {1}", this.TrackNumber, this.Language);
         }
 
-        /// <summary>
-        /// The equals.
-        /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
         public bool Equals(Subtitle other)
         {
             if (ReferenceEquals(null, other))
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
+
             return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.SubtitleType, this.SubtitleType);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -175,13 +124,6 @@ namespace HandBrakeWPF.Services.Scan.Model
             return this.Equals((Subtitle)obj);
         }
 
-        /// <summary>
-        /// Serves as a hash function for a particular type. 
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
             unchecked

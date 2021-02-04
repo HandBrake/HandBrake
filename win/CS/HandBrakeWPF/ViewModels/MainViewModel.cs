@@ -1105,24 +1105,6 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
-            {
-                if ((this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
-                    && !(this.CurrentTask.SubtitleTracks.Count == 1 && this.CurrentTask.SubtitleTracks.First().SubtitleType == SubtitleType.ForeignAudioSearch))
-                {
-                    MessageBoxResult result = this.errorService.ShowMessageBox(
-                        Resources.Main_AutoAdd_AudioAndSubWarning,
-                        Resources.Warning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
-
-                    if (result == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-            }
-
             foreach (Title title in this.ScannedSource.Titles)
             {
                 this.SelectedTitle = title;

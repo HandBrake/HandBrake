@@ -10,7 +10,7 @@
 
 namespace HandBrake.Interop.Interop.HbLib
 {
-    public class NativeConstants
+    internal class NativeConstants
     {
         // Audio encoders
         public const uint HB_ACODEC_AC3 = 0x00000800;

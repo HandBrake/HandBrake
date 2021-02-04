@@ -15,6 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
 
@@ -682,9 +683,9 @@ namespace HandBrakeWPF.ViewModels
             this.SetSelectedPictureSettingsResLimitMode();
         }
 
-        private PictureSize.PictureSettingsTitle GetPictureTitleInfo()
+        private PictureSettingsTitle GetPictureTitleInfo()
         {
-            PictureSize.PictureSettingsTitle title = new PictureSize.PictureSettingsTitle
+            PictureSettingsTitle title = new PictureSettingsTitle
             {
                 Width = this.sourceResolution.Width,
                 Height = this.sourceResolution.Height,
@@ -695,9 +696,9 @@ namespace HandBrakeWPF.ViewModels
             return title;
         }
 
-        private PictureSize.PictureSettingsJob GetPictureSettings(ChangedPictureField changedField)
+        private PictureSettingsJob GetPictureSettings(ChangedPictureField changedField)
         {
-            PictureSize.PictureSettingsJob job = new PictureSize.PictureSettingsJob
+            PictureSettingsJob job = new PictureSettingsJob
             {
                 Width = this.Width,
                 Height = this.Height,
@@ -763,19 +764,19 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Choose which setting to keep.
-            PictureSize.KeepSetting setting = PictureSize.KeepSetting.HB_KEEP_WIDTH;
+            HandBrakePictureHelpers.KeepSetting setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
             switch (changedField)
             {
                 case ChangedPictureField.Width:
-                    setting = PictureSize.KeepSetting.HB_KEEP_WIDTH;
+                    setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
                     break;
                 case ChangedPictureField.Height:
-                    setting = PictureSize.KeepSetting.HB_KEEP_HEIGHT;
+                    setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
                     break;
             }
 
             // Step 2, For the changed field, call hb_set_anamorphic_size and process the results.
-            PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size2(this.GetPictureSettings(changedField), this.GetPictureTitleInfo(), setting);
+            AnamorphicResult result = HandBrakePictureHelpers.hb_set_anamorphic_size2(this.GetPictureSettings(changedField), this.GetPictureTitleInfo(), setting);
             double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
 
             this.Task.Width = result.OutputWidth;

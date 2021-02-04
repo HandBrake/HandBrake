@@ -181,11 +181,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   <data name="Error" xml:space="preserve">
     <value>Sbagliu</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Avertimentu : s’è vo vulete chì sottutituli sianu aghjunti à ogni elementu chì vo site prontu à mette in fila d’attesa, verificate chì i parametri predefiniti di i sottutituli sianu currettamente cunfigurati in l’unghjetta Sottutituli.
-    
-Vulete cuntinuà ?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Ci vole à attivà u numinà autumaticu di i schedarii È sceglie un chjassu predefinitu in e preferenze nanzu di pudè aghjunghje à a fila d’attesa.</value>
   </data>

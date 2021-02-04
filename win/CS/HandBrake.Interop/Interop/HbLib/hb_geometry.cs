@@ -16,7 +16,7 @@ namespace HandBrake.Interop.Interop.HbLib
     /// The hb_geometry_s.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct hb_geometry_s
+    internal struct hb_geometry_s
     {
         /// <summary>
         /// The width.
@@ -38,7 +38,7 @@ namespace HandBrake.Interop.Interop.HbLib
     /// The hb_ui_geometry_s.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct hb_geometry_settings_s
+    internal struct hb_geometry_settings_s
     {
         /// <summary>
         ///  Anamorphic mode, see job struct anamorphic
@@ -86,7 +86,7 @@ namespace HandBrake.Interop.Interop.HbLib
     /// The hb_rational_t.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct hb_rational_t
+    internal struct hb_rational_t
     {
         /// <summary>
         /// The num. W

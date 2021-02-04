@@ -182,11 +182,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="Error" xml:space="preserve">
     <value>エラー</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>警告：キューに入れようとしている各アイテムに字幕を追加する場合は、[字幕]タブで字幕のデフォルト設定が正しく設定されていることを確認してください。
-    
-続けますか？</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>キューに追加する前に自動ファイル名を設定し、かつ、既定の保存先を設定から設定しなければいけません。</value>
   </data>

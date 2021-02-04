@@ -188,11 +188,6 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   <data name="Error" xml:space="preserve">
     <value>Fehler</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Warnung: Wenn jedem Objekt, das in die Warteschlange aufgenommen werden soll, Untertitel hinzugefügt werden sollen, dann sollte vorher geprüft werden, dass die Standardeinstellungen für Untertitel im Untertitel-Tab richtig eingestellt sind.
-
-Trotzdem fortfahren?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Die automatische Dateibenennung muss aktiviert sein UND es muss ein Standardpfad in den Einstellungen vorgegeben sein, bevor es der Warteschlange hinzugefügt werden kann.</value>
   </data>

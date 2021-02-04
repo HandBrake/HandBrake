@@ -13,5 +13,5 @@ namespace HandBrake.Interop.Interop.HbLib
     using System.Runtime.InteropServices;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void LoggingCallback(string message);
+    internal delegate void LoggingCallback(string message);
 }

@@ -185,11 +185,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
   <data name="Error" xml:space="preserve">
     <value>Hata</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Uyarı: Sıralamak üzere olduğunuz her öğeye altyazı eklenmesini istiyorsanız, lütfen altyazı varsayılan ayarlarının altyazılar sekmesinde doğru bir şekilde ayarlandığını doğrulayın.
-
-Devam etmek istiyor musun?</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Otomatik dosya adlandırma özelliğini açmalısınız ve sıraya ekleyebilmeniz için tercihlerde varsayılan bir yol belirlemelisiniz.</value>
   </data>

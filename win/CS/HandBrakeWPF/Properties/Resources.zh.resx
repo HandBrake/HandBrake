@@ -182,11 +182,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Error" xml:space="preserve">
     <value>错误</value>
   </data>
-  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>警告：如果您希望为要列队的每个项目添加字幕，请确认您在字幕选项卡上正确设置了字幕默认设置。
-    
-你想继续吗？</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>在添加到队列之前，必须启用自动文件命名并在首选项中设置默认路径。</value>
   </data>
