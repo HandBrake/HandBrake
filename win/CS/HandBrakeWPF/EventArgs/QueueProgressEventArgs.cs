@@ -11,8 +11,6 @@ namespace HandBrakeWPF.EventArgs
 {
     using System;
 
-    using HandBrake.Interop.Model;
-
     using HandBrakeWPF.Services.Queue.Model;
 
     /// <summary>

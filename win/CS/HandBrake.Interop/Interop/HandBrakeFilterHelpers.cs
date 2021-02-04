@@ -19,7 +19,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Json.Filters;
-    using HandBrake.Interop.Json;
+    using HandBrake.Interop.Utilities;
 
     /// <summary>
     /// The hand brake filter helpers.

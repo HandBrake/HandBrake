@@ -266,7 +266,7 @@ namespace HandBrake.Interop.Utilities
             List<string> names = new List<string>();
             foreach (var item in languageCodes)
             {
-                KeyValuePair<string, string> name = MapLanguages().FirstOrDefault(v => v.Value == item);  // Slightly inefficient but small set anyway so not a big issue.
+                KeyValuePair<string, string> name = MapLanguages().FirstOrDefault(v => v.Value == item); // Slightly inefficient but small set anyway so not a big issue.
                 names.Add(name.Key);
             }
 

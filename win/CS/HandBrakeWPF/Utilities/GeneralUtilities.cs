@@ -107,7 +107,7 @@ namespace HandBrakeWPF.Utilities
                 gpuBuilder.Append("GPU Information is unavailable");
             }
 
-            logHeader.AppendLine(string.Format("HandBrake {0}", VersionHelper.GetVersion()));
+            logHeader.AppendLine(string.Format("HandBrake {0}", HandBrakeVersionHelper.GetVersion()));
             logHeader.AppendLine(string.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(string.Format("CPU: {0}", SystemInfo.GetCpu));
             logHeader.AppendLine(string.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
@@ -115,7 +115,7 @@ namespace HandBrakeWPF.Utilities
             logHeader.AppendLine(string.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
             logHeader.AppendLine(string.Format("Temp Dir: {0}", Path.GetTempPath()));
             logHeader.AppendLine(string.Format("Install Dir: {0}", Application.StartupPath));
-            logHeader.AppendLine(string.Format("Data Dir: {0}\n", DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly())));
+            logHeader.AppendLine(string.Format("Data Dir: {0}\n", DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly())));
 
             logHeader.AppendLine("-------------------------------------------");
 

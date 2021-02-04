@@ -13,10 +13,11 @@ namespace HandBrakeWPF.Converters.Video
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Utilities;
 
     /// <summary>

@@ -715,7 +715,7 @@ namespace HandBrake.Interop.Interop
 
         public static List<int> GetQsvAdaptorList()
         {
-            if (SystemInfo.IsQsvAvailable)
+            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable)
             {
                 IntPtr gpuListPtr = HBFunctions.hb_qsv_adapters_list();
 

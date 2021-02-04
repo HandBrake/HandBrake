@@ -11,7 +11,7 @@ namespace HandBrake.Interop.Interop.Interfaces
 {
     using System;
 
-    using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
 

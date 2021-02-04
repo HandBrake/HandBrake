@@ -14,7 +14,7 @@ namespace HandBrake.Interop.Utilities
 
     using HandBrake.Interop.Interop.HbLib;
 
-    public class VersionHelper
+    public class HandBrakeVersionHelper
     {
         /// <summary>
         /// Gets the HandBrake version string.

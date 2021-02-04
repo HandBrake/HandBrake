@@ -15,11 +15,12 @@ namespace HandBrakeWPF.Services
     using System.IO;
     using System.Linq;
 
-    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -36,7 +37,7 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class UserSettingService : IUserSettingService
     {
-        private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "settings.json");
+        private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly()), "settings.json");
         private readonly string releaseSettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.json");
         private readonly string nightlySettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.json");
         private readonly JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
@@ -189,7 +190,7 @@ namespace HandBrakeWPF.Services
                         this.userSettings = deserialisedSettings;
                     }
                 }
-                else if (VersionHelper.IsNightly() && File.Exists(this.releaseSettingsFile))
+                else if (HandBrakeVersionHelper.IsNightly() && File.Exists(this.releaseSettingsFile))
                 {
                     // Port the release versions config to the nightly.
                     if (!Directory.Exists(DirectoryUtilities.GetUserStoragePath(true)))

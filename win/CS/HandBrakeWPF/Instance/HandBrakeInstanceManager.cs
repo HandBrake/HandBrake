@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Instance
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
-    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;

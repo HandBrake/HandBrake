@@ -19,7 +19,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
-    using HandBrake.Interop.Json;
+    using HandBrake.Interop.Utilities;
 
     /// <summary>
     /// The hand brake preset service.

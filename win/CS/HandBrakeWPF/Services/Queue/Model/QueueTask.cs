@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;

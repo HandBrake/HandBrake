@@ -36,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.Format("{0}", VersionHelper.GetVersion());
+                return string.Format("{0}", HandBrakeVersionHelper.GetVersion());
             }
         }
 

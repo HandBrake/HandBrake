@@ -30,16 +30,16 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
-    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
-    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
-    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
-    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
-    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using FramerateMode = Services.Encode.Model.Models.FramerateMode;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
+    using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
+    using VideoEncoder = Model.Video.VideoEncoder;
+    using VideoEncodeRateType = Model.Video.VideoEncodeRateType;
+    using VideoLevel = Services.Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = Services.Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = Services.Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = Services.Encode.Model.Models.Video.VideoTune;
 
     /// <summary>
     /// The Video View Model
@@ -1544,7 +1544,7 @@ namespace HandBrakeWPF.ViewModels
             // Override for QuickSync
             if (selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
             {
-                if (HandBrake.Interop.Utilities.SystemInfo.QsvHardwareGeneration > 6) 
+                if (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) 
                 {
                     defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "speed")); // TGL
                 }

@@ -18,7 +18,7 @@ namespace HandBrake.Worker.Logging
     using System.Text;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
 

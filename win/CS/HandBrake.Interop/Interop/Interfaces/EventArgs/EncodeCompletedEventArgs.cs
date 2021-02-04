@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Interop.EventArgs
+namespace HandBrake.Interop.Interop.Interfaces.EventArgs
 {
     using System;
 

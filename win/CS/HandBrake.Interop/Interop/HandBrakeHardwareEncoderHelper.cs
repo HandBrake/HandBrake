@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SystemInfo.cs" company="HandBrake Project (https://handbrake.fr)">
+// <copyright file="HandBrakeHardwareEncoderHelper.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Utilities
+namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Diagnostics;
 
-    using Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib;
 
-    public class SystemInfo
+    public class HandBrakeHardwareEncoderHelper
     {
         private static bool? isNvencH264Available; // Local cache to prevent log spam.
         private static bool? isNvencH265Available;

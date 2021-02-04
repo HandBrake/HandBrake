@@ -19,10 +19,10 @@ namespace HandBrake.Interop.Interop
     using System.Timers;
     using System.Xml;
 
-    using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -30,7 +30,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Json;
+    using HandBrake.Interop.Utilities;
 
     public class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {

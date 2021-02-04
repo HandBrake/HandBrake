@@ -15,8 +15,8 @@ namespace HandBrake.Worker.Routing
     using System.Text.Json;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Json;
     using HandBrake.Interop.Utilities;
     using HandBrake.Worker.Logging;
     using HandBrake.Worker.Logging.Interfaces;
@@ -36,7 +36,7 @@ namespace HandBrake.Worker.Routing
 
         public string GetVersionInfo(HttpListenerRequest request)
         {
-            string versionInfo = JsonSerializer.Serialize(VersionHelper.GetVersion(), JsonSettings.Options);
+            string versionInfo = JsonSerializer.Serialize(HandBrakeVersionHelper.GetVersion(), JsonSettings.Options);
 
             return versionInfo;
         }
@@ -133,7 +133,7 @@ namespace HandBrake.Worker.Routing
             this.TerminationEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        private void HandbrakeInstance_EncodeCompleted(object sender, Interop.Interop.EventArgs.EncodeCompletedEventArgs e)
+        private void HandbrakeInstance_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.completedState = new JsonState() { WorkDone = new WorkDone() { Error = e.Error } };
             this.completedState.State = "WORKDONE";

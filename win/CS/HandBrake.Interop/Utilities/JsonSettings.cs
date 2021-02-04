@@ -7,12 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Json
+namespace HandBrake.Interop.Utilities
 {
     using System.Text.Json;
 
     public class JsonSettings
     {
+        /// <summary>
+        /// For consistent use of JSON settings between this library and the consumers.
+        /// </summary>
         public static JsonSerializerOptions Options = new JsonSerializerOptions
                                                             {
                                                                 IgnoreNullValues = true,

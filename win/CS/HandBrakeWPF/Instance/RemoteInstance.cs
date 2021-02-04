@@ -19,11 +19,11 @@ namespace HandBrakeWPF.Instance
     using System.Threading;
     using System.Threading.Tasks;
 
-    using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Json;
+    using HandBrake.Interop.Utilities;
     using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;

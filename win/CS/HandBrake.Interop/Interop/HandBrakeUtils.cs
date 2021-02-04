@@ -16,11 +16,11 @@ namespace HandBrake.Interop.Interop
     using System.Text.Json;
     using System.Xml;
 
-    using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Anamorphic;
     using HandBrake.Interop.Interop.Json.Shared;
-    using HandBrake.Interop.Json;
+    using HandBrake.Interop.Utilities;
 
     /// <summary>
     /// HandBrake Interop Utilities

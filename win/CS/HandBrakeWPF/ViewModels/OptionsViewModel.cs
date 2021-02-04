@@ -21,11 +21,11 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
@@ -37,7 +37,6 @@ namespace HandBrakeWPF.ViewModels
     using Ookii.Dialogs.Wpf;
 
     using Execute = Caliburn.Micro.Execute;
-    using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
 
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
@@ -141,7 +140,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsUWP { get; } = UwpDetect.IsUWP();
 
-        public bool IsNightly { get; } = VersionHelper.IsNightly();
+        public bool IsNightly { get; } = HandBrakeVersionHelper.IsNightly();
 
         public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();
 
@@ -855,11 +854,11 @@ namespace HandBrakeWPF.ViewModels
 
         public VideoScaler SelectedScalingMode { get; set; }
 
-        public bool IsQuickSyncAvailable { get; } = SystemInfo.IsQsvAvailable;
+        public bool IsQuickSyncAvailable { get; } = HandBrakeHardwareEncoderHelper.IsQsvAvailable;
 
-        public bool IsVceAvailable { get; } = SystemInfo.IsVceH264Available;
+        public bool IsVceAvailable { get; } = HandBrakeHardwareEncoderHelper.IsVceH264Available;
 
-        public bool IsNvencAvailable { get; } = SystemInfo.IsNVEncH264Available;
+        public bool IsNvencAvailable { get; } = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
 
         public bool IsUseQsvDecAvailable
         {
@@ -885,7 +884,7 @@ namespace HandBrakeWPF.ViewModels
 
         /* About HandBrake */
 
-        public string Version { get; } = string.Format("{0}", VersionHelper.GetVersion());
+        public string Version { get; } = string.Format("{0}", HandBrakeVersionHelper.GetVersion());
 
         public string UpdateMessage
         {

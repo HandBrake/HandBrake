@@ -104,17 +104,17 @@ namespace HandBrakeWPF.Services
                         // Figure out which appcast we want to read.
                         string url = Constants.Appcast64;
 
-                        if (VersionHelper.IsNightly())
+                        if (HandBrakeVersionHelper.IsNightly())
                         {
                             url = Constants.AppcastUnstable64;
                         }
 
-                        var currentBuild = VersionHelper.Build;
+                        var currentBuild = HandBrakeVersionHelper.Build;
 
                         // Fetch the Appcast from our server.
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                         request.AllowAutoRedirect = false; // We will never do this.
-                        request.UserAgent = string.Format("HandBrake Win Upd {0}", VersionHelper.GetVersionShort());
+                        request.UserAgent = string.Format("HandBrake Win Upd {0}", HandBrakeVersionHelper.GetVersionShort());
                         WebResponse response = request.GetResponse();
 
                         // Parse the data with the AppcastReader
@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Services
 
                        HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
                        webRequest.Credentials = CredentialCache.DefaultCredentials;
-                       webRequest.UserAgent = string.Format("HandBrake Win Upd {0}", VersionHelper.GetVersionShort());
+                       webRequest.UserAgent = string.Format("HandBrake Win Upd {0}", HandBrakeVersionHelper.GetVersionShort());
                        HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
                        long fileSize = webResponse.ContentLength;
 

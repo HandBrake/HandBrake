@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model
+namespace HandBrake.Interop.Interop.Interfaces.Model
 {
     public class HBConfiguration
     {

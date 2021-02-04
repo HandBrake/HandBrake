@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model
+namespace HandBrakeWPF.Model.Video
 {
     using HandBrake.Interop.Attributes;
 

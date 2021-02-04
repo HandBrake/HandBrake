@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Utilities;
 
     using ILog = Logging.Interfaces.ILog;
-    using ScanProgressEventArgs = HandBrake.Interop.Interop.EventArgs.ScanProgressEventArgs;
+    using ScanProgressEventArgs = HandBrake.Interop.Interop.Interfaces.EventArgs.ScanProgressEventArgs;
     using Title = Model.Title;
 
     public class LibScan : IScan, IDisposable

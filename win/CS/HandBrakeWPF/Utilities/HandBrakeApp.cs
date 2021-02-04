@@ -26,7 +26,7 @@ namespace HandBrakeWPF.Utilities
         /// </summary>
         public static void ResetToDefaults()
         {
-            string appDataFolder = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            string appDataFolder = DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly());
             DeleteFile(Path.Combine(appDataFolder, "presets.json"));
             DeleteFile(Path.Combine(appDataFolder, "settings.json"));
 

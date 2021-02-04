@@ -802,7 +802,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsMultiProcess { get; set; }
 
-        public bool IsNightly => VersionHelper.IsNightly();
+        public bool IsNightly => HandBrakeVersionHelper.IsNightly();
 
         /* Commands */
 

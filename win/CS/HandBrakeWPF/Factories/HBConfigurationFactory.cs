@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Factories
 {
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Services.Interfaces;
 
