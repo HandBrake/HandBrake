@@ -17,8 +17,8 @@ namespace HandBrake.Interop.Interop
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
+    using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
-    using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Json;
 
     /// <summary>

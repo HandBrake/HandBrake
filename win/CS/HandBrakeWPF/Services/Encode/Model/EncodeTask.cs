@@ -12,8 +12,8 @@ namespace HandBrakeWPF.Services.Encode.Model
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
-    using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -27,6 +27,8 @@ namespace HandBrakeWPF.Services.Encode.Model
     using OutputFormat = Models.OutputFormat;
     using PointToPointMode = Models.PointToPointMode;
     using SubtitleTrack = Models.SubtitleTrack;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
+    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Models.Video.VideoLevel;
     using VideoPreset = Models.Video.VideoPreset;
     using VideoProfile = Models.Video.VideoProfile;

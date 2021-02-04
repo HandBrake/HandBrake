@@ -10,8 +10,8 @@ namespace HandBrakeWPF.Converters.Queue
     using System.Collections.Generic;
     using System.Globalization;
     using System.Windows.Data;
-    using HandBrake.Interop.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Utilities;

@@ -13,10 +13,11 @@ namespace HandBrakeWPF.Services.Queue
     using System.Collections.Generic;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
+
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class QueueResourceService
     {

@@ -20,9 +20,8 @@ namespace HandBrakeWPF.Services.Presets
     using System.Windows.Xps.Serialization;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
-    using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -40,6 +39,7 @@ namespace HandBrakeWPF.Services.Presets
 
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class PresetService : IPresetService
     {

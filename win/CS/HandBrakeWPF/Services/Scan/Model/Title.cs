@@ -14,7 +14,9 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System.IO;
     using System.Linq;
 
-    using HandBrake.Interop.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+
+    using Size = HandBrakeWPF.Model.Picture.Size;
 
     /// <summary>
     /// An object that represents a single Title of a DVD

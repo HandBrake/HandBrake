@@ -19,11 +19,13 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
@@ -35,6 +37,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class SummaryViewModel : ViewModelBase, ISummaryViewModel
     {

@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Model.Filters
 {
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
 
     public class FilterTune
     {

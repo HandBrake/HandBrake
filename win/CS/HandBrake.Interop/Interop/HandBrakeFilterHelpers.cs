@@ -17,8 +17,8 @@ namespace HandBrake.Interop.Interop
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Json.Filters;
-    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Json;
 
     /// <summary>

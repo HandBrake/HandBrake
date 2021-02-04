@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Helpers
 {
     using System.Configuration;
 
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class VideoEncoderHelpers
     {

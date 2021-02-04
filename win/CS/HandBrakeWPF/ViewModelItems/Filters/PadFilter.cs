@@ -18,7 +18,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model;

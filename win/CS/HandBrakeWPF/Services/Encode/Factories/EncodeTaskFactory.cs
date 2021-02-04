@@ -16,12 +16,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Shared;
-    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
@@ -37,6 +38,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using SubtitleTrack = Model.Models.SubtitleTrack;
     using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
     using Validate = Helpers.Validate;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
+    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
 
     /// <summary>
     /// This factory takes the internal EncodeJob object and turns it into a set of JSON models

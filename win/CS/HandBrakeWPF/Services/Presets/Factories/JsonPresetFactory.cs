@@ -16,9 +16,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+    using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
-    using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -36,6 +37,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using EncodeTask = Encode.Model.EncodeTask;
     using FramerateMode = Encode.Model.Models.FramerateMode;
     using OutputFormat = Encode.Model.Models.OutputFormat;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
+    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Encode.Model.Models.Video.VideoPreset;
     using VideoProfile = Encode.Model.Models.Video.VideoProfile;

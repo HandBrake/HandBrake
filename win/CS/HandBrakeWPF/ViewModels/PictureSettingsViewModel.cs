@@ -15,12 +15,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
@@ -29,7 +26,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using Size = Model.Picture.Size;
 
     public class PictureSettingsViewModel : ViewModelBase, IPictureSettingsViewModel
     {

@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Globalization;
     using System.Windows.Data;
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     /// <summary>
     /// The audio mixdown converter.

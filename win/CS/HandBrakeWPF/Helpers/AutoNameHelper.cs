@@ -17,8 +17,6 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop.Model.Encoding;
-
     using HandBrakeWPF.Converters;
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Model.Options;
@@ -28,6 +26,7 @@ namespace HandBrakeWPF.Helpers
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
 
     /// <summary>
     /// The Destination AutoName Helper

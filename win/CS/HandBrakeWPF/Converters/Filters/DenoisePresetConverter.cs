@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Converters.Filters
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrakeWPF.Model.Filters;
 
     using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
 

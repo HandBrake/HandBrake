@@ -17,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Navigation;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Audio;

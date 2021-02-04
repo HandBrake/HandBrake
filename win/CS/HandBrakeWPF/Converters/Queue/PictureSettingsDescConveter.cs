@@ -12,7 +12,9 @@ namespace HandBrakeWPF.Converters.Queue
     using System;
     using System.Globalization;
     using System.Windows.Data;
-    using HandBrake.Interop.Interop.Model.Encoding;
+
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+
     using HandBrakeWPF.Services.Encode.Model;
 
     /// <summary>

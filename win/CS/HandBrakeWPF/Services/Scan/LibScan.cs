@@ -17,12 +17,12 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+    using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Scan;
-    using HandBrake.Interop.Interop.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Interop.Model.Preview;
 
     using HandBrakeWPF.Instance;
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;

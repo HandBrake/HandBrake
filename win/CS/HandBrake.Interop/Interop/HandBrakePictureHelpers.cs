@@ -11,7 +11,7 @@ namespace HandBrake.Interop.Interop
 {
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces.Model;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     public class HandBrakePictureHelpers
     {

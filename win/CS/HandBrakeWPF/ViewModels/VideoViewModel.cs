@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
@@ -34,6 +34,8 @@ namespace HandBrakeWPF.ViewModels
     using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
+    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
+    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
     using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;

@@ -13,7 +13,7 @@ namespace HandBrake.Interop.Interop
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
-    using HandBrake.Interop.Interop.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model;
 
     /// <summary>
     /// Contains utilities for converting language codes.

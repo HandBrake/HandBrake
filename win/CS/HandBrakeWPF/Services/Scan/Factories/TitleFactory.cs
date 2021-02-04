@@ -12,12 +12,13 @@ namespace HandBrakeWPF.Services.Scan.Factories
     using System;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Json.Scan;
-    using HandBrake.Interop.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.Model;
+
+    using Size = HandBrakeWPF.Model.Picture.Size;
 
     public class TitleFactory
     {

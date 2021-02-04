@@ -24,11 +24,12 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
+    using HandBrake.Interop.Interop.Interfaces.Model.Preview;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Json.State;
-    using HandBrake.Interop.Interop.Model.Encoding;
-    using HandBrake.Interop.Interop.Model.Preview;
     using HandBrake.Interop.Json;
 
     public class HandBrakeInstance : IHandBrakeInstance, IDisposable
