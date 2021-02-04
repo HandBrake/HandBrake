@@ -15,31 +15,14 @@ namespace HandBrake.Interop.Interop
 
     public class HandBrakePictureHelpers
     {
-        /// <summary>
-        /// The keep setting.
-        /// </summary>
         public enum KeepSetting
         {
+            // From common.h
             HB_KEEP_WIDTH = 0x01,
             HB_KEEP_HEIGHT = 0x02,
             HB_KEEP_DISPLAY_ASPECT = 0x04
         }
 
-        /// <summary>
-        /// The hb_set_anamorphic_size 2.
-        /// </summary>
-        /// <param name="job">
-        /// The job.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="setting">
-        /// The setting.
-        /// </param>
-        /// <returns>
-        /// The <see cref="AnamorphicResult"/>.
-        /// </returns>
         public static AnamorphicResult hb_set_anamorphic_size2(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting setting)
         {
             int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
@@ -86,8 +69,7 @@ namespace HandBrake.Interop.Interop
             int outputParHeight = result.par.den;
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
-
-
+        
         internal static hb_geometry_s GetAnamorphicSizes(hb_geometry_s sourceGeometry, hb_geometry_settings_s uiGeometry)
         {
             hb_geometry_s geometry = new hb_geometry_s();

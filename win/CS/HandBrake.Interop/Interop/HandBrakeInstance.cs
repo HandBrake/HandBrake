@@ -20,10 +20,10 @@ namespace HandBrake.Interop.Interop
     using System.Xml;
 
     using HandBrake.Interop.Interop.EventArgs;
-    using HandBrake.Interop.Interop.Factories;
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Json.State;
@@ -204,7 +204,7 @@ namespace HandBrake.Interop.Interop
             {
                 crop = new[] { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right },
                 itu_par = 0,
-                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (settings.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
+                keep = (int)HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH + (settings.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
                 maxWidth = settings.MaxWidth,
                 maxHeight = settings.MaxHeight,
                 mode = (int)(hb_anamorphic_mode_t)settings.Anamorphic,

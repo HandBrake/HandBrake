@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services.Scan
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;

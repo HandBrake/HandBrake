@@ -12,6 +12,7 @@ namespace HandBrake.Interop.Interop.Interfaces
     using System;
 
     using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Model.Preview;
 

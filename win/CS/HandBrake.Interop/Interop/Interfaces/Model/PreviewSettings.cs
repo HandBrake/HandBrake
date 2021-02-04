@@ -7,9 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Interop.Model.Preview
+namespace HandBrake.Interop.Interop.Interfaces.Model
 {
-    using Encoding;
+    using HandBrake.Interop.Interop.Model;
+    using HandBrake.Interop.Interop.Model.Encoding;
 
     /// <summary>
     /// The preview settings.
