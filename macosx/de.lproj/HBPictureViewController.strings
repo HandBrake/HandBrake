@@ -22,6 +22,9 @@
 /* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
 "1zy-53-Bvd.title" = "180°";
 
+/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
+"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
+
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
 "2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
 
@@ -198,9 +201,6 @@
 
 /* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
 "qzy-K8-2tY.title" = "1080p HD";
-
-/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
-"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
 "r9l-cH-pFW.ibExternalAccessibilityDescription" = "Links beschneiden";

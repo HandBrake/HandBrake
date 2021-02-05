@@ -129,6 +129,20 @@
 /* Title description */
 "Chapters %d through %d" = "Kapitel %1$d bis %2$d";
 
+/* Filters description
+   HBJob -> filters short description */
+"Chroma Smooth" = "Chroma-Glättung";
+
+/* HBJob -> invalid chroma smooth settings error recovery suggestion */
+"Chroma Smooth syntax: cb-strength=c:cb-size=c:cr-strength=c:cr-size=c" = "Chroma-Glättung-Syntax: cb-strength=c:cb-size=c:cr-strength=c:cr-size=c";
+
+/* Filters description
+   HBJob -> filters short description */
+"Colorspace" = "Farbraum";
+
+/* HBJob -> invalid chroma smooth settings error recovery suggestion */
+"Colorspace syntax: primaries=p:transfer=t:matrix=m:tonemap=t:param=p:desat=d" = "Farbraum-Syntax: primaries=p:transfer=t:matrix=m:tonemap=t:param=p:desat=d";
+
 /* HBJob -> filters short description */
 "Comb Detect" = "Comb Detect";
 
@@ -222,6 +236,12 @@
 
 /* HBJob -> invalid name error recovery suggestion */
 "HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "HQDN3D-Syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nStandardeinstellungen: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "Ungültige benutzerdefinierte Chroma-Glättungs-Einstellungen.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "Ungültige benutzerdefinierte Farbraum-Einstellungen.";
 
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Ungültige benutzerdefinierte Comb Detect-Einstellungen.";
