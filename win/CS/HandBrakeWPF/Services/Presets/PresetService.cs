@@ -423,6 +423,8 @@ namespace HandBrakeWPF.Services.Presets
             // Clear the current built in Presets and now parse the temporary Presets file.
             this.ClearBuiltIn();
 
+            bool hasUserDefault = this.flatPresetDict.Values.FirstOrDefault(f => f.IsDefault) != null;
+
             IList<HBPresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
 
             foreach (var category in presetCategories)
@@ -434,6 +436,11 @@ namespace HandBrakeWPF.Services.Presets
                     preset.Category = category.PresetName;
                     preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
                     preset.IsPresetDisabled = this.IsPresetDisabled(preset) || hbpreset.PresetDisabled;
+
+                    if (hbpreset.Default && hasUserDefault)
+                    {
+                        preset.IsDefault = false;
+                    }
 
                     this.Add(preset, true);
                 }
