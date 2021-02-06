@@ -579,7 +579,7 @@ namespace HandBrakeWPF.ViewModels
                     directory = Path.GetDirectoryName(directory);
                     if (directory != null && Directory.Exists(directory))
                     {
-                        Process.Start(directory);
+                        Process.Start("explorer.exe", directory);
                     }
                 }
             }
