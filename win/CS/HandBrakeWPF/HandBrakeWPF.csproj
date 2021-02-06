@@ -153,8 +153,15 @@
     <Page Update="Themes\Controls\GroupBoxDark.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Themes\Controls\ToolbarLight.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\Controls\ToolbarDark.xaml">
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Light.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Standalone\CropPanelView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>

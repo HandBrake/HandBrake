@@ -124,20 +124,34 @@ namespace HandBrakeWPF
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             if (SystemInfo.IsWindows10())
             {
-                ResourceDictionary darkTheme = new ResourceDictionary();
+                ResourceDictionary theme = new ResourceDictionary();
                 switch (useDarkTheme)
                 {
                     case DarkThemeMode.System:
                         if (SystemInfo.IsAppsUsingDarkTheme())
                         {
-                            darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
-                            Application.Current.Resources.MergedDictionaries.Add(darkTheme);
+                            theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
+                            Application.Current.Resources.MergedDictionaries.Add(theme);
+                        }
+                        else if (!SystemParameters.HighContrast)
+                        {
+                            theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
+                            Application.Current.Resources.MergedDictionaries.Add(theme);
                         }
                         break;
                     case DarkThemeMode.Dark:
-                        darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
-                        Application.Current.Resources.MergedDictionaries.Add(darkTheme);
+                        theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
+                        Application.Current.Resources.MergedDictionaries.Add(theme);
                         break;
+                    case DarkThemeMode.Light:
+                        if (!SystemParameters.HighContrast)
+                        {
+                            theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
+                            Application.Current.Resources.MergedDictionaries.Add(theme);
+                        }
+
+                        break;
+
                     default:
                         break;
                 }

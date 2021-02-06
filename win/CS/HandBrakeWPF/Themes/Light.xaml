@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
+
+    <!-- StatusBar -->
+    <Style TargetType="StatusBar">
+        <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
+    </Style>
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Controls/ToolbarLight.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>
