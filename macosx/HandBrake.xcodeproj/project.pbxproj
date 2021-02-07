@@ -2151,7 +2151,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
