@@ -168,8 +168,8 @@
     </Page>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy $(SolutionDir)\HandBrake.Worker\bin\$(ConfigurationName)\*.*  $(TargetDir)" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy ..\HandBrake.Worker\bin\$(ConfigurationName)\*.*  bin\$(ConfigurationName)" />
   </Target>
-
+  
 </Project>
