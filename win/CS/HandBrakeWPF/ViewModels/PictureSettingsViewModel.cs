@@ -13,6 +13,10 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
+    using System.Linq;
+    using System.Windows;
+
+    using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -25,12 +29,15 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using Size = Model.Picture.Size;
 
     public class PictureSettingsViewModel : ViewModelBase, IPictureSettingsViewModel
     {
+        private readonly IWindowManager windowManager;
+
         private string displaySize;
         private bool heightControlEnabled = true;
         private bool showCustomAnamorphicControls;
@@ -48,8 +55,9 @@ namespace HandBrakeWPF.ViewModels
 
         private PictureSettingsResLimitModes selectedPictureSettingsResLimitMode;
 
-        public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel)
+        public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel, IWindowManager windowManager)
         {
+            this.windowManager = windowManager;
             this.StaticPreviewViewModel = staticPreviewViewModel;
             this.StaticPreviewViewModel.SetPictureSettingsInstance(this);
             this.sourceResolution = new Size(0, 0);
@@ -660,7 +668,22 @@ namespace HandBrakeWPF.ViewModels
             return true;
         }
 
-         /* Protected and Private Methods */
+        /* Protected and Private Methods */
+
+        public void OpenPreviewWindow()
+        {
+            if (!string.IsNullOrEmpty(this.Task.Source) && !this.StaticPreviewViewModel.IsOpen)
+            {
+                this.StaticPreviewViewModel.IsOpen = true;
+                this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource);
+                this.windowManager.ShowWindow(this.StaticPreviewViewModel);
+            }
+            else if (this.StaticPreviewViewModel.IsOpen)
+            {
+                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(StaticPreviewView));
+                window?.Focus();
+            }
+        }
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {

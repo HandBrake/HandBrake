@@ -14,15 +14,13 @@ namespace HandBrakeWPF.Converters
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
-
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
+    using VideoEncoder = Model.Video.VideoEncoder;
 
     /// <summary>
     /// Enum Combo Converter

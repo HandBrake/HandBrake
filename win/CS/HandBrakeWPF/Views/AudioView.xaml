@@ -29,8 +29,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -39,16 +37,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-
         <!-- Row 0 -->
-        <TextBlock Grid.Row="0"
-                   Margin="10,5,0,0"
-                   FontSize="12" FontWeight="Bold"
-                   VerticalAlignment="Top"
-                   Text="{Binding PanelTitle}" />
-
-        <!-- Row 1 -->
-        <Grid Grid.Row="1" Margin="10,5,10,0" Grid.Column="0" >
+        <Grid Grid.Row="0" Margin="10,5,10,0" Grid.Column="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -104,8 +94,8 @@
             </Grid>
         </Grid>
 
-        <!-- Row 2 -->
-        <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
+        <!-- Row 1 -->
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
                  Margin="10,10,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"

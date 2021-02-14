@@ -852,7 +852,7 @@ Would you like to overwrite it?</value>
     <value>Custom:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -897,7 +897,7 @@ Would you like to overwrite it?</value>
     <value>Rotate:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Sharpen</value>
+    <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Sharpen Preset</value>
@@ -1339,7 +1339,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Modulus:</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Output</value>
+    <value>Output:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>PAR:</value>
@@ -1381,7 +1381,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>The selected titles will be added using the  "{0}"  preset.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Advanced:</value>
+    <value>Video Options:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Audio:</value>
@@ -1510,7 +1510,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Add New Track</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Add Track</value>
+    <value>Tracks</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Available Languages:</value>
@@ -1657,7 +1657,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Avg Bitrate (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Video Codec:</value>
+    <value>Video Encoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Constant Framerate</value>
@@ -1687,13 +1687,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Framerate (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Optimise Video:</value>
+    <value>Encoder Options: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Peak Framerate</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Quality</value>
+    <value>Quality: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Turbo first pass</value>
@@ -1702,7 +1702,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Variable Framerate</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>Video: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Language:</value>
@@ -2255,10 +2255,10 @@ Please choose a different preset.</value>
     <value>Borders</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling</value>
+    <value>Resolution and Scaling:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop</value>
+    <value>Rotate and Crop:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 Only! )</value>
@@ -2420,5 +2420,38 @@ Fields are limited to:
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
     <value>Colourspace</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Open Preview</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Source Preview:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Job Status:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Invalid Settings. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Invalid Input. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Status Unknown. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Errors detected whist trying to read source.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Unknown failure. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
   </data>
 </root>

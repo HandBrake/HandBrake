@@ -19,7 +19,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -27,9 +26,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.FiltersView_Filters}" FontSize="12" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
-
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

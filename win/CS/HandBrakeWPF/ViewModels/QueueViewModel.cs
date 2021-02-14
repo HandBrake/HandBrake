@@ -60,14 +60,15 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsQueueRunning
         {
-            get
-            {
-                return this.isQueueRunning;
-            }
+            get => this.isQueueRunning;
 
             set
             {
-                if (value == this.isQueueRunning) return;
+                if (value == this.isQueueRunning)
+                {
+                    return;
+                }
+
                 this.isQueueRunning = value;
                 this.NotifyOfPropertyChange(() => this.IsQueueRunning);
             }
@@ -75,10 +76,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string JobsPending
         {
-            get
-            {
-                return this.jobsPending;
-            }
+            get => this.jobsPending;
 
             set
             {
@@ -89,10 +87,7 @@ namespace HandBrakeWPF.ViewModels
 
         public WhenDone WhenDoneAction
         {
-            get
-            {
-                return this.whenDoneAction;
-            }
+            get => this.whenDoneAction;
 
             set
             {
@@ -101,26 +96,21 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public ObservableCollection<QueueTask> QueueTasks
-        {
-            get
-            {
-                return this.queueProcessor.Queue;
-            }
-        }
+        public ObservableCollection<QueueTask> QueueTasks => this.queueProcessor.Queue;
 
         public BindingList<QueueTask> SelectedItems { get; }
 
         public QueueTask SelectedTask
         {
-            get
-            {
-                return this.selectedTask;
-            }
+            get => this.selectedTask;
 
             set
             {
-                if (Equals(value, this.selectedTask)) return;
+                if (Equals(value, this.selectedTask))
+                {
+                    return;
+                }
+
                 this.selectedTask = value;
                 this.NotifyOfPropertyChange(() => this.SelectedTask);
                 this.HandleLogData();
@@ -135,13 +125,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool JobInfoVisible
-        {
-            get
-            {
-                return SelectedItems.Count == 1;
-            }
-        }
+        public bool JobInfoVisible => SelectedItems.Count == 1;
 
         public int SelectedTabIndex { get; set; }
 

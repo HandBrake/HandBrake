@@ -10,25 +10,22 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.ChaptersView_ChapterMarkers}" FontSize="12" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
-
-        <Grid Grid.Row="1" Margin="10,5,10,0">
+        <Grid Grid.Row="0" Margin="10,5,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <CheckBox Content="{x:Static Properties:Resources.ChaptersView_CreateChapterMarkers}" IsChecked="{Binding IncludeChapterMarkers}" Grid.Column="0" VerticalAlignment="Center" />
+            <CheckBox Content="{x:Static Properties:Resources.ChaptersView_CreateChapterMarkers}" IsChecked="{Binding IncludeChapterMarkers}" Grid.Column="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
             <Button Content="{x:Static Properties:Resources.ChaptersView_Import}" Name="import" Grid.Column="2" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Import]" />
             <Button Content="{x:Static Properties:Resources.ChaptersView_Export}" Name="export" Grid.Column="3" Width="75" cal:Message.Attach="[Event Click] = [Action Export]" />
         </Grid>
 
-        <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters}" 
+        <DataGrid Grid.Row="1" Margin="10" ItemsSource="{Binding Chapters}" 
                   VerticalAlignment="Stretch"  AutoGenerateColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column"

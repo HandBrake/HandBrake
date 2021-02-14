@@ -102,9 +102,11 @@ namespace HandBrakeWPF.Services.Queue
             this.IsPaused = false;
 
             this.job.Status = !e.Successful ? QueueItemStatus.Error : QueueItemStatus.Completed;
+            this.job?.JobProgress.Update(e);
             this.job.Statistics.EndTime = DateTime.Now;
             this.job.Statistics.CompletedActivityLogPath = e.ActivityLogPath;
             this.job.Statistics.FinalFileSize = e.FinalFilesizeInBytes;
+
 
             this.job.JobProgress.ClearStatusDisplay();
             

@@ -34,7 +34,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -44,14 +43,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Row 0 -->
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   Margin="10,5,0,0"
-                   FontSize="12" FontWeight="Bold"
-                   VerticalAlignment="Top"
-                   Text="{Binding PanelTitle}" />
-
-        <!-- Row 1 -->
-        <Grid Grid.Row="1" Margin="10,5,10,0">
+        <Grid Grid.Row="0" Margin="10,5,10,0">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -104,8 +96,8 @@
         </Grid>
 
 
-        <!-- Row 2 -->
-        <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+        <!-- Row 0 -->
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                  Margin="10,10,10,10" x:Name="subtitleListBox"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"

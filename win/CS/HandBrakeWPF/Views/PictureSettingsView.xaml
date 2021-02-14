@@ -4,7 +4,8 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
               xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-              xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture">
+              xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture"
+              xmlns:cal="http://www.caliburnproject.org">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
@@ -21,7 +22,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -32,7 +32,6 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
 
         <!-- Size Panel-->
         <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResAndScaling}" FontSize="12" FontWeight="Bold"  Grid.Row="0" Grid.Column="0" Margin="10,5,0,15" />
@@ -132,8 +131,8 @@
 
             </Grid>
         </StackPanel>
-
-            <!-- Crop Panel -->
+        
+        <!-- Crop Panel -->
         <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_RotateAndCrop}" FontSize="12" FontWeight="Bold" Grid.Row="0" Grid.Column="1" Margin="50,5,0,15" />
         <Grid Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -281,25 +280,30 @@
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingColour}" Grid.Row="2" Grid.Column="0" />
             <ComboBox ItemsSource="{Binding PaddingFilter.PaddingColours}" SelectedItem="{Binding PaddingFilter.Colour}" Grid.Row="2" Grid.Column="1" />
 
-        </Grid>-->
+        </Grid> -->
+
+        <!-- Preview Control -->
+        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+
 
         <!-- Output Panel -->
-        <StackPanel Name="PreviewPanel" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="4">
+        <StackPanel Name="PreviewPanel" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
             <Label Content="{x:Static Properties:Resources.PictureSettingsView_Output}" FontSize="12" FontWeight="Bold" />
 
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,5"
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <Label Content="{Binding DisplaySize}" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center"
                        Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
-            </Grid>
+
+                <Button Content="{x:Static Properties:Resources.PictureSettingsView_SeePreview}" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]"
+                        VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="20,0,0,0" FontWeight="Bold" />
+            </StackPanel>
+
 
         </StackPanel>
     </Grid>

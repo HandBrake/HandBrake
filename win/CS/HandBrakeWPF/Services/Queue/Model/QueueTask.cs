@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Services.Queue.Model
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = Encode.Model.EncodeTask;
 
     public class QueueTask : PropertyChangedBase
     {
@@ -71,10 +71,7 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public QueueItemStatus Status
         {
-            get
-            {
-                return this.status;
-            }
+            get => this.status;
 
             set
             {
@@ -98,13 +95,7 @@ namespace HandBrakeWPF.Services.Queue.Model
         public bool IsJobStatusVisible => this.Status == QueueItemStatus.InProgress;
         
         [JsonIgnore]
-        public string SelectedPresetKey
-        {
-            get
-            {
-                return this.presetKey;
-            }
-        }
+        public string SelectedPresetKey => this.presetKey;
 
         [JsonIgnore]
         public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
