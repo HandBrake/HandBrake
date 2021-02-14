@@ -67,6 +67,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeblockFilter.SetPreset(preset, task);
             this.ColourSpaceFilter.SetPreset(preset, task);
             this.ChromaSmoothFilter.SetPreset(preset, task);
+            this.GrayscaleFilter.SetPreset(preset, task);
         }
 
         public void UpdateTask(EncodeTask task)
