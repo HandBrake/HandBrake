@@ -90,6 +90,10 @@ AC_ARG_ENABLE(qsv,
 	AS_HELP_STRING([--enable-qsv], [enable QSV encoder]),
 	use_qsv=yes, use_qsv=no)
 
+AC_ARG_ENABLE(mf,
+	AS_HELP_STRING([--enable-mf], [enable MediaFoundation encoder]),
+	use_mf=yes, use_mf=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
@@ -231,7 +235,10 @@ case $host in
 		if test "x$use_libpthread" = "xyes" ; then
 			HB_LIBS="$HB_LIBS -lpthread"
 		fi
-		HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32 -lmfplat -lstrmiids"
+		HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
+		if test "x$use_mf" = "xyes" ; then
+			HB_LIBS="$HB_LIBS -lmfplat -lstrmiids"
+		fi
 		;;
 	*-*-freebsd*)
 		HB_LIBS="$HB_LIBS -lpthread"

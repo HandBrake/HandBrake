@@ -1434,6 +1434,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    h = IfHost( 'MediaFoundation video encoder', '*-*-mingw*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-mf', dest="enable_mf", default=IfHost( True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+
     h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', '*-*-mingw*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', 'x86_64-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
@@ -1724,6 +1728,9 @@ try:
                                        none=True).value
     # Allow GTK mingw only on mingw
     options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
+                                       none=False).value
+    # Disable MediaFoundation on unsupported platforms
+    options.enable_mf         = IfHost(options.enable_mf, '*-*-mingw*',
                                        none=False).value
     # Disable NVENC on unsupported platforms
     options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
@@ -2045,6 +2052,7 @@ int main()
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
+    doc.add( 'FEATURE.mf',         int( options.enable_mf ))
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
@@ -2170,6 +2178,8 @@ int main()
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
+    stdout.write( 'Enable MediaFound.: %s' % options.enable_mf )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable QSV:         %s' % options.enable_qsv )

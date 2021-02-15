@@ -319,7 +319,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
                 return hb_vt_h265_is_available();
 #endif
 
-#ifdef _WIN32
+#if HB_PROJECT_FEATURE_MF
             // TODO: Try to instantiate a throwaway encoder to see if a suitable MediaFoundation encoder can be found?
             // Alt, implement logic similar to ffmpeg's encoder selection, to see if one would be found.
             case HB_VCODEC_FFMPEG_MF_H264:

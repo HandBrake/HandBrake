@@ -113,9 +113,7 @@ else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
         --arch=$(HOST.machine) \
         --cross-prefix=$(HOST.cross.prefix) \
         --pkg-config=$(PKGCONFIG.exe) \
-        --pkg-config-flags="--static" \
-        --enable-encoder=h264_mf \
-        --enable-encoder=hevc_mf
+        --pkg-config-flags="--static"
     FFMPEG.GCC.args.extra += -fno-common
     FFMPEG.GCC.args.extra-ldflags = -static-libgcc -static-libstdc++ -static
 else ifeq (darwin,$(HOST.system))
@@ -153,6 +151,12 @@ FFMPEG.CONFIGURE.extra += \
      --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
      --enable-encoder=hevc_nvenc
+endif
+
+ifeq (1,$(FEATURE.mf))
+FFMPEG.CONFIGURE.extra += \
+      --enable-encoder=h264_mf \
+      --enable-encoder=hevc_mf
 endif
 
 ## enable compile verbosity
