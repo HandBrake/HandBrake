@@ -45,6 +45,15 @@
     <!-- Text Entry Controls -->
     <Style TargetType="TextBox"  BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Command="ApplicationCommands.Copy" />
+                    <MenuItem Command="ApplicationCommands.Cut" />
+                    <MenuItem Command="ApplicationCommands.Paste" />
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type TextBlock}">
