@@ -1435,7 +1435,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = IfHost( 'MediaFoundation video encoder', '*-*-mingw*', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-mf', dest="enable_mf", default=IfHost( True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--enable-mf', dest="enable_mf", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-mf', dest="enable_mf", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', '*-*-mingw*', none=argparse.SUPPRESS).value
@@ -1730,7 +1730,7 @@ try:
     options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
                                        none=False).value
     # Disable MediaFoundation on unsupported platforms
-    options.enable_mf         = IfHost(options.enable_mf, '*-*-mingw*',
+    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32',
                                        none=False).value
     # Disable NVENC on unsupported platforms
     options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
