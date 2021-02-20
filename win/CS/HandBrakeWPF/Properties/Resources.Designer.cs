@@ -5791,6 +5791,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing file &quot;hb.dll&quot;. Please re-install..
+        /// </summary>
+        public static string Startup_HbDllMissing {
+            get {
+                return ResourceManager.GetString("Startup_HbDllMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HandBrake&apos;s engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has..
         /// </summary>
         public static string Startup_InitFailed {

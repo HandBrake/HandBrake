@@ -2454,4 +2454,7 @@ Fields are limited to:
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
     <value>Worker Crashed. Check log for details.</value>
   </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Missing file "hb.dll". Please re-install.</value>
+  </data>
 </root>
