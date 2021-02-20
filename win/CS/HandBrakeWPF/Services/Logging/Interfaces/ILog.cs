@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
     using System;
     using System.Collections.Generic;
 
-    using HandBrake.Worker.Logging.Models;
+    using HandBrakeWPF.Model.Logging;
 
     using LogEventArgs = EventArgs.LogEventArgs;
 

@@ -21,7 +21,6 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Utilities;
-    using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;

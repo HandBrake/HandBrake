@@ -24,10 +24,10 @@ namespace HandBrakeWPF.Instance
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
-    using HandBrake.Worker.Routing.Commands;
 
     using HandBrakeWPF.Instance.Model;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Model.Worker;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
