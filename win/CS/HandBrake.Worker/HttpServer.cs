@@ -105,7 +105,7 @@ namespace HandBrake.Worker
                                         string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
                                         string token = context.Request.Headers.Get("token");
 
-                                        if (!tokenService.IsAuthenticated(token))
+                                        if (!path.Equals("Version") && !tokenService.IsAuthenticated(token))
                                         {
                                             string rstr = "Worker: Access Denied. The token provided in the HTTP header was not valid.";
                                             Console.WriteLine(rstr);

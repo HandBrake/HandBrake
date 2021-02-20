@@ -163,6 +163,10 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy ..\HandBrake.Worker\bin\$(ConfigurationName)\*.*  bin\$(ConfigurationName)" />
   </Target>
