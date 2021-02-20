@@ -644,18 +644,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_dict_set(&av_opts, "hw_encoding", "1", 0);
 
-        pv->sws_context_to_nv12 = hb_sws_get_context(
-                                    job->width, job->height,
-                                    AV_PIX_FMT_YUV420P,
-                                    job->width, job->height,
-                                    AV_PIX_FMT_NV12,
-                                    SWS_LANCZOS|SWS_ACCURATE_RND,
-                                    SWS_CS_DEFAULT);
+        if (job->pix_fmt != AV_PIX_FMT_NV12)
+        {
+            pv->sws_context_to_nv12 = hb_sws_get_context(
+                                        job->width, job->height,
+                                        AV_PIX_FMT_YUV420P,
+                                        job->width, job->height,
+                                        AV_PIX_FMT_NV12,
+                                        SWS_LANCZOS|SWS_ACCURATE_RND,
+                                        SWS_CS_DEFAULT);
 
-        pv->nv12_buf = hb_frame_buffer_init(
-                         AV_PIX_FMT_NV12, job->width, job->height);
+            pv->nv12_buf = hb_frame_buffer_init(
+                             AV_PIX_FMT_NV12, job->width, job->height);
 
-        context->pix_fmt = AV_PIX_FMT_NV12;
+            context->pix_fmt = AV_PIX_FMT_NV12;
+        }
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_MF_H265)

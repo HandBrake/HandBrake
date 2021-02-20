@@ -838,6 +838,33 @@ static int bit_depth_is_supported(hb_job_t * job, int bit_depth)
     return 1;
 }
 
+static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
+{
+    for (int i = 0; i < hb_list_count(job->list_filter); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+
+        switch (filter->id)
+        {
+            case HB_FILTER_DETELECINE:
+            case HB_FILTER_COMB_DETECT:
+            case HB_FILTER_DECOMB:
+            case HB_FILTER_DENOISE:
+            case HB_FILTER_NLMEANS:
+            case HB_FILTER_CHROMA_SMOOTH:
+            case HB_FILTER_LAPSHARP:
+            case HB_FILTER_UNSHARP:
+            case HB_FILTER_GRAYSCALE:
+                if (pix_fmt != AV_PIX_FMT_YUV420P)
+                {
+                    return 0;
+                }
+        }
+    }
+
+    return 1;
+}
+
 static int get_best_pix_ftm(hb_job_t * job)
 {
     int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
@@ -862,6 +889,13 @@ static int get_best_pix_ftm(hb_job_t * job)
         }
     }
 #endif
+    if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 || job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
+    {
+        if (pix_fmt_is_supported(job, AV_PIX_FMT_NV12))
+        {
+            return AV_PIX_FMT_NV12;
+        }
+    }
     if (bit_depth >= 12 && bit_depth_is_supported(job, 12))
     {
         return AV_PIX_FMT_YUV420P12;
