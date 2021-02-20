@@ -167,14 +167,14 @@ namespace HandBrakeWPF
             {
                 HandBrakeInstanceManager.Init(noHardware);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 if (!noHardware)
                 {
                     MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_InitFailed, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                throw exception;
+                throw;
             }
 
             // Initialise the GUI

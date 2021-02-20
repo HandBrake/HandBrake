@@ -144,7 +144,7 @@ namespace HandBrakeWPF.Services.Logging
             return log;
         }
 
-        public async void Reset()
+        public void Reset()
         {
             lock (this.lockObject)
             {

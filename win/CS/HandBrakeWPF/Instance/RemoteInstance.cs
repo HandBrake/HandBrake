@@ -79,7 +79,7 @@ namespace HandBrakeWPF.Instance
             }
         }
 
-        public async void StartEncode(JsonEncodeObject jobToStart)
+        public void StartEncode(JsonEncodeObject jobToStart)
         {
             if (this.IsServerRunning())
             {
@@ -264,7 +264,7 @@ namespace HandBrakeWPF.Instance
 
                 response = await this.MakeHttpGetRequest("PollEncodeProgress");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 retryCount = this.retryCount + 1;
             }

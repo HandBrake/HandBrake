@@ -143,7 +143,7 @@ namespace HandBrakeWPF.Utilities
             return string.Empty;
         }
 
-        public static T GetAttribute<T, TK>(TK value) where T : Attribute
+        public static TH GetAttribute<TH, TK>(TK value) where TH : Attribute
         {
             if (value == null)
             {
@@ -153,7 +153,7 @@ namespace HandBrakeWPF.Utilities
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             if (fieldInfo != null)
             {
-                T[] attributes = (T[])fieldInfo.GetCustomAttributes(typeof(T), false);
+                TH[] attributes = (TH[])fieldInfo.GetCustomAttributes(typeof(TH), false);
                 return (attributes.Length > 0) ? attributes[0] : null;
             }
 
