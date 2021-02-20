@@ -199,7 +199,7 @@ static int avformatInit( hb_mux_object_t * m )
     {
       if( ret == -2 ) 
       {
-        hb_error( "avio_open2 failed, errno -2: Could not write to indicated output file." );
+        hb_error( "avio_open2 failed, errno -2: Could not write to indicated output file. Please check destination path and file permissions" );
       }
       else
         hb_error( "avio_open2 failed, errno %d", ret);
