@@ -72,14 +72,7 @@ namespace HandBrakeWPF
                 Application.Current.Shutdown();
                 return;
             }
-
-            if (!File.Exists("hb.dll"))
-            {
-                MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_HbDllMissing, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-                return;
-            }
-
+            
             if (e.Args.Any(f => f.Equals("--reset")))
             {
                 HandBrakeApp.ResetToDefaults();

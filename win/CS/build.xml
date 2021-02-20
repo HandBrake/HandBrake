@@ -6,109 +6,91 @@
   
   HandBrake Build Script for usage with Jenkins.
   Usage: 
-    msbuild build.xml /t:Nightly
-    msbuild build.xml /t:Release
+    msbuild build_publish.xml /t:x64 /p:Profile=[Nightly or Release]
+    msbuild build_publish.xml /t:arm64 /p:Profile=[Nightly or Release]
   Example with code signing:
-    msbuild build.xml /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
-    msbuild build.xml /t:Release /p:PfxFile=file.pfx /p:PfxPwd=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build_publish.xml /t:x64 /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build_publish.xml /t:x64 /p:PfxFile=file.pfx /p:PfxPwd=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
-  Requires: libhb.dll to be in the release folder.
+  Requires: hb.dll to be in the release folder.
   
 -->
-<Project DefaultTargets="Nightly" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="x64" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <!-- Setup -->
-  <PropertyGroup>
-    <Platform>AnyCPU</Platform>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <!-- ******* Build Targets ******* -->
+  <Target Name="arm64" DependsOnTargets="$(ARM64DependsOn)"/>
+  <Target Name="x64" DependsOnTargets="$(X64DependsOn)"/>
+
+  <PropertyGroup Condition="'$(Profile)'==''">
+    <Profile>Nightly</Profile>
+    <Configuration>Debug</Configuration>
   </PropertyGroup>
 
-  <!-- Build all the main cproj files.-->
-  <ItemGroup>
-    <ProjectsToBuild Include="HandBrake.Interop\*proj" Exclude="$(MSBuildProjectFile)"/>
-    <ProjectsToBuild Include="HandBrakeWPF\*proj" Exclude="$(MSBuildProjectFile)"/>
-  </ItemGroup>
-
-  <!-- Build the installer.-->
-  <ItemGroup>
-    <InstallerToBuild Include="HandBrake.Installer\*wixproj" Exclude="$(MSBuildProjectFile)"/>
-  </ItemGroup>
-
-  <!-- Builds /t: -->
-  <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
-  <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
-
-  <!-- Dependencies -->
-  <PropertyGroup>
-    <NightlyDependsOn>SetupForNightly;BuildRelease;NightlyPostBuild;BuildInstaller;Cleanup;CodeSign</NightlyDependsOn>
-    <InstallDependsOn>SetupForRelease;BuildRelease;ReleasePostBuild;BuildInstaller;Cleanup;CodeSign</InstallDependsOn>
+  <PropertyGroup Condition="'$(Profile)'=='Nightly'">
+    <Configuration>Debug</Configuration>
   </PropertyGroup>
-  
-  <!-- Setup -->
-  <Target Name="SetupForNightly">
+
+  <PropertyGroup Condition="'$(Profile)'=='Release'">
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ARM64DependsOn>ARM64Setup;BuildSoftware;BuildInstaller</ARM64DependsOn>
+    <X64DependsOn>X64Setup;BuildSoftware;BuildInstaller</X64DependsOn>
+  </PropertyGroup>
+
+  <Target Name="ARM64Setup">
     <PropertyGroup>
-      <Configuration>Debug</Configuration>
+      <BuildProfile>publish_arm64</BuildProfile>
+      <Platform>arm64</Platform>
     </PropertyGroup>
   </Target>
 
-  <Target Name="SetupForRelease">
+  <Target Name="X64Setup">
     <PropertyGroup>
-      <Configuration>Release</Configuration>
+      <BuildProfile>publish_x64</BuildProfile>
+      <Platform>x64</Platform>
     </PropertyGroup>
   </Target>
 
-  <!-- Build All Components (WPF, Worker, Interop) -->
-  <Target Name="BuildRelease">
-    <Message Text="Project File Name = $(Platform)" />
-    <MSBuild Projects ="@(ProjectsToBuild)"
-             ContinueOnError ="false"
-             Properties="Configuration=$(Configuration);Platform=$(Platform)" >
-      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+  <!-- ******* Build the software ******* -->
+  <Target Name="BuildSoftware">
+    <Exec Command="dotnet publish -p:PublishProfile=$(buildProfile)" />
 
-    </MSBuild>
+    <!-- Copy required assets -->
+    <Exec Command="xcopy $(MSBuildProjectDirectory)\HandBrake.Worker\bin\publish $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /I /Y" />
+    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\doc /I /Y" />
+    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\doc /I /Y" />
+
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"      Condition="'$(Profile)'=='Release'"/>
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"    Condition="'$(Profile)'=='Nightly'"/>
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
   </Target>
 
-  <!-- Build the installers -->
+  <!-- ******* Create Installers ******* -->
+
+  <ItemGroup>
+    <InstallerToBuild Include="HandBrake.Installer\*wixproj" Exclude="$(MSBuildProjectFile)" >
+      <AdditionalProperties>HBPROFILE=$(Platform)</AdditionalProperties>
+    </InstallerToBuild>
+  </ItemGroup>
+
   <Target Name="BuildInstaller">
-    <!-- The installer doesn't support AnyCPU -->
-    <MSBuild Projects ="@(InstallerToBuild)"
-             ContinueOnError ="false"
-             Properties="Configuration=$(Configuration);Platform=x64" >
+    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\MakeNightly64.nsi" Condition="'$(Profile)'=='Nightly'" />
+    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\Installer64.nsi" Condition="'$(Profile)'=='Release'" />
+
+    <!-- Wix Installer -->
+    <MSBuild Projects ="@(InstallerToBuild)" ContinueOnError ="false" Properties="Configuration=$(Configuration)" >
       <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
 
-    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\MakeNightly64.nsi" Condition="'$(Configuration)'=='Debug'" />
-    <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\Installer64.nsi" Condition="'$(Configuration)'=='Release'" />
-  </Target>
-
-  <!-- Post Build Events -->
-  <Target Name="NightlyPostBuild">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Worker\bin\$(Configuration)\*.json $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-
-    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\doc /I /Y" />
-  </Target>
-
-  <Target Name="ReleasePostBuild">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Worker\bin\$(Configuration)\*.json $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration) /Y" />
-
-    <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\doc /I /Y" />
-  </Target>
-
-  <Target Name="Cleanup">
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\HandBrake-Nightly-x86_64-Win_GUI.msi /Y" Condition="'$(Configuration)'=='Debug'" />
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\x64\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\HandBrake-Version-x86_64-Win_GUI.msi /Y" Condition="'$(Configuration)'=='Release'" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-ARM64-Win_GUI.msi /Y" Condition="'$(Platform)'=='arm64'" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-x86_64-Win_GUI.msi /Y" Condition="'$(Platform)'=='x64'" />
   </Target>
 
 
-  <!--  Code Signing  -->
+  <!-- ******* Code Signing ******* -->
 
   <PropertyGroup Condition="'$(SignToolLocation)'==''">
     <SignToolLocation>C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64\SignTool.exe</SignToolLocation>
@@ -130,8 +112,8 @@
   </PropertyGroup>
 
   <Target Name="CodeSign" Condition="'$(SignEnabled)' == 'true'">
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\*Win_GUI.exe&quot;" />
-    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Configuration)\*Win_GUI.msi&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.exe&quot;" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign $(SignType) $(SignThumbprint)$(PfxFile) $(SignPwd) $(PfxPwd) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*Win_GUI.msi&quot;" />
   </Target>
 
 </Project>

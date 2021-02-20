@@ -123,57 +123,6 @@ Section "HandBrake" SectionApp
   File "*.config"
   File "*.pdb"
   File "*.config"
-  File "*.deps.json"
-  File "*.runtimeconfig.json"
-
-  SetOutPath "$INSTDIR\runtimes\win\lib\netcoreapp2.0"
-  SetOverwrite ifnewer
-  File "runtimes\win\lib\netcoreapp2.0\*.*"
-
- ; Copy the languages
-  SetOutPath "$INSTDIR\de"
-  SetOverwrite ifnewer
-  File "de\*.*"
-
-  SetOutPath "$INSTDIR\zh"
-  SetOverwrite ifnewer
-  File "zh\*.*"
-
-  SetOutPath "$INSTDIR\es"
-  SetOverwrite ifnewer
-  File "es\*.*"
-
-  SetOutPath "$INSTDIR\fr"
-  SetOverwrite ifnewer
-  File "fr\*.*"
-
-  SetOutPath "$INSTDIR\ko"
-  SetOverwrite ifnewer
-  File "ko\*.*"
-
-  SetOutPath "$INSTDIR\ru"
-  SetOverwrite ifnewer
-  File "ru\*.*"
-
-  SetOutPath "$INSTDIR\tr"
-  SetOverwrite ifnewer
-  File "tr\*.*"
-
-  SetOutPath "$INSTDIR\ja"
-  SetOverwrite ifnewer
-  File "ja\*.*"
-
-  SetOutPath "$INSTDIR\pt-BR"
-  SetOverwrite ifnewer
-  File "pt-BR\*.*"
-
-  SetOutPath "$INSTDIR\co"
-  SetOverwrite ifnewer
-  File "co\*.*"
-
-  SetOutPath "$INSTDIR\uk"
-  SetOverwrite ifnewer
-  File "uk\*.*"
 
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
@@ -220,34 +169,6 @@ Section Uninstall
   Delete "$INSTDIR\*.*"
   Delete "$INSTDIR\doc\*.*"
   RMDir  "$INSTDIR\doc"
-  Delete "$INSTDIR\de\*.*"
-  RMDir  "$INSTDIR\de"
-  Delete "$INSTDIR\zh\*.*"
-  RMDir  "$INSTDIR\zh"
-  Delete "$INSTDIR\es\*.*"
-  RMDir  "$INSTDIR\es"
-  Delete "$INSTDIR\fr\*.*"
-  RMDir  "$INSTDIR\fr"
-  Delete "$INSTDIR\ko\*.*"
-  RMDir  "$INSTDIR\ko"
-  Delete "$INSTDIR\ru\*.*"
-  RMDir  "$INSTDIR\ru"
-  Delete "$INSTDIR\tr\*.*"
-  RMDir  "$INSTDIR\tr"
-  Delete "$INSTDIR\ja\*.*"
-  RMDir  "$INSTDIR\ja"
-  Delete "$INSTDIR\pt-BR\*.*"
-  RMDir  "$INSTDIR\pt-BR"
-  Delete "$INSTDIR\co\*.*"
-  RMDir  "$INSTDIR\co"
-  Delete "$INSTDIR\uk\*.*"
-  RMDir  "$INSTDIR\uk"
-  
-  Delete "$INSTDIR\runtimes\win\lib\netcoreapp2.0\*.*"
-  RMDir  "$INSTDIR\runtimes\win\lib\netcoreapp2.0"
-  RMDir  "$INSTDIR\runtimes\win\lib"
-  RMDir  "$INSTDIR\runtimes\win"
-  RMDir  "$INSTDIR\runtimes"
 
   RMDir  "$INSTDIR"
 
