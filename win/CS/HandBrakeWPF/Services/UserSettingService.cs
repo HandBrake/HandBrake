@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services
     using System.IO;
     using System.Linq;
 
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Utilities;
 

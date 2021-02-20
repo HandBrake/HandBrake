@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Timers;
     using System.Windows;
 
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Utilities;

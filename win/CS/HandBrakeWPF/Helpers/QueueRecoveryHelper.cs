@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Helpers
     using System.Text.RegularExpressions;
     using System.Windows;
 
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
