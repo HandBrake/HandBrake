@@ -294,7 +294,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 #if HB_PROJECT_FEATURE_QSV
         if (encoder & HB_VCODEC_QSV_MASK)
         {
-            return hb_qsv_video_encoder_is_enabled(encoder);
+            return hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), encoder);
         }
 #endif
 
@@ -3897,6 +3897,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->metadata = hb_metadata_copy( title->metadata );
 
 #if HB_PROJECT_FEATURE_QSV
+    job->qsv.ctx                   = hb_qsv_context_init();
     job->qsv.enc_info.is_init_done = 0;
     job->qsv.async_depth           = hb_qsv_param_default_async_depth();
     job->qsv.decode                = !!(title->video_decode_support &

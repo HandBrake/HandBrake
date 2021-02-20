@@ -99,8 +99,9 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    int cpu_platform = HBFunctions.hb_get_cpu_platform();
-                    int hardware = HBFunctions.qsv_hardware_generation(cpu_platform);
+                    int adapter_index = HBFunctions.hb_qsv_get_adapter_index();
+                    int qsv_platform = HBFunctions.hb_qsv_get_platform(adapter_index);
+                    int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform);
                     return hardware;
                 }
                 catch (Exception exc)

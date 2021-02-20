@@ -199,6 +199,7 @@ static int      stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
 #if HB_PROJECT_FEATURE_QSV
 static int      qsv_async_depth    = -1;
+static int      qsv_adapter        = -1;
 static int      qsv_decode         = -1;
 #endif
 
@@ -1938,8 +1939,15 @@ if (hb_qsv_available())
 "                           explicitly synchronized.\n"
 "                           Omit 'number' for zero.\n"
 "                           (default: 4)\n"
+    );
+#if defined(_WIN32) || defined(__MINGW32__)
+    fprintf( out,
+"   --qsv-adapter[=index]\n"
+"                           Set QSV hardware graphics adapter index\n"
+"                           (default: QSV hardware graphics adapter with highest hardware generation)\n"
 "\n"
     );
+#endif
 }
 #endif
 }
@@ -2146,36 +2154,36 @@ static int ParseOptions( int argc, char ** argv )
     #define AUDIO_DITHER         294
     #define QSV_BASELINE         295
     #define QSV_ASYNC_DEPTH      296
-    #define QSV_IMPLEMENTATION   297
-    #define FILTER_NLMEANS       298
-    #define FILTER_NLMEANS_TUNE  299
-    #define AUDIO_LANG_LIST      300
-    #define SUBTITLE_LANG_LIST   301
-    #define PRESET_EXPORT        302
-    #define PRESET_EXPORT_DESC   303
-    #define PRESET_EXPORT_FILE   304
-    #define PRESET_IMPORT        305
-    #define PRESET_IMPORT_GUI    306
-    #define VERSION              307
-    #define DESCRIBE             308
-    #define PAD                  309
-    #define FILTER_COMB_DETECT   310
-    #define QUEUE_IMPORT         311
-    #define FILTER_UNSHARP       312
-    #define FILTER_UNSHARP_TUNE  313
-    #define FILTER_LAPSHARP      314
-    #define FILTER_LAPSHARP_TUNE 315
-    #define JSON_LOGGING         316
-    #define SSA_FILE             317
-    #define SSA_OFFSET           318
-    #define SSA_LANG             319
-    #define SSA_DEFAULT          320
-    #define SSA_BURN             321
-    #define FILTER_CHROMA_SMOOTH      322
-    #define FILTER_CHROMA_SMOOTH_TUNE 323
-    #define FILTER_DEBLOCK_TUNE       324
-    #define FILTER_COLORSPACE         325
-
+    #define QSV_ADAPTER          297
+    #define QSV_IMPLEMENTATION   298
+    #define FILTER_NLMEANS       299
+    #define FILTER_NLMEANS_TUNE  300
+    #define AUDIO_LANG_LIST      301
+    #define SUBTITLE_LANG_LIST   302
+    #define PRESET_EXPORT        303
+    #define PRESET_EXPORT_DESC   304
+    #define PRESET_EXPORT_FILE   305
+    #define PRESET_IMPORT        306
+    #define PRESET_IMPORT_GUI    307
+    #define VERSION              308
+    #define DESCRIBE             309
+    #define PAD                  310
+    #define FILTER_COMB_DETECT   311
+    #define QUEUE_IMPORT         312
+    #define FILTER_UNSHARP       313
+    #define FILTER_UNSHARP_TUNE  314
+    #define FILTER_LAPSHARP      315
+    #define FILTER_LAPSHARP_TUNE 316
+    #define JSON_LOGGING         317
+    #define SSA_FILE             318
+    #define SSA_OFFSET           319
+    #define SSA_LANG             320
+    #define SSA_DEFAULT          321
+    #define SSA_BURN             322
+    #define FILTER_CHROMA_SMOOTH      323
+    #define FILTER_CHROMA_SMOOTH_TUNE 324
+    #define FILTER_DEBLOCK_TUNE  325
+    #define FILTER_COLORSPACE    326
     for( ;; )
     {
         static struct option long_options[] =
@@ -2189,6 +2197,7 @@ static int ParseOptions( int argc, char ** argv )
 #if HB_PROJECT_FEATURE_QSV
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH,    },
+            { "qsv-adapter",          required_argument, NULL,        QSV_ADAPTER         },
             { "qsv-implementation",   required_argument, NULL,        QSV_IMPLEMENTATION, },
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,                  },
             { "enable-qsv-decoding",  no_argument,       &qsv_decode, 1,                  },
@@ -3107,6 +3116,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case QSV_ASYNC_DEPTH:
                 qsv_async_depth = atoi(optarg);
+                break;
+            case QSV_ADAPTER:
+                qsv_adapter = atoi(optarg);
                 break;
             case QSV_IMPLEMENTATION:
                 hb_qsv_impl_set_preferred(optarg);
@@ -4211,6 +4223,11 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoQSVAsyncDepth",
                         hb_value_int(qsv_async_depth));
+    }
+    if (qsv_adapter >= 0)
+    {
+        hb_dict_set(preset, "VideoQSVAdapterIndex",
+                        hb_value_int(qsv_adapter));
     }
     if (qsv_decode != -1)
     {
