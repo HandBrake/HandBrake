@@ -1729,22 +1729,19 @@ try:
     # Allow GTK mingw only on mingw
     options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
                                        none=False).value
-    # Disable MediaFoundation on unsupported platforms
-    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32',
-                                       none=False).value
-    # Disable NVENC on unsupported platforms
-    options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
-                                       'x86_64-w64-mingw32', none=False).value
     # NUMA is linux only and only needed with x265
     options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
                                         none=False).value
                                  and options.enable_x265)
-    # Disable QSV on unsupported platforms
+    # Only allow these features on supported platforms
+    options.enable_mf         = IfHost(options.enable_mf, 'aarch64-w64-mingw32',
+                                       none=False).value
+    options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
+                                       'x86_64-w64-mingw32', none=False).value
     options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*', '*-*-freebsd*',
                                        'x86_64-w64-mingw32', none=False).value
-    # Disable VCE on unsupported platforms
-    options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*', 'x86_64-w64-mingw32',
-                                       none=False).value
+    options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*',
+                                       'x86_64-w64-mingw32', none=False).value
 
     #####################################
     ## Additional library and tool checks
