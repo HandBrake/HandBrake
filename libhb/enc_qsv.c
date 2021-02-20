@@ -892,7 +892,7 @@ int qsv_enc_init(hb_work_private_t *pv)
             *job->die = 1;
             return -1;
         }
-        pv->loaded_plugins = hb_qsv_load_plugins(pv->qsv_info, qsv->mfx_session, version);
+        pv->loaded_plugins = hb_qsv_load_plugins(hb_qsv_get_adapter_index(), pv->qsv_info, qsv->mfx_session, version);
         if (pv->loaded_plugins == NULL)
         {
             hb_error("qsv_enc_init: hb_qsv_load_plugins failed");
@@ -998,35 +998,6 @@ int qsv_enc_init(hb_work_private_t *pv)
     return 0;
 }
 
-static mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
-{
-    mfxIMPL impl;
-
-    switch (dx_index)
-    {
-        {
-        case 0:
-            impl = MFX_IMPL_HARDWARE;
-            break;
-        case 1:
-            impl = MFX_IMPL_HARDWARE2;
-            break;
-        case 2:
-            impl = MFX_IMPL_HARDWARE3;
-            break;
-        case 3:
-            impl = MFX_IMPL_HARDWARE4;
-            break;
-
-        default:
-            // try searching on all display adapters
-            impl = MFX_IMPL_HARDWARE_ANY;
-            break;
-        }
-    }
-    return impl;
-}
-
 /***********************************************************************
  * encqsvInit
  ***********************************************************************
@@ -1039,7 +1010,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 
     pv->is_sys_mem         = hb_qsv_full_path_is_enabled(job) ? 0 : 1; // TODO: re-implement QSV VPP filtering support
     pv->job                = job;
-    pv->qsv_info           = hb_qsv_info_get(job->vcodec);
+    pv->qsv_info           = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
     pv->delayed_processing = hb_list_init();
     pv->last_start         = INT64_MIN;
     hb_buffer_list_clear(&pv->encoded_frames);
@@ -1104,12 +1075,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         }
         hb_dict_free(&options_list);
     }
-#if !defined(SYS_LINUX) && !defined(SYS_FREEBSD)
-    if (pv->is_sys_mem)
+#if defined(_WIN32) || defined(__MINGW32__)
+    if (pv->is_sys_mem && hb_qsv_implementation_is_hardware(pv->qsv_info->implementation))
     {
         // select the right hardware implementation based on dx index
         if (!job->qsv.ctx->qsv_device)
-            hb_qsv_param_parse_dx_index(pv->job, -1);
+            hb_qsv_param_parse_dx_index(pv->job, hb_qsv_get_adapter_index());
         mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
         pv->qsv_info->implementation = hb_qsv_dx_index_to_impl(job->qsv.ctx->dx_index) | hw_preference;
     }
@@ -1465,7 +1436,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Load required MFX plug-ins */
-    pv->loaded_plugins = hb_qsv_load_plugins(pv->qsv_info, session, version);
+    pv->loaded_plugins = hb_qsv_load_plugins(hb_qsv_get_adapter_index(), pv->qsv_info, session, version);
     if (pv->loaded_plugins == NULL)
     {
         hb_error("encqsvInit: hb_qsv_load_plugins failed");

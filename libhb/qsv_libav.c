@@ -236,8 +236,11 @@ int hb_qsv_context_clean(hb_qsv_context * qsv, int full_job)
             hb_qsv_pipe_list_clean(&qsv->pipes);
 
         if (qsv->mfx_session && !full_job) {
+            // MFXClose() fails in the media_driver under Linux when encoding interrupted
+#if defined(_WIN32) || defined(__MINGW32__)
             sts = MFXClose(qsv->mfx_session);
             HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+#endif
             qsv->mfx_session = 0;
         }
     }

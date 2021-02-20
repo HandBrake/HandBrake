@@ -1825,7 +1825,11 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(qsv, "AsyncDepth",
                     hb_value_xform(value, HB_VALUE_TYPE_INT));
     }
-
+    if ((value = hb_dict_get(preset, "VideoQSVAdapterIndex")) != NULL)
+    {
+        hb_dict_set(qsv, "AdapterIndex",
+                    hb_value_xform(value, HB_VALUE_TYPE_INT));
+    }
     return 0;
 }
 
