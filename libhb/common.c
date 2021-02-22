@@ -379,10 +379,10 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "Vorbis (vorbis)",    "libvorbis",  NULL,                          HB_ACODEC_VORBIS,                      HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_ACODEC_VORBIS,     },
     { { "FLAC (ffmpeg)",      "ffflac",     NULL,                          HB_ACODEC_FFFLAC,                      HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_ACODEC_FLAC,       },
     { { "FLAC (24-bit)",      "ffflac24",   NULL,                          HB_ACODEC_FFFLAC24,                    HB_MUX_MASK_MKV, }, NULL, 1, 0, HB_GID_ACODEC_FLAC,       },
-    // generic names0,
+    // generic names
     { { "AAC",                "aac",        NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 0, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC",             "haac",       NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 0, HB_GID_ACODEC_AAC_HE,     },
-    // actual encoders0,
+    // actual encoders
     { { "None",               "none",       "None",                        HB_ACODEC_NONE,        0,                               }, NULL, 0, 1, HB_GID_NONE,              },
     { { "AAC (CoreAudio)",    "ca_aac",     "AAC (Apple AudioToolbox)",    HB_ACODEC_CA_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    "HE-AAC (Apple AudioToolbox)", HB_ACODEC_CA_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_ACODEC_AAC_HE,     },
