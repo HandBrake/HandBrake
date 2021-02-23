@@ -55,6 +55,11 @@ namespace HandBrakeWPF.Converters.Video
                     rfqp = "CQ";
                 }
 
+                if (task.VideoEncoder == VideoEncoder.MFH264 || task.VideoEncoder == VideoEncoder.MFH265)
+                {
+                    rfqp = "CQ";
+                }
+
                 string quality = task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality ? string.Format("{0} {1}", task.Quality, rfqp) : string.Format("{0} {1}", task.VideoBitrate, " kbps");
                 string twoPass = null;
 

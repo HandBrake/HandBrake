@@ -28,6 +28,7 @@ namespace HandBrakeWPF.Services.Queue
         private readonly HashSet<Guid> qsvInstances = new HashSet<Guid>();
         private readonly HashSet<Guid> nvencInstances = new HashSet<Guid>();
         private readonly HashSet<Guid> vceInstances = new HashSet<Guid>();
+        private readonly HashSet<Guid> mfInstances = new HashSet<Guid>();
         private readonly HashSet<Guid> totalInstances = new HashSet<Guid>();
 
         private List<int> qsvGpus = new List<int>();
@@ -37,6 +38,7 @@ namespace HandBrakeWPF.Services.Queue
         private int totalQsvInstances;
         private int totalVceInstances;
         private int totalNvidiaInstances;
+        private int totalMfInstances; 
 
         public QueueResourceService(IUserSettingService userSettingService)
         {
@@ -67,6 +69,8 @@ namespace HandBrakeWPF.Services.Queue
 
             // VCE Support still TBD
             this.totalVceInstances = 3;
+
+            this.totalMfInstances = 1;
 
             // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
             if (this.maxAllowedInstances > Utilities.SystemInfo.GetCpuCoreCount)
@@ -126,6 +130,21 @@ namespace HandBrakeWPF.Services.Queue
                             return Guid.Empty; // Busy
                         }
 
+                    case VideoEncoder.MFH264:
+                    case VideoEncoder.MFH265:
+                        if (this.mfInstances.Count < this.totalMfInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
+                        {
+                            Guid guid = Guid.NewGuid();
+                            this.mfInstances.Add(guid);
+                            this.totalInstances.Add(guid);
+                            return guid;
+                        }
+                        else
+                        {
+                            return Guid.Empty; // Busy
+                        }
+
+
                     default:
                         if (this.TotalActiveInstances <= this.maxAllowedInstances)
                         {
@@ -174,12 +193,19 @@ namespace HandBrakeWPF.Services.Queue
                         }
 
                         break;
-
                     case VideoEncoder.VceH264:
                     case VideoEncoder.VceH265:
                         if (this.vceInstances.Contains(unlockKey.Value))
                         {
                             this.vceInstances.Remove(unlockKey.Value);
+                        }
+
+                        break;
+                    case VideoEncoder.MFH264:
+                    case VideoEncoder.MFH265:
+                        if (this.mfInstances.Contains(unlockKey.Value))
+                        {
+                            this.mfInstances.Remove(unlockKey.Value);
                         }
 
                         break;

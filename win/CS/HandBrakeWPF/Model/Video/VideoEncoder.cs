@@ -35,7 +35,11 @@ namespace HandBrakeWPF.Model.Video
         [DisplayName("H.264 (Nvidia NVEnc)")]
         [ShortName("nvenc_h264")]
         NvencH264,
-        
+
+        [DisplayName("H.264 (MediaFoundation)")]
+        [ShortName("mf_h264")]
+        MFH264,
+
         [DisplayName("MPEG-4")]
         [ShortName("mpeg4")]
         FFMpeg,
@@ -75,6 +79,10 @@ namespace HandBrakeWPF.Model.Video
         [DisplayName("H.265 (Nvidia NVEnc)")]
         [ShortName("nvenc_h265")]
         NvencH265,
+
+        [DisplayName("H.265 (MediaFoundation)")]
+        [ShortName("mf_h265")]
+        MFH265,
 
         [DisplayName("VP8")]
         [ShortName("VP8")]

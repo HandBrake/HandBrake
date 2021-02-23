@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Converters.Video
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows.Data;
 
     using HandBrake.Interop.Interop;
@@ -122,6 +123,12 @@ namespace HandBrakeWPF.Converters.Video
                 if (!isNvencEnabled || !HandBrakeHardwareEncoderHelper.IsNVEncH265Available)
                 {
                     encoders.Remove(VideoEncoder.NvencH265);
+                }
+
+                if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
+                {
+                    encoders.Remove(VideoEncoder.MFH264);
+                    encoders.Remove(VideoEncoder.MFH265);
                 }
 
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
