@@ -309,7 +309,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
     avp.data = in->data;
     avp.size = in->size;
     avp.pts  = in->s.start;
-    if (in->s.duration > 0)
+    if (in->s.duration > 0 || ctx->subtitle->source != PGSSUB)
     {
         duration = in->s.duration;
     }
