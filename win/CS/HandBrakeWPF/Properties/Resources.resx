@@ -1843,7 +1843,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Show 'Add Selection to Queue' on the toolbar</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
 This will not impact any of the software encoders.</value>
   </data>
@@ -2191,7 +2191,7 @@ This will also stop any existing running jobs.</value>
     <value>Please select a single job to view summary information.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process. (Experimental)</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Default network port for worker:</value>
@@ -2456,5 +2456,8 @@ Fields are limited to:
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
     <value>Missing file "hb.dll". Please re-install.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
   </data>
 </root>

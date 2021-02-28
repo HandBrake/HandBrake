@@ -3617,7 +3617,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Run each queued job in a separate worker process. (Experimental).
+        ///   Looks up a localized string similar to Run each queued job in a separate worker process..
         /// </summary>
         public static string OptionsView_EnableWorkerProcesses {
             get {
@@ -3654,7 +3654,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+        ///   Looks up a localized string similar to Hardware encoding support is currently disabled. If you did not start HandBrake with the &quot;--no-hardware&quot; option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
         ///
         ///This will not impact any of the software encoders..
         /// </summary>
@@ -3805,6 +3805,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_RequiresRestart {
             get {
                 return ResourceManager.GetString("OptionsView_RequiresRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: Please note that this is a &quot;Safe Mode&quot; build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-&quot;Safe Mode&quot; build from the website..
+        /// </summary>
+        public static string OptionsView_SafeMode {
+            get {
+                return ResourceManager.GetString("OptionsView_SafeMode", resourceCulture);
             }
         }
         

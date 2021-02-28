@@ -11,6 +11,8 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Dynamic;
+    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
 
@@ -18,6 +20,28 @@ namespace HandBrake.Interop.Interop
     {
         private static bool? isNvencH264Available; // Local cache to prevent log spam.
         private static bool? isNvencH265Available;
+
+        public static bool IsSafeMode
+        {
+            get
+            {
+                try
+                {
+                    if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                    {
+                        return false;
+                    }
+
+                    return (HBFunctions.hb_qsv_available() + HBFunctions.hb_vce_h264_available()
+                                                           + HBFunctions.hb_nvenc_h264_available()) == -3;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
 
         /* QuickSync Support */
 
@@ -27,7 +51,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return HBFunctions.hb_qsv_available() != 0;
+                    return HBFunctions.hb_qsv_available() > 0;
                 }
                 catch (Exception)
                 {
@@ -43,7 +67,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H264) != 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H264) > 0;
                 }
                 catch (Exception)
                 {
@@ -59,7 +83,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265) != 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265) > 0;
                 }
                 catch (Exception)
                 {
@@ -94,7 +118,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265_10BIT) != 0;
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265_10BIT) > 0;
                 }
                 catch (Exception)
                 {
@@ -112,7 +136,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return HBFunctions.hb_vce_h264_available() != 0;
+                    return HBFunctions.hb_vce_h264_available() > 0;
                 }
                 catch (Exception)
                 {
@@ -128,7 +152,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return HBFunctions.hb_vce_h265_available() != 0;
+                    return HBFunctions.hb_vce_h265_available() > 0;
                 }
                 catch (Exception)
                 {
@@ -148,7 +172,7 @@ namespace HandBrake.Interop.Interop
                 {
                     if (isNvencH264Available == null)
                     {
-                        isNvencH264Available = HBFunctions.hb_nvenc_h264_available() != 0;
+                        isNvencH264Available = HBFunctions.hb_nvenc_h264_available() > 0;
                     }
                     
                     return isNvencH264Available.Value;
@@ -174,7 +198,7 @@ namespace HandBrake.Interop.Interop
 
                     if (isNvencH265Available == null)
                     {
-                        isNvencH265Available = HBFunctions.hb_nvenc_h265_available() != 0;
+                        isNvencH265Available = HBFunctions.hb_nvenc_h265_available() > 0;
                     }
 
                     return isNvencH265Available.Value;
