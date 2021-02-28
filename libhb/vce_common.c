@@ -144,12 +144,12 @@ int hb_vce_h265_available()
 
 int hb_vce_h264_available()
 {
-    return 0;
+    return -1;
 }
 
 int hb_vce_h265_available()
 {
-    return 0;
+    return -1; 
 }
 
 #endif // HB_PROJECT_FEATURE_VCE

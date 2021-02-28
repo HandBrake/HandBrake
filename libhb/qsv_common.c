@@ -3646,7 +3646,7 @@ void hb_qsv_context_uninit(hb_job_t *job)
 
 int hb_qsv_available()
 {
-    return 0;
+    return -1;
 }
 
 #endif // HB_PROJECT_FEATURE_QSV

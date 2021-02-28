@@ -22,7 +22,7 @@ int hb_nvenc_h264_available()
     #if HB_PROJECT_FEATURE_NVENC
         return hb_check_nvenc_available();
     #else
-        return 0;
+        return is_nvenc_available;
     #endif
 }
 
@@ -31,7 +31,7 @@ int hb_nvenc_h265_available()
     #if HB_PROJECT_FEATURE_NVENC
         return hb_check_nvenc_available();
     #else
-        return 0;
+        return is_nvenc_available;
     #endif
 }
 
