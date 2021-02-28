@@ -46,8 +46,8 @@ struct hb_work_private_s
 
     hb_chapter_queue_t * chapter_queue;
 
-    struct SwsContext  * sws_context_to_nv12;
-    hb_buffer_t        * nv12_buf;
+    struct SwsContext  * sws;
+    hb_buffer_t        * sws_buf;
 };
 
 int  encavcodecInit( hb_work_object_t *, hb_job_t * );
@@ -94,11 +94,6 @@ static const char * const h26x_vt_preset_name[] =
 static const char * const h264_vt_profile_name[] =
 {
     "auto", "baseline", "main", "high", NULL
-};
-
-static const char * const h265_vt_profile_name[] =
-{
-    "auto", "main",  NULL // "main10" not currently supported.
 };
 
 static const char * const h26x_mf_preset_name[] =
@@ -191,6 +186,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     break;
                 case HB_VCODEC_FFMPEG_VT_H265:
                     hb_log("encavcodecInit: H.265 (VideoToolbox)");
+                    codec_name = "hevc_videotoolbox";
+                    break;
+                case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+                    hb_log("encavcodecInit: H.265 10 bit (VideoToolbox)");
                     codec_name = "hevc_videotoolbox";
                     break;
                 case HB_VCODEC_FFMPEG_MF_H265:
@@ -437,7 +436,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             }
             hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
         }
-        else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 )
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
         {
             context->flags |= AV_CODEC_FLAG_QSCALE;
             context->global_quality = job->vquality;
@@ -527,16 +526,30 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265)
     {
-        // Set profile and level
-        if (job->encoder_profile != NULL && *job->encoder_profile)
-        {
-            if (!strcasecmp(job->encoder_profile, "main"))
-                av_dict_set(&av_opts, "profile", "main", 0);
-            else if (!strcasecmp(job->encoder_profile, "main10"))
-                av_dict_set(&av_opts, "profile", "main10", 0);
-        }
-
+        av_dict_set(&av_opts, "profile", "main", 0);
         context->max_b_frames = 16;
+    }
+
+    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
+    {
+        av_dict_set(&av_opts, "profile", "main10", 0);
+        context->max_b_frames = 16;
+
+        if (job->pix_fmt != AV_PIX_FMT_P010LE)
+        {
+            pv->sws = hb_sws_get_context(
+                                         job->width, job->height,
+                                         context->pix_fmt,
+                                         job->width, job->height,
+                                         AV_PIX_FMT_P010LE,
+                                         SWS_LANCZOS|SWS_ACCURATE_RND,
+                                         SWS_CS_DEFAULT);
+
+            pv->sws_buf = hb_frame_buffer_init(
+                             AV_PIX_FMT_P010LE, job->width, job->height);
+
+            context->pix_fmt = AV_PIX_FMT_P010LE;
+        }
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
@@ -646,15 +659,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
         if (job->pix_fmt != AV_PIX_FMT_NV12)
         {
-            pv->sws_context_to_nv12 = hb_sws_get_context(
-                                        job->width, job->height,
-                                        context->pix_fmt,
-                                        job->width, job->height,
-                                        AV_PIX_FMT_NV12,
-                                        SWS_LANCZOS|SWS_ACCURATE_RND,
-                                        SWS_CS_DEFAULT);
+            pv->sws = hb_sws_get_context(
+                                         job->width, job->height,
+                                         context->pix_fmt,
+                                         job->width, job->height,
+                                         AV_PIX_FMT_NV12,
+                                         SWS_LANCZOS|SWS_ACCURATE_RND,
+                                         SWS_CS_DEFAULT);
 
-            pv->nv12_buf = hb_frame_buffer_init(
+            pv->sws_buf = hb_frame_buffer_init(
                              AV_PIX_FMT_NV12, job->width, job->height);
 
             context->pix_fmt = AV_PIX_FMT_NV12;
@@ -770,7 +783,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     job->areBframes = 0;
     if (context->has_b_frames > 0)
     {
-        if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265)
+        if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
         {
             // VT appears to enable b-pyramid by default and there
             // is no documented way of modifying this behaviour or
@@ -816,13 +829,13 @@ void encavcodecClose( hb_work_object_t * w )
         }
         hb_avcodec_free_context(&pv->context);
     }
-    if (pv->sws_context_to_nv12 != NULL)
+    if (pv->sws != NULL)
     {
-        sws_freeContext(pv->sws_context_to_nv12);
+        sws_freeContext(pv->sws);
     }
-    if (pv->nv12_buf != NULL)
+    if (pv->sws_buf != NULL)
     {
-        hb_buffer_close(&pv->nv12_buf);
+        hb_buffer_close(&pv->sws_buf);
     }
     if( pv->file )
     {
@@ -984,14 +997,14 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.linesize[1] = in->plane[1].stride;
     frame.linesize[2] = in->plane[2].stride;
 
-    if (pv->sws_context_to_nv12)
+    if (pv->sws)
     {
         uint8_t *srcs[]   = { in->plane[0].data, in->plane[1].data, in->plane[2].data };
         int srcs_stride[] = { in->plane[0].stride, in->plane[1].stride, in->plane[2].stride };
-        uint8_t *dsts[]   = { pv->nv12_buf->plane[0].data, pv->nv12_buf->plane[1].data, NULL };
-        int dsts_stride[] = { pv->nv12_buf->plane[0].stride, pv->nv12_buf->plane[1].stride, 0 };
+        uint8_t *dsts[]   = { pv->sws_buf->plane[0].data, pv->sws_buf->plane[1].data, NULL };
+        int dsts_stride[] = { pv->sws_buf->plane[0].stride, pv->sws_buf->plane[1].stride, 0 };
 
-        sws_scale(pv->sws_context_to_nv12,
+        sws_scale(pv->sws,
                   (const uint8_t* const*)srcs, srcs_stride,
                   0, in->f.height, dsts, dsts_stride);
 
@@ -1208,6 +1221,7 @@ const char* const* hb_av_preset_get_names(int encoder)
 
         case HB_VCODEC_FFMPEG_VT_H264:
         case HB_VCODEC_FFMPEG_VT_H265:
+        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
             return h26x_vt_preset_name;
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -1229,8 +1243,6 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h265_nvenc_profile_names;
         case HB_VCODEC_FFMPEG_VT_H264:
             return h264_vt_profile_name;
-        case HB_VCODEC_FFMPEG_VT_H265:
-            return h265_vt_profile_name;
         case HB_VCODEC_FFMPEG_MF_H264:
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:

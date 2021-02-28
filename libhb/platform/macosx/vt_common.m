@@ -16,7 +16,7 @@
 static const CFStringRef encoder_id_h264 = CFSTR("com.apple.videotoolbox.videoencoder.h264.gva");
 static const CFStringRef encoder_id_h265 = CFSTR("com.apple.videotoolbox.videoencoder.hevc.gva");
 
-static int encvt_available(CFStringRef encoder)
+static int is_encoder_available(CFStringRef encoder)
 {
     CFArrayRef encoder_list;
     VTCopyVideoEncoderList(NULL, &encoder_list);
@@ -50,22 +50,40 @@ static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *enco
     return err;
 }
 
-static int hb_vt_is_hardware_encoder_available(CMVideoCodecType codecType)
+static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef level)
 {
 #if defined(__MAC_11_0)
     if (@available (macOS 11, *))
     {
+        Boolean found = false;
         CFStringRef encoderIDOut;
         CFDictionaryRef supportedPropertiesOut;
 
         OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
 
-        if (err == noErr) {
+        if (err == noErr)
+        {
+            if (level != NULL)
+            {
+                CFDictionaryRef profiles = CFDictionaryGetValue(supportedPropertiesOut, kVTCompressionPropertyKey_ProfileLevel);
+                if (profiles != NULL)
+                {
+                    CFArrayRef listOfValues = CFDictionaryGetValue(profiles, kVTPropertySupportedValueListKey);
+                    if (listOfValues != NULL)
+                    {
+                        found = CFArrayContainsValue(listOfValues, CFRangeMake(0, CFArrayGetCount(listOfValues)), level);
+                    }
+                }
+            }
+            else
+            {
+                found = true;
+            }
+
             CFRelease(encoderIDOut);
             CFRelease(supportedPropertiesOut);
-            return 1;
         }
-        return 0;
+        return found;
     }
     else
     {
@@ -83,13 +101,13 @@ static int hb_vt_is_hardware_encoder_available(CMVideoCodecType codecType)
                 return 0;
         }
 
-        return encvt_available(encoder_id);
+        return is_encoder_available(encoder_id);
 #if defined(__MAC_11_0)
     }
 #endif
 }
 
-static int hb_vt_is_constant_quality_available(CMVideoCodecType codecType)
+static int is_constant_quality_available(CMVideoCodecType codecType)
 {
 #if defined(__MAC_11_0) && defined(__aarch64__)
     if (@available (macOS 11, *))
@@ -124,7 +142,7 @@ int hb_vt_h264_is_available()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        vt_h264_available = hb_vt_is_hardware_encoder_available(kCMVideoCodecType_H264);
+        vt_h264_available = is_hardware_encoder_available(kCMVideoCodecType_H264, NULL);
     });
     return vt_h264_available;
 }
@@ -135,9 +153,27 @@ int hb_vt_h265_is_available()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        vt_h265_available = hb_vt_is_hardware_encoder_available(kCMVideoCodecType_HEVC);
+        vt_h265_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, NULL);
     });
     return vt_h265_available;
+}
+
+static int vt_h265_10bit_available;
+
+int hb_vt_h265_10bit_is_available()
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (@available (macOS 11, *))
+        {
+            vt_h265_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, kVTProfileLevel_HEVC_Main10_AutoLevel);
+        }
+        else
+        {
+            vt_h265_10bit_available = 0;
+        }
+    });
+    return vt_h265_10bit_available;
 }
 
 static int vt_h264_constant_quality;
@@ -146,7 +182,7 @@ int hb_vt_h264_is_constant_quality_available()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        vt_h264_constant_quality = hb_vt_is_constant_quality_available(kCMVideoCodecType_H264);
+        vt_h264_constant_quality = is_constant_quality_available(kCMVideoCodecType_H264);
     });
     return vt_h264_constant_quality;
 }
@@ -157,7 +193,7 @@ int hb_vt_h265_is_constant_quality_available()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        vt_h265_constant_quality = hb_vt_is_constant_quality_available(kCMVideoCodecType_HEVC);
+        vt_h265_constant_quality = is_constant_quality_available(kCMVideoCodecType_HEVC);
     });
     return vt_h265_constant_quality;
 }
