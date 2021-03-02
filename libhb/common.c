@@ -1521,6 +1521,9 @@ int hb_video_encoder_get_depth(int encoder)
 #if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_QSV_H265_10BIT:
 #endif
+#ifdef __APPLE__
+        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+#endif
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_10BIT:
             return 10;
