@@ -24,7 +24,8 @@ typedef struct
                            int       dst_w,
                            int       dst_h,
                            int       dx,
-                           int       dy);
+                           int       dy,
+                           int       n);
 } NLMeansFunctions;
 
 void nlmeans_init_x86(NLMeansFunctions *functions);

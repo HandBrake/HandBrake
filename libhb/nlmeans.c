@@ -714,16 +714,19 @@ static void build_integral_scalar(uint32_t *integral,
                                   int       dst_w,
                                   int       dst_h,
                                   int       dx,
-                                  int       dy)
+                                  int       dy,
+                                  int       n)
 {
     const int bw = w + 2 * border;
-    for (int y = 0; y < dst_h; y++)
+    const int n_half = (n-1) /2;
+
+    for (int y = 0; y < dst_h + n; y++)
     {
-        const uint8_t *p1 = src_pre + y*bw;
-        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
+        const uint8_t *p1 = src_pre     + (y-n_half   )*bw - n_half;
+        const uint8_t *p2 = compare_pre + (y-n_half+dy)*bw - n_half + dx;
         uint32_t *out = integral + (y*integral_stride);
 
-        for (int x = 0; x < dst_w; x++)
+        for (int x = 0; x < dst_w + n; x++)
         {
             int diff = *p1 - *p2;
             *out = *(out-1) + diff * diff;
@@ -736,7 +739,7 @@ static void build_integral_scalar(uint32_t *integral,
         {
             out = integral + y*integral_stride;
 
-            for (int x = 0; x < dst_w; x++)
+            for (int x = 0; x < dst_w + n; x++)
             {
                 *out += *(out - integral_stride);
                 out++;
@@ -762,7 +765,6 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                     const float  weight_fact_table,
                     const int    diff_max)
 {
-    const int n_half = (n-1) /2;
     const int r_half = (r-1) /2;
 
     // Source image
@@ -773,11 +775,11 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     const int bw     = w + 2 * border;
 
     // Allocate temporary pixel sums
-    struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
+    struct PixelSum *tmp_data = calloc((dst_w + n) * (dst_h + n), sizeof(struct PixelSum));
 
     // Allocate integral image
-    const int integral_stride    = ((dst_w + 15) / 16 * 16) + 2 * 16;
-    uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
+    const int integral_stride    = ((dst_w + n + 15) / 16 * 16) + 2 * 16;
+    uint32_t* const integral_mem = calloc(integral_stride * (dst_h + n + 1), sizeof(uint32_t));
     uint32_t* const integral     = integral_mem + integral_stride + 16;
 
     // Iterate through available frames
@@ -798,9 +800,9 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                 // Apply special weight tuning to origin patch
                 if (dx == 0 && dy == 0 && f == 0)
                 {
-                    for (int y = n_half; y < dst_h-n + n_half; y++)
+                    for (int y = 0; y < dst_h; y++)
                     {
-                        for (int x = n_half; x < dst_w-n + n_half; x++)
+                        for (int x = 0; x < dst_w; x++)
                         {
                             tmp_data[y*dst_w + x].weight_sum += origin_tune;
                             tmp_data[y*dst_w + x].pixel_sum  += origin_tune * src[y*bw + x];
@@ -821,18 +823,17 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                                           dst_w,
                                           dst_h,
                                           dx,
-                                          dy);
+                                          dy,
+                                          n);
 
                 // Average displacement
-                for (int y = 0; y <= dst_h-n; y++)
+                for (int y = 0; y <= dst_h; y++)
                 {
                     const uint32_t *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
                     const uint32_t *integral_ptr2 = integral + (y+n-1)*integral_stride - 1;
 
-                    for (int x = 0; x <= dst_w-n; x++)
+                    for (int x = 0; x <= dst_w; x++)
                     {
-                        const int xc = x + n_half;
-                        const int yc = y + n_half;
 
                         // Difference between patches
                         const int diff = (uint32_t)(integral_ptr2[n] - integral_ptr2[0] - integral_ptr1[n] + integral_ptr1[0]);
@@ -845,8 +846,8 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                             //float weight = exp(-diff*weightFact);
                             const float weight = exptable[diffidx];
 
-                            tmp_data[yc*dst_w + xc].weight_sum += weight;
-                            tmp_data[yc*dst_w + xc].pixel_sum  += weight * compare[(yc+dy)*bw + xc + dx];
+                            tmp_data[y*dst_w + x].weight_sum += weight;
+                            tmp_data[y*dst_w + x].pixel_sum  += weight * compare[(y+dy)*bw + x + dx];
                         }
 
                         integral_ptr1++;
@@ -857,26 +858,11 @@ static void nlmeans_plane(NLMeansFunctions *functions,
         }
     }
 
-    // Copy edges
+    // Copy image without border
+    uint8_t result;
     for (int y = 0; y < dst_h; y++)
     {
-        for (int x = 0; x < n_half; x++)
-        {
-            *(dst + y * dst_s + x)               = *(src + y * bw - x - 1);
-            *(dst + y * dst_s - x + (dst_w - 1)) = *(src + y * bw + x + dst_w);
-        }
-    }
-    for (int y = 0; y < n_half; y++)
-    {
-        memcpy(dst +           y*dst_s, src -     (y+1)*bw, dst_w);
-        memcpy(dst + (dst_h-y-1)*dst_s, src + (y+dst_h)*bw, dst_w);
-    }
-
-    // Copy main image
-    uint8_t result;
-    for (int y = n_half; y < dst_h-n_half; y++)
-    {
-        for (int x = n_half; x < dst_w-n_half; x++)
+        for (int x = 0; x < dst_w; x++)
         {
             result = (uint8_t)(tmp_data[y*dst_w + x].pixel_sum / tmp_data[y*dst_w + x].weight_sum);
             *(dst + y*dst_s + x) = result ? result : *(src + y*bw + x);
@@ -1176,7 +1162,7 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
     for (int c = 0; c < 3; c++)
     {
         // Extend copy of plane with extra border and place in buffer
-        const int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
+        const int border = ((pv->patch_size[c] + 2) / 2 + 15) / 16 * 16;
         nlmeans_alloc(buf->plane[c].data,
                       buf->plane[c].width,
                       buf->plane[c].stride,
