@@ -28,20 +28,22 @@ static void build_integral_sse2(uint32_t *integral,
                                 int       dst_w,
                                 int       dst_h,
                                 int       dx,
-                                int       dy)
+                                int       dy,
+                                int       n)
 {
     const __m128i zero = _mm_set1_epi8(0);
     const int bw = w + 2 * border;
+    const int n_half = (n-1) /2;
 
-    for (int y = 0; y < dst_h; y++)
+    for (int y = 0; y < dst_h + n; y++)
     {
         __m128i prevadd = _mm_set1_epi32(0);
 
-        const uint8_t *p1 = src_pre + y*bw;
-        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
+        const uint8_t *p1 = src_pre     + (y-n_half   )*bw - n_half;
+        const uint8_t *p2 = compare_pre + (y-n_half+dy)*bw - n_half + dx;
         uint32_t *out = integral + (y*integral_stride);
 
-        for (int x = 0; x < dst_w; x += 16)
+        for (int x = 0; x < dst_w + n; x += 16)
         {
             __m128i pa, pb;
             __m128i pla, plb;
@@ -123,7 +125,7 @@ static void build_integral_sse2(uint32_t *integral,
         {
             out = integral + y*integral_stride;
 
-            for (int x = 0; x < dst_w; x += 16)
+            for (int x = 0; x < dst_w + n; x += 16)
             {
                 *((__m128i*)out) = _mm_add_epi32(*(__m128i*)(out-integral_stride),
                                                  *(__m128i*)(out));
