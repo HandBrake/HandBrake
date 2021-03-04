@@ -86,6 +86,7 @@
 
     [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
     [_proxy setUpWithLogLevel:self.level name:self.name];
+    [_proxy setAutomaticallyPreventSleep:self.automaticallyPreventSleep];
 }
 
 - (void)invalidate
@@ -100,6 +101,7 @@
 {
     [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
     [_proxy setUpWithLogLevel:self.level name:self.name];
+    [_proxy setAutomaticallyPreventSleep:self.automaticallyPreventSleep];
 
     HBCoreCompletionHandler handler = self.completionHandler;
 
@@ -130,6 +132,7 @@
 
 - (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
 {
+    _automaticallyPreventSleep = automaticallyPreventSleep;
     [_proxy setAutomaticallyPreventSleep:automaticallyPreventSleep];
 }
 
