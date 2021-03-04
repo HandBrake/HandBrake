@@ -346,11 +346,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //Work around an ffmpeg issue mentioned in issue #3447
             if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
             {
-               av_dict_set( &av_opts, "min_qp_i", 1, 0 );
-               av_dict_set( &av_opts, "min_qp_p", 1, 0 );
-               
-               av_dict_set( &av_opts, "max_qp_i", 51, 0 );
-               av_dict_set( &av_opts, "max_qp_p", 51, 0 );
+               av_dict_set( &av_opts, "qmin", 0, 0 );
+               av_dict_set( &av_opts, "qmax", 51, 0 );
             }
             hb_log( "encavcodec: encoding at rc=vbr_peak Bitrate %d", job->vbitrate );
         }
