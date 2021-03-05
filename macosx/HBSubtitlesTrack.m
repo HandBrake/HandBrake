@@ -70,6 +70,11 @@ static NSArray *_languagesArray = nil;
     HBTitleSubtitlesTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
     self.type = sourceTrack.type;
 
+    if (_sourceTrackIdx == 0)
+    {
+        return;
+    }
+
     if (!hb_subtitle_can_burn(_type))
     {
         // the source track cannot be burned in, so uncheck the widget
