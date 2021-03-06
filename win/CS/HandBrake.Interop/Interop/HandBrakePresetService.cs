@@ -54,7 +54,7 @@ namespace HandBrake.Interop.Interop
         public static PresetTransportContainer GetPresetsFromFile(string filename)
         {
             IntPtr presetStringPointer = HBFunctions.hb_presets_read_file_json(InteropUtilities.ToUtf8PtrFromString(filename));
-            string presetJson = Marshal.PtrToStringAnsi(presetStringPointer);
+            string presetJson = Marshal.PtrToStringUTF8(presetStringPointer);
 
             if (!string.IsNullOrEmpty(presetJson))
             {
