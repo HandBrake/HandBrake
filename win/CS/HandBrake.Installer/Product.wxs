@@ -63,9 +63,7 @@
             <Component Win64="yes" Id="ApplicationFiles" Guid="cbae29e7-6d39-49bb-8c76-0305c3d42181">
               <!-- Core Application -->
               <File Source="$(var.packagePath)\HandBrake.exe" />
-              <File Source="$(var.packagePath)\HandBrake.dll.config"/>
               <File Source="$(var.packagePath)\HandBrake.Worker.exe" />
-              <File Source="$(var.packagePath)\HandBrake.Worker.dll.config"/>
               <File Source="$(var.packagePath)\hb.dll"/>
               <File Source="$(var.packagePath)\portable.ini.template"/>
             </Component>
