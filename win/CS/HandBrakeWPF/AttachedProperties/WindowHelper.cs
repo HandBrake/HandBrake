@@ -12,13 +12,14 @@ namespace HandBrakeWPF.AttachedProperties
     using System;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
+    using System.Text.Json;
     using System.Windows;
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Services.Interfaces;
+    using HandBrake.Interop.Utilities;
 
-    using Newtonsoft.Json;
+    using HandBrakeWPF.Services.Interfaces;
 
     public class WindowHelper
     {
@@ -64,7 +65,7 @@ namespace HandBrakeWPF.AttachedProperties
             string key = string.Format("{0}.Settings", this.appWindow.Name);
             WindowInformation information = new WindowInformation(this.appWindow.Name, this.appWindow.WindowState, this.appWindow.RestoreBounds);
 
-            string json = JsonConvert.SerializeObject(information, Formatting.Indented);
+            string json = JsonSerializer.Serialize(information, JsonSettings.Options);
             if (!string.IsNullOrEmpty(json))
             {
                 this.userSettingService.SetUserSetting(key, json);
@@ -77,7 +78,7 @@ namespace HandBrakeWPF.AttachedProperties
             string json = this.userSettingService.GetUserSetting<string>(key);
             if (!string.IsNullOrEmpty(json))
             {
-                WindowInformation settings = JsonConvert.DeserializeObject<WindowInformation>(json);
+                WindowInformation settings = JsonSerializer.Deserialize<WindowInformation>(json, JsonSettings.Options);
 
                 if (settings.Location != Rect.Empty)
                 {
@@ -101,7 +102,7 @@ namespace HandBrakeWPF.AttachedProperties
             string json = this.userSettingService.GetUserSetting<string>(key);
             if (!string.IsNullOrEmpty(json))
             {
-                WindowInformation settings = JsonConvert.DeserializeObject<WindowInformation>(json);
+                WindowInformation settings = JsonSerializer.Deserialize<WindowInformation>(json, JsonSettings.Options);
                 this.appWindow.WindowState = settings.WindowState;
             }
         }

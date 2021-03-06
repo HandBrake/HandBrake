@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using System.Threading;
     using System.Windows;
     using System.Windows.Input;
@@ -49,8 +50,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
-
-    using Newtonsoft.Json;
 
     using Ookii.Dialogs.Wpf;
 
@@ -1331,7 +1330,7 @@ namespace HandBrakeWPF.ViewModels
                 return; 
             }
 
-            string json = JsonConvert.SerializeObject(this.ScannedSource, Formatting.Indented);
+            string json = JsonSerializer.Serialize(this.ScannedSource, JsonSettings.Options);
 
             SaveFileDialog savefiledialog = new SaveFileDialog
                                             {
@@ -1366,7 +1365,7 @@ namespace HandBrakeWPF.ViewModels
                     string json = reader.ReadToEnd();
                     if (!string.IsNullOrEmpty(json))
                     {
-                       Source source = JsonConvert.DeserializeObject<Source>(json);
+                       Source source = JsonSerializer.Deserialize<Source>(json, JsonSettings.Options);
                        this.ScannedSource = source;
                        this.HasSource = true;
                        this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();

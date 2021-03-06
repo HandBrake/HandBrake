@@ -127,7 +127,7 @@
 Actívelo si a su dispositivo le cuesta reproducir la salida. (Por ej.: pierde cuadros)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Advertencia: RF 0 es sin pérdida</value>
+    <value>Advertencia: RF 0 es sin pérdida!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>Un valor de 0 significa sin pérdida y resultará en un tamaño de archivo más grande que el original,

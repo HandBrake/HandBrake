@@ -11,27 +11,22 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Utilities;
 
-    using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
     using GeneralApplicationException = Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
-    using SystemInfo = HandBrakeWPF.Utilities.SystemInfo;
+    using SystemInfo = Utilities.SystemInfo;
 
     /// <summary>
     /// The User Setting Service
@@ -41,7 +36,6 @@ namespace HandBrakeWPF.Services
         private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly()), "settings.json");
         private readonly string releaseSettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.json");
         private readonly string nightlySettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.json");
-        private readonly JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private Dictionary<string, object> userSettings;
 
         /// <summary>
@@ -90,28 +84,15 @@ namespace HandBrakeWPF.Services
         {
             if (this.userSettings.ContainsKey(name))
             {
-                if (typeof(T) == typeof(int))
-                {
-                    object storedValue = this.userSettings[name];
-                    object converted = storedValue?.ToString().ToInt();
-                    return (T)converted;
-                }
-
-                // Treat String Arrays as StringCollections.  TODO refactor upstream code to more traditional string arrays.
                 object settingValue = this.userSettings[name];
-                if (settingValue != null && settingValue.GetType() == typeof(JArray))
+                if (settingValue is JsonElement)
                 {
-                    string[] stringArr = ((JArray)settingValue).ToObject<string[]>();
-                    StringCollection stringCollection = new StringCollection();
-                    foreach (var item in stringArr)
-                    {
-                        stringCollection.Add(item);
-                    }
-
-                    settingValue = stringCollection;
+                    T rawValue = JsonSerializer.Deserialize<T>(((JsonElement)settingValue).GetRawText(), JsonSettings.Options);
+                    return rawValue;
                 }
-
-                return (T)settingValue;
+                
+                T objectElement = (T)this.userSettings[name];
+                return objectElement;
             }
 
             return default(T);
@@ -160,7 +141,7 @@ namespace HandBrakeWPF.Services
 
                 using (StreamWriter file = new StreamWriter(new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write)))
                 {
-                    string appSettings = JsonConvert.SerializeObject(this.userSettings, Formatting.Indented, this.settings);
+                    string appSettings = JsonSerializer.Serialize(this.userSettings, JsonSettings.Options);
                     file.Write(appSettings);
                 }
             }
@@ -186,7 +167,7 @@ namespace HandBrakeWPF.Services
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         string appSettings = reader.ReadToEnd();
-                        Dictionary<string, object> deserialisedSettings = JsonConvert.DeserializeObject<Dictionary<string, object>>(appSettings);
+                        Dictionary<string, object> deserialisedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
 
                         this.userSettings = deserialisedSettings;
                     }
@@ -204,7 +185,7 @@ namespace HandBrakeWPF.Services
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         string appSettings = reader.ReadToEnd();
-                        Dictionary<string, object> deserialisedSettings = JsonConvert.DeserializeObject<Dictionary<string, object>>(appSettings);
+                        Dictionary<string, object> deserialisedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
                         this.userSettings = deserialisedSettings;
                     }
                 }

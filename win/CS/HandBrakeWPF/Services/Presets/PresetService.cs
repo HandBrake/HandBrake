@@ -12,13 +12,12 @@ namespace HandBrakeWPF.Services.Presets
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Text.Json;
     using System.Windows;
-    using System.Windows.Xps.Serialization;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
@@ -35,8 +34,6 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
-
-    using Newtonsoft.Json;
 
     using GeneralApplicationException = Exceptions.GeneralApplicationException;
     using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
@@ -159,7 +156,7 @@ namespace HandBrakeWPF.Services.Presets
                     bool containsBuildInPreset = false;
                     foreach (var objectPreset in container.PresetList)
                     {
-                        HBPresetCategory category = JsonConvert.DeserializeObject<HBPresetCategory>(objectPreset.ToString());
+                        HBPresetCategory category = JsonSerializer.Deserialize<HBPresetCategory>(objectPreset.ToString(), JsonSettings.Options);
                         if (category == null || category.ChildrenArray == null || category.ChildrenArray.Count == 0)
                         {
                             continue; // Ignore empty preset categories. 
@@ -184,7 +181,7 @@ namespace HandBrakeWPF.Services.Presets
                         }
                         else
                         {
-                            HBPreset hbPreset = JsonConvert.DeserializeObject<HBPreset>(objectPreset.ToString());
+                            HBPreset hbPreset = JsonSerializer.Deserialize<HBPreset>(objectPreset.ToString(), JsonSettings.Options);
                             if (hbPreset != null)
                             {
                                 Preset preset = this.ConvertHbPreset(hbPreset, null);
@@ -515,7 +512,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void SaveCategoryStates()
         {
-            StringCollection expandedPresets = new StringCollection();
+            List<string> expandedPresets = new List<string>();
             foreach (IPresetObject presetObject in this.presets)
             {
                 PresetDisplayCategory category = presetObject as PresetDisplayCategory;
@@ -530,7 +527,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public void LoadCategoryStates()
         {
-            StringCollection expandedPresets = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.PresetExpandedStateList);
+            List<string> expandedPresets = this.userSettingService.GetUserSetting<List<string>>(UserSettingConstants.PresetExpandedStateList);
             if (expandedPresets == null || expandedPresets.Count == 0)
             {
                 return;
@@ -686,7 +683,7 @@ namespace HandBrakeWPF.Services.Presets
             // The presets file loaded was OK, so process it.
             foreach (var item in container.PresetList)
             {
-                object deserialisedItem = JsonConvert.DeserializeObject<HBPresetCategory>(item.ToString());
+                object deserialisedItem = JsonSerializer.Deserialize<HBPresetCategory>(item.ToString(), JsonSettings.Options);
 
                 // Handle Categorised Presets.
                 HBPresetCategory category = deserialisedItem as HBPresetCategory;
@@ -706,7 +703,7 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Uncategorised Presets
-                deserialisedItem = JsonConvert.DeserializeObject<HBPreset>(item.ToString());
+                deserialisedItem = JsonSerializer.Deserialize<HBPreset>(item.ToString(), JsonSettings.Options);
                 HBPreset hbPreset = deserialisedItem as HBPreset;
                 if (hbPreset != null && !hbPreset.Folder)
                 {
@@ -742,8 +739,6 @@ namespace HandBrakeWPF.Services.Presets
                 this.HandlePresetListsForSave(this.flatPresetList.Where(o => o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
 
                 // Wrap the categories in a container. 
-                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
-
                 PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
                 PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro) { PresetList = new List<object>() };
                 container.PresetList.AddRange(presetCategories.Values);
@@ -752,7 +747,7 @@ namespace HandBrakeWPF.Services.Presets
                 // Write the preset container out to file.
                 using (FileStream strm = new FileStream(this.presetFile, FileMode.Create, FileAccess.Write))
                 {
-                    string presetsJson = JsonConvert.SerializeObject(container, Formatting.Indented, settings);
+                    string presetsJson = JsonSerializer.Serialize(container, JsonSettings.Options);
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
                         writer.WriteLine(presetsJson);

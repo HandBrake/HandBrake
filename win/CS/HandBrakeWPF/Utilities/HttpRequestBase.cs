@@ -17,8 +17,6 @@ namespace HandBrakeWPF.Utilities
 
     using HandBrakeWPF.Instance.Model;
 
-    using Newtonsoft.Json;
-
     public class HttpRequestBase
     {
         protected string serverUrl;
@@ -27,8 +25,6 @@ namespace HandBrakeWPF.Utilities
 
         protected string base64Token;
 
-        private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-        
         public async Task<ServerResponse> MakeHttpJsonPostRequest(string urlPath, string json)
         {
             if (string.IsNullOrEmpty(json))
