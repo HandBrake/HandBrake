@@ -63,11 +63,6 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void PerformStartupUpdateCheck(Action<UpdateCheckInformation> callback)
         {
-            if (UwpDetect.IsUWP())
-            {
-                return; // Disable Update checker if we are in a UWP container.
-            }
-
             if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
             {
                 return; // Disable Update Check for Portable Mode.

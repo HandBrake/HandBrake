@@ -22,14 +22,11 @@ namespace HandBrakeWPF.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             OptionsTab[] tabs = value as OptionsTab[];
-            if (tabs != null && (UwpDetect.IsUWP() || !Portable.IsUpdateCheckEnabled()))
+            if (tabs != null && !Portable.IsUpdateCheckEnabled())
             {
                 return tabs.Where(s => s != OptionsTab.Updates).ToArray();
             }
-
-
-
-
+            
             return value;
         }
 

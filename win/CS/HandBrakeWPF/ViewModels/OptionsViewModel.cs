@@ -138,8 +138,6 @@ namespace HandBrakeWPF.ViewModels
 
         public IAboutViewModel AboutViewModel { get; set; }
 
-        public bool IsUWP { get; } = UwpDetect.IsUWP();
-
         public bool IsNightly { get; } = HandBrakeVersionHelper.IsNightly();
 
         public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();

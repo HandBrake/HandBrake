@@ -135,8 +135,8 @@
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator Visibility="{Binding IsUWP, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" Visibility="{Binding IsUWP, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    <Separator />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_About}" cal:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>

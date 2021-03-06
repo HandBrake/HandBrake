@@ -748,8 +748,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsUWP { get; } = UwpDetect.IsUWP();
-
         public string SourceInfo
         {
             get
