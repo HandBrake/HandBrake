@@ -120,9 +120,6 @@ Section "HandBrake" SectionApp
   File "*.exe"
   File "*.dll"
   File "*.template"
-  File "*.config"
-  File "*.pdb"
-  File "*.config"
 
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"

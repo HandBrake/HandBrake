@@ -6,11 +6,11 @@
   
   HandBrake Build Script for usage with Jenkins.
   Usage: 
-    msbuild build_publish.xml /t:x64 /p:Profile=[Nightly or Release]
-    msbuild build_publish.xml /t:arm64 /p:Profile=[Nightly or Release]
+    msbuild build.xml /t:x64 /p:Profile=[Nightly or Release]
+    msbuild build.xml /t:arm64 /p:Profile=[Nightly or Release]
   Example with code signing:
-    msbuild build_publish.xml /t:x64 /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
-    msbuild build_publish.xml /t:x64 /p:PfxFile=file.pfx /p:PfxPwd=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build.xml /t:x64 /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build.xml /t:x64 /p:PfxFile=file.pfx /p:PfxPwd=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
   Requires: hb.dll to be in the release folder.
   
