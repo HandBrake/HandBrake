@@ -923,7 +923,7 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 ILogViewModel logvm = IoC.Get<ILogViewModel>();
-                this.windowManager.ShowWindow(logvm);
+                this.windowManager.ShowWindowAsync(logvm);
             }
         }
 
@@ -941,7 +941,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+                this.windowManager.ShowWindowAsync(IoC.Get<IQueueViewModel>());
             }
         }
 
@@ -951,7 +951,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.StaticPreviewViewModel.IsOpen = true;
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource);
-                this.windowManager.ShowWindow(this.StaticPreviewViewModel);
+                this.windowManager.ShowWindowAsync(this.StaticPreviewViewModel);
             }
             else if (this.StaticPreviewViewModel.IsOpen)
             {
@@ -966,7 +966,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PresetManagerViewModel.IsOpen = true;
                 this.PresetManagerViewModel.SetupWindow(() => this.NotifyOfPropertyChange(() => this.PresetsCategories));
-                this.windowManager.ShowWindow(this.PresetManagerViewModel);
+                this.windowManager.ShowWindowAsync(this.PresetManagerViewModel);
             }
             else if (this.PresetManagerViewModel.IsOpen)
             {
@@ -1186,7 +1186,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.windowManager.ShowWindow(viewModel);
+                this.windowManager.ShowWindowAsync(viewModel);
             }
         }
 
@@ -1524,7 +1524,7 @@ namespace HandBrakeWPF.ViewModels
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
-            this.windowManager.ShowDialog(presetViewModel);
+            this.windowManager.ShowDialogAsync(presetViewModel);
 
             this.NotifyOfPropertyChange(() => this.PresetsCategories);
         }
@@ -1576,7 +1576,7 @@ namespace HandBrakeWPF.ViewModels
 
             IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
             presetViewModel.Setup(this.selectedPreset);
-            this.windowManager.ShowDialog(presetViewModel);
+            this.windowManager.ShowDialogAsync(presetViewModel);
             Preset preset = presetViewModel.Preset;
 
             this.NotifyOfPropertyChange(() => this.PresetsCategories);

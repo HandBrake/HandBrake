@@ -248,7 +248,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditAudioDefaults()
         {
             this.audioDefaultsViewModel.ResetApplied();
-            this.windowManager.ShowDialog(this.audioDefaultsViewModel);
+            this.windowManager.ShowDialogAsync(this.audioDefaultsViewModel);
             if (audioDefaultsViewModel.IsApplied)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
@@ -275,7 +275,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryClose();
+            this.TryCloseAsync();
         }
 
         private void SetSelectedPictureSettingsResLimitMode()

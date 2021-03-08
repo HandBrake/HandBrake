@@ -13,7 +13,8 @@ namespace HandBrakeWPF.Commands
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Input;
-    using System.Windows.Interactivity;
+
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// The input binding trigger.

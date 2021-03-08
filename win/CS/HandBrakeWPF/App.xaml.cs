@@ -15,6 +15,7 @@ namespace HandBrakeWPF
     using System.IO;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -203,17 +204,23 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThreadAsync(() => {
-                if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+            Task t = new Task(
+                () =>
                 {
-                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.8", (Exception)e.ExceptionObject);
-                    this.ShowError(exception);
-                }
-                else
-                {
-                    this.ShowError(e.ExceptionObject);
-                }
-            });
+                    if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+                    {
+                        GeneralApplicationException exception = new GeneralApplicationException(
+                            "A file appears to be missing.",
+                            "Try re-installing Microsoft .NET Framework 4.8",
+                            (Exception)e.ExceptionObject);
+                        this.ShowError(exception);
+                    }
+                    else
+                    {
+                        this.ShowError(e.ExceptionObject);
+                    }
+                });
+            Execute.OnUIThreadAsync(() => t);
         }
 
         /// <summary>
@@ -290,7 +297,7 @@ namespace HandBrakeWPF
 
                     try
                     {
-                        windowManager.ShowDialog(errorView);
+                        windowManager.ShowDialogAsync(errorView);
                     }
                     catch (Exception)
                     {

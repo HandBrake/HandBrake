@@ -15,6 +15,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Media;
 
@@ -1291,10 +1293,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        protected override void OnActivate()
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             this.OnLoad();
-            base.OnActivate();
+            return base.OnActivateAsync(cancellationToken);
         }
 
         private void Save()

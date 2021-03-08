@@ -88,7 +88,7 @@ namespace HandBrakeWPF.ViewModels
         {
             try
             {
-                this.TryClose();
+                this.TryCloseAsync();
             }
             catch (Exception e)
             {

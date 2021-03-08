@@ -5,7 +5,7 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture"

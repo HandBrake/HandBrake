@@ -390,7 +390,7 @@ namespace HandBrakeWPF.ViewModels
             audioDefaultsViewModel.ResetApplied();
             audioDefaultsViewModel.Setup(this.selectedPreset, this.selectedPreset.Task);
 
-            this.windowManager.ShowDialog(audioDefaultsViewModel);
+            this.windowManager.ShowDialogAsync(audioDefaultsViewModel);
             if (audioDefaultsViewModel.IsApplied)
             {
                 this.SelectedPreset.AudioTrackBehaviours = audioDefaultsViewModel.AudioBehaviours.Clone();

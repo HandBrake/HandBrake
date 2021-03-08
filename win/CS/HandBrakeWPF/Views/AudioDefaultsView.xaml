@@ -9,7 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              d:DesignHeight="500"
              d:DesignWidth="800"

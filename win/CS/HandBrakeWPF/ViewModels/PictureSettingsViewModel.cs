@@ -676,7 +676,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.StaticPreviewViewModel.IsOpen = true;
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource);
-                this.windowManager.ShowWindow(this.StaticPreviewViewModel);
+                this.windowManager.ShowWindowAsync(this.StaticPreviewViewModel);
             }
             else if (this.StaticPreviewViewModel.IsOpen)
             {

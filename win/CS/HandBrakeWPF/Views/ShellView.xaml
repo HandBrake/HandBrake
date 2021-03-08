@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:cal="http://www.caliburnproject.org"
         Title="{Data:Binding Path=MainViewModel.WindowTitle}"
         Width="1018"

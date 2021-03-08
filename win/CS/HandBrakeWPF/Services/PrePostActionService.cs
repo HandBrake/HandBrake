@@ -138,7 +138,7 @@ namespace HandBrakeWPF.Services
                     () =>
                     {
                         titleSpecificView.SetAction((WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction));
-                        this.windowManager.ShowDialog(titleSpecificView);
+                        this.windowManager.ShowDialogAsync(titleSpecificView);
                         isCancelled = titleSpecificView.IsCancelled;
                     });
             }

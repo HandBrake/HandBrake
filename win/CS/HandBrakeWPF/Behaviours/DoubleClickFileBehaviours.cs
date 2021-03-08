@@ -12,11 +12,10 @@ namespace HandBrakeWPF.Behaviours
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Net;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Interactivity;
+
+    using Microsoft.Xaml.Behaviors;
 
     public class DoubleClickFileBehaviours : Behavior<TextBox>
     {

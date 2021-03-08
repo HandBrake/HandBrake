@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -192,7 +194,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryClose();
+            this.TryCloseAsync();
         }
 
         public override void OnLoad()
@@ -510,15 +512,15 @@ namespace HandBrakeWPF.ViewModels
 
         public void Activate()
         {
-           this.OnActivate();
+           this.OnActivateAsync(CancellationToken.None);
         }
 
         public void Deactivate()
         {
-           this.OnDeactivate(false);
+           this.OnDeactivateAsync(false, CancellationToken.None);
         }
 
-        protected override void OnActivate()
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             this.Load();
 
@@ -529,17 +531,17 @@ namespace HandBrakeWPF.ViewModels
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
 
-            base.OnActivate();
+            return base.OnActivateAsync(cancellationToken);
         }
 
-        protected override void OnDeactivate(bool close)
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             this.queueProcessor.QueueCompleted -= this.QueueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
 
-            base.OnDeactivate(close);
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         private void OpenDirectory(string directory)

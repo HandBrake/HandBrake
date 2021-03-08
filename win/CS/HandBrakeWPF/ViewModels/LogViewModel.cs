@@ -10,12 +10,13 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Caliburn.Micro;
 
@@ -96,17 +97,17 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        protected override void OnActivate()
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             this.logInstanceManager.NewLogInstanceRegistered += this.LogInstanceManager_NewLogInstanceRegistered;
             this.queueService.QueueChanged += this.QueueService_QueueChanged;
 
             this.CollectLogFiles(null);
-            
-            base.OnActivate();
+
+            return base.OnActivateAsync(cancellationToken);
         }
 
-        protected override void OnDeactivate(bool close)
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             if (this.logService != null)
             {
@@ -118,7 +119,7 @@ namespace HandBrakeWPF.ViewModels
             this.logInstanceManager.NewLogInstanceRegistered -= this.LogInstanceManager_NewLogInstanceRegistered;
             this.queueService.QueueChanged -= this.QueueService_QueueChanged;
 
-            base.OnDeactivate(close);
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         protected virtual void OnLogMessageReceived(LogEventArgs e)
@@ -222,13 +223,15 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.lastReadIndex < e.Log.MessageIndex)
             {
-                Execute.OnUIThreadAsync(() =>
+                Execute.OnUIThreadAsync(
+                    () => new Task(
+                        () =>
                         {
                             this.lastReadIndex = e.Log.MessageIndex;
                             this.log.AppendLine(e.Log.Content);
                             this.OnLogMessageReceived(e);
                             this.NotifyOfPropertyChange(() => this.ActivityLog);
-                        });
+                        }));
             }
         }
 

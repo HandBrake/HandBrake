@@ -42,7 +42,7 @@ namespace HandBrakeWPF.Services
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = details;
-                windowManager.ShowDialog(errorViewModel);
+                windowManager.ShowDialogAsync(errorViewModel);
             }
         }
 
@@ -68,7 +68,7 @@ namespace HandBrakeWPF.Services
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = exception.ToString();
-                windowManager.ShowDialog(errorViewModel);
+                windowManager.ShowDialogAsync(errorViewModel);
             }
         }
 
