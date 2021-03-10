@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Kodlayıcı parametrelerinin tam listesi: 
@@ -531,7 +531,7 @@ HandBrake'den çıkmak istediğinize emin misiniz?</value>
     <value>Resim Önizlemesi</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>Önceki önizleme dosyası silinemiyor. Medya yürütücünüzde hala açık bir önizlemeniz olabilir. Lütfen bunu kapatın.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodunuzu ayarlamalısınız.</value>
@@ -852,7 +852,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Özel:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Karelenme azaltıcı</value>
+    <value>Serbest bırakmak:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Ayrıştırma</value>
@@ -897,7 +897,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Döndürmek:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Keskinleştirmek</value>
+    <value>Keskinleştirmek:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Keskinleştirme Ön Ayarı</value>
@@ -1242,7 +1242,7 @@ Devam etmek istiyor musunuz? </value>
     <value>Yol:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Media Player Yolu</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Kodlama yaparken sistemin uyumasını önleyin</value>
@@ -1293,8 +1293,8 @@ Devam etmek istiyor musunuz? </value>
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Bu yol, yalnızca video önizleme özelliği için kullanılır.
+VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onaylanmamıştır.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Günlük Dizinini Görüntüle</value>
@@ -1339,7 +1339,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Elastiklik:</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Çıktı</value>
+    <value>Çıktı:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>PAR:</value>
@@ -1381,7 +1381,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Seçilen başlıklar  "{0}"  ön ayarı kullanılarak eklenecektir.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Gelişmiş:</value>
+    <value>Video Seçenekleri:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Ses:</value>
@@ -1510,7 +1510,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Yeni Parça Ekle</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Parça Ekle</value>
+    <value>Parçalar</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Mevcut Diller:</value>
@@ -1576,7 +1576,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Bir önizleme resmi seçin</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Sistem varsayılan video oynatıcıyı tercih et</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Mümkün olduğunda Kapalı Başlıklar ekleyin</value>
@@ -1657,7 +1657,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Avg bit hızı (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Video Codec'i:</value>
+    <value>Video Kodlayıcı:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Sabit Kare hızı</value>
@@ -1687,13 +1687,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Kare Hızı (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Videoyu Optimize Et:</value>
+    <value>Kodlayıcı Seçenekleri:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Tepe Kare Hızı</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Kalite</value>
+    <value>Kalite:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Turbo ilk geçiş</value>
@@ -1702,7 +1702,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Değişken Kare Hızı</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>Video:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Dil:</value>
@@ -1843,9 +1843,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Araç çubuğunda 'Sıraya Seçileni Ekle' seçeneğini göster</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Donanım kodlama desteği şu anda devre dışı. Lütfen bu sistemdeki tüm grafik adaptörleri için güncel sürücüler çalıştırdığınızdan emin olun.
+    <value>Donanım kodlama desteği şu anda devre dışı bırakıldı. HandBrake'i "--no-hardware" seçeneğiyle başlatmadıysanız, lütfen bu sistemdeki tüm grafik bağdaştırıcıları için güncel sürücüleri çalıştırdığınızdan emin olun.
 
-Bu, yazılım kodlayıcılarının hiçbirini etkilemeyecektir.</value>
+Bu, herhangi bir yazılım kodlayıcısını etkilemez.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Lütfen devam etmeden önce altyazı ayarlarınızı düzeltin.</value>
@@ -2166,7 +2166,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>HandBrake'in yeni bir sürümü var!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Telif hakkı (C) 2003-2021 The HandBrake Team</value>
+    <value>Telif Hakkı (C) 2003-2021 HandBrake Ekibi</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Düşük pil seviyesi:</value>
@@ -2185,13 +2185,13 @@ Bu, mevcut çalışan işleri de durduracaktır.</value>
     <value>Yinelenenler Algılandı</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Düşük Güçlü QuickSync Donanımını etkinleştirin (desteklendiğinde).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Özet bilgileri görüntülemek için lütfen tek bir iş seçin.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Her sıraya alınmış işi ayrı bir alt işlemde çalıştırın. (Deneysel)</value>
+    <value>Sıraya alınan her işi ayrı bir çalışan işlemde çalıştırın.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Çalışan için varsayılan ağ bağlantı noktası:</value>
@@ -2213,7 +2213,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Ayarlanan bağlantı noktası kullanımdaysa, tanımlanan bağlantı noktasından +100 içinde ilk boş bağlantı noktasını bulur.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Maksimum eşzamanlı kodlama sayısı:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>İptal</value>
@@ -2255,10 +2255,10 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Kenarlık</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Çözünürlük ve Ölçeklendirme</value>
+    <value>Çözünürlük ve Ölçeklendirme:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Döndür ve Kırp</value>
+    <value>Döndür ve Kırp:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Sadece Windows 10! )</value>
@@ -2321,7 +2321,7 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Ön Ayar Bilgisi:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Hazır ön ayarlar değiştirilemez</value>
+    <value>Yerleşik ön ayarlar değiştirilemez.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Seçilen ön ayarı varsayılan yap</value>
@@ -2339,44 +2339,125 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>Meta veri</value>
   </data>
   <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+    <value>Kaynaktan hedef dosyaya temel meta verileri geçirin (destekleniyorsa)</value>
   </data>
   <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
+    <value>Bu seçenek, temel meta veri alanlarının kaynaktan hedef dosyaya aktarılmasına izin verir.
+Alanlar aşağıdakilerle sınırlıdır:
+- İsim
+- Sanatçı
+- Albüm Sanatçısı
+- Besteci
+- Yayın Tarihi
+- Yorum Yap
+- Albüm
+- Tür
+- Açıklama
+- Uzun Açıklama</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>Kategori adı boştu. Lütfen bir isim girin.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>İsim girin:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>Seçili ön ayar yok.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Tüm kullanıcı ön ayarlarını dışa aktar</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>Düşük disk alanı uyarılarının gösterdiği düzey:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>Not: Bu, eşzamanlı işlerin üst sınırıdır. Kodlama sırasında eşzamanlı işlerin gerçek sayısını azaltan donanım sınırlamaları etkili olabilir.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Mevcut Değil)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Varsayılan:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>İnce Ayar Görüntü Ayarları</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Kırpma ayarlama kontrollerini göster.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Koyu Kullan</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Işık Kullan</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Eşleme Sistemi</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Yeniden Başlatma Gerektirir)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Renk alanı:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Renk alanı</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Önizlemeyi Aç</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Kaynak Önizlemesi:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>İş Durumu:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>İptal edildi</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Tamamlandı</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Geçersiz Ayarlar. Ayrıntılar için günlüğü kontrol edin.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Geçersiz Girdi. Ayrıntılar için günlüğü kontrol edin.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Durum Bilinmiyor. Ayrıntılar için günlüğü kontrol edin.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Kaynağı okumaya çalışırken hatalar tespit edildi.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Bilinmeyen başarısızlık. Ayrıntılar için günlüğü kontrol edin.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Çalışma Çöktü. Ayrıntılar için günlüğü kontrol edin.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Eksik "hb.dll" dosyası. Lütfen yeniden yükleyin.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Uyarı: Lütfen bunun, donanım kodlayıcıları için destek içermeyen bir HandBrake "Güvenli Mod" yapısı olduğunu unutmayın. Donanım kodlayıcı desteğini kullanmak istiyorsanız, lütfen web sitesinden "Güvenli Mod" olmayan bir yapı indirin.</value>
   </data>
 </root>
