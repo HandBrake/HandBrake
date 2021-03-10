@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=HandBrake
 GenericName=Media Transcoder
+GenericName[fr]=Transcodeur de médias
 Comment=Transcodes DVD, Bluray, and other media
+Comment[fr]=Transcode les DVD, Bluray et autres supports
 Exec=ghb %f
 Icon=fr.handbrake.ghb
 Terminal=false
