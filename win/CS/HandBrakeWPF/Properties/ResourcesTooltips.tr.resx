@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblok, düşük kaliteli video sıkıştırma işleminden kaynaklanan bloklu eserleri azaltır.</value>
@@ -163,15 +163,15 @@ HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az et
 Blu-ray ve DVD kaynakları genellikle birden fazla başlığa sahiptir, en uzun olanı tipik olarak ana özelliktir.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>Anamorfik, oynatma sırasında orijinal görünümü korurken isteğe bağlı depolama boyutlarına izin verir.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+Hiçbiri anamorfiği devre dışı bırakmaz. Video depolama boyutları ve ekran boyutları aynı olacaktır. Yalnızca belirli eski cihazlarla uyumluluk için kullanışlıdır.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Otomatik, orijinal ekran en boy oranını korurken depolama çözünürlüğünü en üst düzeye çıkarır. Önerilen.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Gevşek, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Özel, tüm parametreleri manuel olarak ayarlamaya izin verir. Yanlış bir kaynak gösterimi yönünü düzeltmek ve post prodüksiyonda gelişmiş kontrole ihtiyaç duyan profesyoneller için kullanışlıdır.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Videonun kenarlarında siyah kenarlıkları otomatik olarak kırp.</value>
@@ -465,5 +465,11 @@ Lapsharp'ın Hareketli ayarı, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıd
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Etkinleştirildiğinde, otomatik ad sistemi her zaman varsayılan yolu kullanır.
 Devre dışı bırakıldığında, doldurulursa ana penceredeki hedef kutusundaki yolu kullanır, aksi takdirde varsayılan yolu kullanır.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Renk Alanı Filtresi.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth Filtresi</value>
   </data>
 </root>

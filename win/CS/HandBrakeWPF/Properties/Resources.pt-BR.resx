@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Lista completa dos parâmetros do codificador:
@@ -532,7 +532,7 @@ Por favor, verifique as Notas de Versão no site.</value>
     <value>Pré-visualização da Imagem</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>Não foi possível excluir o arquivo anterior de pré-visualização. Você ainda pode ter uma pré-visualização aberta no seu reprodutor de mídia. Se for o caso, feche-o.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Você deve primeiro analisar uma origem e configurar a codificação antes de pré-visualizar.</value>
@@ -852,7 +852,7 @@ Você gostaria de substituí-lo?</value>
     <value>Personalizado:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>Redutor de blocos</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -1242,7 +1242,7 @@ Você gostaria de substituí-lo?</value>
     <value>Caminho:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>Caminho para o reprodutor de mídia</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Evitar que o sistema entre em modo de espera durante a conversão</value>
@@ -1293,8 +1293,8 @@ Você gostaria de substituí-lo?</value>
     <value>Vídeo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>Este caminho é usado apenas para o recurso de pré-visualização do vídeo.
+O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia também podem funcionar mas não foram testados.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
     <value>Abrir Pasta de Log</value>
@@ -1381,7 +1381,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Os títulos selecionados serão adicionados usando o perfil "{0}".</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Avançado:</value>
+    <value>Opções de Vídeo:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Áudio</value>
@@ -1510,7 +1510,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Adicionar Nova Trilha</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Adicionar Trilha</value>
+    <value>Trilhas</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Idiomas Disponíveis:</value>
@@ -1576,7 +1576,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Selecione uma imagem de pré-visualização</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>Prefira o reprodutor de vídeo padrão do sistema</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Adicionar Closed Captions quando disponível</value>
@@ -1657,7 +1657,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Taxa de Bits Média (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Codec de Vídeo:</value>
+    <value>Codificador de vídeo:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Taxa de Quadros Constante</value>
@@ -1687,13 +1687,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Taxa de Quadros (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Otimizar Vídeo:</value>
+    <value>Opções do codificador</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Taxa de Quaros de Pico</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Qualidade</value>
+    <value>Qualidade:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Primeiro passe turbo</value>
@@ -1702,7 +1702,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Taxa de Quadros Variável:</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Vídeo</value>
+    <value>Vídeo:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Idioma:</value>
@@ -1843,9 +1843,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Exibir "Adicionar seleção a Fila" na barra de ferramentas</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>O suporte à conversão por hardware está desativado no momento. Verifique se você está executando drivers atualizados para todos os adaptadores gráficos neste sistema.
+    <value>O suporte à conversão por hardware no momento está desativado. Caso não tenha iniciado o HandBrake com a opção "--no-hardware", verifique se os drivers estão atualizados para todos os adaptadores gráficos neste sistema.
 
-Isso não afetará nenhum dos codificadores de software.</value>
+Isso não afetará qualquer um dos codificadores via software.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Por favor, corrija as configurações das legendas antes de continuar.</value>
@@ -2166,7 +2166,7 @@ Onde suportado, quaisquer predefinições de usuário serão importadas.</value>
     <value>Uma nova versão do HandBrake está disponível!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
+    <value>Direitos Autorais (C) 2003-2021 A Equipe HandBrake</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Baixo nível de bateria:</value>
@@ -2185,13 +2185,13 @@ Isso também interromperá os trabalhos em execução existentes.</value>
     <value>Duplicados Detectados</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>Ative o hardware QuickSync de baixo consumo (quando for suportado).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Selecione um único trabalho para visualizar as informações resumidas.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Execute cada trabalho na fila em um processo de trabalho separado. (Experimental)</value>
+    <value>Execute cada trabalho na fila de espera num processo separado.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Porta de rede padrão para o trabalhador:</value>
@@ -2212,7 +2212,7 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>Se a porta definida estiver em uso, ela encontrará a primeira porta livre dentre de +100 à partir da porta definida.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Quantidade máxima de conversões simultâneas:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Cancelar</value>
@@ -2254,10 +2254,10 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>Bordas</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolução e Escala</value>
+    <value>Resolução e dimensionamento:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotacionar e Cortar</value>
+    <value>Girar e cortar</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Apenas Windows 10! )</value>
@@ -2320,7 +2320,7 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>Informação de pré-configuração:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Pré-configuração padão não pode ser modificada.</value>
+    <value>As predefinições embutidas não podem ser modificadas.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Definir pré-configuração selecionada como padrão</value>
@@ -2338,44 +2338,125 @@ Por favor, escolha uma predefinição diferente.</value>
     <value>Metadados</value>
   </data>
   <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+    <value>A passagem direta dos metadados básicos a partir da fonte até o arquivo de destino (quando for suportado)</value>
   </data>
   <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
+    <value>Esta opção permite que campos básicos dos metadados passem direto a partir da fonte até o arquivo de destino.
+Os campos se limitam a:
+- Nome
+- Artista
+- Album do Artista
+- Compositor
+- Data do Lançamento
+- Comentário
+- Álbum
+- Gênero
+- Descrição
+- Descrição Longa</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>O nome da categoria que você inseriu já existe. Escolha um nome diferente.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>O nome da categoria estava vazia. Insira um nome.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>Insira um nome:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>Nenhuma predefinição foi selecionada.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>Exporte todas as predefinições do usuário</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>O nível onde os alertas de pouco espaço em disco serão mostrados:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>Aviso: Este é o teto máximo de trabalhos simultâneos. As limitações de hardware tem o efeito de reduzir a quantidade real dos trabalhos simultâneos durante a codificação.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Não está Disponível)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>É o padrão:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Ajuste findo das configurações da imagem</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Mostre os controles de ajuste do corte</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Use escuro</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Use claro</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Sistema combinado</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(É preciso reiniciar)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Suavização do chroma</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Espaço de cores:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Espaço de cores</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Abra a pré-visualização</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Pré-visualização da origem</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Condição do trabalho:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancelado</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Configurações inválidas. Verifique o log para obter mais detalhes.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Entrada inválida. Verifique o log para obter mais detalhes.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Condição geral desconhecida. Verifique o log para obter mais detalhes.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Erros foram detectados durante a tentativa da leitura da origem.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Falha desconhecida. Verifique o log para obter mais detalhes.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>O trabalhador parou. Verifique o log para obter mais detalhes.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Falta o arquivo "hb.dll". Reinstale.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Atenção: Observe que esta é uma compilação "Safe Mode" (Modo Seguro) do HandBrake que não inclui suporte para codificação via hardware. Caso queira usar o suporte aos codificadores via hardware, faça o download do site da compilação não "Safe Mode".</value>
   </data>
 </root>

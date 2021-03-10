@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>O desbloqueio reduz artefatos em blocos causados pela compactação de vídeo de baixa qualidade.</value>
@@ -163,15 +163,15 @@ O HQDN3D é um filtro passagem-baixa adaptável, mais rápido que o NLMeans, por
 As fontes de Blu-ray e DVD geralmente têm vários títulos, o maior dos quais é geralmente o principal recurso</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>O anamórfico permite o armazenamento das dimensões arbitrárias enquanto preserva o aspecto original durante a reprodução.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+Nenhum desativa o anamórfico. As dimensões serão idênticas para o armazenamento do vídeo e para a exibição . Útil apenas para a compatibilidade com certos dispositivos legados.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automático Maximiza a resolução de armazenamento enquanto preserva a proporção do aspecto original da tela. Recomendado.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Solto é similar ao Auto, porém tenta preservar a relação de aspecto de armazenamento. Isso pode resultar em uma leve perda de resolução de armazenamento em comparação com o Auto.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Personalizado permite o ajuste manual de todos os parâmetros. Útil para corrigir um aspecto incorreto da origem e para profissionais que precisam de um controle mais avançado na pós-produção.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Corte automaticamente bordas pretas em torno das bordas do vídeo.</value>
@@ -463,5 +463,11 @@ O ajuste Lapsharp's Sprite é útil para jogos bidimensionais 1-/4-/8-/16-bits. 
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Quando ativado, o sistema de nome automático sempre usará o caminho padrão.. 
 Quando desativado, ele usará o caminho na caixa de destino na janela principal, se preenchido, caso contrário, o caminho padrão.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtro do espaço de cores.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Filtro de suavização do chroma</value>
   </data>
 </root>
