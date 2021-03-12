@@ -1830,9 +1830,10 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware)
     {
-        if (hb_qsv_available() < 0)
+        result = hb_qsv_info_init();
+        if (result < 0)
         {
-            hb_error("hb_qsv_available failed!");
+            hb_error("hb_qsv_info_init failed!");
             return -1;
         }
         hb_param_configure_qsv();
