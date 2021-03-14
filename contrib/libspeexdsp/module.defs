@@ -1,0 +1,8 @@
+__deps__ := LIBOGG
+
+$(eval $(call import.MODULE.defs,LIBSPEEXDSP,libspeexdsp,LIBOGG))
+$(eval $(call import.CONTRIB.defs,LIBSPEEXDSP))
+
+LIBSPEEXDSP.FETCH.url       = https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-1.2.0.tar.gz
+LIBSPEEXDSP.FETCH.sha256    = 682042fc6f9bee6294ec453f470dadc26c6ff29b9c9e9ad2ffc1f4312fd64771
+LIBSPEEXDSP.EXTRACT.tarbase = speexdsp-1.2.0

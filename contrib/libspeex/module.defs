@@ -1,3 +1,5 @@
+__deps__ := LIBSPEEXDSP LIBOGG
+
 $(eval $(call import.MODULE.defs,LIBSPEEX,libspeex,LIBOGG))
 $(eval $(call import.CONTRIB.defs,LIBSPEEX))
 

@@ -23,6 +23,7 @@ ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     MODULES += contrib/libvorbis
     MODULES += contrib/libopus
     MODULES += contrib/libspeex
+    MODULES += contrib/libspeexdsp
     MODULES += contrib/libtheora
     MODULES += contrib/lame
     MODULES += contrib/x264
