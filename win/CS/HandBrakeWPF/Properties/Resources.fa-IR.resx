@@ -1,0 +1,2463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>فهرست کامل متغیر‌های فشرده‌ساز:
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>استفاده از پردازنده را در بازسازی کاهش بده.
+
+اگر دستگاه شما برای پخش خروجی مشکل دارد (مثلا تصویر گیر می‌کند)، این را بزنید.</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>هشدار: اگر RF برابر 0 باشد، بدون کاهش است!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>مقدار 0 به معنای بی اتلاف است و در نتیجه اندازه پرونده، بزرگ‌تر از منبع اصلی خواهد شد؛
+مگر اینکه منبع نیز بی اتلاف باشد.
+
+مقیاس x264 و x265 لگاریتمی است و مقادیر پایین‌تر معادل کیفیت بالاتر است.
+
+بنابراین اندکی کاهش مقدار (افزایش کیفیت) منجر به افزایش تصاعدی اندازه‌ی پرونده‌ی حاصله می‌شود.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>You can optionally store a picture settings with this preset. There are 3 modes:
+
+None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
+
+Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
+
+Source Maximum:  Always encode at the sources resolution where possible.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>هشدار: نام‌دهی خودکار پرونده روشن نیست. لطفاً آن را از گزینه‌ها فعال کنید.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>پیش‌نهاده‌های داخلی بازنشانده شده‌است.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>بازنشانی کامل شد</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>کیفیت بالاتر |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| کیفیت پایین‌تر</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>کیفیت خارق‌العاده |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>خطا</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>قبل از افزودن به صف، باید «نام‌دهی خودکار پرونده» را فعال کنید و یک مسیر پیش‌فرض در «ترجیحات» مقرر کنید.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>هشدار</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>آیا مطمئن هستید؟</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>Handbrake در حال فشرده‌سازی است.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>کار در انتظار {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>New Default Preset Set: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>یک بروزرسانی جدید در دسترس است. برای نصب به فهرست ابزار &gt; گزینه‌ها بروید</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>شما نمی‌توانید پیش‌نهاده‌های داخلی را تغییر دهید. لطفاً یکی از پیش‌نهاده‌های خودتان را انتخاب کنید.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>لطفا یک پوشه را انتخاب کنید.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>در حال مهیا شدن برای فشرده‌سازی ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>شما نمی‌توانید پیش‌نهاده‌ای هم‌نام پیش‌نهاده‌های داخلی را وارد کنید.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>پیشنهاده‌ای با نام «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>پیش‌نهاده‌ها</value>
+  </data>
+  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+    <value>آیا مطمئن هستید که می‌خواهید پیش‌نهاده‌ی انتخاب شده را بروز آوری کنید؟</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>The Preset has now been updated with your current settings.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake تشخیص داده است که پیش‌نهاده‌ی داخلی شما قدیمی است... این پیش‌نهاده‌ها هم‌اکنون بروز می‌شوند.
+پیش‌نهاده‌های دلخواه شما بروز نشده است بنابراین ممکن است مجبور شوید با حذف و افزودن مجدد، آنها را از نو ایجاد کنید.
+از پرونده‌ی user_presets.xml قبلی پشتیبان‌گیری شد.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>صف به پایان رسید</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>وارسی لغو شد.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>وارسی کامل شد</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>وارسی ناموفق بود:</value>
+  </data>
+  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+    <value>وارسی شکست خورد... لطفا برای مشاهده‌ی جزئیاتَ، گزارش فعالیت را ببینید.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>درحال وارسی منبع، لطفا صبر کنید...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>وارسی عنوان {0} از {1} (٪{2})</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>قبل از شروع فشرده‌سازی شما ابتدا باید یک منبع را اسکن کرده و کار خود را تنظیم کنید. برای ادامه روی دکمه «منبع» در نوار ابزار بزنید</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>لطفا مطمئن شوید که یکی از پیش‌نهاده‌های خود را انتخاب کرده‌اید. لطفاً توجه داشته باشید که نمی‌توانید پیش‌نهاده‌های داخلی را صادر کنید.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>لطفا یک پیش‌نهاده را برای بروزرسانی انتخاب کنید.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>برای ادامه دادن، «منبعی» را انتخاب کنید</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} کار در انتظار</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>توجه</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>جای‌نویسی شود؟</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>سوال</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>آماده</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>بروزرسانی شده</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>نسخه‌ی پیش‌نهاده</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>پیش‌نهاده‌هایی که شما تلاش می‌کنید وارد کنید مربوط به نسخه‌ای متفاوت از HandBrake است. 
+شاید امکان وارد کردن همه‌ی مقادیر از این پیش‌نهاده وجود نداشته باشد.
+
+آیا می‌خواهید ادامه دهید؟</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>نتوانست پیش‌نهاده‌ها را وارد کند!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>نتوانست پیش‌نهاده را وارد کند زیرا به نظر می‌رسد خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>شما باید اول مسیر مقصد را برای پرونده‌ی خروجی تنظیم کنید سپس آن را در صف قرار دهید.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>The entered destination path contained illegal characters and will not be updated.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>پیش‌نمایش {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Preview (Scaled)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>خروجی: {0}</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
+
+Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+  </data>
+  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
+    <value>گزینه‌های اضافی موجود: {source_path} (مسیر منبع)  یا  {source_folder_name} (نام پوشه‌ی منبع)  یا  {source} (نام منبع)</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>مسیر و نام پرونده‌ای که در فرآیند فشرده‌سازی ایجاد می‌شود نباید عین پرونده‌ی منبع باشد. لطفاً نام پرونده‌ی مقصد را تغییر دهید تا مطابق پرونده‌ی منبع نباشد.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>دستگاه شما از راه اندازی مرورگر وب توسط HandBrake جلوگیری کرد.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>شما همچنان قادرید صفحه‌ی کمک را با مراجعه‌ی مستقیم به وبگاه https://handbrake.fr مشاهده کنید.</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>نتوانست پیش‌نهاده‌های انتخاب‌شده را وارد کند!</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>این پیش‌نهاده ممکن است خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد که پشتیبانی نمی‌شود.
+پیش‌نهاده‌های نسخه‌های قدیمی‌تر باید باید در همین نسخه از نو ساخته شوند.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>شناسه‌های پیشرفته‌ی اضافی که می توانند به فشرده‌ساز ویدیو منتقل شوند.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>None - Only tracks where the container does not support the format will be burned in.
+Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+First Track - The first track will be burned in.
+Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>پشتیبانی از زیرنویس WebM</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM در HandBrake فقط از زیرنویس‌های چسبیده پشتیبانی می کند.
+
+شما باید انتخاب‌های زیرنویس خود را تغییر دهید.
+
+اگر ادامه دهید، زیرنویس‌های غیرچسبیده‌ی شما از بین می‌روند.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>هیچ منبع یا عنوان سالمی پیدا نشد.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake نمی‌تواند منبع انتخاب شده را فشرده کند زیرا هیچ منبع معتبری را برای فشرده‌سازی پیدا نکرد.
+این می‌تواند به یکی از دلایل زیر باشد:
+- مدت زمان تمام منبع کمتر از «حداقل مدت عنوان» است که در ترجیحات &gt; پیشرفته &gt; گزینه‌ها قابل تنظیم است.
+- پرونده‌ی منبع یک پرونده‌ی ویدیویی معتبر نیست یا در قالبی است که HandBrake از آن پشتیبانی نمی‌کند.
+- منبع ممکن است از محافظت شده از رونوشت باشد یا شامل DRM باشد. لطفا توجه داشته باشید که HandBrake از حذف محافظت از رونوشت پشتیبانی نمی‌کند.
+
+گزارش فعالیت ممکن است اطلاعات بیشتری داشته باشد.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>صف{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>شروع فشرده‌سازی</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>شروع صف</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>شما نمی‌توانید پیش‌نهاده‌ی پیش‌فرض را حذف کنید. لطفا اول یک پیش‌نهاده‌ی دیگر را به عنوان پیش‌فرض تنظیم کنید.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>آیا مطمئن هستیدید می‌خواهید این پیش‌نهاده را حذف کنید؟</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>یک پیش‌نهاده باید نام داشته باشد. لطفا قسمت نام پیش‌نهاده را پر کنید.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>پیش‌نهاده‌ای با همین نام از قبل موجود است. دوست دارید جای‌نویسی کنید؟</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>You must first scan a source to use the 'Source Maximum' Option.</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>The Custom Width or Height fields must be filled in for the 'Custom' option.</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>نتواست پیش‌نهاده را اضافه کند</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>خطای ناشناخته</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>پیش‌فرض‌های صدا</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>خط‌های صدا</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Selection Behavior</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Switch Back To Tracks</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>نتوانست پرونده‌ی بخش‌نشان‌ها را ذخیره کند!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>نام بخش‌نشان در پرونده‌ی فشرده‌ی شما ذخیره نخواهد شد.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>عملیات « {0} » در {1} ثانیه‌ی دیگر اتفاق خواهد افتاد.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>اگر مشکل همچنان ادامه داشت، لطفاً HandBrake را از نو راه‌اندازی کنید.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>در مورد این خطا اطلاعات بیشتری در دسترس نیست.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>یک خطای ناشناخته رخ داده است.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>آپدیت جدیدی در دسترس است! لطفاً وبگاه را برای نکات انتشار بررسی کنید.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>دستگاه شما از نسخه‌ی 64بیتی HandBrake پشتیبانی می‌کند! آن نسخه عملکرد بهتر و ثبات بیشتری نسبت به نسخه‌ی 32بیتی دارد.
+لطفاً وب سایت را برای مشاهده‌ی نکات انتشار بررسی کنید.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>فعلاً بروزرسانی جدیدی موجود نیست.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>بروزرسانی بارگیری شد.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>بروزرسانی در دسترس نیست. شما می‌توانید برای بارگیری بروزرسانی از https://handbrake.fr تلاش کنید.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>بروزرسانی ناموفق بود. شما می‌توانید برای بارگیری بروزرسانی از https://handbrake.fr تلاش کنید.</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Display Size: {0}x{1},  PAR {2}x{3}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>افزودن به صف</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>هیچ فشرده‌سازیی در انتظار نیست</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>در حال حاضر کاری برای فشرده‌سازی نیست</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>صف</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+    <value>آیا مطمئن هستید می‌خواهید این صف را پاک کنید؟</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>تأیید</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} کار در انتظار</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>صف نگه داشته شد</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>آیا مطمئن هستید می‌خواهید کارهای انتخاب شده را حذف کنید؟</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>این فشرده‌سازی در حال انجام است. اگر آن را حذف کنید، فشرده‌سازی متوقف می‌شود. آیا مطمئن هستید می‌خواهید ادامه دهید؟</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>هیچ کاری در انتظاری نیست.</value>
+  </data>
+  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+    <value>آیا مطمئن هستید می‌خواهید این کار را ویرایش کنید؟ در این صورت از صف حذف شده و به پنجره‌ی اصلی انتقال می‌یابد.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>صف آماده است</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>صف در حال اجرا نیست</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>صف تکمیل شد</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>کارهای سف تمام شد</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>صف آغاز شد</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>یک فشرده‌سازی الآن در حال اجرا است. با خروج از HandBrake این فشرده‌سازی متوقف می‌شود.
+آیا مطمئن هستید می‌خواهید از ‌HandBrake خارج شوید؟</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>پیش‌نمایش تصویر</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>نتوانست پرونده‌ی پیش‌نمایش قبلی را حذف کند. ممکن است هنوز یک پیش‌نمایش در پخش‌کننده‌ی رسانه‌ی شما باز باشد. لطفاً آن را ببندید.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>You must first scan a source and setup your encode before creating a preview.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>هم‌اکنون HandBrake درحال فشرده‌سازی است! در هر زمان فقط یک پرونده می‌تواند فشرده‌سازی شود.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>پیش‌فرض‌های زیرنویس</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>خط‌های زیرنویس</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Switch Back To Tracks</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Selection Behavior</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>پرونده‌ی بایگانی شده</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Unable to load presets.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake نتوانست پرونده‌ی پیش‌نهاده‌ی شما را باز کند. ممکن است این پرونده از نسخه‌ی قدیمی پشتیبانی نشده‌ی HandBrake باشد یا خراب شده باشد.
+
+پرونده‌ی پیش‌نهاده‌های قدیمی در اینجا بایگانی شدند:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value>با {0} خطا یا لغو شناسایی شد.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>حافظه کم است</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>هشدار، فضای دیسک شما کم است. اگر فضای دیسک کم باشد HandBrake نخواهد توانست این فشرده‌سازی را کامل کند.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Line {0} is invalid. Nothing will be imported.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>نتوانست پرونده‌ی بخش‌بندی را وارد کند.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>تمام خطوط موجود در پرونده‌ی بخش‌بندی باید حاوی حداقل 2 ستون «داده» باشند</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>ستون اول در پرونده‌ی بخش‌بندی باید فقط حاوی اعداد صحیح بالاتر از صفر (0) باشد </value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>پرونده‌ی بخش‌بندی ار نوع «{0}» در حال حاضر پشتیبانی نمی‌شود.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>نوع پرونده‌ی بخش‌بندی پشتیبانی نشده</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>اطلاعات بخش‌بندی نامعتبر برای رسانه‌ی منبع</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>تعداد فصل‌ها در رسانه‌ی منبع
+و تعداد فصل‌ها در پرونده‌ی ورودی مطابقت ندارند ({0} دربرابر {1}).
+
+آیا هنوز می‌خواهید نام فصل‌ها را وارد کنید؟</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>تعداد فصل‌ها در رسانه‌ی منبع
+و تعداد فصل‌ها در پرونده‌ی ورودی مطابقت ندارند ({0} دربرابر {1}).
+
+آیا هنوز می‌خواهید نام فصل‌ها را وارد کنید؟</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>شمار بخش بین پرونده‌ی منبع و ورودی تطابق ندارد</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>آنچه از مدت بخش‌‌ها در رسانه‌ی منبع گزارش شده
+با مدت بخش‌ها در پرونده‌ی ورودی بسیار متفاوت است.
+
+به احتمال بسیار بالا، این پرونده‌ی بخش‌بندی بر اساس منبع دیگری تولید شده.
+
+آیا مطمئن هستید که می خواهید نام بخش‌ها را وارد کنید؟</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>مدت بخش بین پرونده‌ی منبع و ورودی تطابق ندارد</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>An error occurred when trying to stop the scan. Please restart HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake is unable to upgrade your presets file to a new version format.
+Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+    <value>در هنگام تلاش برای دخیره‌ی ترجیحات مشکلی پیش آمد.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>هشدار، تنظیمات شما بازنشانی شده‌است!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Unable to load user settings file: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>پوشه‌ی خروجیی که انتخاب کردید وجود ندارد یا اجازه ذخیره‌ی پرونده‌ها در آن را ندارید.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>پوشه‌ای ایجاد کند؟</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>پوشه‌ای که می‌خواهید در آن ذخیره شود وجود ندارد. آیا مایلید HandBrake این پوشه را بسازد؟
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>نتواست پوشه‌ی مقصد را باز کند.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>لطفاً بررسی کنید پوشه‌ی مقصد شما معتبر باشد.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>بدون اطلاعات اضافی</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - (٪{1}،  مرحله‌ی {2} از{3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{1}%, Pass {2} of {3}
+Remaining Time: {4}</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>صف نگه داشته شد. هشدار، فضای رانه‌ای (درایوی) که شما در آن فشرده‌سازی می‌کنید، کم است. لطفاً مقداری از فضا را آزاد کرده و برای ادامه «شروع» را بزنید. همچنین می‌توانید در «ترجیحات» حداقل مقدار فضا را تنظیم کنید.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>صف نگه داشته شد</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>صف نگه داشته شد</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>حافظه‌ی پوشه‌ی مقصد شما کم است.
+
+شما می‌توانید سطحی که این هشدار نمایش داده می‌شود را در ترجیحات تنظیم کنید.
+
+آیا مایل هستید ادامه دهید؟</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Unable to reset job status as it is not in an Error or Completed state</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Unable to restore queue file.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>این پرونده ممکن است خراب باشد یا از نسخه‌ی قدیمی و ناسازگاز HandBrake باشد</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake در حال فشرده‌سازی یک پرونده است.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>لطفاً فشرده‌سازی فعلی را متوقف کنید. اگر مشکل همچنان ادامه داشت، لطفاً HandBrake را دوباره راه‌اندازی کنید.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>پیش‌نمایش (٪{0} سایز واقعی)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake برای اجرا شدن نیازمند ویندوز 64بیتی و 7 به بالاست.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake برای اجرا شدن نیازمند ویندوز 7 یا بالاتر است. نسخه‌ی 0.9.9 (XP) و 0.10.5 (Vista)، آخرین نسخه‌هایی بود که از این سیستم‌عامل‌ها پشتیبانی می‌کرد.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Do you wish to proceed trying to add the rest?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>پرونده‌ی «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>The system clipboard is currently unavailable.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>مجوز:</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>نسخه:</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- افزودن دسته‌ی جدید --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>افزودن پیش‌نهاده</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>دسته:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>شرح:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>نام:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>ابعاد:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Source Track Selection</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Allow passthru of:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>'Auto Passthru' Behaviour:</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>بیت بر ثانیه</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>نوع فشرده‌سازی</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>فشرده‌سازی با دامنه‌ی پویا DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Gain</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>مخفی کردن</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixdown</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Fallback encoder:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>بارگذاری مجدد</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Samplerate</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>نمایاندن</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>نام خط</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Track Selection Behaviour:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>برای خط‌های اضافی</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>When 'Auto Passthru' is selected as the audio codec.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>بخش‌نشان‌ها</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>نام بخش</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>شماره‌ی بخش</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>ایجاد بخش‌نشان</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>مدت</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>صادر کردن</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>وارد کردن</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>صادر کردن نام‌ها</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>وارد کردن نام‌ها</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>بازنشانی نام بخش‌ها</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>لغو عملیات</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>ادامه دادن</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>عملکرد زمانی که انجام شد </value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>جزئیات خطا:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Custom:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>هموارسازی:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>پیش‌نهاده:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Deinterlace Preset</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>نویز زدایی:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>پیش‌نهاده‌ی نویز زدایی</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>میزان نویز زدایی</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>پالایه‌ها</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>وارنه کردن</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>سیاه و سفید</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Interlace Detection:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>پیش‌نهاده:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>چرخاندن:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>واضح کردن:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>پیش‌نهاده‌‌ی واضح کردن </value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>میزان واضح کردن</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>میزان</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>افزودن</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>بستن</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>رونوشت به بریده‌دان</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>انتقال به چپ</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>انتقال به راست</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>ذخیره کردن</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>رونوشت به بریده‌دان</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>گزارش فشرده‌سازی</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>باز کردن پوشه‌ی گزارش</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>گزارش وارسی</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>گزارش فعالیت</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>افزودن همه</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Add Current</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Add Selection</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>افزودن به صف</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>پیشرفته</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>تراز کردن صدا/تصویر در شروع</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>زاویه:</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>صدا</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>خط‌های صدا</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>مرور</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>بخش‌ها</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>مقصد</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>مدت:</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>ذخیره با نام:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>پالایه‌ها</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>فرمت:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>کمک</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>پشتیبانی از iPod نسل 5</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>فراداده</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(اصلاح شده)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Muxing: This may take a while...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>گزینه‌ها</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>تنظیمات خروجی</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>نگه‌داشتن</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>ابعاد</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>تغییر نام پیش‌نهاده</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Preset Options Context Menu</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>حذف پیش‌نهاده</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>پیش‌نهاده‌ها</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>پیش‌نمایش</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Range:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>بازیابی</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>بازنشانی پیش‌نهاده‌های داخلی</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>ذخیره‌ی پیش‌نهاده‌ی جدید</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Searching for start time</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>پیش‌فرض قرار دادن</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>پیش‌نمایش</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>صف</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>منبع:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>باز کردن منبع</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>شروع فشرده‌سازی</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>شروع صف</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>توقف</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>توقف فشرده‌سازی</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>آیا مطمئن هستید که می‌خواهید این فشرده‌سازی را لغو کنید؟</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>لطفاً قبل از تلاش برای وارد کردن پرونده‌ی زیرنویس، یک منبع برای فشرده‌سازی انتخاب کنید.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>زیرنویس‌ها</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>خط‌های زیرنویس</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>خلاصه</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>عنوان:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>بروزرسانی پیش‌نهاده‌ی انتخاب شده</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>ویدیو</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>بهینه برای وب</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>مدیریت پیش‌نهاده‌ها:</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>فراداده</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>اجازه دادن به استفاده از فشرده‌ساز Nvidia NVENC</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>اجازه دادن به استفاده از فشرده‌ساز Intel QuickSync</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>اجازه دادن به استفاده از فشرده‌ساز AMD VCE</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>The file format entered contained invalid characters. These have been removed. </value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>بعد از اینکه هر فشرده‌سازی تکمیل شد یک صدا پخش کن.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>بعد از اینکه صف تکمیل شد یک صدا پخش کن.</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>پیش‌نمایش‌هایی را در صفحه‌ی خلاصه نشان بده.</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>وضعیت فشرده‌سازی را در نوار عنوان برنامه نشان بده.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>پرونده‌های گزارشی که بیش از 7 روز از ایجاد آن‌ها می‌گذرد را پاک کن</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>درباره‌ی HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>پیشرفته</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>گزینه‌های پیشرفته</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Arguments:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>نام‌دهی خودکار</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>پروند‌ه‌های خروجی را به صورت خودکار نام‌دهی کن</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>بررسی بروزرسانی‌ها</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>همیشه موارد صف را پس از فشرده‌سازی از صف پاک کن</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>پاک‌کردن تاریخچه‌یگزارش</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>یک رونوشت از گزارش‌های فشرده‌سازی جداگانه را در این مکان قرار بده:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>یک نسخه از گزارش‌های فشرده‌سازی جداگانه را در مکان ویدیوی فشرده شده قرار بده</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>نسخه‌ی فعلی</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>بازسازی</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>مسیر پیش‌فرض:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>بارگیری بروزرسانی</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>DVD Reading</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>فشرده‌سازی</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>قالب فایل:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>عمومی</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>گزارش نگاری</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Log Verbosity Level:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>مسیر گزارش:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>اگر حافظه کم بود، صف را نگه دار</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>کوچک کردن در سینی (system tray) (نیازمند راه‌اندازی مجدد)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>پسوند فایل MP4:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>موقع شروع</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>پرونده‌های خروجی</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>مسیر:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>مسیر پخش‌کننده‌ی رسانه:</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Prevent the system from sleeping while encoding</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Number of picture previews to scan:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>میزان اولویت:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Prefer use of Intel QuickSync for decoding video when available. </value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) </value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Remove common punctuation</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Replace underscores with a space</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>دفعه‌ی بعد که برنامه باز شد، روی «هیچ کاری نکن» برگردد.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Choose Scaler:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Scaling</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>ارسال فایل به:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Change case to Title Case</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>بروز‌رسانی‌ها</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>رابط کاربری</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>نسخه:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>ویدیو</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>این مسیر فقط برای قابلیت پیش‌نمایش ویدیو استفاده می‌شود.
+VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های دیگر نیز ممکن است کار کنند اما معتبر نیستند.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>مشاهده‌ی پوشه‌ی گزارش</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>وقتی</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>تنظیمات x264/5</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Constant quality fractional granularity:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorphic:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>خودکار</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>پایین</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>برش:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>دلخواه</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+    <value>Display Width:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>ارتفاع:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>حفظ نسبت ابعاد</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>چپ</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Modulus:</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>خروجی:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>PAR:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>راست</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>اندازه</value>
+  </data>
+  <data name="PictureSettingsView_Source" xml:space="preserve">
+    <value>منبع:</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>عرض:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>دلخواه</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>صادر کردن به پرونده</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>وارد کردن از پرونده</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>رسمی</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>انتخاب عناوین</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>افزودن به صف</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>تظیمات ویدیو:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>صدا:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>پاک کردن همه</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>پاک کردن کامل شد</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>پاک کردن صف</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Clear Selected</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>مقصد:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>هیچ کاری نکن</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Encode Time:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>زمان پایان:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>صادرکردن صف</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>اندازه پرونده:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Hibernate</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Lock System</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>گزارش پس از تکمیل فشرده‌سازی در دسترس خواهد بود.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>باز کردن پوشه‌ی مقصد</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>باز کردن پوشه‌ی منبع</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>گزینه‌ها</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>نگه‌داشتن</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Paused Duration:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Picture Settings:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>خروج از HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Retry All Jobs</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Retry Failed</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Reset Selected Jobs</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>بازنشانی</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>منبع:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>شروع صف</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>زمان شروع:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>آمار</value>
+  </data>
+  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
+    <value>آمار پس از اتمام یک فشرده‌سازی در دسترس خواهد بود.</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>زیرنویس‌ها:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>خلاصه</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Sleep</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>ویدیو:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>وقتی انجام شد</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Add All Remaining Selected Languages</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>همه‌ی خط‌های باقی‌مانده را اضافه کند</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>افزودن خط جدید</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>خط‌ها</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>زبان‌های موجود:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>انتخاب زبان:</value>
+  </data>
+  <data name="Shared_ChosenLangages" xml:space="preserve">
+    <value>Selected Languages:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Configure Default Behaviours</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>بازیابی</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>انتخاب یک دیسک برای وارسی</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>انتخاب یک پرونده برای وارسی</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>پوشه‌ای را برای وارسی انتخاب کنید</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Optionally choose a specific title: </value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>پس ویدیو(هایی) که می‌خواهید فشرده شود را انتخاب کنید:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>پرونده</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>پوشه (وارسی دسته‌ای)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Open this DVD or Bluray Drive</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>یک پوشه با یک یا چند پرونده را باز کنید</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Recover Queue Files</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>A previous queue archive is available. </value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>بازکردن یک پرونده‌ی ویدیویی</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Source Selection</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>مدت:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>پیش‌نمایش زنده</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Select a preview image</value>
+  </data>
+  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
+    <value>پخش‌کننده‌ی پیش‌فرض دستگاه را ترجیح بده</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Add Closed Captions when available</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Add 'Foreign Audio Scan'</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Burn-In Behaviour:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>وارد کردن زیرنویس</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Track Selection Behaviour:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>خط‌های صدای اضافی</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>خط‌های زیرنویس فرعی</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Burned</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>بخش‌نشان‌ها</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>هموارسازی</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>صفحه‌نمایش</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>سیاه و سفید</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>بدون خط صدا</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>هیچ بخش‌نشانی نیست</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>بدون پالایه</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>بدون منبع</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>بدون خط زیرنویس</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>بدون خط</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>پیش‌نمایش {0} از {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>چرخش</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>حافظه</value>
+  </data>
+  <data name="VideoView_2Pass" xml:space="preserve">
+    <value>فشرده‌سازی 2 مرحله‌ای</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Avg Bitrate (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>فشرده‌ساز ویدیو:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>فریم بر ثانیه‌ی ثابت</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>کیفیت ثابت:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>تراز فشردگی</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>پیش‌نهاده‌ی فشردگی</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Encoder Profile:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>میزان فشرده‌سازی</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>گزینه‌های پیشرفته:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>بازسازی سریع</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>فریم بر ثانیه (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>گزینه‌های فشرده‌سازی:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>بیشنه‌ی فریم بر ثانیه</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>کیفیت:</value>
+  </data>
+  <data name="VideoView_TurboFirstPass" xml:space="preserve">
+    <value>Turbo first pass</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>فریم بر ثانیه‌ی تغییرپذیر</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>ویدیو:</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>زبان:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>استفاده از زبان دستگاه</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>درباره‌ی HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>یا یک پرونده یا پوشه را اینجا رها کنید ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>کمک</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>ترجیحات</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>افزودن خط</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>تنظیمات فشردگی صوت برای هر کدام از خط‌های انتخاب شده</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Burn In</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>پیش‌فرض</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Forced Only</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_درباره‌ی...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_گزارش فعالیت</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_بررسی بروزرسانی‌ها</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_خروج</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_صادر کردن به پرونده</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_پرونده</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_مستندات HandBrake</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_کمک</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_وارد کردن از پرونده</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_ترجیحات</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_پیش‌نهاده‌ها</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_صف</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_بازنشانی پیش‌نهاده‌های داخلی</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_تنظیم تنظیمان فعلی به عنوان پیش‌فرض</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>S_how Preset Panel</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_نمایش  صف</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_ابزارها</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>بررسی بروزرسانی‌ها</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>آیا مطمئن هستید که می‌خواهید پوشه‌ی پرونده‌های گزارش HandBrake را پاک کنید؟</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>پاک  کردن گزارش‌ها</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>در حال بارگیری</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>پوشه‌ی پرونده‌های گزارش HandBrake پاک شد!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>توجه</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>آماده‌سازی برای بروزرسانی</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>لطفا یک پوشه را انتخاب کنید.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>برای تنظیم محل پیش‌فرض بر روی «مرور» بزنید</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>مخفی کردن</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>نمایاندن</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>«افزودن همه» به صف</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>«افزودن انتخاب‌ها» به صف</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>پخش پرونده</value>
+  </data>
+  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+    <value>نوار ابزار برنامه</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>نمایش «افزودن همه به صف» در نوار ابزار</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>نمایش «افزودن انتخاب‌ها به صف» در نوار ابزار</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>پشتیبانی از فشرده‌سازی سخت‌افزاری در حال حاضر غیرفعال است. اگر HandBrake را با گزینه "no-hardware--" شروع نکردید، لطفاً از بروز بودن رانه‌های تمام سازوارگرهای گرافیکی موجود در این دستگاه اطمینان حاصل کنید.
+
+این مورد بر فشرده‌سازی‌های نرم افزاری اثر نمی‌گذارد.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Please correct your subtitle settings before continuing. </value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>اعمال کردن</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>از سرگیری فشرده‌سازی</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Import Queue</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>حالت قابل حمل: نتوانست پوشه‌ی موقتی را ایجاد کند. لطفا مجددا بررسی کنید آیا مسیر صحیح و قابل نوشتن است؟
+
+{0}</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>حالت قابل حمل: نتوانست پوشه‌ی ذخیره‌سازی را ایجاد کند. لطفا مجددا بررسی کنید آیا مسیر صحیح و قابل نوشتن است؟
+
+{0}</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
+  </data>
+  <data name="Startup_InitFailed" xml:space="preserve">
+    <value>موتور HandBrake در مقداردهی اولیه ناموفق بود. این معمولا ناشی از رانه‌های (درایور‌های) GPU‌های قدیمی است.
+لطفاً رانه‌های تمام GPUهای خود را ، اعم از گرافیک‌های داخلی و مجزای دستگاهتان، بروزرسانی کنید.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+  </data>
+  <data name="OptionsView_PathOptions" xml:space="preserve">
+    <value>گزینه‌های اضافی موجود:  {source_path} (مسیر منبع)،  {source_folder_name} (نام پوشه‌ی منبع)،  {source} (منبع)</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>درخواست جای‌نویسی پرونده</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Try to automatically rename file</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>جای‌نویسی پرونده</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>User Interface Behaviour</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>File overwrite behaviour:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>فشرده‌سازی کامل شد</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>اعلانات</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>صف تکمیل شد</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>وقتی انجام شد</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Filename collision behaviour:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Append Number</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>نمایش‌پالایه_پالایه‌ی‌هموارسازی</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>میزان هموارسازی</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>انتخاب کردن فشرده‌سازها باعث می‌شود در زبانه‌ی «ویدیو» در دسترس باشند.</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Queue Recovery Possible</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
+
+Where supported, any user presets will have been imported.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>بلافاصله اقدام شود. (این گزینه پیام تأیید 60 ثانیه‌ای را غیرفعال می کند)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>مرور</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>هیچ صدایی انتخاب نشده است. لطفا روی «مرور» بزنید و یک فایل mp3 یا wav را برای پخش انتخاب کنید.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>پخش</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>صادرکردن صف (فقط رابط خط فرمان)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>استفاده از پی‌رنگ تیره (نیازمند راه‌اندازی مجدد، فقط ویندوز 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>موجود نیست</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>گیگابایت</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>AC Mains power detected. Resuming encode... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>وضع باتری دستگاه وخیم است! (٪{0})</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>حافظه‌ی باقی مانده‌ی رانه‌ی (درایو) مقصد به کمتر از {0}گیگابایت رسید. در حال نگه‌داشتن فشرده‌سازی</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Configure Automatic Audio Selections</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Configure Automatic Subtitle Selections</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>دستگاه</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comments:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>شرح:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>گونه:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>تاریخ انتشار:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>عنوان:</value>
+  </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Preview Rotation and Flip</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>نمایشگر گزارش</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>ابعاد</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>پالایه‌ها</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>اندازه</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>خط‌ها:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>عمومی</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>برای «بررسی بروزرسانی‌ها» بزنید تا نسخه‌های جدید بررسی شود</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; عقب</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Currently Paused</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>پرونده‌های خروجی</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>بخش‌ها</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>قاب‌ها</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>پیش‌نمایش</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>All Matching Selected Languages</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>First Matching Selected Language</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>هیچ کدام</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>اولین خط</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Foreign Audio Preferred, else First</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>خط صدای خارجی</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>هیچ کدام</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Foreign Audio Search</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Foreign Audio Scan</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>All Matching Selected Languages</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>از همه‌ی خط‌ها به عنوان الگو استفاده کن</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>First Matching Selected Language</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>از خط اول به عنوان الگو استفاده کن</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>No Audio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>بخش {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>خودکار</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>همیشه از M4V استفاده کن</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>همیشه از MP4 استفاده کن</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>دلخواه</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>هیچ کدام</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Always use Source Resolution</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Above Normal</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Below Normal</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>پایین</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>معمولی</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>ماهانه</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>هفتگی</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Always use the default path for each new name generated.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Port range must be between 5000 and 32767</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Replacement Placeholders: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>نسخه‌ی جدید HandBrake در دسترس است!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>حق نشر(C) 2003-2021 برای گروه HandBrake محفوظ است</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Low battery level:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Pause any running jobs when the battery gets low.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Duplicates Detected</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>فعال کردن سخت افزار QuickSync کم مصرف (اگر پشتیبانی شود).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>لطفاً یک کار را برای مشاهده‌ی خلاصه اصلاعات انتخاب کنید.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Run each queued job in a separate worker process.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Default network port for worker:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>The preset you have selected is not available for use on this system.
+
+This is typically an indication that your system does not support the hardware required to utilise it.
+
+Please choose a different preset.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Process Isolation</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>بیشینه‌ی تعداد فشرده‌سازی همزمان:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>پیش‌نهاده:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>عین منبع باشد</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>بازنشانی تنظیمات</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>آیا مطمئن هستید می‌خواهید تنطیمات HandBrake را به پیش‌فرض باز نشانید؟</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Custom (Not Limited)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Fill (pad to resolution limit)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Height (pad up to res limit)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>هیچ کدام</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Width (pad up to res limit)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Padding:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Padding Colour:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>مرزها</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>تفکیک‌پذیری و مقیاس‌گذاری:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>چرخاندن و بریدن:</value>
+  </data>
+  <data name="OptionsView_Win10Only" xml:space="preserve">
+    <value>(فقط ویندوز 10!)</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>پالایه‌ها</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>پیش‌فرض</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Forced</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080پیکسل HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480پیکسل NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160پیکسل 4K UHD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576پیکسل PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720پیکسل HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320پیکسل 8K UHD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>دلخواه</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>بیشینه‌ی ارتفاع:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>بیشینه‌ی عرض</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Resolution Limit:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>هیچ کدام</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>مدیریت پیش‌نهاده‌ها:</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>حذف پیش‌نهاده‌های داخلی</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>خارج کردن پیش‌نهاده‌های انتخاب شده</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>وارد کردن پیش‌نهاده‌(ها) از پرونده</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>اطلاعات پیش‌نهاده:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>پیش‌نهاده‌های داخلی نمی‌توانند تغییر کنند.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>تنظیم پیش‌نهاده‌ی فعلی در حالت پیش‌فرض</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>حذف پیش‌نهاده</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(بر روی این دستگاه پشتیبانی نمی‌شود)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>توقف</value>
+  </data>
+  <data name="Options_Metadata" xml:space="preserve">
+    <value>فراداده</value>
+  </data>
+  <data name="Options_PassthruMetadata" xml:space="preserve">
+    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
+  </data>
+  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
+    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
+Fields are limited to:
+- Name
+- Artist
+- Album Artist
+- Composer
+- Release Date
+- Comment
+- Album
+- Genre
+- Description
+- Long Description</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>نام دسته‌ای که وارد  کردید از قبل وجود دارد. لطفاً یک نام دیگر را وارد کنید.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>نام دسته خالی بود. لطفاً یک نام وارد کنید.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>یک نام وارد کنید:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>صادر کردن پیش‌نهاده‌های همه‌ی کاربران</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>سطحی که هشدارهای «فضای دیسک کم است» را نشان می‌دهد:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>توجه: این حد بالای کارهای همزمان است. محدودیت‌های سخت‌افزاری ممکن است تأثیرگذار باشد که باعث کاهش تعداد کارهای فشرده‌سازی همزمان در عمل شود.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(موجود نیست)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is Default:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>خیر</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>بله </value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>استفاده از تیره</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>لستفاده از روشن</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>تطابق دستگاه</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>سبک:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(نیازمند شروع مجدد)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>نرمی خلوص رنگ:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>فضای رنگ:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>فضای رنگ</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>باز کردن پیش‌نمایش</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>پیش‌نمایش منبع:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>وضعیت کار:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>لغو شد</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>تکمیل</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>تنظیمات نامعتبر. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>ورودی نامعتبر. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>وضعیت ناشناخته. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>هنگام تلاش برای خواندن منبع خطاهایی شناسایی شد.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>خطای ناشناخته. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>پرونده‌ی "hb.dll" گم شده. لطفا از نو نصب کنید.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>هشدار: لطفاً توجه داشته باشید که این ساخت HandBrake «حالت ایمن» است که پشتیبانی از فشرده‌سازی‌های سخت‌افزاری را شامل نمی‌شود. اگر می‌خواهید از فشرده‌ساز سخت‌افزاری استفاده کنید، لطفاً ساختی غیر «حالت ایمن» را از وبگاه بارگیری کنید.</value>
+  </data>
+</root>
