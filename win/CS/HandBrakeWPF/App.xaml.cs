@@ -73,7 +73,7 @@ namespace HandBrakeWPF
                 Application.Current.Shutdown();
                 return;
             }
-            
+
             if (e.Args.Any(f => f.Equals("--reset")))
             {
                 HandBrakeApp.ResetToDefaults();
@@ -118,6 +118,13 @@ namespace HandBrakeWPF
                     CultureInfo ci = new CultureInfo(language.Culture);
                     Thread.CurrentThread.CurrentUICulture = ci;
                 }
+            }
+
+            int oldOsWarningCount = userSettingService.GetUserSetting<int>(UserSettingConstants.OldOsWarning);
+            if (!SystemInfo.IsWindows10() && oldOsWarningCount < 2)
+            {
+                MessageBox.Show(HandBrakeWPF.Properties.Resources.OldOperatingSystem, HandBrakeWPF.Properties.Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
+                userSettingService.SetUserSetting(UserSettingConstants.OldOsWarning, oldOsWarningCount + 1); // Only display once.
             }
 
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);

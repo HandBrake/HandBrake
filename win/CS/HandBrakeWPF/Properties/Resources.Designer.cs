@@ -2819,6 +2819,21 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+        ///
+        ///While you can continue using the applicaiton at your own risk, please be aware that certain freatures are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+        ///
+        ///Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+        ///
+        ///This warning will display only twice..
+        /// </summary>
+        public static string OldOperatingSystem {
+            get {
+                return ResourceManager.GetString("OldOperatingSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Log files older than 7 days.
         /// </summary>
         public static string Options_7DayLogClear {

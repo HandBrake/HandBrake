@@ -133,16 +133,8 @@ namespace HandBrakeWPF.Utilities
 
         public static bool IsWindows10()
         {
-            var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
-
-            string productName = (string)reg.GetValue("ProductName");
-
-            if (productName.StartsWith("Windows 10"))
-            {
-                return true;
-            }
-
-            if (productName.StartsWith("Windows Server 2019"))
+            OperatingSystem os = Environment.OSVersion;
+            if (os.Version.Major >= 10)
             {
                 return true;
             }
