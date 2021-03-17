@@ -92,7 +92,8 @@
                     "SubtitleAddForeignAudioSubtitle": false,
                     "SubtitleBurnBehavior": "none",
                     "SubtitleBurnBDSub": false,
-                    "SubtitleBurnDVDSub": false,
+                    "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",

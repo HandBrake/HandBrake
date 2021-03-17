@@ -88,6 +88,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,                    
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -198,6 +199,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -308,6 +310,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -418,6 +421,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -528,6 +532,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -638,6 +643,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -748,6 +754,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -858,6 +865,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -982,6 +990,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1106,6 +1115,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1230,6 +1240,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1354,6 +1365,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1478,6 +1490,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1602,6 +1615,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1726,6 +1740,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1850,6 +1865,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -1967,6 +1983,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2077,6 +2094,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2187,6 +2205,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2297,6 +2316,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2407,6 +2427,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2517,6 +2538,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2627,6 +2649,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2737,6 +2760,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2847,6 +2871,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -2957,6 +2982,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3067,6 +3093,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3177,6 +3204,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3287,6 +3315,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3418,6 +3447,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3542,6 +3572,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3652,6 +3683,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3762,6 +3794,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3872,6 +3905,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -3982,6 +4016,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4092,6 +4127,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4216,6 +4252,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4340,6 +4377,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4464,6 +4502,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4588,6 +4627,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4712,6 +4752,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4836,6 +4877,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -4960,6 +5002,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5084,6 +5127,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5206,6 +5250,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5330,6 +5375,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5440,6 +5486,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5550,6 +5597,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5677,6 +5725,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5801,6 +5850,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -5925,6 +5975,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6035,6 +6086,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6145,6 +6197,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6269,6 +6322,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6386,6 +6440,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6496,6 +6551,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6606,6 +6662,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6716,6 +6773,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6826,6 +6884,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -6936,6 +6995,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7046,6 +7106,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7156,6 +7217,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7266,6 +7328,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7376,6 +7439,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7485,6 +7549,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7594,6 +7659,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7703,6 +7769,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7812,6 +7879,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -7921,6 +7989,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8030,6 +8099,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8139,6 +8209,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8248,6 +8319,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8357,6 +8429,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8473,6 +8546,7 @@
                     "SubtitleBurnBehavior": "none",
                     "SubtitleBurnBDSub": false,
                     "SubtitleBurnDVDSub": false,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8582,6 +8656,7 @@
                     "SubtitleBurnBehavior": "none",
                     "SubtitleBurnBDSub": false,
                     "SubtitleBurnDVDSub": false,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8691,6 +8766,7 @@
                     "SubtitleBurnBehavior": "none",
                     "SubtitleBurnBDSub": false,
                     "SubtitleBurnDVDSub": false,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8800,6 +8876,7 @@
                     "SubtitleBurnBehavior": "none",
                     "SubtitleBurnBDSub": false,
                     "SubtitleBurnDVDSub": false,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -8917,6 +8994,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -9027,6 +9105,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -9137,6 +9216,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
@@ -9247,6 +9327,7 @@
                     "SubtitleBurnBehavior": "foreign",
                     "SubtitleBurnBDSub": true,
                     "SubtitleBurnDVDSub": true,
+                    "SubtitleImportExternalSubtitles": true,
                     "SubtitleLanguageList": [
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
