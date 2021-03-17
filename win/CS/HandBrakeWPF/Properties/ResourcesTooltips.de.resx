@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock reduziert Blockartefakte, die durch Videokompression niedriger Qualität entstehen.</value>
@@ -462,5 +462,11 @@ Lapsharp's Abstimmung Sprite: Ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Spri
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Wenn aktiviert, verwendet die automatische Dateibenennung steht den Standardpfad.
 Wenn nicht aktiviert, wird der Pfad im Zielfeld des Hauptfensters verwendet, wenn er ausgefüllt ist, andernfalls wird der Standardpfad verwendet.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Farbraum-Filter.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma-Glättung</value>
   </data>
 </root>

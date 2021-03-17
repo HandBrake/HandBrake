@@ -235,6 +235,11 @@ namespace HandBrakeWPF.Services
                 this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
                 this.userSettings[UserSettingConstants.SimultaneousEncodes] = 1;
             }
+
+            if (!SystemInfo.IsWindows10())
+            {
+                this.userSettings[UserSettingConstants.DarkThemeMode] = DarkThemeMode.Light;
+            }
         }
         
         /// <summary>
@@ -322,7 +327,8 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ForcePresetReset, 3);
             defaults.Add(UserSettingConstants.MetadataPassthru, true);
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
-
+            defaults.Add(UserSettingConstants.OldOsWarning, 0);
+            
             return defaults;
         }
     }

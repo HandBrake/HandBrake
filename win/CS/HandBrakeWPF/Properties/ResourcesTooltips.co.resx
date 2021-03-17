@@ -112,13 +112,13 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>U filtru di sblucchime riduce l’effetti parassiti cagiunati da una cumpressione video di bassa qualità.</value>
+    <value>U filtru di sblucchime riduce l’effetti parassiti cagiunati da una cumpressione video di bassa qualità.Dumandà per rimpiazzà u schedariu</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>Sceglie l’ozzioni di filtru decomb o disintricciamentu.
@@ -135,7 +135,7 @@ Preferenze « denoise » troppu putente ponu dannighjà a qualità di a fiura 
          
 - « NLMeans » hè un filtru « denoise » d’alta qualità chì fà dinù cresce a vitezza di a cudificazione. Impiegatelu quandu a qualità hè più impurtante chè a vitezza.
          
-- « HQDN3D » hè un filtru passu-bassu adattevule, più prestu chè NLMeans ma menu efficiente per preservà i detaglii i più fini.</value>
+- « HQDN3D » hè un filtru passu-bassu adattevule, più prestu chè NLMeans ma menu efficiente per preservà i detaglii i più fini.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>U filtru « detelecine » caccia l’effetti parassiti chì sò cagiunati da u telesinema, un trattamentu chì cunvertisce e frequenze di fiure d’un filmu ver di frequenze di fiure di televisiò.</value>
@@ -287,7 +287,7 @@ Dunque, chjuchi aumenti di valore aumentanu prugressi-
 vamente a dimensione di u schedariu d’esciuta.  Un valore à 0 vole dì
 senza perdita è per què, u schedariu d’esciuta serà più maiò chì quellu
 di a fonte, for di s’è a fonte era dinù senza perdita.
-I valori suggerite sò : 18 à 20 per fonti à definizione classica è 20 à 23 per quelle à alta definizione.
+I valori suggerite sò : 18 à 20 per fonti à definizione classica è 20 à 23 per quelle à alta definizione.
 
 A scala di FFMpeg è Theora hè più lineare.
 Sti cudificatori ùn anu micca di modu senza perdita.</value>
@@ -336,13 +336,13 @@ Què ùn hè micca cumpatibile cù certi lettori.</value>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Parametri « Denoise » persunalizati.
  
-Sintassa NLMeans : y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+Sintassa NLMeans : y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
-Predefinizioni NLMeans : y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+Predefinizioni NLMeans : y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
 
-Sintassa HQDN3D : y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+Sintassa HQDN3D : y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
 
-Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
     <value>Prerigatura di u filtru « Denoise ». Definisce a forza di u filtru.</value>
@@ -365,7 +365,7 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-te
 - « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 1, 4, 8 o 16 bit. Ùn hè micca previstu per e video di alta definizione.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>U filtru« Disintricciamentu » caccia l’effetti parassiti da a fiura.
+    <value>U filtru« Disintricciamentu » caccia l’effetti parassiti da a fiura.
 
 - « Yadif » hè un filtru di disintricciamentu populare è rapidu.
 
@@ -374,13 +374,13 @@ Predefinizioni HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-te
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Parametri di disintricciamentu persunalizati.
  
- Sintassa Yadif : mode=m:parity=p
+ Sintassa Yadif : mode=m:parity=p
  
- Predefinizioni Yadif : mode=3
+ Predefinizioni Yadif : mode=3
  
- Sintassa Decomb : mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Sintassa Decomb : mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
- Predefinizioni Decomb : mode=7</value>
+ Predefinizioni Decomb : mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Prerigatura di u filtru di disintricciamentu.
@@ -402,9 +402,9 @@ Bob pruva di preservà megliu a mossa per una chjuca penalità à a risuluzione 
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>Parametri d’abbentata d’intricciamentu persunalizati.
  
- Sintassa : mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ Sintassa : mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
  
- Predefinizioni : mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+ Predefinizioni : mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
     <value>Girà a fiura di 90 gradi in u sensu di e sfiere d’arilogiu.</value>
@@ -418,13 +418,13 @@ Bob pruva di preservà megliu a mossa per una chjuca penalità à a risuluzione 
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>Parametri d’arrutata persunalizati.
 
-Sintassa Unsharp : y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Sintassa Unsharp : y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-Predefinizioni Unsharp : y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Predefinizioni Unsharp : y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-Sintassa Lapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Sintassa Lapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Predefinizioni Lapsharp : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
     <value>L’arrutata amendeghja l’aspettu di i detaglii, sopratuttu i bordi. Preferenze d’arrutata troppu forte ponu dannighjà a qualità di a fiura creendu effetti parassiti è aumentendu u rumore, ciò chì pò riduce a faccindaghjine di a cumpressione.
@@ -466,5 +466,11 @@ A rigatura « Sprite » (Spiritibugliettu) hè ghjuvevule per i ghjochi 2D in 
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Quandu st’ozzione hè attivata, u sistema di nome autumaticu impiegherà sempre u chjassu predefinitu. 
 Quand’ella hè disattivata, impiegherà u chjassu scrittu in a scatula di dialogu di a finestra principale, s’ellu hè indicatu ; osinnò impiegherà sempre u chjassu predefinitu.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtru di spaziu di culore.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Filtru d’allisciata cromatica</value>
   </data>
 </root>

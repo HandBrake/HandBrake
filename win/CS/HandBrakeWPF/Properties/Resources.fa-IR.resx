@@ -118,2079 +118,2080 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>인코더 파라미터의 전체 목록: 
+    <value>فهرست کامل متغیر‌های فشرده‌ساز:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>디코더  CPU 사용량을 줄이십시오.
+    <value>استفاده از پردازنده را در بازسازی کاهش بده.
 
-만약 사용자의 device가 결과를 출력하는데 문제가 있다면 이와 같이 설정하십시오. (예를 들어, 손실된 프레임들)</value>
+اگر دستگاه شما برای پخش خروجی مشکل دارد (مثلا تصویر گیر می‌کند)، این را بزنید.</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>경고: RF 0은 무손실입니다!</value>
+    <value>هشدار: اگر RF برابر 0 باشد، بدون کاهش است!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>원본 파일이 또한 손실되지 않는 한, 0의 값은 무손실을 의미하고 
-이 값은 원본보다 큰 파일 사이즈가 될 수 있습니다.
+    <value>مقدار 0 به معنای بی اتلاف است و در نتیجه اندازه پرونده، بزرگ‌تر از منبع اصلی خواهد شد؛
+مگر اینکه منبع نیز بی اتلاف باشد.
 
-x264와 x265의 규모는 대수이며 더 낮은 값은 더 높은 품질에 해당합니다.
+مقیاس x264 و x265 لگاریتمی است و مقادیر پایین‌تر معادل کیفیت بالاتر است.
 
-그래서 작은 값의 증가들은 결과 파일 크기를 점진적으로 더 크게 증가하도록 초래할 것입니다.</value>
+بنابراین اندکی کاهش مقدار (افزایش کیفیت) منجر به افزایش تصاعدی اندازه‌ی پرونده‌ی حاصله می‌شود.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>환경 설정된 사진 설정 값들로 마음대로 저장할 수 있습니다. 3가지 모드들이 있습니다:
+    <value>You can optionally store a picture settings with this preset. There are 3 modes:
 
-없음: 사진 설정 값들이 환경 설정에 저장되어 있지 않습니다. 원본을 불러올 때, 사진 설정들은 원본 해상도의 범위 안에 그대로 남아있을 것입니다. 이것은 또한 Anamorphic, 계수, 자르기 등에 영향을 미칩니다.
+None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
 
-사용자 설정: 사용자가 마음껏 최대 너비와 높이를 설정할 수 있습니다. 이 작업을 수행할 때 인코딩은 이러한 값들보다 작거나 같을 것입니다. Keep Aspect Ratio가 자동적으로 켜질 것입니다.
+Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
 
-Source Maximum: 가능한 경우 항상 원본 해상도로 인코딩하십시오.</value>
+Source Maximum:  Always encode at the sources resolution where possible.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>이 프로그램은 자유 소프트웨어입니다; FSF에 의해 출시된
-GNU GPL, GPLv2, 그 이후의 버전(사용자 옵션에 따라)에
-따라서 재배포와 변경이 가능합니다.
+    <value>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-이 프로그램은 사용자의 유용성을 위해 배포되었지만,
-어떠한 보증 또는 묵시적인 보증 없이 특정한 목적에 대한
-프로그램 사용 적합성에 대해서 재배포할 수 없습니다.
-GNU GPL을 자세히 살펴보십시오.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-이 프로그램과 함께 GNU GPL의 복사본을 받게 될 것입니다;
-그러지 않았다면, Free Software Foundation,
-Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으십시오.</value>
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>경고: 자동 파일 이름 설정이 켜져있지 않습니다. 옵션에서 해당 설정을 가능하게 해주십시오.</value>
+    <value>هشدار: نام‌دهی خودکار پرونده روشن نیست. لطفاً آن را از گزینه‌ها فعال کنید.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>경고: 현재 자동 오디오 및 자막 트랙 선택 설정이 없습니다. 옵션에서 기본 트랙 선택 방식을 설정할 수 있습니다.</value>
+    <value>WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>내장된 환경 설정들이 재설정되었습니다.</value>
+    <value>پیش‌نهاده‌های داخلی بازنشانده شده‌است.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>재설정 완료</value>
+    <value>بازنشانی کامل شد</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>더 높은 화질 |</value>
+    <value>کیفیت بالاتر |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| 더 낮은 화질</value>
+    <value>| کیفیت پایین‌تر</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>플라시보 화질 |</value>
+    <value>کیفیت خارق‌العاده |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>에러</value>
+    <value>خطا</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하려면 우선적으로 자동 파일 이름 설정을 켜고 기본 경로를 설정해야만 합니다.</value>
+    <value>قبل از افزودن به صف، باید «نام‌دهی خودکار پرونده» را فعال کنید و یک مسیر پیش‌فرض در «ترجیحات» مقرر کنید.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>경고</value>
+    <value>هشدار</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>확실합니까?</value>
+    <value>آیا مطمئن هستید؟</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 인코딩 중 입니다.</value>
+    <value>Handbrake در حال فشرده‌سازی است.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>대기열에 같은 저장 경로로 설정된 작업들이 있습니다. 해당 작업에 대해 다른 경로를 선택해주십시오.</value>
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>보류 중인 작업들{0}</value>
+    <value>کار در انتظار {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>새로운 기본 환경 설정 세트: {0}</value>
+    <value>New Default Preset Set: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>새로운 업데이트가 가능합니다. Tools Menu &gt; Options to Install로 이동하십시오</value>
+    <value>یک بروزرسانی جدید در دسترس است. برای نصب به فهرست ابزار &gt; گزینه‌ها بروید</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>환경 설정이 설정되지 않았습니다.</value>
+    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>내장된 환경 설정을 변경할 수 없습니다. 자신만의 환경 설정 중 하나를 선택하십시오.</value>
+    <value>شما نمی‌توانید پیش‌نهاده‌های داخلی را تغییر دهید. لطفاً یکی از پیش‌نهاده‌های خودتان را انتخاب کنید.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>폴더를 선택하십시오.</value>
+    <value>لطفا یک پوشه را انتخاب کنید.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>인코딩을 준비 중입니다 ...</value>
+    <value>در حال مهیا شدن برای فشرده‌سازی ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>내장된 환경 설정과 같은 이름을 가진 환경 설정을 추가할 수 없습니다.</value>
+    <value>شما نمی‌توانید پیش‌نهاده‌ای هم‌نام پیش‌نهاده‌های داخلی را وارد کنید.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>환경 설정 "{0}" 이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>پیشنهاده‌ای با نام «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>환경 설정</value>
+    <value>پیش‌نهاده‌ها</value>
   </data>
   <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
-    <value>선택된 환경 설정으로 업데이트하려는 것이 확실합니까?</value>
+    <value>آیا مطمئن هستید که می‌خواهید پیش‌نهاده‌ی انتخاب شده را بروز آوری کنید؟</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>해당 환경 설정이 현재 설정들에 업데이트되었습니다.</value>
+    <value>The Preset has now been updated with your current settings.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>사용자의 내장 환경 설정이 오래되었습니다. 이러한 환경 설정들은 지금 업데이트되어야 합니다.
-사용자의 내장 환경 설정이 오래되었습니다. 이러한 환경 설정들은 지금 업데이트되어야 합니다.사용자 지정 환경 설정들은 업데이트되지 않았으므로 사용자가 환경 설정을 삭제하고 다시 추가하여 환경 설정을 다시 만들어야 합니다.
-이전 user_presets.xml 파일은 백업됩니다.</value>
+    <value>HandBrake تشخیص داده است که پیش‌نهاده‌ی داخلی شما قدیمی است... این پیش‌نهاده‌ها هم‌اکنون بروز می‌شوند.
+پیش‌نهاده‌های دلخواه شما بروز نشده است بنابراین ممکن است مجبور شوید با حذف و افزودن مجدد، آنها را از نو ایجاد کنید.
+از پرونده‌ی user_presets.xml قبلی پشتیبان‌گیری شد.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>대기열이 종료되었습니다.</value>
+    <value>صف به پایان رسید</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>스캔이 취소되었습니다.</value>
+    <value>وارسی لغو شد.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>스캔 완료</value>
+    <value>وارسی کامل شد</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>스캔 실패:</value>
+    <value>وارسی ناموفق بود:</value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>스캔에 실패하였습니다... 자세한 내용은 Activity Log를 참고하십시오.</value>
+    <value>وارسی شکست خورد... لطفا برای مشاهده‌ی جزئیاتَ، گزارش فعالیت را ببینید.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>파일을 스캔하고 있습니다. 잠시만 기다리십시오...</value>
+    <value>درحال وارسی منبع، لطفا صبر کنید...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>{1}개 중 {0}개 스캔 중 ({2}%)</value>
+    <value>وارسی عنوان {0} از {1} (٪{2})</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>인코딩을 시작하기 전에, 먼저 파일을 스캔하고 작업을 설정하십시오. 계속하기 위해서 툴바에 있는 '파일' 버튼을 클릭하십시오.</value>
+    <value>قبل از شروع فشرده‌سازی شما ابتدا باید یک منبع را اسکن کرده و کار خود را تنظیم کنید. برای ادامه روی دکمه «منبع» در نوار ابزار بزنید</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>자신의 환경 설정 중 하나를 선택했는지 확인하십시오. 내장된 환경 설정을 내보낼 수 없다는 것에 유의하십시오.</value>
+    <value>لطفا مطمئن شوید که یکی از پیش‌نهاده‌های خود را انتخاب کرده‌اید. لطفاً توجه داشته باشید که نمی‌توانید پیش‌نهاده‌های داخلی را صادر کنید.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>업데이트를 위해 환경 설정을 선택하십시오.</value>
+    <value>لطفا یک پیش‌نهاده را برای بروزرسانی انتخاب کنید.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>계속하기 위해서 '파일'을 선택하십시오.</value>
+    <value>برای ادامه دادن، «منبعی» را انتخاب کنید</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} 작업 보류 중</value>
+    <value>{0} کار در انتظار</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>توجه</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>덮어쓰기?</value>
+    <value>جای‌نویسی شود؟</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>질문</value>
+    <value>سوال</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>준비</value>
+    <value>آماده</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>업데이트가 완료되었습니다.</value>
+    <value>بروزرسانی شده</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>환경 설정 버전</value>
+    <value>نسخه‌ی پیش‌نهاده</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>가지고 오려고 하는 환경 설정은 현재 HandBrake와는 다른 버전입니다.
-해당 환경 설정에서 모든 값들을 가지고 오는 것은 불가능할 것입니다.
+    <value>پیش‌نهاده‌هایی که شما تلاش می‌کنید وارد کنید مربوط به نسخه‌ای متفاوت از HandBrake است. 
+شاید امکان وارد کردن همه‌ی مقادیر از این پیش‌نهاده وجود نداشته باشد.
 
-계속 진행하시겠습니까?</value>
+آیا می‌خواهید ادامه دهید؟</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>환경 설정을 가지고 올 수 없습니다!</value>
+    <value>نتوانست پیش‌نهاده‌ها را وارد کند!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>환경 설정에 문제가 있거나 HandBrake와 상이한 버전이기 떄문에 해당 환경 설정을 가지고 올 수 없습니다.</value>
+    <value>نتوانست پیش‌نهاده را وارد کند زیرا به نظر می‌رسد خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>대기열에 추가하기 전에 출력 결과 파일에 대한 저장 경로를 설정하십시오.</value>
+    <value>شما باید اول مسیر مقصد را برای پرونده‌ی خروجی تنظیم کنید سپس آن را در صف قرار دهید.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>입력된 저장 경로가 적합하지 않은 문자를 포함하고 있고 저장 경로가 변경될 수 없습니다.</value>
+    <value>The entered destination path contained illegal characters and will not be updated.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>미리보기 {0}</value>
+    <value>پیش‌نمایش {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>미리보기(화면에 맞춰서)</value>
+    <value>Preview (Scaled)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>출력 결과: {0}</value>
+    <value>خروجی: {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>출력 결과 파일의 형식. 지원되는 파일 시스템 형식 이외에, 제목을 수정하거나 파일을 스캔할 때는 기존의 형식을 대체할 수 있는 아래의 자리 표시자를 사용할 수 있습니다.
+    <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
 
-Live 업데이트 옵션: {source} {title} {chapters}
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>이용 가능한 추가 옵션: {source_path} 또는 {source_folder_name} 또는 {source}</value>
+    <value>گزینه‌های اضافی موجود: {source_path} (مسیر منبع)  یا  {source_folder_name} (نام پوشه‌ی منبع)  یا  {source} (نام منبع)</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>인코딩할 파일과 원본 파일이 같은 주소와 파일 이름을 가질 수 없습니다. 원본 파일과 같지 않도록 저장할 파일 이름을 바꿔 주십시오.</value>
+    <value>مسیر و نام پرونده‌ای که در فرآیند فشرده‌سازی ایجاد می‌شود نباید عین پرونده‌ی منبع باشد. لطفاً نام پرونده‌ی مقصد را تغییر دهید تا مطابق پرونده‌ی منبع نباشد.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>시스템이 HandBrake의 웹 브라우저 실행을 막고 있습니다.</value>
+    <value>دستگاه شما از راه اندازی مرورگر وب توسط HandBrake جلوگیری کرد.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>여전히 웹사이트 https://handbrake.fr 에 직접 방문하여 도움말 페이지에 접속할 수 있습니다.</value>
+    <value>شما همچنان قادرید صفحه‌ی کمک را با مراجعه‌ی مستقیم به وبگاه https://handbrake.fr مشاهده کنید.</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>선택된 환경 설정으로 설정할 수 없습니다.</value>
+    <value>نتوانست پیش‌نهاده‌های انتخاب‌شده را وارد کند!</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>환경 설정이 잘못되었거나 HandBrake가 지원하지 않는 오래된 버전입니다.
-오래된 환경 설정은 반드시 현재 버전으로 다시 만들어져야 합니다.</value>
+    <value>این پیش‌نهاده ممکن است خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد که پشتیبانی نمی‌شود.
+پیش‌نهاده‌های نسخه‌های قدیمی‌تر باید باید در همین نسخه از نو ساخته شوند.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>비디오 인코더에 전달될 수 있는 추가적인 고급 인자.</value>
+    <value>شناسه‌های پیشرفته‌ی اضافی که می توانند به فشرده‌ساز ویدیو منتقل شوند.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>없음 - 컨테이너가 해당 형식을 지원하지 않는 트랙만 굽습니다.
-외부 오디오 트랙 - 사용할 수 있다면 외부 오디오 트랙을 굽습니다.
-첫 번째 트랙 - 첫 번째 트랙을 굽습니다.
-외부 오디오 우선, 외부 오디오가 없을 경우 첫 번째 트랙 - 외부 오디오 트랙이 존재할 경우, 외부 오디오 트랙이 구워질 것이고, 그렇지 않은 경우 첫 번째 트랙이 선택될 것입니다.</value>
+    <value>None - Only tracks where the container does not support the format will be burned in.
+Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+First Track - The first track will be burned in.
+Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM 자막 호환성</value>
+    <value>پشتیبانی از زیرنویس WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake의 WebM은 구워진 자막만을 지원합니다.
+    <value>WebM در HandBrake فقط از زیرنویس‌های چسبیده پشتیبانی می کند.
 
-자막 선택을 변경해야 합니다.
+شما باید انتخاب‌های زیرنویس خود را تغییر دهید.
 
-변경하지 않을 경우, 굽지 않은 자막들은 없어질 것입니다.</value>
+اگر ادامه دهید، زیرنویس‌های غیرچسبیده‌ی شما از بین می‌روند.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>유효한 파일 또는 타이틀을 찾을 수 없습니다.</value>
+    <value>هیچ منبع یا عنوان سالمی پیدا نشد.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake는 인코딩할 제목의 유효한 파일을 찾지 못하였으므로 선택된 파일을 인코딩할 수 없습니다.
-아래와 같은 이유들 중 하나로 인코딩할 수 없습니다.
-- 각 파일 제목의 지속 시간이 '설정 &gt; 고급'의 "최소 제목 지속 시간" 임계값  조건보다 낮습니다.
-- 원본 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하는 파일 형식이 아닙니다.
-- 원본 파일은 복사 방지가 되거나 DRM을 포함해야 합니다. HandBrake가 복사 방지 제거를 지원하지 않다는 것에 유의하십시오.
+    <value>HandBrake نمی‌تواند منبع انتخاب شده را فشرده کند زیرا هیچ منبع معتبری را برای فشرده‌سازی پیدا نکرد.
+این می‌تواند به یکی از دلایل زیر باشد:
+- مدت زمان تمام منبع کمتر از «حداقل مدت عنوان» است که در ترجیحات &gt; پیشرفته &gt; گزینه‌ها قابل تنظیم است.
+- پرونده‌ی منبع یک پرونده‌ی ویدیویی معتبر نیست یا در قالبی است که HandBrake از آن پشتیبانی نمی‌کند.
+- منبع ممکن است از محافظت شده از رونوشت باشد یا شامل DRM باشد. لطفا توجه داشته باشید که HandBrake از حذف محافظت از رونوشت پشتیبانی نمی‌کند.
 
-Activity log에 추가 정보가 있습니다.</value>
+گزارش فعالیت ممکن است اطلاعات بیشتری داشته باشد.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>대기열{0}</value>
+    <value>صف{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>인코딩 시작</value>
+    <value>شروع فشرده‌سازی</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>대기열 실행</value>
+    <value>شروع صف</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>기본 환경 설정을 삭제할 수 없습니다. 먼저 다른 환경 설정을 기본 값으로 설정하십시오.</value>
+    <value>شما نمی‌توانید پیش‌نهاده‌ی پیش‌فرض را حذف کنید. لطفا اول یک پیش‌نهاده‌ی دیگر را به عنوان پیش‌فرض تنظیم کنید.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>환경 설정을 삭제하시겠습니까:</value>
+    <value>آیا مطمئن هستیدید می‌خواهید این پیش‌نهاده را حذف کنید؟</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>환경 설정은 이름이 필요합니다. 환경 설정 이름 칸을 채워주십시오.</value>
+    <value>یک پیش‌نهاده باید نام داشته باشد. لطفا قسمت نام پیش‌نهاده را پر کنید.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>같은 이름의 환경 설정이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>پیش‌نهاده‌ای با همین نام از قبل موجود است. دوست دارید جای‌نویسی کنید؟</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>'파일 최댓값' 옵션을 이용하려면 먼저 원본 파일을 스캔해야 합니다.</value>
+    <value>You must first scan a source to use the 'Source Maximum' Option.</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>사용자 정의 너비 또는 높이는 '사용자 정의' 옵션에 입력해야 합니다.</value>
+    <value>The Custom Width or Height fields must be filled in for the 'Custom' option.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>환경 설정을 추가할 수 없습니다.</value>
+    <value>نتواست پیش‌نهاده را اضافه کند</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류</value>
+    <value>خطای ناشناخته</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>기본 오디오</value>
+    <value>پیش‌فرض‌های صدا</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>오디오 트랙</value>
+    <value>خط‌های صدا</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>선택 동작</value>
+    <value>Selection Behavior</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>Switch Back To Tracks</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>챕터 표시 파일을 저장할 수 없습니다!</value>
+    <value>نتوانست پرونده‌ی بخش‌نشان‌ها را ذخیره کند!</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>챕터 표시 이름이 인코드에 저장되지 않을 것입니다.</value>
+    <value>نام بخش‌نشان در پرونده‌ی فشرده‌ی شما ذخیره نخواهد شد.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>{0}을 수행할 시에, {1}가 실행됩니다.</value>
+    <value>عملیات « {0} » در {1} ثانیه‌ی دیگر اتفاق خواهد افتاد.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>문제가 지속될 경우, HandBrake를 다시 실행하십시오.</value>
+    <value>اگر مشکل همچنان ادامه داشت، لطفاً HandBrake را از نو راه‌اندازی کنید.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>해당 오류에 대한 추가 정보가 없습니다.</value>
+    <value>در مورد این خطا اطلاعات بیشتری در دسترس نیست.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류가 발생했습니다.</value>
+    <value>یک خطای ناشناخته رخ داده است.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>새 업데이트가 가능합니다! 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>آپدیت جدیدی در دسترس است! لطفاً وبگاه را برای نکات انتشار بررسی کنید.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>사용자의 시스템이 HandBrake 64비트 버전을 지원합니다! 이것은 32비트 버전을 넘어서는 성능과 안정성을 제공합니다.
- 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>دستگاه شما از نسخه‌ی 64بیتی HandBrake پشتیبانی می‌کند! آن نسخه عملکرد بهتر و ثبات بیشتری نسبت به نسخه‌ی 32بیتی دارد.
+لطفاً وب سایت را برای مشاهده‌ی نکات انتشار بررسی کنید.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>현재 새로운 업데이트가 없습니다.</value>
+    <value>فعلاً بروزرسانی جدیدی موجود نیست.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>업데이트 다운로드 완료</value>
+    <value>بروزرسانی بارگیری شد.</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>업데이트 서비스가 이용 불가합니다. https://handbrake.fr 에서 업데이트를 다운로드 받을 수 있습니다.</value>
+    <value>بروزرسانی در دسترس نیست. شما می‌توانید برای بارگیری بروزرسانی از https://handbrake.fr تلاش کنید.</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>업데이트에 실패하였습니다. https://handbrake.fr 에서 업데이트를 다운로드 할 수 있습니다.</value>
+    <value>بروزرسانی ناموفق بود. شما می‌توانید برای بارگیری بروزرسانی از https://handbrake.fr تلاش کنید.</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>화면 크기 : {0}x{1}, 측정 크기 {2}x{3}</value>
+    <value>Display Size: {0}x{1},  PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>افزودن به صف</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>보류된 인코드 없음</value>
+    <value>هیچ فشرده‌سازیی در انتظار نیست</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>현재 인코딩 작업이 없습니다.</value>
+    <value>در حال حاضر کاری برای فشرده‌سازی نیست</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>대기열</value>
+    <value>صف</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
-    <value>대기열을 비우시겠습니까?</value>
+    <value>آیا مطمئن هستید می‌خواهید این صف را پاک کنید؟</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>확인</value>
+    <value>تأیید</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} 보류중인 작업</value>
+    <value>{0} کار در انتظار</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>대기열 일시 중지</value>
+    <value>صف نگه داشته شد</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>선택된 작업을 삭제하시겠습니까?</value>
+    <value>آیا مطمئن هستید می‌خواهید کارهای انتخاب شده را حذف کنید؟</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>해당 인코딩은 현재 진행 중입니다. 만약 삭제할 경우, 인코딩은 중단될 것입니다. 계속하시겠습니까?</value>
+    <value>این فشرده‌سازی در حال انجام است. اگر آن را حذف کنید، فشرده‌سازی متوقف می‌شود. آیا مطمئن هستید می‌خواهید ادامه دهید؟</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>보류 중인 작업이 없습니다.</value>
+    <value>هیچ کاری در انتظاری نیست.</value>
   </data>
   <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
-    <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
+    <value>آیا مطمئن هستید می‌خواهید این کار را ویرایش کنید؟ در این صورت از صف حذف شده و به پنجره‌ی اصلی انتقال می‌یابد.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>대기열 준비</value>
+    <value>صف آماده است</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>대기열 실행 안 함</value>
+    <value>صف در حال اجرا نیست</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료</value>
+    <value>صف تکمیل شد</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>마지막 대기 작업 완료</value>
+    <value>کارهای سف تمام شد</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>صف آغاز شد</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%. FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6:d\:hh\:mm\:ss} </value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>인코딩이 현재 진행 중입니다. HandBrake를 종료할 경우 인코딩이 중단됩니다.
-HandBrake를 종료하시겠습니까?</value>
+    <value>یک فشرده‌سازی الآن در حال اجرا است. با خروج از HandBrake این فشرده‌سازی متوقف می‌شود.
+آیا مطمئن هستید می‌خواهید از ‌HandBrake خارج شوید؟</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>사진 미리보기</value>
+    <value>پیش‌نمایش تصویر</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>نتوانست پرونده‌ی پیش‌نمایش قبلی را حذف کند. ممکن است هنوز یک پیش‌نمایش در پخش‌کننده‌ی رسانه‌ی شما باز باشد. لطفاً آن را ببندید.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>미리보기를 만들기 전에 먼저 파일을 스캔하고 인코딩을 설정하십시오.</value>
+    <value>You must first scan a source and setup your encode before creating a preview.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>미리보기 파일을 찾을 수 없습니다. 파일이 삭제되었거나 인코딩에 실패하였습니다. 자세한 내용은 액티비티 로그를 확인하십시오.</value>
+    <value>Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 비디오를 인코딩하고 있습니다! 한 번에 하나의 파일만 인코딩할 수 있습니다.</value>
+    <value>هم‌اکنون HandBrake درحال فشرده‌سازی است! در هر زمان فقط یک پرونده می‌تواند فشرده‌سازی شود.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>기본 자막</value>
+    <value>پیش‌فرض‌های زیرنویس</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>خط‌های زیرنویس</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>Switch Back To Tracks</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택</value>
+    <value>Selection Behavior</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>보관 파일:</value>
+    <value>پرونده‌ی بایگانی شده</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>환경 설정을 불러올 수 없습니다.</value>
+    <value>Unable to load presets.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake는 환경 설정 파일을 불러올 수 없습니다. 해당 파일이 HandBrake가 지원하지 않는 오래된 버전의 파일이거나 손상되었을 가능성이 높습니다.
+    <value>HandBrake نتوانست پرونده‌ی پیش‌نهاده‌ی شما را باز کند. ممکن است این پرونده از نسخه‌ی قدیمی پشتیبانی نشده‌ی HandBrake باشد یا خراب شده باشد.
 
-해당 환경 설정 파일은 다음 경로에 보관되어 있습니다:</value>
+پرونده‌ی پیش‌نهاده‌های قدیمی در اینجا بایگانی شدند:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0} 오류 또는 취소가 감지된 경우</value>
+    <value>با {0} خطا یا لغو شناسایی شد.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>디스크 공간 부족</value>
+    <value>حافظه کم است</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>경고, 디스크 공간이 부족합니다. 디스크 공간 부족한 경우, HandBrake는 인코딩을 완료할 수 없습니다.</value>
+    <value>هشدار، فضای دیسک شما کم است. اگر فضای دیسک کم باشد HandBrake نخواهد توانست این فشرده‌سازی را کامل کند.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>라인 {0}은 유효하지 않습니다. 아무 것도 불러올 수 없습니다.</value>
+    <value>Line {0} is invalid. Nothing will be imported.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>챕터 파일을 가지고 올 수 없습니다</value>
+    <value>نتوانست پرونده‌ی بخش‌بندی را وارد کند.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>챕터 파일의 모든 라인에는 적어도 2개의 데이터 열이 있어야 합니다.</value>
+    <value>تمام خطوط موجود در پرونده‌ی بخش‌بندی باید حاوی حداقل 2 ستون «داده» باشند</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>챕터 파일의 첫 번째 열에는 영(0)보다 큰 정수 값만 포함해야 합니다.</value>
+    <value>ستون اول در پرونده‌ی بخش‌بندی باید فقط حاوی اعداد صحیح بالاتر از صفر (0) باشد </value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>'{0}' 형식의 챕터 파일은 현재 지원되지 않습니다.</value>
+    <value>پرونده‌ی بخش‌بندی ار نوع «{0}» در حال حاضر پشتیبانی نمی‌شود.</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>지원되지 않는 챕터 파일 형식</value>
+    <value>نوع پرونده‌ی بخش‌بندی پشتیبانی نشده</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>원본 미디어에 대한 유효하지 않은 챕터 정보</value>
+    <value>اطلاعات بخش‌بندی نامعتبر برای رسانه‌ی منبع</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>원본 미디어의 챕터 수
-와 입력 파일의 챕터 수가 일치하지 않습니다({0} vs {1}).
+    <value>تعداد فصل‌ها در رسانه‌ی منبع
+و تعداد فصل‌ها در پرونده‌ی ورودی مطابقت ندارند ({0} دربرابر {1}).
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+آیا هنوز می‌خواهید نام فصل‌ها را وارد کنید؟</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>원본 미디어의 챕터 수
-와 입력 파일의 챕터 수가 일치하지 않습니다({0} vs {1}).
+    <value>تعداد فصل‌ها در رسانه‌ی منبع
+و تعداد فصل‌ها در پرونده‌ی ورودی مطابقت ندارند ({0} دربرابر {1}).
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+آیا هنوز می‌خواهید نام فصل‌ها را وارد کنید؟</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간 챕터 장수가 맞지 않습니다.</value>
+    <value>شمار بخش بین پرونده‌ی منبع و ورودی تطابق ندارد</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>원본 미디어에 대한 챕터의 보고된 지속 시간
-과 입력 파일에 대한 챕터의 지속 시간이 차이가 매우 많습니다.
+    <value>آنچه از مدت بخش‌‌ها در رسانه‌ی منبع گزارش شده
+با مدت بخش‌ها در پرونده‌ی ورودی بسیار متفاوت است.
 
-이 챕터 파일은 다른 파일 매체에서 만들어졌을 가능성이 매우 높습니다.
+به احتمال بسیار بالا، این پرونده‌ی بخش‌بندی بر اساس منبع دیگری تولید شده.
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+آیا مطمئن هستید که می خواهید نام بخش‌ها را وارد کنید؟</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간 챕터 지속 시간이 맞지 않습니다.</value>
+    <value>مدت بخش بین پرونده‌ی منبع و ورودی تطابق ندارد</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>스캔을 중지하여 오류가 발생하였습니다. HandBrake를 다시 시작하십시오.</value>
+    <value>An error occurred when trying to stop the scan. Please restart HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake는 새로운 버전 형식으로 사용자 환경 설정 파일을 업그레이드 할 수 없습니다.
-환경 설정 파일은 보관될 것이며 새 파일이 생성될 것입니다.  사용자만의 환경 설정 파일을 다시 생성해야 합니다.</value>
+    <value>HandBrake is unable to upgrade your presets file to a new version format.
+Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
+    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
   </data>
   <data name="UserSettings_AnErrorOccured" xml:space="preserve">
-    <value>설정을 저장하려고 할 때 문제가 발생하였습니다.</value>
+    <value>در هنگام تلاش برای دخیره‌ی ترجیحات مشکلی پیش آمد.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>경고, 설정이 재설정되었습니다!</value>
+    <value>هشدار، تنظیمات شما بازنشانی شده‌است!</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>사용자 설정 파일이 손상되었거나 접근할 수 없습니다. 설정이 기본 설정으로 재설정되었습니다.</value>
+    <value>Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>사용자 설정 파일을 가져올 수 없습니다: {0}</value>
+    <value>Unable to load user settings file: {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>사용자 설정 파일이 접근할 수 없거나 손상된 것 같습니다. 파일을 삭제하거나 HandBrake에서 새로운 파일을 생성할 수 있습니다.</value>
+    <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>사용자가 고른 출력 디렉토리는 존재하지 않거나, 해당 디렉토리에 파일을 쓸 수 있는 권한이 없습니다.</value>
+    <value>پوشه‌ی خروجیی که انتخاب کردید وجود ندارد یا اجازه ذخیره‌ی پرونده‌ها در آن را ندارید.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>폴더를 생성하시겠습니까?</value>
+    <value>پوشه‌ای ایجاد کند؟</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>해당 폴더가 존재하지 않습니다. HandBrake에서 다음 폴더를 생성하시겠습니까?
+    <value>پوشه‌ای که می‌خواهید در آن ذخیره شود وجود ندارد. آیا مایلید HandBrake این پوشه را بسازد؟
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>대상 디렉토리를 시작할 수 없습니다.</value>
+    <value>نتواست پوشه‌ی مقصد را باز کند.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>유효한 대상 디렉토리인지 확인하십시오.</value>
+    <value>لطفاً بررسی کنید پوشه‌ی مقصد شما معتبر باشد.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
+    <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>추가적인 정보 없음</value>
+    <value>بدون اطلاعات اضافی</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, {3}의 {2} 통과)</value>
+    <value>{0} - (٪{1}،  مرحله‌ی {2} از{3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1} %, {3}의 {2} 통과 
-남은 시간: {4}</value>
+    <value>{1}%, Pass {2} of {3}
+Remaining Time: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>대기열 중지. 경고, 인코딩을 진행하는 드라이브의 디스크 공간이 부족합니다. 공간을 확보하고 시작을 눌러 계속하십시오. 설정에서 최소 공간 수준을 조정할 수도 있습니다.</value>
+    <value>صف نگه داشته شد. هشدار، فضای رانه‌ای (درایوی) که شما در آن فشرده‌سازی می‌کنید، کم است. لطفاً مقداری از فضا را آزاد کرده و برای ادامه «شروع» را بزنید. همچنین می‌توانید در «ترجیحات» حداقل مقدار فضا را تنظیم کنید.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>대기열 중지</value>
+    <value>صف نگه داشته شد</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>대기열 중지</value>
+    <value>صف نگه داشته شد</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>경로 디렉토리의 디스크 공간이 부족합니다.
+    <value>حافظه‌ی پوشه‌ی مقصد شما کم است.
 
-이 경고가 설정에 표시되는 수준을 설정할 수 있습니다.
+شما می‌توانید سطحی که این هشدار نمایش داده می‌شود را در ترجیحات تنظیم کنید.
 
-계속하시겠습니까?</value>
+آیا مایل هستید ادامه دهید؟</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>오류나 완료 상태가 아니므로 작업 상태를 재설정할 수 없습니다</value>
+    <value>Unable to reset job status as it is not in an Error or Completed state</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>대기열 파일을 복원할 수 없습니다.</value>
+    <value>Unable to restore queue file.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>파일이 손상되었거나 HandBrake의 호환되지 않는 이전 버전입니다.</value>
+    <value>این پرونده ممکن است خراب باشد یا از نسخه‌ی قدیمی و ناسازگاز HandBrake باشد</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 파일을 인코딩 중 입니다.</value>
+    <value>HandBrake در حال فشرده‌سازی یک پرونده است.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>현재 진행 중인 인코딩을 멈추십시오. 문제가 계속되는 경우, HandBrake를 다시 시작하십시오.</value>
+    <value>لطفاً فشرده‌سازی فعلی را متوقف کنید. اگر مشکل همچنان ادامه داشت، لطفاً HandBrake را دوباره راه‌اندازی کنید.</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>미리보기 (실제 사이즈 {0}%)</value>
+    <value>پیش‌نمایش (٪{0} سایز واقعی)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake를 실행시키기 위해서는 Windows 7 이상 64 비트 버전이 필요합니다.</value>
+    <value>HandBrake برای اجرا شدن نیازمند ویندوز 64بیتی و 7 به بالاست.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake를 실행시키기 위해서는 Windows 7 이상 버전이 필요합니다. 0.9.9 버전 (XP)와 0.10.5 (Vista) 버전은 이러한 버전을 지원하는 마지막 버전입니다.</value>
+    <value>HandBrake برای اجرا شدن نیازمند ویندوز 7 یا بالاتر است. نسخه‌ی 0.9.9 (XP) و 0.10.5 (Vista)، آخرین نسخه‌هایی بود که از این سیستم‌عامل‌ها پشتیبانی می‌کرد.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>나머지를 추가하시겠습니까?</value>
+    <value>Do you wish to proceed trying to add the rest?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>'{0}' 파일은 이미 존재합니다!
-덮어쓰시겠습니까?</value>
+    <value>پرونده‌ی «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>시스템 클립보드는 현재 사용할 수 없습니다.</value>
+    <value>The system clipboard is currently unavailable.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>다른 응용 프로그램을 모니터링하거나 클립 보드를 자체적으로 잠그기 때문일 수 있습니다. 잠금을 해제하기 전까지는 클립보드를 사용할 수 없습니다.</value>
+    <value>This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>라이선스:</value>
+    <value>مجوز:</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>버전:</value>
+    <value>نسخه:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 새 카테고리 추가 --</value>
+    <value>-- افزودن دسته‌ی جدید --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>환경 설정 추가</value>
+    <value>افزودن پیش‌نهاده</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>카테고리:</value>
+    <value>دسته:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>شرح:</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>이름:</value>
+    <value>نام:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>면적:</value>
+    <value>ابعاد:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>원본 파일 트랙 선택</value>
+    <value>Source Track Selection</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>다음 경로 경유 허용:</value>
+    <value>Allow passthru of:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>새로운 타이틀이나 원본 파일 비디오를 선택할 시에 오디오 트랙을 자동으로 선택하고 설정하는 방법을 설정하십시오.</value>
+    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'자동 경유' 동작:</value>
+    <value>'Auto Passthru' Behaviour:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>비트 전송속도</value>
+    <value>بیت بر ثانیه</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>코덱</value>
+    <value>نوع فشرده‌سازی</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
-    <value>DRC</value>
+    <value>فشرده‌سازی با دامنه‌ی پویا DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>얻기</value>
+    <value>Gain</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>مخفی کردن</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>믹스다운</value>
+    <value>Mixdown</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>대체 인코더:</value>
+    <value>Fallback encoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>بارگذاری مجدد</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>견본 비율</value>
+    <value>Samplerate</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>보여주기</value>
+    <value>نمایاندن</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>트랙 이름</value>
+    <value>نام خط</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 동작</value>
+    <value>Track Selection Behaviour:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>추가적인 트랙에 대해:</value>
+    <value>برای خط‌های اضافی</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>오디오 코덱으로 '자동 경유' 를 선택한 경우</value>
+    <value>When 'Auto Passthru' is selected as the audio codec.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>بخش‌نشان‌ها</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>챕터 이름</value>
+    <value>نام بخش</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>챕터 수</value>
+    <value>شماره‌ی بخش</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>챕터 표시 생성</value>
+    <value>ایجاد بخش‌نشان</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>지속 시간</value>
+    <value>مدت</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>내보내기</value>
+    <value>صادر کردن</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>가져오기</value>
+    <value>وارد کردن</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>내보낼 파일명</value>
+    <value>صادر کردن نام‌ها</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>가져올 파일명</value>
+    <value>وارد کردن نام‌ها</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>챕터 이름 재설정</value>
+    <value>بازنشانی نام بخش‌ها</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>취소 작업</value>
+    <value>لغو عملیات</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>진행</value>
+    <value>ادامه دادن</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>작업 완료 시</value>
+    <value>عملکرد زمانی که انجام شد </value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>오류 세부 정보:</value>
+    <value>جزئیات خطا:</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>사용자 설정:</value>
+    <value>Custom:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>هموارسازی:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace</value>
+    <value>Deinterlace:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>환경 설정:</value>
+    <value>پیش‌نهاده:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Deinterlace 환경 설정</value>
+    <value>Deinterlace Preset</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>잡음 제거:</value>
+    <value>نویز زدایی:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>잡음 제거 환경 설정</value>
+    <value>پیش‌نهاده‌ی نویز زدایی</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>잡음 제거</value>
+    <value>میزان نویز زدایی</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>Detelecine:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>필터</value>
+    <value>پالایه‌ها</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>뒤집기</value>
+    <value>وارنه کردن</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>흑백</value>
+    <value>سیاه و سفید</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace 감지:</value>
+    <value>Interlace Detection:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>환경 설정:</value>
+    <value>پیش‌نهاده:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>회전:</value>
+    <value>چرخاندن:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>선명도</value>
+    <value>واضح کردن:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>선명도 환경 설정</value>
+    <value>پیش‌نهاده‌‌ی واضح کردن </value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>선명도 조정</value>
+    <value>میزان واضح کردن</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>조정:</value>
+    <value>میزان</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>추가</value>
+    <value>افزودن</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>취소</value>
+    <value>لغو</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>파일 내용 지우기</value>
+    <value>پاک کردن</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>종료</value>
+    <value>بستن</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>رونوشت به بریده‌دان</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>왼쪽으로 이동</value>
+    <value>انتقال به چپ</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>오른쪽으로 이동</value>
+    <value>انتقال به راست</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>저장</value>
+    <value>ذخیره کردن</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>رونوشت به بریده‌دان</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>인코딩 로그</value>
+    <value>گزارش فشرده‌سازی</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>활동 로그 디렉토리 열기</value>
+    <value>باز کردن پوشه‌ی گزارش</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>스캔 로그</value>
+    <value>گزارش وارسی</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>활동 로그</value>
+    <value>گزارش فعالیت</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>전부 추가</value>
+    <value>افزودن همه</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>현재 추가</value>
+    <value>Add Current</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>선택 추가</value>
+    <value>Add Selection</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>افزودن به صف</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>고급</value>
+    <value>پیشرفته</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>A/V 정렬 시작</value>
+    <value>تراز کردن صدا/تصویر در شروع</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>각도:</value>
+    <value>زاویه:</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>오디오</value>
+    <value>صدا</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>오디오 트랙들</value>
+    <value>خط‌های صدا</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>مرور</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>챕터</value>
+    <value>بخش‌ها</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>컨테이너</value>
+    <value>Container</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>대상</value>
+    <value>مقصد</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>مدت:</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>다른 이름으로 저장:</value>
+    <value>ذخیره با نام:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>필터</value>
+    <value>پالایه‌ها</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>형식:</value>
+    <value>فرمت:</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>کمک</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G 지원</value>
+    <value>پشتیبانی از iPod نسل 5</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>فراداده</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(수정)</value>
+    <value>(اصلاح شده)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>다중화: 시간이 다소 소요될 수 있습니다...</value>
+    <value>Muxing: This may take a while...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>گزینه‌ها</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>출력 설정</value>
+    <value>تنظیمات خروجی</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>نگه‌داشتن</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>면적</value>
+    <value>ابعاد</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>환경 설정 이름 바꾸기</value>
+    <value>تغییر نام پیش‌نهاده</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>환경 설정 옵션 컨텍스트 메뉴</value>
+    <value>Preset Options Context Menu</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>환경 설정 삭제</value>
+    <value>حذف پیش‌نهاده</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>환경 설정</value>
+    <value>پیش‌نهاده‌ها</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>پیش‌نمایش</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>인코딩: {0}, {1:00.00}%, 남은 시간: {2}, {3}</value>
+    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>범위:</value>
+    <value>Range:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>بازیابی</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>삭제</value>
+    <value>حذف</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>내장된 환경 설정 재설정</value>
+    <value>بازنشانی پیش‌نهاده‌های داخلی</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>새로운 환경 설정 저장</value>
+    <value>ذخیره‌ی پیش‌نهاده‌ی جدید</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>시작 시간 검색</value>
+    <value>Searching for start time</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>기본값 설정</value>
+    <value>پیش‌فرض قرار دادن</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>پیش‌نمایش</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>대기열</value>
+    <value>صف</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>منبع:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>파일 열기</value>
+    <value>باز کردن منبع</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>인코딩을 시작합니다.</value>
+    <value>شروع فشرده‌سازی</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>Queue를 시작합니다.</value>
+    <value>شروع صف</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>توقف</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>인코딩 멈춤</value>
+    <value>توقف فشرده‌سازی</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>작업 중인 인코딩을 멈추시겠습니까?</value>
+    <value>آیا مطمئن هستید که می‌خواهید این فشرده‌سازی را لغو کنید؟</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>자막 파일을 가져 오기 전에 인코딩할 원본 파일을 선택하십시오.</value>
+    <value>لطفاً قبل از تلاش برای وارد کردن پرونده‌ی زیرنویس، یک منبع برای فشرده‌سازی انتخاب کنید.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>자막</value>
+    <value>زیرنویس‌ها</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>خط‌های زیرنویس</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>개요</value>
+    <value>خلاصه</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value> - </value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>제목:</value>
+    <value>عنوان:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>선택한 환경 설정으로 변경</value>
+    <value>بروزرسانی پیش‌نهاده‌ی انتخاب شده</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>비디오</value>
+    <value>ویدیو</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>웹 최적화</value>
+    <value>بهینه برای وب</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>مدیریت پیش‌نهاده‌ها:</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>فراداده</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Nvidia NVENC 인코더 사용 가능</value>
+    <value>اجازه دادن به استفاده از فشرده‌ساز Nvidia NVENC</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Intel QuickSync 인코더 사용 가능</value>
+    <value>اجازه دادن به استفاده از فشرده‌ساز Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE 인코더 사용 가능</value>
+    <value>اجازه دادن به استفاده از فشرده‌ساز AMD VCE</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>입력된 파일 형식은 유효하지 못한 문자를 포함하고 있습니다. 이를 삭제하십시오.</value>
+    <value>The file format entered contained invalid characters. These have been removed. </value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>인코딩을 완료할 때마다 소리 내기</value>
+    <value>بعد از اینکه هر فشرده‌سازی تکمیل شد یک صدا پخش کن.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>큐를 완료할 때마다 소리 내기</value>
+    <value>بعد از اینکه صف تکمیل شد یک صدا پخش کن.</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>summary 탭에 미리보기 보여주기</value>
+    <value>پیش‌نمایش‌هایی را در صفحه‌ی خلاصه نشان بده.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>프로그램 제목 바에 인코딩 상태 보여주기</value>
+    <value>وضعیت فشرده‌سازی را در نوار عنوان برنامه نشان بده.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>Clear Log files older than 7 days</value>
+    <value>پرونده‌های گزارشی که بیش از 7 روز از ایجاد آن‌ها می‌گذرد را پاک کن</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>درباره‌ی HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>고급</value>
+    <value>پیشرفته</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>고급 옵션</value>
+    <value>گزینه‌های پیشرفته</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>인수:</value>
+    <value>Arguments:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>파일 이름 자동 설정</value>
+    <value>نام‌دهی خودکار</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>출력 파일 자동 이름 지정</value>
+    <value>پروند‌ه‌های خروجی را به صورت خودکار نام‌دهی کن</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>بررسی بروزرسانی‌ها</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>인코딩 완료 후 항상 완료된 대기열 지우기</value>
+    <value>همیشه موارد صف را پس از فشرده‌سازی از صف پاک کن</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>로그 히스트리 지우기</value>
+    <value>پاک‌کردن تاریخچه‌یگزارش</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>특정 위치에 각각의 인코딩 로그 복사본 배치:</value>
+    <value>یک رونوشت از گزارش‌های فشرده‌سازی جداگانه را در این مکان قرار بده:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>인코딩된 비디오와 같은 위치에 각각의 인코딩 로그 복사본 배치</value>
+    <value>یک نسخه از گزارش‌های فشرده‌سازی جداگانه را در مکان ویدیوی فشرده شده قرار بده</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>현재 버전</value>
+    <value>نسخه‌ی فعلی</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>디코딩</value>
+    <value>بازسازی</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>기본 경로:</value>
+    <value>مسیر پیش‌فرض:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>업데이트 다운로드</value>
+    <value>بارگیری بروزرسانی</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD 읽기</value>
+    <value>DVD Reading</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav을 사용 안 함. (대신 libdvdread가 사용 됨)</value>
+    <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>인코딩</value>
+    <value>فشرده‌سازی</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>파일 형식:</value>
+    <value>قالب فایل:</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>일반</value>
+    <value>عمومی</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Logging</value>
+    <value>گزارش نگاری</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>로그 상세 수준:</value>
+    <value>Log Verbosity Level:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>로그 경로: </value>
+    <value>مسیر گزارش:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>디스크 공간이 작으면 대기열을 정지합니다.</value>
+    <value>اگر حافظه کم بود، صف را نگه دار</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>시스템 트레이 최소화 (재시작 필요)</value>
+    <value>کوچک کردن در سینی (system tray) (نیازمند راه‌اندازی مجدد)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>최소 DVD 와 Blu-ray 제목 초 단위 지속 시간. 짧은 제목 건너뛰기:</value>
+    <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 파일 확장자:</value>
+    <value>پسوند فایل MP4:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>시작할 때</value>
+    <value>موقع شروع</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>پرونده‌های خروجی</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>경로: </value>
+    <value>مسیر:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>مسیر پخش‌کننده‌ی رسانه:</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>인코딩 중 시스템 절전 방지</value>
+    <value>Prevent the system from sleeping while encoding</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>스캔할 사진 미리보기 개수:</value>
+    <value>Number of picture previews to scan:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>우선순위 수준:</value>
+    <value>میزان اولویت:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>사용 가능한 경우 비디오를 디코딩에 있어서 Intel QuickSync 사용을 선호합니다.</value>
+    <value>Prefer use of Intel QuickSync for decoding video when available. </value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>또한 QuickSync 인코더 사용 불가한 경우 QSV 디코딩을 사용합니다. (i.e. x265)</value>
+    <value>Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>공통 구두점 제거</value>
+    <value>Remove common punctuation</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>밑줄을 공백으로 교체</value>
+    <value>Replace underscores with a space</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>프로그램이 재시작되면 '아무것도 하지 않음'으로 재설정합니다.</value>
+    <value>دفعه‌ی بعد که برنامه باز شد، روی «هیچ کاری نکن» برگردد.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>스케일러 선택:</value>
+    <value>Choose Scaler:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>화면 크기 조정</value>
+    <value>Scaling</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>다음 경로로 파일 전송:</value>
+    <value>ارسال فایل به:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>케이스를 제목 케이스로 변경</value>
+    <value>Change case to Title Case</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>업데이트</value>
+    <value>بروز‌رسانی‌ها</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>사용자 인터페이스</value>
+    <value>رابط کاربری</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>버전: </value>
+    <value>نسخه:</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>비디오</value>
+    <value>ویدیو</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>این مسیر فقط برای قابلیت پیش‌نمایش ویدیو استفاده می‌شود.
+VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های دیگر نیز ممکن است کار کنند اما معتبر نیستند.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>로그 디렉토리 보기</value>
+    <value>مشاهده‌ی پوشه‌ی گزارش</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>완료 시</value>
+    <value>وقتی</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 설정</value>
+    <value>تنظیمات x264/5</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>일정 품질 부분 제어:</value>
+    <value>Constant quality fractional granularity:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽:</value>
+    <value>Anamorphic:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>자동</value>
+    <value>خودکار</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>맨 아래</value>
+    <value>پایین</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Cropping:</value>
+    <value>برش:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>دلخواه</value>
   </data>
   <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>화면 너비:</value>
+    <value>Display Width:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>높이:</value>
+    <value>ارتفاع:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>가로세로 비율 유지</value>
+    <value>حفظ نسبت ابعاد</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>왼쪽</value>
+    <value>چپ</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>기준:</value>
+    <value>Modulus:</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>출력</value>
+    <value>خروجی:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>측정 크기:</value>
+    <value>PAR:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>오른쪽</value>
+    <value>راست</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>크기</value>
+    <value>اندازه</value>
   </data>
   <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>منبع:</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>위</value>
+    <value>بالا</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>너비:</value>
+    <value>عرض:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>دلخواه</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>파일로 내보내기</value>
+    <value>صادر کردن به پرونده</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>파일에서 가져오기</value>
+    <value>وارد کردن از پرونده</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>공식</value>
+    <value>رسمی</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>제목 선택:</value>
+    <value>انتخاب عناوین</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>대기열에 추가하기</value>
+    <value>افزودن به صف</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>"{0}" 환경 설정을 이용해서 선택된 제목을 추가합니다.</value>
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>고급:</value>
+    <value>تظیمات ویدیو:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>오디오:</value>
+    <value>صدا:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>모두 제거</value>
+    <value>پاک کردن همه</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>제거 완료</value>
+    <value>پاک کردن کامل شد</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>대기열 제거</value>
+    <value>پاک کردن صف</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>선택 항목 제거</value>
+    <value>Clear Selected</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>삭제</value>
+    <value>حذف</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>대상:</value>
+    <value>مقصد:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>아무것도 안 함</value>
+    <value>هیچ کاری نکن</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>인코딩 시간:</value>
+    <value>Encode Time:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>수정</value>
+    <value>ویرایش</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>종료 시간:</value>
+    <value>زمان پایان:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>대기열로 내보내기</value>
+    <value>صادرکردن صف</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>파일 사이즈:</value>
+    <value>اندازه پرونده:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>최대 절전 모드</value>
+    <value>Hibernate</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>시스템 잠금</value>
+    <value>Lock System</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료되면 로그가 제공될 것입니다.</value>
+    <value>گزارش پس از تکمیل فشرده‌سازی در دسترس خواهد بود.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>로그 오프</value>
+    <value>Log off</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>대상 디렉토리 열기</value>
+    <value>باز کردن پوشه‌ی مقصد</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>원본 파일 디렉토리 열기</value>
+    <value>باز کردن پوشه‌ی منبع</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>گزینه‌ها</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>نگه‌داشتن</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>중단 지속 시간:</value>
+    <value>Paused Duration:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>사진 설정:</value>
+    <value>Picture Settings:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake 종료</value>
+    <value>خروج از HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>모든 작업 재시도</value>
+    <value>Retry All Jobs</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>실패 항목 재시도</value>
+    <value>Retry Failed</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>선택 작업 재설정</value>
+    <value>Reset Selected Jobs</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>재설정</value>
+    <value>بازنشانی</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>컴퓨터 종료</value>
+    <value>Shutdown</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>منبع:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>대기열 실행</value>
+    <value>شروع صف</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>시작 시간:</value>
+    <value>زمان شروع:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>통계</value>
+    <value>آمار</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료된 후 통계가 제공될 것입니다.</value>
+    <value>آمار پس از اتمام یک فشرده‌سازی در دسترس خواهد بود.</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>자막:</value>
+    <value>زیرنویس‌ها:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>요약</value>
+    <value>خلاصه</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>절전</value>
+    <value>Sleep</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>비디오:</value>
+    <value>ویدیو:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>وقتی انجام شد</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>남아있는 선택된 모든 언어 추가</value>
+    <value>Add All Remaining Selected Languages</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>남아있는 모든 트랙 추가</value>
+    <value>همه‌ی خط‌های باقی‌مانده را اضافه کند</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>새로운 트랙 추가</value>
+    <value>افزودن خط جدید</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>트랙 추가</value>
+    <value>خط‌ها</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>이용가능한 언어</value>
+    <value>زبان‌های موجود:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>언어 선택</value>
+    <value>انتخاب زبان:</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>선택한 언어</value>
+    <value>Selected Languages:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>기본 동작 설정</value>
+    <value>Configure Default Behaviours</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>بازیابی</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>스캔할 디스크를 선택하십시오</value>
+    <value>انتخاب یک دیسک برای وارسی</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>스캔할 파일을 선택하십시오</value>
+    <value>انتخاب یک پرونده برای وارسی</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>스캔할 폴더를 선택하십시오</value>
+    <value>پوشه‌ای را برای وارسی انتخاب کنید</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>마음대로 특정 제목 선택:</value>
+    <value>Optionally choose a specific title: </value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>인코딩하고자 하는 비디오(들)를 고르시오:</value>
+    <value>پس ویدیو(هایی) که می‌خواهید فشرده شود را انتخاب کنید:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>파일</value>
+    <value>پرونده</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>폴더 (묶음 스캔)</value>
+    <value>پوشه (وارسی دسته‌ای)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>이 DVD 또는 Bluray Drive를 여십시오</value>
+    <value>Open this DVD or Bluray Drive</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>하나 이상의 파일이 있는 폴더를 여십시오.</value>
+    <value>یک پوشه با یک یا چند پرونده را باز کنید</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>대기열에 있는 파일들 복구</value>
+    <value>Recover Queue Files</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>이전 대기열 보관이 가능합니다.</value>
+    <value>A previous queue archive is available. </value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>단일 비디오 파일을 엽니다.</value>
+    <value>بازکردن یک پرونده‌ی ویدیویی</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>원본 파일 선택</value>
+    <value>Source Selection</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>مدت:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>실시간 미리보기</value>
+    <value>پیش‌نمایش زنده</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>미리보기 이미지 선택</value>
+    <value>Select a preview image</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>پخش‌کننده‌ی پیش‌فرض دستگاه را ترجیح بده</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>사용 가능할 경우 내장 자막 추가</value>
+    <value>Add Closed Captions when available</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>'외부 오디오 스캔' 추가</value>
+    <value>Add 'Foreign Audio Scan'</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>굽기 작업:</value>
+    <value>Burn-In Behaviour:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>자막 가져오기</value>
+    <value>وارد کردن زیرنویس</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 작업:</value>
+    <value>Track Selection Behaviour:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>Add All Remaining Closed Captions</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 시에 자막 트랙이 자동으로 선택되고 구성되는 방법을 설정하십시오.</value>
+    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>추가 오디오 트랙</value>
+    <value>خط‌های صدای اضافی</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>추가 자막 트랙</value>
+    <value>خط‌های زیرنویس فرعی</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>복제 완료됨</value>
+    <value>Burned</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>بخش‌نشان‌ها</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>블록 분리</value>
+    <value>هموارسازی</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
     <value>Detelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>디스플레이</value>
+    <value>صفحه‌نمایش</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>흑백</value>
+    <value>سیاه و سفید</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>오디오 트랙 없음</value>
+    <value>بدون خط صدا</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>챕터 표시 없음</value>
+    <value>هیچ بخش‌نشانی نیست</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>필터 없음</value>
+    <value>بدون پالایه</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>원본 파일 없음</value>
+    <value>بدون منبع</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>자막 트랙 없음</value>
+    <value>بدون خط زیرنویس</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>트랙 없음</value>
+    <value>بدون خط</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>{1}개 중 {0}개 미리보기</value>
+    <value>پیش‌نمایش {0} از {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>회전</value>
+    <value>چرخش</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>저장소</value>
+    <value>حافظه</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Pass 인코딩</value>
+    <value>فشرده‌سازی 2 مرحله‌ای</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>평균 비트 전송 속도 (kbps):</value>
+    <value>Avg Bitrate (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>비디오 코덱:</value>
+    <value>فشرده‌ساز ویدیو:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>일정한 프레임률</value>
+    <value>فریم بر ثانیه‌ی ثابت</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>일정한 품질:</value>
+    <value>کیفیت ثابت:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>인코더 수준:</value>
+    <value>تراز فشردگی</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>인코더 환경 설정:</value>
+    <value>پیش‌نهاده‌ی فشردگی</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>인코더 프로필:</value>
+    <value>Encoder Profile:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>인코더 조정:</value>
+    <value>میزان فشرده‌سازی</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>고급 옵션:</value>
+    <value>گزینه‌های پیشرفته:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>빠른 디코딩</value>
+    <value>بازسازی سریع</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>프레임률 (FPS):</value>
+    <value>فریم بر ثانیه (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>비디오 최적화:</value>
+    <value>گزینه‌های فشرده‌سازی:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>최고 프레임률</value>
+    <value>بیشنه‌ی فریم بر ثانیه</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>화질</value>
+    <value>کیفیت:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>터보 우선 통과</value>
+    <value>Turbo first pass</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>변화하는 프레임률</value>
+    <value>فریم بر ثانیه‌ی تغییرپذیر</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>비디오</value>
+    <value>ویدیو:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>언어:</value>
+    <value>زبان:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>시스템 언어 사용</value>
+    <value>استفاده از زبان دستگاه</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>درباره‌ی HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>파일이나 폴더를 여기에 드롭하십시오...</value>
+    <value>یا یک پرونده یا پوشه را اینجا رها کنید ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>کمک</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>환경 설정</value>
+    <value>ترجیحات</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>트랙 추가</value>
+    <value>افزودن خط</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>선택된 트랙에 대한 오디오 인코더 설정:</value>
+    <value>تنظیمات فشردگی صوت برای هر کدام از خط‌های انتخاب شده</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>완료</value>
+    <value>پاک کردن</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>굽기</value>
+    <value>Burn In</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>پیش‌فرض</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>강제로</value>
+    <value>Forced Only</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_관하여...</value>
+    <value>_درباره‌ی...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_액티비티 로그</value>
+    <value>_گزارش فعالیت</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_업데이트 확인</value>
+    <value>_بررسی بروزرسانی‌ها</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_종료</value>
+    <value>_خروج</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_파일 내보내기</value>
+    <value>_صادر کردن به پرونده</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_파일</value>
+    <value>_پرونده</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake 문서 (HTTPS)</value>
+    <value>_مستندات HandBrake</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_도움말</value>
+    <value>_کمک</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_파일에서 가져오기</value>
+    <value>_وارد کردن از پرونده</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_설정</value>
+    <value>_ترجیحات</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_환경 설정</value>
+    <value>_پیش‌نهاده‌ها</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_대기열</value>
+    <value>_صف</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_내장된 환경 설정 재설정</value>
+    <value>_بازنشانی پیش‌نهاده‌های داخلی</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_현재 값을 기본값으로 설정</value>
+    <value>_تنظیم تنظیمان فعلی به عنوان پیش‌فرض</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>S_환경 설정 패널 방식</value>
+    <value>S_how Preset Panel</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_대기열 보이기</value>
+    <value>_نمایش  صف</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_도구</value>
+    <value>_ابزارها</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>업데이트 확인 ...</value>
+    <value>بررسی بروزرسانی‌ها</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>로그 파일 디렉터리를 제거하시겠습니까?</value>
+    <value>آیا مطمئن هستید که می‌خواهید پوشه‌ی پرونده‌های گزارش HandBrake را پاک کنید؟</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>로그 제거</value>
+    <value>پاک  کردن گزارش‌ها</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>다운로드 중...</value>
+    <value>در حال بارگیری</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake의 로그 파일 디렉터리가 제거되었습니다!</value>
+    <value>پوشه‌ی پرونده‌های گزارش HandBrake پاک شد!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>توجه</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>업데이트 준비 ...</value>
+    <value>آماده‌سازی برای بروزرسانی</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>폴더를 선택하세요.</value>
+    <value>لطفا یک پوشه را انتخاب کنید.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>기본 위치 설정을 위해 '찾아보기'를 클릭하세요</value>
+    <value>برای تنظیم محل پیش‌فرض بر روی «مرور» بزنید</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>مخفی کردن</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>보여주기</value>
+    <value>نمایاندن</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>대기열에 '전체 추가'</value>
+    <value>«افزودن همه» به صف</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>대기열에 '선택 추가'</value>
+    <value>«افزودن انتخاب‌ها» به صف</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>파일 재생</value>
+    <value>پخش پرونده</value>
   </data>
   <data name="Options_ApplicaitonToolbar" xml:space="preserve">
-    <value>프로그램 툴바</value>
+    <value>نوار ابزار برنامه</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>툴바에 '대기열에 전체 추가' 보이기</value>
+    <value>نمایش «افزودن همه به صف» در نوار ابزار</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>툴바에 '대기열에 선택 추가' 보이기</value>
+    <value>نمایش «افزودن انتخاب‌ها به صف» در نوار ابزار</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>하드웨어 인코딩 지원이 현재 사용할 수 없습니다. 이 시스템에 있는 모든 그래픽 어댑터가 최신 드라이버를 실행하고 있는지 확인하십시오.
+    <value>پشتیبانی از فشرده‌سازی سخت‌افزاری در حال حاضر غیرفعال است. اگر HandBrake را با گزینه "no-hardware--" شروع نکردید، لطفاً از بروز بودن رانه‌های تمام سازوارگرهای گرافیکی موجود در این دستگاه اطمینان حاصل کنید.
 
-이것은 어떤 소프트웨어 인코더에도 영향을 미치지 않을 것입니다.</value>
+این مورد بر فشرده‌سازی‌های نرم افزاری اثر نمی‌گذارد.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>계속하기 전에 자막 설정을 수정하십시오.</value>
+    <value>Please correct your subtitle settings before continuing. </value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>적용</value>
+    <value>اعمال کردن</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>인코딩 다시 시작하기</value>
+    <value>از سرگیری فشرده‌سازی</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>동작</value>
+    <value>Actions</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>대기열 가져오기</value>
+    <value>Import Queue</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}
-남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>선택한 항목 삭제</value>
+    <value>Delete Selected</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>휴대용 모드: TMP 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오. 
+    <value>حالت قابل حمل: نتوانست پوشه‌ی موقتی را ایجاد کند. لطفا مجددا بررسی کنید آیا مسیر صحیح و قابل نوشتن است؟
 
-    {0}</value>
+{0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>휴대용 모드: Storage 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.
+    <value>حالت قابل حمل: نتوانست پوشه‌ی ذخیره‌سازی را ایجاد کند. لطفا مجددا بررسی کنید آیا مسیر صحیح و قابل نوشتن است؟
 
-    {0}</value>
+{0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>휴대용 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
+    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 엔진이 초기화하는데 실패하였습니다. GPU 드라이버들이 오래되었을 경우 종종 발생하는 문제입니다.\n 시스템에 탑재된 개별 그래픽에 대한 GPU 드라이버들을 업데이트하십시오.</value>
+    <value>موتور HandBrake در مقداردهی اولیه ناموفق بود. این معمولا ناشی از رانه‌های (درایور‌های) GPU‌های قدیمی است.
+لطفاً رانه‌های تمام GPUهای خود را ، اعم از گرافیک‌های داخلی و مجزای دستگاهتان، بروزرسانی کنید.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Live 업데이트 옵션: {source} {title} {chapters} 
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+    <value>Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>사용 가능한 옵션: {source_path} {source_folder_name} {source}</value>
+    <value>گزینه‌های اضافی موجود:  {source_path} (مسیر منبع)،  {source_folder_name} (نام پوشه‌ی منبع)،  {source} (منبع)</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>파일 덮어쓰기 요청</value>
+    <value>درخواست جای‌نویسی پرونده</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>자동 파일 이름 바꾸기를 시도하십시오</value>
+    <value>Try to automatically rename file</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>파일 덮어쓰기</value>
+    <value>جای‌نویسی پرونده</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>사용자 인터페이스 동작</value>
+    <value>User Interface Behaviour</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>파일 덮어쓰기 동작:</value>
+    <value>File overwrite behaviour:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>인코딩 완료</value>
+    <value>فشرده‌سازی کامل شد</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>공지</value>
+    <value>اعلانات</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료</value>
+    <value>صف تکمیل شد</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>وقتی انجام شد</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>파일 이름 충돌 시 동작:</value>
+    <value>Filename collision behaviour:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>접두사</value>
+    <value>Postfix</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>접미사</value>
+    <value>Prefix</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>숫자 첨부</value>
+    <value>Append Number</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>필터 보기_Deblock 환경 설정</value>
+    <value>نمایش‌پالایه_پالایه‌ی‌هموارسازی</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock  조정</value>
+    <value>میزان هموارسازی</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>인코더 선택은 '비디오' 탭에서 이용 가능합니다.</value>
+    <value>انتخاب کردن فشرده‌سازها باعث می‌شود در زبانه‌ی «ویدیو» در دسترس باشند.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake가 여러 개의 미완료 대기열 파일을 발견하였습니다. 이는 HandBrake가 실행 중인 여러 인스턴스에서 발생하였습니다. 모든 미완료 작업들을 복구하시겠습니까?</value>
+    <value>HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake가 대기열에서 마지막으로 프로그램이 실행된 시점부터 미완료된 항목을 발견하였습니다. 해당 항목들을 복구하시겠습니까?</value>
+    <value>HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>대기열 복구 가능</value>
+    <value>Queue Recovery Possible</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>사용자 환경 설정 파일은 내장된 환경 설정을 포함합니다. 가져오기 기능은 환경 설정 가져오기를 지원하고 있지 않습니다. '환경 설정 메뉴 -&gt; 내장된 환경 설정 재설정' 을 이용해서 기본 환경 설정을 복원하십시오.
+    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
 
-지원되는 경우, 모든 사용자 환경 사전 설정을 가져옵니다.</value>
+Where supported, any user presets will have been imported.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>작업을 즉시 수행합니다. (이 경우 60초 확인 다이얼로그가 비활성화됩니다.)</value>
+    <value>بلافاصله اقدام شود. (این گزینه پیام تأیید 60 ثانیه‌ای را غیرفعال می کند)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>مرور</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>설정된 오디오 파일이 없습니다.  '찾아보기'를 클릭하여 재생 하고자 하는 wav나 mp3 파일을 선택하십시오. </value>
+    <value>هیچ صدایی انتخاب نشده است. لطفا روی «مرور» بزنید و یک فایل mp3 یا wav را برای پخش انتخاب کنید.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>재생하기</value>
+    <value>پخش</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>대기열로 내보내기 (CLI  Only)</value>
+    <value>صادرکردن صف (فقط رابط خط فرمان)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>다크 테마를 사용하십시오. (Windows 10일 경우 재시작하십시오)</value>
+    <value>استفاده از پی‌رنگ تیره (نیازمند راه‌اندازی مجدد، فقط ویندوز 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>이용 불가</value>
+    <value>موجود نیست</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
-    <value>GB</value>
+    <value>گیگابایت</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>AC Mains 파워가 감지되었습니다. 인코더를 다시 시작하는 중... ({0} %)</value>
+    <value>AC Mains power detected. Resuming encode... ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %)</value>
+    <value>وضع باتری دستگاه وخیم است! (٪{0})</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %). 인코딩이 중단됩니다.</value>
+    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>대상 드라이브의 남은 디스크 크기가 {0} GB로 떨어졌습니다. 인코딩 중단 중...</value>
+    <value>حافظه‌ی باقی مانده‌ی رانه‌ی (درایو) مقصد به کمتر از {0}گیگابایت رسید. در حال نگه‌داشتن فشرده‌سازی</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 오디오 선택 설정</value>
+    <value>Configure Automatic Audio Selections</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 자막 선택 설정</value>
+    <value>Configure Automatic Subtitle Selections</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>시스템</value>
+    <value>دستگاه</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>배우:</value>
+    <value>Actors:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>코멘트:</value>
+    <value>Comments:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>شرح:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>감독:</value>
+    <value>Director:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>장르:</value>
+    <value>گونه:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>줄거리:</value>
+    <value>Plot:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>출시일:</value>
+    <value>تاریخ انتشار:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>제목: </value>
+    <value>عنوان:</value>
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>회전 및 뒤집기 미리보기</value>
+    <value>Preview Rotation and Flip</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>로그 뷰어</value>
+    <value>نمایشگر گزارش</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>양상:</value>
+    <value>ابعاد</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>필터:</value>
+    <value>پالایه‌ها</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>크기: </value>
+    <value>اندازه</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>트랙:</value>
+    <value>خط‌ها:</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>일반</value>
+    <value>عمومی</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>새 업데이트 버전을 확인하기 위해 '업데이트 확인'을 클릭하십시오.</value>
+    <value>برای «بررسی بروزرسانی‌ها» بزنید تا نسخه‌های جدید بررسی شود</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; 뒤로</value>
+    <value>&lt; عقب</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>현재 일시 중지됨</value>
+    <value>Currently Paused</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>پرونده‌های خروجی</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>챕터</value>
+    <value>بخش‌ها</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>프레임</value>
+    <value>قاب‌ها</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>پیش‌نمایش</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>초</value>
+    <value>Seconds</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>선택한 언어와 모두 매칭</value>
+    <value>All Matching Selected Languages</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>선택한 언어와 첫 번째 매칭</value>
+    <value>First Matching Selected Language</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>هیچ کدام</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>첫 번째 트랙</value>
+    <value>اولین خط</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>외부 오디오 선호, 없을 경우 첫 번째 오디오 선택</value>
+    <value>Foreign Audio Preferred, else First</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>외부 오디오 트랙</value>
+    <value>خط صدای خارجی</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>هیچ کدام</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>외부 오디오 검색</value>
+    <value>Foreign Audio Search</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>외부 오디오 스캔</value>
+    <value>Foreign Audio Scan</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>선택한 언어와 모두 매칭</value>
+    <value>All Matching Selected Languages</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>모든 트랙을 템플릿으로 사용</value>
+    <value>از همه‌ی خط‌ها به عنوان الگو استفاده کن</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>선택한 언어와 첫 번째 매칭</value>
+    <value>First Matching Selected Language</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>템플릿으로 첫 번째 트랙 사용</value>
+    <value>از خط اول به عنوان الگو استفاده کن</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>오디오 없음</value>
+    <value>No Audio</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>챕터 {0}</value>
+    <value>بخش {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>자동</value>
+    <value>خودکار</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>항상 M4V를 사용</value>
+    <value>همیشه از M4V استفاده کن</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>항상 MP4를 사용</value>
+    <value>همیشه از MP4 استفاده کن</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>دلخواه</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>هیچ کدام</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>항상 원본 해상도 사용하기</value>
+    <value>Always use Source Resolution</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>보통 이상</value>
+    <value>Above Normal</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>보통 이하</value>
+    <value>Below Normal</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>높음</value>
+    <value>بالا</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>낮음</value>
+    <value>پایین</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>보통</value>
+    <value>معمولی</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>매 월</value>
+    <value>ماهانه</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>매 주</value>
+    <value>هفتگی</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>각 생성된 새로운 이름에 항상 기본 경로를 사용합니다.</value>
+    <value>Always use the default path for each new name generated.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
+    <value>Port range must be between 5000 and 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>대체 표시자: {source} {destination}</value>
+    <value>Replacement Placeholders: {source} {destination}</value>
     <comment>Note: {source} and {destination} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
+    <value>نسخه‌ی جدید HandBrake در دسترس است!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
+    <value>حق نشر(C) 2003-2021 برای گروه HandBrake محفوظ است</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>저전력 단계:</value>
+    <value>Low battery level:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>배터리가 부족할 경우 진행 중인 작업을 중지하시오.</value>
+    <value>Pause any running jobs when the battery gets low.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>Add All Remaining Closed Captions</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>가져오려고 하는 대기열 파일에서 중복된 작업이 있습니다. 기존 작업 기록을 덮어쓰기 하시겠습니까?
-이는 또한 기존의 모든 실행 중인 작업을 중단시키게 됩니다.</value>
+    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
+This will also stop any existing running jobs.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>중복 감지</value>
+    <value>Duplicates Detected</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>فعال کردن سخت افزار QuickSync کم مصرف (اگر پشتیبانی شود).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Please select a single job to view summary information.</value>
+    <value>لطفاً یک کار را برای مشاهده‌ی خلاصه اصلاعات انتخاب کنید.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process. (Experimental)</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Default network port for worker:</value>
@@ -2212,22 +2213,22 @@ Please choose a different preset.</value>
     <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>بیشینه‌ی تعداد فشرده‌سازی همزمان:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>취소</value>
+    <value>لغو</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>환경 설정:</value>
+    <value>پیش‌نهاده:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Same as source</value>
+    <value>عین منبع باشد</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>Reset Settings</value>
+    <value>بازنشانی تنظیمات</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+    <value>آیا مطمئن هستید می‌خواهید تنطیمات HandBrake را به پیش‌فرض باز نشانید؟</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
     <value>Custom (Not Limited)</value>
@@ -2239,7 +2240,7 @@ Please choose a different preset.</value>
     <value>Height (pad up to res limit)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>هیچ کدام</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
     <value>Width (pad up to res limit)</value>
@@ -2251,91 +2252,91 @@ Please choose a different preset.</value>
     <value>Padding Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders</value>
+    <value>مرزها</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling</value>
+    <value>تفکیک‌پذیری و مقیاس‌گذاری:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop</value>
+    <value>چرخاندن و بریدن:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 Only! )</value>
+    <value>(فقط ویندوز 10!)</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>필터:</value>
+    <value>پالایه‌ها</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>پیش‌فرض</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
     <value>Forced</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
-    <value>1080p HD</value>
+    <value>1080پیکسل HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
-    <value>480p NTSC SD</value>
+    <value>480پیکسل NTSC SD</value>
   </data>
   <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
-    <value>2160p 4K Ultra HD</value>
+    <value>2160پیکسل 4K UHD</value>
   </data>
   <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
-    <value>576p PAL SD</value>
+    <value>576پیکسل PAL SD</value>
   </data>
   <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
-    <value>720p HD</value>
+    <value>720پیکسل HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
-    <value>4320p 8K Ultra HD</value>
+    <value>4320پیکسل 8K UHD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>دلخواه</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
+    <value>بیشینه‌ی ارتفاع:</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+    <value>بیشینه‌ی عرض</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>없음</value>
+    <value>هیچ کدام</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>مدیریت پیش‌نهاده‌ها:</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Delete Built-in Presets</value>
+    <value>حذف پیش‌نهاده‌های داخلی</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Export selected preset</value>
+    <value>خارج کردن پیش‌نهاده‌های انتخاب شده</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Import Preset(s) from file</value>
+    <value>وارد کردن پیش‌نهاده‌(ها) از پرونده</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Preset Information:</value>
+    <value>اطلاعات پیش‌نهاده:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Build in presets can not be modified.</value>
+    <value>پیش‌نهاده‌های داخلی نمی‌توانند تغییر کنند.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Set selected preset as default</value>
+    <value>تنظیم پیش‌نهاده‌ی فعلی در حالت پیش‌فرض</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>환경 설정 삭제</value>
+    <value>حذف پیش‌نهاده</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(Not supported on this system)</value>
+    <value>(بر روی این دستگاه پشتیبانی نمی‌شود)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>توقف</value>
   </data>
   <data name="Options_Metadata" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>فراداده</value>
   </data>
   <data name="Options_PassthruMetadata" xml:space="preserve">
     <value>Passthru basic metadata from the source to the destination file (where supported)</value>
@@ -2355,27 +2356,108 @@ Fields are limited to:
 - Long Description</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>نام دسته‌ای که وارد  کردید از قبل وجود دارد. لطفاً یک نام دیگر را وارد کنید.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>نام دسته خالی بود. لطفاً یک نام وارد کنید.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>یک نام وارد کنید:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>صادر کردن پیش‌نهاده‌های همه‌ی کاربران</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>سطحی که هشدارهای «فضای دیسک کم است» را نشان می‌دهد:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>توجه: این حد بالای کارهای همزمان است. محدودیت‌های سخت‌افزاری ممکن است تأثیرگذار باشد که باعث کاهش تعداد کارهای فشرده‌سازی همزمان در عمل شود.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(موجود نیست)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is Default:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>خیر</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>بله </value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>استفاده از تیره</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>لستفاده از روشن</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>تطابق دستگاه</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>سبک:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(نیازمند شروع مجدد)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>نرمی خلوص رنگ:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>فضای رنگ:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>فضای رنگ</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>باز کردن پیش‌نمایش</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>پیش‌نمایش منبع:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>وضعیت کار:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>لغو شد</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>تکمیل</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>تنظیمات نامعتبر. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>ورودی نامعتبر. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>وضعیت ناشناخته. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>هنگام تلاش برای خواندن منبع خطاهایی شناسایی شد.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>خطای ناشناخته. برای جزئیات گزارش را بررسی کنید.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>پرونده‌ی "hb.dll" گم شده. لطفا از نو نصب کنید.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>هشدار: لطفاً توجه داشته باشید که این ساخت HandBrake «حالت ایمن» است که پشتیبانی از فشرده‌سازی‌های سخت‌افزاری را شامل نمی‌شود. اگر می‌خواهید از فشرده‌ساز سخت‌افزاری استفاده کنید، لطفاً ساختی غیر «حالت ایمن» را از وبگاه بارگیری کنید.</value>
   </data>
 </root>

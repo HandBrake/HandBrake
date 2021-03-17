@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Komplette Liste der Encoderparameter:
@@ -1341,7 +1341,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Modulus:</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Ausgabe</value>
+    <value>Ausgabe:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
     <value>PAR:</value>
@@ -1383,7 +1383,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Die ausgewählten Titel werden mit der Voreinstellung „{0}“ hinzugefügt.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Erweitert:</value>
+    <value>Videoeinstellungen:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Audio:</value>
@@ -1512,7 +1512,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Neue Spur hinzufügen</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Spur hinzufügen</value>
+    <value>Spuren</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Verfügbare Sprachen:</value>
@@ -1689,13 +1689,13 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Bildfrequenz (BpS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Optimiertes Video:</value>
+    <value>Encodereinstellungen:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Maximale Bildfrequenz</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Qualität</value>
+    <value>Qualität:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Ersten Durchgang beschleunigen</value>
@@ -1704,7 +1704,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Variable Bildfrequenz</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>Video:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Sprache:</value>
@@ -1845,7 +1845,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>„Auswahl zur Warteschlange hinzufügen“ in der Symbolleiste anzeigen</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Die Unterstützung für Hardware-Encodierung ist momentan deaktiviert. Bitte sicherstellen, dass alle Grafikkarten-Treiber auf dem aktuellen Stand sind.
+    <value>Die Unterstützung für Hardware-Codierung ist derzeit deaktiviert. Wenn Sie HandBrake nicht mit der Option "--no-hardware" gestartet haben, stellen Sie bitte sicher, dass Sie aktuelle Treiber für alle Grafikkarten in diesem System verwenden.
 
 Dies hat keinen Einfluss auf die Software-Encoder.</value>
   </data>
@@ -2168,7 +2168,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Eine neue Version von HandBrake ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003–2021 The HandBrake Team</value>
+    <value>Copyright (C) 2003-2021 Das HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2193,7 +2193,7 @@ Dadurch werden auch alle bereits laufenden Aufgaben gestoppt.</value>
     <value>Bitte nur eine Aufgabe auswählen um die Übersichtsinformationen anzuzeigen.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Führe jede Aufgabe in der Warteschlange in einem separaten Worker-Prozess aus. (Experimentell)</value>
+    <value>Jeden Auftrag in der Warteschlange in einem separaten Worker-Prozess ausführen.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Standard-Netzwerkport für Worker:</value>
@@ -2257,10 +2257,10 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Ränder</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Auflösung und Skalierung</value>
+    <value>Auflösung und Skalierung:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Drehen und Beschneiden</value>
+    <value>Drehen und Beschneiden:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Nur Windows 10! )</value>
@@ -2358,7 +2358,7 @@ Dies ist auf folgende Felder begrenzt:
 - Lange Beschreibung</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2380,5 +2380,86 @@ Dies ist auf folgende Felder begrenzt:
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Bemerkung: Dies ist das obere Limit gleichzeitiger Enkodierungen. Möglicherweise treten Hardware-Beschränkungen in Kraft, die die tatsächliche Anzahl gleichzeitiger Aufgaben während der Kodierung verringern.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Nicht verfügbar)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Ist Standard:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Feineinstellung der Bildeinstellungen</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Zeige Beschnitteinstellungen.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Dunkel</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Hell</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Systemstandard</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Neustart benötigt)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma-Glättung:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Farbraum:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Farbraum</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Vorschau öffnen</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Vorschau der Quelle:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Aufgabenstatus:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Abgebrochen</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Abgeschlossen</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Ungültige Einstellungen. Siehe Protokoll für Details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Ungültige Eingangsdatei. Siehe Protokoll für Details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Unbekannter Status. Siehe Protokoll für Details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Beim Versuch, die Quelle zu lesen, wurden Fehler entdeckt.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Unbekannter Fehler. Siehe Protokoll für Details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker abgestürzt. Siehe Protokoll für Details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Fehlende Datei "hb.dll". Bitte neu installieren.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warnung: Bitte beachten Sie, dass dies ein "Safe Mode"-Build von HandBrake ist, das keine Unterstützung für Hardware-Encoder enthält. Wenn Sie die Hardware-Encoder-Unterstützung nutzen möchten, laden Sie bitte einen nicht-"Safe Mode"-Build von der Website herunter.</value>
   </data>
 </root>

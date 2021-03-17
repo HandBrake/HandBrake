@@ -1423,7 +1423,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
         if(hb_qsv_full_path_is_enabled(job))
         {
-            hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
+            hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
             if (info != NULL)
             {
                 // setup the QSV configuration
@@ -1443,6 +1443,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                     hb_error( "decavcodecvInit: no context" );
                     return 1;
                 }
+                pv->job->qsv.ctx->full_path_is_enabled = 1;
                 if (!pv->job->qsv.ctx->hb_dec_qsv_frames_ctx)
                 {
                     pv->job->qsv.ctx->hb_dec_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
@@ -2131,32 +2132,8 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
 
 #if HB_PROJECT_FEATURE_QSV
-    if (avcodec_find_decoder_by_name(hb_qsv_decode_get_codec_name(pv->context->codec_id)))
-    {
-        switch (pv->context->codec_id)
-        {
-            case AV_CODEC_ID_HEVC:
-            case AV_CODEC_ID_H264:
-                if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P  ||
-                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P ||
-                    pv->context->pix_fmt == AV_PIX_FMT_YUV420P10LE)
-                {
-                    info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
-                }
-                break;
-            case AV_CODEC_ID_AV1:
-                if ((qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G8) &&
-                    (pv->context->pix_fmt == AV_PIX_FMT_YUV420P  ||
-                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P ||
-                    pv->context->pix_fmt == AV_PIX_FMT_YUV420P10LE))
-                {
-                    info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt))
+        info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
 #endif
 
     return 1;

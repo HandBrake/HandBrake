@@ -709,6 +709,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "mkv":
                 case "av_mkv":
                     return OutputFormat.Mkv;
+                case "webm":
+                case "av_webm":
+                    return OutputFormat.WebM;
             }
         }
     }
