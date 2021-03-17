@@ -2460,4 +2460,7 @@ Fields are limited to:
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
   </data>
+  <data name="SubtitlesView_ImportAllExternalSubtitles" xml:space="preserve">
+    <value>Import External Subtitles</value>
+  </data>
 </root>

@@ -136,6 +136,7 @@ namespace HandBrakeWPF.ViewModels
         public string SwitchDisplayTitle
         {
             get
+            
             {
                 return Resources.SubtitlesViewModel_ConfigureDefaults;
             }
@@ -281,6 +282,20 @@ namespace HandBrakeWPF.ViewModels
                 this.AddInputSubtitles(subtitleFiles);
             }        
         }
+
+        public void ImportExternalSubtitles()
+        {
+            string source = this.Task.Source;
+            string directoryName = Path.GetDirectoryName(source);
+            if (string.IsNullOrWhiteSpace(directoryName)) return;
+
+            string fileName = Path.GetFileNameWithoutExtension(source);
+            if (string.IsNullOrWhiteSpace(fileName)) return;
+
+            this.AddExternalSubtitles(directoryName, fileName);
+        }
+
+        
 
         /// <summary>
         /// Remove a Track
@@ -447,6 +462,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AddAllClosedCaptions();
             }
+
+            //TODO Remove before commit
+            //if(this.SubtitleBehaviours.AddExternalSubtitles)
+            //    this.ImportExternalSubtitles();
+
         }
 
         /// <summary>
@@ -780,6 +800,44 @@ namespace HandBrakeWPF.ViewModels
                                           };
                 this.Task.SubtitleTracks.Add(track);
             }
+        }
+
+        private static IEnumerable<string> GetExternalSubtitlesBasedOnFileName(string directoryName, string fileName)
+        {
+            var subtitleFiles = Directory.EnumerateFiles(directoryName, $"{fileName}.*.ass").ToList();
+            subtitleFiles.AddRange(Directory.EnumerateFiles(directoryName, $"{fileName}.*.srt").ToList());
+            subtitleFiles.AddRange(Directory.EnumerateFiles(directoryName, $"{fileName}.*.ssa").ToList());
+            return subtitleFiles;
+        }
+
+        private void AddExternalSubtitles(string directoryName, string fileName)
+        {
+            foreach (string subtitleFile in GetExternalSubtitlesBasedOnFileName(directoryName, fileName))
+            {
+                var languageCode = GetLanguageCodeFromExternalSubtitleFile(subtitleFile);
+
+                var languageNames = LanguageUtilities.GetLanguageNames(new List<string>() { languageCode });
+                if (!languageNames.Any())
+                    languageNames = LanguageUtilities.GetLanguageNames(new List<string>() { "eng" });
+
+                SubtitleTrack track = new SubtitleTrack
+                                      {
+                                          SrtFileName = Path.GetFileNameWithoutExtension(subtitleFile),
+                                          SrtOffset = 0,
+                                          SrtCharCode = "UTF-8",
+                                          SrtLang = languageNames.FirstOrDefault(),
+                                          SubtitleType = SubtitleType.IMPORTSRT,
+                                          SrtPath = subtitleFile,
+                                      };
+                this.Task.SubtitleTracks.Add(track);
+            }
+        }
+
+        private static string GetLanguageCodeFromExternalSubtitleFile(string subtitleFile)
+        {
+            var fileWithoutSubtitleExtenstion = Path.GetFileNameWithoutExtension(subtitleFile);
+            var languageCode = Path.GetExtension(fileWithoutSubtitleExtenstion).Replace(".", string.Empty).Trim().ToLower();
+            return languageCode;
         }
 
         #endregion

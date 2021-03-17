@@ -6131,6 +6131,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import External Subtitles.
+        /// </summary>
+        public static string SubtitlesView_ImportAllExternalSubtitles {
+            get {
+                return ResourceManager.GetString("SubtitlesView_ImportAllExternalSubtitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Subtitle.
         /// </summary>
         public static string SubtitlesView_ImportSubtitle {
