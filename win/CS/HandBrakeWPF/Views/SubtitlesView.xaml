@@ -75,6 +75,7 @@
                         <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
                         <Separator/>
                         <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}" cal:Message.Attach="[Event Click] = [Action Import]" />
+                        <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportAllExternalSubtitles}" cal:Message.Attach="[Event Click] = [Action ImportExternalSubtitles]" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

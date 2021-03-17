@@ -2469,4 +2469,10 @@ Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there w
 
 This warning will display only twice.</value>
   </data>
+  <data name="SubtitlesView_ImportAllExternalSubtitles" xml:space="preserve">
+    <value>Import External Subtitles</value>
+  </data>
+  <data name="SubtitlesView_AddExternalSubtitles" xml:space="preserve">
+    <value>Add External Subtitles when available</value>
+  </data>
 </root>

@@ -24,7 +24,8 @@ namespace HandBrakeWPF.Model.Subtitles
         private bool addForeignAudioScanTrack;
         private bool addClosedCaptions;
         private SubtitleBurnInBehaviourModes selectedBurnInBehaviour;
-
+        private bool addExternalSubtitles;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitleBehaviours"/> class.
         /// </summary>
@@ -48,6 +49,7 @@ namespace HandBrakeWPF.Model.Subtitles
             this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges.ToList());
             this.AddClosedCaptions = behaviours.AddClosedCaptions;
             this.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
+            this.AddExternalSubtitles = behaviours.AddExternalSubtitles;
         }
 
         /// <summary>
@@ -150,6 +152,21 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
+
+        public bool AddExternalSubtitles
+        {
+            get => this.addExternalSubtitles;
+            set
+            {
+                if (value.Equals(this.addExternalSubtitles))
+                {
+                    return;
+                }
+                this.addExternalSubtitles = value;
+                NotifyOfPropertyChange(() => AddExternalSubtitles);
+            }
+        }
+
         /// <summary>
         /// Clone this object
         /// </summary>
@@ -165,6 +182,7 @@ namespace HandBrakeWPF.Model.Subtitles
                 SelectedLangauges = new BindingList<string>(), 
                 AddClosedCaptions = this.addClosedCaptions, 
                 AddForeignAudioScanTrack = this.addForeignAudioScanTrack, 
+                AddExternalSubtitles = this.addExternalSubtitles
             };
 
             foreach (var item in this.SelectedLangauges)
