@@ -293,6 +293,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool SubtitleAddForeignAudioSearch { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether external subtitles should be imported.
+        /// </summary>
+        public bool SubtitleImportExternalSubtitles { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether subtitle add foreign audio subtitle.
         /// </summary>
         public bool SubtitleAddForeignAudioSubtitle { get; set; }

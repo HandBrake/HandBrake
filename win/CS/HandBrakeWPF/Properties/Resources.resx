@@ -2463,4 +2463,7 @@ Fields are limited to:
   <data name="SubtitlesView_ImportAllExternalSubtitles" xml:space="preserve">
     <value>Import External Subtitles</value>
   </data>
+  <data name="SubtitlesView_AddExternalSubtitles" xml:space="preserve">
+    <value>Add External Subtitles when available</value>
+  </data>
 </root>

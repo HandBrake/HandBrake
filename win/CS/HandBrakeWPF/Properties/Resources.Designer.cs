@@ -6086,6 +6086,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add External Subtitles when available.
+        /// </summary>
+        public static string SubtitlesView_AddExternalSubtitles {
+            get {
+                return ResourceManager.GetString("SubtitlesView_AddExternalSubtitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add &apos;Foreign Audio Scan&apos;.
         /// </summary>
         public static string SubtitlesView_AddForeignAudioSearch {

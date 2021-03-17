@@ -463,10 +463,11 @@ namespace HandBrakeWPF.ViewModels
                 this.AddAllClosedCaptions();
             }
 
-            //TODO Remove before commit
-            //if(this.SubtitleBehaviours.AddExternalSubtitles)
-            //    this.ImportExternalSubtitles();
-
+            // Add all external subtitles if enabled.
+            if (this.SubtitleBehaviours.AddExternalSubtitles)
+            {
+                this.ImportExternalSubtitles();
+            }
         }
 
         /// <summary>
@@ -566,6 +567,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour != this.SubtitleBehaviours.SelectedBurnInBehaviour)
+            {
+                return false;
+            }
+
+            if (preset.SubtitleTrackBehaviours.AddExternalSubtitles != this.SubtitleBehaviours.AddExternalSubtitles)
             {
                 return false;
             }
