@@ -142,7 +142,10 @@ static void work_func( void * _work )
             job = new_job;
         }
 #if HB_PROJECT_FEATURE_QSV
-        hb_qsv_setup_job(job);
+        if (hb_qsv_available())
+        {
+            hb_qsv_setup_job(job);
+        }
 #endif
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
