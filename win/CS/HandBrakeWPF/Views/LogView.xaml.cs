@@ -93,7 +93,7 @@ namespace HandBrakeWPF.Views
 
                     if (this.AutoScroll.IsChecked)
                     {
-                        delayProcessor.PerformTask(() => Execute.OnUIThreadAsync(() => new Task(() => this.logText.ScrollToEnd())), 100);
+                        delayProcessor.PerformTask(() => Execute.BeginOnUIThread(() => this.logText.ScrollToEnd()), 100);
                     }
                 }
             }

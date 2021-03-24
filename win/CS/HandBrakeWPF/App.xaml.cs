@@ -211,23 +211,22 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Task t = new Task(
-                () =>
+            Execute.BeginOnUIThread(
+                () => 
+            {
+                if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
                 {
-                    if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
-                    {
-                        GeneralApplicationException exception = new GeneralApplicationException(
-                            "A file appears to be missing.",
-                            "Try re-installing Microsoft .NET Framework 4.8",
-                            (Exception)e.ExceptionObject);
-                        this.ShowError(exception);
-                    }
-                    else
-                    {
-                        this.ShowError(e.ExceptionObject);
-                    }
-                });
-            Execute.OnUIThreadAsync(() => t);
+                    GeneralApplicationException exception = new GeneralApplicationException(
+                        "A file appears to be missing.",
+                        "Try re-installing Microsoft .NET 5 Desktop Runtime",
+                        (Exception)e.ExceptionObject);
+                    this.ShowError(exception);
+                }
+                else
+                {
+                    this.ShowError(e.ExceptionObject);
+                }
+            });
         }
 
         /// <summary>
@@ -244,7 +243,7 @@ namespace HandBrakeWPF
         {
             if (e.Exception.GetType() == typeof(FileNotFoundException))
             {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.7.1", e.Exception);
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 5 Desktop Runtime", e.Exception);
                 this.ShowError(exception);
             }
             else if (e.Exception.GetType() == typeof(GeneralApplicationException))
@@ -317,8 +316,7 @@ namespace HandBrakeWPF
             }
             catch (Exception)
             {
-                MessageBox.Show("An Unknown Error has occurred. \n\n Exception:" + exception, "Unhandled Exception",
-                     MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("An Unknown Error has occurred. \n\n Exception:" + exception, "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -223,15 +223,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.lastReadIndex < e.Log.MessageIndex)
             {
-                Execute.OnUIThreadAsync(
-                    () => new Task(
-                        () =>
+                Execute.BeginOnUIThread(() =>
                         {
                             this.lastReadIndex = e.Log.MessageIndex;
                             this.log.AppendLine(e.Log.Content);
                             this.OnLogMessageReceived(e);
                             this.NotifyOfPropertyChange(() => this.ActivityLog);
-                        }));
+                        });
             }
         }
 

@@ -224,7 +224,7 @@ namespace HandBrakeWPF.Instance
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
         {
-            this.logService.LogMessage("Worker Process Exited!");
+            this.logService.LogMessage("Worker process exited!");
         }
 
         private void StopServer()
@@ -252,7 +252,18 @@ namespace HandBrakeWPF.Instance
                     encodeCompleteFired = true;
                     this.encodePollTimer?.Stop();
 
-                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(-11));
+                    int exitcode = -11;
+                    if (this.workerProcess != null && this.workerProcess.HasExited)
+                    {
+                        this.logService.LogMessage("Worker process exit was not expected.");
+                        exitcode = -12;
+                    }
+                    else
+                    {
+                        this.logService.LogMessage("Worker process appears to be unresponsive. Terminating .... ");
+                    }
+
+                    this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(exitcode));
                     
                     if (this.workerProcess != null && !this.workerProcess.HasExited)
                     {

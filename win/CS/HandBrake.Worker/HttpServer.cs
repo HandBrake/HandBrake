@@ -16,7 +16,9 @@ namespace HandBrake.Worker
     using System.Net;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
 
+    using HandBrake.Worker.Logging;
     using HandBrake.Worker.Services.Interfaces;
 
     public class HttpServer
@@ -42,10 +44,9 @@ namespace HandBrake.Worker
 
             if (!tokenService.IsTokenSet())
             {
-                Console.WriteLine("Worker: No Token Set.");
-
-                Console.WriteLine();
-                Console.WriteLine("API Information: ");
+                ConsoleOutput.WriteLine("Worker: Token has not been initialised. API Access is limited!", ConsoleColor.Red);
+                Console.WriteLine(Environment.NewLine);
+                ConsoleOutput.WriteLine("API Information: ", ConsoleColor.Cyan);
                 Console.WriteLine("All calls require a 'token' in the HTTP header ");
             }
 
@@ -56,7 +57,7 @@ namespace HandBrake.Worker
 
                 if (!tokenService.IsTokenSet())
                 {
-                    Console.WriteLine(url);
+                    Console.WriteLine(" - " + url);
                 }
             }
 
@@ -78,81 +79,33 @@ namespace HandBrake.Worker
             }
         }
 
-        public bool Run()
+        public async Task<bool> Run()
         {
             if (this.failedStart)
             {
                 return false;
             }
 
-            ThreadPool.QueueUserWorkItem(o =>
+
+            while (this.httpListener.IsListening)
             {
                 try
                 {
-                    while (this.httpListener.IsListening)
+                    var context = await this.httpListener.GetContextAsync();
+                    lock (this.httpListener)
                     {
-                        ThreadPool.QueueUserWorkItem(
-                            (c) =>
-                                {
-                                    var context = c as HttpListenerContext;
-                                    if (context == null)
-                                    {
-                                        return;
-                                    }
-
-                                    try
-                                    {
-                                        string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
-                                        string token = context.Request.Headers.Get("token");
-
-                                        if (!path.Equals("Version") && !tokenService.IsAuthenticated(token))
-                                        {
-                                            string rstr = "Worker: Access Denied. The token provided in the HTTP header was not valid.";
-                                            Console.WriteLine(rstr);
-                                            byte[] buf = Encoding.UTF8.GetBytes(rstr);
-                                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                                            context.Response.ContentLength64 = buf.Length;
-                                            context.Response.OutputStream.Write(buf, 0, buf.Length);
-                                            return;
-                                        }
-
-                                        Debug.WriteLine("Handling call to: " + path);
-
-                                        if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
-                                        {
-                                            string rstr = actionToPerform(context.Request);
-                                            if (!string.IsNullOrEmpty(rstr))
-                                            {
-                                                byte[] buf = Encoding.UTF8.GetBytes(rstr);
-                                                context.Response.ContentLength64 = buf.Length;
-                                                context.Response.OutputStream.Write(buf, 0, buf.Length);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            string rstr = "Error, There is a missing API handler.";
-                                            byte[] buf = Encoding.UTF8.GetBytes(rstr);
-                                            context.Response.ContentLength64 = buf.Length;
-                                            context.Response.OutputStream.Write(buf, 0, buf.Length);
-                                        }
-                                    }
-                                    catch (Exception exc)
-                                    {
-                                        Console.WriteLine("Worker: Listener Thread: " + exc);
-                                    }
-                                    finally
-                                    {
-                                        context?.Response.OutputStream.Close();
-                                    }
-                                },
-                            this.httpListener.GetContext());
+                        this.HandleRequest(context);
                     }
                 }
-                catch (Exception exc)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Worker: " + exc);
+                    if (e is HttpListenerException)
+                    {
+                        Debug.WriteLine("Worker: " + e);
+                        return false;
+                    }
                 }
-            });
+            }
 
             return true;
         }
@@ -161,6 +114,62 @@ namespace HandBrake.Worker
         {
             this.httpListener.Stop();
             this.httpListener.Close();
+        }
+
+        private void HandleRequest(HttpListenerContext context)
+        {
+            try
+            {
+                if (context == null)
+                {
+                    return;
+                }
+
+                Stopwatch watch = Stopwatch.StartNew();
+
+                string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
+                string token = context.Request.Headers.Get("token");
+
+                if (!path.Equals("Version") && !tokenService.IsAuthenticated(token))
+                {
+                    string rstr = string.Format("Worker: Access Denied to '/{0}'. The token provided in the HTTP header was not valid.", path);
+                    ConsoleOutput.WriteLine(rstr, ConsoleColor.Red, true);
+                    byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    context.Response.ContentLength64 = buf.Length;
+                    context.Response.OutputStream.Write(buf, 0, buf.Length);
+                    return;
+                }
+
+                if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
+                {
+                    string rstr = actionToPerform(context.Request);
+                    if (!string.IsNullOrEmpty(rstr))
+                    {
+                        byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                        context.Response.ContentLength64 = buf.Length;
+                        context.Response.OutputStream.Write(buf, 0, buf.Length);
+                    }
+                }
+                else
+                {
+                    string rstr = "Error, There is a missing API handler.";
+                    byte[] buf = Encoding.UTF8.GetBytes(rstr);
+                    context.Response.ContentLength64 = buf.Length;
+                    context.Response.OutputStream.Write(buf, 0, buf.Length);
+                }
+
+                watch.Stop();
+                Debug.WriteLine(string.Format(" - Processed call to: '/{0}', Took {1}ms", path, watch.ElapsedMilliseconds), ConsoleColor.White, true);
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine("Worker: Listener Thread: " + exc);
+            }
+            finally
+            {
+                context?.Response.OutputStream.Close();
+            }
         }
     }
 }
