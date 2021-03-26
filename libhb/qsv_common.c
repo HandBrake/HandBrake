@@ -1287,7 +1287,7 @@ int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param
             if (pix_fmt == AV_PIX_FMT_NV12     ||
                 pix_fmt == AV_PIX_FMT_YUV420P  ||
                 pix_fmt == AV_PIX_FMT_YUVJ420P ||
-                pix_fmt == AV_PIX_FMT_YUV420P10LE)
+                pix_fmt == AV_PIX_FMT_YUV420P10)
             {
                 return hb_qsv_decode_h264_is_supported(adapter_index);
             }
@@ -1299,16 +1299,18 @@ int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param
             {
                 return hb_qsv_decode_h265_is_supported(adapter_index);
             }
-            else if (pix_fmt == AV_PIX_FMT_YUV420P10LE)
+            else if (pix_fmt == AV_PIX_FMT_P010LE ||
+                pix_fmt == AV_PIX_FMT_YUV420P10)
             {
                 return hb_qsv_decode_h265_10_bit_is_supported(adapter_index);
             }
             break;
         case AV_CODEC_ID_AV1:
             if (pix_fmt == AV_PIX_FMT_NV12     ||
+                pix_fmt == AV_PIX_FMT_P010LE   ||
                 pix_fmt == AV_PIX_FMT_YUV420P  ||
                 pix_fmt == AV_PIX_FMT_YUVJ420P ||
-                pix_fmt == AV_PIX_FMT_YUV420P10LE)
+                pix_fmt == AV_PIX_FMT_YUV420P10)
             {
                 return hb_qsv_decode_av1_is_supported(adapter_index);
             }
