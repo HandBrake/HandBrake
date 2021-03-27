@@ -12,6 +12,7 @@
         "--filesystem=host",
         "--filesystem=xdg-run/dconf",
         "--filesystem=xdg-run/gvfs",
+        "--filesystem=xdg-run/gvfsd",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*",
