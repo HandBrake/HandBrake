@@ -19,17 +19,17 @@ namespace HandBrakeWPF.Model.Filters
         [ShortName("none")]
         None = 0,
 
-        [DisplayName(typeof(Resources), "PaddingMode_Fill")]
-        [ShortName("fill")]
-        FirstMatch,
+        //[DisplayName(typeof(Resources), "PaddingMode_Fill")]
+        //[ShortName("fill")]
+        //FirstMatch,
 
-        [DisplayName(typeof(Resources), "PaddingMode_Width")]
-        [ShortName("width")]
-        Width,
+        //[DisplayName(typeof(Resources), "PaddingMode_Width")]
+        //[ShortName("width")]
+        //Width,
 
-        [DisplayName(typeof(Resources), "PaddingMode_Height")]
-        [ShortName("height")]
-        Height,
+        //[DisplayName(typeof(Resources), "PaddingMode_Height")]
+        //[ShortName("height")]
+        //Height,
 
         [DisplayName(typeof(Resources), "PaddingMode_Custom")]
         [ShortName("custom")]

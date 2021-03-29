@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PaddingFilter.cs" company="HandBrake Project (https://handbrake.fr)">
+// <copyright file="PaddingFilter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -18,5 +18,9 @@ namespace HandBrakeWPF.Model.Filters
         public int X { get; set; }
 
         public int Y { get; set; }
+
+        public int W { get; set; }
+
+        public int H { get; set; }
     }
 }

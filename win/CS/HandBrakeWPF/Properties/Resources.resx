@@ -2234,25 +2234,25 @@ Please choose a different preset.</value>
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (pad to resolution limit)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (pad up to res limit)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (pad up to res limit)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
     <value>Padding:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding Colour:</value>
+    <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders</value>
+    <value>Borders:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
     <value>Resolution and Scaling:</value>
@@ -2468,5 +2468,17 @@ While you can continue using the application at your own risk, please be aware t
 Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
 
 This warning will display only twice.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB Value:</value>
   </data>
 </root>

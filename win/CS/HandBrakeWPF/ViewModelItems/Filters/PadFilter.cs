@@ -1,27 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeblockFilter.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PadFilter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
-// <summary>
-//   Defines the DeblockFilter type.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.HbLib;
-
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
@@ -31,6 +21,12 @@ namespace HandBrakeWPF.ViewModelItems.Filters
     public class PadFilter : PropertyChangedBase
     {
         private readonly Action triggerTabChanged;
+        private int top, bottom, left, right;
+        private EncodeTask currentTask;
+        private PaddingMode mode;
+        private PadColour colour;
+
+        private string customColour;
 
         public PadFilter(EncodeTask currentTask, Action triggerTabChanged)
         {
@@ -38,71 +34,134 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             this.CurrentTask = currentTask;
         }
 
-        public EncodeTask CurrentTask { get; private set; }
+        public EncodeTask CurrentTask
+        {
+            get => this.currentTask;
+            private set => this.currentTask = value;
+        }
 
         public IEnumerable<PaddingMode> PaddingModes => EnumHelper<PaddingMode>.GetEnumList();
 
-        public PaddingMode Mode { get; set; }
-
-        public IEnumerable<string> PaddingColours { get; } = new List<string>() { "Black", "White", "Custom" };
-
-        public int X
+        public PaddingMode Mode
         {
-            get
-            {
-                return this.CurrentTask.Padding.X;
-            }
-
+            get => this.mode;
             set
             {
-                this.CurrentTask.Padding.X = value;
-                this.NotifyOfPropertyChange(() => this.X);
-                this.triggerTabChanged();
+                this.mode = value;
+                this.IsCustomPaddingEnabled = false;
+
+                switch (value)
+                {
+                    case PaddingMode.Custom:
+                        this.currentTask.Padding.Enabled = true;
+                        IsCustomPaddingEnabled = true;
+                        break;
+                    case PaddingMode.None:
+                    default:
+                        this.currentTask.Padding.Enabled = false;
+                        break;
+                }
+
+                this.NotifyOfPropertyChange(() => this.IsCustomPaddingEnabled);
+                this.NotifyOfPropertyChange(() => this.IsCustomColourVisible);
             }
         }
 
-        public int Y
+        public bool IsCustomPaddingEnabled { get; set; }
+
+        public IEnumerable<PadColour> PaddingColours => EnumHelper<PadColour>.GetEnumList();
+
+        public PadColour Colour
         {
             get
             {
-                return this.CurrentTask.Padding.Y;
+                return colour;
             }
 
             set
             {
-                this.CurrentTask.Padding.Y = value;
-                this.NotifyOfPropertyChange(() => this.Y);
-                this.triggerTabChanged();
-            }
-        }
-
-        public string Colour
-        {
-            get
-            {
-                return this.CurrentTask.Padding.Color;
-            }
-
-            set
-            {
-                this.CurrentTask.Padding.Color = value;
+                this.colour = value;
+                this.SetColour();
                 this.NotifyOfPropertyChange(() => this.Colour);
+                this.NotifyOfPropertyChange(() => this.IsCustomColourVisible);
                 this.triggerTabChanged();
             }
         }
 
-        public void SetPreset(Preset preset, EncodeTask task)
+        public string CustomColour
         {
-            this.CurrentTask = task;
-
-            if (preset == null)
+            get => this.customColour;
+            set
             {
-                return;
+                this.customColour = value;
+                this.SetColour();
+                this.NotifyOfPropertyChange(() => this.CustomColour);
             }
+        }
 
-            this.NotifyOfPropertyChange(() => this.X);
-            this.NotifyOfPropertyChange(() => this.Y);
-            this.NotifyOfPropertyChange(() => this.Colour);
+        public bool IsCustomColourVisible => this.IsCustomPaddingEnabled && this.Colour == PadColour.Custom;
+
+        public int Top
+        {
+            get => this.top;
+
+            set
+            {
+                this.top = value;
+                this.CalculatePosition();
+                this.NotifyOfPropertyChange(() => this.Top);
+                this.triggerTabChanged();
+            }
+        }
+
+        public int Bottom
+        {
+            get => this.bottom;
+
+            set
+            {
+                this.bottom = value;
+                this.CalculatePosition();
+                this.NotifyOfPropertyChange(() => this.Bottom);
+                this.triggerTabChanged();
+            }
+        }
+        
+        public int Left
+        {
+            get => this.left;
+
+            set
+            {
+                this.left = value;
+                this.CalculatePosition();
+                this.NotifyOfPropertyChange(() => this.Left);
+                this.triggerTabChanged();
+            }
+        }
+        
+        public int Right
+        {
+            get => this.right;
+
+            set
+            {
+                this.right = value;
+                this.CalculatePosition();
+                this.NotifyOfPropertyChange(() => this.Right);
+                this.triggerTabChanged();
+            }
+        }
+        
+        private void CalculatePosition()
+        {
+            // Figure the X,Y coordinate 
+            this.CurrentTask.Padding.X = this.Left;
+            this.CurrentTask.Padding.Y = this.Top;
+            
+            // Calculate the total padding
+            this.currentTask.Padding.W = this.Left + this.Right;
+            this.currentTask.Padding.H = this.Top + this.Bottom;
         }
 
         public void UpdateTask(EncodeTask task)
@@ -117,27 +176,43 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 return false;
             }
 
-            if (preset.Task.Padding.X != this.X)
-            {
-                return false;
-            }
-
-            if (preset.Task.Padding.Y != this.Y)
-            {
-                return false;
-            }
-
-            if (preset.Task.Padding.Color != this.Colour)
-            {
-                return false;
-            }
-
             return true;
         }
 
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
+        }
+
+        private void SetColour()
+        {
+            switch (this.Colour)
+            {
+                case PadColour.Black:
+                    this.CurrentTask.Padding.Color = "black";
+                    break;
+                case PadColour.White:
+                    this.CurrentTask.Padding.Color = "white";
+                    break;
+                case PadColour.Custom:
+                    this.CurrentTask.Padding.Color = CustomColour?.Trim().ToLower();
+                    break;
+                default:
+                    this.CurrentTask.Padding.Color = "black";
+                    break;
+            }
+        }
+
+        public void SetPreset(Preset preset, EncodeTask task)
+        {
+            this.CurrentTask = task;
+
+            if (preset == null)
+            {
+                return;
+            }
+
+            this.NotifyOfPropertyChange(() => this.Colour);
         }
     }
 }

@@ -592,6 +592,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field can accept RGB values such as: &quot;0xFF0000&quot; or colour names such as &quot;red&quot;. For a full list of named colours, see the padding filter documentation. .
+        /// </summary>
+        public static string PictureSettingsView_PaddingCustomColourTooltip {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_PaddingCustomColourTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pixel aspect defines the shape of the pixels.
         ///A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
         ///Players will scale the image in order to achieve the specified aspect..

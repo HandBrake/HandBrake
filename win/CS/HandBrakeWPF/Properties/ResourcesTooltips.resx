@@ -471,4 +471,7 @@ When disabled, it will use the path in the destination box on the main window if
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
     <value>Chroma Smooth Filter</value>
   </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+  </data>
 </root>

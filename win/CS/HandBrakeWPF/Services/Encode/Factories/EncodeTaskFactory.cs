@@ -472,8 +472,18 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             // Padding Filter
             if (job.Padding.Enabled)
-            { 
-                string padSettings = string.Format("width={0}:height={1}:color={2}:x={3}:y={4}", job.Width, job.Height, job.Padding.Color, job.Padding.X, job.Padding.Y);
+            {
+                // Calculate the new Width / Height
+                int? width = job.Width;
+                int? height = job.Height;
+                if (job.Padding.Enabled)
+                {
+                    width = width + job.Padding.W;
+                    height = height + job.Padding.H;
+                }
+
+                // Setup the filter.
+                string padSettings = string.Format("width={0}:height={1}:color={2}:x={3}:y={4}", width, height, job.Padding.Color, job.Padding.X, job.Padding.Y);
                 string unparsedPadSettingsJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_PAD, null, null, padSettings);
                 if (!string.IsNullOrEmpty(unparsedPadSettingsJson))
                 {
