@@ -2857,7 +2857,6 @@ int hb_qsv_get_platform(int adapter_index)
             return qsv_map_mfx_platform_codename(info->Platform.CodeName);
         }
     }
-    hb_error("qsv: hb_qsv_get_platform incorrect qsv device index %d", adapter_index);
     return HB_CPU_PLATFORM_UNSPECIFIED;
 }
 
