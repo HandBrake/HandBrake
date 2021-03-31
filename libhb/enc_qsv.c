@@ -2057,6 +2057,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
                         mfxFrameSurface1 *surface,
                         HBQSVFramesContext *frames_ctx)
 {
+    int err;
     mfxStatus sts;
     hb_qsv_context *qsv_ctx       = pv->job->qsv.ctx;
     hb_qsv_space   *qsv_enc_space = pv->job->qsv.ctx->enc_space;
@@ -2160,7 +2161,12 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 pv->async_depth--;
 
                 /* perform a sync operation to get the output bitstream */
-                hb_qsv_wait_on_sync(qsv_ctx, task->stage);
+                err = hb_qsv_wait_on_sync(qsv_ctx, task->stage);
+                if (err < 0)
+                {
+                    hb_error("encqsv: hb_qsv_wait_on_sync failed (%d)", err);
+                    return err;
+                }
 
                 if (task->bs->DataLength > 0)
                 {
@@ -2190,6 +2196,7 @@ static int qsv_enc_work(hb_work_private_t *pv,
 
 int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
+    int err;
     hb_work_private_t *pv = w->private_data;
     hb_buffer_t *in       = *buf_in;
     hb_job_t *job         = pv->job;
@@ -2209,7 +2216,12 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
      */
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        qsv_enc_work(pv, NULL, NULL, NULL);
+        err = qsv_enc_work(pv, NULL, NULL, NULL);
+        if (err < 0)
+        {
+            hb_error("encqsvWork: EOF qsv_enc_work failed %d", err);
+            goto fail;
+        }
         hb_buffer_list_append(&pv->encoded_frames, in);
         *buf_out = hb_buffer_list_clear(&pv->encoded_frames);
         *buf_in = NULL; // don't let 'work_loop' close this buffer
@@ -2308,8 +2320,10 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     {
         mfxStatus sts;
 
-        if (qsv_enc_work(pv, NULL, NULL, NULL) < 0)
+        err = qsv_enc_work(pv, NULL, NULL, NULL);
+        if (err < 0)
         {
+            hb_error("encqsvWork: new_chap qsv_enc_work failed %d", err);
             goto fail;
         }
 
@@ -2346,8 +2360,10 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     /*
      * Now that the input surface is setup, we can encode it.
      */
-    if (qsv_enc_work(pv, qsv_atom, surface, frames_ctx) < 0)
+    err = qsv_enc_work(pv, qsv_atom, surface, frames_ctx);
+    if (err < 0)
     {
+        hb_error("encqsvWork: qsv_enc_work failed %d", err);
         goto fail;
     }
 #if HB_PROJECT_FEATURE_QSV
