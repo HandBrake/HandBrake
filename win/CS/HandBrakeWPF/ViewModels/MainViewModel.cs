@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Text.Json;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
 
@@ -1524,9 +1525,13 @@ namespace HandBrakeWPF.ViewModels
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
-            this.windowManager.ShowDialogAsync(presetViewModel);
+            Task<bool?> result = this.windowManager.ShowDialogAsync(presetViewModel);
 
-            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+            if (result.Result.HasValue && result.Result.Value)
+            {
+                this.NotifyOfPropertyChange(() => this.PresetsCategories);
+                this.SelectedPreset = this.presetService.GetPreset(presetViewModel.PresetName);
+            }
         }
 
         public void PresetUpdate()

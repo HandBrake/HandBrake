@@ -13,13 +13,18 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Scan.Model;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
     public interface IAddPresetViewModel
     {
+        /// <summary>
+        /// Gets the name of the newly created preset.
+        /// </summary>
+        string PresetName { get; }
+
         /// <summary>
         /// Prepare the Preset window to create a Preset Object later.
         /// </summary>
