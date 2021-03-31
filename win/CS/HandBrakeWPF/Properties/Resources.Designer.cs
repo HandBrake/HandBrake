@@ -6425,6 +6425,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (padded).
+        /// </summary>
+        public static string SummaryView_Padded {
+            get {
+                return ResourceManager.GetString("SummaryView_Padded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview {0} of {1}.
         /// </summary>
         public static string SummaryView_PreviewInfo {

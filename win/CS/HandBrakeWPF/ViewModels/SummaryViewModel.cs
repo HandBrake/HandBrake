@@ -549,7 +549,17 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
 
             // Picture Section
-            this.DimensionInfo = string.Format("{0}x{1} {2}, {3}x{4} {5}", this.Task.Width, this.Task.Height, Resources.SummaryView_storage, this.Task.DisplayWidth, this.Task.Height, Resources.SummaryView_display);
+            string storageDesc = Resources.SummaryView_storage;
+            int? width = this.task.Width;
+            int? height = this.task.Height;
+            if (this.task.Padding.Enabled)
+            {
+                storageDesc = string.Format("{0} {1}", Resources.SummaryView_storage, Resources.SummaryView_Padded);
+                width = this.task.Width + this.task.Padding.W;
+                height = this.task.Height + this.task.Padding.H;
+            }
+     
+            this.DimensionInfo = string.Format("{0}x{1} {2}, {3}x{4} {5}", width, height, storageDesc, this.Task.DisplayWidth, this.Task.Height, Resources.SummaryView_display);
             this.NotifyOfPropertyChange(() => this.DimensionInfo);
 
             this.AspectInfo = string.Empty;

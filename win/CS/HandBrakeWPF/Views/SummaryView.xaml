@@ -86,8 +86,6 @@
             <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" FontSize="12" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
 
-
-
             <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" FontSize="12" FontWeight="Bold" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
 
