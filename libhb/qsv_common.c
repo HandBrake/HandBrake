@@ -162,7 +162,7 @@ static hb_triplet_t hb_qsv_h265_levels[] =
 
 // check available Intel Media SDK version against a minimum
 #define HB_CHECK_MFX_VERSION(MFX_VERSION, MAJOR, MINOR) \
-    (MFX_VERSION.Major == MAJOR  && MFX_VERSION.Minor >= MINOR)
+    ((MFX_VERSION.Major * 1000 + MFX_VERSION.Minor) >= (MAJOR * 1000 + MINOR))
 
 int hb_qsv_get_adapter_index()
 {
