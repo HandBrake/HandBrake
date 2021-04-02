@@ -13,7 +13,7 @@ Please replace this text with the version of HandBrake you are running.
 
 ### Operating system and version (e.g., Ubuntu 19.10, macOS 10.15 Catalina, Windows 10 1909):
 
-Please replace this text with the version of the operation system you are running.
+Please replace this text with the version of the operating system you are running.
 
 ### Error message text and/or screenshot:
 
