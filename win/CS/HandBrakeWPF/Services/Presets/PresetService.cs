@@ -157,11 +157,6 @@ namespace HandBrakeWPF.Services.Presets
                     foreach (var objectPreset in container.PresetList)
                     {
                         HBPresetCategory category = JsonSerializer.Deserialize<HBPresetCategory>(objectPreset.ToString(), JsonSettings.Options);
-                        if (category == null || category.ChildrenArray == null || category.ChildrenArray.Count == 0)
-                        {
-                            continue; // Ignore empty preset categories. 
-                        }
-
                         if (category != null && category.ChildrenArray != null && category.ChildrenArray.Count > 0)
                         {
                             foreach (HBPreset hbPreset in category.ChildrenArray)
