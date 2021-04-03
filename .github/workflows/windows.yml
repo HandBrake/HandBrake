@@ -17,17 +17,17 @@ jobs:
 
     - name: Setup Toolchain
       run: |
-        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.1.0/mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
-        SHA=$(sha1sum mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz)
-        EXPECTED="4c0fadeaaa0c72ed7107bf49ebddf5c8a35abd92  mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz"
+        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.2.0/mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz)
+        EXPECTED="560ceb85cdf2783c68226d3761f865c42101c3f6  mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz"
         if [ "$SHA" == "$EXPECTED" ];
         then
             echo "Toolchain Verified. Extracting ..."
             mkdir toolchains
-            mv mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz toolchains
+            mv mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz toolchains
             cd toolchains
-            tar xvf mingw-w64-toolchain-9.1.0-linux-x86_64.tar.gz
-            cd mingw-w64-toolchain-9.1.0-linux-x86_64/mingw-w64-x86_64/
+            tar xvf mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/
             pwd
         else
             echo "Toolchain Verification FAILED. Exiting!"
