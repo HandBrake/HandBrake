@@ -2082,6 +2082,18 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
     return result;
 }
 
+hb_image_t * hb_get_preview3_json(hb_handle_t * h, int picture, const char *json_job)
+{
+    hb_image_t * image;
+    hb_dict_t  * job_dict;
+
+    job_dict = hb_value_json(json_job);
+    image = hb_get_preview3(h, picture, job_dict);
+    hb_value_free(&job_dict);
+
+    return image;
+}
+
 char* hb_get_preview_params_json(int title_idx, int preview_idx,
                             int deinterlace, hb_geometry_settings_t *settings)
 {
