@@ -90,14 +90,15 @@ static int pad_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     {
         snprintf(y_str, 20, "%d", y);
     }
-    if (width < 0)
+    if (width < init->geometry.width)
     {
         width = init->geometry.width;
     }
-    if (height < 0)
+    if (height < init->geometry.height)
     {
         height = init->geometry.height;
     }
+
     hb_dict_t * avfilter = hb_dict_init();
     hb_dict_t * avsettings = hb_dict_init();
 
