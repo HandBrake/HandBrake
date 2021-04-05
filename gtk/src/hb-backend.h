@@ -147,8 +147,7 @@ gint ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int s
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
 GdkPixbuf* ghb_get_preview_image(
-    const hb_title_t *title, gint index, signal_user_data_t *ud,
-    gint *out_width, gint *out_height);
+    const hb_title_t *title, gint index, signal_user_data_t *ud);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_subtitle_track_source(GhbValue *settings, gint track);
 const gchar* ghb_subtitle_track_lang(GhbValue *settings, gint track);

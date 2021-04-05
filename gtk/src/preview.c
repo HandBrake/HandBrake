@@ -112,13 +112,6 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 }
 
 void
-preview_set_size(signal_user_data_t *ud, int width, int height)
-{
-    ud->preview->width = width;
-    ud->preview->height = height;
-}
-
-void
 preview_set_render_size(signal_user_data_t *ud, int width, int height)
 {
     GtkWidget     * widget;
@@ -126,6 +119,29 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     GhbSurface    * ss;
     GdkGeometry     geo;
 
+    if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
+    {
+        gint factor = 80;
+        gint s_w, s_h;
+
+        ghb_monitor_get_size(GHB_WIDGET(ud->builder, "hb_window"), &s_w, &s_h);
+        if (s_w > 0 && s_h > 0)
+        {
+            int orig_w = width;
+            int orig_h = height;
+
+            if (width > s_w * factor / 100)
+            {
+                width = s_w * factor / 100;
+                height = height * width / orig_w;
+            }
+            if (height > s_h * factor / 100)
+            {
+                height = s_h * factor / 100;
+                width = orig_w * height / orig_h;
+            }
+        }
+    }
     widget = GHB_WIDGET (ud->builder, "preview_image");
     gtk_widget_set_size_request(widget, width, height);
     window = GTK_WINDOW(GHB_WIDGET(ud->builder, "preview_window"));
@@ -143,6 +159,25 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
 
     ud->preview->render_width = width;
     ud->preview->render_height = height;
+}
+
+void
+preview_set_size(signal_user_data_t *ud, int width, int height)
+{
+    if (height == ud->preview->width &&
+        width == ud->preview->height)
+    {
+        // Rotation happened, fix up render size
+        preview_set_render_size(ud, ud->preview->render_height,
+                                ud->preview->render_width);
+    }
+    else if (width != ud->preview->width ||
+             height != ud->preview->height)
+    {
+        preview_set_render_size(ud, width, height);
+    }
+    ud->preview->width = width;
+    ud->preview->height = height;
 }
 
 void
@@ -933,7 +968,6 @@ void
 init_preview_image(signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    gint width, height;
 
     gint title_id, titleindex;
     const hb_title_t *title;
@@ -971,8 +1005,7 @@ init_preview_image(signal_user_data_t *ud)
     if (ud->preview->scaled_pix != NULL)
         g_object_unref(ud->preview->scaled_pix);
 
-    ud->preview->pix = ghb_get_preview_image(title, ud->preview->frame,
-                                             ud, &width, &height);
+    ud->preview->pix = ghb_get_preview_image(title, ud->preview->frame, ud);
     if (ud->preview->pix == NULL)
         return;
 

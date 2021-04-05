@@ -35,6 +35,7 @@
 #include "subtitlehandler.h"
 #include "audiohandler.h"
 #include "videohandler.h"
+#include "queuehandler.h"
 #include "preview.h"
 #include "presets.h"
 #include "values.h"
@@ -4031,48 +4032,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     ud->scale_busy = FALSE;
 }
 
-static void
-get_preview_geometry(signal_user_data_t *ud, const hb_title_t *title,
-                     hb_geometry_t *srcGeo, hb_geometry_settings_t *uiGeo)
-{
-    srcGeo->width  = title->geometry.width;
-    srcGeo->height = title->geometry.height;
-    srcGeo->par    = title->geometry.par;
-
-    uiGeo->mode = ghb_settings_combo_int(ud->settings, "PicturePAR");
-    uiGeo->keep = (ghb_dict_get_bool(ud->settings, "PictureKeepRatio") ||
-                                 uiGeo->mode == HB_ANAMORPHIC_STRICT  ||
-                                 uiGeo->mode == HB_ANAMORPHIC_LOOSE) ?
-                                 HB_KEEP_DISPLAY_ASPECT : 0;
-    uiGeo->itu_par = 0;
-    uiGeo->modulus = ghb_settings_combo_int(ud->settings, "PictureModulus");
-    uiGeo->crop[0] = ghb_dict_get_int(ud->settings, "PictureTopCrop");
-    uiGeo->crop[1] = ghb_dict_get_int(ud->settings, "PictureBottomCrop");
-    uiGeo->crop[2] = ghb_dict_get_int(ud->settings, "PictureLeftCrop");
-    uiGeo->crop[3] = ghb_dict_get_int(ud->settings, "PictureRightCrop");
-    uiGeo->geometry.width = ghb_dict_get_int(ud->settings, "scale_width");
-    uiGeo->geometry.height = ghb_dict_get_int(ud->settings, "scale_height");
-    uiGeo->geometry.par.num = ghb_dict_get_int(ud->settings, "PicturePARWidth");
-    uiGeo->geometry.par.den = ghb_dict_get_int(ud->settings, "PicturePARHeight");
-    uiGeo->maxWidth = 0;
-    uiGeo->maxHeight = 0;
-    if (ghb_dict_get_bool(ud->prefs, "preview_show_crop"))
-    {
-        gdouble xscale = (gdouble)uiGeo->geometry.width /
-                  (title->geometry.width - uiGeo->crop[2] - uiGeo->crop[3]);
-        gdouble yscale = (gdouble)uiGeo->geometry.height /
-                  (title->geometry.height - uiGeo->crop[0] - uiGeo->crop[1]);
-
-        uiGeo->geometry.width += xscale * (uiGeo->crop[2] + uiGeo->crop[3]);
-        uiGeo->geometry.height += yscale * (uiGeo->crop[0] + uiGeo->crop[1]);
-        uiGeo->crop[0] = 0;
-        uiGeo->crop[1] = 0;
-        uiGeo->crop[2] = 0;
-        uiGeo->crop[3] = 0;
-        uiGeo->modulus = 2;
-    }
-}
-
 const char*
 ghb_lookup_filter_name(int filter_id, const char *short_name, int preset)
 {
@@ -4665,138 +4624,23 @@ ghb_pause_resume_queue()
     }
 }
 
-static void
-vert_line(
-    GdkPixbuf * pb,
-    guint8 r,
-    guint8 g,
-    guint8 b,
-    gint x,
-    gint y,
-    gint len,
-    gint width)
-{
-    guint8 *pixels = gdk_pixbuf_get_pixels (pb);
-    guint8 *dst;
-    gint ii, jj;
-    gint channels = gdk_pixbuf_get_n_channels (pb);
-    gint stride = gdk_pixbuf_get_rowstride (pb);
-
-    for (jj = 0; jj < width; jj++)
-    {
-        dst = pixels + y * stride + (x+jj) * channels;
-        for (ii = 0; ii < len; ii++)
-        {
-            dst[0] = r;
-            dst[1] = g;
-            dst[2] = b;
-            dst += stride;
-        }
-    }
-}
-
-static void
-horz_line(
-    GdkPixbuf * pb,
-    guint8 r,
-    guint8 g,
-    guint8 b,
-    gint x,
-    gint y,
-    gint len,
-    gint width)
-{
-    guint8 *pixels = gdk_pixbuf_get_pixels (pb);
-    guint8 *dst;
-    gint ii, jj;
-    gint channels = gdk_pixbuf_get_n_channels (pb);
-    gint stride = gdk_pixbuf_get_rowstride (pb);
-
-    for (jj = 0; jj < width; jj++)
-    {
-        dst = pixels + (y+jj) * stride + x * channels;
-        for (ii = 0; ii < len; ii++)
-        {
-            dst[0] = r;
-            dst[1] = g;
-            dst[2] = b;
-            dst += channels;
-        }
-    }
-}
-
-static void
-hash_pixbuf(
-    GdkPixbuf * pb,
-    gint        x,
-    gint        y,
-    gint        w,
-    gint        h,
-    gint        step,
-    gint        orientation)
-{
-    gint ii, jj;
-    gint line_width = 8;
-    struct
-    {
-        guint8 r;
-        guint8 g;
-        guint8 b;
-    } c[4] =
-    {{0x80, 0x80, 0x80},{0xC0, 0x80, 0x70},{0x80, 0xA0, 0x80},{0x70, 0x80, 0xA0}};
-
-    if (!orientation)
-    {
-        // vertical lines
-        for (ii = x, jj = 0; ii+line_width < x+w; ii += step, jj++)
-        {
-            vert_line(pb, c[jj&3].r, c[jj&3].g, c[jj&3].b, ii, y, h, line_width);
-        }
-    }
-    else
-    {
-        // horizontal lines
-        for (ii = y, jj = 0; ii+line_width < y+h; ii += step, jj++)
-        {
-            horz_line(pb, c[jj&3].r, c[jj&3].g, c[jj&3].b, x, ii, w, line_width);
-        }
-    }
-}
-
 GdkPixbuf*
 ghb_get_preview_image(
     const hb_title_t *title,
     gint index,
-    signal_user_data_t *ud,
-    gint *out_width,
-    gint *out_height)
+    signal_user_data_t *ud)
 {
-    hb_geometry_t srcGeo, resultGeo;
-    hb_geometry_settings_t uiGeo;
+    GhbValue * settings, * job;
 
-    if( title == NULL ) return NULL;
+    settings = ghb_value_dup(ud->settings);
+    ghb_finalize_job(settings);
+    job = ghb_dict_get(settings, "Job");
 
-    gboolean deinterlace;
-    deinterlace = ghb_settings_combo_int(ud->settings,
-                            "PictureDeinterlaceFilter") != HB_FILTER_INVALID;
+    GdkPixbuf     * preview;
+    hb_image_t    * image;
 
-    // Get the geometry settings for the preview.  This will disable
-    // cropping if the setting to show the cropped region is enabled.
-    get_preview_geometry(ud, title, &srcGeo, &uiGeo);
-
-    // hb_get_preview doesn't compensate for anamorphic, so lets
-    // calculate scale factors
-    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-
-    // Rescale preview dimensions to adjust for screen PAR and settings PAR
-    ghb_par_scale(ud, &uiGeo.geometry.width, &uiGeo.geometry.height,
-                      resultGeo.par.num, resultGeo.par.den);
-    uiGeo.geometry.par.num = 1;
-    uiGeo.geometry.par.den = 1;
-
-    GdkPixbuf *preview;
-    hb_image_t *image;
-    image = hb_get_preview2(h_scan, title->index, index, &uiGeo, deinterlace);
+    image = hb_get_preview3(h_scan, index, job);
+    ghb_value_free(&settings);
 
     if (image == NULL)
     {
@@ -4837,83 +4681,8 @@ ghb_get_preview_image(
         dst += stride;
     }
 
-    *out_width = ghb_dict_get_int(ud->settings, "scale_width");
-    *out_height = ghb_dict_get_int(ud->settings, "scale_height");
-    ghb_par_scale(ud, out_width, out_height,
-                  resultGeo.par.num, resultGeo.par.den);
-
-    gint c0, c1, c2, c3;
-    c0 = ghb_dict_get_int(ud->settings, "PictureTopCrop");
-    c1 = ghb_dict_get_int(ud->settings, "PictureBottomCrop");
-    c2 = ghb_dict_get_int(ud->settings, "PictureLeftCrop");
-    c3 = ghb_dict_get_int(ud->settings, "PictureRightCrop");
-
-    gdouble xscale, yscale;
-    if (ghb_dict_get_bool(ud->prefs, "preview_show_crop"))
-    {
-        xscale = (gdouble)image->width / title->geometry.width;
-        yscale = (gdouble)image->height / title->geometry.height;
-    }
-    else
-    {
-        xscale = (gdouble)image->width / (title->geometry.width - c2 - c3);
-        yscale = (gdouble)image->height / (title->geometry.height - c0 - c1);
-    }
-
-    int previewWidth = image->width;
-    int previewHeight = image->height;
-
-    // If the preview is too large to fit the screen, reduce it's size.
-    if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
-    {
-        gint factor = 80;
-        gint s_w, s_h;
-
-        ghb_monitor_get_size(GHB_WIDGET(ud->builder, "hb_window"), &s_w, &s_h);
-        if (s_w > 0 && s_h > 0 &&
-            (previewWidth  > s_w * factor / 100 ||
-             previewHeight > s_h * factor / 100))
-        {
-            GdkPixbuf *scaled_preview;
-            int orig_w = previewWidth;
-            int orig_h = previewHeight;
-
-            if (previewWidth > s_w * factor / 100)
-            {
-                previewWidth = s_w * factor / 100;
-                previewHeight = previewHeight * previewWidth / orig_w;
-            }
-            if (previewHeight > s_h * factor / 100)
-            {
-                previewHeight = s_h * factor / 100;
-                previewWidth = orig_w * previewHeight / orig_h;
-            }
-            xscale *= (gdouble)previewWidth / orig_w;
-            yscale *= (gdouble)previewHeight / orig_h;
-            scaled_preview = gdk_pixbuf_scale_simple(preview,
-                            previewWidth, previewHeight, GDK_INTERP_HYPER);
-            g_object_unref(preview);
-            preview = scaled_preview;
-        }
-    }
-
-    if (ghb_dict_get_bool(ud->prefs, "preview_show_crop"))
-    {
-        c0 *= yscale;
-        c1 *= yscale;
-        c2 *= xscale;
-        c3 *= xscale;
-
-        // Top
-        hash_pixbuf(preview, 0, 0, previewWidth, c0, 32, 0);
-        // Bottom
-        hash_pixbuf(preview, 0, previewHeight-c1, previewWidth, c1, 32, 0);
-        // Left
-        hash_pixbuf(preview, 0, 0, c2, previewHeight, 32, 1);
-        // Right
-        hash_pixbuf(preview, previewWidth-c3, 0, c3, previewHeight, 32, 1);
-    }
     hb_image_close(&image);
+
     return preview;
 }
 
