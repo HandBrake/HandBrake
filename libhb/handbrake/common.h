@@ -1483,6 +1483,7 @@ int hb_output_color_transfer(hb_job_t * job);
 int hb_output_color_matrix(hb_job_t * job);
 
 int hb_get_bit_depth(int format);
+int hb_get_best_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"

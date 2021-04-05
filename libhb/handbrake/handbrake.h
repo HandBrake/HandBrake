@@ -77,6 +77,8 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
 
 hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                               hb_geometry_settings_t *geo, int deinterlace);
+hb_image_t  * hb_get_preview3(hb_handle_t * h, int picture,
+                              hb_dict_t * job_dict);
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_geometry_settings_t *geo,
                                       hb_geometry_t *result);

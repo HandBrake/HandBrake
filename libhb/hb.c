@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/hbavfilter.h"
 #include "handbrake/encx264.h"
 #include "libavfilter/avfilter.h"
 #include <stdio.h>
@@ -594,9 +595,13 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     hb_buffer_t * buf;
     buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
                                title->geometry.width, title->geometry.height);
+    buf->f.color_prim     = title->color_prim;
+    buf->f.color_transfer = title->color_transfer;
+    buf->f.color_matrix   = title->color_matrix;
 
     if (!buf)
     {
+        hb_error("hb_read_preview: hb_frame_buffer_init failed");
         goto done;
     }
 
@@ -819,6 +824,274 @@ fail:
     hb_buffer_close( &preview_buf );
 
     image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
+    return image;
+}
+
+static void process_filter(hb_filter_object_t * filter)
+{
+    hb_buffer_t * in, * out;
+
+    while (filter->status != HB_FILTER_DONE)
+    {
+        in = hb_fifo_get_wait(filter->fifo_in);
+        if (in == NULL)
+            continue;
+
+        out = NULL;
+        filter->status = filter->work(filter, &in, &out);
+        if (in != NULL)
+        {
+            hb_buffer_close(&in);
+        }
+        if (out != NULL)
+        {
+            hb_fifo_push(filter->fifo_out, out);
+        }
+    }
+}
+
+// Get preview and apply applicable filters
+hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
+                             hb_dict_t * job_dict)
+{
+    hb_job_t    * job;
+    hb_title_t  * title = NULL;
+    hb_buffer_t * in = NULL, * out;
+
+    job = hb_dict_to_job(h, job_dict);
+    if (job == NULL)
+    {
+        hb_error("hb_get_preview3: failed to unpack job");
+        goto fail;
+    }
+    title = job->title;
+
+    in = hb_read_preview( h, title, picture, HB_PREVIEW_FORMAT_JPG );
+    if (in == NULL)
+    {
+        goto fail;
+    }
+
+    // Initialize supported filters
+    hb_list_t        * list_filter = job->list_filter;
+    hb_filter_init_t   init;
+    int                ii;
+
+    memset(&init, 0, sizeof(init));
+    init.time_base.num = 1;
+    init.time_base.den = 90000;
+    init.job = job;
+    init.pix_fmt = hb_get_best_pix_fmt(job);
+    init.color_range = AVCOL_RANGE_MPEG;
+
+    init.color_prim = title->color_prim;
+    init.color_transfer = title->color_transfer;
+    init.color_matrix = title->color_matrix;
+    init.geometry.width = title->geometry.width;
+    init.geometry.height = title->geometry.height;
+
+    init.geometry.par = job->par;
+    memset(init.crop, 0, sizeof(int[4]));
+    init.vrate = job->vrate;
+    init.cfr = 0;
+    init.grayscale = 0;
+
+    hb_filter_object_t * filter;
+
+    for (ii = 0; ii < hb_list_count(list_filter); )
+    {
+        filter = hb_list_item(list_filter, ii);
+        switch (filter->id)
+        {
+            case HB_FILTER_AVFILTER:
+            case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_PAD:
+            case HB_FILTER_ROTATE:
+            case HB_FILTER_COLORSPACE:
+            case HB_FILTER_DECOMB:
+            case HB_FILTER_DETELECINE:
+            case HB_FILTER_DEINTERLACE:
+            case HB_FILTER_GRAYSCALE:
+                break;
+
+            case HB_FILTER_VFR:
+            case HB_FILTER_RENDER_SUB:
+            case HB_FILTER_QSV:
+            case HB_FILTER_NLMEANS:
+            case HB_FILTER_CHROMA_SMOOTH:
+            case HB_FILTER_LAPSHARP:
+            case HB_FILTER_UNSHARP:
+            case HB_FILTER_DEBLOCK:
+            case HB_FILTER_COMB_DETECT:
+            case HB_FILTER_HQDN3D:
+                // Not implemented, N/A, or requires multiple frame input
+                hb_list_rem(list_filter, filter);
+                hb_filter_close(&filter);
+                continue;
+            default:
+                hb_log("hb_get_preview3: Unrecognized filter (%d)",
+                       filter->id);
+                hb_list_rem(list_filter, filter);
+                hb_filter_close(&filter);
+                continue;
+        }
+        if (filter->init != NULL && filter->init(filter, &init))
+        {
+            hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                     filter->name);
+            hb_list_rem(list_filter, filter);
+            hb_filter_close(&filter);
+            continue;
+        }
+        ii++;
+    }
+
+    job->pix_fmt = init.pix_fmt;
+    job->color_prim = init.color_prim;
+    job->color_transfer = init.color_transfer;
+    job->color_matrix = init.color_matrix;
+    job->width = init.geometry.width;
+    job->height = init.geometry.height;
+    job->par = init.geometry.par;
+    memcpy(job->crop, init.crop, sizeof(int[4]));
+    job->vrate = init.vrate;
+    job->cfr = init.cfr;
+    job->grayscale = init.grayscale;
+
+    // Add "cropscale"
+    // Adjusts for pixel aspect, performs any requested
+    // post-scaling and sets required pix_fmt AV_PIX_FMT_RGB32
+    //
+    // This will scale the result at the end of the pipeline.
+    // I.e. padding will be scaled
+    hb_rational_t par = init.geometry.par;
+
+    int scaled_width  = init.geometry.width;
+    int scaled_height = init.geometry.height;
+
+    filter = hb_filter_init(HB_FILTER_CROP_SCALE);
+    filter->settings = hb_dict_init();
+    if (par.num >= par.den)
+    {
+        scaled_width = scaled_width * par.num / par.den;
+    }
+    else
+    {
+        scaled_height = scaled_height * par.den / par.num;
+    }
+    hb_dict_set_int(filter->settings, "width", scaled_width);
+    hb_dict_set_int(filter->settings, "height", scaled_height);
+    hb_dict_set_string(filter->settings, "out_pix_fmt", av_get_pix_fmt_name(AV_PIX_FMT_RGB32));
+    hb_list_add(job->list_filter, filter);
+    if (filter->init != NULL && filter->init(filter, &init))
+    {
+        hb_error("hb_get_preview3: Failure to initialize filter '%s'",
+                 filter->name);
+        hb_list_rem(list_filter, filter);
+        hb_filter_close(&filter);
+    }
+
+    hb_avfilter_combine(list_filter);
+
+    for( ii = 0; ii < hb_list_count( list_filter ); )
+    {
+        filter = hb_list_item( list_filter, ii );
+        filter->done = &job->done;
+        if (filter->post_init != NULL && filter->post_init(filter, job))
+        {
+            hb_log( "hb_get_preview3: Failure to initialise filter '%s'",
+                    filter->name );
+            hb_list_rem(list_filter, filter);
+            hb_filter_close(&filter);
+            continue;
+        }
+        ii++;
+    }
+
+    // Set up filter fifos
+    hb_fifo_t *fifo_in, * fifo_first, * fifo_last;
+
+    fifo_in = fifo_first = hb_fifo_init(2, 2);
+    for( ii = 0; ii < hb_list_count( list_filter ); ii++)
+    {
+        filter = hb_list_item(list_filter, ii);
+        if (!filter->skip)
+        {
+            filter->fifo_in = fifo_in;
+            filter->fifo_out = hb_fifo_init(2, 2);
+            fifo_last = fifo_in = filter->fifo_out;
+        }
+    }
+
+    // Feed preview frame to filter chain
+    hb_fifo_push(fifo_first, in);
+    hb_fifo_push(fifo_first, hb_buffer_eof_init());
+
+    // Process the preview frame through all filters
+    for( ii = 0; ii < hb_list_count( list_filter ); ii++)
+    {
+        filter = hb_list_item(list_filter, ii);
+        if (!filter->skip)
+        {
+            process_filter(filter);
+        }
+    }
+    // Retrieve the filtered preview frame
+    out = hb_fifo_get(fifo_last);
+
+    // Close filters
+    for (ii = 0; ii < hb_list_count(list_filter); ii++)
+    {
+        filter = hb_list_item(list_filter, ii);
+        filter->close(filter);
+    }
+
+    // Close fifos
+    hb_fifo_close(&fifo_first);
+    for( ii = 0; ii < hb_list_count( list_filter ); ii++)
+    {
+        filter = hb_list_item(list_filter, ii);
+        hb_fifo_close(&filter->fifo_out);
+    }
+
+    if (out == NULL)
+    {
+        hb_error("hb_get_preview3: Failed to filter preview");
+        goto fail;
+    }
+
+    hb_image_t *image = hb_buffer_to_image(out);
+    hb_buffer_close(&out);
+    if (image->width < 16 || image->height < 16)
+    {
+        // Guard against broken filter generating degenerate images
+        hb_error("hb_get_preview3: bad preview image output by filters");
+        hb_image_close(&image);
+        goto fail;
+    }
+
+    // Clean up
+    hb_job_close(&job);
+
+    return image;
+
+fail:
+
+    {
+        int width = 854, height = 480;
+
+        if (title != NULL)
+        {
+            hb_geometry_t * geo = &title->geometry;
+
+            width = geo->width * geo->par.num / geo->par.den;
+            height = geo->height;
+        }
+
+        image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
+    }
+    hb_job_close(&job);
+
     return image;
 }
 

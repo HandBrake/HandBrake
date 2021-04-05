@@ -63,7 +63,8 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
     hb_dict_t        * settings = filter->settings;
     hb_value_array_t * avfilters = hb_value_array_init();
-    int                width, height, top, bottom, left, right;
+    int                width, height;
+    int                top = 0, bottom = 0, left = 0, right = 0;
     const char       * matrix;
 
     // Convert crop settings to 'crop' avfilter
@@ -83,6 +84,9 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_dict_set(avfilter, "crop", avsettings);
         hb_value_array_append(avfilters, avfilter);
     }
+
+    width  = init->geometry.width;
+    height = init->geometry.height;
 
     // Convert scale settings to 'scale' avfilter
     hb_dict_extract_int(&width, settings, "width");
@@ -183,7 +187,21 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     if (!hb_qsv_hw_filters_are_enabled(init->job))
 #endif
     {
-        hb_dict_set(avsettings, "pix_fmts", hb_value_string(av_get_pix_fmt_name(init->pix_fmt)));
+        char * out_pix_fmt = NULL;
+
+        // "out_pix_fmt" is a private option used internally by
+        // handbrake for preview generation
+        hb_dict_extract_string(&out_pix_fmt, settings, "out_pix_fmt");
+        if (out_pix_fmt != NULL)
+        {
+            hb_dict_set_string(avsettings, "pix_fmts", out_pix_fmt);
+            free(out_pix_fmt);
+        }
+        else
+        {
+            hb_dict_set_string(avsettings, "pix_fmts",
+                av_get_pix_fmt_name(init->pix_fmt));
+        }
         hb_dict_set(avfilter, "format", avsettings);
         hb_value_array_append(avfilters, avfilter);
     }
