@@ -203,7 +203,7 @@ static int avformatInit( hb_mux_object_t * m )
       }
       else
         hb_error( "avio_open2 failed, errno %d", ret);
-        goto error;
+      goto error;
     }
 
     /* Video track */
