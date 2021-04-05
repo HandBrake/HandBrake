@@ -3892,7 +3892,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                             <property name="tooltip_text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining.
 
 Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">0</property>
@@ -3908,7 +3908,7 @@ Telecining is a process that adjusts film framerates that are 24fps to NTSC vide
 
 JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -3969,7 +3969,7 @@ to be interlaced will be deinterlaced.</property>
 Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:
 Block Thresh: Block Width: Block Height</property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -4049,7 +4049,7 @@ The deinterlace filter is a classic YADIF deinterlacer.
 The decomb filter supports a variety of interpolation algorithms.
 The deinterlace filter is a classic YADIF deinterlacer.
 </property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -4063,7 +4063,7 @@ The deinterlace filter is a classic YADIF deinterlacer.
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes"></property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -4137,7 +4137,7 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact.
 If your source exhibits 'blockiness', this filter may help clean it up.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -4153,7 +4153,7 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
 
 strength=weak|strong:thresh=0-100:blocksize=4-512</property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -4229,7 +4229,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
                             <property name="tooltip_text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
 Film grain and other types of high frequency noise are difficult to compress.
 Using this filter on such sources can result in smaller file sizes.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -4262,7 +4262,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
                             <property name="tooltip_text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
 Film grain and other types of high frequency noise are difficult to compress.
 Using this filter on such sources can result in smaller file sizes.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -4278,7 +4278,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -4352,7 +4352,7 @@ high frequency components in the video.</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Sharpen filtering enhances edges and other
 high frequency components in the video.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -4384,7 +4384,7 @@ high frequency components in the video.</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Sharpen filtering enhances edges and other
 high frequency components in the video.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -4400,7 +4400,7 @@ high frequency components in the video.</property>
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="width-chars">8</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -4441,7 +4441,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Rotate the video clockwise in 90 degree increments.</property>
-                            <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -4463,7 +4463,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
+                        <signal name="toggled" handler="filter_widget_changed_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>

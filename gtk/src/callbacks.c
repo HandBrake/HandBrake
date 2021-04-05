@@ -2919,6 +2919,13 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+filter_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    setting_widget_changed_cb(widget, ud);
+    update_preview = TRUE;
+}
+
+G_MODULE_EXPORT void
 nonsetting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
@@ -4312,7 +4319,7 @@ ghb_timer_cb(gpointer data)
     if (update_preview)
     {
         g_debug("Updating preview\n");
-        ghb_set_preview_image (ud);
+        ghb_set_preview_image(ud);
         update_preview = FALSE;
     }
 
