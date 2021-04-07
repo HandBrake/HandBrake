@@ -1543,7 +1543,9 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_error("Invalid rotate filter settings (%s)", rotate);
             return -1;
         }
-        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        else if (!hb_dict_get_bool(filter_settings, "disable") &&
+                 (hb_dict_get_int(filter_settings, "angle") != 0 ||
+                  hb_dict_get_bool(filter_settings, "hflip")))
         {
             filter_dict = hb_dict_init();
             hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_ROTATE));
