@@ -62,10 +62,11 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
     hb_dict_t        * settings = filter->settings;
 
+    hb_rational_t par    = init->geometry.par;
     int           width  = init->geometry.width;
     int           height = init->geometry.height;
     const char *  trans  = NULL;
-    int           angle  = 0, flip = 0, hflip = 0, vflip = 0, tmp;
+    int           angle  = 0, flip = 0, hflip = 0, vflip = 0;
 
     hb_dict_extract_int(&angle, settings, "angle");
     hb_dict_extract_bool(&flip, settings, "hflip");
@@ -88,10 +89,11 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hflip = flip;
             break;
         case 90:
-            trans  = clock;
-            tmp    = width;
-            width  = height;
-            height = tmp;
+            trans   = clock;
+            width   = init->geometry.height;
+            height  = init->geometry.width;
+            par.num = init->geometry.par.den;
+            par.den = init->geometry.par.num;
             break;
         case 180:
             vflip = 1;
@@ -99,9 +101,10 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             break;
         case 270:
             trans  = cclock;
-            tmp    = width;
-            width  = height;
-            height = tmp;
+            width   = init->geometry.height;
+            height  = init->geometry.width;
+            par.num = init->geometry.par.den;
+            par.den = init->geometry.par.num;
             break;
         default:
             break;
@@ -138,8 +141,9 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         pv->avfilters = hb_value_null();
     }
 
-    init->geometry.width = width;
+    init->geometry.width  = width;
     init->geometry.height = height;
+    init->geometry.par    = par;
     pv->output = *init;
 
     return 0;
