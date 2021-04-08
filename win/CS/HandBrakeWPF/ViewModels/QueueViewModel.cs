@@ -529,8 +529,9 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
 
+            this.IsQueueRunning = this.queueProcessor.IsProcessing;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-
+            
             return base.OnActivateAsync(cancellationToken);
         }
 
