@@ -14,6 +14,7 @@ struct hb_work_private_s
 {
     hb_job_t       * job;
     AVCodecContext * context;
+    AVPacket       * pkt;
 
     int              out_discrete_channels;
     int              samples_per_frame;
@@ -52,6 +53,13 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     pv->job               = job;
     pv->list              = hb_list_init();
     pv->last_pts          = AV_NOPTS_VALUE;
+    pv->pkt               = av_packet_alloc();
+
+    if (pv->pkt == NULL)
+    {
+        hb_error("encavcodecaInit: av_packet_alloc failed");
+        return 1;
+    }
 
     // channel count, layout and matrix encoding
     int matrix_encoding;
@@ -319,6 +327,8 @@ static void encavcodecaClose(hb_work_object_t * w)
             hb_avcodec_free_context(&pv->context);
         }
 
+        av_packet_free(&pv->pkt);
+
         if (pv->output_buf != NULL)
         {
             free(pv->output_buf);
@@ -353,11 +363,9 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
     {
         // Prepare output packet
         int           ret;
-        AVPacket      pkt;
         hb_buffer_t * out;
 
-        av_init_packet(&pkt);
-        ret = avcodec_receive_packet(pv->context, &pkt);
+        ret = avcodec_receive_packet(pv->context, pv->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
         {
             break;
@@ -368,19 +376,19 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             break;
         }
 
-        out = hb_buffer_init(pkt.size);
-        memcpy(out->data, pkt.data, out->size);
+        out = hb_buffer_init(pv->pkt->size);
+        memcpy(out->data, pv->pkt->data, out->size);
 
         // FIXME: On windows builds, there is an upstream bug in the lame
         // encoder that causes an extra output packet that has the same
         // timestamp as the second to last packet.  This causes an error
         // during muxing. Work around it by dropping such packets here.
         // See: https://github.com/HandBrake/HandBrake/issues/726
-        if (pkt.pts > pv->last_pts)
+        if (pv->pkt->pts > pv->last_pts)
         {
             // The output pts from libav is in context->time_base. Convert it
             // back to our timebase.
-            out->s.start = av_rescale_q(pkt.pts, pv->context->time_base,
+            out->s.start = av_rescale_q(pv->pkt->pts, pv->context->time_base,
                                         (AVRational){1, 90000});
             out->s.duration  = (double)90000 * pv->samples_per_frame /
                                                audio->config.out.samplerate;
@@ -389,9 +397,9 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             out->s.frametype = HB_FRAME_AUDIO;
 
             hb_buffer_list_append(list, out);
-            pv->last_pts = pkt.pts;
+            pv->last_pts = pv->pkt->pts;
         }
-        av_packet_unref(&pkt);
+        av_packet_unref(pv->pkt);
     }
 }
 

@@ -118,6 +118,7 @@ struct hb_work_private_s
     AVCodecContext       * context;
     AVCodecParserContext * parser;
     AVFrame              * frame;
+    AVPacket             * pkt;
     hb_buffer_t          * palette;
     int                    threads;
     int                    video_codec_opened;
@@ -336,6 +337,13 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
+    pv->pkt = av_packet_alloc();
+    if (pv->pkt == NULL)
+    {
+        hb_log("decavcodecaInit: av_packet_alloc failed");
+        return 1;
+    }
+
     return 0;
 }
 
@@ -395,6 +403,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             hb_avcodec_free_context(&pv->context);
         }
+        av_packet_free(&pv->pkt);
         hb_audio_resample_free(pv->resample);
 
         int ii;
@@ -735,16 +744,15 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 context->request_channel_layout = 0;
             }
 
-            AVPacket avp;
-            av_init_packet(&avp);
-            avp.data = parse_buffer;
-            avp.size = parse_buffer_size;
+            AVPacket *avp = av_packet_alloc();
+            avp->data = parse_buffer;
+            avp->size = parse_buffer_size;
 
-            ret = avcodec_send_packet(context, &avp);
+            ret = avcodec_send_packet(context, avp);
             if (ret < 0 && ret != AVERROR_EOF)
             {
                 parse_pos += parse_len;
-                av_packet_unref(&avp);
+                av_packet_free(&avp);
                 continue;
             }
 
@@ -850,7 +858,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         // Parse ADTS AAC streams for AudioSpecificConfig.
                         // This data is required in order to write
                         // proper headers in MP4, WebM, and MKV files.
-                        parse_adts_extradata(audio, context, &avp);
+                        parse_adts_extradata(audio, context, avp);
                     }
 
                     result = 1;
@@ -859,7 +867,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     break;
                 }
             } while (ret >= 0);
-            av_packet_unref(&avp);
+            av_packet_free(&avp);
             av_frame_free(&frame);
             parse_pos += parse_len;
         }
@@ -1314,7 +1322,7 @@ static void filter_video(hb_work_private_t *pv)
 static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 {
     int got_picture = 0, oldlevel = 0, ret;
-    AVPacket avp;
+    AVPacket *avp = pv->pkt;
     reordered_data_t * reordered;
 
     if ( global_verbosity_level <= 1 )
@@ -1323,13 +1331,12 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         av_log_set_level( AV_LOG_QUIET );
     }
 
-    av_init_packet(&avp);
     if (packet_info != NULL)
     {
-        avp.data = packet_info->data;
-        avp.size = packet_info->size;
-        avp.pts  = pv->sequence;
-        avp.dts  = pv->sequence;
+        avp->data = packet_info->data;
+        avp->size = packet_info->size;
+        avp->pts  = pv->sequence;
+        avp->dts  = pv->sequence;
         reordered = malloc(sizeof(*reordered));
         if (reordered != NULL)
         {
@@ -1345,29 +1352,29 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         // PNG in a mov container.
         if (packet_info->frametype & HB_FRAME_MASK_KEY)
         {
-            avp.flags |= AV_PKT_FLAG_KEY;
+            avp->flags |= AV_PKT_FLAG_KEY;
         }
-        avp.flags  |= packet_info->discard * AV_PKT_FLAG_DISCARD;
+        avp->flags  |= packet_info->discard * AV_PKT_FLAG_DISCARD;
     }
     else
     {
-        avp.data = NULL;
-        avp.size = 0;
+        avp->data = NULL;
+        avp->size = 0;
     }
 
     if (pv->palette != NULL)
     {
         uint8_t * palette;
         int size;
-        palette = av_packet_new_side_data(&avp, AV_PKT_DATA_PALETTE,
+        palette = av_packet_new_side_data(avp, AV_PKT_DATA_PALETTE,
                                           AVPALETTE_SIZE);
         size = MIN(pv->palette->size, AVPALETTE_SIZE);
         memcpy(palette, pv->palette->data, size);
         hb_buffer_close(&pv->palette);
     }
 
-    ret = avcodec_send_packet(pv->context, &avp);
-    av_packet_unref(&avp);
+    ret = avcodec_send_packet(pv->context, avp);
+    av_packet_unref(avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
         ++pv->decode_errors;
@@ -1549,6 +1556,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     if (pv->frame == NULL)
     {
         hb_log("decavcodecvInit: av_frame_alloc failed");
+        return 1;
+    }
+
+    pv->pkt = av_packet_alloc();
+    if (pv->pkt == NULL)
+    {
+        hb_log("decavcodecvInit: av_packet_alloc failed");
         return 1;
     }
 
@@ -2188,7 +2202,7 @@ hb_work_object_t hb_decavcodecv =
 static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
 {
     AVCodecContext * context = pv->context;
-    AVPacket         avp;
+    AVPacket       * avp = pv->pkt;
     int              ret;
 
     // libav does not supply timestamps for wmapro audio (possibly others)
@@ -2199,25 +2213,24 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
     {
         pv->next_pts = packet_info->pts;
     }
-    av_init_packet(&avp);
     if (packet_info != NULL)
     {
-        avp.data = packet_info->data;
-        avp.size = packet_info->size;
-        avp.pts  = packet_info->pts;
-        avp.dts  = AV_NOPTS_VALUE;
-        avp.flags |= packet_info->discard * AV_PKT_FLAG_DISCARD;
+        avp->data = packet_info->data;
+        avp->size = packet_info->size;
+        avp->pts  = packet_info->pts;
+        avp->dts  = AV_NOPTS_VALUE;
+        avp->flags |= packet_info->discard * AV_PKT_FLAG_DISCARD;
     }
     else
     {
-        avp.data = NULL;
-        avp.size = 0;
+        avp->data = NULL;
+        avp->size = 0;
     }
 
-    ret = avcodec_send_packet(context, &avp);
+    ret = avcodec_send_packet(context, avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
-        av_packet_unref(&avp);
+        av_packet_unref(avp);
         return;
     }
 
@@ -2255,8 +2268,8 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             // Note that even though we are doing passthru, we had to decode
             // so that we know the stop time and the pts of the next audio
             // packet.
-            out = hb_buffer_init(avp.size);
-            memcpy(out->data, avp.data, avp.size);
+            out = hb_buffer_init(avp->size);
+            memcpy(out->data, avp->data, avp->size);
         }
         else
         {
@@ -2301,7 +2314,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             {
                 hb_log("decavcodec: hb_audio_resample_update() failed");
                 av_frame_unref(pv->frame);
-                av_packet_unref(&avp);
+                av_packet_unref(avp);
                 return;
             }
             out = hb_audio_resample(pv->resample,
@@ -2356,5 +2369,5 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         av_frame_unref(pv->frame);
         ++pv->nframes;
     } while (ret >= 0);
-    av_packet_unref(&avp);
+    av_packet_unref(avp);
 }
