@@ -410,7 +410,10 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
 
         // Prepare input frame
         int     out_size;
-        AVFrame frame = { .nb_samples = pv->samples_per_frame, };
+        AVFrame frame = { .nb_samples = pv->samples_per_frame,
+                          .format = pv->context->sample_fmt,
+                          .channels = pv->context->channels
+        };
 
         out_size = av_samples_get_buffer_size(NULL,
                                               pv->context->channels,
