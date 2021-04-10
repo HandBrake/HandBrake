@@ -32,7 +32,7 @@ struct hb_work_private_s
 {
     AVFormatContext    * ic;
     hb_avsub_context_t * ctx;
-    AVPacket             avpkt;
+    AVPacket           * pkt;
     hb_job_t           * job;
     hb_subtitle_t      * subtitle;
 
@@ -85,7 +85,14 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->job         = job;
     pv->subtitle    = w->subtitle;
-    av_init_packet(&pv->avpkt);
+
+    pv->pkt = av_packet_alloc();
+    if (pv->pkt == NULL)
+    {
+        hb_error("decssaInit: av_packet_alloc failed");
+        goto fail;
+    }
+
     if (avformat_open_input(&pv->ic, pv->subtitle->config.src_filename,
         NULL, NULL ) < 0 )
     {
@@ -145,7 +152,7 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 fail:
     if (pv != NULL)
     {
-        av_packet_unref(&pv->avpkt);
+        av_packet_free(&pv->pkt);
         decavsubClose(pv->ctx);
         if (pv->ic)
         {
@@ -177,7 +184,7 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
         }
     }
 
-    if ((err = av_read_frame(pv->ic, &pv->avpkt)) < 0)
+    if ((err = av_read_frame(pv->ic, pv->pkt)) < 0)
     {
         if (err != AVERROR_EOF)
         {
@@ -185,22 +192,22 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
         }
         return hb_buffer_eof_init();
     }
-    AVStream * st = pv->ic->streams[pv->avpkt.stream_index];
+    AVStream * st = pv->ic->streams[pv->pkt->stream_index];
 
-    out = hb_buffer_init(pv->avpkt.size + 1);
-    memcpy(out->data, pv->avpkt.data, pv->avpkt.size);
-    out->data[pv->avpkt.size] = 0;
-    out->size = pv->avpkt.size;
+    out = hb_buffer_init(pv->pkt->size + 1);
+    memcpy(out->data, pv->pkt->data, pv->pkt->size);
+    out->data[pv->pkt->size] = 0;
+    out->size = pv->pkt->size;
 
     double tsconv = (double)90000. * st->time_base.num / st->time_base.den;
-    if (pv->avpkt.pts != AV_NOPTS_VALUE)
+    if (pv->pkt->pts != AV_NOPTS_VALUE)
     {
-        out->s.start = pv->avpkt.pts * tsconv +
+        out->s.start = pv->pkt->pts * tsconv +
                        pv->subtitle->config.offset * 90;
     }
-    if (pv->avpkt.dts != AV_NOPTS_VALUE)
+    if (pv->pkt->dts != AV_NOPTS_VALUE)
     {
-        out->s.renderOffset = pv->avpkt.dts * tsconv +
+        out->s.renderOffset = pv->pkt->dts * tsconv +
                               pv->subtitle->config.offset * 90;
     }
     if (out->s.renderOffset >= 0 && out->s.start == AV_NOPTS_VALUE)
@@ -211,7 +218,7 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
     {
         out->s.renderOffset = out->s.start;
     }
-    int64_t pkt_duration = pv->avpkt.duration;
+    int64_t pkt_duration = pv->pkt->duration;
     if (pkt_duration != AV_NOPTS_VALUE)
     {
         out->s.duration = pkt_duration * tsconv;
@@ -222,7 +229,7 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
         out->s.duration = (int64_t)AV_NOPTS_VALUE;
     }
     out->s.type = SUBTITLE_BUF;
-    av_packet_unref(&pv->avpkt);
+    av_packet_unref(pv->pkt);
 
     if (out->s.stop  <= pv->start_time || out->s.start >= pv->stop_time)
     {
@@ -276,7 +283,7 @@ static void decssaClose( hb_work_object_t * w )
     if (pv != NULL)
     {
         decavsubClose(pv->ctx);
-        av_packet_unref(&pv->avpkt);
+        av_packet_free(&pv->pkt);
         avformat_close_input(&pv->ic);
         free(pv);
     }

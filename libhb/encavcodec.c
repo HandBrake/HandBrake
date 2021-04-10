@@ -31,6 +31,7 @@ struct hb_work_private_s
 {
     hb_job_t           * job;
     AVCodecContext     * context;
+    AVPacket           * pkt;
     FILE               * file;
 
     int                  frameno_in;
@@ -124,6 +125,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data   = pv;
     pv->job           = job;
     pv->chapter_queue = hb_chapter_queue_init();
+    pv->pkt           = av_packet_alloc();
+
+    if (pv->pkt == NULL)
+    {
+        hb_log("encavcodecInit: av_packet_alloc failed");
+        ret = 1;
+        goto done;
+    }
 
     hb_buffer_list_clear(&pv->delay_list);
 
@@ -826,6 +835,7 @@ void encavcodecClose( hb_work_object_t * w )
     {
         return;
     }
+    av_packet_free(&pv->pkt);
     hb_chapter_queue_close(&pv->chapter_queue);
     if( pv->context )
     {
@@ -947,11 +957,9 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
     while (1)
     {
         int           ret;
-        AVPacket      pkt;
         hb_buffer_t * out;
 
-        av_init_packet(&pkt);
-        ret = avcodec_receive_packet(pv->context, &pkt);
+        ret = avcodec_receive_packet(pv->context, pv->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
         {
             break;
@@ -961,11 +969,11 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             hb_log("encavcodec: avcodec_receive_packet failed");
         }
 
-        out = hb_buffer_init(pkt.size);
-        memcpy(out->data, pkt.data, out->size);
+        out = hb_buffer_init(pv->pkt->size);
+        memcpy(out->data, pv->pkt->data, out->size);
 
-        int64_t frameno = pkt.pts;
-        out->size       = pkt.size;
+        int64_t frameno = pv->pkt->pts;
+        out->size       = pv->pkt->size;
         out->s.start    = get_frame_start(pv, frameno);
         out->s.duration = get_frame_duration(pv, frameno);
         out->s.stop     = out->s.stop + out->s.duration;
@@ -975,7 +983,7 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         // must be considered to potentially be reference frames
         out->s.flags     = HB_FLAG_FRAMETYPE_REF;
         out->s.frametype = 0;
-        if (pkt.flags & AV_PKT_FLAG_KEY)
+        if (pv->pkt->flags & AV_PKT_FLAG_KEY)
         {
             out->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             hb_chapter_dequeue(pv->chapter_queue, out);
@@ -983,7 +991,7 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         out = process_delay_list(pv, out);
 
         hb_buffer_list_append(list, out);
-        av_packet_unref(&pkt);
+        av_packet_unref(pv->pkt);
     }
 }
 

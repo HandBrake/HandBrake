@@ -47,6 +47,8 @@ struct hb_mux_object_s
 
     AVFormatContext   * oc;
     AVRational          time_base;
+    AVPacket          * pkt;
+    AVPacket          * empty_pkt;
 
     int                 ntracks;
     hb_mux_data_t    ** tracks;
@@ -135,6 +137,16 @@ static int avformatInit( hb_mux_object_t * m )
     uint8_t         default_track_flag = 1;
     uint8_t         need_fonts = 0;
     char *lang;
+
+    m->pkt = av_packet_alloc();
+    m->empty_pkt = av_packet_alloc();
+
+    m->pkt = av_packet_alloc();
+    if (m->pkt == NULL || m->empty_pkt == NULL)
+    {
+        hb_error("muxavformat: av_packet_alloc failed");
+        goto error;
+    }
 
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
@@ -1225,7 +1237,6 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
-    AVPacket   pkt;
     int64_t    dts, pts, duration = AV_NOPTS_VALUE;
     hb_job_t * job     = m->job;
     uint8_t  * sub_out = NULL;
@@ -1248,17 +1259,16 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
             // subtitle that was written
             if (track->duration > 0)
             {
-                AVPacket empty_pkt;
                 uint8_t empty[2] = {0,0};
 
-                av_init_packet(&empty_pkt);
-                empty_pkt.data = empty;
-                empty_pkt.size = 2;
-                empty_pkt.dts = track->duration;
-                empty_pkt.pts = track->duration;
-                empty_pkt.duration = 90;
-                empty_pkt.stream_index = track->st->index;
-                av_interleaved_write_frame(m->oc, &empty_pkt);
+                m->empty_pkt->data = empty;
+                m->empty_pkt->size = 2;
+                m->empty_pkt->dts = track->duration;
+                m->empty_pkt->pts = track->duration;
+                m->empty_pkt->duration = 90;
+                m->empty_pkt->stream_index = track->st->index;
+                av_interleaved_write_frame(m->oc, m->empty_pkt);
+                av_packet_unref(m->empty_pkt);
             }
         }
         return 0;
@@ -1331,30 +1341,29 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         }
     }
 
-    av_init_packet(&pkt);
-    pkt.data = buf->data;
-    pkt.size = buf->size;
-    pkt.dts = dts;
-    pkt.pts = pts;
-    pkt.duration = duration;
+    m->pkt->data = buf->data;
+    m->pkt->size = buf->size;
+    m->pkt->dts = dts;
+    m->pkt->pts = pts;
+    m->pkt->duration = duration;
 
     if (track->type == MUX_TYPE_VIDEO)
     {
         if ((buf->s.frametype == HB_FRAME_IDR) ||
             (buf->s.flags & HB_FLAG_FRAMETYPE_KEY))
         {
-            pkt.flags |= AV_PKT_FLAG_KEY;
+            m->pkt->flags |= AV_PKT_FLAG_KEY;
         }
 #ifdef AV_PKT_FLAG_DISPOSABLE
         if (!(buf->s.flags & HB_FLAG_FRAMETYPE_REF))
         {
-            pkt.flags |= AV_PKT_FLAG_DISPOSABLE;
+            m->pkt->flags |= AV_PKT_FLAG_DISPOSABLE;
         }
 #endif
     }
     else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {
-        pkt.flags |= AV_PKT_FLAG_KEY;
+        m->pkt->flags |= AV_PKT_FLAG_KEY;
     }
 
     switch (track->type)
@@ -1378,7 +1387,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     // make sure we're not writing a chapter that has 0 length
                     if (chapter != NULL &&
                         track->prev_chapter_tc != AV_NOPTS_VALUE &&
-                        track->prev_chapter_tc < pkt.pts)
+                        track->prev_chapter_tc < m->pkt->pts)
                     {
                         char title[1024];
                         if (chapter->title != NULL)
@@ -1390,11 +1399,11 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                             snprintf(title, 1023, "Chapter %d",
                                      track->current_chapter);
                         }
-                        add_chapter(m, track->prev_chapter_tc, pkt.pts, title);
+                        add_chapter(m, track->prev_chapter_tc, m->pkt->pts, title);
                     }
                 }
                 track->current_chapter = buf->s.new_chap;
-                track->prev_chapter_tc = pkt.pts;
+                track->prev_chapter_tc = m->pkt->pts;
             }
         } break;
 
@@ -1405,17 +1414,16 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 /* Write an empty sample */
                 if ( track->duration < pts )
                 {
-                    AVPacket empty_pkt;
                     uint8_t empty[2] = {0,0};
 
-                    av_init_packet(&empty_pkt);
-                    empty_pkt.data = empty;
-                    empty_pkt.size = 2;
-                    empty_pkt.dts = track->duration;
-                    empty_pkt.pts = track->duration;
-                    empty_pkt.duration = pts - track->duration;
-                    empty_pkt.stream_index = track->st->index;
-                    int ret = av_interleaved_write_frame(m->oc, &empty_pkt);
+                    m->empty_pkt->data = empty;
+                    m->empty_pkt->size = 2;
+                    m->empty_pkt->dts = track->duration;
+                    m->empty_pkt->pts = track->duration;
+                    m->empty_pkt->duration = pts - track->duration;
+                    m->empty_pkt->stream_index = track->st->index;
+                    int ret = av_interleaved_write_frame(m->oc, m->empty_pkt);
+                    av_packet_unref(m->empty_pkt);
                     if (ret < 0)
                     {
                         char errstr[64];
@@ -1456,14 +1464,14 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         memcpy(sub_out + 2 + buffersize, styleatom, stylesize);
                         sub_out[0] = (buffersize >> 8) & 0xff;
                         sub_out[1] = buffersize & 0xff;
-                        pkt.data = sub_out;
-                        pkt.size = buffersize + stylesize + 2;
+                        m->pkt->data = sub_out;
+                        m->pkt->size = buffersize + stylesize + 2;
                     }
                     free(buffer);
                     free(styleatom);
                 }
             }
-            if (pkt.data == NULL)
+            if (m->pkt->data == NULL)
             {
                 // Memory allocation failure!
                 hb_error("avformatMux: subtitle memory allocation failure");
@@ -1476,19 +1484,19 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         default:
             break;
     }
-    track->duration = pts + pkt.duration;
+    track->duration = pts + m->pkt->duration;
 
     if (track->bitstream_context)
     {
         int ret;
-        ret = av_bsf_send_packet(track->bitstream_context, &pkt);
+        ret = av_bsf_send_packet(track->bitstream_context, m->pkt);
         if (ret < 0)
         {
             hb_error("avformatMux: track %d av_bsf_send_packet failed",
                      track->st->index);
             return ret;
         }
-        ret = av_bsf_receive_packet(track->bitstream_context, &pkt);
+        ret = av_bsf_receive_packet(track->bitstream_context, m->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
         {
             return 0;
@@ -1501,8 +1509,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         }
     }
 
-    pkt.stream_index = track->st->index;
-    int ret = av_interleaved_write_frame(m->oc, &pkt);
+    m->pkt->stream_index = track->st->index;
+    int ret = av_interleaved_write_frame(m->oc, m->pkt);
+    av_packet_unref(m->pkt);
     if (sub_out != NULL)
     {
         free(sub_out);
@@ -1618,6 +1627,8 @@ static int avformatEnd(hb_mux_object_t *m)
     av_write_trailer(m->oc);
     avio_close(m->oc->pb);
     avformat_free_context(m->oc);
+    av_packet_free(&m->pkt);
+    av_packet_free(&m->empty_pkt);
     free(m->tracks);
     m->oc = NULL;
 

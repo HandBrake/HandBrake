@@ -14,6 +14,7 @@
 struct hb_avsub_context_s
 {
     AVCodecContext * context;
+    AVPacket       * pkt;
     hb_job_t       * job;
     hb_subtitle_t  * subtitle;
     // For subs, when doing passthru, we don't know if we need a
@@ -54,7 +55,6 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     AVCodec        * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
     AVCodecContext * context = avcodec_alloc_context3(codec);
     context->codec = codec;
-
 
     hb_buffer_list_clear(&ctx->list);
     hb_buffer_list_clear(&ctx->list_pass);
@@ -101,6 +101,13 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
         return NULL;
     }
     av_dict_free( &av_opts );
+
+    ctx->pkt = av_packet_alloc();
+    if (ctx->pkt == NULL)
+    {
+        hb_log("decsubInit: av_packet_alloc failed");
+        return NULL;
+    }
 
     if (ctx->subtitle->format == TEXTSUB)
     {
@@ -303,12 +310,10 @@ int decavsubWork( hb_avsub_context_t * ctx,
     memset( &subtitle, 0, sizeof(subtitle) );
 
     int64_t duration = AV_NOPTS_VALUE;
-    AVPacket avp;
 
-    av_init_packet( &avp );
-    avp.data = in->data;
-    avp.size = in->size;
-    avp.pts  = in->s.start;
+    ctx->pkt->data = in->data;
+    ctx->pkt->size = in->size;
+    ctx->pkt->pts  = in->s.start;
     if (in->s.duration > 0 || ctx->subtitle->source != PGSSUB)
     {
         duration = in->s.duration;
@@ -324,13 +329,13 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
     int has_subtitle = 0;
 
-    while (avp.size > 0)
+    while (ctx->pkt->size > 0)
     {
         int usedBytes = avcodec_decode_subtitle2(ctx->context, &subtitle,
-                                                 &has_subtitle, &avp );
+                                                 &has_subtitle, ctx->pkt );
         if (usedBytes < 0)
         {
-            hb_error("unable to decode subtitle with %d bytes.", avp.size);
+            hb_error("unable to decode subtitle with %d bytes.", ctx->pkt->size);
             return HB_WORK_OK;
         }
 
@@ -339,17 +344,17 @@ int decavsubWork( hb_avsub_context_t * ctx,
             // We expect avcodec_decode_subtitle2 to return the number
             // of bytes consumed, or an error.  If for some unforseen reason
             // it returns 0, lets not get stuck in an infinite loop!
-            usedBytes = avp.size;
+            usedBytes = ctx->pkt->size;
         }
 
-        if (usedBytes <= avp.size)
+        if (usedBytes <= ctx->pkt->size)
         {
-            avp.data += usedBytes;
-            avp.size -= usedBytes;
+            ctx->pkt->data += usedBytes;
+            ctx->pkt->size -= usedBytes;
         }
         else
         {
-            avp.size = 0;
+            ctx->pkt->size = 0;
         }
 
         if (!has_subtitle)
@@ -678,6 +683,7 @@ void decavsubClose( hb_avsub_context_t * ctx )
     {
         return;
     }
+    av_packet_free(&ctx->pkt);
     hb_buffer_list_close(&ctx->list_pass);
     avcodec_flush_buffers(ctx->context);
     avcodec_free_context(&ctx->context);
