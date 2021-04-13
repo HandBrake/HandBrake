@@ -59,8 +59,6 @@ namespace HandBrakeWPF.ViewModels
         private double percentageValue;
         private bool isEncoding;
         private bool useSystemDefaultPlayer;
-        private bool previewRotateFlip;
-
         private bool showPictureSettingControls;
 
         public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, ILog logService, ILogInstanceManager logInstanceManager, IPortService portService)
@@ -86,8 +84,6 @@ namespace HandBrakeWPF.ViewModels
             this.useSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
             this.showPictureSettingControls = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewShowPictureSettingsOverlay);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
-            this.previewRotateFlip = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewRotationFlip);
-            this.NotifyOfPropertyChange(() => this.previewRotateFlip); // Don't want to trigger an Update, so setting the backing variable. 
         }
         
         public IPictureSettingsViewModel PictureSettingsViewModel { get; private set; }
@@ -143,24 +139,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedPreviewImage);
 
                 this.UpdatePreviewFrame();
-            }
-        }
-
-        public bool PreviewRotateFlip
-        {
-            get => this.previewRotateFlip;
-            set
-            {
-                if (value == this.previewRotateFlip)
-                {
-                    return;
-                }
-
-                this.previewRotateFlip = value;
-                this.NotifyOfPropertyChange(() => this.PreviewRotateFlip);
-
-                this.UpdatePreviewFrame();
-                this.userSettingService.SetUserSetting(UserSettingConstants.PreviewRotationFlip, value);
             }
         }
 
@@ -370,11 +348,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (image != null)
             {
-                if (previewRotateFlip)
-                {
-                    image = BitmapHelpers.CreateTransformedBitmap(image, this.Task.Rotation, this.Task.FlipVideo);
-                }
-
                 PreviewNotAvailable = false;
                 this.Width = (int)Math.Ceiling(image.Width);
                 this.Height = (int)Math.Ceiling(image.Height);

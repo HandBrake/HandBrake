@@ -96,6 +96,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 this.customColour = value;
                 this.SetColour();
                 this.NotifyOfPropertyChange(() => this.CustomColour);
+                this.triggerTabChanged();
             }
         }
 

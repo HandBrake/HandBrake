@@ -52,9 +52,7 @@
                 Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <CheckBox IsChecked="{Binding PreviewRotateFlip}" Content="{x:Static Properties:Resources.StaticPreviewView_PreviewRotationFlip}" Foreground="White" Margin="0,0,0,10" />
-                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Content="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" Margin="10,0,0,10" />
-
+                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Content="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" Margin="0,0,0,10" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">

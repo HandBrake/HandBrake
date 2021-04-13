@@ -25,6 +25,9 @@ namespace HandBrake.Interop.Interop.HbLib
         public int max_plane;
         public int width;
         public int height;
+        public int color_prim;
+        public int color_transfer;
+        public int color_matrix;
         public IntPtr data;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
@@ -47,3 +50,5 @@ namespace HandBrake.Interop.Interop.HbLib
 #pragma warning restore 0649
     }
 }
+
+

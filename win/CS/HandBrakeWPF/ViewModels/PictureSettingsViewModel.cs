@@ -9,18 +9,9 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
-    using System.Windows;
-
     using Caliburn.Micro;
-
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
-
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
@@ -30,7 +21,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
-
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Linq;
+    using System.Windows;
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using Size = Model.Picture.Size;
 
@@ -62,8 +58,8 @@ namespace HandBrakeWPF.ViewModels
             this.StaticPreviewViewModel.SetPictureSettingsInstance(this);
             this.sourceResolution = new Size(0, 0);
             this.Task = new EncodeTask();
-            this.PaddingFilter = new PadFilter(this.Task, () => this.OnTabStatusChanged(null));
-            this.RotateFlipFilter = new RotateFlipFilter(this.Task, () => this.OnTabStatusChanged(null));
+            this.PaddingFilter = new PadFilter(this.Task, () => this.OnFilterChanged(null));
+            this.RotateFlipFilter = new RotateFlipFilter(this.Task, () => this.OnFilterChanged(null));
             this.Init();
         }
 
@@ -257,6 +253,8 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.MaxWidth);
                 this.NotifyOfPropertyChange(() => this.MaxHeight);
+
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -687,6 +685,16 @@ namespace HandBrakeWPF.ViewModels
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnFilterChanged(TabStatusEventArgs e)
+        {
+            if (delayedPreviewprocessor != null && this.Task != null && this.StaticPreviewViewModel != null && this.StaticPreviewViewModel.IsOpen)
+            {
+                delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource), 800);
+            }
+
             this.TabStatusChanged?.Invoke(this, e);
         }
 

@@ -5923,15 +5923,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview Rotation and Flip.
-        /// </summary>
-        public static string StaticPreviewView_PreviewRotationFlip {
-            get {
-                return ResourceManager.GetString("StaticPreviewView_PreviewRotationFlip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select a preview image.
         /// </summary>
         public static string StaticPreviewView_SelectPreviewImage {

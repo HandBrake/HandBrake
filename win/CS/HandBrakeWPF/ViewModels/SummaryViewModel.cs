@@ -742,8 +742,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (image != null)
             {
-                image = BitmapHelpers.CreateTransformedBitmap(image, this.task.Rotation, this.task.FlipVideo);
-
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
                 this.MaxWidth = (int)image.Width;

@@ -19,21 +19,24 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
+    using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
 
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Model.Filters;
+    using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Factories;
     using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
     using ILog = Logging.Interfaces.ILog;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.Interfaces.EventArgs.ScanProgressEventArgs;
+    using Source = HandBrakeWPF.Services.Scan.Model.Source;
     using Title = Model.Title;
 
     public class LibScan : IScan, IDisposable
@@ -172,22 +175,9 @@ namespace HandBrakeWPF.Services.Scan
             BitmapImage bitmapImage = null;
             try
             {
-                PreviewSettings settings = new PreviewSettings
-                                               {
-                                                   Cropping = new Cropping(job.Cropping),
-                                                   MaxWidth = job.MaxWidth ?? 0,
-                                                   MaxHeight = job.MaxHeight ?? 0,
-                                                   KeepDisplayAspect = job.KeepDisplayAspect,
-                                                   TitleNumber = job.Title,
-                                                   Anamorphic = job.Anamorphic,
-                                                   Modulus = job.Modulus,
-                                                   Width = job.Width ?? 0,
-                                                   Height = job.Height ?? 0,
-                                                   PixelAspectX = job.PixelAspectX,
-                                                   PixelAspectY = job.PixelAspectY
-                                               };
-
-                RawPreviewData bitmapData = this.instance.GetPreview(settings, preview, job.DeinterlaceFilter != DeinterlaceFilter.Off);
+                EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService);
+                JsonEncodeObject jobDict = factory.Create(job, HBConfigurationFactory.Create());
+                RawPreviewData bitmapData = this.instance.GetPreview(jobDict, preview);
                 bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
             }
             catch (AccessViolationException e)

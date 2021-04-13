@@ -248,9 +248,6 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_nvenc_h265_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_nvenc_h265_available();
 
-        [DllImport("hb", EntryPoint = "hb_get_preview2", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_get_preview2(IntPtr hbHandle, int title_idx, int preview_idx, ref hb_geometry_settings_s geo, int deinterlace);
-
         [DllImport("hb", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_image_close(IntPtr image);
 
@@ -316,5 +313,9 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "hb_qsv_adapters_list", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_qsv_adapters_list();
+        
+        // hb_get_preview3(hb_handle_t* h, int picture, const char * job_dict)
+        [DllImport("hb", EntryPoint = "hb_get_preview3_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_get_preview3_json(IntPtr hbHandle, int preview_idx, [In][MarshalAs(UnmanagedType.LPStr)] string job_dict);
     }
 }

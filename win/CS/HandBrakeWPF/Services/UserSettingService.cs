@@ -313,7 +313,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ClearOldLogs, true);
 
             // Preview
-            defaults.Add(UserSettingConstants.PreviewRotationFlip, false);
             defaults.Add(UserSettingConstants.LastPreviewDuration, 30);
             defaults.Add(UserSettingConstants.DefaultPlayer, false);
 

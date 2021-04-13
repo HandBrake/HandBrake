@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Interop.Interfaces
 
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Interfaces.Model.Preview;
+    using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
 
     /// <summary>
@@ -72,13 +73,10 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="previewNumber">
         /// The index of the preview to get (0-based).
         /// </param>
-        /// <param name="deinterlace">
-        /// True to enable basic deinterlace of preview images.
-        /// </param>
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        RawPreviewData GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
+        RawPreviewData GetPreview(JsonEncodeObject job, int previewNumber);
 
         /// <summary>
         /// Starts a scan of the given path.
