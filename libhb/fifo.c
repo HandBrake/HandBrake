@@ -870,6 +870,9 @@ hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
     image->format = buf->f.fmt;
     image->width = buf->f.width;
     image->height = buf->f.height;
+    image->color_prim     = buf->f.color_prim;
+    image->color_transfer = buf->f.color_transfer;
+    image->color_matrix   = buf->f.color_matrix;
     memcpy(image->data, buf->data, buf->size);
 
     int p;

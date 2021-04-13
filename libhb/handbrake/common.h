@@ -290,6 +290,9 @@ struct hb_image_s
     int max_plane;
     int width;
     int height;
+    int color_prim;
+    int color_transfer;
+    int color_matrix;
     uint8_t *data;
 
     struct image_plane
