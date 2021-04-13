@@ -182,9 +182,12 @@ It may be used under the terms of the GNU General Public License. */
     if (self.generator && self.visible)
     {
         CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.selectedIndex shouldCache:YES];
-        self.previewView.image = fPreviewImage;
-        CFRelease(fPreviewImage);
-        self.previewView.layer.opacity = 1;
+        if (fPreviewImage)
+        {
+            self.previewView.image = fPreviewImage;
+            CFRelease(fPreviewImage);
+            self.previewView.layer.opacity = 1;
+        }
     }
     else
     {

@@ -79,7 +79,7 @@
  *
  * @param index picture index in title.
  */
-- (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
+- (nullable CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
 {
     if (index >= self.imagesCount)
     {
@@ -92,13 +92,7 @@
 
     if (!theImage)
     {
-        HBFilters *filters = self.job.filters;
-        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"]);
-
-        theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
-                                                           forTitle:self.job.title
-                                                       pictureFrame:self.job.picture
-                                                        deinterlace:deinterlace];
+        theImage = [self.scanCore copyImageAtIndex:index job:self.job];
         if (cache && theImage)
         {
             // The cost is the number of pixels of the image
@@ -188,10 +182,7 @@
 
         if (image == NULL)
         {
-            image = (CGImageRef)[self.scanCore copyImageAtIndex:index
-                                                       forTitle:self.job.title
-                                                   pictureFrame:self.job.picture
-                                                    deinterlace:NO];
+            image = [self.scanCore copyImageAtIndex:index job:self.job];
             CFAutorelease(image);
         }
 

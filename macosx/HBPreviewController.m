@@ -481,8 +481,11 @@
     if (self.generator && self.window.isVisible)
     {
         CGImageRef image = [self.generator copyImageAtIndex:idx shouldCache:YES];
-        self.previewView.image = image;
-        CFRelease(image);
+        if (image)
+        {
+            self.previewView.image = image;
+            CFRelease(image);
+        }
     }
 }
 

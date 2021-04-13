@@ -177,16 +177,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  into an CGImage.
  *
  *  @param index       the index of the desired image.
- *  @param title       Handle to hb_title_t of desired title
- *  @param frame       a HBPicture instance that describe the image's frame.
- *  @param deinterlace whether the preview image must be deinterlaced or not.
+ *  @param job           a HBJob instance.
  *
  *  @return a CGImageRef of the wanted image, NULL if the index is out of bounds.
  */
-- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index
-                      forTitle:(HBTitle *)title
-                  pictureFrame:(HBPicture *)frame
-                   deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
+- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED;
 
 /**
  *  Returns the counts of the available previews images.

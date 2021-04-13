@@ -331,29 +331,19 @@ typedef void (^HBCoreCleanupHandler)(void);
 
 #pragma mark - Preview images
 
-- (CGImageRef)copyImageAtIndex:(NSUInteger)index
-                      forTitle:(HBTitle *)title
-                  pictureFrame:(HBPicture *)frame
-                   deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED
+- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index job:(HBJob *)job CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
 
-    hb_geometry_settings_t geo;
-    memset(&geo, 0, sizeof(geo));
-    geo.geometry.width = frame.displayWidth;
-    geo.geometry.height = frame.height;
-    // ignore the par.
-    geo.geometry.par.num = 1;
-    geo.geometry.par.den = 1;
-    int crop[4] = {frame.cropTop, frame.cropBottom, frame.cropLeft, frame.cropRight};
-    memcpy(geo.crop, crop, sizeof(int[4]));
-
-    hb_image_t *image = hb_get_preview2(_hb_handle, title.index, (int)index, &geo, deinterlace);
+    hb_job_t *hb_job = [job hb_job];
+    hb_dict_t *job_dict = hb_job_to_dict(hb_job);
+    hb_job_close(&hb_job);
+    hb_image_t *image = hb_get_preview3(_hb_handle, (int)index, job_dict);
 
     if (image)
     {
         // Create an CGImageRef and copy the libhb image into it.
-        // The image data returned by hb_get_preview2 is 4 bytes per pixel, BGRA format.
+        // The image data returned by hb_get_preview3 is 4 bytes per pixel, BGRA format.
         // Alpha is ignored.
         CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 0);
         CFDataSetLength(imgData, 3 * image->width * image->height);
@@ -376,9 +366,9 @@ typedef void (^HBCoreCleanupHandler)(void);
         CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
 
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
-        CGColorSpaceRef colorSpace = copyColorSpace(title.hb_title->color_prim,
-                                                    title.hb_title->color_transfer,
-                                                    title.hb_title->color_matrix);
+        CGColorSpaceRef colorSpace = copyColorSpace(image->color_prim,
+                                                    image->color_transfer,
+                                                    image->color_matrix);
 
         img = CGImageCreate(image->width,
                             image->height,
@@ -399,16 +389,9 @@ typedef void (^HBCoreCleanupHandler)(void);
         hb_image_close(&image);
     }
 
-    if (img && (frame.rotate || frame.flip))
-    {
-        CGImageRef rotatedImg = CGImageRotated(img, frame.rotate, frame.flip);
-        CGImageRelease(img);
-        return rotatedImg;
-    }
-    else
-    {
-        return img;
-    }
+    hb_value_free(&job_dict);
+
+    return img;
 }
 
 - (NSUInteger)imagesCountForTitle:(HBTitle *)title

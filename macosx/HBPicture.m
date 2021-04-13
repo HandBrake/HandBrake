@@ -652,6 +652,20 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
+- (void)setPaddingColorCustom:(NSString *)paddingColorCustom
+{
+    if (paddingColorCustom != _paddingColorCustom)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setPaddingColorCustom:_paddingColorCustom];
+    }
+    _paddingColorCustom = paddingColorCustom;
+
+    if (!self.isValidating)
+    {
+        [self validateSettings];
+    }
+}
+
 #pragma mark - Anamorphic
 
 - (void)setAnamorphicMode:(HBPictureAnarmophicMode)anamorphicMode
