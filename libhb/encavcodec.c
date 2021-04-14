@@ -341,7 +341,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: encoding at rc=vbr_hq Bitrate %d", job->vbitrate );
         }
         
-        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 ) {
+        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
             //Work around an ffmpeg issue mentioned in issue #3447
             if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
@@ -418,7 +419,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
             hb_log( "encavcodec: encoding at rc=vbr_hq %.2f", job->vquality );
         }
-        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 )
         {
             char quality[7];
             char qualityB[7];
@@ -435,12 +436,305 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             av_dict_set( &av_opts, "qp_i", quality, 0 );
             av_dict_set( &av_opts, "qp_p", quality, 0 );
-
-            if ( job->vcodec != HB_VCODEC_FFMPEG_VCE_H265 )
-            {
-                av_dict_set( &av_opts, "qp_b", qualityB, 0 );
-            }
+            av_dict_set( &av_opts, "qp_b", qualityB, 0 );
             hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
+        }
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        {
+            char  *vce_h265_max_au_size_char,
+                   vce_h265_qmin_p_char[4],
+                   vce_h265_qmax_p_char[4];
+            int    vce_h265_max_au_size,
+                   vce_h265_max_au_size_length,
+                   vce_h265_qmin,
+                   vce_h265_qmax,
+                   vce_h265_qmin_p,
+                   vce_h265_qmax_p,
+                   vce_h265_threshold;
+            double vce_h265_bit_rate,
+                   vce_h265_buffer_size,
+                   vce_h265_comp_factor,
+                   vce_h265_exp_scale,
+                   vce_h265_max_rate = 0;
+
+            /*
+              constant quality tuning for peak constrained vbr rate control
+
+              summary of settings:
+              - set a relatively short gop size to help avoid stale references, since we do not have scene detection
+              - constrain qmin and qmax to ensure consistent visual quality window regardless of complexity in detail and/or motion
+              - limit max rate to 1.3x (effectively ~2x) target bit rate to allow adequate variance while avoiding extreme peaks
+              - calculate hrd buffer size based on max rate to manage short term data rate in conjunction with max au size
+              - set max au size to 1/4 hrd buffer size to improve intra-gop bit allocation and minimize refresh/recovery effects at gop transitions
+
+              additional settings for low quality / bit rates:
+              - increase gop size slightly to save bits by reducing total keyframe count
+              - increase qmin to save bits by minimizing overallocation to static scenes
+              - increase max rate to give the encoder flexibility in reallocating saved bits
+              - increase qmax as a last resort to avoid overshooting data rate
+            */
+
+            // set gop size to two seconds in frames
+            context->gop_size = (int)(FFMIN(av_q2d(fps) * 2, 120));
+
+            // the fun part
+            if (job->vquality > 0 && job->vquality < 51)
+            {
+                // set rc mode to peak constrained vbr
+                av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
+
+                // calculate CQ 33 bit rate
+                vce_h265_bit_rate = ((sqrt((double)(job->width * job->height) * sqrt(job->width * job->height) / 1000) * 1.2) + 150) * 1000;
+
+                // initial compounding factor for calculating bit rates for other CQ values
+                vce_h265_comp_factor = 1.16;
+
+                // calculate CQ 39 bit rate, which is the low bit rate quality threshold
+                vce_h265_threshold = pow(1 / vce_h265_comp_factor, 6);
+
+                // calculate bit rate for user specified CQ value
+                if (job->vquality < 33)
+                {
+                    for (int i = 0; i < 33 - job->vquality; i++)
+                    {
+                        if (i > 14)
+                        {
+                            vce_h265_comp_factor = 1.14; // vce_h265_comp_factor * 0.9827586207;
+                        }
+                        else if (i > 17)
+                        {
+                            vce_h265_comp_factor = 1.12; // vce_h265_comp_factor * 0.9824561404;
+                        }
+                        else if (i > 23)
+                        {
+                            vce_h265_comp_factor = 1.07; // vce_h265_comp_factor * 0.9553571429;
+                        }
+                        vce_h265_bit_rate = vce_h265_bit_rate * vce_h265_comp_factor;
+                    }
+                }
+                else if (job->vquality > 33)
+                {
+                    for (int i = 0; i < job->vquality - 33; i++)
+                    {
+                        if (i > 5)
+                        {
+                            vce_h265_comp_factor = 1.15; // vce_h265_comp_factor * 0.9913793103;
+                        }
+                        else if (i > 15)
+                        {
+                            vce_h265_comp_factor = 1.25; // vce_h265_comp_factor * 1.0869565217;
+                        }
+                        vce_h265_bit_rate = vce_h265_bit_rate / vce_h265_comp_factor;
+                    }
+                }
+
+                // QP 1-19
+                // constrain qmax to ensure bits are not underallocated to motion at normal bit rates
+                vce_h265_qmin   = 0;
+                vce_h265_qmax   = 32;
+                vce_h265_qmin_p = 0;
+                vce_h265_qmax_p = 36;
+
+                if (vce_h265_bit_rate < vce_h265_threshold * 12)
+                {
+                    // CQ 20-22
+                    // constrain qmin to ensure bits are not overallocated to low motion, static scenes
+                    vce_h265_qmin   =  4;
+                    vce_h265_qmax   = 34;
+                    vce_h265_qmin_p =  8;
+                    vce_h265_qmax_p = 38;
+
+                    if (vce_h265_bit_rate < vce_h265_threshold * 8)
+                    {
+                        // CQ 23-27
+                        vce_h265_qmin   =  8;
+                        vce_h265_qmax   = 36;
+                        vce_h265_qmin_p = 12;
+                        vce_h265_qmax_p = 40;
+
+                        if (vce_h265_bit_rate < vce_h265_threshold * 4)
+                        {
+                            // CQ 28-32
+                            vce_h265_qmin   = 16;
+                            vce_h265_qmax   = 38;
+                            vce_h265_qmin_p = 19;
+                            vce_h265_qmax_p = 42;
+
+                            if (vce_h265_bit_rate < vce_h265_threshold * 2)
+                            {
+                                // CQ 33-38
+                                // bit rate is at or just above the starvation threshold
+                                // increase qmax to baseline for decent references (I) and minimal motion trails, recovery effects (P)
+                                vce_h265_qmin   = 19;
+                                vce_h265_qmax   = 39;
+                                vce_h265_qmin_p = 22;
+                                vce_h265_qmax_p = 44;
+
+                                if (vce_h265_bit_rate <= vce_h265_threshold)
+                                {
+                                    // CQ 39-40
+                                    // bit rate is at or just below the starvation threshold
+                                    // increase gop size to save bits by reducing total keyframe count
+                                    // increase qmin to continue saving bits by minimizing overallocation to static scenes
+                                    // increase qmax beyond baseline for decent references (I) and minimal motion trails, recovery effects (P)
+                                    // increase max rate to allow higher relative peaks in short bursts
+                                    context->gop_size = (int)(FFMIN(av_q2d(fps) * 3, 180));
+                                    vce_h265_qmin   = 22;
+                                    vce_h265_qmax   = 40;
+                                    vce_h265_qmin_p = 24;
+                                    vce_h265_qmax_p = 45;
+                                    vce_h265_max_rate = vce_h265_bit_rate * 1.5;
+
+                                    if (vce_h265_bit_rate < vce_h265_threshold * 0.85)
+                                    {
+                                        // CQ 41
+                                        vce_h265_qmin   = 24;
+                                        vce_h265_qmax   = 41;
+                                        vce_h265_qmin_p = 27;
+                                        vce_h265_qmax_p = 46;
+                                        vce_h265_max_rate = vce_h265_bit_rate * 2.5;
+
+                                        if (vce_h265_bit_rate < vce_h265_threshold * 0.7)
+                                        {
+                                            // CQ 42
+                                            vce_h265_qmin   = 27;
+                                            vce_h265_qmax   = 42;
+                                            vce_h265_qmin_p = 30;
+                                            vce_h265_qmax_p = 47;
+                                            vce_h265_max_rate = vce_h265_bit_rate * 8;
+
+                                            if (vce_h265_bit_rate < vce_h265_threshold * 0.6)
+                                            {
+                                                // CQ 43
+                                                // bit rate is far below the starvation threshold
+                                                // increase qmax and max rate to reallocate bits from worst to best areas
+                                                vce_h265_qmin   = 30;
+                                                vce_h265_qmax   = 44;
+                                                vce_h265_qmin_p = 33;
+                                                vce_h265_qmax_p = 48;
+                                                vce_h265_max_rate = vce_h265_bit_rate * 16;
+
+                                                if (vce_h265_bit_rate < vce_h265_threshold * 0.51)
+                                                {
+                                                    // CQ 44-45
+                                                    vce_h265_qmin   = 33;
+                                                    vce_h265_qmax   = 46;
+                                                    vce_h265_qmin_p = 36;
+                                                    vce_h265_qmax_p = 50;
+                                                    vce_h265_max_rate = vce_h265_bit_rate * 20;
+
+                                                    if (vce_h265_bit_rate < vce_h265_threshold * 0.42)
+                                                    {
+                                                        // CQ 46-47
+                                                        // bit rate is insufficient for any motion
+                                                        vce_h265_qmin   = 39;
+                                                        vce_h265_qmax   = 48;
+                                                        vce_h265_qmin_p = 42;
+                                                        vce_h265_qmax_p = 50;
+
+                                                        if (vce_h265_bit_rate < vce_h265_threshold * 0.32)
+                                                        {
+                                                            // CQ 48-49
+                                                            // bit rate is entirely insufficient
+                                                            vce_h265_qmin   = 42;
+                                                            vce_h265_qmax   = 49;
+                                                            vce_h265_qmin_p = 45;
+                                                            vce_h265_qmax_p = 50;
+                                                            vce_h265_max_rate = vce_h265_bit_rate * 16;
+
+                                                            if (vce_h265_bit_rate < vce_h265_threshold * 0.24)
+                                                            {
+                                                                // CQ 50
+                                                                // there are no bits
+                                                                vce_h265_qmin   = 45;
+                                                                vce_h265_qmax   = 49;
+                                                                vce_h265_qmin_p = 48;
+                                                                vce_h265_qmax_p = 51;
+                                                                vce_h265_max_rate = vce_h265_bit_rate * 8;
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // factor for calculating max rate and buffer size
+                vce_h265_exp_scale = FFMIN(1.0L * 1000000 / vce_h265_bit_rate, 1.0L);
+
+                // ideal max rate is ~1.3x target bit rate, diminishing on a curve as target bit rate increases
+                // this allows allows the actual bit rate to vary as needed to ensure consistent visual quality,
+                // while limiting potentially exteme one-second peaks to approximately double the target bit rate
+                if (vce_h265_max_rate == 0)
+                {
+                    vce_h265_max_rate = vce_h265_bit_rate * ((vce_h265_exp_scale * 10) + 1);
+                    vce_h265_max_rate = FFMAX(vce_h265_bit_rate * 1.05L, FFMIN(vce_h265_max_rate, vce_h265_bit_rate * 1.3L));
+                }
+                context->rc_max_rate = (int)(vce_h265_max_rate);
+
+                // ideal hrd buffer size is the calculated max rate, diminishing on a curve as target bit rate increases
+                // minimum 1/3 target bit rate ensures the buffer size is not too constrained at higher target bit rates
+                vce_h265_buffer_size = FFMAX(vce_h265_bit_rate / 3, vce_h265_max_rate - (vce_h265_max_rate / FFMAX(vce_h265_exp_scale * 150.0L, 1.5L)));
+                if (vce_h265_buffer_size / vce_h265_max_rate > 0.98L)
+                {
+                    // buffer size is nearly identical to max rate, make them equal
+                    vce_h265_buffer_size = vce_h265_max_rate;
+                }
+                context->rc_buffer_size = (int)(vce_h265_buffer_size);
+                context->rc_initial_buffer_occupancy = context->rc_buffer_size;
+
+                // ideal max au size (frame size + overhead) is 1/4 the hrd buffer size
+                // this improves bit allocation by preventing the encoder from spending too many bits early in the gop
+                // or during periods of low motion, leaving too few bits for remaining frames and objects in motion
+                // better intra-gop quality consistency also helps minimize refresh/recovery effects at gop transitions
+                // if max_au_size is set, libavcodec will also set enforce_hrd for us
+                vce_h265_max_au_size        = (int)(vce_h265_buffer_size * 0.25);
+                vce_h265_max_au_size_length = snprintf(NULL, 0, "%d", vce_h265_max_au_size);
+                vce_h265_max_au_size_char   = malloc(vce_h265_max_au_size_length + 1);
+                if( !vce_h265_max_au_size_char )
+                {
+                    hb_log( "encavcodecInit: malloc of size %d "
+                            "failed", vce_h265_max_au_size_length );
+                    ret = 1;
+                    goto done;
+                }
+                snprintf(vce_h265_max_au_size_char, vce_h265_max_au_size_length + 1, "%d", vce_h265_max_au_size);
+                av_dict_set( &av_opts, "max_au_size",  vce_h265_max_au_size_char, 0 );
+            }
+            else
+            {
+                // CQ 0  == CQP 0
+                // CQ 51 == CQP 51
+                av_dict_set( &av_opts, "rc", "cqp", 0 );
+                vce_h265_qmin   = job->vquality < 1 ? 0 : 51;
+                vce_h265_qmax   = vce_h265_qmin;
+                vce_h265_qmin_p = vce_h265_qmin;
+                vce_h265_qmax_p = vce_h265_qmin;
+            }
+
+            context->qmin = vce_h265_qmin;
+            context->qmax = vce_h265_qmax;
+            snprintf(vce_h265_qmin_p_char, 4, "%d", vce_h265_qmin_p);
+            av_dict_set( &av_opts, "min_qp_p", vce_h265_qmin_p_char, 0 );
+            snprintf(vce_h265_qmax_p_char, 4, "%d", vce_h265_qmax_p);
+            av_dict_set( &av_opts, "max_qp_p", vce_h265_qmax_p_char, 0 );
+
+            hb_log( "encavcodec: encoding at CQ %d", job->vquality );
+            hb_log( "encavcodec: QP (I)      %d-%d", vce_h265_qmin, vce_h265_qmax );
+            hb_log( "encavcodec: QP (P)      %d-%d", vce_h265_qmin_p, vce_h265_qmax_p );
+            hb_log( "encavcodec: GOP Size    %d",    context->gop_size );
+            if (vce_h265_max_rate > 0)
+            {
+                hb_log( "encavcodec: Max Rate    %d", context->rc_max_rate/1000 );
+                hb_log( "encavcodec: Buffer Size %d", context->rc_buffer_size/1000 );
+                hb_log( "encavcodec: Max AU Size %d", vce_h265_max_au_size/1000 );
+            }
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
         {
