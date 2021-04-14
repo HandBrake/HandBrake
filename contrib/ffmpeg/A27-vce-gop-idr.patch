@@ -1,0 +1,29 @@
+From 76a3ee996bf9f3435b1c11d69639cd1e971f20c3 Mon Sep 17 00:00:00 2001
+From: Lu Jiao <sourpotato@live.com>
+Date: Tue, 16 Jun 2020 22:10:10 +0800
+Subject: [PATCH] avcodec/amfenc_hevc: set default gops_per_idr 1
+
+Previously gops_per_idr default 60 would make amd gpu encoding hevc
+has erratic seek bar behaviour as descripted in this ticket:
+https://trac.ffmpeg.org/ticket/7272
+
+This bad default is already fixed in newer AMF headers:
+https://github.com/GPUOpen-LibrariesAndSDKs/AMF/blob/master/amf/public/include/components/VideoEncoderHEVC.h
+
+Fixes ticket #7272.
+
+Signed-off-by: Marton Balint <cus@passwd.hu>
+
+diff --git a/libavcodec/amfenc_hevc.c b/libavcodec/amfenc_hevc.c
+index 8b2302f2af..fa12a3a3f6 100644
+--- a/libavcodec/amfenc_hevc.c
++++ b/libavcodec/amfenc_hevc.c
+@@ -69,7 +69,7 @@ static const AVOption options[] = {
+     { "gop",            "", 0, AV_OPT_TYPE_CONST, { .i64 = AMF_VIDEO_ENCODER_HEVC_HEADER_INSERTION_MODE_GOP_ALIGNED }, 0, 0, VE, "hdrmode" },
+     { "idr",            "", 0, AV_OPT_TYPE_CONST, { .i64 = AMF_VIDEO_ENCODER_HEVC_HEADER_INSERTION_MODE_IDR_ALIGNED }, 0, 0, VE, "hdrmode" },
+ 
+-    { "gops_per_idr",    "GOPs per IDR 0-no IDR will be inserted",  OFFSET(gops_per_idr),  AV_OPT_TYPE_INT,  { .i64 = 60 },  0, INT_MAX, VE },
++    { "gops_per_idr",    "GOPs per IDR 0-no IDR will be inserted",  OFFSET(gops_per_idr),  AV_OPT_TYPE_INT,  { .i64 = 1  },  0, INT_MAX, VE },
+     { "preanalysis",    "Enable preanalysis",                       OFFSET(preanalysis),   AV_OPT_TYPE_BOOL, { .i64 = 0  },  0, 1, VE},
+     { "vbaq",           "Enable VBAQ",                              OFFSET(enable_vbaq),   AV_OPT_TYPE_BOOL, { .i64 = 0  },  0, 1, VE},
+     { "enforce_hrd",    "Enforce HRD",                              OFFSET(enforce_hrd),   AV_OPT_TYPE_BOOL, { .i64 = 0  },  0, 1, VE},
