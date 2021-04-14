@@ -387,10 +387,27 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
             buf->f.color_transfer = stream->common->job->title->color_transfer;
             buf->f.color_matrix = stream->common->job->title->color_matrix;
             buf->f.color_range = stream->common->job->color_range;
+#if HB_PROJECT_FEATURE_QSV
+            if (stream->common->job->qsv.ctx && !stream->common->job->qsv.ctx->qsv_filters_are_enabled)
+            {
+                hb_qsv_attach_surface_to_video_buffer(stream->common->job, buf, 0);
+            }
+#endif
         }
         else
         {
-            buf = hb_buffer_dup(buf);
+#if HB_PROJECT_FEATURE_QSV
+            if (stream->common->job->qsv.ctx && !stream->common->job->qsv.ctx->qsv_filters_are_enabled)
+            {
+                hb_buffer_t *temp = hb_buffer_dup(buf);
+                hb_qsv_copy_video_buffer_to_video_buffer(stream->common->job, buf, temp, 0);
+                buf = temp;
+            }
+            else
+#endif
+            {
+                buf = hb_buffer_dup(buf);
+            }
         }
         buf->s.start     = next_pts;
         next_pts        += frame_dur;

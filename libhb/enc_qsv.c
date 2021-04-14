@@ -2252,19 +2252,18 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     {
 #if HB_PROJECT_FEATURE_QSV
         QSVMid *mid = NULL;
-        if(in->qsv_details.frame)
+        if (in->qsv_details.frame && in->qsv_details.frame->data[3])
         {
             surface = ((mfxFrameSurface1*)in->qsv_details.frame->data[3]);
             frames_ctx = in->qsv_details.qsv_frames_ctx;
             hb_qsv_get_mid_by_surface_from_pool(frames_ctx, surface, &mid);
+            hb_qsv_replace_surface_mid(frames_ctx, mid, surface);
         }
         else
         {
-            // Create black buffer in the beginning of the encoding, usually first 2 frames
-            hb_qsv_get_free_surface_from_pool_with_range(pv->job->qsv.ctx->hb_dec_qsv_frames_ctx, HB_QSV_POOL_SURFACE_SIZE - HB_QSV_POOL_ENCODER_SIZE, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
-            frames_ctx = pv->job->qsv.ctx->hb_dec_qsv_frames_ctx;
+            hb_error("encqsv: in->qsv_details no surface available");
+            goto fail;
         }
-        hb_qsv_replace_surface_mid(frames_ctx, mid, surface);
 #endif
         // At this point, enc_qsv takes ownership of the QSV resources
         // in the 'in' buffer.
