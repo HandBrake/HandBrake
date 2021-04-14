@@ -962,7 +962,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
-        out = hb_qsv_copy_frame(pv->job, pv->frame, 0);
+        out = hb_qsv_copy_avframe_to_video_buffer(pv->job, pv->frame, 0);
     }
     else
 #endif

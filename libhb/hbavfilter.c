@@ -317,7 +317,7 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
 #if HB_PROJECT_FEATURE_QSV
         if (hb_qsv_hw_filters_are_enabled(graph->job))
         {
-            buf = hb_qsv_copy_frame(graph->job, graph->frame, 1);
+            buf = hb_qsv_copy_avframe_to_video_buffer(graph->job, graph->frame, 1);
             hb_avframe_set_video_buffer_flags(buf, graph->frame, graph->out_time_base);
         }
         else
