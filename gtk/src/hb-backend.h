@@ -124,9 +124,10 @@ void ghb_backend_scan_stop();
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 hb_list_t * ghb_get_title_list();
 void ghb_par_init(signal_user_data_t *ud);
-void ghb_apply_crop(GhbValue *settings, const hb_title_t * title);
+void ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
-void ghb_set_scale_settings(GhbValue *settings, gint mode);
+void ghb_set_scale_settings(signal_user_data_t * ud,
+                            GhbValue *settings, gint mode);
 void ghb_picture_settings_deps(signal_user_data_t *ud);
 gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
@@ -146,8 +147,7 @@ void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
-GdkPixbuf* ghb_get_preview_image(
-    const hb_title_t *title, gint index, signal_user_data_t *ud);
+GdkPixbuf* ghb_get_preview_image(gint index, signal_user_data_t *ud);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_subtitle_track_source(GhbValue *settings, gint track);
 const gchar* ghb_subtitle_track_lang(GhbValue *settings, gint track);
@@ -182,7 +182,6 @@ void ghb_audio_samplerate_opts_filter(GtkComboBox *combo, gint acodec);
 
 int ghb_lookup_lang(const GhbValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
-void ghb_update_display_aspect_label(signal_user_data_t *ud);
 
 // libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
@@ -232,5 +231,9 @@ hb_handle_t* ghb_live_handle(void);
 gchar* ghb_create_title_label(const hb_title_t *title);
 gchar* ghb_create_source_label(const hb_title_t * title);
 gchar* ghb_create_volume_label(const hb_title_t * title);
+
+const gchar * ghb_lookup_resolution_limit(int width, int height);
+int ghb_lookup_resolution_limit_dimensions(const gchar * opt,
+                                           int * width, int * height);
 
 #endif // _HBBACKEND_H_

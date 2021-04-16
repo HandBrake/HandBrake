@@ -2932,9 +2932,9 @@ void hb_reduce( int *x, int *y, int num, int den )
     }
 }
 
-void hb_limit_rational( int *x, int *y, int num, int den, int limit )
+void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit )
 {
-    hb_reduce( &num, &den, num, den );
+    hb_reduce64( &num, &den, num, den );
     if ( num < limit && den < limit )
     {
         *x = num;
@@ -3851,23 +3851,22 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     /* Autocrop by default. Gnark gnark */
     memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
-
-    hb_geometry_t resultGeo, srcGeo;
+    hb_geometry_t          srcGeo, resultGeo;
     hb_geometry_settings_t uiGeo;
 
     srcGeo = title->geometry;
 
     memset(&uiGeo, 0, sizeof(uiGeo));
     memcpy(uiGeo.crop, title->crop, 4 * sizeof( int ));
-    uiGeo.geometry.width = srcGeo.width - uiGeo.crop[2] - uiGeo.crop[3];
+    uiGeo.geometry.width  = srcGeo.width  - uiGeo.crop[2] - uiGeo.crop[3];
     uiGeo.geometry.height = srcGeo.height - uiGeo.crop[0] - uiGeo.crop[1];
     uiGeo.mode = HB_ANAMORPHIC_NONE;
     uiGeo.keep = HB_KEEP_DISPLAY_ASPECT;
 
     hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-    job->width = resultGeo.width;
+    job->width  = resultGeo.width;
     job->height = resultGeo.height;
-    job->par = resultGeo.par;
+    job->par    = resultGeo.par;
 
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
     job->vquality   = HB_INVALID_VIDEO_QUALITY;
@@ -4157,6 +4156,27 @@ hb_list_t *hb_filter_list_copy(const hb_list_t *src)
         }
     }
     return list;
+}
+
+hb_dict_t * hb_filter_dict_find(const hb_value_array_t * list, int filter_id)
+{
+    hb_dict_t * filter = NULL;
+    int ii;
+
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    for (ii = 0; ii < hb_value_array_len(list); ii++)
+    {
+        filter = hb_value_array_get(list, ii);
+        if (hb_dict_get_int(filter, "ID") == filter_id)
+        {
+            return filter;
+        }
+    }
+
+    return NULL;
 }
 
 hb_filter_object_t * hb_filter_find(const hb_list_t *list, int filter_id)

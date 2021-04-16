@@ -139,13 +139,9 @@ void      * hb_list_item( const hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );
 
 void hb_reduce( int *x, int *y, int num, int den );
-void hb_limit_rational( int *x, int *y, int num, int den, int limit );
+void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
 void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
-
-#define HB_KEEP_WIDTH           0x01
-#define HB_KEEP_HEIGHT          0x02
-#define HB_KEEP_DISPLAY_ASPECT  0x04
 
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
 void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
@@ -271,15 +267,38 @@ struct hb_geometry_s
     hb_rational_t par;
 };
 
+struct hb_geometry_crop_s
+{
+    int crop[4];
+    int pad[4];
+    hb_geometry_t geometry;
+};
+
+// hb_geometry_settings_s 'keep' flags
+#define HB_KEEP_WIDTH           0x01
+#define HB_KEEP_HEIGHT          0x02
+#define HB_KEEP_DISPLAY_ASPECT  0x04
+#define HB_KEEP_DISPLAY_WIDTH   0x08
+#define HB_KEEP_PAD             0x10
+
+// hb_geometry_settings_s 'flags'
+#define HB_GEO_SCALE_UP         0x01
+#define HB_GEO_SCALE_BEST       0x02
+
 struct hb_geometry_settings_s
 {
-    int mode;                   // Anamorphic mode, see job struct anamorphic
-    int keep;                   // Specifies settings that shouldn't be changed
-    int itu_par;                // use dvd dimensions to determine PAR
-    int modulus;                // pixel alignment for loose anamorphic
-    int crop[4];                // Pixels cropped from source before scaling
-    int maxWidth;               // max destination storage width
-    int maxHeight;              // max destination storage height
+    int mode;               // Anamorphic mode, see job struct anamorphic
+    int keep;               // Specifies settings that shouldn't be changed
+    int flags;              // Flags that affect calculations
+    int itu_par;            // use dvd dimensions to determine PAR
+    int modulus;            // pixel alignment for loose anamorphic
+    int crop[4];            // Pixels cropped from source before scaling
+    int pad[4];             // Pixels cropped from source before scaling
+    int maxWidth;           // max destination storage width
+    int maxHeight;          // max destination storage height
+    int displayWidth;       // display width, used with !HB_KEEP_DISPLAY_ASPECT
+    int displayHeight;      // display height, used with !HB_KEEP_DISPLAY_ASPECT
+                            // Note that display size includes pad!
     hb_geometry_t geometry;
 };
 
@@ -1411,11 +1430,11 @@ enum
     HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
     HB_FILTER_NLMEANS,
     HB_FILTER_CHROMA_SMOOTH,
+    HB_FILTER_ROTATE,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
     HB_FILTER_LAPSHARP,
     HB_FILTER_UNSHARP,
-    HB_FILTER_ROTATE,
     HB_FILTER_GRAYSCALE,
     HB_FILTER_PAD,
     HB_FILTER_COLORSPACE,
@@ -1437,6 +1456,8 @@ hb_filter_object_t * hb_filter_get( int filter_id );
 hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
 hb_list_t          * hb_filter_list_copy(const hb_list_t *src);
+hb_dict_t          * hb_filter_dict_find(const hb_value_array_t * list,
+                                         int filter_id);
 hb_filter_object_t * hb_filter_find(const hb_list_t *list, int filter_id);
 void                 hb_filter_close( hb_filter_object_t ** );
 void                 hb_filter_info_close( hb_filter_info_t ** );

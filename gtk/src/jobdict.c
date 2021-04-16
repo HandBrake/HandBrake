@@ -84,6 +84,17 @@ GhbValue* ghb_get_job_source_settings(GhbValue *settings)
     return source;
 }
 
+int ghb_get_job_title_id(GhbValue *settings)
+{
+    GhbValue * source = ghb_get_job_source_settings(settings);
+    GhbValue * title  = ghb_dict_get(source, "Title");
+    if (title == NULL)
+    {
+        return -1;
+    }
+    return ghb_value_get_int(title);
+}
+
 GhbValue* ghb_get_job_range_settings(GhbValue *settings)
 {
     GhbValue *source = ghb_get_job_source_settings(settings);

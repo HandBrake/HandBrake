@@ -1496,6 +1496,11 @@ Resets the queue job to pending and ready to run again.</property>
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="display_size_lock_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">emblem-readonly</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -1522,33 +1527,55 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment13">
-    <property name="upper">1000</property>
-    <property name="step_increment">1</property>
+  <object class="GtkAdjustment" id="TopPadAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment14">
-    <property name="upper">1000</property>
-    <property name="step_increment">1</property>
+  <object class="GtkAdjustment" id="BottomPadAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment15">
-    <property name="upper">1000</property>
-    <property name="step_increment">1</property>
+  <object class="GtkAdjustment" id="LeftPadAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment16">
-    <property name="upper">1000</property>
-    <property name="step_increment">1</property>
+  <object class="GtkAdjustment" id="RightPadAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment17">
-    <property name="upper">8000</property>
+  <object class="GtkAdjustment" id="LeftCropAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="TopCropAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="BottomCropAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="RightCropAdjustment">
+    <property name="upper">8192</property>
+    <property name="step_increment">2</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="scale_width_adjustment">
+    <property name="lower">32</property>
+    <property name="upper">20480</property>
     <property name="step_increment">2</property>
     <property name="page_increment">16</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment18">
-    <property name="upper">8000</property>
+  <object class="GtkAdjustment" id="scale_height_adjustment">
+    <property name="lower">32</property>
+    <property name="upper">20480</property>
     <property name="step_increment">2</property>
     <property name="page_increment">16</property>
   </object>
@@ -1643,13 +1670,15 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="step_increment">10</property>
     <property name="page_increment">100</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment32">
-    <property name="upper">8000</property>
+  <object class="GtkAdjustment" id="PictureWidthAdjustment">
+    <property name="lower">0</property>
+    <property name="upper">20480</property>
     <property name="step_increment">2</property>
     <property name="page_increment">16</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment33">
-    <property name="upper">8000</property>
+  <object class="GtkAdjustment" id="PictureHeightAdjustment">
+    <property name="lower">0</property>
+    <property name="upper">20480</property>
     <property name="step_increment">2</property>
     <property name="page_increment">16</property>
   </object>
@@ -1703,6 +1732,18 @@ Resets the queue job to pending and ready to run again.</property>
     <property name="lower">6</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="DisplayWidthAdjustment">
+    <property name="lower">32</property>
+    <property name="upper">20480</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">16</property>
+  </object>
+  <object class="GtkAdjustment" id="DisplayHeightAdjustment">
+    <property name="lower">32</property>
+    <property name="upper">20480</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">16</property>
   </object>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="transient_for">hb_window</property>
@@ -3190,9 +3231,156 @@ sync for broken players that do not honor MP4 edit lists.</property>
                     <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin-top">16</property>
+                    <property name="margin-top">8</property>
                     <property name="margin-start">0</property>
-                    <property name="spacing">16</property>
+                    <property name="spacing">24</property>
+                    <child>
+                      <object class="GtkFrame" id="source_dimensions_frame">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <property name="margin-start">2</property>
+                        <property name="margin-end">2</property>
+                        <child>
+                          <object class="GtkGrid" id="source_dimensions_grid">
+                            <property name="margin-top">8</property>
+                            <property name="row-spacing">4</property>
+                            <property name="column-spacing">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <child>
+                              <object class="GtkBox" id="source_storage_hbox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="source_storage_size_label">
+                                    <property name="label" translatable="yes">Storage Size:</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="source_storage_size">
+                                    <property name="label" translatable="yes">--</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="source_display_hbox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="source_display_size_label">
+                                    <property name="label" translatable="yes">Display Size:</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="source_display_size">
+                                    <property name="label" translatable="yes">--</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="source_aspect_hbox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="source_aspect_ratio_label">
+                                    <property name="label" translatable="yes">Aspect Ratio:</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="source_aspect_ratio">
+                                    <property name="label" translatable="yes">--</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">2</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="source_dimensions_frame_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Source Dimensions&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkBox" id="hbox75">
                         <property name="orientation">horizontal</property>
@@ -3215,155 +3403,196 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="can_focus">False</property>
                                 <property name="margin-top">6</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="spacing">4</property>
                                 <child>
-                                  <object class="GtkGrid" id="crop_grid">
-                                    <property name="row-spacing">4</property>
-                                    <property name="column-spacing">0</property>
+                                  <object class="GtkGrid" id="table16">
+                                    <property name="row-spacing">2</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="column_spacing">5</property>
+                                    <property name="halign">start</property>
+                                    <property name="valign">start</property>
+                                    <property name="row-spacing">4</property>
+                                    <property name="column-spacing">8</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="PictureAutoCrop">
-                                        <property name="label" translatable="yes">Auto Crop</property>
+                                      <object class="GtkLabel" id="hflip_label">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Automatically crop black borders around edges of the video.</property>
+                                        <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                        <property name="label" translatable="yes">Flipping:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">0</property>
                                         <property name="left_attach">0</property>
-                                        <property name="width">4</property>
+                                        <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="PictureLooseCrop">
-                                        <property name="label" translatable="yes">Loose Crop</property>
+                                      <object class="GtkCheckButton" id="hflip">
+                                        <property name="label" translatable="yes">Horizontal ⇌</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">When picture settings require that the image
-dimensions be rounded to some multiple number
-of pixels, this setting will crop a few extra pixels
-instead of doing exact cropping and then scaling to
-the required multiple.</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Flip video horizontally.</property>
                                         <property name="halign">start</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                        <signal name="toggled" handler="rotate_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="PictureRotateLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Rotation:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">1</property>
                                         <property name="left_attach">0</property>
-                                        <property name="width">4</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="rotate">
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
+                                        <property name="width_request">100</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Rotate the video clockwise in 90 degree increments.</property>
+                                        <signal name="changed" handler="rotate_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="crop_mode_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Cropping:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="crop_mode">
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
+                                        <property name="width_request">100</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">How to apply crop settings.</property>
+                                        <signal name="changed" handler="scale_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="PictureLeftCrop">
-                                        <property name="width-chars">6</property>
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Left Crop</property>
-                                        <property name="adjustment">adjustment13</property>
+                                        <property name="adjustment">LeftCropAdjustment</property>
                                         <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">4</property>
                                         <property name="left_attach">0</property>
-                                        <property name="width">6</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="PictureTopCrop">
-                                        <property name="width-chars">6</property>
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Top Crop</property>
-                                        <property name="adjustment">adjustment14</property>
+                                        <property name="adjustment">TopCropAdjustment</property>
                                         <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="left_attach">5</property>
-                                        <property name="width">6</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="PictureBottomCrop">
-                                        <property name="width-chars">6</property>
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Bottom Crop</property>
-                                        <property name="adjustment">adjustment15</property>
+                                        <property name="adjustment">BottomCropAdjustment</property>
                                         <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">3</property>
-                                        <property name="left_attach">5</property>
-                                        <property name="width">6</property>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="PictureRightCrop">
-                                        <property name="width-chars">6</property>
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="tooltip_text" translatable="yes">Right Crop</property>
-                                        <property name="adjustment">adjustment16</property>
+                                        <property name="adjustment">RightCropAdjustment</property>
                                         <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">2</property>
-                                        <property name="left_attach">10</property>
-                                        <property name="width">6</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label97">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Crop Dimensions:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">5</property>
-                                        <property name="left_attach">0</property>
-                                        <property name="width">4</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="crop_dimensions2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">--</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">5</property>
-                                        <property name="left_attach">4</property>
-                                        <property name="width">4</property>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">2</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkGrid" id="crop_grid">
+                                    <property name="row-spacing">4</property>
+                                    <property name="column-spacing">8</property>
+                                    <property name="column-homogeneous">True</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3373,7 +3602,7 @@ the required multiple.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Cropping&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Orientation &amp;amp; Cropping&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -3407,30 +3636,43 @@ the required multiple.</property>
                                     <property name="halign">start</property>
                                     <property name="valign">start</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="autoscale">
-                                        <property name="label" translatable="yes">Optimal for source</property>
+                                      <object class="GtkLabel" id="resolution_limit_label">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
-This will be the resolution that most closely matches the source resolution after cropping.</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="halign">start</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                        <property name="label" translatable="yes">Resolution Limit:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">0</property>
                                         <property name="left_attach">0</property>
-                                        <property name="width">2</property>
+                                        <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label27">
+                                      <object class="GtkComboBox" id="resolution_limit">
+                                        <property name="visible">True</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_markup" translatable="yes">Resolution limits for common video formats.</property>
+                                        <signal name="changed" handler="resolution_limit_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">3</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="maximum_size_label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Width:</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Maximum Size:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -3440,14 +3682,13 @@ This will be the resolution that most closely matches the source resolution afte
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="scale_width">
-                                        <property name="width-chars">6</property>
+                                      <object class="GtkSpinButton" id="PictureWidth">
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">This is the width that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
-                                        <property name="adjustment">adjustment17</property>
+                                        <property name="tooltip_text" translatable="yes">This is the maximum width that the video will be stored at.</property>
+                                        <property name="adjustment">PictureWidthAdjustment</property>
                                         <property name="snap_to_ticks">True</property>
                                         <signal name="value-changed" handler="scale_width_changed_cb" swapped="no"/>
                                       </object>
@@ -3459,59 +3700,45 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label28">
+                                      <object class="GtkLabel" id="label23">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Height:</property>
+                                        <property name="label" translatable="yes">x</property>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">2</property>
-                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">2</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="scale_height">
-                                        <property name="width-chars">6</property>
+                                      <object class="GtkSpinButton" id="PictureHeight">
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">This is the height that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
-                                        <property name="adjustment">adjustment18</property>
+                                        <property name="tooltip_text" translatable="yes">This is the maximum height that the video will be stored at.</property>
+                                        <property name="adjustment">PictureHeightAdjustment</property>
                                         <signal name="value-changed" handler="scale_height_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">2</property>
-                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">3</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkGrid" id="ana_grid">
-                                    <property name="row-spacing">2</property>
-                                    <property name="column-spacing">4</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
                                     <child>
-                                      <object class="GtkLabel" id="label96">
+                                      <object class="GtkLabel" id="anamorphic_label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Anamorphic:</property>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">0</property>
+                                        <property name="top_attach">2</property>
                                         <property name="left_attach">0</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
@@ -3523,61 +3750,199 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                         <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
-&lt;small&gt;&lt;tt&gt;
-None      - Force pixel aspect ratio to 1:1.
-Loose     - Use a pixel aspect ratio that is as
-        close as possible to the source video pixel
-        aspect ratio while preserving the original
-        display aspect ratio
-Automatic - Use a pixel aspect ratio that maximizes
+                                        <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;&lt;small&gt;&lt;tt&gt;
+    Automatic - Use a pixel aspect ratio that maximizes
         storage resolution while preserving the original
-        display aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
+        display aspect ratio.
+    None      - Force pixel aspect ratio to 1:1.
+    Custom    - Enter a custom pixel aspect ratio.&lt;/tt&gt;&lt;/small&gt;</property>
                                         <signal name="changed" handler="scale_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">0</property>
+                                        <property name="top_attach">2</property>
                                         <property name="left_attach">1</property>
-                                        <property name="width">1</property>
+                                        <property name="width">3</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label95">
+                                      <object class="GtkLabel" id="pixel_aspect_label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Alignment:</property>
+                                        <property name="label" translatable="yes">Pixel Aspect:</property>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">1</property>
+                                        <property name="top_attach">3</property>
                                         <property name="left_attach">0</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="PictureModulus">
+                                      <object class="GtkSpinButton" id="PicturePARWidth">
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
-                                        <property name="valign">GTK_ALIGN_CENTER</property>
-                                        <property name="can_focus">False</property>
+                                        <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Align storage dimensions to multiples of this value.
+                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
 
-This setting is only necessary for compatibility with some devices.
-You should use 2 unless you experience compatibility issues.</property>
-                                        <signal name="changed" handler="scale_changed_cb" swapped="no"/>
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</property>
+                                        <property name="adjustment">adjustment29</property>
+                                        <property name="snap_to_ticks">True</property>
+                                        <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">1</property>
+                                        <property name="top_attach">3</property>
                                         <property name="left_attach">1</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <object class="GtkLabel" id="picture_aspect_colon">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">2</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="PicturePARHeight">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</property>
+                                        <property name="adjustment">adjustment30</property>
+                                        <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">3</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="scaled_size_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Scaled Size:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="scale_width">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">This is the width that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
+                                        <property name="adjustment">scale_width_adjustment</property>
+                                        <property name="snap_to_ticks">True</property>
+                                        <signal name="value-changed" handler="scale_width_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label28">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">x</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">2</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="scale_height">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">This is the height that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
+                                        <property name="adjustment">scale_height_adjustment</property>
+                                        <signal name="value-changed" handler="scale_height_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">3</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="PictureUseMaximumSize">
+                                        <property name="label" translatable="yes">Optimal Size</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Use highest resolution permitted by above settings.</property>
+                                        <property name="halign">start</property>
+                                        <property name="active">False</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="PictureAllowUpscaling">
+                                        <property name="label" translatable="yes">Allow Upscaling</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">If not enabled, scaled dimensions will be limited to source dimensions.</property>
+                                        <property name="halign">start</property>
+                                        <property name="active">False</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">6</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
-                                    <property name="position">4</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3587,7 +3952,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Storage Geometry&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Resolution &amp;amp; Scaling&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -3613,211 +3978,151 @@ You should use 2 unless you experience compatibility issues.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="spacing">2</property>
                                 <child>
-                                  <object class="GtkGrid" id="display_grid">
+                                  <object class="GtkGrid" id="pad_options_grid">
                                     <property name="row-spacing">2</property>
                                     <property name="column-spacing">4</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="valign">start</property>
+                                    <property name="column-spacing">8</property>
+                                    <property name="row-spacing">4</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="PictureKeepRatio">
-                                        <property name="label" translatable="yes">Keep Aspect</property>
+                                      <object class="GtkLabel" id="pad_mode_label">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">If enabled, the original display aspect of the source will be maintained.</property>
+                                        <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                        <property name="label" translatable="yes">Fill:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">0</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="PicturePadMode">
+                                        <property name="hexpand">False</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
+                                        <property name="width_request">100</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Add a border around the video.</property>
+                                        <signal name="changed" handler="pad_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+
+                                    <child>
+                                      <object class="GtkSpinButton" id="PicturePadLeft">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Left Pad</property>
+                                        <property name="adjustment">LeftPadAdjustment</property>
+                                        <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
                                         <property name="left_attach">0</property>
                                         <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label91">
+                                      <object class="GtkSpinButton" id="PicturePadTop">
+                                        <property name="width-chars">4</property>
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
+                                        <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Width:</property>
+                                        <property name="tooltip_text" translatable="yes">Top Pad</property>
+                                        <property name="adjustment">TopPadAdjustment</property>
+                                        <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="PicturePadBottom">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Bottom Pad</property>
+                                        <property name="adjustment">BottomPadAdjustment</property>
+                                        <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="PicturePadRight">
+                                        <property name="width-chars">4</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip_text" translatable="yes">Right Pad</property>
+                                        <property name="adjustment">RightPadAdjustment</property>
+                                        <signal name="value-changed" handler="pad_changed_cb" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">2</property>
+                                        <property name="width">2</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="pad_color_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Color:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">4</property>
                                         <property name="left_attach">0</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="PictureDisplayWidth">
-                                        <property name="width-chars">6</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">This is the display width. It is the result of scaling the storage dimensions by the pixel aspect.</property>
-                                        <property name="adjustment">adjustment25</property>
-                                        <property name="snap_to_ticks">True</property>
-                                        <signal name="value-changed" handler="display_width_changed_cb" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="left_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label92">
+                                      <object class="GtkComboBox" id="PicturePadColor">
+                                        <property name="hexpand">False</property>
+                                        <property name="valign">GTK_ALIGN_CENTER</property>
+                                        <property name="width_request">100</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Height:</property>
+                                        <property name="tooltip_text" translatable="yes">Color of border added around video.</property>
+                                        <signal name="changed" handler="pad_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
-                                        <property name="top_attach">2</property>
-                                        <property name="left_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSpinButton" id="PictureDisplayHeight">
-                                        <property name="width-chars">6</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="adjustment">adjustment26</property>
-                                        <signal name="value-changed" handler="display_height_changed_cb" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">4</property>
                                         <property name="left_attach">1</property>
-                                        <property name="width">1</property>
+                                        <property name="width">2</property>
                                         <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkGrid" id="aspect_grid">
-                                    <property name="row-spacing">2</property>
-                                    <property name="column-spacing">4</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label98">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Pixel Aspect:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">0</property>
-                                        <property name="left_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSpinButton" id="PicturePARWidth">
-                                        <property name="width-chars">6</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
-
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</property>
-                                        <property name="adjustment">adjustment29</property>
-                                        <property name="snap_to_ticks">True</property>
-                                        <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">0</property>
-                                        <property name="left_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label99">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">0</property>
-                                        <property name="left_attach">2</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkSpinButton" id="PicturePARHeight">
-                                        <property name="width-chars">6</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</property>
-                                        <property name="adjustment">adjustment30</property>
-                                        <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">0</property>
-                                        <property name="left_attach">3</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label93">
-                                        <property name="width_request">100</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Display Aspect:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="left_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="display_aspect">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">--:--</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="left_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3827,7 +4132,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Display Geometry&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Borders&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -3838,7 +4143,216 @@ Players will scale the image in order to achieve the specified aspect.</property
                         </child>
                       </object>
                       <packing>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="final_dimensions_frame">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <property name="margin-start">2</property>
+                        <property name="margin-end">2</property>
+                        <child>
+                          <object class="GtkGrid" id="final_dimensions_grid">
+                            <property name="margin-top">8</property>
+                            <property name="row-spacing">4</property>
+                            <property name="column-spacing">32</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <child>
+                              <object class="GtkBox" id="final_storage_hbox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="final_storage_size_label">
+                                    <property name="label" translatable="yes">Storage Size:</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="final_storage_size">
+                                    <property name="label" translatable="yes">--</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkGrid" id="display_size_grid">
+                                <property name="row-spacing">2</property>
+                                <property name="column-spacing">4</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <child>
+                                  <object class="GtkLabel" id="display_size_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Display Size:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="PictureDARWidth">
+                                    <property name="width-chars">4</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip_text" translatable="yes">Changing the display size will stretch the video.</property>
+                                    <property name="adjustment">DisplayWidthAdjustment</property>
+                                    <property name="snap_to_ticks">True</property>
+                                    <signal name="value-changed" handler="display_width_changed_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="display_size_x_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">x</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">2</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="DisplayHeight">
+                                    <property name="width-chars">4</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip_text" translatable="yes">Changing the display size will stretch the video.</property>
+                                    <property name="adjustment">DisplayHeightAdjustment</property>
+                                    <signal name="value-changed" handler="display_height_changed_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">3</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="PictureKeepRatio">
+                                    <property name="label" translatable="yes">Automatic</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip_text" translatable="yes">Changing the display size will stretch the video.</property>
+                                    <property name="halign">start</property>
+                                    <property name="active">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">4</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="final_aspect_hbox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="final_aspect_label">
+                                    <property name="label" translatable="yes">Aspect Ratio:</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="final_aspect_ratio">
+                                    <property name="label" translatable="yes">--</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">2</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="final_dimensions_frame_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Final Dimensions&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -4404,47 +4918,6 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
-                            <property name="left_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="table16">
-                        <property name="row-spacing">2</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="column_spacing">5</property>
-                        <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <child>
-                          <object class="GtkLabel" id="PictureRotateLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Rotate Filter:</property>
-                          </object>
-                          <packing>
-                            <property name="top_attach">1</property>
-                            <property name="left_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="PictureRotate">
-                            <property name="valign">GTK_ALIGN_CENTER</property>
-                            <property name="width_request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip_text" translatable="yes">Rotate the video clockwise in 90 degree increments.</property>
-                            <signal name="changed" handler="filter_widget_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top_attach">1</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8225,85 +8698,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="left_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="PictureWidthEnable">
-                    <property name="label" translatable="yes">Maximum Width:</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Enable maximum width limit.</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="PictureWidth">
-                    <property name="width-chars">7</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">This is the maximum width that the video will be stored at.
-
-Whenever a new source is loaded, this value will be applied if the source width is greater.
-Setting this to 0 means there is no maximum width.</property>
-                    <property name="adjustment">adjustment32</property>
-                    <property name="snap_to_ticks">True</property>
-                    <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="PictureHeightEnable">
-                    <property name="label" translatable="yes">Maximum Height:</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Enable maximum height limit.</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="left_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="PictureHeight">
-                    <property name="width-chars">7</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">This is the maximum height that the video will be stored at.
-
-Whenever a new source is loaded, this value will be applied if the source height is greater.
-Setting this to 0 means there is no maximum height.</property>
-                    <property name="adjustment">adjustment33</property>
-                    <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="left_attach">1</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>

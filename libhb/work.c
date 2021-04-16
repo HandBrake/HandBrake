@@ -1440,10 +1440,7 @@ static void do_job(hb_job_t *job)
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
-        init.geometry.width = title->geometry.width;
-        init.geometry.height = title->geometry.height;
-
-        init.geometry.par = job->par;
+        init.geometry = title->geometry;
         memset(init.crop, 0, sizeof(int[4]));
         init.vrate = job->vrate;
         init.cfr = 0;
@@ -1469,7 +1466,10 @@ static void do_job(hb_job_t *job)
         job->color_matrix = init.color_matrix;
         job->width = init.geometry.width;
         job->height = init.geometry.height;
-        job->par = init.geometry.par;
+        // job->par is supplied by the frontend.
+        //
+        // The filter chain does not know what the final desired PAR is.
+        // job->par = init.geometry.par;
         memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate = init.vrate;
         job->cfr = init.cfr;

@@ -256,17 +256,51 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     ghb_dict_set(settings, "scale_width", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureWidth")));
 
-    int width, height, uses_pic, autoscale;
+    if (ghb_dict_get_bool(settings, "PictureAutoCrop"))
+    {
+        ghb_dict_set_string(settings, "crop_mode", "auto");
+    }
+    else
+    {
+        int ct = ghb_dict_get_int(settings, "PictureTopCrop");
+        int cb = ghb_dict_get_int(settings, "PictureBottomCrop");
+        int cl = ghb_dict_get_int(settings, "PictureLeftCrop");
+        int cr = ghb_dict_get_int(settings, "PictureRightCrop");
+        if (ct == 0 && cb == 0 && cl == 0 && cr == 0)
+        {
+            ghb_dict_set_string(settings, "crop_mode", "none");
+        }
+        else
+        {
+            ghb_dict_set_string(settings, "crop_mode", "custom");
+        }
+    }
+
+    int width, height;
+    const gchar * resolution_limit;
 
     width    = ghb_dict_get_int(settings, "PictureWidth");
     height   = ghb_dict_get_int(settings, "PictureHeight");
-    uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
+    resolution_limit = ghb_lookup_resolution_limit(width, height);
+    ghb_dict_set_string(settings, "resolution_limit", resolution_limit);
 
-    autoscale = uses_pic != 1 || (width == 0 && height == 0);
-    ghb_dict_set_bool(settings, "autoscale", autoscale);
-    ghb_dict_set_int(settings, "PictureWidthEnable", !autoscale);
-    ghb_dict_set_int(settings, "PictureHeightEnable", !autoscale);
+    const char * rotate = ghb_dict_get_string(settings, "PictureRotate");
+    if (rotate != NULL)
+    {
+        int         angle, hflip;
+        char      * angle_opt;
+        hb_dict_t * filter_settings;
 
+        filter_settings = hb_generate_filter_settings(HB_FILTER_ROTATE,
+                                                      NULL, NULL, rotate);
+        angle = hb_dict_get_int(filter_settings, "angle");
+        hflip = hb_dict_get_bool(filter_settings, "hflip");
+        angle_opt = g_strdup_printf("%d", angle);
+        ghb_dict_set_string(settings, "rotate", angle_opt);
+        ghb_dict_set_int(settings, "hflip", hflip);
+        g_free(angle_opt);
+        hb_value_free(&filter_settings);
+    }
     gint vqtype;
 
     vqtype = ghb_dict_get_int(settings, "VideoQualityType");
@@ -1690,31 +1724,24 @@ ghb_settings_to_preset(GhbValue *settings)
 {
     GhbValue *preset = ghb_value_dup(settings);
 
-    gboolean autoscale, br, constant;
+    gboolean br, constant;
 
     ghb_dict_remove(preset, "title");
     ghb_dict_set_bool(preset, "Default", 0);
-    if (!ghb_dict_get_bool(preset, "PictureWidthEnable"))
-    {
-        ghb_dict_remove(preset, "PictureWidth");
-    }
-    if (!ghb_dict_get_bool(preset, "PictureHeightEnable"))
-    {
-        ghb_dict_remove(preset, "PictureHeight");
-    }
-    autoscale = !ghb_dict_get_bool(preset, "PictureWidthEnable") &&
-                !ghb_dict_get_bool(preset, "PictureHeightEnable");
 
     br = ghb_dict_get_bool(preset, "vquality_type_bitrate");
     constant = ghb_dict_get_bool(preset, "vquality_type_constant");
-    if (autoscale)
-    {
-        ghb_dict_set_int(preset, "UsesPictureSettings", 2);
-    }
-    else
-    {
-        ghb_dict_set_int(preset, "UsesPictureSettings", 1);
-    }
+
+    const char * angle    = ghb_dict_get_string(preset, "rotate");
+    int          hflip    = ghb_dict_get_int(preset, "hflip");
+    char       * rot_flip = g_strdup_printf("angle=%s:hflip=%d", angle, hflip);
+    ghb_dict_set_string(preset, "PictureRotate", rot_flip);
+    g_free(rot_flip);
+
+    const gchar * crop_mode;
+
+    crop_mode = ghb_dict_get_string(settings, "crop_mode");
+    ghb_dict_set_bool(preset, "PictureAutoCrop", !strcmp(crop_mode, "auto"));
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
@@ -2223,8 +2250,6 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     const gchar       * fullname;
     int                 type;
     hb_preset_index_t * path;
-    int                 width, height;
-    gboolean            autoscale;
     GtkWidget         * dialog;
     GtkWidget         * widget;
     GtkEntry          * entry;
@@ -2235,13 +2260,8 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     name      = ghb_dict_get_string(ud->settings, "PresetName");
     type      = ghb_dict_get_int(ud->settings, "Type");
     fullname  = ghb_dict_get_string(ud->settings, "PresetFullName");
-    width     = ghb_dict_get_int(ud->settings, "PictureWidth");
-    height    = ghb_dict_get_int(ud->settings, "PictureHeight");
-    autoscale = ghb_dict_get_bool(ud->settings, "autoscale");
 
     ghb_ui_update(ud, "PresetSetDefault", ghb_boolean_value(FALSE));
-    ghb_ui_update(ud, "PictureWidthEnable", ghb_boolean_value(!autoscale));
-    ghb_ui_update(ud, "PictureHeightEnable", ghb_boolean_value(!autoscale));
 
     path = hb_preset_search_index(fullname, 0, type);
 
@@ -2285,16 +2305,6 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     }
     ghb_ui_update(ud, "PresetCategory", ghb_string_value(category));
     tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
-    if (!width)
-    {
-        width = ghb_dict_get_int(ud->settings, "scale_width");
-        ghb_ui_update(ud, "PictureWidth", ghb_int_value(width));
-    }
-    if (!height)
-    {
-        height = ghb_dict_get_int(ud->settings, "scale_height");
-        ghb_ui_update(ud, "PictureHeight", ghb_int_value(height));
-    }
 
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));

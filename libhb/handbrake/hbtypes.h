@@ -20,6 +20,7 @@ typedef struct hb_encoder_s hb_encoder_t;
 typedef struct hb_container_s hb_container_t;
 typedef struct hb_rational_s hb_rational_t;
 typedef struct hb_geometry_s hb_geometry_t;
+typedef struct hb_geometry_crop_s hb_geometry_crop_t;
 typedef struct hb_geometry_settings_s hb_geometry_settings_t;
 typedef struct hb_image_s hb_image_t;
 typedef struct hb_job_s  hb_job_t;

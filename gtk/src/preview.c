@@ -969,18 +969,8 @@ init_preview_image(signal_user_data_t *ud)
 {
     GtkWidget *widget;
 
-    gint title_id, titleindex;
-    const hb_title_t *title;
-
     live_preview_stop(ud);
 
-    title_id = ghb_dict_get_int(ud->settings, "title");
-    title = ghb_lookup_title(title_id, &titleindex);
-    if (title == NULL && ud->preview->pix != NULL)
-    {
-        g_object_unref(ud->preview->pix);
-        ud->preview->pix = NULL;
-    }
     widget = GHB_WIDGET (ud->builder, "preview_frame");
     ud->preview->frame = ghb_widget_int(widget) - 1;
     if (ud->preview->encoded[ud->preview->frame])
@@ -1005,7 +995,7 @@ init_preview_image(signal_user_data_t *ud)
     if (ud->preview->scaled_pix != NULL)
         g_object_unref(ud->preview->scaled_pix);
 
-    ud->preview->pix = ghb_get_preview_image(title, ud->preview->frame, ud);
+    ud->preview->pix = ghb_get_preview_image(ud->preview->frame, ud);
     if (ud->preview->pix == NULL)
         return;
 
@@ -1502,7 +1492,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
+        ghb_set_scale(ud, 0);
     ghb_pref_save(ud->prefs, "preview_show_crop");
     ghb_rescale_preview_image(ud);
 }

@@ -27,6 +27,7 @@
 
 GhbValue* ghb_get_job_settings(GhbValue *settings);
 GhbValue* ghb_get_job_source_settings(GhbValue *settings);
+int       ghb_get_job_title_id(GhbValue *settings);
 GhbValue* ghb_get_job_range_settings(GhbValue *settings);
 GhbValue* ghb_get_job_par_settings(GhbValue *settings);
 GhbValue* ghb_get_job_dest_settings(GhbValue *settings);

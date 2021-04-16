@@ -15,7 +15,9 @@ static int pad_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 
 const char pad_template[] =
     "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:color=^"HB_ALL_REG"$:"
-    "x=^"HB_INT_REG"$:y=^"HB_INT_REG"$";
+    "x=^"HB_INT_REG"$:y=^"HB_INT_REG"$:"
+    "top=^"HB_INT_REG"$:bottom=^"HB_INT_REG"$:"
+    "left=^"HB_INT_REG"$:right=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_pad =
 {
@@ -50,8 +52,14 @@ static int pad_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t        * settings = filter->settings;
 
     int      width  = -1, height = -1, rgb = 0;
+    int      top = -1, bottom = -1, left = -1, right = -1;
     int      x = -1, y = -1;
     char  *  color = NULL;
+
+    hb_dict_extract_int(&top, settings, "top");
+    hb_dict_extract_int(&bottom, settings, "bottom");
+    hb_dict_extract_int(&left, settings, "left");
+    hb_dict_extract_int(&right, settings, "right");
 
     hb_dict_extract_int(&width, settings, "width");
     hb_dict_extract_int(&height, settings, "height");
@@ -59,6 +67,22 @@ static int pad_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_extract_int(&x, settings, "x");
     hb_dict_extract_int(&y, settings, "y");
 
+    if (x < 0)
+    {
+        x = left;
+    }
+    if (y < 0)
+    {
+        y = top;
+    }
+    if (top >= 0 && bottom >= 0 && height < 0)
+    {
+        height = init->geometry.height + top + bottom;
+    }
+    if (left >= 0 && right >= 0 && width < 0)
+    {
+        width = init->geometry.width + left + right;
+    }
     if (color != NULL)
     {
         char * end;
