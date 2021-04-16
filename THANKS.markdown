@@ -48,6 +48,8 @@ Windows UI:
 - [GitHub](https://github.com)
 - [JetBrains](https://www.jetbrains.com/?from=HandBrake) Thanks for providing an All Products License!
 - [phpBB](http://www.phpbb.com/)
+- [MacStadium](https://www.macstadium.com/) MacMini Server Hosting. 
+<img width="200" alt="MacStadium" src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png">
 
 
 ## Graphics
