@@ -15,6 +15,7 @@ jobs:
           channel: "#handbrake"
           nickname: handbrake-bot
           server: chat.freenode.net
+          password: ${{ secrets.IRC_PASSWORD }}
           port: 6697
           tls: true
           message: |
@@ -26,6 +27,7 @@ jobs:
           channel: "#handbrake"
           nickname: handbrake-bot
           server: chat.freenode.net
+          password: ${{ secrets.IRC_PASSWORD }}
           port: 6697
           tls: true
           message: |
