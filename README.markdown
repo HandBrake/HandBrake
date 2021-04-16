@@ -41,7 +41,6 @@ Please read our [Translations Guide](https://github.com/HandBrake/HandBrake/blob
 [News](NEWS.markdown)  
 
 ## Special Thanks
-- [MacStadium](https://www.macstadium.com/) 
 
 <a href="https://www.macstadium.com/"><img width="200" alt="MacStadium" src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png"></a>
 
