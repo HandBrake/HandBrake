@@ -120,10 +120,9 @@ combo_opts_t when_complete_opts =
 
 static options_map_t d_par_opts[] =
 {
-    {N_("Off"),       "off",    HB_ANAMORPHIC_NONE},
-    {N_("Automatic"), "auto",   HB_ANAMORPHIC_AUTO},
-    {N_("Loose"),     "loose",  HB_ANAMORPHIC_LOOSE},
-    {N_("Custom"),    "custom", HB_ANAMORPHIC_CUSTOM},
+    {N_("Automatic"),     "auto",   HB_ANAMORPHIC_AUTO},
+    {N_("None"),          "off",    HB_ANAMORPHIC_NONE},
+    {N_("Custom"),        "custom", HB_ANAMORPHIC_CUSTOM},
 };
 combo_opts_t par_opts =
 {
@@ -232,17 +231,74 @@ combo_opts_t sharpen_opts =
     d_sharpen_opts
 };
 
+static options_map_t d_crop_opts[] =
+{
+    {N_("Automatic"), "auto",   0},
+    {N_("None"),      "none",   1},
+    {N_("Custom"),    "custom", 2},
+};
+combo_opts_t crop_opts =
+{
+    sizeof(d_crop_opts)/sizeof(options_map_t),
+    d_crop_opts
+};
+
 static options_map_t d_rotate_opts[] =
 {
-    {N_("Off"),         "disable=1",   0},
-    {N_("90 Degrees"),  "angle=90",   90},
-    {N_("180 Degrees"), "angle=180", 180},
-    {N_("270 Degrees"), "angle=270", 270},
+    {N_("Off"),    "0",   0},
+    {N_("90°"),   "90",  90},
+    {N_("180°"), "180", 180},
+    {N_("270°"), "270", 270},
 };
 combo_opts_t rotate_opts =
 {
     sizeof(d_rotate_opts)/sizeof(options_map_t),
     d_rotate_opts
+};
+
+static options_map_t d_resolution_opts[] =
+{
+    {N_("4320p 8K Ultra HD"),  "4320p",  4320},
+    {N_("2160p 4K Ultra HD"),  "2160p",  2160},
+    {N_("1440p 2.5K Quad HD"), "1440p",  1440},
+    {N_("1080p Full HD"),      "1080p",  1080},
+    {N_("720p HD"),            "720p",   720},
+    {N_("576p PAL"),           "576p",   576},
+    {N_("480p NTSC"),          "480p",   480},
+    {N_("None"),               "none",   0},
+    {N_("Custom"),             "custom", 1},
+};
+combo_opts_t resolution_opts =
+{
+    sizeof(d_resolution_opts)/sizeof(options_map_t),
+    d_resolution_opts
+};
+
+static options_map_t d_pad_opts[] =
+{
+    {N_("None"),               "none",      0},
+    {N_("Height (Letterbox)"), "letterbox", 1},
+    {N_("Width (Pillarbox)"),  "pillarbox", 2},
+    {N_("Width &amp; Height"), "fill",      3},
+    {N_("Custom"),             "custom",    4},
+};
+combo_opts_t pad_opts =
+{
+    sizeof(d_pad_opts)/sizeof(options_map_t),
+    d_pad_opts
+};
+
+static options_map_t d_pad_color_opts[] =
+{
+    {N_("Black"),     "black",         0},
+    {N_("Dark Gray"), "darkslategray", 1},
+    {N_("Gray"),      "slategray",     2},
+    {N_("White"),     "white",         3},
+};
+combo_opts_t pad_color_opts =
+{
+    sizeof(d_pad_color_opts)/sizeof(options_map_t),
+    d_pad_color_opts
 };
 
 static options_map_t d_direct_opts[] =
@@ -423,6 +479,26 @@ static filter_opts_t detel_opts =
     .preset    = TRUE
 };
 
+typedef struct
+{
+    const gchar * shortOpt;
+    int           width;
+    int           height;
+} resolution_map_t;
+
+static resolution_map_t resolution_to_opts[] =
+{
+    {"4320p",  7680, 4320},
+    {"2160p",  3840, 2160},
+    {"1440p",  2560, 1440},
+    {"1080p",  1920, 1080},
+    {"720p",   1280,  720},
+    {"576p",    720,  576},
+    {"480p",    720,  480},
+    {"none",      0,    0},
+    {NULL,        0,    0},
+};
+
 typedef void (*opts_set_f)(signal_user_data_t *ud, const gchar *name,
                            void *opts, const void* data);
 typedef GhbValue* (*opt_get_f)(const gchar *name, const void *opts,
@@ -530,12 +606,6 @@ combo_name_map_t combo_name_map[] =
         generic_opt_get
     },
     {
-        "PictureModulus",
-        &alignment_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
         "LoggingLevel",
         &logging_opts,
         small_opts_set,
@@ -632,8 +702,32 @@ combo_name_map_t combo_name_map[] =
         filter_opt_get
     },
     {
-        "PictureRotate",
+        "rotate",
         &rotate_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "crop_mode",
+        &crop_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "resolution_limit",
+        &resolution_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PicturePadMode",
+        &pad_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PicturePadColor",
+        &pad_color_opts,
         small_opts_set,
         generic_opt_get
     },
@@ -790,6 +884,42 @@ ghb_lookup_lang(const GhbValue *glang)
 
     str = ghb_value_get_string(glang);
     return lang_lookup_index(str);
+}
+
+const gchar *
+ghb_lookup_resolution_limit(int width, int height)
+{
+    int ii;
+
+    for (ii = 0; resolution_to_opts[ii].shortOpt != NULL; ii++)
+    {
+        if (resolution_to_opts[ii].width == width &&
+            resolution_to_opts[ii].height == height)
+        {
+            return resolution_to_opts[ii].shortOpt;
+        }
+    }
+    return "custom";
+}
+
+int
+ghb_lookup_resolution_limit_dimensions(const gchar * opt,
+                                       int * width, int * height)
+{
+    int ii;
+
+    for (ii = 0; resolution_to_opts[ii].shortOpt != NULL; ii++)
+    {
+        if (!strcmp(opt, resolution_to_opts[ii].shortOpt))
+        {
+            *width  = resolution_to_opts[ii].width;
+            *height = resolution_to_opts[ii].height;
+            return 0;
+        }
+    }
+    *width  = -1;
+    *height = -1;
+    return 1;
 }
 
 static void
@@ -3623,45 +3753,78 @@ ghb_get_default_acodec()
 void
 ghb_picture_settings_deps(signal_user_data_t *ud)
 {
-    gboolean autoscale, keep_aspect, enable_keep_aspect;
+    gboolean autoscale, keep_aspect, custom_resolution_limit;
     gboolean enable_scale_width, enable_scale_height;
     gboolean enable_disp_width, enable_disp_height, enable_par;
+    gboolean custom_crop, custom_pad;
+    const gchar * resolution_limit, * crop_mode, * pad_mode;
     gint pic_par;
     GtkWidget *widget;
 
-    pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-    enable_keep_aspect = (pic_par != HB_ANAMORPHIC_STRICT &&
-                          pic_par != HB_ANAMORPHIC_AUTO   &&
-                          pic_par != HB_ANAMORPHIC_LOOSE);
-    keep_aspect = ghb_dict_get_bool(ud->settings, "PictureKeepRatio");
-    autoscale = ghb_dict_get_bool(ud->settings, "autoscale");
+    pic_par          = ghb_settings_combo_int(ud->settings, "PicturePAR");
+    keep_aspect      = ghb_dict_get_bool(ud->settings, "PictureKeepRatio");
+    autoscale        = ghb_dict_get_bool(ud->settings, "PictureUseMaximumSize");
+    resolution_limit = ghb_dict_get_string(ud->settings, "resolution_limit");
+    crop_mode        = ghb_dict_get_string(ud->settings, "crop_mode");
+    pad_mode         = ghb_dict_get_string(ud->settings, "PicturePadMode");
 
-    enable_scale_width = enable_scale_height =
-                         !autoscale && (pic_par != HB_ANAMORPHIC_STRICT);
-    enable_disp_width = (pic_par == HB_ANAMORPHIC_CUSTOM) && !keep_aspect;
-    enable_par = (pic_par == HB_ANAMORPHIC_CUSTOM) && !keep_aspect;
-    enable_disp_height = FALSE;
+    enable_scale_width      = enable_scale_height = !autoscale;
+    enable_disp_width       = !keep_aspect;
+    enable_par              = (pic_par == HB_ANAMORPHIC_CUSTOM);
+    enable_disp_height      = FALSE;
+    custom_resolution_limit = !strcmp(resolution_limit, "custom");
+    custom_crop             = !strcmp(crop_mode, "custom");
+    custom_pad              = !strcmp(pad_mode, "custom");
 
-    widget = GHB_WIDGET(ud->builder, "PictureModulus");
-    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
-    widget = GHB_WIDGET(ud->builder, "PictureLooseCrop");
-    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
     widget = GHB_WIDGET(ud->builder, "scale_width");
     gtk_widget_set_sensitive(widget, enable_scale_width);
     widget = GHB_WIDGET(ud->builder, "scale_height");
     gtk_widget_set_sensitive(widget, enable_scale_height);
-    widget = GHB_WIDGET(ud->builder, "PictureDisplayWidth");
+
+    widget = GHB_WIDGET(ud->builder, "PictureDARWidth");
     gtk_widget_set_sensitive(widget, enable_disp_width);
-    widget = GHB_WIDGET(ud->builder, "PictureDisplayHeight");
+    widget = GHB_WIDGET(ud->builder, "DisplayHeight");
     gtk_widget_set_sensitive(widget, enable_disp_height);
+
     widget = GHB_WIDGET(ud->builder, "PicturePARWidth");
     gtk_widget_set_sensitive(widget, enable_par);
     widget = GHB_WIDGET(ud->builder, "PicturePARHeight");
     gtk_widget_set_sensitive(widget, enable_par);
-    widget = GHB_WIDGET(ud->builder, "PictureKeepRatio");
-    gtk_widget_set_sensitive(widget, enable_keep_aspect);
-    widget = GHB_WIDGET(ud->builder, "autoscale");
-    gtk_widget_set_sensitive(widget, pic_par != HB_ANAMORPHIC_STRICT);
+
+    widget = GHB_WIDGET(ud->builder, "PictureWidth");
+    gtk_widget_set_sensitive(widget, custom_resolution_limit);
+    widget = GHB_WIDGET(ud->builder, "PictureHeight");
+    gtk_widget_set_sensitive(widget, custom_resolution_limit);
+
+    widget = GHB_WIDGET(ud->builder, "PictureTopCrop");
+    gtk_widget_set_sensitive(widget, custom_crop);
+    widget = GHB_WIDGET(ud->builder, "PictureBottomCrop");
+    gtk_widget_set_sensitive(widget, custom_crop);
+    widget = GHB_WIDGET(ud->builder, "PictureLeftCrop");
+    gtk_widget_set_sensitive(widget, custom_crop);
+    widget = GHB_WIDGET(ud->builder, "PictureRightCrop");
+    gtk_widget_set_sensitive(widget, custom_crop);
+
+    widget = GHB_WIDGET(ud->builder, "PicturePadTop");
+    gtk_widget_set_sensitive(widget, custom_pad);
+    widget = GHB_WIDGET(ud->builder, "PicturePadBottom");
+    gtk_widget_set_sensitive(widget, custom_pad);
+    widget = GHB_WIDGET(ud->builder, "PicturePadLeft");
+    gtk_widget_set_sensitive(widget, custom_pad);
+    widget = GHB_WIDGET(ud->builder, "PicturePadRight");
+    gtk_widget_set_sensitive(widget, custom_pad);
+
+    widget = GHB_WIDGET(ud->builder, "display_size_lock_image");
+    if (keep_aspect)
+    {
+        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "emblem-readonly",
+                                     GTK_ICON_SIZE_BUTTON);
+    }
+    else
+    {
+        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "edit-clear",
+                                     GTK_ICON_SIZE_BUTTON);
+    }
 }
 
 void
@@ -3685,240 +3848,240 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 }
 
 void
-ghb_apply_crop(GhbValue *settings, const hb_title_t * title)
+ghb_apply_pad(GhbValue *settings,
+              const hb_geometry_settings_t * geo,
+                    hb_geometry_t          * result)
 {
-    gboolean autocrop, loosecrop;
+    gboolean fillwidth, fillheight;
+    gint pad[4] = {0,};
+
+    const gchar * pad_mode;
+
+    pad_mode   = ghb_dict_get_string(settings, "PicturePadMode");
+    fillwidth  = fillheight  = !strcmp(pad_mode, "fill");
+    fillheight = fillheight || !strcmp(pad_mode, "letterbox");
+    fillwidth  = fillwidth  || !strcmp(pad_mode, "pillarbox");
+
+    if (!strcmp(pad_mode, "custom"))
+    {
+        pad[0] = ghb_dict_get_int(settings, "PicturePadTop");
+        pad[1] = ghb_dict_get_int(settings, "PicturePadBottom");
+        pad[2] = ghb_dict_get_int(settings, "PicturePadLeft");
+        pad[3] = ghb_dict_get_int(settings, "PicturePadRight");
+    }
+
+    if (fillheight && geo->maxHeight > 0)
+    {
+        pad[0] = (geo->maxHeight - result->height) / 2;
+        pad[1] =  geo->maxHeight - result->height - pad[0];
+    }
+    if (fillwidth && geo->maxWidth > 0)
+    {
+        pad[2] = (geo->maxWidth - result->width) / 2;
+        pad[3] =  geo->maxWidth - result->width - pad[2];
+    }
+
+    pad[0] = MOD_DOWN(pad[0], 2);
+    pad[1] = MOD_DOWN(pad[1], 2);
+    pad[2] = MOD_DOWN(pad[2], 2);
+    pad[3] = MOD_DOWN(pad[3], 2);
+    ghb_dict_set_int(settings, "PicturePadTop",    pad[0]);
+    ghb_dict_set_int(settings, "PicturePadBottom", pad[1]);
+    ghb_dict_set_int(settings, "PicturePadLeft",   pad[2]);
+    ghb_dict_set_int(settings, "PicturePadRight",  pad[3]);
+
+    result->width  += pad[2] + pad[3];
+    result->height += pad[0] + pad[1];
+}
+
+void
+ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo)
+{
+    gboolean autocrop, customcrop;
     gint crop[4] = {0,};
 
-    autocrop = ghb_dict_get_bool(settings, "PictureAutoCrop");
-    // "PictureLooseCrop" is a flag that says we prefer to crop extra to
-    // satisfy alignment constraints rather than scaling to satisfy them.
-    loosecrop = ghb_dict_get_bool(settings, "PictureLooseCrop");
+    const gchar * crop_mode;
+
+    crop_mode  = ghb_dict_get_string(settings, "crop_mode");
+    autocrop   = !strcmp(crop_mode, "auto");
+    customcrop = !strcmp(crop_mode, "custom");
 
     if (autocrop)
     {
-        crop[0] = title->crop[0];
-        crop[1] = title->crop[1];
-        crop[2] = title->crop[2];
-        crop[3] = title->crop[3];
+        crop[0] = geo->crop[0];
+        crop[1] = geo->crop[1];
+        crop[2] = geo->crop[2];
+        crop[3] = geo->crop[3];
     }
-    else
+    else if (customcrop)
     {
         crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
         crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
         crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
         crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
     }
-    if (loosecrop)
-    {
-        gint need1, need2;
-        gint crop_width, crop_height, width, height;
-        gint mod;
 
-        mod = ghb_settings_combo_int(settings, "PictureModulus");
-        if (mod <= 0)
-            mod = 16;
-
-        // Adjust the cropping to accomplish the desired width and height
-        crop_width = title->geometry.width - crop[2] - crop[3];
-        crop_height = title->geometry.height - crop[0] - crop[1];
-        width = MOD_DOWN(crop_width, mod);
-        height = MOD_DOWN(crop_height, mod);
-
-        need1 = EVEN((crop_height - height) / 2);
-        need2 = crop_height - height - need1;
-        crop[0] += need1;
-        crop[1] += need2;
-        need1 = EVEN((crop_width - width) / 2);
-        need2 = crop_width - width - need1;
-        crop[2] += need1;
-        crop[3] += need2;
-    }
     // Prevent crop from creating too small an image
-    if (title->geometry.height - crop[0] -crop[1] < 16)
+    if (geo->geometry.height - crop[0] -crop[1] < 16)
     {
-        crop[0] = title->geometry.height - crop[1] - 16;
+        crop[0] = geo->geometry.height - crop[1] - 16;
         if (crop[0] < 0)
         {
             crop[1] += crop[0];
-            crop[0] = 0;
+            crop[0]  = 0;
         }
     }
-    if (title->geometry.width - crop[2] - crop[3] < 16)
+    if (geo->geometry.width - crop[2] - crop[3] < 16)
     {
-        crop[2] = title->geometry.width - crop[3] - 16;
+        crop[2] = geo->geometry.width - crop[3] - 16;
         if (crop[2] < 0)
         {
             crop[3] += crop[2];
-            crop[2] = 0;
+            crop[2]  = 0;
         }
     }
-    ghb_dict_set_int(settings, "PictureTopCrop", crop[0]);
+    crop[0] = MOD_DOWN(crop[0], 2);
+    crop[1] = MOD_DOWN(crop[1], 2);
+    crop[2] = MOD_DOWN(crop[2], 2);
+    crop[3] = MOD_DOWN(crop[3], 2);
+    ghb_dict_set_int(settings, "PictureTopCrop",    crop[0]);
     ghb_dict_set_int(settings, "PictureBottomCrop", crop[1]);
-    ghb_dict_set_int(settings, "PictureLeftCrop", crop[2]);
-    ghb_dict_set_int(settings, "PictureRightCrop", crop[3]);
+    ghb_dict_set_int(settings, "PictureLeftCrop",   crop[2]);
+    ghb_dict_set_int(settings, "PictureRightCrop",  crop[3]);
 }
 
 void
-ghb_set_scale_settings(GhbValue *settings, gint mode)
+ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
 {
     gboolean keep_aspect;
-    gint pic_par;
-    gboolean autoscale;
-    gint crop[4] = {0,};
-    gint width, height;
-    gint crop_width, crop_height;
-    gboolean keep_width = (mode & GHB_PIC_KEEP_WIDTH);
-    gboolean keep_height = (mode & GHB_PIC_KEEP_HEIGHT);
-    gint mod;
-    gint max_width = 0;
-    gint max_height = 0;
-
-    pic_par = ghb_settings_combo_int(settings, "PicturePAR");
-    if (pic_par == HB_ANAMORPHIC_STRICT)
-    {
-        ghb_dict_set_bool(settings, "autoscale", TRUE);
-        ghb_dict_set_int(settings, "PictureModulus", 2);
-        ghb_dict_set_bool(settings, "PictureLooseCrop", TRUE);
-    }
-    if (pic_par == HB_ANAMORPHIC_STRICT ||
-        pic_par == HB_ANAMORPHIC_AUTO   ||
-        pic_par == HB_ANAMORPHIC_LOOSE)
-    {
-        ghb_dict_set_bool(settings, "PictureKeepRatio", TRUE);
-    }
+    gboolean autoscale, upscale;
+    gboolean keep_width         = (mode & GHB_PIC_KEEP_WIDTH);
+    gboolean keep_height        = (mode & GHB_PIC_KEEP_HEIGHT);
+    gboolean keep_display_width = (mode & GHB_PIC_KEEP_DISPLAY_WIDTH);
+    const gchar * pad_mode;
 
     int title_id, titleindex;
     const hb_title_t * title;
+    int angle, hflip;
+
+    hb_geometry_crop_t     srcGeo;
+    hb_geometry_t          resultGeo;
+    hb_geometry_settings_t uiGeo;
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    if (title == NULL) return;
 
-    hb_geometry_t srcGeo, resultGeo;
-    hb_geometry_settings_t uiGeo;
-
-    srcGeo.width   = title->geometry.width;
-    srcGeo.height  = title->geometry.height;
-    srcGeo.par     = title->geometry.par;
-
-    // First configure widgets
-    mod = ghb_settings_combo_int(settings, "PictureModulus");
-    if (mod <= 0)
-        mod = 16;
-    keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
-    autoscale = ghb_dict_get_bool(settings, "autoscale");
-    // Align dimensions to either 16 or 2 pixels
-    // The scaler crashes if the dimensions are not divisible by 2
-    // x264 also will not accept dims that are not multiple of 2
-    if (autoscale)
+    if (title != NULL)
     {
-        keep_width = FALSE;
-        keep_height = FALSE;
-    }
-
-    ghb_apply_crop(settings, title);
-    crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
-    crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
-    crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
-    crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
-    uiGeo.crop[0] = crop[0];
-    uiGeo.crop[1] = crop[1];
-    uiGeo.crop[2] = crop[2];
-    uiGeo.crop[3] = crop[3];
-
-    crop_width = title->geometry.width - crop[2] - crop[3];
-    crop_height = title->geometry.height - crop[0] - crop[1];
-    if (autoscale)
-    {
-        width = crop_width;
-        height = crop_height;
+        srcGeo.geometry = title->geometry;
+        memcpy(srcGeo.crop, &title->crop, 4 * sizeof(int));
     }
     else
     {
-        width = ghb_dict_get_int(settings, "scale_width");
-        height = ghb_dict_get_int(settings, "scale_height");
-        if (mode & GHB_PIC_USE_MAX)
+        // Defaults so that the Dimensions tab does something resonable
+        // when there is no title
+        memset(&srcGeo, 0, sizeof(srcGeo));
+        srcGeo.geometry.width  = ghb_dict_get_int(settings, "PictureWidth");
+        srcGeo.geometry.height = ghb_dict_get_int(settings, "PictureHeight");
+        srcGeo.geometry.par.num = 1;
+        srcGeo.geometry.par.den = 1;
+        if (srcGeo.geometry.width == 0 || srcGeo.geometry.height == 0)
         {
-            max_width = MOD_DOWN(
-                ghb_dict_get_int(settings, "PictureWidth"), mod);
-            max_height = MOD_DOWN(
-                ghb_dict_get_int(settings, "PictureHeight"), mod);
+            srcGeo.geometry.width  = 1920;
+            srcGeo.geometry.height = 1080;
         }
     }
-    g_debug("max_width %d, max_height %d\n", max_width, max_height);
 
-    if (width < 16)
-        width = 16;
-    if (height < 16)
-        height = 16;
+    // Rotate title dimensions so that they align with the current
+    // orientation of dimensions tab settings
+    angle = ghb_dict_get_int(settings, "rotate");
+    hflip = ghb_dict_get_int(settings, "hflip");
+    hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
 
-    width = MOD_ROUND(width, mod);
-    height = MOD_ROUND(height, mod);
+    // Apply crop mode to current settings and sanitize crop values
+    ghb_apply_crop(settings, &srcGeo);
 
-    uiGeo.mode = pic_par;
-    uiGeo.keep = 0;
+    memset(&uiGeo, 0, sizeof(uiGeo));
+
+    pad_mode    = ghb_dict_get_string(ud->settings, "PicturePadMode");
+    autoscale   = ghb_dict_get_bool(settings, "PictureUseMaximumSize");
+    upscale     = ghb_dict_get_bool(settings, "PictureAllowUpscaling");
+    keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
+
+    if (keep_display_width)
+        uiGeo.keep |= HB_KEEP_DISPLAY_WIDTH;
     if (keep_width)
         uiGeo.keep |= HB_KEEP_WIDTH;
     if (keep_height)
         uiGeo.keep |= HB_KEEP_HEIGHT;
     if (keep_aspect)
         uiGeo.keep |= HB_KEEP_DISPLAY_ASPECT;
-    uiGeo.itu_par = 0;
-    uiGeo.modulus = mod;
-    uiGeo.geometry.width = width;
-    uiGeo.geometry.height = height;
-    uiGeo.geometry.par = title->geometry.par;
-    uiGeo.maxWidth = max_width;
-    uiGeo.maxHeight = max_height;
-    if (pic_par != HB_ANAMORPHIC_NONE)
-    {
-        if (pic_par == HB_ANAMORPHIC_CUSTOM && !keep_aspect)
-        {
-            if (mode & GHB_PIC_KEEP_PAR)
-            {
-                uiGeo.geometry.par.num =
-                    ghb_dict_get_int(settings, "PicturePARWidth");
-                uiGeo.geometry.par.den =
-                    ghb_dict_get_int(settings, "PicturePARHeight");
-            }
-            else if (mode & (GHB_PIC_KEEP_DISPLAY_HEIGHT |
-                             GHB_PIC_KEEP_DISPLAY_WIDTH))
-            {
-                uiGeo.geometry.par.num =
-                        ghb_dict_get_int(settings, "PictureDisplayWidth");
-                uiGeo.geometry.par.den = width;
-                hb_reduce(&uiGeo.geometry.par.num, &uiGeo.geometry.par.den,
-                           uiGeo.geometry.par.num,  uiGeo.geometry.par.den);
-            }
-        }
-        else
-        {
-            uiGeo.keep |= HB_KEEP_DISPLAY_ASPECT;
-        }
-    }
-    // hb_set_anamorphic_size will adjust par, dar, and width/height
-    // to conform to job parameters that have been set, including
-    // maxWidth and maxHeight
-    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+    if (!strcmp(pad_mode, "custom"))
+        uiGeo.keep |= HB_KEEP_PAD;
+
+    if (upscale)
+        uiGeo.flags |= HB_GEO_SCALE_UP;
+    if (autoscale)
+        uiGeo.flags |= HB_GEO_SCALE_BEST;
+
+    uiGeo.mode             = ghb_settings_combo_int(settings, "PicturePAR");
+    uiGeo.modulus          = ghb_dict_get_int(settings, "PictureModulus");
+    uiGeo.geometry.width   = ghb_dict_get_int(settings, "scale_width");
+    uiGeo.geometry.height  = ghb_dict_get_int(settings, "scale_height");
+    uiGeo.maxWidth         = ghb_dict_get_int(settings, "PictureWidth");
+    uiGeo.maxHeight        = ghb_dict_get_int(settings, "PictureHeight");
+    uiGeo.geometry.par.num = ghb_dict_get_int(settings, "PicturePARWidth");
+    uiGeo.geometry.par.den = ghb_dict_get_int(settings, "PicturePARHeight");
+    uiGeo.displayWidth     = ghb_dict_get_int(settings, "PictureDARWidth");
+    uiGeo.displayHeight    = ghb_dict_get_int(settings, "DisplayHeight");
+
+    uiGeo.pad[0] = ghb_dict_get_int(settings, "PicturePadTop");
+    uiGeo.pad[1] = ghb_dict_get_int(settings, "PicturePadBottom");
+    uiGeo.pad[2] = ghb_dict_get_int(settings, "PicturePadLeft");
+    uiGeo.pad[3] = ghb_dict_get_int(settings, "PicturePadRight");
+
+    uiGeo.crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+    uiGeo.crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+    uiGeo.crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+    uiGeo.crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
+
+    // hb_set_anamorphic_size2 will adjust par, dar, and width/height
+    // and enforce resolution limits
+    hb_set_anamorphic_size2(&srcGeo.geometry, &uiGeo, &resultGeo);
 
     ghb_dict_set_int(settings, "scale_width", resultGeo.width);
     ghb_dict_set_int(settings, "scale_height", resultGeo.height);
+
+    ghb_dict_set_int(settings, "PicturePARWidth", resultGeo.par.num);
+    ghb_dict_set_int(settings, "PicturePARHeight", resultGeo.par.den);
+
+    // Update Job PAR
+    GhbValue *par = ghb_get_job_par_settings(settings);
+    ghb_dict_set_int(par, "Num", resultGeo.par.num);
+    ghb_dict_set_int(par, "Den", resultGeo.par.den);
+
+    uiGeo.maxWidth  = ghb_dict_get_int(settings, "PictureWidth");
+    uiGeo.maxHeight = ghb_dict_get_int(settings, "PictureHeight");
+    ghb_apply_pad(settings, &uiGeo, &resultGeo);
 
     gint disp_width;
 
     disp_width = ((gdouble)resultGeo.par.num / resultGeo.par.den) *
                  resultGeo.width + 0.5;
 
-    ghb_dict_set_int(settings, "PicturePARWidth", resultGeo.par.num);
-    ghb_dict_set_int(settings, "PicturePARHeight", resultGeo.par.den);
-    ghb_dict_set_int(settings, "PictureDisplayWidth", disp_width);
-    ghb_dict_set_int(settings, "PictureDisplayHeight", resultGeo.height);
+    ghb_dict_set_int(settings, "PictureDARWidth", disp_width);
+    ghb_dict_set_int(settings, "DisplayHeight", resultGeo.height);
 
-    // Update Job PAR
-    GhbValue *par = ghb_get_job_par_settings(settings);
-    ghb_dict_set_int(par, "Num", resultGeo.par.num);
-    ghb_dict_set_int(par, "Den", resultGeo.par.den);
+    char * storage_size;
+    storage_size = hb_strdup_printf("%d x %d",
+                                    resultGeo.width, resultGeo.height);
+    ghb_ui_update(ud, "final_storage_size", ghb_string_value(storage_size));
+    g_free(storage_size);
+
+    char * aspect;
+    aspect = ghb_get_display_aspect_string(disp_width, resultGeo.height);
+    ghb_ui_update(ud, "final_aspect_ratio", ghb_string_value(aspect));
+    g_free(aspect);
 }
 
 char *
@@ -3927,43 +4090,27 @@ ghb_get_display_aspect_string(double disp_width, double disp_height)
     gchar *str;
 
     gint iaspect = disp_width * 9 / disp_height;
-    if (disp_width > 2 * disp_height)
+    if (disp_width / disp_height > 1.9)
     {
+        // x.x:1
         str = g_strdup_printf("%.2f:1", disp_width / disp_height);
     }
-    else if (iaspect <= 16 && iaspect >= 15)
+    else if (iaspect >= 15)
     {
+        // x.x:9
         str = g_strdup_printf("%.4g:9", disp_width * 9 / disp_height);
     }
-    else if (iaspect <= 12 && iaspect >= 11)
+    else if (iaspect >= 9)
     {
+        // x.x:3
         str = g_strdup_printf("%.4g:3", disp_width * 3 / disp_height);
     }
     else
     {
-        gint dar_width, dar_height;
-        hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
-        str = g_strdup_printf("%d:%d", dar_width, dar_height);
+        // 1:x.x
+        str = g_strdup_printf("1:%.2f", disp_height / disp_width);
     }
     return str;
-}
-
-void
-ghb_update_display_aspect_label(signal_user_data_t *ud)
-{
-    gint width, disp_height;
-    gint par_num, par_den;
-    double disp_width;
-    gchar *str;
-
-    width  = ghb_dict_get_int(ud->settings, "scale_width");
-    disp_height = ghb_dict_get_int(ud->settings, "scale_height");
-    par_num = ghb_dict_get_int(ud->settings, "PicturePARWidth");
-    par_den = ghb_dict_get_int(ud->settings, "PicturePARHeight");
-    disp_width = (double)width * par_num / par_den;
-    str        = ghb_get_display_aspect_string(disp_width, disp_height);
-    ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
-    g_free(str);
 }
 
 void
@@ -3972,48 +4119,20 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     if (ud->scale_busy) return;
     ud->scale_busy = TRUE;
 
-    ghb_set_scale_settings(ud->settings, mode);
+    ghb_set_scale_settings(ud, ud->settings, mode);
     ghb_update_summary_info(ud);
     ghb_picture_settings_deps(ud);
 
     // Step needs to be at least 2 because odd widths cause scaler crash
     // subsampled chroma requires even crop values.
     GtkWidget *widget;
-    int mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
+    int mod = ghb_dict_get_int(ud->settings, "PictureModulus");
     widget = GHB_WIDGET (ud->builder, "scale_width");
     gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
     widget = GHB_WIDGET (ud->builder, "scale_height");
     gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
 
-    // "PictureLooseCrop" is a flag that says we prefer to crop extra to
-    // satisfy alignment constraints rather than scaling to satisfy them.
-    gboolean loosecrop = ghb_dict_get_bool(ud->settings, "PictureLooseCrop");
-    if (loosecrop)
-    {
-        widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
-    }
-    else
-    {
-        widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-        widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-        gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-    }
-
-    ghb_ui_update_from_settings(ud, "autoscale", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureModulus", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureLooseCrop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureUseMaximumSize", ud->settings);
     ghb_ui_update_from_settings(ud, "PictureKeepRatio", ud->settings);
 
     ghb_ui_update_from_settings(ud, "PictureTopCrop", ud->settings);
@@ -4023,12 +4142,19 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
     ghb_ui_update_from_settings(ud, "scale_width", ud->settings);
     ghb_ui_update_from_settings(ud, "scale_height", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureWidth", ud->settings);
+    ghb_ui_update_from_settings(ud, "PictureHeight", ud->settings);
 
     ghb_ui_update_from_settings(ud, "PicturePARWidth", ud->settings);
     ghb_ui_update_from_settings(ud, "PicturePARHeight", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureDisplayWidth", ud->settings);
-    ghb_ui_update_from_settings(ud, "PictureDisplayHeight", ud->settings);
-    ghb_update_display_aspect_label(ud);
+
+    ghb_ui_update_from_settings(ud, "PicturePadTop", ud->settings);
+    ghb_ui_update_from_settings(ud, "PicturePadBottom", ud->settings);
+    ghb_ui_update_from_settings(ud, "PicturePadLeft", ud->settings);
+    ghb_ui_update_from_settings(ud, "PicturePadRight", ud->settings);
+
+    ghb_ui_update_from_settings(ud, "PictureDARWidth", ud->settings);
+    ghb_ui_update_from_settings(ud, "DisplayHeight", ud->settings);
     ud->scale_busy = FALSE;
 }
 
@@ -4626,7 +4752,6 @@ ghb_pause_resume_queue()
 
 GdkPixbuf*
 ghb_get_preview_image(
-    const hb_title_t *title,
     gint index,
     signal_user_data_t *ud)
 {
@@ -4634,18 +4759,23 @@ ghb_get_preview_image(
 
     settings = ghb_value_dup(ud->settings);
     ghb_finalize_job(settings);
-    job = ghb_dict_get(settings, "Job");
+    job = ghb_get_job_settings(settings);
 
     GdkPixbuf     * preview;
-    hb_image_t    * image;
-
-    image = hb_get_preview3(h_scan, index, job);
+    hb_image_t    * image = NULL;
+    if (ghb_get_job_title_id(settings) >= 0)
+    {
+        image = hb_get_preview3(h_scan, index, job);
+    }
     ghb_value_free(&settings);
 
     if (image == NULL)
     {
-        preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
-                                 title->geometry.width, title->geometry.height);
+        preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 854, 480);
+        guint8 * pixels = gdk_pixbuf_get_pixels(preview);
+        gint     stride = gdk_pixbuf_get_rowstride(preview);
+        memset(pixels, 0, 480 * stride);
+
         return preview;
     }
 

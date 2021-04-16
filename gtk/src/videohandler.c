@@ -163,7 +163,7 @@ update_adv_settings_tooltip(signal_user_data_t *ud)
 
         if (w == 0 || h == 0)
         {
-            if (!ghb_dict_get_bool(ud->settings, "autoscale"))
+            if (!ghb_dict_get_bool(ud->settings, "PictureUseMaximumSize"))
             {
                 w = ghb_dict_get_int(ud->settings, "PictureWidth");
                 h = ghb_dict_get_int(ud->settings, "PictureHeight");

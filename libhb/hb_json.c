@@ -1912,9 +1912,12 @@ char* hb_set_anamorphic_size_json(const char * json_param)
     "s:{"
     //   Geometry {Width, Height, PAR {Num, Den}},
     "s:{s:i, s:i, s:{s:i, s:i}},"
-    //   AnamorphicMode, Keep, ItuPAR, Modulus, MaxWidth, MaxHeight,
-    "s:i, s?i, s?b, s:i, s:i, s:i,"
+    //   AnamorphicMode, Flags, Keep, ItuPAR, Modulus, MaxWidth, MaxHeight,
+    //   DisplayWidth, DisplayHeight
+    "s:i, s?i, s?i, s?b, s?i, s?i, s?i, s?i, s?i"
     //   Crop [Top, Bottom, Left, Right]
+    "s?[iiii]"
+    //   Pad [Top, Bottom, Left, Right]
     "s?[iiii]"
     "  }"
     "}",
@@ -1932,15 +1935,22 @@ char* hb_set_anamorphic_size_json(const char * json_param)
                 "Num",          unpack_i(&ui_geo.geometry.par.num),
                 "Den",          unpack_i(&ui_geo.geometry.par.den),
         "AnamorphicMode",       unpack_i(&ui_geo.mode),
+        "Flags",                unpack_i(&ui_geo.flags),
         "Keep",                 unpack_i(&ui_geo.keep),
         "ItuPAR",               unpack_b(&ui_geo.itu_par),
         "Modulus",              unpack_i(&ui_geo.modulus),
         "MaxWidth",             unpack_i(&ui_geo.maxWidth),
         "MaxHeight",            unpack_i(&ui_geo.maxHeight),
+        "DisplayWidth",         unpack_i(&ui_geo.displayWidth),
+        "DisplayHeight",        unpack_i(&ui_geo.displayHeight),
         "Crop",                 unpack_i(&ui_geo.crop[0]),
                                 unpack_i(&ui_geo.crop[1]),
                                 unpack_i(&ui_geo.crop[2]),
-                                unpack_i(&ui_geo.crop[3])
+                                unpack_i(&ui_geo.crop[3]),
+        "Pad",                  unpack_i(&ui_geo.pad[0]),
+                                unpack_i(&ui_geo.pad[1]),
+                                unpack_i(&ui_geo.pad[2]),
+                                unpack_i(&ui_geo.pad[3])
     );
     hb_value_free(&dict);
 

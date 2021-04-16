@@ -64,6 +64,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_t        * settings = filter->settings;
     hb_value_array_t * avfilters = hb_value_array_init();
     int                width, height;
+    int                cropped_width, cropped_height;
     int                top = 0, bottom = 0, left = 0, right = 0;
     const char       * matrix;
 
@@ -72,6 +73,8 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_extract_int(&bottom, settings, "crop-bottom");
     hb_dict_extract_int(&left, settings, "crop-left");
     hb_dict_extract_int(&right, settings, "crop-right");
+    cropped_width  = init->geometry.width - left - right;
+    cropped_height = init->geometry.height - top - bottom;
     if (top > 0 || bottom > 0 || left > 0 || right > 0)
     {
         hb_dict_t * avfilter   = hb_dict_init();
@@ -79,14 +82,14 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
 
         hb_dict_set_int(avsettings, "x", left);
         hb_dict_set_int(avsettings, "y", top);
-        hb_dict_set_int(avsettings, "w", init->geometry.width - left - right);
-        hb_dict_set_int(avsettings, "h", init->geometry.height - top - bottom);
+        hb_dict_set_int(avsettings, "w", cropped_width);
+        hb_dict_set_int(avsettings, "h", cropped_height);
         hb_dict_set(avfilter, "crop", avsettings);
         hb_value_array_append(avfilters, avfilter);
     }
 
-    width  = init->geometry.width;
-    height = init->geometry.height;
+    width  = cropped_width;
+    height = cropped_height;
 
     // Convert scale settings to 'scale' avfilter
     hb_dict_extract_int(&width, settings, "width");
@@ -210,8 +213,12 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     init->crop[1] = bottom;
     init->crop[2] = left;
     init->crop[3] = right;
+    hb_limit_rational(&init->geometry.par.num, &init->geometry.par.den,
+        (int64_t)init->geometry.par.num * height * cropped_width,
+        (int64_t)init->geometry.par.den * width  * cropped_height, 65535);
     init->geometry.width = width;
     init->geometry.height = height;
+
     pv->output = *init;
 
     pv->avfilters = avfilters;

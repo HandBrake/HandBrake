@@ -1264,10 +1264,18 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
 
     // Create new filters
-    filters_dict = hb_dict_init();
-    hb_dict_set(job_dict, "Filters", filters_dict);
-    filter_list = hb_value_array_init();
-    hb_dict_set(filters_dict, "FilterList", filter_list);
+    filters_dict = hb_dict_get(job_dict, "Filters");
+    if (filters_dict == NULL)
+    {
+        filters_dict = hb_dict_init();
+        hb_dict_set(job_dict, "Filters", filters_dict);
+    }
+    filter_list = hb_dict_get(filters_dict, "FilterList");
+    if (filter_list == NULL)
+    {
+        filter_list = hb_value_array_init();
+        hb_dict_set(filters_dict, "FilterList", filter_list);
+    }
 
     // Detelecine filter
     hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
@@ -1567,15 +1575,77 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_add_filter2(filter_list, filter_dict);
     }
 
-    // Pad filter
-    char *pad = hb_value_get_string_xform(hb_dict_get(preset, "PicturePad"));
-    if (pad != NULL)
+    // Pad filter requires knowing crop/scale settings
+    hb_dict_t * scale_filter, * scale_settings = NULL;
+    scale_filter = hb_filter_dict_find(filter_list, HB_FILTER_CROP_SCALE);
+    if (scale_filter != NULL)
+    {
+        scale_settings = hb_dict_get(scale_filter, "Settings");
+    }
+
+    char       * pad_params = NULL;
+    const char * pad_mode = hb_dict_get_string(preset, "PicturePadMode");
+    if (pad_mode != NULL && strcmp(pad_mode, "none"))
+    {
+        // Preset values used by the GUI and built-in presets
+        int pad[4] = {0,};
+        const char * color;
+
+        if (!strcmp(pad_mode, "custom"))
+        {
+            pad[0] = hb_dict_get_int(preset, "PicturePadTop");
+            pad[1] = hb_dict_get_int(preset, "PicturePadBottom");
+            pad[2] = hb_dict_get_int(preset, "PicturePadLeft");
+            pad[3] = hb_dict_get_int(preset, "PicturePadRight");
+        }
+
+        if (scale_settings != NULL)
+        {
+            int fillwidth, fillheight;
+
+            int width     = hb_dict_get_int(scale_settings, "width");
+            int height    = hb_dict_get_int(scale_settings, "height");
+            int maxWidth  = hb_dict_get_int(preset, "PictureWidth");
+            int maxHeight = hb_dict_get_int(preset, "PictureHeight");
+
+            fillwidth  = fillheight  = !strcmp(pad_mode, "fill");
+            fillheight = fillheight || !strcmp(pad_mode, "letterbox");
+            fillwidth  = fillwidth  || !strcmp(pad_mode, "pillarbox");
+
+            if (fillwidth && maxWidth > 0)
+            {
+                pad[2] = (maxWidth  - width) / 2;
+                pad[3] =  maxWidth  - width - pad[2];
+            }
+            if (fillheight && maxHeight > 0)
+            {
+                pad[0] = (maxHeight - height) / 2;
+                pad[1] =  maxHeight - height - pad[0];
+            }
+        }
+        color  = hb_dict_get_string(preset, "PicturePadColor");
+        if (color == NULL)
+        {
+            color = "black";
+        }
+
+        pad_params =
+            hb_strdup_printf("top=%d:bottom=%d:left=%d:right=%d:color=%s",
+                             pad[0], pad[1], pad[2], pad[3], color);
+    }
+    else
+    {
+        // Preset value used by the CLI
+        pad_params =
+            hb_value_get_string_xform(hb_dict_get(preset, "PicturePad"));
+    }
+    if (pad_params != NULL)
     {
         filter_settings = hb_generate_filter_settings(HB_FILTER_PAD,
-                                                      NULL, NULL, pad);
+                                                      NULL, NULL, pad_params);
         if (filter_settings == NULL)
         {
-            hb_error("Invalid pad filter settings (%s)", pad);
+            hb_error("Invalid pad filter settings (%s)", pad_params);
             return -1;
         }
         else if (!hb_dict_get_bool(filter_settings, "disable"))
@@ -1589,8 +1659,8 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         {
             hb_value_free(&filter_settings);
         }
+        free(pad_params);
     }
-    free(pad);
 
     // Colorspace filter
     const char *colorspace = hb_value_get_string(hb_dict_get(preset, "PictureColorspacePreset"));
@@ -1883,7 +1953,8 @@ int hb_preset_apply_mux(const hb_dict_t *preset, hb_dict_t *job_dict)
     return 0;
 }
 
-int hb_preset_apply_title(hb_handle_t *h, int title_index,
+
+int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
                           const hb_dict_t *preset, hb_dict_t *job_dict)
 {
     // Apply preset settings  that requires the title
@@ -1891,56 +1962,84 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     if (title == NULL)
         return -1;
 
-    int chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
-    if (hb_list_count(title->list_chapter) <= 1)
-        chapters = 0;
+    hb_dict_t        * filter_dict;
+    hb_dict_t        * filters_dict = hb_dict_get(job_dict, "Filters");
+    hb_value_array_t * filter_list = hb_dict_get(filters_dict, "FilterList");
 
-    // Set "Destination" settings in job
-    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
-    hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));
-
-    hb_dict_t *filters_dict = hb_dict_get(job_dict, "Filters");
-    hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
+    // Rotate filter settings must be known prior to applying crop/scale
+    char * rotate = hb_value_get_string_xform(
+                        hb_dict_get(preset, "PictureRotate"));
+    hb_dict_t * rotate_settings = NULL;
+    if (rotate != NULL)
+    {
+        rotate_settings = hb_generate_filter_settings(HB_FILTER_ROTATE,
+                                                      NULL, NULL, rotate);
+        if (rotate_settings == NULL)
+        {
+            hb_error("Invalid rotate filter settings (%s)", rotate);
+            return -1;
+        }
+        else if (!hb_dict_get_bool(rotate_settings, "disable") &&
+                 (hb_dict_get_int(rotate_settings, "angle") != 0 ||
+                  hb_dict_get_bool(rotate_settings, "hflip")))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_ROTATE));
+            hb_dict_set(filter_dict, "Settings", rotate_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&rotate_settings);
+        }
+        free(rotate);
+    }
 
     // Calculate default job geometry settings
-    hb_geometry_t srcGeo, resultGeo;
+    hb_geometry_crop_t     srcGeo;
+    hb_geometry_t          resultGeo;
     hb_geometry_settings_t geo;
     int keep_aspect, allow_upscaling, use_maximum_size;
 
-    srcGeo = title->geometry;
+    srcGeo.geometry = title->geometry;
+    memcpy(srcGeo.crop, title->crop, sizeof(geo.crop));
+
+    if (rotate_settings != NULL)
+    {
+        int angle = hb_dict_get_int(rotate_settings, "angle");
+        int hflip = hb_dict_get_bool(rotate_settings, "hflip");
+        hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
+    }
+
     if (!hb_value_get_bool(hb_dict_get(preset, "PictureAutoCrop")))
     {
-        geo.crop[0] = hb_value_get_int(hb_dict_get(preset, "PictureTopCrop"));
-        geo.crop[1] = hb_value_get_int(hb_dict_get(preset, "PictureBottomCrop"));
-        geo.crop[2] = hb_value_get_int(hb_dict_get(preset, "PictureLeftCrop"));
-        geo.crop[3] = hb_value_get_int(hb_dict_get(preset, "PictureRightCrop"));
+        geo.crop[0] = hb_dict_get_int(preset, "PictureTopCrop");
+        geo.crop[1] = hb_dict_get_int(preset, "PictureBottomCrop");
+        geo.crop[2] = hb_dict_get_int(preset, "PictureLeftCrop");
+        geo.crop[3] = hb_dict_get_int(preset, "PictureRightCrop");
     }
     else
     {
-        memcpy(geo.crop, title->crop, sizeof(geo.crop));
+        memcpy(geo.crop, srcGeo.crop, sizeof(geo.crop));
     }
+
+    const char * pad_mode;
+    pad_mode = hb_dict_get_string(preset, "PicturePadMode");
+    if (pad_mode != NULL && !strcmp(pad_mode, "custom"))
+    {
+        geo.pad[0] = hb_value_get_int(hb_dict_get(preset, "PicturePadTop"));
+        geo.pad[1] = hb_value_get_int(hb_dict_get(preset, "PicturePadBottom"));
+        geo.pad[2] = hb_value_get_int(hb_dict_get(preset, "PicturePadLeft"));
+        geo.pad[3] = hb_value_get_int(hb_dict_get(preset, "PicturePadRight"));
+    }
+    else
+    {
+        memset(geo.pad, 0, sizeof(geo.pad));
+    }
+
     geo.modulus = hb_value_get_int(hb_dict_get(preset, "PictureModulus"));
     if (geo.modulus < 2)
         geo.modulus = 2;
-    if (hb_value_get_bool(hb_dict_get(preset, "PictureLooseCrop")))
-    {
-        // Crop a few extra pixels to avoid scaling to fit Modulus
-        int extra1, extra2, crop_width, crop_height, width, height;
-
-        crop_width = srcGeo.width - geo.crop[2] - geo.crop[3];
-        crop_height = srcGeo.height - geo.crop[0] - geo.crop[1];
-        width = MULTIPLE_MOD_DOWN(crop_width, geo.modulus);
-        height = MULTIPLE_MOD_DOWN(crop_height, geo.modulus);
-
-        extra1 = EVEN((crop_height - height) / 2);
-        extra2 = crop_height - height - extra1;
-        geo.crop[0] += extra1;
-        geo.crop[1] += extra2;
-        extra1 = EVEN((crop_width - width) / 2);
-        extra2 = crop_width - width - extra1;
-        geo.crop[2] += extra1;
-        geo.crop[3] += extra2;
-    }
     hb_value_t *ana_mode_value = hb_dict_get(preset, "PicturePAR");
     if (hb_value_type(ana_mode_value) == HB_VALUE_TYPE_STRING)
     {
@@ -1968,84 +2067,164 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
         keep_aspect = 1;
     }
     geo.keep = keep_aspect * HB_KEEP_DISPLAY_ASPECT;
+    allow_upscaling = hb_dict_get_bool(preset, "PictureAllowUpscaling");
+    use_maximum_size = hb_dict_get_bool(preset, "PictureUseMaximumSize");
+    geo.flags |= allow_upscaling  * HB_GEO_SCALE_UP;
+    geo.flags |= use_maximum_size * HB_GEO_SCALE_BEST;
+
     geo.itu_par = hb_value_get_bool(hb_dict_get(preset, "PictureItuPAR"));
     geo.maxWidth = hb_value_get_int(hb_dict_get(preset, "PictureWidth"));
     geo.maxHeight = hb_value_get_int(hb_dict_get(preset, "PictureHeight"));
     geo.geometry = title->geometry;
     int width = hb_value_get_int(hb_dict_get(preset, "PictureForceWidth"));
     int height = hb_value_get_int(hb_dict_get(preset, "PictureForceHeight"));
-    allow_upscaling = hb_value_get_bool(hb_dict_get(preset, "PictureAllowUpscaling"));
-    use_maximum_size = hb_value_get_bool(hb_dict_get(preset, "PictureUseMaximumSize"));
+
     if (width > 0)
     {
         geo.geometry.width = width;
         geo.keep |= HB_KEEP_WIDTH;
-    }
-    else if (allow_upscaling && use_maximum_size)
-    {
-        geo.geometry.width = geo.maxWidth;
-    }
-    else
-    {
-        geo.geometry.width -= geo.crop[2] + geo.crop[3];
     }
     if (height > 0)
     {
         geo.geometry.height = height;
         geo.keep |= HB_KEEP_HEIGHT;
     }
-    else if (allow_upscaling && use_maximum_size)
-    {
-        geo.geometry.height = geo.maxHeight;
-    }
-    else
-    {
-        geo.geometry.height -= geo.crop[0] + geo.crop[1];
-    }
-    if (geo.mode == HB_ANAMORPHIC_CUSTOM && !keep_aspect)
-    {
-        int dar_width;
-        dar_width = hb_value_get_int(hb_dict_get(preset, "PictureDARWidth"));
-        if (dar_width > 0)
-        {
-            geo.geometry.par.num = dar_width;
-            geo.geometry.par.den = geo.geometry.width;
-        }
-        else
-        {
-            geo.geometry.par.num =
-                hb_value_get_int(hb_dict_get(preset, "PicturePARWidth"));
-            geo.geometry.par.den =
-                hb_value_get_int(hb_dict_get(preset, "PicturePARHeight"));
-        }
-    }
-    hb_set_anamorphic_size2(&srcGeo, &geo, &resultGeo);
+
+    geo.geometry.par.num = hb_dict_get_int(preset, "PicturePARWidth");
+    geo.geometry.par.den = hb_dict_get_int(preset, "PicturePARHeight");
+    geo.displayWidth     = hb_dict_get_int(preset, "PictureDARWidth");
+    geo.displayHeight    = geo.geometry.height;
+
+    hb_set_anamorphic_size2(&srcGeo.geometry, &geo, &resultGeo);
+
     hb_dict_t *par_dict = hb_dict_get(job_dict, "PAR");
     hb_dict_set(par_dict, "Num", hb_value_int(resultGeo.par.num));
     hb_dict_set(par_dict, "Den", hb_value_int(resultGeo.par.den));
     par_dict = NULL;
 
-    hb_dict_t *filter_dict;
-    hb_dict_t *filter_settings;
+    hb_dict_t * scale_settings;
 
-    filter_settings = hb_dict_init();
-    hb_dict_set(filter_settings, "width", hb_value_int(resultGeo.width));
-    hb_dict_set(filter_settings, "height", hb_value_int(resultGeo.height));
-    hb_dict_set(filter_settings, "crop-top", hb_value_int(geo.crop[0]));
-    hb_dict_set(filter_settings, "crop-bottom", hb_value_int(geo.crop[1]));
-    hb_dict_set(filter_settings, "crop-left", hb_value_int(geo.crop[2]));
-    hb_dict_set(filter_settings, "crop-right", hb_value_int(geo.crop[3]));
-    if (hb_validate_filter_settings(HB_FILTER_CROP_SCALE, filter_settings))
+    scale_settings = hb_dict_init();
+    hb_dict_set(scale_settings, "width", hb_value_int(resultGeo.width));
+    hb_dict_set(scale_settings, "height", hb_value_int(resultGeo.height));
+    hb_dict_set(scale_settings, "crop-top", hb_value_int(geo.crop[0]));
+    hb_dict_set(scale_settings, "crop-bottom", hb_value_int(geo.crop[1]));
+    hb_dict_set(scale_settings, "crop-left", hb_value_int(geo.crop[2]));
+    hb_dict_set(scale_settings, "crop-right", hb_value_int(geo.crop[3]));
+    if (hb_validate_filter_settings(HB_FILTER_CROP_SCALE, scale_settings))
     {
-        hb_error("hb_preset_apply_title: Internal error, invalid CROP_SCALE");
-        hb_value_free(&filter_settings);
+        hb_error("hb_preset_apply_dimensions: Internal error, invalid CROP_SCALE");
+        hb_value_free(&scale_settings);
         goto fail;
     }
 
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_CROP_SCALE));
-    hb_dict_set(filter_dict, "Settings", filter_settings);
+    hb_dict_set(filter_dict, "Settings", scale_settings);
     hb_add_filter2(filter_list, filter_dict);
+
+    // Pad filter requires knowing crop/scale settings
+    char       * pad_params = NULL;
+    if (pad_mode != NULL && strcmp(pad_mode, "none"))
+    {
+        // Preset values used by the GUI and built-in presets
+        int pad[4] = {0,};
+        const char * color;
+
+        if (!strcmp(pad_mode, "custom"))
+        {
+            pad[0] = hb_dict_get_int(preset, "PicturePadTop");
+            pad[1] = hb_dict_get_int(preset, "PicturePadBottom");
+            pad[2] = hb_dict_get_int(preset, "PicturePadLeft");
+            pad[3] = hb_dict_get_int(preset, "PicturePadRight");
+        }
+
+        if (scale_settings != NULL)
+        {
+            int fillwidth, fillheight;
+
+            int width     = hb_dict_get_int(scale_settings, "width");
+            int height    = hb_dict_get_int(scale_settings, "height");
+            int maxWidth  = hb_dict_get_int(preset, "PictureWidth");
+            int maxHeight = hb_dict_get_int(preset, "PictureHeight");
+
+            fillwidth  = fillheight  = !strcmp(pad_mode, "fill");
+            fillheight = fillheight || !strcmp(pad_mode, "letterbox");
+            fillwidth  = fillwidth  || !strcmp(pad_mode, "pillarbox");
+
+            if (fillwidth && maxWidth > 0)
+            {
+                pad[2] = (maxWidth  - width) / 2;
+                pad[3] =  maxWidth  - width - pad[2];
+            }
+            if (fillheight && maxHeight > 0)
+            {
+                pad[0] = (maxHeight - height) / 2;
+                pad[1] =  maxHeight - height - pad[0];
+            }
+        }
+        color  = hb_dict_get_string(preset, "PicturePadColor");
+        if (color == NULL)
+        {
+            color = "black";
+        }
+
+        pad_params =
+            hb_strdup_printf("top=%d:bottom=%d:left=%d:right=%d:color=%s",
+                             pad[0], pad[1], pad[2], pad[3], color);
+    }
+    else
+    {
+        // Preset value used by the CLI
+        pad_params =
+            hb_value_get_string_xform(hb_dict_get(preset, "PicturePad"));
+    }
+    if (pad_params != NULL)
+    {
+        hb_dict_t * filter_settings;
+        filter_settings = hb_generate_filter_settings(HB_FILTER_PAD,
+                                                      NULL, NULL, pad_params);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid pad filter settings (%s)", pad_params);
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_PAD));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+        free(pad_params);
+    }
+
+    return 0;
+
+fail:
+    return -1;
+}
+
+int hb_preset_apply_title(hb_handle_t *h, int title_index,
+                          const hb_dict_t *preset, hb_dict_t *job_dict)
+{
+    // Apply preset settings  that requires the title
+    hb_title_t *title = hb_find_title_by_index(h, title_index);
+    if (title == NULL)
+        return -1;
+
+    int chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
+    if (hb_list_count(title->list_chapter) <= 1)
+        chapters = 0;
+
+    // Set "Destination" settings in job
+    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
+    hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));
+
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
     {
@@ -2091,6 +2270,9 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
         goto fail;
 
     if (hb_preset_apply_video(preset, job_dict) < 0)
+        goto fail;
+
+    if (hb_preset_apply_dimensions(h, title_index, preset, job_dict) < 0)
         goto fail;
 
     if (hb_preset_apply_filters(preset, job_dict) < 0)
@@ -2582,6 +2764,24 @@ static void und_to_any(hb_value_array_t * list)
         {
             hb_value_array_set(list, ii, hb_value_string("any"));
         }
+    }
+}
+
+static void import_pic_settings_44_0_0(hb_value_t *preset)
+{
+    int uses_pic = hb_dict_get_int(preset, "UsesPictureSettings");
+
+    if (uses_pic != 1)
+    {
+        hb_dict_set_int(preset, "PictureWidth", 0);
+        hb_dict_set_int(preset, "PictureHeight", 0);
+    }
+    hb_dict_remove(preset, "UsesPictureSettings");
+
+    const char * pic_par = hb_dict_get_string(preset, "PicturePAR");
+    if (!strcasecmp(pic_par, "loose"))
+    {
+        hb_dict_set(preset, "PicturePAR", hb_value_string("auto"));
     }
 }
 
@@ -3236,9 +3436,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_44_0_0(hb_value_t *preset)
+{
+    import_pic_settings_44_0_0(preset);
+}
+
 static void import_40_0_0(hb_value_t *preset)
 {
     import_lang_list_40_0_0(preset);
+
+    import_44_0_0(preset);
 }
 
 static void import_35_0_0(hb_value_t *preset)
@@ -3368,6 +3575,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 40, 0, 0) <= 0)
         {
             import_40_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 44, 0, 0) <= 0)
+        {
+            import_44_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);
