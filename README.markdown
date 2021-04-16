@@ -39,4 +39,9 @@ Please read our [Translations Guide](https://github.com/HandBrake/HandBrake/blob
 [Authors](AUTHORS.markdown)  
 [License](LICENSE)  
 [News](NEWS.markdown)  
-[Thanks](THANKS.markdown)
+
+## Special Thanks
+- [MacStadium](https://www.macstadium.com/) MacMini Server Hosting. 
+<img width="200" alt="MacStadium" src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png">
+
+and to many others who have contributed! [Thanks](THANKS.markdown)
