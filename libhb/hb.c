@@ -881,7 +881,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     init.time_base.num = 1;
     init.time_base.den = 90000;
     init.job = job;
-    init.pix_fmt = hb_get_best_pix_fmt(job);
+    init.pix_fmt = AV_PIX_FMT_YUV420P;
     init.color_range = AVCOL_RANGE_MPEG;
 
     init.color_prim = title->color_prim;
