@@ -201,29 +201,28 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     if (primaries)
     {
         color_prim = av_color_primaries_from_name(primaries);
+        free(primaries);
     }
     if (transfer)
     {
         color_transfer = av_color_transfer_from_name(transfer);
+        free(transfer);
     }
     if (matrix)
     {
         color_matrix = av_color_space_from_name(matrix);
+        free(matrix);
     }
     if (range)
     {
         color_range = av_color_range_from_name(range);
+        free(range);
     }
 
     if (color_prim == init->color_prim && color_transfer == init->color_transfer &&
         color_matrix == init->color_matrix && color_range == init->color_range)
     {
         return 0;
-    }
-
-    if (tonemap == NULL)
-    {
-        tonemap = "hable";
     }
 
     hb_value_array_t * avfilters = hb_value_array_init();
@@ -256,8 +255,10 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         avfilter   = hb_dict_init();
         avsettings = hb_dict_init();
 
-        hb_dict_set_string(avsettings, "tonemap", tonemap);
-        if (strcmp(tonemap, "hable") && strcmp(tonemap, "none") && param != 0)
+        const char * tonemap_in = tonemap != NULL ? tonemap : "hable";
+
+        hb_dict_set_string(avsettings, "tonemap", tonemap_in);
+        if (strcmp(tonemap_in, "hable") && strcmp(tonemap_in, "none") && param != 0)
         {
             hb_dict_set_double(avsettings, "param", param);
         }
@@ -270,23 +271,28 @@ static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         hb_value_array_append(avfilters, avfilter);
     }
 
+    if (tonemap)
+    {
+        free(tonemap);
+    }
+
     // Zscale
     avfilter   = hb_dict_init();
     avsettings = hb_dict_init();
 
-    if (primaries)
+    if (color_prim != init->color_prim)
     {
         hb_dict_set_string(avsettings, "primaries", get_primaries_name(color_prim));
     }
-    if (transfer)
+    if (color_transfer != init->color_transfer)
     {
         hb_dict_set_string(avsettings, "transfer", get_transfer_name(color_transfer));
     }
-    if (matrix)
+    if (color_matrix != init->color_matrix)
     {
         hb_dict_set_string(avsettings, "matrix", get_matrix_name(color_matrix));
     }
-    if (range)
+    if (color_range != init->color_range)
     {
         hb_dict_set_string(avsettings, "range", get_range_name(color_range));
     }
