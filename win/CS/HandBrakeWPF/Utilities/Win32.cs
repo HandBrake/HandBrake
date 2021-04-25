@@ -93,41 +93,6 @@ namespace HandBrakeWPF.Utilities
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
-        /// <summary>
-        /// Generate a Console Ctrl Event
-        /// </summary>
-        /// <param name="sigevent">
-        /// The sigevent.
-        /// </param>
-        /// <param name="dwProcessGroupId">
-        /// The dw process group id.
-        /// </param>
-        /// <returns>
-        /// Bool true is success
-        /// </returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool GenerateConsoleCtrlEvent(ConsoleCtrlEvent sigevent, int dwProcessGroupId);
-
-        /// <summary>
-        /// Console Ctrl Event
-        /// </summary>
-        public enum ConsoleCtrlEvent
-        {
-            /// <summary>
-            /// Ctrl - C
-            /// </summary>
-            CTRL_C = 0,
-
-            /// <summary>
-            /// Ctrl - Break
-            /// </summary>
-            CTRL_BREAK = 1,
-
-            /// <summary>
-            /// Ctrl - Close
-            /// </summary>
-            CTRL_CLOSE = 2,
-        }
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
@@ -141,8 +106,6 @@ namespace HandBrakeWPF.Utilities
             ES_SYSTEM_REQUIRED = 0x00000001,
 
             ES_CONTINUOUS = 0x80000000,
-
-            ES_AWAYMODE_REQUIRED = 0x00000040
         }
 
         /// <summary>
@@ -158,10 +121,7 @@ namespace HandBrakeWPF.Utilities
         /// </summary>
         public static void PreventSleep()
         {
-            executor(
-                () => SetThreadExecutionState(
-                    EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED
-                    | EXECUTION_STATE.ES_AWAYMODE_REQUIRED));
+            executor(() => SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED));
         }
 
         /// <summary>

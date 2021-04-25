@@ -10,7 +10,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
     {
         public Cropping Crop { get; set; }
 
-        public int? Modulus { get; set; }
+        public Padding Pad { get; set; }
 
         public int ParW { get; set; }
 
@@ -33,5 +33,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
         public int DarWidth { get; set; }
 
         public int DarHeight { get; set; }
+        
+
+        public int? PreviousRotation { get; set;  }
+
+        public int RotateAngle { get; set; }
+
+        public int? PreviousHflip { get; set; }
+
+        public int Hflip { get; set; }
     }
 }

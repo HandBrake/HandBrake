@@ -22,9 +22,6 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
         [DisplayName("Automatic")]
         [ShortName("auto")]
         Automatic = 4,
-        [DisplayName("Loose")]
-        [ShortName("loose")]
-        Loose = 2,
         [DisplayName("Custom")]
         [ShortName("custom")]
         Custom = 3

@@ -1088,7 +1088,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Flip.
+        ///   Looks up a localized string similar to Flip:.
+        /// </summary>
+        public static string FiltersView_Flip {
+            get {
+                return ResourceManager.GetString("FiltersView_Flip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horizontal.
         /// </summary>
         public static string FiltersView_FlipVideo {
             get {
@@ -1124,7 +1133,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rotate:.
+        ///   Looks up a localized string similar to Rotation:.
         /// </summary>
         public static string FiltersView_Rotate {
             get {
@@ -2554,6 +2563,18 @@ namespace HandBrakeWPF.Properties {
         public static string MainViewModel_EncodeStatusChanged_SubScan_StatusLabel {
             get {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_SubScan_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error was detected in the File Browser Dialog. 
+        ///
+        ///- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+        ///- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file..
+        /// </summary>
+        public static string MainViewModel_FilePathSelectError {
+            get {
+                return ResourceManager.GetString("MainViewModel_FilePathSelectError", resourceCulture);
             }
         }
         
@@ -4239,7 +4260,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display Width:.
+        ///   Looks up a localized string similar to Display Size:.
         /// </summary>
         public static string PictureSettingsView_DisplayWitdh {
             get {
@@ -4257,7 +4278,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep Aspect Ratio.
+        ///   Looks up a localized string similar to Automatic.
         /// </summary>
         public static string PictureSettingsView_KeepAR {
             get {
@@ -4284,6 +4305,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum Size:.
+        /// </summary>
+        public static string PictureSettingsView_MaxSize {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_MaxSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Width:.
         /// </summary>
         public static string PictureSettingsView_MaxWidth {
@@ -4293,16 +4323,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modulus:.
-        /// </summary>
-        public static string PictureSettingsView_Modulus {
-            get {
-                return ResourceManager.GetString("PictureSettingsView_Modulus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Output:.
+        ///   Looks up a localized string similar to Final Dimensions:.
         /// </summary>
         public static string PictureSettingsView_Output {
             get {
@@ -4311,7 +4332,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Padding:.
+        ///   Looks up a localized string similar to Fill:.
         /// </summary>
         public static string PictureSettingsView_Padding {
             get {
@@ -4338,7 +4359,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PAR:.
+        ///   Looks up a localized string similar to Pixel Aspect:.
         /// </summary>
         public static string PictureSettingsView_PAR {
             get {
@@ -4374,7 +4395,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rotate and Crop:.
+        ///   Looks up a localized string similar to Orientation and Cropping:.
         /// </summary>
         public static string PictureSettingsView_RotateAndCrop {
             get {
@@ -4401,11 +4422,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source:.
+        ///   Looks up a localized string similar to Source Dimensions:.
         /// </summary>
-        public static string PictureSettingsView_Source {
+        public static string PictureSettingsView_SourceDimensions {
             get {
-                return ResourceManager.GetString("PictureSettingsView_Source", resourceCulture);
+                return ResourceManager.GetString("PictureSettingsView_SourceDimensions", resourceCulture);
             }
         }
         
@@ -4419,7 +4440,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Width:.
+        ///   Looks up a localized string similar to Scaled Size:.
         /// </summary>
         public static string PictureSettingsView_Width {
             get {
@@ -4428,7 +4449,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display Size: {0}x{1},  PAR {2}x{3}.
+        ///   Looks up a localized string similar to Aspect Ratio: {0}.
+        /// </summary>
+        public static string PictureSettingsViewModel_AspectRatioLabel {
+            get {
+                return ResourceManager.GetString("PictureSettingsViewModel_AspectRatioLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}.
+        /// </summary>
+        public static string PictureSettingsViewModel_SourceInfo {
+            get {
+                return ResourceManager.GetString("PictureSettingsViewModel_SourceInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage Size: {0}x{1}.
         /// </summary>
         public static string PictureSettingsViewModel_StorageDisplayLabel {
             get {

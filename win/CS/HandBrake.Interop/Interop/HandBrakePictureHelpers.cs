@@ -3,14 +3,16 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the HandBrakePictureHelpers type.
+//   Wrapper around functions in libhb.
+//   See common.h for stuct's / API
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Interop.Interop
 {
+    using System;
+
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     public class HandBrakePictureHelpers
@@ -20,38 +22,45 @@ namespace HandBrake.Interop.Interop
             // From common.h
             HB_KEEP_WIDTH = 0x01,
             HB_KEEP_HEIGHT = 0x02,
-            HB_KEEP_DISPLAY_ASPECT = 0x04
+            HB_KEEP_DISPLAY_ASPECT = 0x04,
+            HB_KEEP_DISPLAY_WIDTH = 0x08,
+            HB_KEEP_PAD = 0x10,
+        }
+        
+        public enum FlagsSetting
+        {
+            HB_GEO_SCALE_UP = 0x01,
+            HB_GEO_SCALE_BEST = 0x02,
         }
 
-        public static AnamorphicResult hb_set_anamorphic_size2(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting setting)
+        public static AnamorphicResult GetAnamorphicSize(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting keepSetting, FlagsSetting flagSetting)
         {
-            int settingMode = (int)setting + (job.KeepDisplayAspect ? 0x04 : 0);
-
-
-            hb_rational_t computed_par = new hb_rational_t();
+            hb_rational_t computedPar;
             switch (job.AnamorphicMode)
             {
                 case Anamorphic.None:
-                    computed_par = new hb_rational_t { den = 1, num = 1 };
+                    computedPar = new hb_rational_t { den = 1, num = 1 };
                     break;
                 case Anamorphic.Custom:
-                    computed_par = new hb_rational_t { den = job.ParH, num = job.ParW };
+                    computedPar = new hb_rational_t { den = job.ParH, num = job.ParW };
                     break;
                 default:
-                    computed_par = new hb_rational_t { den = title.ParH, num = title.ParW };
+                    computedPar = new hb_rational_t { den = title.ParH, num = title.ParW };
                     break;
             }
 
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
                 crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right },
+                pad = new[] { job.Pad.Top, job.Pad.Bottom, job.Pad.Left, job.Pad.Right },
+                flags = (int)flagSetting,
                 itu_par = 0,
-                keep = settingMode,
+                keep = (int)keepSetting,
                 maxWidth = job.MaxWidth,
                 maxHeight = job.MaxHeight,
                 mode = (int)job.AnamorphicMode,
-                modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
-                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computed_par }
+                modulus = 2,
+                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar }
             };
 
             hb_geometry_s sourceGeometry = new hb_geometry_s
@@ -61,7 +70,9 @@ namespace HandBrake.Interop.Interop
                 par = new hb_rational_t { den = title.ParH, num = title.ParW }
             };
 
-            hb_geometry_s result = HandBrakePictureHelpers.GetAnamorphicSizes(sourceGeometry, uiGeometry);
+            hb_geometry_s result = new hb_geometry_s();
+
+            HBFunctions.hb_set_anamorphic_size2(ref sourceGeometry, ref uiGeometry, ref result);
 
             int outputWidth = result.width;
             int outputHeight = result.height;
@@ -69,14 +80,71 @@ namespace HandBrake.Interop.Interop
             int outputParHeight = result.par.den;
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
-        
-        internal static hb_geometry_s GetAnamorphicSizes(hb_geometry_s sourceGeometry, hb_geometry_settings_s uiGeometry)
+
+        public static RotateResult RotateGeometry(PictureSettingsJob job)
         {
-            hb_geometry_s geometry = new hb_geometry_s();
+            hb_geometry_crop_s geometry = new hb_geometry_crop_s();
+            geometry.crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right };
+            geometry.pad = new[] { job.Pad.Top, job.Pad.Bottom, job.Pad.Left, job.Pad.Right };
 
-            HBFunctions.hb_set_anamorphic_size2(ref sourceGeometry, ref uiGeometry, ref geometry);
+            // Undo any previous rotation so that we are back at 0.
+            // Normally hflip is applied, then rotation.
+            // To revert, must apply rotation then hflip.
+            if (job.PreviousRotation.HasValue && job.PreviousRotation != 0)
+            {
+                HBFunctions.hb_rotate_geometry(ref geometry, ref geometry, 360 - job.PreviousRotation.Value, 0);
+            }
 
-            return geometry;
+            if (job.PreviousHflip.HasValue && job.PreviousHflip == 1)
+            {
+                HBFunctions.hb_rotate_geometry(ref geometry, ref geometry, 0, 1);
+            }
+            
+            // Apply the new rotation and Horizontal flip value.
+            HBFunctions.hb_rotate_geometry(ref geometry, ref geometry, job.RotateAngle, job.Hflip);
+
+            RotateResult processedResult = new RotateResult
+                                           {
+                                               CropTop = geometry.crop[0],
+                                               CropBottom = geometry.crop[1],
+                                               CropLeft = geometry.crop[2],
+                                               CropRight = geometry.crop[3],
+                                               PadTop = geometry.pad[0],
+                                               PadBottom = geometry.pad[1],
+                                               PadLeft = geometry.pad[2],
+                                               PadRight = geometry.pad[3]
+                                           };
+
+            return processedResult;
+        }
+
+        public static string GetNiceDisplayAspect(double displayWidth, double displayHeight)
+        {
+            string result;
+
+            double iaspect = displayWidth * 9 / displayHeight;
+            if (displayWidth / displayHeight > 1.9)
+            {
+                // x.x:1
+                result = string.Format("{0}:1", Math.Round(displayWidth / displayHeight, 2));
+            }
+            else if (iaspect >= 15)
+            {
+                // x.x:9
+                result = string.Format("{0}:9", Math.Round(displayWidth * 9 / displayHeight));
+            }
+            else if (iaspect >= 9)
+            {
+                // x.x:3
+                result = string.Format("{0}:3", Math.Round(displayWidth * 3 / displayHeight));
+            }
+            else
+            {
+                // 1:x.x
+                result = string.Format("1:{0}", Math.Round(displayHeight / displayWidth));
+            }
+
+            return result;
         }
     }
 }

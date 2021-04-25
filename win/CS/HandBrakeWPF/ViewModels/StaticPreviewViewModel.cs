@@ -322,14 +322,7 @@ namespace HandBrakeWPF.ViewModels
         [HandleProcessCorruptedStateExceptions]
         public void UpdatePreviewFrame()
         {
-            // Don't preview for small images.
-            if (this.Task.Anamorphic == Anamorphic.Loose && this.Task.Width < 32)
-            {
-                PreviewNotAvailable = true;
-                return;
-            }
-
-            if ((this.Task.Anamorphic == Anamorphic.None || this.Task.Anamorphic == Anamorphic.Custom) && (this.Task.Width < 32 || this.Task.Height < 32))
+            if (this.Task.Width < 32 || this.Task.Height < 32)
             {
                 PreviewNotAvailable = true;
                 return;

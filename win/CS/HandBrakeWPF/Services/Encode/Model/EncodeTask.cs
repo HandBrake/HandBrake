@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Threading;
 
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -43,34 +44,47 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
-            this.Modulus = 16;
             this.MetaData = new MetaData();
             this.Padding = new PaddingFilter();
-
             this.VideoTunes = new List<VideoTune>();
         }
 
         public EncodeTask(EncodeTask task)
         {
-            this.AllowedPassthruOptions = new AllowedPassthru(task.AllowedPassthruOptions);
-            this.Anamorphic = task.Anamorphic;
+            /* Source */
+            this.Source = task.Source;
+            this.StartPoint = task.StartPoint;
+            this.Title = task.Title;
             this.Angle = task.Angle;
+            this.EndPoint = task.EndPoint;
+            this.PointToPointMode = task.PointToPointMode;
 
+            /* Audio */
+            this.AllowedPassthruOptions = new AllowedPassthru(task.AllowedPassthruOptions);
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             foreach (AudioTrack track in task.AudioTracks)
             {
                 this.AudioTracks.Add(new AudioTrack(track, true));
             }
 
+            /* Chapters */
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             foreach (ChapterMarker track in task.ChapterNames)
             {
                 this.ChapterNames.Add(new ChapterMarker(track));
             }
 
-            this.AlignAVStart = task.AlignAVStart;
+            this.IncludeChapterMarkers = task.IncludeChapterMarkers;
             this.ChapterMarkersFilePath = task.ChapterMarkersFilePath;
-            this.Cropping = new Cropping(task.Cropping);
+
+            /* Subtitles */
+            this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
+            foreach (SubtitleTrack subtitleTrack in task.SubtitleTracks)
+            {
+                this.SubtitleTracks.Add(new SubtitleTrack(subtitleTrack));
+            }
+
+            /* Filter Settings */
             this.CustomDeinterlaceSettings = task.CustomDeinterlaceSettings;
             this.CustomDenoise = task.CustomDenoise;
             this.CustomDetelecine = task.CustomDetelecine;
@@ -86,61 +100,56 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.DenoiseTune = task.DenoiseTune;
             this.Destination = task.Destination;
             this.Detelecine = task.Detelecine;
-            this.FlipVideo = task.FlipVideo;
-            this.Rotation = task.Rotation;
             this.Sharpen = task.Sharpen;
             this.SharpenPreset = task.SharpenPreset;
             this.SharpenTune = task.SharpenTune;
             this.SharpenCustom = task.SharpenCustom;
-            this.Padding = task.Padding;
             this.Colourspace = task.Colourspace;
             this.CustomColourspace = task.CustomColourspace;
             this.ChromaSmooth = task.ChromaSmooth;
             this.ChromaSmoothTune = task.ChromaSmoothTune;
             this.CustomChromaSmooth = task.CustomChromaSmooth;
-
-            this.DisplayWidth = task.DisplayWidth;
-            this.EndPoint = task.EndPoint;
-            this.Framerate = task.Framerate;
-            this.FramerateMode = task.FramerateMode;
             this.Grayscale = task.Grayscale;
-            this.HasCropping = task.HasCropping;
-            this.Height = task.Height;
-            this.IncludeChapterMarkers = task.IncludeChapterMarkers;
-            this.IPod5GSupport = task.IPod5GSupport;
-            this.KeepDisplayAspect = task.KeepDisplayAspect;
+
+            /* Picture Settings*/
+            this.DisplayWidth = task.DisplayWidth;
             this.MaxHeight = task.MaxHeight;
             this.MaxWidth = task.MaxWidth;
-            this.Modulus = task.Modulus;
-            this.OptimizeMP4 = task.OptimizeMP4;
-            this.OutputFormat = task.OutputFormat;
+            this.Width = task.Width;
+            this.Height = task.Height;
+            this.AllowUpscaling = task.AllowUpscaling;
+            this.OptimalSize = task.OptimalSize;
+            this.HasCropping = task.HasCropping;
             this.PixelAspectX = task.PixelAspectX;
             this.PixelAspectY = task.PixelAspectY;
-            this.PointToPointMode = task.PointToPointMode;
+            this.Cropping = new Cropping(task.Cropping);
+            this.Padding = task.Padding;
+            this.FlipVideo = task.FlipVideo;
+            this.Rotation = task.Rotation;
+            this.Anamorphic = task.Anamorphic;
+            this.KeepDisplayAspect = task.KeepDisplayAspect;
+
+            /* Video */
             this.Quality = task.Quality;
-            this.Source = task.Source;
-            this.StartPoint = task.StartPoint;
-
-            this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
-            foreach (SubtitleTrack subtitleTrack in task.SubtitleTracks)
-            {
-                this.SubtitleTracks.Add(new SubtitleTrack(subtitleTrack));
-            }
-
-            this.Title = task.Title;
+            this.Framerate = task.Framerate;
+            this.FramerateMode = task.FramerateMode;
             this.TurboFirstPass = task.TurboFirstPass;
             this.TwoPass = task.TwoPass;
             this.VideoBitrate = task.VideoBitrate;
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
-            this.Width = task.Width;
-
             this.VideoLevel = task.VideoLevel;
             this.VideoProfile = task.VideoProfile;
             this.VideoPreset = task.VideoPreset;
             this.VideoTunes = new List<VideoTune>(task.VideoTunes);
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
+            /* Container */
+            this.IPod5GSupport = task.IPod5GSupport;
+            this.OutputFormat = task.OutputFormat;
+            this.OptimizeMP4 = task.OptimizeMP4;
+
+            /* Other */
             this.MetaData = new MetaData(task.MetaData);
         }
 
@@ -195,9 +204,10 @@ namespace HandBrakeWPF.Services.Encode.Model
         public int PixelAspectX { get; set; }
 
         public int PixelAspectY { get; set; }
+        
+        public bool AllowUpscaling { get; set; }
 
-        public int? Modulus { get; set; }
-
+        public bool OptimalSize { get; set; }
 
         /* Filters */
 

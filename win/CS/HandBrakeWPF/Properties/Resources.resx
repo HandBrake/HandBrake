@@ -467,7 +467,7 @@ The Activity log may have further information.</value>
     <value>Update Failed. You can try downloading the update from https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Display Size: {0}x{1},  PAR {2}x{3}</value>
+    <value>Storage Size: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Add to Queue</value>
@@ -882,7 +882,7 @@ Would you like to overwrite it?</value>
     <value>Filters</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Flip</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Grayscale</value>
@@ -894,7 +894,7 @@ Would you like to overwrite it?</value>
     <value>Preset:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotate:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Sharpen:</value>
@@ -1324,25 +1324,22 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Custom</value>
   </data>
   <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Display Width:</value>
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Height:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Keep Aspect Ratio</value>
+    <value>Automatic</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Left</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Modulus:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Output:</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Right</value>
@@ -1350,14 +1347,11 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Size</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Source:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Top</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Width:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Custom</value>
@@ -2243,7 +2237,7 @@ Please choose a different preset.</value>
     <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
     <value>Colour:</value>
@@ -2255,7 +2249,7 @@ Please choose a different preset.</value>
     <value>Resolution and Scaling:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop:</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 Only! )</value>
@@ -2290,11 +2284,8 @@ Please choose a different preset.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Custom</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
@@ -2480,5 +2471,29 @@ This warning will display only twice.</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
     <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max Height:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max Width:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
   </data>
 </root>

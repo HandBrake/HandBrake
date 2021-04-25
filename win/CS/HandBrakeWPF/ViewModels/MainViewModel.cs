@@ -59,6 +59,7 @@ namespace HandBrakeWPF.ViewModels
     using DataFormats = System.Windows.DataFormats;
     using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
+    using ILog = Services.Logging.Interfaces.ILog;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -70,6 +71,9 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUpdateService updateService;
         private readonly IWindowManager windowManager;
         private readonly INotifyIconService notifyIconService;
+
+        private readonly ILog logService;
+
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
         private readonly Win7 windowsSeven = new Win7();
@@ -114,7 +118,8 @@ namespace HandBrakeWPF.ViewModels
             IMetaDataViewModel metaDataViewModel,
             IPresetManagerViewModel presetManagerViewModel,
             INotifyIconService notifyIconService,
-            ISystemService systemService)
+            ISystemService systemService,
+            ILog logService)
             : base(userSettingService)
         {
             this.scanService = scanService;
@@ -123,6 +128,7 @@ namespace HandBrakeWPF.ViewModels
             this.updateService = updateService;
             this.windowManager = windowManager;
             this.notifyIconService = notifyIconService;
+            this.logService = logService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueService>();
@@ -1211,9 +1217,24 @@ namespace HandBrakeWPF.ViewModels
             {
                 dialog.InitialDirectory = mruDir;
             }
-            
-            bool? dialogResult = dialog.ShowDialog();
 
+            bool? dialogResult = null;
+            try
+            {
+                dialogResult = dialog.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                this.SetMru(Constants.FileScanMru, string.Empty); // RESET MRU in case it's the fault.
+                this.errorService.ShowMessageBox(
+                    Resources.MainViewModel_FilePathSelectError,
+                    Resources.Error,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                this.logService.LogMessage("Attempted to recover from an error fro the File Scan FileDialog: " + e);
+                return;
+            }
+            
             if (dialogResult.HasValue && dialogResult.Value)
             {
                 this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));

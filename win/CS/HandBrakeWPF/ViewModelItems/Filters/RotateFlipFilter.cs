@@ -9,25 +9,24 @@
 
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
+    using System;
     using System.ComponentModel;
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
 
-    using Action = System.Action;
-
     public class RotateFlipFilter : PropertyChangedBase
     {
-        private readonly Action triggerTabChanged;
+        private readonly Action<FlipRotationCommand> triggerTabChanged;
 
-        public RotateFlipFilter(EncodeTask currentTask, Action triggerTabChanged)
+        public RotateFlipFilter(EncodeTask currentTask, Action<FlipRotationCommand> triggerTabChanged)
         {
             this.triggerTabChanged = triggerTabChanged;
             this.CurrentTask = currentTask;
-
         }
 
         public EncodeTask CurrentTask { get; private set; }
@@ -43,9 +42,13 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
             set
             {
+                int previousFlipValue = this.CurrentTask.FlipVideo ? 1 : 0;
+                int previousRotation = this.CurrentTask.Rotation;
                 this.CurrentTask.Rotation = value;
                 this.NotifyOfPropertyChange(() => this.SelectedRotation);
-                this.triggerTabChanged();
+
+
+                this.triggerTabChanged(new FlipRotationCommand(ChangedPictureField.Rotate, previousRotation, previousFlipValue));
             }
         }
 
@@ -58,9 +61,11 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
             set
             {
+                int previousFlipValue = this.CurrentTask.FlipVideo ? 1 : 0;
+                int previousRotation = this.CurrentTask.Rotation;
                 this.CurrentTask.FlipVideo = value;
                 this.NotifyOfPropertyChange(() => this.FlipVideo);
-                this.triggerTabChanged();
+                this.triggerTabChanged(new FlipRotationCommand(ChangedPictureField.Flip, previousRotation, previousFlipValue));
             }
         }
 
@@ -77,7 +82,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
             this.SelectedRotation = preset.Task.Rotation;
             this.FlipVideo = preset.Task.FlipVideo;
-
         }
 
         public void UpdateTask(EncodeTask task)

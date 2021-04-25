@@ -48,7 +48,9 @@ namespace HandBrake.Interop.Interop.HbLib
         /// <summary>
         ///  Specifies settings that shouldn't be changed
         /// </summary>
-        public int keep; 
+        public int keep;
+
+        public int flags;
 
         /// <summary>
         /// use dvd dimensions to determine PAR
@@ -58,13 +60,16 @@ namespace HandBrake.Interop.Interop.HbLib
         /// <summary>
         /// pixel alignment for loose anamorphic
         /// </summary>
-        public int modulus; 
+        public int modulus;
 
         /// <summary>
-        /// Cropping
+        /// Pixels cropped from source before scaling
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
         public int[] crop;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] pad;
 
         /// <summary>
         /// max destination storage width
@@ -75,6 +80,10 @@ namespace HandBrake.Interop.Interop.HbLib
         ///  max destination storage height
         /// </summary>
         public int maxHeight;
+
+        public int displayWidth;
+
+        public int displayHeight;
 
         /// <summary>
         /// Pixel aspect used in custom anamorphic
@@ -98,4 +107,16 @@ namespace HandBrake.Interop.Interop.HbLib
         /// </summary>
         public int den;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct hb_geometry_crop_s
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] crop;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] pad;
+
+        hb_geometry_s geometry;
+    };
 }

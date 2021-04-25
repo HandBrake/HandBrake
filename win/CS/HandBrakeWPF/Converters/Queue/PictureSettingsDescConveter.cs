@@ -51,9 +51,6 @@ namespace HandBrakeWPF.Converters.Queue
                     case Anamorphic.Automatic:
                         resolution = "Anamorphic: Automatic";
                         break;
-                    case Anamorphic.Loose:
-                        resolution = "Anamorphic: Loose, Width: " + task.Width;
-                        break;
                     case Anamorphic.Custom:
                         resolution = "Anamorphic: Custom, Resolution: " + task.Width + "x" + task.Height;
                         break;

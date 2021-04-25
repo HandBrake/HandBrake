@@ -715,7 +715,7 @@ namespace HandBrakeWPF.ViewModels
         private void UpdatePreviewFrame()
         {
             // Don't preview for small images.
-            if (this.Task.Anamorphic == Anamorphic.Loose && this.Task.Width < 32)
+            if (this.Task.Width < 32)
             {
                 this.PreviewNotAvailable = true;
                 this.IsPreviewInfoVisible = false;

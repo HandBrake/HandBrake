@@ -60,6 +60,9 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_set_anamorphic_size2", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_set_anamorphic_size2(ref hb_geometry_s sourceGeometry, ref hb_geometry_settings_s uiGeometry, ref hb_geometry_s result);
 
+        [DllImport("hb", EntryPoint = "hb_rotate_geometry", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_rotate_geometry(ref hb_geometry_crop_s geo, ref hb_geometry_crop_s result, int angle, int hflip);
+
         [DllImport("hb", EntryPoint = "hb_count", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_count(IntPtr hbHandle);
 
@@ -250,6 +253,7 @@ namespace HandBrake.Interop.Interop.HbLib
 
         [DllImport("hb", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_image_close(IntPtr image);
+
 
         /* JSON API */
 
