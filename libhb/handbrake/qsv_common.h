@@ -228,6 +228,7 @@ uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
+mfxIMPL     hb_qsv_dx_index_to_impl(int dx_index);
 
 /* Full QSV pipeline helpers */
 int hb_qsv_is_enabled(hb_job_t *job);
@@ -252,7 +253,6 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
 void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc(hb_job_t *job);
-mfxIMPL hb_qsv_dx_index_to_impl(int dx_index);
 int hb_qsv_parse_adapter_index(hb_job_t *job);
 int hb_qsv_setup_job(hb_job_t *job);
 int hb_qsv_decode_h264_is_supported(int adapter_index);
