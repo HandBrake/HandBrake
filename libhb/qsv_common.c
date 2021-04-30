@@ -826,7 +826,6 @@ hb_display_t * hb_qsv_display_init(void)
 static int hb_qsv_query_adapters(mfxAdaptersInfo* adapters_info);
 static int hb_qsv_make_adapters_list(const mfxAdaptersInfo* adapters_info, hb_list_t **qsv_adapters_list);
 static int hb_qsv_make_adapters_details_list(const mfxAdaptersInfo* adapters_info, hb_list_t **hb_qsv_adapter_details_list);
-#endif
 
 mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
 {
@@ -856,6 +855,7 @@ mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
     }
     return impl;
 }
+#endif
 
 static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list_t *hb_qsv_adapter_details_list)
 {
@@ -897,7 +897,12 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
         }
         // check for actual hardware support
         do{
-            if (MFXInit(hb_qsv_dx_index_to_impl(*dx_index) | hw_preference, &version, &session) == MFX_ERR_NONE)
+#if defined(_WIN32) || defined(__MINGW32__)
+            mfxIMPL hw_impl = hb_qsv_dx_index_to_impl(details->index);
+#else
+            mfxIMPL hw_impl = MFX_IMPL_HARDWARE_ANY;
+#endif
+            if (MFXInit(hw_impl | hw_preference, &version, &session) == MFX_ERR_NONE)
             {
                 // On linux, the handle to the VA display must be set.
                 // This code is essentiall a NOP other platforms.
@@ -918,9 +923,9 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                                         HB_QSV_MINVERSION_MINOR))
                 {
                     query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_avc);
-                    details->qsv_hardware_info_avc.implementation = hb_qsv_dx_index_to_impl(*dx_index) | hw_preference;
+                    details->qsv_hardware_info_avc.implementation = hw_impl | hw_preference;
                     query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc);
-                    details->qsv_hardware_info_hevc.implementation = hb_qsv_dx_index_to_impl(*dx_index) | hw_preference;
+                    details->qsv_hardware_info_hevc.implementation = hw_impl | hw_preference;
                     // now that we know which hardware encoders are
                     // available, we can set the preferred implementation
                     qsv_impl_set_preferred(details, "hardware");
