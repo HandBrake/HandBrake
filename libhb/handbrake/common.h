@@ -184,16 +184,8 @@ void hb_attachment_close(hb_attachment_t **attachment);
 hb_metadata_t * hb_metadata_init(void);
 hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
-void hb_metadata_set_name( hb_metadata_t *metadata, const char *name );
-void hb_metadata_set_artist( hb_metadata_t *metadata, const char *artist );
-void hb_metadata_set_composer( hb_metadata_t *metadata, const char *composer );
-void hb_metadata_set_release_date( hb_metadata_t *metadata, const char *release_date );
-void hb_metadata_set_comment( hb_metadata_t *metadata, const char *comment );
-void hb_metadata_set_genre( hb_metadata_t *metadata, const char *genre );
-void hb_metadata_set_album( hb_metadata_t *metadata, const char *album );
-void hb_metadata_set_album_artist( hb_metadata_t *metadata, const char *album_artist );
-void hb_metadata_set_description( hb_metadata_t *metadata, const char *description );
-void hb_metadata_set_long_description( hb_metadata_t *metadata, const char *long_description );
+void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value);
+const char * hb_lookup_meta_key(const char * mux_key);
 void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type );
 void hb_metadata_rem_coverart( hb_metadata_t *metadata, int ii );
 
@@ -1098,16 +1090,7 @@ struct hb_coverart_s
 
 struct hb_metadata_s
 {
-    char  *name;
-    char  *artist;          // Actors
-    char  *composer;
-    char  *release_date;
-    char  *comment;
-    char  *album;           // DVD
-    char  *album_artist;    // Director
-    char  *genre;
-    char  *description;
-    char  *long_description;
+    hb_dict_t * dict;
     hb_list_t * list_coverart;
 };
 

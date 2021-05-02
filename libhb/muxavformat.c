@@ -56,40 +56,59 @@ struct hb_mux_object_s
 
 enum
 {
-    META_TITLE,
-    META_ARTIST,
-    META_DIRECTOR,
-    META_COMPOSER,
-    META_RELEASE_DATE,
-    META_COMMENT,
-    META_ALBUM,
-    META_GENRE,
-    META_DESCRIPTION,
-    META_SYNOPSIS,
-    META_LAST
-};
-
-enum
-{
+    META_HB,
     META_MUX_MP4,
     META_MUX_MKV,
     META_MUX_WEBM,
     META_MUX_LAST
 };
 
-const char *metadata_keys[META_LAST][META_MUX_LAST] =
+const char *metadata_keys[][META_MUX_LAST] =
 {
-    {"title",        "TITLE"},
-    {"artist",       "ARTIST"},
-    {"album_artist", "DIRECTOR"},
-    {"composer",     "COMPOSER"},
-    {"date",         "DATE_RELEASED"},
-    {"comment",      "SUMMARY"},
-    {"album",        NULL},
-    {"genre",        "GENRE"},
-    {"description",  "DESCRIPTION"},
-    {"synopsis",     "SYNOPSIS"}
+    {"Name",            "title",        "TITLE"},
+    {"Artist",          "artist",       "ARTIST"},
+    {"AlbumArtist",     "album_artist", "DIRECTOR"},
+    {"Composer",        "composer",     "COMPOSER"},
+    {"ReleaseDate",     "date",         "DATE_RELEASED"},
+    {"Comment",         "comment",      "SUMMARY"},
+    {"Album",           "album",        NULL},
+    {"Genre",           "genre",        "GENRE"},
+    {"Description",     "description",  "DESCRIPTION"},
+    {"LongDescription", "synopsis",     "SYNOPSIS"},
+    {NULL}
 };
+
+static const char * lookup_meta_mux_key(int meta_mux, const char * hb_key)
+{
+    int ii;
+
+    for (ii = 0; metadata_keys[ii][META_HB] != NULL; ii++)
+    {
+        if (!strcmp(hb_key, metadata_keys[ii][META_HB]))
+        {
+            return metadata_keys[ii][meta_mux];
+        }
+    }
+    return NULL;
+}
+
+const char * hb_lookup_meta_key(const char * mux_key)
+{
+    int ii, jj;
+
+    for (ii = 0; metadata_keys[ii][META_HB] != NULL; ii++)
+    {
+        for (jj = 0; jj < META_MUX_LAST; jj++)
+        {
+            if (metadata_keys[ii][jj] != NULL &&
+                !strcmp(mux_key, metadata_keys[ii][jj]))
+            {
+                return metadata_keys[ii][META_HB];
+            }
+        }
+    }
+    return NULL;
+}
 
 static char* lookup_lang_code(int mux, char *iso639_2)
 {
@@ -1089,75 +1108,31 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    if( job->metadata )
+    if( job->metadata && job->metadata->dict )
     {
-        hb_metadata_t *md = job->metadata;
-
         hb_deep_log(2, "Writing Metadata to output file...");
-        if (md->name &&
-            metadata_keys[META_TITLE][meta_mux] != NULL)
+        hb_dict_iter_t iter = hb_dict_iter_init(job->metadata->dict);
+
+        while (iter != HB_DICT_ITER_DONE)
         {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_TITLE][meta_mux], md->name, 0);
-        }
-        if (md->artist &&
-            metadata_keys[META_ARTIST][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_ARTIST][meta_mux], md->artist, 0);
-        }
-        if (md->album_artist &&
-            metadata_keys[META_DIRECTOR][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_DIRECTOR][meta_mux],
-                        md->album_artist, 0);
-        }
-        if (md->composer &&
-            metadata_keys[META_COMPOSER][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_COMPOSER][meta_mux],
-                        md->composer, 0);
-        }
-        if (md->release_date &&
-            metadata_keys[META_RELEASE_DATE][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_RELEASE_DATE][meta_mux],
-                        md->release_date, 0);
-        }
-        if (md->comment &&
-            metadata_keys[META_COMMENT][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_COMMENT][meta_mux], md->comment, 0);
-        }
-        if (!md->name && md->album &&
-            metadata_keys[META_ALBUM][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_ALBUM][meta_mux], md->album, 0);
-        }
-        if (md->genre &&
-            metadata_keys[META_GENRE][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_GENRE][meta_mux], md->genre, 0);
-        }
-        if (md->description &&
-            metadata_keys[META_DESCRIPTION][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_DESCRIPTION][meta_mux],
-                        md->description, 0);
-        }
-        if (md->long_description &&
-            metadata_keys[META_SYNOPSIS][meta_mux] != NULL)
-        {
-            av_dict_set(&m->oc->metadata,
-                        metadata_keys[META_SYNOPSIS][meta_mux],
-                        md->long_description, 0);
+            const char * key;
+            hb_value_t * val;
+
+            hb_dict_iter_next_ex(job->metadata->dict, &iter, &key, &val);
+            if (key != NULL && val != NULL)
+            {
+                const char * str = hb_value_get_string(val);
+
+                if (str != NULL)
+                {
+                    const char * mux_key = lookup_meta_mux_key(meta_mux, key);
+
+                    if (mux_key != NULL)
+                    {
+                        av_dict_set(&m->oc->metadata, mux_key, str, 0);
+                    }
+                }
+            }
         }
     }
 

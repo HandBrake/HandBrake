@@ -5699,53 +5699,12 @@ static int ffmpeg_decmetadata( AVDictionary *m, hb_title_t *title )
     AVDictionaryEntry *tag = NULL;
     while ( (tag = av_dict_get(m, "", tag, AV_DICT_IGNORE_SUFFIX)) )
     {
-        if ( !strcasecmp( "TITLE", tag->key ) )
+        const char * hb_key;
+
+        hb_key = hb_lookup_meta_key(tag->key);
+        if (hb_key != NULL)
         {
-            hb_metadata_set_name(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "ARTIST", tag->key ) )
-        {
-            hb_metadata_set_artist(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "DIRECTOR", tag->key ) ||
-                  !strcasecmp( "album_artist", tag->key ) )
-        {
-            hb_metadata_set_album_artist(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "COMPOSER", tag->key ) )
-        {
-            hb_metadata_set_composer(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "DATE_RELEASED", tag->key ) ||
-                  !strcasecmp( "date", tag->key ) )
-        {
-            hb_metadata_set_release_date(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "SUMMARY", tag->key ) ||
-                  !strcasecmp( "comment", tag->key ) )
-        {
-            hb_metadata_set_comment(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "GENRE", tag->key ) )
-        {
-            hb_metadata_set_genre(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "DESCRIPTION", tag->key ) )
-        {
-            hb_metadata_set_description(title->metadata, tag->value);
-            result = 1;
-        }
-        else if ( !strcasecmp( "SYNOPSIS", tag->key ) )
-        {
-            hb_metadata_set_long_description(title->metadata, tag->value);
-            result = 1;
+            hb_update_meta_dict(title->metadata->dict, hb_key, tag->value);
         }
     }
     return result;
