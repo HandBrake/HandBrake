@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5q-5e-xlx">
-                    <rect key="frame" x="20" y="297" width="324" height="36"/>
+                    <rect key="frame" x="20" y="295" width="324" height="36"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vKA-Sa-wGh">
                             <rect key="frame" x="-2" y="22" width="112" height="14"/>
@@ -176,7 +176,7 @@
                     </customSpacing>
                 </stackView>
                 <stackView distribution="equalSpacing" orientation="horizontal" alignment="top" spacing="23" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OFE-0G-Zqz">
-                    <rect key="frame" x="20" y="90" width="710" height="187"/>
+                    <rect key="frame" x="20" y="88" width="710" height="187"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zU5-gT-j2i">
                             <rect key="frame" x="0.0" y="35" width="218" height="152"/>
@@ -801,7 +801,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
                                             </connections>
                                         </textField>
-                                        <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Jh-a4-mTP">
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Jh-a4-mTP">
                                             <rect key="frame" x="96" y="0.0" width="152" height="19"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWv-Y9-b0S">
@@ -855,7 +855,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                     </connections>
                                                 </stepper>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="IVk-ye-fOe">
-                                                    <rect key="frame" x="71" y="2" width="10" height="14"/>
+                                                    <rect key="frame" x="71" y="3" width="10" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="6" id="nJL-sF-Y30"/>
                                                     </constraints>
@@ -1582,7 +1582,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                     </customSpacing>
                 </stackView>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F25-0x-6Ny">
-                    <rect key="frame" x="20" y="29" width="508" height="41"/>
+                    <rect key="frame" x="20" y="27" width="508" height="41"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xWj-2Z-c5a">
                             <rect key="frame" x="-2" y="27" width="99" height="14"/>
@@ -1651,97 +1651,114 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="f4T-WF-ZSb"/>
                                             </connections>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ag1-Tk-hCm">
-                                            <rect key="frame" x="71" y="0.0" width="54" height="19"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="54" id="qca-mb-bKn"/>
-                                            </constraints>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="xla-nI-boO">
-                                                <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Vk7-cS-5iS"/>
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <accessibility description="Display width"/>
-                                            <connections>
-                                                <binding destination="-2" name="enabled" keyPath="self.picture" id="WdY-WX-2we">
-                                                    <dictionary key="options">
-                                                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                                                    </dictionary>
-                                                </binding>
-                                                <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="QvD-YU-eyJ">
-                                                    <dictionary key="options">
-                                                        <bool key="NSValidatesImmediately" value="YES"/>
-                                                    </dictionary>
-                                                </binding>
-                                                <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="WdY-WX-2we" id="gMb-Mz-v3v">
-                                                    <dictionary key="options">
-                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                                        <integer key="NSNullPlaceholder" value="-1"/>
-                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                    </dictionary>
-                                                </binding>
-                                                <outlet property="nextKeyView" destination="jru-UG-Rf6" id="2PI-1U-54b"/>
-                                            </connections>
-                                        </textField>
-                                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jru-UG-Rf6">
-                                            <rect key="frame" x="127" y="-2" width="15" height="22"/>
-                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="20480" doubleValue="64" id="9gQ-W0-q4W">
-                                                <font key="font" metaFont="smallSystem"/>
-                                            </stepperCell>
-                                            <accessibility description="Display width"/>
-                                            <connections>
-                                                <binding destination="-2" name="enabled" keyPath="self.picture" id="eX0-Np-IVz">
-                                                    <dictionary key="options">
-                                                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                                                    </dictionary>
-                                                </binding>
-                                                <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="7uO-3v-U0S"/>
-                                                <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="eX0-Np-IVz" id="2fr-Fd-Ywe">
-                                                    <dictionary key="options">
-                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                                        <integer key="NSNullPlaceholder" value="-1"/>
-                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                    </dictionary>
-                                                </binding>
-                                            </connections>
-                                        </stepper>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="E5O-kn-GYm">
-                                            <rect key="frame" x="142" y="2" width="10" height="14"/>
-                                            <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="C6R-PR-3gu">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <accessibility description=" "/>
-                                            <connections>
-                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="YjI-CI-02L"/>
-                                            </connections>
-                                        </textField>
-                                        <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEF-b3-4o9">
-                                            <rect key="frame" x="154" y="0.0" width="54" height="19"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="54" id="XAc-pJ-P2R"/>
-                                            </constraints>
-                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="64t-lh-wQS">
-                                                <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="nbw-Gv-QSY"/>
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <accessibility description="Display height"/>
-                                            <connections>
-                                                <binding destination="-2" name="value" keyPath="self.picture.displayHeight" id="aiv-VD-uF6">
-                                                    <dictionary key="options">
-                                                        <bool key="NSValidatesImmediately" value="YES"/>
-                                                    </dictionary>
-                                                </binding>
-                                            </connections>
-                                        </textField>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FHJ-9w-6BA">
+                                            <rect key="frame" x="71" y="0.0" width="137" height="19"/>
+                                            <subviews>
+                                                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ag1-Tk-hCm">
+                                                    <rect key="frame" x="0.0" y="0.0" width="54" height="19"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="54" id="qca-mb-bKn"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="xla-nI-boO">
+                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Vk7-cS-5iS"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <accessibility description="Display width"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture" id="WdY-WX-2we">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="QvD-YU-eyJ">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="WdY-WX-2we" id="gMb-Mz-v3v">
+                                                            <dictionary key="options">
+                                                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                <integer key="NSNullPlaceholder" value="-1"/>
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <outlet property="nextKeyView" destination="jru-UG-Rf6" id="2PI-1U-54b"/>
+                                                    </connections>
+                                                </textField>
+                                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jru-UG-Rf6">
+                                                    <rect key="frame" x="56" y="-2" width="15" height="22"/>
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="20480" doubleValue="64" id="9gQ-W0-q4W">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </stepperCell>
+                                                    <accessibility description="Display width"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.picture" id="eX0-Np-IVz">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="7uO-3v-U0S"/>
+                                                        <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="eX0-Np-IVz" id="2fr-Fd-Ywe">
+                                                            <dictionary key="options">
+                                                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                <integer key="NSNullPlaceholder" value="-1"/>
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </stepper>
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="20" translatesAutoresizingMaskIntoConstraints="NO" id="E5O-kn-GYm">
+                                                    <rect key="frame" x="71" y="3" width="10" height="14"/>
+                                                    <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="C6R-PR-3gu">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <accessibility description=" "/>
+                                                    <connections>
+                                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="YjI-CI-02L"/>
+                                                    </connections>
+                                                </textField>
+                                                <textField verticalHuggingPriority="751" preferredMaxLayoutWidth="200" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEF-b3-4o9">
+                                                    <rect key="frame" x="83" y="0.0" width="54" height="19"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="54" id="XAc-pJ-P2R"/>
+                                                    </constraints>
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="64t-lh-wQS">
+                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="nbw-Gv-QSY"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <accessibility description="Display height"/>
+                                                    <connections>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.displayHeight" id="aiv-VD-uF6">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
                                         <button toolTip="Changing the displays size will stretch the video" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tHu-FW-tzx">
                                             <rect key="frame" x="211" y="1" width="75" height="16"/>
                                             <buttonCell key="cell" type="check" title="Automatic" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="eOi-50-jLK">
@@ -1762,14 +1779,8 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
                                         <integer value="1000"/>
-                                        <integer value="1000"/>
-                                        <integer value="1000"/>
-                                        <integer value="1000"/>
                                     </visibilityPriorities>
                                     <customSpacing>
-                                        <real value="3.4028234663852886e+38"/>
-                                        <real value="3.4028234663852886e+38"/>
-                                        <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
                                         <real value="3.4028234663852886e+38"/>
@@ -1844,7 +1855,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="F25-0x-6Ny" secondAttribute="bottom" constant="20" id="EgU-o8-5Ft"/>
                 <constraint firstItem="F25-0x-6Ny" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="KwO-RI-iDs"/>
                 <constraint firstItem="OFE-0G-Zqz" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="SP3-l7-QPV"/>
-                <constraint firstItem="P5q-5e-xlx" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="14" id="SR8-ag-lX0"/>
+                <constraint firstItem="P5q-5e-xlx" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="SR8-ag-lX0"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="OFE-0G-Zqz" secondAttribute="trailing" constant="20" symbolic="YES" id="gdQ-9j-1VW"/>
             </constraints>
             <connections>

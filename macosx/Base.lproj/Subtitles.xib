@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -122,7 +122,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Subtitles language and type." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-cP-TGw">
-                                                        <rect key="frame" x="-1" y="2" width="288" height="22"/>
+                                                        <rect key="frame" x="-1" y="1" width="288" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="JWk-Ab-hdY">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -144,7 +144,7 @@
                                                 <constraints>
                                                     <constraint firstItem="Tf3-cP-TGw" firstAttribute="leading" secondItem="EZp-rc-7mo" secondAttribute="leading" constant="3" id="SjK-h4-jBa"/>
                                                     <constraint firstAttribute="trailing" secondItem="Tf3-cP-TGw" secondAttribute="trailing" constant="3" id="Z2W-qa-AON"/>
-                                                    <constraint firstItem="Tf3-cP-TGw" firstAttribute="top" secondItem="EZp-rc-7mo" secondAttribute="top" constant="3" id="nLT-E9-asy"/>
+                                                    <constraint firstItem="Tf3-cP-TGw" firstAttribute="centerY" secondItem="EZp-rc-7mo" secondAttribute="centerY" id="bNw-5g-dhI"/>
                                                 </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -165,7 +165,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Forced Only. Use only subtitles marked as “forced” in the selected source track." translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
-                                                        <rect key="frame" x="28" y="3" width="20" height="19"/>
+                                                        <rect key="frame" x="28" y="5" width="20" height="16"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPR-9q-XBK">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -179,7 +179,6 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="HC5-ql-Vcr" firstAttribute="centerY" secondItem="zKg-by-KFV" secondAttribute="centerY" id="Bnl-uV-Fds"/>
-                                                    <constraint firstItem="HC5-ql-Vcr" firstAttribute="top" secondItem="zKg-by-KFV" secondAttribute="top" constant="5" id="LGF-pz-TTr"/>
                                                     <constraint firstItem="HC5-ql-Vcr" firstAttribute="leading" secondItem="zKg-by-KFV" secondAttribute="leading" constant="29" id="OGP-N0-fSq"/>
                                                     <constraint firstItem="HC5-ql-Vcr" firstAttribute="centerX" secondItem="zKg-by-KFV" secondAttribute="centerX" id="mvF-fX-bf0"/>
                                                 </constraints>
@@ -202,7 +201,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Burned In. Make the selected subtitles permanent by overlaying them onto the video track." translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
-                                                        <rect key="frame" x="22" y="3" width="20" height="19"/>
+                                                        <rect key="frame" x="22" y="5" width="20" height="16"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s2E-1o-mGs">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -222,7 +221,6 @@
                                                     <constraint firstItem="zpm-9Z-Hsq" firstAttribute="centerX" secondItem="gxH-yz-YRK" secondAttribute="centerX" id="Xbu-8p-kJ7"/>
                                                     <constraint firstItem="zpm-9Z-Hsq" firstAttribute="centerY" secondItem="gxH-yz-YRK" secondAttribute="centerY" id="nLs-iU-WUw"/>
                                                     <constraint firstItem="zpm-9Z-Hsq" firstAttribute="leading" secondItem="gxH-yz-YRK" secondAttribute="leading" constant="23" id="php-Zc-NnF"/>
-                                                    <constraint firstItem="zpm-9Z-Hsq" firstAttribute="top" secondItem="gxH-yz-YRK" secondAttribute="top" constant="5" id="ylD-H0-wie"/>
                                                 </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -279,11 +277,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="4bh-my-GeM">
-                                                <rect key="frame" x="490" y="1" width="158" height="25"/>
+                                                <rect key="frame" x="490" y="1" width="159" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Language of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
-                                                        <rect key="frame" x="-1" y="-1" width="160" height="22"/>
+                                                        <rect key="frame" x="-1" y="1" width="161" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="zIn-sc-xak">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -308,7 +306,7 @@
                                                     </popUpButton>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="Inz-O5-B8g" secondAttribute="bottom" constant="3" id="CII-4f-7Y0"/>
+                                                    <constraint firstItem="Inz-O5-B8g" firstAttribute="centerY" secondItem="4bh-my-GeM" secondAttribute="centerY" id="3Cd-LX-xuq"/>
                                                     <constraint firstItem="Inz-O5-B8g" firstAttribute="leading" secondItem="4bh-my-GeM" secondAttribute="leading" constant="3" id="CnV-f5-Gtx"/>
                                                     <constraint firstAttribute="trailing" secondItem="Inz-O5-B8g" secondAttribute="trailing" constant="3" id="NhM-0h-zLT"/>
                                                 </constraints>
@@ -328,11 +326,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="ZBK-cc-m0z">
-                                                <rect key="frame" x="651" y="1" width="115" height="25"/>
+                                                <rect key="frame" x="651.5" y="1" width="115" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
-                                                        <rect key="frame" x="-1" y="-1" width="117" height="22"/>
+                                                        <rect key="frame" x="-1" y="1" width="117" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jFr-2c-3Vv">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -353,8 +351,8 @@
                                                     </popUpButton>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="QV0-kE-4yR" secondAttribute="bottom" constant="3" id="3cY-6P-m7C"/>
                                                     <constraint firstAttribute="trailing" secondItem="QV0-kE-4yR" secondAttribute="trailing" constant="3" id="56f-EX-8Xt"/>
+                                                    <constraint firstItem="QV0-kE-4yR" firstAttribute="centerY" secondItem="ZBK-cc-m0z" secondAttribute="centerY" id="VnC-oi-pgx"/>
                                                     <constraint firstItem="QV0-kE-4yR" firstAttribute="leading" secondItem="ZBK-cc-m0z" secondAttribute="leading" constant="3" id="W3d-o2-suN"/>
                                                 </constraints>
                                             </tableCellView>
@@ -373,11 +371,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="9tV-iL-oaF">
-                                                <rect key="frame" x="769" y="1" width="58" height="17"/>
+                                                <rect key="frame" x="769.5" y="1" width="57" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField toolTip="Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
-                                                        <rect key="frame" x="0.0" y="-3" width="58" height="14"/>
+                                                        <rect key="frame" x="0.0" y="-3" width="57" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="hhH-c3-gD0">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Jui-oB-oVO"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -396,9 +394,9 @@
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="aJi-zQ-0cg" firstAttribute="top" secondItem="9tV-iL-oaF" secondAttribute="top" constant="6" id="AHN-d6-URf"/>
                                                     <constraint firstItem="aJi-zQ-0cg" firstAttribute="centerX" secondItem="9tV-iL-oaF" secondAttribute="centerX" id="Dqo-dR-xOW"/>
                                                     <constraint firstItem="aJi-zQ-0cg" firstAttribute="leading" secondItem="9tV-iL-oaF" secondAttribute="leading" constant="2" id="bUg-SG-Q9K"/>
+                                                    <constraint firstItem="aJi-zQ-0cg" firstAttribute="top" secondItem="9tV-iL-oaF" secondAttribute="top" constant="6" id="oXx-Vj-wkT"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="textField" destination="aJi-zQ-0cg" id="WSP-oS-jCs"/>
@@ -418,13 +416,12 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView id="FiE-Us-vj1">
+                                            <tableCellView misplaced="YES" id="FiE-Us-vj1">
                                                 <rect key="frame" x="830" y="1" width="28" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bFt-wX-C9J">
-                                                        <rect key="frame" x="-3" y="-2" width="34" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bFt-wX-C9J">
+                                                        <rect key="frame" x="-4" y="-2" width="37" height="27"/>
                                                         <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="A3l-TZ-bBd">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu" size="11"/>
@@ -435,6 +432,11 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="bFt-wX-C9J" firstAttribute="centerY" secondItem="FiE-Us-vj1" secondAttribute="centerY" id="HvX-qj-Lkx"/>
+                                                    <constraint firstItem="bFt-wX-C9J" firstAttribute="leading" secondItem="FiE-Us-vj1" secondAttribute="leading" constant="2" id="ec9-Mx-7wu"/>
+                                                    <constraint firstAttribute="trailing" secondItem="bFt-wX-C9J" secondAttribute="trailing" constant="2" id="lR2-PN-R4w"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -482,6 +484,7 @@
             <point key="canvasLocation" x="230" y="122"/>
         </customView>
         <arrayController objectClassName="HBSubtitlesTrack" id="ssY-jQ-Nev">
+            <classReference key="objectClass" className="HBSubtitlesTrack"/>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.subtitles.tracks" id="mlB-F3-p89"/>
             </connections>

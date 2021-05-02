@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,7 +18,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" verticalCompressionResistancePriority="751" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="1a5-Yb-uwn">
-                    <rect key="frame" x="8" y="303" width="108" height="14"/>
+                    <rect key="frame" x="8" y="305" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -29,7 +29,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Mwp-XS-2tc">
-                    <rect key="frame" x="278" y="303" width="48" height="14"/>
+                    <rect key="frame" x="278" y="305" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -45,7 +45,7 @@
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DER-tS-cLx">
-                    <rect key="frame" x="118" y="298" width="138" height="22"/>
+                    <rect key="frame" x="118" y="300" width="138" height="22"/>
                     <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="jiO-4I-seR"/>
@@ -72,7 +72,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
-                    <rect key="frame" x="332" y="301" width="180" height="19"/>
+                    <rect key="frame" x="332" y="303" width="180" height="19"/>
                     <string key="toolTip">Custom Detelecine parameters.
 
 Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
@@ -101,7 +101,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="N8y-at-fwU">
-                    <rect key="frame" x="8" y="197" width="108" height="14"/>
+                    <rect key="frame" x="8" y="199" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -112,7 +112,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="xKf-yr-nCk">
-                    <rect key="frame" x="8" y="237" width="108" height="14"/>
+                    <rect key="frame" x="8" y="239" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -123,7 +123,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="C83-aJ-v3x">
-                    <rect key="frame" x="486" y="237" width="48" height="14"/>
+                    <rect key="frame" x="486" y="239" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -139,7 +139,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xct-UB-bKm">
-                    <rect key="frame" x="118" y="232" width="138" height="22"/>
+                    <rect key="frame" x="118" y="234" width="138" height="22"/>
                     <string key="toolTip">Deinterlace removes comb artifacts from the picture.
 
 Yadif is a popular and fast deinterlacer.
@@ -169,7 +169,7 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
-                    <rect key="frame" x="539" y="235" width="180" height="19"/>
+                    <rect key="frame" x="539" y="237" width="180" height="19"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
 Yadif syntax: mode=m:parity=p
@@ -201,7 +201,7 @@ Decomb default: mode=7</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="9Uz-PL-igg">
-                    <rect key="frame" x="278" y="237" width="48" height="14"/>
+                    <rect key="frame" x="278" y="239" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="zvZ-ZX-yKE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -217,7 +217,7 @@ Decomb default: mode=7</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6nG-zk-FMo">
-                    <rect key="frame" x="328" y="232" width="136" height="22"/>
+                    <rect key="frame" x="328" y="234" width="136" height="22"/>
                     <string key="toolTip">Deinterlace filter preset.
 
 Default is well balanced for speed and quality.
@@ -251,7 +251,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="Mg1-Yq-F9S">
-                    <rect key="frame" x="8" y="263" width="108" height="14"/>
+                    <rect key="frame" x="8" y="265" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Interlace Detection:" id="xHD-vC-ePQ">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -262,7 +262,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="RZE-gp-SB7">
-                    <rect key="frame" x="278" y="263" width="48" height="14"/>
+                    <rect key="frame" x="278" y="265" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="Da7-pY-5vu">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -278,7 +278,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </textField>
                 <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IQG-Nn-HTb">
-                    <rect key="frame" x="118" y="258" width="138" height="22"/>
+                    <rect key="frame" x="118" y="260" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="Kbc-Vj-81g"/>
                     </constraints>
@@ -304,7 +304,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
-                    <rect key="frame" x="332" y="261" width="180" height="19"/>
+                    <rect key="frame" x="332" y="263" width="180" height="19"/>
                     <string key="toolTip">Custom Interlace Detection parameters.
 
 Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
@@ -332,7 +332,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-c1-7hB">
-                    <rect key="frame" x="8" y="171" width="108" height="14"/>
+                    <rect key="frame" x="8" y="173" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -343,7 +343,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ins-7X-kbN">
-                    <rect key="frame" x="118" y="166" width="138" height="22"/>
+                    <rect key="frame" x="118" y="168" width="138" height="22"/>
                     <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
 
 NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
@@ -374,7 +374,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-3F-Xh0">
-                    <rect key="frame" x="278" y="171" width="48" height="14"/>
+                    <rect key="frame" x="278" y="173" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -390,7 +390,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </textField>
                 <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cTy-PO-BSd">
-                    <rect key="frame" x="328" y="166" width="136" height="22"/>
+                    <rect key="frame" x="328" y="168" width="136" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="Zly-jH-wkv"/>
                     </constraints>
@@ -416,7 +416,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1XQ-md-5cQ">
-                    <rect key="frame" x="536" y="166" width="116" height="22"/>
+                    <rect key="frame" x="536" y="168" width="116" height="22"/>
                     <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
@@ -456,7 +456,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="O3I-G6-dfv">
-                    <rect key="frame" x="486" y="171" width="48" height="14"/>
+                    <rect key="frame" x="486" y="173" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -472,7 +472,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
-                    <rect key="frame" x="540" y="169" width="180" height="19"/>
+                    <rect key="frame" x="540" y="171" width="180" height="19"/>
                     <string key="toolTip">Custom Denoise parameters.
 
 NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
@@ -504,7 +504,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="A6i-ft-02b">
-                    <rect key="frame" x="486" y="171" width="48" height="14"/>
+                    <rect key="frame" x="486" y="173" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -520,7 +520,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <popUpButton toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bz8-FC-vYp">
-                    <rect key="frame" x="118" y="192" width="138" height="22"/>
+                    <rect key="frame" x="118" y="194" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="lTF-ns-c6C"/>
                     </constraints>
@@ -546,7 +546,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </popUpButton>
                 <popUpButton toolTip="Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bRd-Km-Wa8">
-                    <rect key="frame" x="328" y="192" width="116" height="22"/>
+                    <rect key="frame" x="328" y="194" width="116" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="Q7t-rC-L8C"/>
                     </constraints>
@@ -571,7 +571,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="dXf-9u-LSs">
-                    <rect key="frame" x="278" y="197" width="48" height="14"/>
+                    <rect key="frame" x="278" y="199" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="xqk-dM-L3o">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -587,7 +587,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DI9-Ed-acp">
-                    <rect key="frame" x="332" y="195" width="180" height="19"/>
+                    <rect key="frame" x="332" y="197" width="180" height="19"/>
                     <string key="toolTip">Custom Deblock parameters.
 
 strength=s:thresh=t:blocksize=b</string>
@@ -613,7 +613,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PIN-cz-nC7">
-                    <rect key="frame" x="278" y="197" width="48" height="14"/>
+                    <rect key="frame" x="278" y="199" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="ydN-tP-vpt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -629,7 +629,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="ZRr-ED-W8e">
-                    <rect key="frame" x="8" y="79" width="108" height="14"/>
+                    <rect key="frame" x="8" y="81" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Colorspace:" id="HVj-4g-OVv">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -640,7 +640,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ScE-ad-pHc">
-                    <rect key="frame" x="118" y="74" width="138" height="22"/>
+                    <rect key="frame" x="118" y="76" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="jyp-SN-ebY"/>
                     </constraints>
@@ -651,7 +651,6 @@ strength=s:thresh=t:blocksize=b</string>
                     </popUpButtonCell>
                     <accessibility description="Colorspace Preset"/>
                     <connections>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.colorspacePresets" id="3Cp-8k-5OQ"/>
                         <binding destination="-2" name="enabled" keyPath="self.filters" id="YAW-46-huV">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -662,10 +661,11 @@ strength=s:thresh=t:blocksize=b</string>
                                 <string key="NSValueTransformerName">HBColorspaceTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.colorspacePresets" id="3Cp-8k-5OQ"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="rJQ-Rd-fR6">
-                    <rect key="frame" x="278" y="79" width="48" height="14"/>
+                    <rect key="frame" x="278" y="81" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="oWz-qF-JYk">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -681,7 +681,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uzk-ZU-EFM">
-                    <rect key="frame" x="332" y="77" width="180" height="19"/>
+                    <rect key="frame" x="332" y="79" width="180" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="180" id="uXw-nC-F2h"/>
                     </constraints>
@@ -691,20 +691,20 @@ strength=s:thresh=t:blocksize=b</string>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customColorspaceSelected" id="tYT-SC-GOi">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="value" keyPath="self.filters.colorspaceCustomString" id="ghZ-e7-Txu">
                             <dictionary key="options">
                                 <bool key="NSValidatesImmediately" value="YES"/>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customColorspaceSelected" id="tYT-SC-GOi">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="p9P-Fd-bNm">
-                    <rect key="frame" x="8" y="119" width="108" height="14"/>
+                    <rect key="frame" x="8" y="121" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="TwB-ag-L1L">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -715,7 +715,7 @@ strength=s:thresh=t:blocksize=b</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="boo-YC-gWm">
-                    <rect key="frame" x="118" y="114" width="138" height="22"/>
+                    <rect key="frame" x="118" y="116" width="138" height="22"/>
                     <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
 Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
@@ -731,7 +731,6 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="p9P-Fd-bNm" id="2KJ-Az-gNw"/>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="gcv-LW-YUV"/>
                         <binding destination="-2" name="enabled" keyPath="self.filters" id="duv-hY-CcP">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -742,11 +741,12 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                                 <string key="NSValueTransformerName">HBSharpenTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="gcv-LW-YUV"/>
                         <outlet property="nextKeyView" destination="cG4-79-P9J" id="Ytl-M2-eCA"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="P47-pv-TEW">
-                    <rect key="frame" x="278" y="119" width="48" height="14"/>
+                    <rect key="frame" x="278" y="121" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="D7G-kY-TSj">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -762,7 +762,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <popUpButton toolTip="Sharpen filter preset. Sets the strength of the filter." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cG4-79-P9J">
-                    <rect key="frame" x="328" y="114" width="136" height="22"/>
+                    <rect key="frame" x="328" y="116" width="136" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="5QK-Vs-3FG"/>
                     </constraints>
@@ -773,7 +773,6 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </popUpButtonCell>
                     <accessibility description="Sharpen Preset"/>
                     <connections>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="h9z-WJ-t0Y"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="vR4-hv-wEB">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -784,11 +783,12 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                                 <string key="NSValueTransformerName">HBSharpenPresetTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="h9z-WJ-t0Y"/>
                         <outlet property="nextKeyView" destination="Hcn-5m-N9x" id="BLD-FK-DI6"/>
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hcn-5m-N9x">
-                    <rect key="frame" x="536" y="114" width="116" height="22"/>
+                    <rect key="frame" x="536" y="116" width="116" height="22"/>
                     <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
@@ -812,21 +812,21 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </popUpButtonCell>
                     <accessibility description="Sharpen Tune"/>
                     <connections>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="YKu-Me-xRd" id="Tiq-Qf-HRZ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTunes" id="YKu-Me-xRd"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="Z7B-xU-S2z">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="YKu-Me-xRd" id="Tiq-Qf-HRZ">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
-                            </dictionary>
-                        </binding>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="BOw-ko-ODH">
-                    <rect key="frame" x="486" y="119" width="48" height="14"/>
+                    <rect key="frame" x="486" y="121" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="CFV-ur-emt">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -842,7 +842,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBr-vV-iAz">
-                    <rect key="frame" x="540" y="117" width="180" height="19"/>
+                    <rect key="frame" x="540" y="119" width="180" height="19"/>
                     <string key="toolTip">Custom Sharpen parameters.
 
 Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
@@ -874,7 +874,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="8EJ-8r-9In">
-                    <rect key="frame" x="486" y="119" width="48" height="14"/>
+                    <rect key="frame" x="486" y="121" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="5Vt-0j-92R">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -890,7 +890,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="ns7-Ww-hmX">
-                    <rect key="frame" x="8" y="53" width="108" height="14"/>
+                    <rect key="frame" x="8" y="55" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color:" id="uDH-ts-vs5">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -901,7 +901,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." translatesAutoresizingMaskIntoConstraints="NO" id="Psx-nN-XiT">
-                    <rect key="frame" x="121" y="52" width="73" height="16"/>
+                    <rect key="frame" x="121" y="54" width="73" height="16"/>
                     <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -916,7 +916,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="jIE-qq-CIX">
-                    <rect key="frame" x="8" y="145" width="108" height="14"/>
+                    <rect key="frame" x="8" y="147" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Chroma Smooth:" id="ZLl-Q6-HpE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -927,7 +927,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hiK-Va-rbJ">
-                    <rect key="frame" x="118" y="140" width="138" height="22"/>
+                    <rect key="frame" x="118" y="142" width="138" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="sLi-Ba-GZ5"/>
                     </constraints>
@@ -938,7 +938,6 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </popUpButtonCell>
                     <accessibility description="Chroma Smooth Preset"/>
                     <connections>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.chromaSmoothPresets" id="JzX-S5-IZV"/>
                         <binding destination="-2" name="enabled" keyPath="self.filters" id="7tE-jc-wm4">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -949,11 +948,12 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                                 <string key="NSValueTransformerName">HBChromaSmoothTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.chromaSmoothPresets" id="JzX-S5-IZV"/>
                         <outlet property="nextKeyView" destination="jFk-Eg-o2W" id="v1P-dU-Tjf"/>
                     </connections>
                 </popUpButton>
                 <popUpButton toolTip="Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jFk-Eg-o2W">
-                    <rect key="frame" x="328" y="140" width="116" height="22"/>
+                    <rect key="frame" x="328" y="142" width="116" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="v10-eF-W38"/>
                     </constraints>
@@ -964,15 +964,6 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </popUpButtonCell>
                     <accessibility description="Chroma Smooth Tune"/>
                     <connections>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockTunes" id="S80-at-P31"/>
-                        <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="AMm-ys-xDB" id="8pf-jg-07J">
-                            <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="AMm-ys-xDB">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -983,10 +974,19 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                                 <string key="NSValueTransformerName">HBChromaSmoothTuneTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="AMm-ys-xDB" id="8pf-jg-07J">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockTunes" id="S80-at-P31"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PZ7-Nx-ctH">
-                    <rect key="frame" x="278" y="145" width="48" height="14"/>
+                    <rect key="frame" x="278" y="147" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="aem-qz-Cqk">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1002,7 +1002,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRz-wh-Qqk">
-                    <rect key="frame" x="332" y="143" width="180" height="19"/>
+                    <rect key="frame" x="332" y="145" width="180" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="180" id="UKZ-Hz-thL"/>
                     </constraints>
@@ -1012,37 +1012,37 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customChromaSmoothSelected" id="zBU-lb-bUj">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="value" keyPath="self.filters.chromaSmoothCustomString" id="r7c-uw-qFL">
                             <dictionary key="options">
                                 <bool key="NSValidatesImmediately" value="YES"/>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customChromaSmoothSelected" id="zBU-lb-bUj">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="UEb-07-vEn">
-                    <rect key="frame" x="278" y="145" width="48" height="14"/>
+                    <rect key="frame" x="278" y="147" width="48" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="hyH-QP-Zdi">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="sBY-7C-VuR">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="hidden2" keyPath="self.filters.customChromaSmoothSelected" previousBinding="sBY-7C-VuR" id="uEF-o0-TBa">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.chromaSmoothEnabled" id="sBY-7C-VuR">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="meD-9K-TkI"/>
@@ -1060,7 +1060,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="6nG-zk-FMo" firstAttribute="firstBaseline" secondItem="C83-aJ-v3x" secondAttribute="firstBaseline" id="4Gh-ni-riT"/>
                 <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="Mwp-XS-2tc" secondAttribute="firstBaseline" id="4Ne-Es-RdZ"/>
                 <constraint firstItem="ScE-ad-pHc" firstAttribute="firstBaseline" secondItem="rJQ-Rd-fR6" secondAttribute="firstBaseline" id="4ar-oH-g7s"/>
-                <constraint firstItem="1a5-Yb-uwn" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="4v0-Rd-A4l"/>
+                <constraint firstItem="1a5-Yb-uwn" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="4v0-Rd-A4l"/>
                 <constraint firstItem="O3I-G6-dfv" firstAttribute="firstBaseline" secondItem="ZR9-YG-pfn" secondAttribute="firstBaseline" id="50f-Fo-ZOR"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="leading" secondItem="1a5-Yb-uwn" secondAttribute="leading" id="5BY-Ix-ea2"/>
                 <constraint firstItem="ins-7X-kbN" firstAttribute="firstBaseline" secondItem="k1h-3F-Xh0" secondAttribute="firstBaseline" id="5R3-bd-R0R"/>

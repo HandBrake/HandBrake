@@ -89,7 +89,7 @@
 "Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Larghezza visualizzazione";
 
 /* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
-"aVx-b3-2AK.title" = "Risoluzione";
+"aVx-b3-2AK.title" = "Risoluzione e ridimensionamento";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
 "BjH-qa-mJM.ibShadowedToolTip" = "Colore del bordo inserito attorno al video";
