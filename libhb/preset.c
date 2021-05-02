@@ -2070,6 +2070,7 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
     geo.keep = keep_aspect * HB_KEEP_DISPLAY_ASPECT;
     allow_upscaling = hb_dict_get_bool(preset, "PictureAllowUpscaling");
     use_maximum_size = hb_dict_get_bool(preset, "PictureUseMaximumSize");
+    geo.flags = 0;
     geo.flags |= allow_upscaling  * HB_GEO_SCALE_UP;
     geo.flags |= use_maximum_size * HB_GEO_SCALE_BEST;
 
