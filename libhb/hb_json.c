@@ -242,7 +242,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         // InterlaceDetected, VideoCodec
         "s:o, s:o,"
         // Metadata
-        "s:{}"
+        "s:o"
     "}",
     "Type",                 hb_value_int(title->type),
     "Path",                 hb_value_string(title->path),
@@ -276,7 +276,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "Den",              hb_value_int(title->vrate.den),
     "InterlaceDetected",    hb_value_bool(title->detected_interlacing),
     "VideoCodec",           hb_value_string(title->video_codec_name),
-    "Metadata"
+    "Metadata",             hb_value_dup(title->metadata->dict)
     );
     if (dict == NULL)
     {
@@ -287,58 +287,6 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     if (title->container_name != NULL)
     {
         hb_dict_set(dict, "Container", hb_value_string(title->container_name));
-    }
-
-    // Add metadata
-    hb_dict_t *meta_dict = hb_dict_get(dict, "Metadata");
-    if (title->metadata->name != NULL)
-    {
-        hb_dict_set(meta_dict, "Name", hb_value_string(title->metadata->name));
-    }
-    if (title->metadata->artist != NULL)
-    {
-        hb_dict_set(meta_dict, "Artist",
-                    hb_value_string(title->metadata->artist));
-    }
-    if (title->metadata->composer != NULL)
-    {
-        hb_dict_set(meta_dict, "Composer",
-                    hb_value_string(title->metadata->composer));
-    }
-    if (title->metadata->comment != NULL)
-    {
-        hb_dict_set(meta_dict, "Comment",
-                    hb_value_string(title->metadata->comment));
-    }
-    if (title->metadata->genre != NULL)
-    {
-        hb_dict_set(meta_dict, "Genre",
-                    hb_value_string(title->metadata->genre));
-    }
-    if (title->metadata->album != NULL)
-    {
-        hb_dict_set(meta_dict, "Album",
-                    hb_value_string(title->metadata->album));
-    }
-    if (title->metadata->album_artist != NULL)
-    {
-        hb_dict_set(meta_dict, "AlbumArtist",
-                    hb_value_string(title->metadata->album_artist));
-    }
-    if (title->metadata->description != NULL)
-    {
-        hb_dict_set(meta_dict, "Description",
-                    hb_value_string(title->metadata->description));
-    }
-    if (title->metadata->long_description != NULL)
-    {
-        hb_dict_set(meta_dict, "LongDescription",
-                    hb_value_string(title->metadata->long_description));
-    }
-    if (title->metadata->release_date != NULL)
-    {
-        hb_dict_set(meta_dict, "ReleaseDate",
-                    hb_value_string(title->metadata->release_date));
     }
 
     // process chapter list
@@ -563,7 +511,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     // Subtitles {Search {Enable, Forced, Default, Burn}, SubtitleList []}
     "s:{s:{s:o, s:o, s:o, s:o}, s:[]},"
     // Metadata
-    "s:{},"
+    "s:o,"
     // Filters {FilterList []}
     "s:{s:[]}"
     "}",
@@ -598,7 +546,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                 "Default",      hb_value_bool(job->select_subtitle_config.default_track),
                 "Burn",         hb_value_bool(subtitle_search_burn),
             "SubtitleList",
-        "Metadata",
+        "Metadata",             hb_value_dup(job->metadata->dict),
         "Filters",
             "FilterList"
     );
@@ -777,54 +725,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     {
         hb_dict_set(video_dict, "Options",
                     hb_value_string(job->encoder_options));
-    }
-    hb_dict_t *meta_dict = hb_dict_get(dict, "Metadata");
-    if (job->metadata->name != NULL)
-    {
-        hb_dict_set(meta_dict, "Name", hb_value_string(job->metadata->name));
-    }
-    if (job->metadata->artist != NULL)
-    {
-        hb_dict_set(meta_dict, "Artist",
-                    hb_value_string(job->metadata->artist));
-    }
-    if (job->metadata->composer != NULL)
-    {
-        hb_dict_set(meta_dict, "Composer",
-                    hb_value_string(job->metadata->composer));
-    }
-    if (job->metadata->comment != NULL)
-    {
-        hb_dict_set(meta_dict, "Comment",
-                    hb_value_string(job->metadata->comment));
-    }
-    if (job->metadata->genre != NULL)
-    {
-        hb_dict_set(meta_dict, "Genre", hb_value_string(job->metadata->genre));
-    }
-    if (job->metadata->album != NULL)
-    {
-        hb_dict_set(meta_dict, "Album", hb_value_string(job->metadata->album));
-    }
-    if (job->metadata->album_artist != NULL)
-    {
-        hb_dict_set(meta_dict, "AlbumArtist",
-                    hb_value_string(job->metadata->album_artist));
-    }
-    if (job->metadata->description != NULL)
-    {
-        hb_dict_set(meta_dict, "Description",
-                    hb_value_string(job->metadata->description));
-    }
-    if (job->metadata->long_description != NULL)
-    {
-        hb_dict_set(meta_dict, "LongDescription",
-                    hb_value_string(job->metadata->long_description));
-    }
-    if (job->metadata->release_date != NULL)
-    {
-        hb_dict_set(meta_dict, "ReleaseDate",
-                    hb_value_string(job->metadata->release_date));
     }
 
     // process chapter list
@@ -1092,16 +992,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     const char       * video_profile = NULL, * video_level = NULL;
     const char       * video_options = NULL;
     int                subtitle_search_burn = 0;
-    hb_dict_t        * meta_dict = NULL;
-    const char       * meta_name = NULL, * meta_artist = NULL;
-    const char       * meta_album_artist = NULL, * meta_release = NULL;
-    const char       * meta_comment = NULL, * meta_genre = NULL;
-    const char       * meta_composer = NULL, * meta_desc = NULL;
-    const char       * meta_long_desc = NULL;
     json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
     int                vbitrate = -1;
     double             vquality = HB_INVALID_VIDEO_QUALITY;
     int                adapter_index = -1;
+    hb_dict_t        * meta_dict = NULL;
 
     result = json_unpack_ex(dict, &error, 0,
     "{"
@@ -1205,6 +1100,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     {
         hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
+    }
+    if (meta_dict != NULL)
+    {
+        job->metadata->dict = hb_value_dup(meta_dict);
     }
     // Lookup mux id
     if (hb_value_type(mux) == HB_VALUE_TYPE_STRING)
@@ -1351,137 +1250,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         {
             hb_error("hb_dict_to_job: failed to parse coll_dict: %s", error.text);
             goto fail;
-        }
-    }
-
-    if (meta_dict != NULL)
-    {
-        // By default, the job is populated with the metadata
-        // from the source title.
-        //
-        // If the metadata dict is present, assume any fields not
-        // present are to be removed from the job's metadata
-        meta_name = meta_artist = meta_composer = meta_album_artist =
-        meta_release = meta_comment = meta_genre = meta_desc =
-        meta_long_desc = "";
-
-        result = json_unpack_ex(meta_dict, &error, 0,
-        // {Name, Artist, Composer, AlbumArtist, ReleaseDate,
-        //  Comment, Genre, Description, LongDescription}
-        "{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s}",
-            "Name",                 unpack_s(&meta_name),
-            "Artist",               unpack_s(&meta_artist),
-            "Composer",             unpack_s(&meta_composer),
-            "AlbumArtist",          unpack_s(&meta_album_artist),
-            "ReleaseDate",          unpack_s(&meta_release),
-            "Comment",              unpack_s(&meta_comment),
-            "Genre",                unpack_s(&meta_genre),
-            "Description",          unpack_s(&meta_desc),
-            "LongDescription",      unpack_s(&meta_long_desc)
-        );
-        if (result < 0)
-        {
-            hb_error("hb_dict_to_job: failed to parse meta_dict: %s", error.text);
-            goto fail;
-        }
-    }
-    if (meta_name != NULL)
-    {
-        if (meta_name[0] != 0)
-        {
-            hb_metadata_set_name(job->metadata, meta_name);
-        }
-        else
-        {
-            hb_metadata_set_name(job->metadata, NULL);
-        }
-    }
-    if (meta_artist != NULL)
-    {
-        if (meta_artist[0] != 0)
-        {
-            hb_metadata_set_artist(job->metadata, meta_artist);
-        }
-        else
-        {
-            hb_metadata_set_artist(job->metadata, NULL);
-        }
-    }
-    if (meta_composer != NULL)
-    {
-        if (meta_composer[0] != 0)
-        {
-            hb_metadata_set_composer(job->metadata, meta_composer);
-        }
-        else
-        {
-            hb_metadata_set_composer(job->metadata, NULL);
-        }
-    }
-    if (meta_album_artist != NULL)
-    {
-        if (meta_album_artist[0] != 0)
-        {
-            hb_metadata_set_album_artist(job->metadata, meta_album_artist);
-        }
-        else
-        {
-            hb_metadata_set_album_artist(job->metadata, NULL);
-        }
-    }
-    if (meta_release != NULL)
-    {
-        if (meta_release[0] != 0)
-        {
-            hb_metadata_set_release_date(job->metadata, meta_release);
-        }
-        else
-        {
-            hb_metadata_set_release_date(job->metadata, NULL);
-        }
-    }
-    if (meta_comment != NULL)
-    {
-        if (meta_comment[0] != 0)
-        {
-            hb_metadata_set_comment(job->metadata, meta_comment);
-        }
-        else
-        {
-            hb_metadata_set_comment(job->metadata, NULL);
-        }
-    }
-    if (meta_genre != NULL)
-    {
-        if (meta_genre[0] != 0)
-        {
-            hb_metadata_set_genre(job->metadata, meta_genre);
-        }
-        else
-        {
-            hb_metadata_set_genre(job->metadata, NULL);
-        }
-    }
-    if (meta_desc != NULL)
-    {
-        if (meta_desc[0] != 0)
-        {
-            hb_metadata_set_description(job->metadata, meta_desc);
-        }
-        else
-        {
-            hb_metadata_set_description(job->metadata, NULL);
-        }
-    }
-    if (meta_long_desc != NULL)
-    {
-        if (meta_long_desc[0] != 0)
-        {
-            hb_metadata_set_long_description(job->metadata, meta_long_desc);
-        }
-        else
-        {
-            hb_metadata_set_long_description(job->metadata, NULL);
         }
     }
 

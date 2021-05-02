@@ -5214,6 +5214,10 @@ int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx, int audio_idx, int en
 hb_metadata_t *hb_metadata_init()
 {
     hb_metadata_t *metadata = calloc( 1, sizeof(*metadata) );
+    if (metadata != NULL)
+    {
+        metadata->dict = hb_dict_init();
+    }
     return metadata;
 }
 
@@ -5229,45 +5233,9 @@ hb_metadata_t *hb_metadata_copy( const hb_metadata_t *src )
     if ( src )
     {
         metadata = calloc( 1, sizeof(*metadata) );
-        if ( src->name )
+        if (src->dict != NULL)
         {
-            metadata->name = strdup(src->name);
-        }
-        if ( src->artist )
-        {
-            metadata->artist = strdup(src->artist);
-        }
-        if ( src->album_artist )
-        {
-            metadata->album_artist = strdup(src->album_artist);
-        }
-        if ( src->composer )
-        {
-            metadata->composer = strdup(src->composer);
-        }
-        if ( src->release_date )
-        {
-            metadata->release_date = strdup(src->release_date);
-        }
-        if ( src->comment )
-        {
-            metadata->comment = strdup(src->comment);
-        }
-        if ( src->album )
-        {
-            metadata->album = strdup(src->album);
-        }
-        if ( src->genre )
-        {
-            metadata->genre = strdup(src->genre);
-        }
-        if ( src->description )
-        {
-            metadata->description = strdup(src->description);
-        }
-        if ( src->long_description )
-        {
-            metadata->long_description = strdup(src->long_description);
+            metadata->dict = hb_value_dup(src->dict);
         }
         if ( src->list_coverart )
         {
@@ -5295,16 +5263,10 @@ void hb_metadata_close( hb_metadata_t **_m )
         hb_metadata_t *m = *_m;
         hb_coverart_t *art;
 
-        free( m->name );
-        free( m->artist );
-        free( m->composer );
-        free( m->release_date );
-        free( m->comment );
-        free( m->album );
-        free( m->album_artist );
-        free( m->genre );
-        free( m->description );
-        free( m->long_description );
+        if (m->dict != NULL)
+        {
+            hb_value_free(&m->dict);
+        }
 
         if ( m->list_coverart )
         {
@@ -5327,83 +5289,15 @@ void hb_metadata_close( hb_metadata_t **_m )
  **********************************************************************
  *
  *********************************************************************/
-void hb_metadata_set_name( hb_metadata_t *metadata, const char *name )
+void hb_update_meta_dict(hb_dict_t * dict, const char * key, const char * value)
 {
-    if ( metadata )
+    if (value != NULL)
     {
-        hb_update_str( &metadata->name, name );
+        hb_dict_set_string(dict, key, value);
     }
-}
-
-void hb_metadata_set_artist( hb_metadata_t *metadata, const char *artist )
-{
-    if ( metadata )
+    else
     {
-        hb_update_str( &metadata->artist, artist );
-    }
-}
-
-void hb_metadata_set_composer( hb_metadata_t *metadata, const char *composer )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->composer, composer );
-    }
-}
-
-void hb_metadata_set_release_date( hb_metadata_t *metadata, const char *release_date )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->release_date, release_date );
-    }
-}
-
-void hb_metadata_set_comment( hb_metadata_t *metadata, const char *comment )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->comment, comment );
-    }
-}
-
-void hb_metadata_set_genre( hb_metadata_t *metadata, const char *genre )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->genre, genre );
-    }
-}
-
-void hb_metadata_set_album( hb_metadata_t *metadata, const char *album )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->album, album );
-    }
-}
-
-void hb_metadata_set_album_artist( hb_metadata_t *metadata, const char *album_artist )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->album_artist, album_artist );
-    }
-}
-
-void hb_metadata_set_description( hb_metadata_t *metadata, const char *description )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->description, description );
-    }
-}
-
-void hb_metadata_set_long_description( hb_metadata_t *metadata, const char *long_description )
-{
-    if ( metadata )
-    {
-        hb_update_str( &metadata->long_description, long_description );
+        hb_dict_remove(dict, key);
     }
 }
 
