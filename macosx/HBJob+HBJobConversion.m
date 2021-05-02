@@ -182,8 +182,8 @@
     }
 
     // Picture Size Settings
-    job->par.num = self.picture.parWidth;
-    job->par.den = self.picture.parHeight;
+    job->par.num = self.picture.parNum;
+    job->par.den = self.picture.parDen;
 
     // Video settings
     // Framerate
@@ -541,71 +541,52 @@
         hb_dict_free(&filter_dict);
     }
 
-    // Add grayscale filter
+    // Grayscale
     if (self.filters.grayscale)
     {
         filter = hb_filter_init(HB_FILTER_GRAYSCALE);
         hb_add_filter(job, filter, NULL);
     }
 
-    // Add rotate filter
-    if (self.picture.rotate || self.picture.flip)
+    // Rotate
+    if (self.picture.angle || self.picture.flip)
     {
         int filter_id = HB_FILTER_ROTATE;
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
                                                              NULL, NULL,
-                                                             [NSString stringWithFormat:@"angle=%d:hflip=%d", self.picture.rotate, self.picture.flip].UTF8String);
+                                                             [NSString stringWithFormat:@"angle=%d:hflip=%d",
+                                                              self.picture.angle, self.picture.flip].UTF8String);
 
         filter = hb_filter_init(filter_id);
         hb_add_filter_dict(job, filter, filter_dict);
         hb_dict_free(&filter_dict);
     }
 
-    if (self.picture.paddingMode != HBPicturePaddingModeNone)
+    // Pad
+    if (self.picture.padMode != HBPicturePadModeNone)
     {
         int filter_id = HB_FILTER_PAD;
         NSString *color;
-        switch (self.picture.paddingColorMode) {
-            case HBPicturePaddingColorModeBlack:
+        switch (self.picture.padColorMode) {
+            case HBPicturePadColorModeBlack:
                 color = @"black";
                 break;
-            case HBPicturePaddingColorModeWhite:
+            case HBPicturePadColorModeDarkGray:
+                color = @"darkslategray";
+                break;
+            case HBPicturePadColorModeGray:
+                color = @"slategray";
+                break;
+            case HBPicturePadColorModeWhite:
                 color = @"white";
                 break;
-            case HBPicturePaddingColorModeCustom:
-                color = self.picture.paddingColorCustom;
+            case HBPicturePadColorModeCustom:
+                color = self.picture.padColorCustom;
                 break;
         }
-        int width, height, paddingLeft, paddingTop;
-        switch (self.picture.rotate) {
-            case 90:
-                width = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
-                height = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
-                paddingLeft = self.picture.paddingBottom;
-                paddingTop = self.picture.paddingLeft;
-                break;
-            case 180:
-                width = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
-                height = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
-                paddingLeft = self.picture.paddingRight;
-                paddingTop = self.picture.paddingBottom;
-                break;
-            case 270:
-                width = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
-                height = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
-                paddingLeft = self.picture.paddingTop;
-                paddingTop = self.picture.paddingRight;
-                break;
-            case 0:
-            default:
-                width = self.picture.width + self.picture.paddingLeft + self.picture.paddingRight;
-                height = self.picture.height + self.picture.paddingTop + self.picture.paddingBottom;
-                paddingLeft = self.picture.paddingLeft;
-                paddingTop = self.picture.paddingTop;
-                break;
-        }
-        NSString *settings = [NSString stringWithFormat:@"width=%d:height=%d:color=%@:x=%d:y=%d",
-                              width, height, color, paddingLeft, paddingTop];
+        
+        NSString *settings = [NSString stringWithFormat:@"color=%@:top=%d:bottom=%d:left=%d:right=%d",
+                              color, self.picture.padTop, self.picture.padBottom, self.picture.padLeft, self.picture.padRight];
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id, NULL, NULL, settings.UTF8String);
 
         filter = hb_filter_init(filter_id);

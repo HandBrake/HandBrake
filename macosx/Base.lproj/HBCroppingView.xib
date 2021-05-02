@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,36 +15,29 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <userDefaultsController representsSharedInstance="YES" id="vUw-ux-GVV"/>
         <view wantsLayer="YES" id="G0m-eh-cUI">
-            <rect key="frame" x="0.0" y="0.0" width="198" height="144"/>
+            <rect key="frame" x="0.0" y="0.0" width="198" height="124"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RXb-dd-41D">
-                    <rect key="frame" x="20" y="20" width="158" height="104"/>
+                    <rect key="frame" x="20" y="20" width="158" height="84"/>
                     <subviews>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aMe-kd-fWG">
-                            <rect key="frame" x="-1" y="89.5" width="75" height="15"/>
-                            <buttonCell key="cell" type="radio" title="Automatic" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="TpA-LI-v0t">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cWv-q0-EN9">
+                            <rect key="frame" x="-4" y="64" width="166" height="22"/>
+                            <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Pqk-fS-pyy" id="rRi-AL-IKl">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
+                                <menu key="menu" id="Q04-FI-Vi6">
+                                    <items>
+                                        <menuItem title="None" state="on" id="Pqk-fS-pyy"/>
+                                        <menuItem title="Automatic" tag="1" id="sUG-Cw-nQU"/>
+                                        <menuItem title="Custom" tag="2" id="dD5-og-dxx"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
                             <connections>
-                                <binding destination="-2" name="value" keyPath="self.picture.autocrop" id="fLv-q1-RI0"/>
+                                <binding destination="-2" name="selectedTag" keyPath="self.picture.cropMode" id="YYm-Ox-FuZ"/>
                             </connections>
-                        </button>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aAm-nF-ebh">
-                            <rect key="frame" x="-1" y="67.5" width="65" height="15"/>
-                            <buttonCell key="cell" type="radio" title="Custom:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="auT-Ic-0JB">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <connections>
-                                <binding destination="-2" name="value" keyPath="self.picture.autocrop" id="WhW-H5-lUN">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                    </dictionary>
-                                </binding>
-                            </connections>
-                        </button>
+                        </popUpButton>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="3IY-Qm-KMJ">
                             <rect key="frame" x="0.0" y="0.0" width="158" height="60"/>
                             <subviews>
@@ -59,16 +52,12 @@
                                     </textFieldCell>
                                     <accessibility description="Crop left"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="U91-Ic-kfk">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="yDf-4g-FLl">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="3wv-2f-6xB"/>
                                     </connections>
                                 </textField>
                                 <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="6Gj-ZU-E1E">
@@ -82,16 +71,12 @@
                                     </textFieldCell>
                                     <accessibility description="Crop bottom"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="ePK-Un-qQM">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="oN8-74-lk0">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="srC-rj-gXM"/>
                                     </connections>
                                 </textField>
                                 <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="php-p6-Nz6">
@@ -105,16 +90,12 @@
                                     </textFieldCell>
                                     <accessibility description="Crop right"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="oW8-mk-KIe">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Pbe-2e-W29">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="VwH-vn-EsZ"/>
                                     </connections>
                                 </textField>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="y7P-yk-q46">
@@ -125,16 +106,12 @@
                                     </stepperCell>
                                     <accessibility description="Crop right"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="2YV-hD-H5I">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="Wsh-SC-RmH">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="JQM-oa-Ucm"/>
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="8e5-zI-IBg">
@@ -145,16 +122,12 @@
                                     </stepperCell>
                                     <accessibility description="Crop top"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="ZwR-aS-W9R">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="bJl-KS-VCU">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="o4T-Q0-FG9"/>
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Yua-R6-mWU">
@@ -165,16 +138,12 @@
                                     </stepperCell>
                                     <accessibility description="Crop left"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Bxh-RA-VIi">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="Idt-Df-QOQ">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="dBc-zu-QOM"/>
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="sWf-fq-lvl">
@@ -185,16 +154,12 @@
                                     </stepperCell>
                                     <accessibility description="Crop bottom"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="KPh-OG-10x">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="kwp-8o-xAt">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="Cir-0Q-phe"/>
                                     </connections>
                                 </stepper>
                                 <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="Cp5-xz-x1h">
@@ -208,16 +173,12 @@
                                     </textFieldCell>
                                     <accessibility description="Crop top"/>
                                     <connections>
-                                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="vtq-zQ-fuH">
-                                            <dictionary key="options">
-                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                            </dictionary>
-                                        </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="Mfe-8c-gIn">
                                             <dictionary key="options">
                                                 <bool key="NSValidatesImmediately" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kH1-Bw-UWp"/>
                                     </connections>
                                 </textField>
                             </subviews>
@@ -230,10 +191,8 @@
                     <visibilityPriorities>
                         <integer value="1000"/>
                         <integer value="1000"/>
-                        <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
-                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>

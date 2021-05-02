@@ -521,7 +521,7 @@ fail:
 {
     NSDictionary *result = nil;
 
-    hb_dict_t *hb_preset = [preset content].hb_value;
+    hb_dict_t *hb_preset = preset.content.hb_value;
     hb_dict_t *job = hb_preset_job_init(self.hb_handle, self.hb_title->index, hb_preset);
 
     if (job)

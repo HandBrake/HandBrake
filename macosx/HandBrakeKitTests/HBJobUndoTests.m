@@ -135,10 +135,10 @@
     XCTAssertEqual(self.job.picture.height, self.modifiedJob.picture.height);
 
     XCTAssertEqual(self.job.picture.displayWidth, self.modifiedJob.picture.displayWidth);
-    XCTAssertEqual(self.job.picture.parWidth, self.modifiedJob.picture.parWidth);
-    XCTAssertEqual(self.job.picture.parHeight, self.modifiedJob.picture.parHeight);
+    XCTAssertEqual(self.job.picture.parNum, self.modifiedJob.picture.parNum);
+    XCTAssertEqual(self.job.picture.parDen, self.modifiedJob.picture.parDen);
 
-    XCTAssertEqual(self.job.picture.autocrop, self.modifiedJob.picture.autocrop);
+    XCTAssertEqual(self.job.picture.cropMode, self.modifiedJob.picture.cropMode);
 
     XCTAssertEqual(self.job.picture.cropTop, self.modifiedJob.picture.cropTop);
     XCTAssertEqual(self.job.picture.cropBottom, self.modifiedJob.picture.cropBottom);

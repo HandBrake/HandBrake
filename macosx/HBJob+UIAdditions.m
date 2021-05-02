@@ -279,10 +279,6 @@ static HBMixdownTransformer    *mixdownTransformer;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
     NSString *pictureInfo = self.picture.summary;
-    if (self.picture.keepDisplayAspect)
-    {
-        pictureInfo = [pictureInfo stringByAppendingString:HBKitLocalizedString(@" Keep Aspect Ratio", @"Dimensions description")];
-    }
     [attrString appendString:@"\t"      withAttributes:detailAttr];
     [attrString appendString:HBKitLocalizedString(@"Dimensions:", @"Dimensions description") withAttributes:detailBoldAttr];
     [attrString appendString:@" \t"             withAttributes:detailAttr];
@@ -985,14 +981,6 @@ static HBMixdownTransformer    *mixdownTransformer;
         [summary appendString:HBKitLocalizedString(@"Colorspace", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
-
-    // FIX ME
-    // Rotation
-    //if (picture.rotate || picture.flip)
-    //{
-    //    [summary appendString:HBKitLocalizedString(@"Rotation", @"HBJob -> filters short description")];
-    //    [summary appendString:@", "];
-    //}
 
     if ([summary hasSuffix:@", "])
     {

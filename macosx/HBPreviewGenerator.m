@@ -119,7 +119,7 @@
 
 - (CGSize)imageSize
 {
-    return CGSizeMake(self.job.picture.displayWidth, self.job.picture.height);
+    return CGSizeMake(self.job.picture.displayWidth, self.job.picture.displayHeight);
 }
 
 - (void)imagesSettingsDidChange

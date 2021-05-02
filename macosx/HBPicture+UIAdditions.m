@@ -12,17 +12,17 @@
 
 @implementation HBPicture (UIAdditions)
 
-@dynamic maxTopCrop;
-@dynamic maxBottomCrop;
-@dynamic maxLeftCrop;
-@dynamic maxRightCrop;
-
-@dynamic maxTopPadding;
-@dynamic maxBottomPadding;
-@dynamic maxLeftPadding;
-@dynamic maxRightPadding;
-
 #pragma mark - Editable state
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomCropEnabled
+{
+    return [NSSet setWithObjects:@"cropMode", nil];
+}
+
+- (BOOL)isCustomCropEnabled
+{
+    return self.cropMode == HBPictureCropModeCustom;
+}
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingCustomResolutionLimitEnabled
 {
@@ -34,24 +34,6 @@
     return self.resolutionLimitMode == HBPictureResolutionLimitModeCustom;
 }
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingKeepDisplayAspectEditable
-{
-    return [NSSet setWithObjects:@"anamorphicMode", nil];
-}
-
-- (BOOL)isKeepDisplayAspectEditable
-{
-    if (self.anamorphicMode == HBPictureAnarmophicModeAuto ||
-        self.anamorphicMode == HBPictureAnarmophicModeLoose)
-    {
-        return NO;
-    }
-    else
-    {
-        return YES;
-    }
-}
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingCustomAnamorphicEnabled
 {
     return [NSSet setWithObjects:@"anamorphicMode", nil];
@@ -59,32 +41,107 @@
 
 - (BOOL)isCustomAnamorphicEnabled
 {
-    return self.anamorphicMode == HB_ANAMORPHIC_CUSTOM;
+    return self.anamorphicMode == HBPictureAnarmophicModeCustom;
 }
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPaddingEnabled
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPadEnabled
 {
-    return [NSSet setWithObjects:@"paddingMode", nil];
+    return [NSSet setWithObjects:@"padMode", nil];
 }
 
-- (BOOL)isCustomPaddingEnabled
+- (BOOL)isCustomPadEnabled
 {
-    return self.paddingMode == HBPicturePaddingModeCustom;
+    return self.padMode == HBPicturePadModeCustom;
 }
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPaddingColorEnabled
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomPadColorEnabled
 {
-    return [NSSet setWithObjects:@"paddingColorMode", nil];
+    return [NSSet setWithObjects:@"padColorMode", nil];
 }
 
-- (BOOL)isCustomPaddingColorEnabled
+- (BOOL)isCustomPadColorEnabled
 {
-    return self.paddingColorMode == HBPicturePaddingColorModeCustom;
+    return self.padColorMode == HBPicturePadColorModeCustom;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingInfo
 {
     return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
+}
+
+#pragma mark - Labels
+
+- (NSString *)sourceStorageSize
+{
+    return [NSString stringWithFormat:@"%dx%d", self.sourceWidth, self.sourceHeight];
+}
+
+- (NSString *)sourceDisplaySize
+{
+    return [NSString stringWithFormat:@"%dx%d", self.sourceDisplayWidth, self.sourceHeight];
+}
+
+- (NSString *)sourceAspectRatio
+{
+    return FormattedDisplayAspect(self.sourceWidth * self.sourceParNum, self.sourceHeight * self.sourceParDen);
+}
+
+static NSString * FormattedDisplayAspect(double disp_width, double disp_height)
+{
+    NSString *str;
+
+    int iaspect = disp_width * 9 / disp_height;
+    if (disp_width / disp_height > 1.9)
+    {
+        // x.x:1
+        str = [NSString stringWithFormat:@"%.2f:1", disp_width / disp_height];
+    }
+    else if (iaspect >= 15)
+    {
+        // x.x:9
+        str = [NSString stringWithFormat:@"%.4g:9", disp_width * 9 / disp_height];
+    }
+    else if (iaspect >= 9)
+    {
+        // x.x:3
+        str = [NSString stringWithFormat:@"%.4g:3", disp_width * 3 / disp_height];
+    }
+    else
+    {
+        // 1:x.x
+        str = [NSString stringWithFormat:@"1:%.2f", disp_height / disp_width];
+    }
+    return str;
+}
+
+- (NSString *)storageSize
+{
+    return [NSString stringWithFormat:@"%dx%d", self.storageWidth, self.storageHeight];
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingStorageSize
+{
+    return [NSSet setWithObjects:@"storageWidth", @"storageHeight", nil];
+}
+
+- (NSString *)displaySize
+{
+    return [NSString stringWithFormat:@"%dx%d", self.displayWidth, self.displayHeight];
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingDisplaySize
+{
+    return [NSSet setWithObjects:@"displayWidth", @"displayHeight", nil];
+}
+
+- (NSString *)displayAspectRatio
+{
+    return FormattedDisplayAspect(self.displayWidth, self.displayHeight);
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingDisplayAspectRatio
+{
+    return [NSSet setWithObjects:@"displayWidth", @"displayHeight", nil];
 }
 
 - (NSString *)info
@@ -95,29 +152,23 @@
                 (@"Source: %dx%d, ", @"HBPicture -> short info"),
                 self.sourceWidth, self.sourceHeight];
 
-    if (self.anamorphicMode == HB_ANAMORPHIC_AUTO)
+    if (self.anamorphicMode == HBPictureAnarmophicModeAuto)
     {
         sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
-                    (@"%@Output: %dx%d, Anamorphic: %dx%d Auto", @"HBPicture -> short info"),
-                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
+                    (@"%@Output: %dx%d, Anamorphic: %dx%d Automatic", @"HBPicture -> short info"),
+                    sizeInfo, self.storageWidth, self.storageHeight, self.displayWidth, self.displayHeight];
     }
-    else if (self.anamorphicMode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
-    {
-        sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
-                    (@"%@Output: %dx%d, Anamorphic: %dx%d Loose", @"HBPicture -> short info"),
-                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
-    }
-    else if (self.anamorphicMode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
+    else if (self.anamorphicMode == HBPictureAnarmophicModeCustom)
     {
         sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
                     (@"%@Output: %dx%d, Anamorphic: %dx%d Custom", @"HBPicture -> short info"),
-                    sizeInfo, self.width, self.height, self.displayWidth, self.height];
+                    sizeInfo, self.storageWidth, self.storageHeight, self.displayWidth, self.displayHeight];
     }
     else // No Anamorphic
     {
         sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
                     (@"%@Output: %dx%d", @"HBPicture -> short info"),
-                    sizeInfo, self.width, self.height];
+                    sizeInfo, self.storageWidth, self.storageHeight];
     }
 
     return sizeInfo;
@@ -125,22 +176,25 @@
 
 - (NSString *)shortInfo
 {
-    return [NSString stringWithFormat:HBKitLocalizedString(@"%dx%d Storage, %dx%d Display", @"HBPicture -> short info"), self.width, self.height, self.displayWidth, self.height];
-}
-
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingSummary
-{
-    return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", @"paddingTop", @"paddingBottom", @"paddingLeft", @"paddingRight", nil];
+    return [NSString stringWithFormat:HBKitLocalizedString(@"%dx%d Storage, %dx%d Display", @"HBPicture -> short info"),
+            self.storageWidth, self.storageHeight, self.displayWidth, self.height];
 }
 
 - (NSString *)summary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
     [summary appendString:self.info];
-    [summary appendFormat:HBKitLocalizedString(@", Crop: %@ %d/%d/%d/%d", @"HBPicture -> summary"),
-     self.autocrop ? HBKitLocalizedString(@"Auto", @"HBPicture -> summary") : HBKitLocalizedString(@"Custom", @"HBPicture -> summary"),
-     self.cropTop, self.cropBottom,
-     self.cropLeft, self.cropRight];
+    if (self.cropMode != HBPictureCropModeNone && (self.cropTop && self.cropBottom && self.cropLeft && self.cropRight))
+    {
+        [summary appendFormat:HBKitLocalizedString(@", Crop: %@ %d/%d/%d/%d", @"HBPicture -> summary"),
+         self.cropMode ? HBKitLocalizedString(@"Automatic", @"HBPicture -> summary") : HBKitLocalizedString(@"Custom", @"HBPicture -> summary"),
+         self.cropTop, self.cropBottom, self.cropLeft, self.cropRight];
+    }
+    if (self.padMode != HBPicturePadModeNone && (self.padTop && self.padBottom && self.padLeft && self.padRight))
+    {
+        [summary appendFormat:HBKitLocalizedString(@", Border: %d/%d/%d/%d", @"HBPicture -> summary"),
+         self.padTop, self.padBottom, self.padLeft, self.padRight];
+    }
 
     return [summary copy];
 }

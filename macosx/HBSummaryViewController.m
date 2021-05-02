@@ -193,7 +193,9 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
         [_job addObserver:self forKeyPath:@"video.frameRate" options:0 context:HBSummaryViewControllerVideoContext];
         [_job addObserver:self forKeyPath:@"video.frameRateMode" options:0 context:HBSummaryViewControllerVideoContext];
         [_job addObserver:self forKeyPath:@"filters.deinterlace" options:0 context:HBSummaryViewControllerFiltersContext];
-        [_job addObserver:self forKeyPath:@"filters.rotate" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"filters.colorspace" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"filters.grayscale" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"filters.angle" options:0 context:HBSummaryViewControllerFiltersContext];
         [_job addObserver:self forKeyPath:@"filters.flip" options:0 context:HBSummaryViewControllerFiltersContext];
         [_job addObserver:self forKeyPath:@"audio.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerAudioContext];
         [_job addObserver:self forKeyPath:@"subtitles.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerSubsContext];
@@ -216,7 +218,9 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
         [_job removeObserver:self forKeyPath:@"video.frameRate" context:HBSummaryViewControllerVideoContext];
         [_job removeObserver:self forKeyPath:@"video.frameRateMode" context:HBSummaryViewControllerVideoContext];
         [_job removeObserver:self forKeyPath:@"filters.deinterlace" context:HBSummaryViewControllerFiltersContext];
-        [_job removeObserver:self forKeyPath:@"filters.rotate" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"filters.colorspace" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"filters.grayscale" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"filters.angle" context:HBSummaryViewControllerFiltersContext];
         [_job removeObserver:self forKeyPath:@"filters.flip" context:HBSummaryViewControllerFiltersContext];
         [_job removeObserver:self forKeyPath:@"audio.tracks" context:HBSummaryViewControllerAudioContext];
         [_job removeObserver:self forKeyPath:@"subtitles.tracks" context:HBSummaryViewControllerSubsContext];
@@ -230,7 +234,7 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
 {
     if (self.tracksReloadInQueue == NO)
     {
-        [[NSRunLoop mainRunLoop] performSelector:@selector(updateTracksLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [NSRunLoop.mainRunLoop performSelector:@selector(updateTracksLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.tracksReloadInQueue = YES;
     }
 }
@@ -239,7 +243,7 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
 {
     if (self.filtersReloadInQueue == NO)
     {
-        [[NSRunLoop mainRunLoop] performSelector:@selector(updateFiltersLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [NSRunLoop.mainRunLoop performSelector:@selector(updateFiltersLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.filtersReloadInQueue = YES;
     }
 }
@@ -250,7 +254,7 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
     // to avoid reloading the same image multiple times.
     if (self.pictureReloadInQueue == NO)
     {
-        [[NSRunLoop mainRunLoop] performSelector:@selector(updatePictureLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [NSRunLoop.mainRunLoop performSelector:@selector(updatePictureLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.pictureReloadInQueue = YES;
     }
 }
