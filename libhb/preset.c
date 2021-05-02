@@ -1886,6 +1886,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     {
         qsv = hb_dict_init();
         hb_dict_set(video_dict, "QSV", qsv);
+        qsv = hb_dict_get(video_dict, "QSV");
     }
     if ((value = hb_dict_get(preset, "VideoQSVDecode")) != NULL)
     {
