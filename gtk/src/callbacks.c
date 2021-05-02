@@ -2469,7 +2469,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
 
     // Filters
     gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, rot, gray;
+    gboolean     unsharp, lapsharp, hflip, rot, gray;
     const char * sval;
 
     sval        = ghb_dict_get_string(ud->settings, "PictureDetelecine");
@@ -2487,8 +2487,9 @@ ghb_update_summary_info(signal_user_data_t *ud)
     sval        = ghb_dict_get_string(ud->settings, "PictureSharpenFilter");
     unsharp     = sval != NULL && !strcasecmp(sval, "unsharp");
     lapsharp    = sval != NULL && !strcasecmp(sval, "lapsharp");
+    hflip       = ghb_dict_get_bool(ud->settings, "hflip");
     sval        = ghb_dict_get_string(ud->settings, "rotate");
-    rot         = sval != NULL && !!strcasecmp(sval, "disable=1");
+    rot         = sval != NULL && !!strcasecmp(sval, "0");
     gray        = ghb_dict_get_bool(ud->settings, "VideoGrayScale");
 
     str = g_string_new("");
@@ -2541,15 +2542,15 @@ ghb_update_summary_info(signal_user_data_t *ud)
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }
-    if (lapsharp)
+    if (rot || hflip)
     {
-        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_LAPSHARP);
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }
-    if (rot)
+    if (lapsharp)
     {
-        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_LAPSHARP);
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }

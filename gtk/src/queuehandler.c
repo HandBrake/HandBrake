@@ -447,7 +447,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
 
     // Append Filters to video summary
     gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, rot, gray;
+    gboolean     unsharp, lapsharp, hflip, rot, gray;
 
     ctext       = ghb_dict_get_string(uiDict, "PictureDetelecine");
     detel       = ctext != NULL && !!strcasecmp(ctext, "off");
@@ -464,8 +464,9 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     ctext       = ghb_dict_get_string(uiDict, "PictureSharpenFilter");
     unsharp     = ctext != NULL && !strcasecmp(ctext, "unsharp");
     lapsharp    = ctext != NULL && !strcasecmp(ctext, "lapsharp");
+    hflip       = ghb_dict_get_bool(uiDict, "hflip");
     ctext       = ghb_dict_get_string(uiDict, "rotate");
-    rot         = ctext != NULL && !!strcasecmp(ctext, "disable=1");
+    rot         = ctext != NULL && !!strcasecmp(ctext, "0");
     gray        = ghb_dict_get_bool(uiDict, "VideoGrayScale");
 
     sep = "\n";
@@ -523,7 +524,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         g_string_append_printf(str, "%s%s", sep, filter->name);
         sep = ", ";
     }
-    if (rot)
+    if (rot || hflip)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
         g_string_append_printf(str, "%s%s", sep, filter->name);
