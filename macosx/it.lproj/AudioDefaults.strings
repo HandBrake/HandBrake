@@ -82,6 +82,9 @@
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "Comportamento di selezione traccia:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Abilita questa opzione se il tuo dispositivo di riproduzione supporta MP2. Ciò consente di utilizzare il passthru MP2 quando è abilitata la selezione automatica passthru.";
+
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Tutte quelle corrispondenti alle lingue selezione";
 
@@ -201,6 +204,9 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibShadowedToolTip" = "Guadagno audio in decibel (dB). Aumenta o diminuisce il volume dell'audio.";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
 
 /* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
 "z9d-P3-6UP.title" = "TrueHD";
