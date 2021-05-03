@@ -454,6 +454,12 @@ hb_dict_t * hb_dict_init()
     return json_object();
 }
 
+void
+hb_dict_clear(hb_dict_t *dict)
+{
+    json_object_clear(dict);
+}
+
 int hb_dict_elements(hb_dict_t * dict)
 {
     return json_object_size(dict);

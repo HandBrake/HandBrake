@@ -3026,6 +3026,26 @@ sync for broken players that do not honor MP4 edit lists.</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="MetadataPassthrough">
+                            <property name="label" translatable="yes">Passthru Common Metadata</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="tooltip_text" translatable="yes">Copy metadata from source to output.</property>
+                            <property name="halign">start</property>
+                            <property name="hexpand">False</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="meta_pass_changed_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="top_attach">4</property>
+                            <property name="left_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -3037,7 +3057,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="label" translatable="yes">Duration:</property>
                           </object>
                           <packing>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -3057,7 +3077,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="width-chars">8</property>
                           </object>
                           <packing>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -3075,7 +3095,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="top_attach">5</property>
+                            <property name="top_attach">6</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -3097,7 +3117,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="top_attach">5</property>
+                            <property name="top_attach">6</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">8</property>
@@ -3115,7 +3135,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="margin-top">12</property>
                           </object>
                           <packing>
-                            <property name="top_attach">13</property>
+                            <property name="top_attach">14</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -3137,7 +3157,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="top_attach">13</property>
+                            <property name="top_attach">14</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">4</property>
@@ -3156,7 +3176,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="margin-top">12</property>
                           </object>
                           <packing>
-                            <property name="top_attach">14</property>
+                            <property name="top_attach">15</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -3175,7 +3195,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             <property name="label" translatable="yes">--</property>
                           </object>
                           <packing>
-                            <property name="top_attach">14</property>
+                            <property name="top_attach">15</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>

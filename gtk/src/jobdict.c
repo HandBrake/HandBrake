@@ -200,6 +200,7 @@ GhbValue* ghb_get_job_metadata_settings(GhbValue *settings)
     {
         meta = ghb_dict_new();
         ghb_dict_set(job, "Metadata", meta);
+        meta = ghb_dict_get(job, "Metadata");
     }
     return meta;
 }
