@@ -7,20 +7,29 @@
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "Oben beschneiden";
 
-/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "auT-Ic-0JB"; */
-"auT-Ic-0JB.title" = "Eigene:";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Oben beschneiden";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibShadowedToolTip" = "Pixel die von oben abgeschnitten werden.";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "Dreht das Bild im Uhrzeigersinn in 90°-Schritten.";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "Eigene";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibExternalAccessibilityDescription" = "Rechts beschneiden";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibShadowedToolTip" = "Pixel die von der rechten Ecke abgeschnitten werden.";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "Ohne";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "Automatisch";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
 "sWf-fq-lvl.ibExternalAccessibilityDescription" = "Unten beschneiden";
@@ -30,9 +39,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
 "Td7-sa-0TV.ibShadowedToolTip" = "Pixel die von der linken Ecke abgeschnitten werden.";
-
-/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "TpA-LI-v0t"; */
-"TpA-LI-v0t.title" = "Automatisch";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
 "y7P-yk-q46.ibExternalAccessibilityDescription" = "Rechts beschneiden";
