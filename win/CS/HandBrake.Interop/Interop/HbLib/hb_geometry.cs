@@ -117,6 +117,6 @@ namespace HandBrake.Interop.Interop.HbLib
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
         public int[] pad;
 
-        hb_geometry_s geometry;
+        public hb_geometry_s geometry;
     };
 }

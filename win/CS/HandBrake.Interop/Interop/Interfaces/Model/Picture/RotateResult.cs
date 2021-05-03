@@ -24,5 +24,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
         public int PadLeft { get; set; }
 
         public int PadRight { get; set; }
+
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public int ParNum { get; set; }
+
+        public int ParDen { get; set; }
     }
 }

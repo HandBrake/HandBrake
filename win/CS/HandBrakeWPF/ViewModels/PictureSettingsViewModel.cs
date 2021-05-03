@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
+    using Accessibility;
+
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
@@ -217,6 +219,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.OptimalSize = value;
                 this.UpdateVisibileControls();
+                this.NotifyOfPropertyChange(() => this.OptimalSize);
             }
         }
 
@@ -228,6 +231,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.AllowUpscaling = value;
                 this.UpdateVisibileControls();
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.AllowUpscale);
+                this.NotifyOfPropertyChange(() => this.AllowUpscaling);
             }
         }
 
@@ -317,10 +321,15 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!value && this.currentTitle != null)
                 {
-                    this.CropTop = currentTitle.AutoCropDimensions.Top;
-                    this.CropBottom = currentTitle.AutoCropDimensions.Bottom;
-                    this.CropLeft = currentTitle.AutoCropDimensions.Left;
-                    this.CropRight = currentTitle.AutoCropDimensions.Right;
+                    this.Task.Cropping.Top = currentTitle.AutoCropDimensions.Top;
+                    this.Task.Cropping.Bottom = currentTitle.AutoCropDimensions.Bottom;
+                    this.Task.Cropping.Left = currentTitle.AutoCropDimensions.Left;
+                    this.Task.Cropping.Right = currentTitle.AutoCropDimensions.Right;
+
+                    this.NotifyOfPropertyChange(() => this.CropLeft);
+                    this.NotifyOfPropertyChange(() => this.CropRight);
+                    this.NotifyOfPropertyChange(() => this.CropTop);
+                    this.NotifyOfPropertyChange(() => this.CropBottom);
                 }
             }
         }
@@ -463,6 +472,8 @@ namespace HandBrakeWPF.ViewModels
 
             // Picture Sizes and Anamorphic
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
+            this.OptimalSize = preset.Task.OptimalSize;
+            this.AllowUpscaling = preset.Task.AllowUpscaling;
 
             // Set the Maintain Aspect ratio.
             this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
@@ -921,15 +932,28 @@ namespace HandBrakeWPF.ViewModels
             job.PreviousRotation = command.PreviousRotation;
             RotateResult result = HandBrakePictureHelpers.RotateGeometry(job);
 
-            this.CropTop = result.CropTop;
-            this.CropBottom = result.CropBottom;
-            this.CropLeft = result.CropLeft;
-            this.CropRight = result.CropRight;
+            this.Task.Cropping.Top = result.CropTop;
+            this.Task.Cropping.Bottom = result.CropBottom;
+            this.Task.Cropping.Left = result.CropLeft;
+            this.Task.Cropping.Right = result.CropRight;
+            this.NotifyOfPropertyChange(() => this.CropTop);
+            this.NotifyOfPropertyChange(() => this.CropBottom);
+            this.NotifyOfPropertyChange(() => this.CropLeft);
+            this.NotifyOfPropertyChange(() => this.CropRight);
 
-            this.PaddingFilter.Top = result.PadTop;
-            this.PaddingFilter.Bottom = result.PadBottom;
-            this.PaddingFilter.Left = result.PadLeft;
-            this.PaddingFilter.Right = result.PadRight;
+            this.PaddingFilter.SetRotationValues(result.PadTop, result.PadBottom, result.PadLeft, result.PadRight);
+
+            this.Task.Width = result.Width;
+            this.Task.Height = result.Height;
+            this.Task.PixelAspectX = result.ParNum;
+            this.Task.PixelAspectY = result.ParDen;
+
+            this.NotifyOfPropertyChange(() => this.Width);
+            this.NotifyOfPropertyChange(() => this.Height);
+            this.NotifyOfPropertyChange(() => this.ParWidth);
+            this.NotifyOfPropertyChange(() => this.ParHeight);
+
+            RecaulcatePictureSettingsProperties(ChangedPictureField.Rotate);
         }
     }
 }

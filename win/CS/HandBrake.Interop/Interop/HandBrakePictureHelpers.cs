@@ -33,7 +33,7 @@ namespace HandBrake.Interop.Interop
             HB_GEO_SCALE_BEST = 0x02,
         }
 
-        public static AnamorphicResult GetAnamorphicSize(PictureSettingsJob job, PictureSettingsTitle title, KeepSetting keepSetting, FlagsSetting flagSetting)
+        public static AnamorphicResult GetAnamorphicSize(PictureSettingsJob job, PictureSettingsTitle sourceTitle, KeepSetting keepSetting, FlagsSetting flagSetting)
         {
             hb_rational_t computedPar;
             switch (job.AnamorphicMode)
@@ -45,7 +45,7 @@ namespace HandBrake.Interop.Interop
                     computedPar = new hb_rational_t { den = job.ParH, num = job.ParW };
                     break;
                 default:
-                    computedPar = new hb_rational_t { den = title.ParH, num = title.ParW };
+                    computedPar = new hb_rational_t { den = sourceTitle.ParH, num = sourceTitle.ParW };
                     break;
             }
 
@@ -63,11 +63,40 @@ namespace HandBrake.Interop.Interop
                 geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar }
             };
 
+            // If we are rotated, the source title geometry must also be rotated. 
+            int titleWidth, titleHeight, titleParW, titleParH;
+            if (job.RotateAngle != 0)
+            {
+                PictureSettingsJob titleRepresentation = new PictureSettingsJob
+                                                         {
+                                                             Width = sourceTitle.Width,
+                                                             Height = sourceTitle.Height,
+                                                             RotateAngle = job.RotateAngle,
+                                                             Hflip = job.Hflip,
+                                                             ParW = sourceTitle.ParW,
+                                                             ParH = sourceTitle.ParH,
+                                                             Crop = new Cropping(),
+                                                             Pad = new Padding()
+                                                         };
+                RotateResult titleRotation = HandBrakePictureHelpers.RotateGeometry(titleRepresentation);
+                titleWidth = titleRotation.Width;
+                titleHeight = titleRotation.Height;
+                titleParW = titleRotation.ParNum;
+                titleParH = titleRotation.ParDen;
+            }
+            else
+            {
+                titleWidth = sourceTitle.Width;
+                titleHeight = sourceTitle.Height;
+                titleParW = sourceTitle.ParW;
+                titleParH = sourceTitle.ParH;
+            }
+
             hb_geometry_s sourceGeometry = new hb_geometry_s
             {
-                width = title.Width,
-                height = title.Height,
-                par = new hb_rational_t { den = title.ParH, num = title.ParW }
+                width = titleWidth,
+                height = titleHeight,
+                par = new hb_rational_t { den = titleParH, num = titleParW }
             };
 
             hb_geometry_s result = new hb_geometry_s();
@@ -86,6 +115,12 @@ namespace HandBrake.Interop.Interop
             hb_geometry_crop_s geometry = new hb_geometry_crop_s();
             geometry.crop = new[] { job.Crop.Top, job.Crop.Bottom, job.Crop.Left, job.Crop.Right };
             geometry.pad = new[] { job.Pad.Top, job.Pad.Bottom, job.Pad.Left, job.Pad.Right };
+            geometry.geometry = new hb_geometry_s
+                                {
+                                    width = job.Width,
+                                    height = job.Height,
+                                    par = new hb_rational_t { num = job.ParW, den = job.ParH }
+                                };
 
             // Undo any previous rotation so that we are back at 0.
             // Normally hflip is applied, then rotation.
@@ -112,7 +147,11 @@ namespace HandBrake.Interop.Interop
                                                PadTop = geometry.pad[0],
                                                PadBottom = geometry.pad[1],
                                                PadLeft = geometry.pad[2],
-                                               PadRight = geometry.pad[3]
+                                               PadRight = geometry.pad[3],
+                                               Width = geometry.geometry.width,
+                                               Height = geometry.geometry.height,
+                                               ParNum = geometry.geometry.par.num,
+                                               ParDen = geometry.geometry.par.den
                                            };
 
             return processedResult;
