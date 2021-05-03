@@ -2265,7 +2265,7 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
 {
     GhbValue *metadata = ghb_get_job_metadata_settings(settings);
 
-    if (val == NULL)
+    if (val == NULL || val[0] == 0)
         ghb_dict_remove(metadata, name);
     else
         ghb_dict_set_string(metadata, name, val);
@@ -2670,42 +2670,53 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_set_scale_settings(ud, settings, GHB_PIC_USE_MAX);
         ghb_dict_set_int(settings, "angle_count", title->angle_count);
 
-        ghb_dict_set_string(settings, "MetaName", title->name);
-        update_meta(settings, "Name", title->name);
-        if (title->metadata && title->metadata->dict)
+
+        // Clear UI settings for new title
+        ghb_dict_set_string(settings, "MetaName", "");
+        ghb_dict_set_string(settings, "MetaArtist", "");
+        ghb_dict_set_string(settings, "MetaReleaseDate", "");
+        ghb_dict_set_string(settings, "MetaComment", "");
+        ghb_dict_set_string(settings, "MetaAlbumArtist", "");
+        ghb_dict_set_string(settings, "MetaGenre", "");
+        ghb_dict_set_string(settings, "MetaDescription", "");
+        ghb_dict_set_string(settings, "MetaLongDescription", "");
+
+        if (ghb_dict_get_bool(settings, "MetadataPassthrough"))
         {
-            // Clear UI settings for new title
-            ghb_dict_set_string(settings, "MetaArtist", "");
-            ghb_dict_set_string(settings, "MetaReleaseDate", "");
-            ghb_dict_set_string(settings, "MetaComment", "");
-            ghb_dict_set_string(settings, "MetaAlbumArtist", "");
-            ghb_dict_set_string(settings, "MetaGenre", "");
-            ghb_dict_set_string(settings, "MetaDescription", "");
-            ghb_dict_set_string(settings, "MetaLongDescription", "");
-
-            hb_dict_iter_t iter = hb_dict_iter_init(title->metadata->dict);
-
-            while (iter != HB_DICT_ITER_DONE)
+            ghb_dict_set_string(settings, "MetaName", title->name);
+            update_meta(settings, "Name", title->name);
+            if (title->metadata && title->metadata->dict)
             {
-                const char * key;
-                hb_value_t * val;
 
-                hb_dict_iter_next_ex(title->metadata->dict, &iter, &key, &val);
-                if (key != NULL && val != NULL)
+                hb_dict_iter_t iter = hb_dict_iter_init(title->metadata->dict);
+
+                while (iter != HB_DICT_ITER_DONE)
                 {
-                    const char * str = hb_value_get_string(val);
+                    const char * key;
+                    hb_value_t * val;
 
-                    update_meta(settings, key, str);
-
-                    if (!strcmp(key, "Album"))
+                    hb_dict_iter_next_ex(title->metadata->dict, &iter, &key, &val);
+                    if (key != NULL && val != NULL)
                     {
-                        key = "Name";
+                        const char * str = hb_value_get_string(val);
+
+                        update_meta(settings, key, str);
+
+                        if (!strcmp(key, "Album"))
+                        {
+                            key = "Name";
+                        }
+                        char * ui_key = g_strdup_printf("Meta%s", key);
+                        ghb_dict_set_string(settings, ui_key, str);
+                        free(ui_key);
                     }
-                    char * ui_key = g_strdup_printf("Meta%s", key);
-                    ghb_dict_set_string(settings, ui_key, str);
-                    free(ui_key);
                 }
             }
+        }
+        else
+        {
+            GhbValue * meta = ghb_get_job_metadata_settings(settings);
+            hb_dict_clear(meta);
         }
         ghb_sanitize_audio_track_settings(settings);
     }
@@ -2896,6 +2907,78 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+meta_pass_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    setting_widget_changed_cb(widget, ud);
+
+    int title_id, titleindex;
+    const hb_title_t * title;
+
+    title_id = ghb_dict_get_int(ud->settings, "title");
+    title = ghb_lookup_title(title_id, &titleindex);
+
+    if (title != NULL &&
+        ghb_dict_get_bool(ud->settings, "MetadataPassthrough"))
+    {
+        // Reload metadata from title
+        ghb_dict_set_string(ud->settings, "MetaName", title->name);
+        update_meta(ud->settings, "Name", title->name);
+        if (title->metadata && title->metadata->dict)
+        {
+
+            hb_dict_iter_t iter = hb_dict_iter_init(title->metadata->dict);
+
+            while (iter != HB_DICT_ITER_DONE)
+            {
+                const char * key;
+                hb_value_t * val;
+
+                hb_dict_iter_next_ex(title->metadata->dict, &iter, &key, &val);
+                if (key != NULL && val != NULL)
+                {
+                    const char * str = hb_value_get_string(val);
+
+                    update_meta(ud->settings, key, str);
+
+                    if (!strcmp(key, "Album"))
+                    {
+                        key = "Name";
+                    }
+                    char * ui_key = g_strdup_printf("Meta%s", key);
+                    ghb_dict_set_string(ud->settings, ui_key, str);
+                    free(ui_key);
+                }
+            }
+        }
+    }
+    else
+    {
+        // Clear metadata
+        ghb_dict_set_string(ud->settings, "MetaName", "");
+        ghb_dict_set_string(ud->settings, "MetaArtist", "");
+        ghb_dict_set_string(ud->settings, "MetaReleaseDate", "");
+        ghb_dict_set_string(ud->settings, "MetaComment", "");
+        ghb_dict_set_string(ud->settings, "MetaAlbumArtist", "");
+        ghb_dict_set_string(ud->settings, "MetaGenre", "");
+        ghb_dict_set_string(ud->settings, "MetaDescription", "");
+        ghb_dict_set_string(ud->settings, "MetaLongDescription", "");
+
+        GhbValue * meta = ghb_get_job_metadata_settings(ud->settings);
+        hb_dict_clear(meta);
+    }
+
+    // Update UI
+    ghb_ui_update_from_settings(ud, "MetaName", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaArtist", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaReleaseDate", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaComment", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaAlbumArtist", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaGenre", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaDescription", ud->settings);
+    ghb_ui_update_from_settings(ud, "MetaLongDescription", ud->settings);
 }
 
 G_MODULE_EXPORT void

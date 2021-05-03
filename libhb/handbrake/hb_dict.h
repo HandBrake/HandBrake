@@ -36,6 +36,7 @@ typedef void*      hb_dict_iter_t;
  * "value" must be an hb_value_t*
  */
 hb_dict_t *       hb_dict_init(void);
+void              hb_dict_clear(hb_dict_t *dict);
 /* free dictionary and release references to all values it contains */
 void              hb_dict_free(hb_dict_t ** dict_ptr);
 /* return number of member elements in the dictionary */
