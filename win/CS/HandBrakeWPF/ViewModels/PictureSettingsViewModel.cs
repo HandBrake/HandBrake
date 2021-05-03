@@ -806,7 +806,7 @@ namespace HandBrakeWPF.ViewModels
             // Step 3, Set the display width label to indicate the output.
             this.DisplaySize = this.sourceResolution == null || this.sourceResolution.IsEmpty
                            ? string.Empty
-                           : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, dispWidth, result.OutputHeight);
+                           : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, result.OutputWidth, result.OutputHeight);
             this.NotifyOfPropertyChange(() => this.DisplaySize);
 
             this.OutputAspect = string.Format(Resources.PictureSettingsViewModel_AspectRatioLabel, HandBrakePictureHelpers.GetNiceDisplayAspect(dispWidth, result.OutputHeight));
