@@ -127,6 +127,11 @@
         job->chapter_markers = 0;
     }
 
+    if (self.metadataPassthru == NO && job->metadata && job->metadata->dict)
+    {
+        hb_dict_clear(job->metadata->dict);
+    }
+
     if (job->vcodec & HB_VCODEC_H264_MASK)
     {
         // iPod 5G atom

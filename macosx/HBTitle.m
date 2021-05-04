@@ -18,29 +18,33 @@
 
 @interface HBMetadata ()
 
-@property (nonatomic, readonly) hb_metadata_t *hb_metadata;
-@property (nonatomic, copy) NSString *releaseDate;
+@property (nonatomic, readonly, nullable) hb_metadata_t *metadata;
+@property (nonatomic, copy, nullable) NSString *releaseDate;
 
 @end
 
 @implementation HBMetadata
-- (instancetype)initWithMetadata:(hb_metadata_t *)data
+- (instancetype)initWithMetadata:(hb_metadata_t *)metadata
 {
     self = [super init];
     if (self)
     {
-        _hb_metadata = data;
+        _metadata = metadata;
     }
     return self;
 }
 
 - (NSString *)releaseDate
 {
-    if (self.hb_metadata->release_date == nil)
+    if (_metadata && _metadata->dict)
     {
-        return nil;
+        const char *releaseDate = hb_dict_get_string(_metadata->dict, "ReleaseDate");
+        if (releaseDate)
+        {
+            return @(releaseDate);
+        }
     }
-    return @(self.hb_metadata->release_date);
+    return nil;
 }
 
 @end

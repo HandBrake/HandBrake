@@ -70,6 +70,8 @@ extern NSString *HBChaptersChangedNotification;
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapterTitles;
 
+@property (nonatomic, readwrite) BOOL metadataPassthru;
+
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end

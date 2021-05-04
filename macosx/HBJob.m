@@ -70,7 +70,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _subtitles = [[HBSubtitles alloc] initWithJob:self];
 
         _chapterTitles = [title.chapters copy];
-
+        _metadataPassthru = YES;
         _presetName = @"";
 
         [self applyPreset:preset];
@@ -96,8 +96,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     self.alignAVStart = [preset[@"AlignAVStart"] boolValue];
 
-    // Chapter Markers
     self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
+    self.metadataPassthru = [preset[@"MetadataPassthrough"] boolValue];
 
     [self.audio applyPreset:preset jobSettings:jobSettings];
     [self.subtitles applyPreset:preset jobSettings:jobSettings];
@@ -111,12 +111,14 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     preset.name = self.presetName;
 
     preset[@"FileFormat"] = @(hb_container_get_short_name(self.container));
-    preset[@"ChapterMarkers"] = @(self.chaptersEnabled);
+
     // MP4 specifics options.
     preset[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
+    preset[@"AlignAVStart"] = @(self.alignAVStart);
     preset[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
 
-    preset[@"AlignAVStart"] = @(self.alignAVStart);
+    preset[@"ChapterMarkers"] = @(self.chaptersEnabled);
+    preset[@"MetadataPassthrough"] = @(self.metadataPassthru);
 
     [@[self.video, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(writeToPreset:)
                                                                                                            withObject:preset];
@@ -283,6 +285,16 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
 }
 
+- (void)setMetadataPassthru:(BOOL)metadataPassthru
+{
+    if (metadataPassthru != _metadataPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setMetadataPassthru:_metadataPassthru];
+    }
+    _metadataPassthru = metadataPassthru;
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
+}
+
 - (NSString *)description
 {
     return self.name;
@@ -378,6 +390,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         copy->_chaptersEnabled = _chaptersEnabled;
         copy->_chapterTitles = [[NSArray alloc] initWithArray:_chapterTitles copyItems:YES];
+
+        copy->_metadataPassthru = _metadataPassthru;
     }
 
     return copy;
@@ -439,6 +453,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     encodeBool(_chaptersEnabled);
     encodeObject(_chapterTitles);
+
+    encodeBool(_metadataPassthru);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -480,6 +496,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         decodeBool(_chaptersEnabled);
         decodeCollectionOfObjectsOrFail(_chapterTitles, NSArray, HBChapter);
+
+        decodeBool(_metadataPassthru);
 
         return self;
     }

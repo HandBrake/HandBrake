@@ -25,13 +25,13 @@
                     <rect key="frame" x="20" y="18" width="843" height="334"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="13" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ksS-7u-OU5">
-                            <rect key="frame" x="0.0" y="177" width="259" height="157"/>
+                            <rect key="frame" x="0.0" y="157" width="259" height="177"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="vertical" alignment="trailing" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t30-II-1w2">
-                                    <rect key="frame" x="0.0" y="81" width="189" height="76"/>
+                                    <rect key="frame" x="0.0" y="81" width="218" height="96"/>
                                     <subviews>
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vuy-Er-bln">
-                                            <rect key="frame" x="0.0" y="60" width="189" height="16"/>
+                                            <rect key="frame" x="0.0" y="80" width="218" height="16"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
                                                     <rect key="frame" x="-2" y="1" width="45" height="14"/>
@@ -45,7 +45,7 @@
                                                     </connections>
                                                 </textField>
                                                 <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
-                                                    <rect key="frame" x="45" y="-4" width="148" height="22"/>
+                                                    <rect key="frame" x="45" y="-4" width="177" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
                                                     </constraints>
@@ -84,8 +84,23 @@
                                             </customSpacing>
                                         </stackView>
                                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M1l-8s-m3Z">
-                                            <rect key="frame" x="49" y="0.0" width="140" height="54"/>
+                                            <rect key="frame" x="49" y="0.0" width="169" height="74"/>
                                             <subviews>
+                                                <button toolTip="Copy metadata from source to output" translatesAutoresizingMaskIntoConstraints="NO" id="eJx-BO-rhL" userLabel="Passthru Metadata">
+                                                    <rect key="frame" x="-1" y="59" width="170" height="16"/>
+                                                    <buttonCell key="cell" type="check" title="Passthru Common Metadata" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="CZZ-bW-jZc">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.job" id="65Y-RB-cvj">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.metadataPassthru" id="gB5-R3-zaI"/>
+                                                    </connections>
+                                                </button>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
                                                     <rect key="frame" x="-1" y="39" width="102" height="16"/>
                                                     <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
@@ -154,19 +169,14 @@
                                                 <integer value="1000"/>
                                                 <integer value="1000"/>
                                                 <integer value="1000"/>
+                                                <integer value="1000"/>
                                             </visibilityPriorities>
                                             <customSpacing>
                                                 <real value="3.4028234663852886e+38"/>
                                                 <real value="3.4028234663852886e+38"/>
                                                 <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
                                             </customSpacing>
-                                            <connections>
-                                                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="Boc-dA-C5S">
-                                                    <dictionary key="options">
-                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                    </dictionary>
-                                                </binding>
-                                            </connections>
                                         </stackView>
                                     </subviews>
                                     <constraints>
@@ -336,5 +346,28 @@
             </constraints>
             <point key="canvasLocation" x="-88.5" y="-145"/>
         </customView>
+        <button id="JNB-kV-52S">
+            <rect key="frame" x="0.0" y="0.0" width="102" height="16"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
+            <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ma8-UR-dx2">
+                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                <font key="font" metaFont="smallSystem"/>
+            </buttonCell>
+            <connections>
+                <binding destination="-2" name="enabled" keyPath="self.job" id="GM1-ep-4mM">
+                    <dictionary key="options">
+                        <string key="NSValueTransformerName">NSIsNotNil</string>
+                    </dictionary>
+                </binding>
+                <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="oQw-Gl-n8O"/>
+                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="GM1-ep-4mM" id="JOB-2s-UOH">
+                    <dictionary key="options">
+                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                    </dictionary>
+                </binding>
+            </connections>
+            <point key="canvasLocation" x="-211" y="-402"/>
+        </button>
     </objects>
 </document>
