@@ -3552,6 +3552,13 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *hb_qsv_frames_ctx = NULL;
 
+    static int log_once = 0;
+    if (log_once == 0)
+    {
+        hb_log("qsv: hb_qsv_attach_surface_to_video_buffer could cause slow down, disable AlignAVStart for better performance");
+        log_once = 1;
+    }
+
     if (is_vpp)
     {
         hb_qsv_frames_ctx = job->qsv.ctx->hb_vpp_qsv_frames_ctx;
@@ -3611,6 +3618,13 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
 
 int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_buffer_t* out, int is_vpp)
 {
+    static int log_once = 0;
+    if (log_once == 0)
+    {
+        hb_log("qsv: hb_qsv_copy_video_buffer_to_video_buffer could cause slow down, disable AlignAVStart for better performance");
+        log_once = 1;
+    }
+
     // alloc new frame
     out->qsv_details.frame = av_frame_alloc();
     if (!out->qsv_details.frame)
