@@ -424,5 +424,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool x264UseAdvancedOptions { get; set; }
 
         public bool PresetDisabled { get; set; }
+
+        public bool MetadataPassthrough { get; set; }
     }
 }

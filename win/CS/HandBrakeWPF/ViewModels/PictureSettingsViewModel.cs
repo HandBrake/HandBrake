@@ -830,7 +830,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.Task, this.scannedSource), 800);
             }
-        }
+        } 
 
         private void UpdateVisibileControls()
         {

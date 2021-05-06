@@ -2323,26 +2323,6 @@ Please choose a different preset.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Metadata</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
-  </data>
   <data name="String1" xml:space="preserve">
     <value />
   </data>
@@ -2495,5 +2475,8 @@ This warning will display only twice.</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
     <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>

@@ -61,21 +61,29 @@
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
                               SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
                               AutomationProperties.Name="{x:Static Properties:Resources.MainView_Format}" />
-            <CheckBox Name="WebOptimized" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" 
-                              Content="{x:Static Properties:Resources.MainView_WebOptimized}"
-                              IsChecked="{Binding Path=OptimizeMP4}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
-                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-            <CheckBox Name="AlignAVStart" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" 
-                              Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
-                              IsChecked="{Binding Path=AlignAVStart}"
-                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-            <CheckBox Name="iPod5G" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" 
-                              Content="{x:Static Properties:Resources.MainView_iPod5G}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
-                              IsChecked="{Binding Path=IPod5GSupport}"
-                              Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
+
+            <StackPanel Orientation="Vertical"  Grid.Row="1" Grid.Column="1">
+                <CheckBox Name="WebOptimized" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_WebOptimized}"
+                          IsChecked="{Binding Path=OptimizeMP4}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
+                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                <CheckBox Name="AlignAVStart" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
+                          IsChecked="{Binding Path=AlignAVStart}"
+                          Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                <CheckBox Name="iPod5G" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                          Content="{x:Static Properties:Resources.MainView_iPod5G}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
+                          IsChecked="{Binding Path=IPod5GSupport}"
+                          Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
+                <CheckBox Name="Metadata" VerticalAlignment="Center"  HorizontalAlignment="Left"  IsChecked="{Binding Path=MetadataPassthru}"
+                          Content="{x:Static Properties:Resources.SummaryView_MetadataPassthru}"/>
+
+            </StackPanel>
+       
+
 
             <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" FontSize="12" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />

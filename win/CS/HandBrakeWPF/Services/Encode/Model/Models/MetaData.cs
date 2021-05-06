@@ -31,11 +31,14 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.LongDescription = metadata.LongDescription;
                 this.Name = metadata.Name;
                 this.ReleaseDate = metadata.ReleaseDate;
+                this.PassthruMetadataEnabled = metadata.PassthruMetadataEnabled;
             }
         }
 
-        public MetaData(Metadata metadata)
+        public MetaData(Metadata metadata, bool metadataEnabled)
         {
+            this.PassthruMetadataEnabled = metadataEnabled;
+
             if (metadata != null)
             {
                 this.AlbumArtist = metadata.AlbumArtist;
@@ -50,6 +53,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.ReleaseDate = metadata.ReleaseDate;
             }
         }
+
+        public bool PassthruMetadataEnabled { get; set; }
 
         public string AlbumArtist { get; set; }
 

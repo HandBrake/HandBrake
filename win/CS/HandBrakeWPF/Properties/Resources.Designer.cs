@@ -3155,15 +3155,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Metadata.
-        /// </summary>
-        public static string Options_Metadata {
-            get {
-                return ResourceManager.GetString("Options_Metadata", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Minimize to system tray (Requires Restart).
         /// </summary>
         public static string Options_MinimiseTray {
@@ -3223,35 +3214,6 @@ namespace HandBrakeWPF.Properties {
         public static string Options_OutputFiles {
             get {
                 return ResourceManager.GetString("Options_OutputFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Passthru basic metadata from the source to the destination file (where supported).
-        /// </summary>
-        public static string Options_PassthruMetadata {
-            get {
-                return ResourceManager.GetString("Options_PassthruMetadata", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This option will allow basic metadata fields to be passed through from the source to destination file.
-        ///Fields are limited to:
-        ///- Name
-        ///- Artist
-        ///- Album Artist
-        ///- Composer
-        ///- Release Date
-        ///- Comment
-        ///- Album
-        ///- Genre
-        ///- Description
-        ///- Long Description.
-        /// </summary>
-        public static string Options_PassthruMetadataTooltip {
-            get {
-                return ResourceManager.GetString("Options_PassthruMetadataTooltip", resourceCulture);
             }
         }
         
@@ -6397,6 +6359,15 @@ namespace HandBrakeWPF.Properties {
         public static string SummaryView_Grayscale {
             get {
                 return ResourceManager.GetString("SummaryView_Grayscale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passthru Common Metadata.
+        /// </summary>
+        public static string SummaryView_MetadataPassthru {
+            get {
+                return ResourceManager.GetString("SummaryView_MetadataPassthru", resourceCulture);
             }
         }
         

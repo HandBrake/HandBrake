@@ -578,25 +578,22 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
         private Metadata CreateMetadata(EncodeTask job)
         {
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MetadataPassthru))
+            if (job.MetaData != null && job.MetaData.PassthruMetadataEnabled)
             {
-                if (job.MetaData != null && job.MetaData.IsMetadataSet)
-                {
-                    Metadata metaData = new Metadata();
-                    metaData.Artist = job.MetaData.Artist;
-                    metaData.Album = job.MetaData.Album;
-                    metaData.AlbumArtist = job.MetaData.AlbumArtist;
-                    metaData.Comment = job.MetaData.Comment;
-                    metaData.Composer = job.MetaData.Composer;
-                    metaData.Description = job.MetaData.Description;
-                    metaData.Genre = job.MetaData.Genre;
-                    metaData.LongDescription = job.MetaData.LongDescription;
-                    metaData.Name = job.MetaData.Name;
-                    metaData.ReleaseDate = job.MetaData.ReleaseDate;
-                    return metaData;
-                }
-
-                return null; // Null will allow Libhb to find and passthru any metadata it supports.
+                Metadata metaData = new Metadata
+                                    {
+                                        Artist = job.MetaData.Artist,
+                                        Album = job.MetaData.Album,
+                                        AlbumArtist = job.MetaData.AlbumArtist,
+                                        Comment = job.MetaData.Comment,
+                                        Composer = job.MetaData.Composer,
+                                        Description = job.MetaData.Description,
+                                        Genre = job.MetaData.Genre,
+                                        LongDescription = job.MetaData.LongDescription,
+                                        Name = job.MetaData.Name,
+                                        ReleaseDate = job.MetaData.ReleaseDate
+                                    };
+                return metaData;
             }
 
             return new Metadata(); // Empty Metadata will not pass through to the destination.  
