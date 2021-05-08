@@ -89,6 +89,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBAudioEncoderChangedNotification object:self.job.audio];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:self.job];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBContainerChangedNotification object:self.job];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBRangeChangedNotification object:self.job.range];
 }
 
@@ -96,6 +97,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HBAudioEncoderChangedNotification object:self.job.audio];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HBChaptersChangedNotification object:self.job];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:HBContainerChangedNotification object:self.job];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:HBRangeChangedNotification object:_job.range];
 }
 
