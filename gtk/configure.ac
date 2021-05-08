@@ -159,16 +159,6 @@ HB_LIBS="$HB_LIBS $GHB_LIBS"
 HB_CPPFLAGS="$HB_CPPFLAGS $GHB_CFLAGS"
 
 
-pkg_gudev="gudev-1.0"
-PKG_CHECK_MODULES([gudev], [$pkg_gudev], have_gudev=yes, have_gudev=no)
-if test "x$have_gudev" = "xyes" ; then
-	HB_LIBS="$HB_LIBS $gudev_LIBS"
-	HB_CPPFLAGS="$HB_CPPFLAGS $gudev_CFLAGS"
-
-	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
-	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
-fi
-
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
 if test "x$gst_disable" = "xno" ; then
 	PKG_CHECK_MODULES([gstreamer1], [$GST1_MODULES], use_gst1=yes, use_gst1=no)
