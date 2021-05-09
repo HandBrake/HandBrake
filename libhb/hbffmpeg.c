@@ -118,21 +118,9 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
     return buf;
 }
 
-static int handle_jpeg(enum AVPixelFormat *format)
-{
-    switch (*format)
-    {
-        case AV_PIX_FMT_YUVJ420P: *format = AV_PIX_FMT_YUV420P; return 1;
-        case AV_PIX_FMT_YUVJ422P: *format = AV_PIX_FMT_YUV422P; return 1;
-        case AV_PIX_FMT_YUVJ444P: *format = AV_PIX_FMT_YUV444P; return 1;
-        case AV_PIX_FMT_YUVJ440P: *format = AV_PIX_FMT_YUV440P; return 1;
-        default:                                                return 0;
-    }
-}
-
 struct SwsContext*
-hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
-                   int dstW, int dstH, enum AVPixelFormat dstFormat,
+hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat, int srcRange,
+                   int dstW, int dstH, enum AVPixelFormat dstFormat, int dstRange,
                    int flags, int colorspace)
 {
     struct SwsContext * ctx;
@@ -140,10 +128,6 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
     ctx = sws_alloc_context();
     if ( ctx )
     {
-        int srcRange, dstRange;
-
-        srcRange = handle_jpeg(&srcFormat);
-        dstRange = handle_jpeg(&dstFormat);
         flags |= SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
 
         av_opt_set_int(ctx, "srcw", srcW, 0);

@@ -598,6 +598,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     buf->f.color_prim     = title->color_prim;
     buf->f.color_transfer = title->color_transfer;
     buf->f.color_matrix   = title->color_matrix;
+    buf->f.color_range    = AVCOL_RANGE_MPEG;
 
     if (!buf)
     {
@@ -791,7 +792,9 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     context = hb_sws_get_context(
                 title->geometry.width  - (geo->crop[2] + geo->crop[3]),
                 title->geometry.height - (geo->crop[0] + geo->crop[1]),
-                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags, colorspace);
+                AV_PIX_FMT_YUV420P, AVCOL_RANGE_MPEG,
+                width, height, AV_PIX_FMT_RGB32, AVCOL_RANGE_MPEG,
+                swsflags, colorspace);
 
     if (context == NULL)
     {

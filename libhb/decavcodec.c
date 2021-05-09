@@ -107,6 +107,7 @@ struct video_filters_s
 
     int                   width;
     int                   height;
+    int                   color_range;
     int                   pix_fmt;
 };
 
@@ -1140,6 +1141,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     hb_dict_t        * settings;
     hb_filter_init_t   filter_init;
     enum AVPixelFormat pix_fmt;
+    enum AVColorRange  color_range;
 
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
@@ -1157,6 +1159,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         orig_width = pv->context->width & ~1;
         orig_height = pv->context->height & ~1;
         pix_fmt = AV_PIX_FMT_YUV420P;
+        color_range = AVCOL_RANGE_MPEG;
     }
     else
     {
@@ -1172,11 +1175,13 @@ int reinit_video_filters(hb_work_private_t * pv)
             orig_height = pv->job->title->geometry.height;
         }
         pix_fmt = pv->job->pix_fmt;
+        color_range = pv->job->color_range;
     }
 
     if (pix_fmt            == pv->frame->format  &&
         orig_width         == pv->frame->width   &&
         orig_height        == pv->frame->height  &&
+        color_range        == pv->frame->color_range &&
         HB_ROTATION_0      == pv->title->rotation)
     {
         // No filtering required.
@@ -1184,18 +1189,20 @@ int reinit_video_filters(hb_work_private_t * pv)
         return 0;
     }
 
-    if (pv->video_filters.graph   != NULL              &&
-        pv->video_filters.width   == pv->frame->width  &&
-        pv->video_filters.height  == pv->frame->height &&
-        pv->video_filters.pix_fmt == pv->frame->format)
+    if (pv->video_filters.graph       != NULL              &&
+        pv->video_filters.width       == pv->frame->width  &&
+        pv->video_filters.height      == pv->frame->height &&
+        pv->video_filters.color_range == pv->frame->color_range &&
+        pv->video_filters.pix_fmt     == pv->frame->format)
     {
         // Current filter settings are good
         return 0;
     }
 
-    pv->video_filters.width   = pv->frame->width;
-    pv->video_filters.height  = pv->frame->height;
-    pv->video_filters.pix_fmt = pv->frame->format;
+    pv->video_filters.width       = pv->frame->width;
+    pv->video_filters.height      = pv->frame->height;
+    pv->video_filters.color_range = pv->frame->color_range;
+    pv->video_filters.pix_fmt     = pv->frame->format;
 
     // New filter required, create filter graph
     close_video_filters(pv);
@@ -1210,7 +1217,8 @@ int reinit_video_filters(hb_work_private_t * pv)
     filters = hb_value_array_init();
     if (pix_fmt            != pv->frame->format ||
         orig_width         != pv->frame->width  ||
-        orig_height        != pv->frame->height)
+        orig_height        != pv->frame->height ||
+        color_range        != pv->frame->color_range)
     {
         settings = hb_dict_init();
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
@@ -1226,6 +1234,14 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
+            if (color_range == AVCOL_RANGE_JPEG)
+            {
+                hb_dict_set_string(settings, "out_range", "full");
+            }
+            else
+            {
+                hb_dict_set_string(settings, "out_range", "limited");
+            }
             hb_avfilter_append_dict(filters, "scale", settings);
 
             settings = hb_dict_init();

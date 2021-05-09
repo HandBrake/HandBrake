@@ -287,15 +287,15 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
     // PIX_FMT_NV12,      ///< planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)
     pv->sws_context_from_nv12 = hb_sws_get_context(
         pv->job->title->geometry.width, pv->job->title->geometry.height,
-        AV_PIX_FMT_NV12,
+        AV_PIX_FMT_NV12, pv->job->color_range,
         pv->job->title->geometry.width, pv->job->title->geometry.height,
-        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUV420P, pv->job->color_range,
         SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
     pv->sws_context_to_nv12 = hb_sws_get_context(
         pv->job->title->geometry.width, pv->job->title->geometry.height,
-        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUV420P, pv->job->color_range,
         pv->job->title->geometry.width, pv->job->title->geometry.height,
-        AV_PIX_FMT_NV12,
+        AV_PIX_FMT_NV12, pv->job->color_range,
         SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
     return 0;
 }

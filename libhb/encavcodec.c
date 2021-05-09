@@ -554,9 +554,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             pv->sws = hb_sws_get_context(
                                          job->width, job->height,
-                                         context->pix_fmt,
+                                         context->pix_fmt, job->color_range,
                                          job->width, job->height,
-                                         AV_PIX_FMT_P010LE,
+                                         AV_PIX_FMT_P010LE, job->color_range,
                                          SWS_LANCZOS|SWS_ACCURATE_RND,
                                          SWS_CS_DEFAULT);
 
@@ -676,9 +676,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             pv->sws = hb_sws_get_context(
                                          job->width, job->height,
-                                         context->pix_fmt,
+                                         context->pix_fmt, job->color_range,
                                          job->width, job->height,
-                                         AV_PIX_FMT_NV12,
+                                         AV_PIX_FMT_NV12, job->color_range,
                                          SWS_LANCZOS|SWS_ACCURATE_RND,
                                          SWS_CS_DEFAULT);
 

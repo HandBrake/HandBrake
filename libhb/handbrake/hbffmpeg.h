@@ -46,8 +46,8 @@ hb_mastering_display_metadata_t hb_mastering_ff_to_hb(AVMasteringDisplayMetadata
 AVMasteringDisplayMetadata hb_mastering_hb_to_ff(hb_mastering_display_metadata_t mastering);
 
 struct SwsContext*
-hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
-                   int dstW, int dstH, enum AVPixelFormat dstFormat,
+hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat, int srcRange,
+                   int dstW, int dstH, enum AVPixelFormat dstFormat, int dstRange,
                    int flags, int colorspace);
 
 static const char* const hb_vce_preset_names[] = { "speed", "balanced", "quality", NULL, };

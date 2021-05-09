@@ -348,8 +348,8 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
             if (pv->sws!= NULL)
                 sws_freeContext(pv->sws);
             pv->sws = hb_sws_get_context(
-                                sub->f.width, sub->f.height, sub->f.fmt,
-                                scaled->f.width, scaled->f.height, sub->f.fmt,
+                                sub->f.width, sub->f.height, sub->f.fmt, AVCOL_RANGE_MPEG,
+                                scaled->f.width, scaled->f.height, sub->f.fmt, AVCOL_RANGE_MPEG,
                                 SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
             pv->sws_width   = width;
             pv->sws_height  = height;
