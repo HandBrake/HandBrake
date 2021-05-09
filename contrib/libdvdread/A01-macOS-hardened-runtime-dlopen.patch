@@ -1,16 +1,16 @@
 diff --git a/src/dvd_input.c b/src/dvd_input.c
-index d28efe7..4de0ce7 100644
+index 0c44387..476c9c8 100644
 --- a/src/dvd_input.c
 +++ b/src/dvd_input.c
-@@ -277,6 +277,7 @@ int dvdinput_setup(void)
+@@ -319,6 +319,7 @@ int dvdinput_setup(void *priv, dvd_logger_cb *logcb)
  
  #ifdef __APPLE__
    #define CSS_LIB "libdvdcss.2.dylib"
 +  #define CSS_USR_LOCAL_LIB "/usr/local/lib/libdvdcss.2.dylib"
- #elif defined(WIN32)
+ #elif defined(_WIN32)
    #define CSS_LIB "libdvdcss-2.dll"
  #elif defined(__OS2__)
-@@ -286,6 +287,13 @@ int dvdinput_setup(void)
+@@ -328,6 +329,13 @@ int dvdinput_setup(void *priv, dvd_logger_cb *logcb)
  #endif
    dvdcss_library = dlopen(CSS_LIB, RTLD_LAZY);
  

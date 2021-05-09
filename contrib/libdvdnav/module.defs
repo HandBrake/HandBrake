@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdnav-6.0.1.tar.bz2
-LIBDVDNAV.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdnav/6.0.1/libdvdnav-6.0.1.tar.bz2
-LIBDVDNAV.FETCH.sha256  = e566a396f1950017088bfd760395b0565db44234195ada5413366c9d23926733
+LIBDVDNAV.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdnav-6.1.1.tar.bz2
+LIBDVDNAV.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdnav/6.1.1/libdvdnav-6.1.1.tar.bz2
+LIBDVDNAV.FETCH.sha256  = c191a7475947d323ff7680cf92c0fb1be8237701885f37656c64d04e98d18d48
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
