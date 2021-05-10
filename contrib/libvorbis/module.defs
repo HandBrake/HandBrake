@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVORBIS,libvorbis,LIBOGG))
 $(eval $(call import.CONTRIB.defs,LIBVORBIS))
 
-LIBVORBIS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvorbis-1.3.6.tar.gz
-LIBVORBIS.FETCH.url    += https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.6.tar.gz
-LIBVORBIS.FETCH.sha256  = 6ed40e0241089a42c48604dc00e362beee00036af2d8b3f46338031c9e0351cb
+LIBVORBIS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvorbis-1.3.7.tar.gz
+LIBVORBIS.FETCH.url    += https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz
+LIBVORBIS.FETCH.sha256  = 0e982409a9c3fc82ee06e08205b1355e5c6aa4c36bca58146ef399621b0ce5ab
 
 LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
 
