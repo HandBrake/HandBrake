@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVPX,libvpx))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
-LIBVPX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvpx-1.8.1.tar.gz
-LIBVPX.FETCH.url    += https://github.com/webmproject/libvpx/archive/v1.8.1.tar.gz
-LIBVPX.FETCH.sha256  = df19b8f24758e90640e1ab228ab4a4676ec3df19d23e4593375e6f3847dee03e
+LIBVPX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvpx-1.10.0.tar.gz
+LIBVPX.FETCH.url    += https://github.com/webmproject/libvpx/archive/v1.10.0.tar.gz
+LIBVPX.FETCH.sha256  = 85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a
 
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
@@ -40,7 +40,7 @@ endif
 
 ifeq (darwin,$(HOST.system))
     ifeq (arm64,$(HOST.machine))
-        LIBVPX.CONFIGURE.extra += --target=arm64-darwin-gcc
+        LIBVPX.CONFIGURE.extra += --target=arm64-darwin20-gcc
     else ifeq (x86_64,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --target=x86_64-darwin14-gcc
     endif
