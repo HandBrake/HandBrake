@@ -466,9 +466,6 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Échec de la mise à jour. Vous pouvez essayer de télécharger la mise à jour depuis https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Taille de l'écran : {0}x{1}, par {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Ajouter à la file</value>
   </data>

@@ -468,9 +468,6 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Falló la actualización. Puede intentar descargar la actualización directamente de https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Mostrar Tamaño: {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Agregar a la cola</value>
   </data>

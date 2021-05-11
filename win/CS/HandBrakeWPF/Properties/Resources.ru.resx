@@ -468,9 +468,6 @@ Foreign Audio Preferred, else First - Если существует дорожк
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Не удалось установить обновление. Вы можете попробовать скачать обновление с сайта https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Размер Вывода: {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Добавить в очередь</value>
   </data>

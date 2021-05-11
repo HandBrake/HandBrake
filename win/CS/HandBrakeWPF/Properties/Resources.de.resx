@@ -469,9 +469,6 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Update fehlgeschlagen. Es kann versucht werden, das Update von https://handbrake.fr herunterzuladen.</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Anzeigegröße: {0}×{1}, PAR {2}×{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Zur Warteschlange hinzufügen</value>
   </data>
@@ -2358,7 +2355,7 @@ Dies ist auf folgende Felder begrenzt:
 - Lange Beschreibung</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>

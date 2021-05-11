@@ -465,9 +465,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>更新に失敗しました。https://handbrake.fr から更新をダウンロードすることもできます。</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>表示サイズ {0}x{1}, PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>キューに追加</value>
   </data>

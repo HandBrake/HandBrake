@@ -466,9 +466,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Помилка оновлення. Можете спробувати завантажити оновлення з https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Розмір зображення: {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Додати до черги</value>
   </data>

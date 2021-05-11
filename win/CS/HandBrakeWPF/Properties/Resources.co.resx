@@ -462,9 +462,6 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Rinnovu fiascu. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Dimensione di u screnu : {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Aghjunghje à a fila d’attesa</value>
   </data>
@@ -2352,7 +2349,7 @@ I campi sò limitati à :
 - Discrizzione longa</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>U nome di categuria scrittu esiste dighjà. Ci vole à sceglie un nome sfarente.</value>

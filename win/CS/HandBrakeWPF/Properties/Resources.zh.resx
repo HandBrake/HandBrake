@@ -463,9 +463,6 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>更新失败。您可以尝试从 https://handbrake.fr 下载更新</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>显示尺寸： {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>添加到队列中</value>
   </data>

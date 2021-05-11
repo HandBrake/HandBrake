@@ -466,9 +466,6 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Güncelleme başarısız oldu. Güncelleştirmeyi https://handbrake.fr adresinden indirmeyi deneyebilirsiniz.</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Ekran Boyutu: {0}x{1},  PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Sıraya ekle</value>
   </data>
@@ -2356,7 +2353,7 @@ Alanlar aşağıdakilerle sınırlıdır:
 - Uzun Açıklama</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>

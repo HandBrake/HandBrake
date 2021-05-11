@@ -465,9 +465,6 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>업데이트에 실패하였습니다. https://handbrake.fr 에서 업데이트를 다운로드 할 수 있습니다.</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>화면 크기 : {0}x{1}, 측정 크기 {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>대기열에 추가</value>
   </data>

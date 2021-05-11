@@ -468,9 +468,6 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>A Atualização falhou. Você pode tentar baixar a atualização em https://handbrake.fr</value>
   </data>
-  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Tamanho da Tela: {0}x{1}, PAR {2}x{3}</value>
-  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Adicionar à Fila</value>
   </data>
@@ -2355,7 +2352,7 @@ Os campos se limitam a:
 - Descrição Longa</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>O nome da categoria que você inseriu já existe. Escolha um nome diferente.</value>
