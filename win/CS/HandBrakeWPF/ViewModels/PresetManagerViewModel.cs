@@ -406,6 +406,7 @@ namespace HandBrakeWPF.ViewModels
 
             ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
             subtitlesDefaultsViewModel.ResetApplied();
+            subtitlesDefaultsViewModel.SetupLanguages(this.selectedPreset);
             SubtitlesDefaultsView view = new SubtitlesDefaultsView();
             view.DataContext = subtitlesDefaultsViewModel;
             view.ShowDialog();
