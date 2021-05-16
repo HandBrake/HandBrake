@@ -174,8 +174,8 @@
 
 
             <!-- Pixel Aspect -->
-            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PAR}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}" />
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PAR}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
                 <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
                                     IsEnabled="{Binding IsPixelAspectSettable}"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
@@ -286,7 +286,7 @@
 
                 <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" VerticalAlignment="Center" Margin="15,0,0,0" />
 
-                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5,0,0,0"
+                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5,0,0,0" Modulus="2"
                                     AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}"/>
 

@@ -40,7 +40,6 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IWindowManager windowManager;
         private bool heightControlEnabled = true;
-        private bool showCustomAnamorphicControls;
         private string sourceInfo;
         private Size sourceParValues;
         private Size sourceResolution;
@@ -88,17 +87,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.heightControlEnabled = value;
                 this.NotifyOfPropertyChange(() => this.HeightControlEnabled);
-            }
-        }
-
-        public bool ShowCustomAnamorphicControls
-        {
-            get => this.showCustomAnamorphicControls;
-
-            set
-            {
-                this.showCustomAnamorphicControls = value;
-                this.NotifyOfPropertyChange(() => this.ShowCustomAnamorphicControls);
             }
         }
 
@@ -220,6 +208,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.OptimalSize = value;
                 this.UpdateVisibileControls();
                 this.NotifyOfPropertyChange(() => this.OptimalSize);
+                this.RecaulcatePictureSettingsProperties(ChangedPictureField.OptimalSize);
             }
         }
 
@@ -334,7 +323,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public long DisplayWidth
+        public int DisplayWidth
         {
             get => this.Task.DisplayWidth.HasValue ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture)) : 0;
 
@@ -710,6 +699,7 @@ namespace HandBrakeWPF.ViewModels
                 Pad = new Padding(this.PaddingFilter.Top, this.PaddingFilter.Bottom, this.PaddingFilter.Left, this.PaddingFilter.Right),
                 RotateAngle = this.RotateFlipFilter.SelectedRotation,
                 Hflip = this.RotateFlipFilter.FlipVideo ? 1 : 0,
+                DarWidth = this.DisplayWidth
             };
 
             if (this.SelectedAnamorphicMode == Anamorphic.Custom)
@@ -763,13 +753,26 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Choose which setting to keep.
-            HandBrakePictureHelpers.KeepSetting setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
+            HandBrakePictureHelpers.KeepSetting setting = 0;
             switch (changedField)
             {
                 case ChangedPictureField.Width:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
                     break;
                 case ChangedPictureField.Height:
+                    setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
+                    break;
+                case ChangedPictureField.DisplayWidth:
+                    setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_WIDTH;
+                    break;
+                case ChangedPictureField.MaintainAspectRatio:
+                    if (!this.MaintainAspectRatio)
+                    {
+                        setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_WIDTH;
+                    }
+                    break;
+                case ChangedPictureField.ParW:
+                case ChangedPictureField.ParH:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
                     break;
             }
@@ -786,7 +789,7 @@ namespace HandBrakeWPF.ViewModels
                 flag = HandBrakePictureHelpers.FlagsSetting.HB_GEO_SCALE_UP;
             }
 
-            if (this.OptimalSize)
+            if (this.OptimalSize) 
             {
                 flag |= HandBrakePictureHelpers.FlagsSetting.HB_GEO_SCALE_BEST;
             }
@@ -836,17 +839,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.WidthControlEnabled = true;
             this.HeightControlEnabled = true;
-
-            switch (this.SelectedAnamorphicMode)
-            {
-                case Anamorphic.None:
-                case Anamorphic.Automatic:
-                    this.ShowCustomAnamorphicControls = false;
-                    break;
-                case Anamorphic.Custom:
-                    this.ShowCustomAnamorphicControls = true;
-                    break;
-            }
 
             if (OptimalSize)
             {

@@ -22,6 +22,7 @@ namespace HandBrakeWPF.Model.Picture
         Flip,
         Rotate,
         AllowUpscale,
-        ResolutionLimit
+        ResolutionLimit,
+        OptimalSize
     }
 }

@@ -60,7 +60,8 @@ namespace HandBrake.Interop.Interop
                 maxHeight = job.MaxHeight,
                 mode = (int)job.AnamorphicMode,
                 modulus = 2,
-                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar }
+                geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar },
+                displayWidth = job.DarWidth
             };
 
             // If we are rotated, the source title geometry must also be rotated. 
@@ -170,17 +171,17 @@ namespace HandBrake.Interop.Interop
             else if (iaspect >= 15)
             {
                 // x.x:9
-                result = string.Format("{0}:9", Math.Round(displayWidth * 9 / displayHeight));
+                result = string.Format("{0}:9", Math.Round(displayWidth * 9 / displayHeight, 2));
             }
             else if (iaspect >= 9)
             {
                 // x.x:3
-                result = string.Format("{0}:3", Math.Round(displayWidth * 3 / displayHeight));
+                result = string.Format("{0}:3", Math.Round(displayWidth * 3 / displayHeight, 2));
             }
             else
             {
                 // 1:x.x
-                result = string.Format("1:{0}", Math.Round(displayHeight / displayWidth));
+                result = string.Format("1:{0}", Math.Round(displayHeight / displayWidth, 2));
             }
 
             return result;
