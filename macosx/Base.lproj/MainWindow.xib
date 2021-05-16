@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -433,14 +433,20 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="selectedValue" keyPath="self.job.angle" previousBinding="If4-Fp-R0g" id="3Gk-ma-r2w">
+                            <binding destination="-2" name="selectedValue" keyPath="self.job.angle" previousBinding="aID-g7-zTF" id="Iat-pL-ttI">
                                 <dictionary key="options">
                                     <string key="NSNullPlaceholder" base64-UTF8="YES">
 IA
 </string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="content" keyPath="self.job.angles" id="If4-Fp-R0g"/>
+                            <binding destination="-2" name="content" keyPath="self.job.angles" id="aID-g7-zTF">
+                                <dictionary key="options">
+                                    <string key="NSNullPlaceholder" base64-UTF8="YES">
+IA
+</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" previousBinding="pA6-GK-w84" id="Ocv-Hr-bje">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -739,7 +745,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <action selector="togglePauseResume:" target="-2" id="AN1-8V-lc1"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="E1B0B8C6-5C5C-460A-B432-3AB62BC9AB73" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" sizingBehavior="auto" id="Qoa-tj-Rj2">
+                    <toolbarItem implicitItemIdentifier="E1B0B8C6-5C5C-460A-B432-3AB62BC9AB73" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" title="Box" sizingBehavior="auto" id="Qoa-tj-Rj2">
                         <nil key="toolTip"/>
                         <box key="view" misplaced="YES" boxType="custom" borderType="none" cornerRadius="4" title="Box" titlePosition="noTitle" id="zcd-K2-F7w">
                             <rect key="frame" x="41" y="14" width="0.0" height="0.0"/>
