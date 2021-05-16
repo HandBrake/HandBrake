@@ -1389,6 +1389,9 @@ fail:
     preset[@"PicturePARWidth"] = @(self.parNum);
     preset[@"PicturePARHeight"] = @(self.parDen);
 
+    // Display width
+    preset[@"PictureDARWidth"] = @(self.displayWidth);
+
     // Set crop settings
     preset[@"PictureAutoCrop"] = @(self.cropMode == HBPictureCropModeAutomatic);
 
