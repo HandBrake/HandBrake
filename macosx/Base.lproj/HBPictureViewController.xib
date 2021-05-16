@@ -435,7 +435,7 @@
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
                                                             <rect key="frame" x="143" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
+                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="QFM-0O-SjJ">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </stepperCell>
                                                             <accessibility description="Crop right"/>
@@ -449,14 +449,18 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="fj8-4t-Yp0"/>
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="v1c-lQ-Iil"/>
+                                                                <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="NJi-37-m7W">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
                                                             <rect key="frame" x="89" y="38" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
+                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="jWe-et-eOH">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </stepperCell>
                                                             <accessibility description="Crop top"/>
@@ -470,14 +474,18 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="I28-ra-10F"/>
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="5Zy-md-B3T"/>
+                                                                <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="mA8-MT-U6L">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
                                                             <rect key="frame" x="35" y="18" width="15" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
+                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="Z4J-oE-seK">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </stepperCell>
                                                             <accessibility description="Crop left"/>
@@ -491,14 +499,18 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="2L4-jb-bPW"/>
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kYV-av-Iau"/>
+                                                                <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="d5o-v4-Wdb">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
                                                             <rect key="frame" x="89" y="-1" width="15" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
+                                                            <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="Fll-IT-6Ex">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </stepperCell>
                                                             <accessibility description="Crop bottom"/>
@@ -512,8 +524,12 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="KCX-6E-mgs"/>
                                                                 <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="wAQ-9J-HFt"/>
+                                                                <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="S7N-Uj-ONm">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </stepper>
                                                         <textField toolTip="Top edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
@@ -832,7 +848,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iuc-JG-bhU">
                                                     <rect key="frame" x="56" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="QXh-re-pS9">
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="1" maxValue="65535" doubleValue="64" id="QXh-re-pS9">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Width"/>
@@ -850,7 +866,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <integer key="NSNullPlaceholder" value="-1"/>
                                                             </dictionary>
                                                         </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.picture.parNum" id="SwZ-6b-FmV"/>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.parNum" id="qgJ-RU-Tl2">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
                                                         <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="XaN-VN-Lhb"/>
                                                     </connections>
                                                 </stepper>
@@ -897,7 +917,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                 </textField>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3HN-8C-yAS">
                                                     <rect key="frame" x="139" y="-2" width="15" height="22"/>
-                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" minValue="64" maxValue="59" doubleValue="64" id="KRj-Qv-Gaa">
+                                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="64" maxValue="65535" doubleValue="64" id="KRj-Qv-Gaa">
                                                         <font key="font" metaFont="smallSystem"/>
                                                     </stepperCell>
                                                     <accessibility description="Storage Height"/>
@@ -915,7 +935,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <integer key="NSNullPlaceholder" value="-1"/>
                                                             </dictionary>
                                                         </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.picture.parDen" id="CLO-c8-Pl0"/>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.parDen" id="Zo5-kL-gcs">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
                                                     </connections>
                                                 </stepper>
                                             </subviews>
@@ -1701,7 +1725,6 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                                                             </dictionary>
                                                         </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="7uO-3v-U0S"/>
                                                         <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="eX0-Np-IVz" id="2fr-Fd-Ywe">
                                                             <dictionary key="options">
                                                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -1709,6 +1732,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                                 <integer key="NSNullPlaceholder" value="-1"/>
                                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="TE4-wJ-dSs">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
                                                             </dictionary>
                                                         </binding>
                                                     </connections>
