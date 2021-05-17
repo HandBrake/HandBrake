@@ -814,6 +814,7 @@ static void textsub_close( hb_filter_object_t * filter )
 static void process_sub(hb_filter_private_t *pv, hb_buffer_t *sub)
 {
     int64_t start, dur;
+    int size;
     char *ssa, *tmp;
 
     // libass expects every chunk to have a unique sequence number
@@ -830,7 +831,8 @@ static void process_sub(hb_filter_private_t *pv, hb_buffer_t *sub)
     // do not need to do special processing for stop == AV_NOPTS_VALUE
     start = sub->s.start;
     dur = sub->s.stop - sub->s.start;
-    ass_process_chunk(pv->ssaTrack, ssa, sub->size, start, dur);
+    size = strlen(ssa);
+    ass_process_chunk(pv->ssaTrack, ssa, size, start, dur);
     free(ssa);
 }
 
