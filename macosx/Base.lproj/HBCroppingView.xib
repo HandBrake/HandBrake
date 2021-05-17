@@ -101,7 +101,7 @@
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="y7P-yk-q46">
                                     <rect key="frame" x="143" y="18" width="15" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="SA2-eh-4Jb">
+                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="SA2-eh-4Jb">
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <accessibility description="Crop right"/>
@@ -117,7 +117,7 @@
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="8e5-zI-IBg">
                                     <rect key="frame" x="89" y="38" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="c11-EG-77U">
+                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="c11-EG-77U">
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <accessibility description="Crop top"/>
@@ -133,7 +133,7 @@
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Yua-R6-mWU">
                                     <rect key="frame" x="35" y="18" width="15" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="yPe-lP-KfM">
+                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="yPe-lP-KfM">
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <accessibility description="Crop left"/>
@@ -149,7 +149,7 @@
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="sWf-fq-lvl">
                                     <rect key="frame" x="89" y="-1" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="w45-AO-bJL">
+                                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="20480" id="w45-AO-bJL">
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <accessibility description="Crop bottom"/>
