@@ -62,5 +62,6 @@ void            hb_avframe_set_video_buffer_flags(hb_buffer_t * buf,
 int hb_av_encoder_present(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);
+const int* hb_av_get_pix_fmts(int encoder);
 
 #endif // HANDBRAKE_FFMPEG_H
