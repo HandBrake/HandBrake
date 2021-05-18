@@ -1678,6 +1678,50 @@ const char* const* hb_video_encoder_get_levels(int encoder)
     }
 }
 
+static const enum AVPixelFormat standard_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_12bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+const int* hb_video_encoder_get_pix_fmts(int encoder)
+{
+#if HB_PROJECT_FEATURE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_get_pix_fmts(encoder);
+    }
+#endif
+
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_get_pix_fmts(encoder);
+    }
+
+    switch (encoder)
+    {
+        case HB_VCODEC_X264_10BIT:
+            return standard_10bit_pix_fmts;
+#if HB_PROJECT_FEATURE_X265
+        case HB_VCODEC_X265_10BIT:
+            return standard_10bit_pix_fmts;
+        case HB_VCODEC_X265_12BIT:
+            return standard_12bit_pix_fmts;
+#endif
+        default:
+            return standard_pix_fmts;
+    }
+}
+
 // Get limits and hints for the UIs.
 //
 // granularity sets the minimum step increments that should be used
@@ -5847,7 +5891,7 @@ int hb_get_bit_depth(int format)
     int i, min, max;
 
     if (!desc || !desc->nb_components) {
-        min = max = 0;
+        return -1;
     }
 
     min = INT_MAX, max = -INT_MAX;
@@ -5859,36 +5903,27 @@ int hb_get_bit_depth(int format)
     return max;
 }
 
-static int bit_depth_is_supported(hb_job_t * job, int bit_depth)
+static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
 {
-    for (int i = 0; i < hb_list_count(job->list_filter); i++)
-    {
-        hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+    int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
+    int pix_fmt_bit_depth = hb_get_bit_depth(pix_fmt);
 
-        switch (filter->id) {
-            case HB_FILTER_DETELECINE:
-            case HB_FILTER_COMB_DETECT:
-            case HB_FILTER_DECOMB:
-            case HB_FILTER_DENOISE:
-            case HB_FILTER_NLMEANS:
-            case HB_FILTER_CHROMA_SMOOTH:
-            case HB_FILTER_LAPSHARP:
-            case HB_FILTER_UNSHARP:
-            case HB_FILTER_GRAYSCALE:
-                return 0;
-        }
-    }
-
-    if (hb_video_encoder_get_depth(job->vcodec) < bit_depth)
+    if (pix_fmt_bit_depth > title_bit_depth)
     {
         return 0;
     }
 
-    return 1;
-}
+    // Allow biplanar formats only if
+    // hardware decoder is supported.
+    if (pix_fmt == AV_PIX_FMT_P010LE ||
+        pix_fmt == AV_PIX_FMT_NV12)
+    {
+        if (!(job->title->video_decode_support & HB_DECODE_SUPPORT_QSV))
+        {
+            return 0;
+        }
+    }
 
-static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
-{
     for (int i = 0; i < hb_list_count(job->list_filter); i++)
     {
         hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
@@ -5908,6 +5943,13 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
                 {
                     return 0;
                 }
+            case HB_FILTER_RENDER_SUB:
+               if (pix_fmt != AV_PIX_FMT_YUV420P   ||
+                   pix_fmt != AV_PIX_FMT_YUV420P10 ||
+                   pix_fmt != AV_PIX_FMT_YUV420P12)
+               {
+                   return 0;
+               }
         }
     }
 
@@ -5916,42 +5958,16 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
 
 int hb_get_best_pix_fmt(hb_job_t * job)
 {
-    int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec))
+    const int *pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+
+    while (*pix_fmts != AV_PIX_FMT_NONE)
     {
-        if (hb_qsv_full_path_is_enabled(job))
+        if (pix_fmt_is_supported(job, *pix_fmts))
         {
-            if (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H265_10BIT)
-            {
-                return AV_PIX_FMT_P010LE;
-            }
-            else
-            {
-                return AV_PIX_FMT_NV12;
-            }
+            return *pix_fmts;
         }
-        else
-        {
-            // system memory usage: QSV encoder only or QSV decoder + SW filters + QSV encoder
-            return AV_PIX_FMT_YUV420P;
-        }
+        pix_fmts++;
     }
-#endif
-    if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 || job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
-    {
-        if (pix_fmt_is_supported(job, AV_PIX_FMT_NV12))
-        {
-            return AV_PIX_FMT_NV12;
-        }
-    }
-    if (bit_depth >= 12 && bit_depth_is_supported(job, 12))
-    {
-        return AV_PIX_FMT_YUV420P12;
-    }
-    if (bit_depth >= 10 && bit_depth_is_supported(job, 10))
-    {
-        return AV_PIX_FMT_YUV420P10;
-    }
+
     return AV_PIX_FMT_YUV420P;
 }

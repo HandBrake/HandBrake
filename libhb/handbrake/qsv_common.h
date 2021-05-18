@@ -186,6 +186,7 @@ static const char* const hb_qsv_preset_names2[] = { "speed", "balanced", "qualit
 const char* const* hb_qsv_preset_get_names();
 const char* const* hb_qsv_profile_get_names(int encoder);
 const char* const* hb_qsv_level_get_names(int encoder);
+const int* hb_qsv_get_pix_fmts(int encoder);
 
 const char* hb_qsv_video_quality_get_name(uint32_t codec);
 void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
