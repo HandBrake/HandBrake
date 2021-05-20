@@ -2061,12 +2061,6 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
         geo.mode = hb_value_get_int(hb_dict_get(preset, "PicturePAR"));
     }
     keep_aspect = hb_value_get_bool(hb_dict_get(preset, "PictureKeepRatio"));
-    if (geo.mode == HB_ANAMORPHIC_STRICT ||
-        geo.mode == HB_ANAMORPHIC_LOOSE  ||
-        geo.mode == HB_ANAMORPHIC_AUTO)
-    {
-        keep_aspect = 1;
-    }
     geo.keep = keep_aspect * HB_KEEP_DISPLAY_ASPECT;
     allow_upscaling = hb_dict_get_bool(preset, "PictureAllowUpscaling");
     use_maximum_size = hb_dict_get_bool(preset, "PictureUseMaximumSize");
@@ -2094,7 +2088,13 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
 
     geo.geometry.par.num = hb_dict_get_int(preset, "PicturePARWidth");
     geo.geometry.par.den = hb_dict_get_int(preset, "PicturePARHeight");
-    geo.displayWidth     = hb_dict_get_int(preset, "PictureDARWidth");
+
+    int display_width = hb_dict_get_int(preset, "PictureDARWidth");
+    if (display_width <= 0)
+    {
+        display_width = ((double)geo.geometry.par.num / geo.geometry.par.den) * geo.geometry.width + 0.5;
+    }
+    geo.displayWidth     = display_width;
     geo.displayHeight    = geo.geometry.height;
 
     hb_set_anamorphic_size2(&srcGeo.geometry, &geo, &resultGeo);
