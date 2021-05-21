@@ -148,7 +148,7 @@
 }
 
 /**
- *  This is called everytime a x264 widget in the video tab is changed to
+ *  This is called every time a x264 widget in the video tab is changed to
  *  display the expanded options in a text field via outlet fDisplayX264PresetsUnparseTextField
  */
 - (NSString *)unparseOptions
