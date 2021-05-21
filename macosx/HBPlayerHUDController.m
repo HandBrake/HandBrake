@@ -15,7 +15,7 @@
 @property (nonatomic, weak) IBOutlet NSSlider *volumeSlider;
 
 @property (nonatomic, weak) IBOutlet NSTextField *currentTimeLabel;
-@property (nonatomic, weak) IBOutlet NSTextField *remaingTimeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *remainingTimeLabel;
 
 @property (nonatomic, weak) IBOutlet NSPopUpButton *tracksSelection;
 
@@ -202,7 +202,7 @@
 
         self.slider.doubleValue = currentTime;
         self.currentTimeLabel.attributedStringValue = [self _timeToTimecode:currentTime].HB_smallMonospacedString;
-        self.remaingTimeLabel.attributedStringValue = [self _timeToTimecode:duration - currentTime].HB_smallMonospacedString;
+        self.remainingTimeLabel.attributedStringValue = [self _timeToTimecode:duration - currentTime].HB_smallMonospacedString;
 
         if (@available(macOS 10.12.2, *))
         {
