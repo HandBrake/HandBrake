@@ -1476,7 +1476,7 @@ void hb_set_anamorphic_size2(hb_geometry_t          * src_geo,
             }
             else if (keep_display_width)
             {
-                // Recompute width if we are monifying display size
+                // Recompute width if we are modifying display size
                 // in these anamorphic modes. These modes all have a fixed
                 // user specified PAR.
                 //
@@ -1580,7 +1580,7 @@ void hb_set_anamorphic_size2(hb_geometry_t          * src_geo,
 
             if (!keep_display_aspect && keep_display_width)
             {
-                // Recompute PAR if we are monifying display size
+                // Recompute PAR if we are modifying display size
                 // in auto anamorphic mode (stretching the display aspect).
                 //
                 // Not that (keep_display_aspect && geo->displayWidth < 0)
