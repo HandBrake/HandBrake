@@ -3978,7 +3978,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
     }
     else
     {
-        // Defaults so that the Dimensions tab does something resonable
+        // Defaults so that the Dimensions tab does something reasonable
         // when there is no title
         memset(&srcGeo, 0, sizeof(srcGeo));
         srcGeo.geometry.width  = ghb_dict_get_int(settings, "PictureWidth");
