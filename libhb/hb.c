@@ -91,7 +91,6 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
         avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
                                hb_get_cpu_count() / 2 + 1 : thread_count;
         avctx->thread_type = FF_THREAD_FRAME|FF_THREAD_SLICE;
-        avctx->thread_safe_callbacks = 1;
     }
     else
     {
