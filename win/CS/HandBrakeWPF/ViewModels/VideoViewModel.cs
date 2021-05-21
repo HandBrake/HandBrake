@@ -1222,7 +1222,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The get actualx 264 query.
+        /// The get actual x264 query.
         /// </summary>
         /// <returns>
         /// The <see cref="string"/>.
