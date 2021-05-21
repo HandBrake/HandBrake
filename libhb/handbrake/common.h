@@ -1030,7 +1030,7 @@ struct hb_subtitle_s
     const char * name;
     char         lang[1024];
     char         iso639_2[4];
-    uint32_t     attributes; /* Closed Caption, Childrens, Directors etc */
+    uint32_t     attributes; /* Closed Caption, Children, Directors etc */
 
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.
