@@ -4,7 +4,7 @@
 // </copyright>
 // <summary>
 //   Wrapper around functions in libhb.
-//   See common.h for stuct's / API
+//   See common.h for struct's / API
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
