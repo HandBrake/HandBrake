@@ -2152,7 +2152,7 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 - Added option for H.264 Baseline (suitable for iPods)
 - (Very) experimental queue support
 - Fixes for some DVD titles HandBrake would not recognize
-- Fixes audio gliches when encoding from LPCM tracks
+- Fixes audio glitches when encoding from LPCM tracks
 
 ## HandBrake 0.7.0-beta3
 
