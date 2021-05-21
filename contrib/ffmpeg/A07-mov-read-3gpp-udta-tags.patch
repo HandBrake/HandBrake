@@ -1,25 +1,25 @@
-From 1b02b0afe201cd14a97d83dc08716bf9cc188cb0 Mon Sep 17 00:00:00 2001
+From aee54de382b07ec1dcfc98f003e4ca9dcc3277af Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
-Date: Sun, 4 Aug 2019 10:59:38 -0700
-Subject: [PATCH 3/3] mov: read 3gpp udta tags
+Date: Fri, 21 May 2021 14:16:09 +0200
+Subject: [PATCH 3/5] [PATCH 3/3] mov: read 3gpp udta tags
 
 ---
  libavformat/mov.c | 110 ++++++++++++++++++++++++++++++++++++++++++++--
  1 file changed, 107 insertions(+), 3 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 1f933cccfd..0c365cde3e 100644
+index 1546867..d5bf31c 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -50,6 +50,7 @@
- #include "libavcodec/flac.h"
+@@ -52,6 +52,7 @@
  #include "libavcodec/mpegaudiodecheader.h"
+ #include "libavcodec/mlp_parse.h"
  #include "avformat.h"
 +#include "avlanguage.h"
  #include "internal.h"
  #include "avio_internal.h"
  #include "riff.h"
-@@ -295,6 +296,82 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
+@@ -297,6 +298,82 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
      return 0;
  }
  
@@ -101,8 +101,8 @@ index 1f933cccfd..0c365cde3e 100644
 +
  static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
-     char tmp_key[5];
-@@ -320,15 +397,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     char tmp_key[AV_FOURCC_MAX_STRING_SIZE] = {0};
+@@ -322,15 +399,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG( 'c','a','t','g'): key = "category"; break;
      case MKTAG( 'c','p','i','l'): key = "compilation";
          parse = mov_metadata_int8_no_padding; break;
@@ -139,7 +139,7 @@ index 1f933cccfd..0c365cde3e 100644
      case MKTAG( 'h','d','v','d'): key = "hd_video";
          parse = mov_metadata_int8_no_padding; break;
      case MKTAG( 'H','M','M','T'):
-@@ -399,6 +494,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -401,6 +496,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
      case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
      case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
      case MKTAG(0xa9,'x','y','z'): key = "location";  break;
@@ -156,5 +156,5 @@ index 1f933cccfd..0c365cde3e 100644
  retry:
      if (c->itunes_metadata && atom.size > 8) {
 -- 
-2.21.0
+2.30.1 (Apple Git-130)
 
