@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Converters
                                             Command = new OpenPresetManagerCommand()
                                         };
                 groupedMenu.Add("hb_preset_manager", presetManagerMenuItem);
-                groupedMenu.Add("hb_menu_seperator", new Separator());
+                groupedMenu.Add("hb_menu_separator", new Separator());
             }
 
             foreach (IPresetObject item in presets)
