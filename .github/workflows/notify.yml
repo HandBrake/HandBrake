@@ -14,8 +14,8 @@ jobs:
         with:
           channel: "#handbrake"
           nickname: handbrake-bot
-          server: chat.freenode.net
-          sasl_password: ${{ secrets.IRC_PASSWORD }}
+          server: irc.libera.chat
+          sasl_password: ${{ secrets.LIBERACHAT_PWD }}
           port: 6697
           tls: true
           message: |
@@ -26,8 +26,8 @@ jobs:
         with:
           channel: "#handbrake"
           nickname: handbrake-bot
-          server: chat.freenode.net
-          sasl_password: ${{ secrets.IRC_PASSWORD }}
+          server: irc.libera.chat
+          sasl_password: ${{ secrets.LIBERACHAT_PWD }}
           port: 6697
           tls: true
           message: |
