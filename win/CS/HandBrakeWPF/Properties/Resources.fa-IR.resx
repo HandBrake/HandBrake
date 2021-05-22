@@ -168,7 +168,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>WARNING: You do not currently have automatic audio and subtitle track selection setup. You can setup the default track selection behaviour in options.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>پیش‌نهاده‌های داخلی بازنشانده شده‌است.</value>
+    <value>پیش‌نشانده‌ها‌ی داخلی بازنشانده شده‌است.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>بازنشانی کامل شد</value>
@@ -213,10 +213,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>یک بروزرسانی جدید در دسترس است. برای نصب به فهرست ابزار &gt; گزینه‌ها بروید</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
+    <value>هیچ پیش‌نشانده‌ای انتخاب نشده.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>شما نمی‌توانید پیش‌نهاده‌های داخلی را تغییر دهید. لطفاً یکی از پیش‌نهاده‌های خودتان را انتخاب کنید.</value>
+    <value>شما نمی‌توانید پیش‌نشانده‌ها‌ی داخلی را تغییر دهید. لطفاً یکی از پیش‌نشانده‌ها‌ی خودتان را انتخاب کنید.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
     <value>لطفا یک پوشه را انتخاب کنید.</value>
@@ -225,23 +225,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>در حال مهیا شدن برای فشرده‌سازی ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>شما نمی‌توانید پیش‌نهاده‌ای هم‌نام پیش‌نهاده‌های داخلی را وارد کنید.</value>
+    <value>شما نمی‌توانید پیش‌نشانده‌ای هم‌نام پیش‌نشانده‌ی داخلی را وارد کنید.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
     <value>پیشنهاده‌ای با نام «{0}» از قبل وجود دارد. آیا می‌خواهید آن را جای‌نویسی کنید؟</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>پیش‌نهاده‌ها</value>
+    <value>پیش‌نشانده‌ها</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
-    <value>آیا مطمئن هستید که می‌خواهید پیش‌نهاده‌ی انتخاب شده را بروز آوری کنید؟</value>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>آیا مطمئن هستید که می‌خواهید پیش‌نشانده‌ی انتخاب شده را بروزرسانی کنید؟</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
     <value>The Preset has now been updated with your current settings.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake تشخیص داده است که پیش‌نهاده‌ی داخلی شما قدیمی است... این پیش‌نهاده‌ها هم‌اکنون بروز می‌شوند.
-پیش‌نهاده‌های دلخواه شما بروز نشده است بنابراین ممکن است مجبور شوید با حذف و افزودن مجدد، آنها را از نو ایجاد کنید.
+    <value>HandBrake تشخیص داده است که پیش‌نشانده‌ها‌ی داخلی شما قدیمی است... این پیش‌نشانده‌ها هم‌اکنون بروز می‌شوند.
+پیش‌نشانده‌ها دلخواه شما بروز نشده است بنابراین ممکن است مجبور شوید با حذف و افزودن مجدد، آنها را از نو ایجاد کنید.
 از پرونده‌ی user_presets.xml قبلی پشتیبان‌گیری شد.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
@@ -256,23 +256,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>وارسی ناموفق بود:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>وارسی شکست خورد... لطفا برای مشاهده‌ی جزئیاتَ، گزارش فعالیت را ببینید.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
     <value>درحال وارسی منبع، لطفا صبر کنید...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>وارسی عنوان {0} از {1} (٪{2})</value>
+    <value>درحال وارسی عنوان {0} از {1} (%{2})</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
     <value>قبل از شروع فشرده‌سازی شما ابتدا باید یک منبع را اسکن کرده و کار خود را تنظیم کنید. برای ادامه روی دکمه «منبع» در نوار ابزار بزنید</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>لطفا مطمئن شوید که یکی از پیش‌نهاده‌های خود را انتخاب کرده‌اید. لطفاً توجه داشته باشید که نمی‌توانید پیش‌نهاده‌های داخلی را صادر کنید.</value>
+    <value>لطفا مطمئن شوید که یکی از پیش‌نشانده‌ها‌ی خود را انتخاب کرده‌اید. لطفاً توجه داشته باشید که نمی‌توانید پیش‌نشانده‌ها‌ی داخلی را صادر کنید.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>لطفا یک پیش‌نهاده را برای بروزرسانی انتخاب کنید.</value>
+    <value>لطفا یک پیش‌نشانده را برای بروزرسانی انتخاب کنید.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>برای ادامه دادن، «منبعی» را انتخاب کنید</value>
@@ -296,19 +296,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>بروزرسانی شده</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>نسخه‌ی پیش‌نهاده</value>
+    <value>نسخه‌ی پیش‌نشانده</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>پیش‌نهاده‌هایی که شما تلاش می‌کنید وارد کنید مربوط به نسخه‌ای متفاوت از HandBrake است. 
-شاید امکان وارد کردن همه‌ی مقادیر از این پیش‌نهاده وجود نداشته باشد.
+    <value>پیش‌نشانده‌هایی که شما تلاش می‌کنید وارد کنید مربوط به نسخه‌ای متفاوت از HandBrake است. 
+شاید امکان وارد کردن همه‌ی مقادیر از این پیش‌نشانده وجود نداشته باشد.
 
 آیا می‌خواهید ادامه دهید؟</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>نتوانست پیش‌نهاده‌ها را وارد کند!</value>
+    <value>نتوانست پیش‌نشانده را وارد کند!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>نتوانست پیش‌نهاده را وارد کند زیرا به نظر می‌رسد خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد.</value>
+    <value>نتوانست پیش‌نشانده را وارد کند زیرا به نظر می‌رسد خراب شده یا از یک نسخه‌ی قدیمی‌تر HandBrake باشد.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>شما باید اول مسیر مقصد را برای پرونده‌ی خروجی تنظیم کنید سپس آن را در صف قرار دهید.</value>
@@ -344,11 +344,11 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
     <value>شما همچنان قادرید صفحه‌ی کمک را با مراجعه‌ی مستقیم به وبگاه https://handbrake.fr مشاهده کنید.</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>نتوانست پیش‌نهاده‌های انتخاب‌شده را وارد کند!</value>
+    <value>نتوانست پیش‌نشانده‌ی انتخاب‌شده را وارد کند!</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>این پیش‌نهاده ممکن است خراب شده یا از یک نسخه‌ی قدیمی‌تر HandbBrake باشد که پشتیبانی نمی‌شود.
-پیش‌نهاده‌های نسخه‌های قدیمی‌تر باید باید در همین نسخه از نو ساخته شوند.</value>
+    <value>این پیش‌نشانده ممکن است خراب شده یا از یک نسخه‌ی قدیمی‌تر HandBrake باشد که پشتیبانی نمی‌شود.
+پیش‌نشانده‌ها‌ی نسخه‌های قدیمی‌تر باید باید در همین نسخه از نو ساخته شوند.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>شناسه‌های پیشرفته‌ی اضافی که می توانند به فشرده‌ساز ویدیو منتقل شوند.</value>
@@ -391,19 +391,19 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
     <value>شروع صف</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>شما نمی‌توانید پیش‌نهاده‌ی پیش‌فرض را حذف کنید. لطفا اول یک پیش‌نهاده‌ی دیگر را به عنوان پیش‌فرض تنظیم کنید.</value>
+    <value>شما نمی‌توانید پیش‌نشانده‌ی پیش‌فرض را حذف کنید. لطفا اول یک پیش‌نشانده‌ی دیگر را به عنوان پیش‌فرض تنظیم کنید.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>آیا مطمئن هستیدید می‌خواهید این پیش‌نهاده را حذف کنید؟</value>
+    <value>آیا مطمئن هستیدید می‌خواهید این پیش‌نشانده را حذف کنید؟</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>یک پیش‌نهاده باید نام داشته باشد. لطفا قسمت نام پیش‌نهاده را پر کنید.</value>
+    <value>یک پیش‌نشانده باید نام داشته باشد. لطفا قسمت نام پیش‌نشانده را پر کنید.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>پیش‌نهاده‌ای با همین نام از قبل موجود است. دوست دارید جای‌نویسی کنید؟</value>
+    <value>پیش‌نشانده‌ای با همین نام از قبل موجود است. دوست دارید جای‌نویسی کنید؟</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
     <value>You must first scan a source to use the 'Source Maximum' Option.</value>
@@ -412,7 +412,7 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
     <value>The Custom Width or Height fields must be filled in for the 'Custom' option.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>نتواست پیش‌نهاده را اضافه کند</value>
+    <value>نتواست پیش‌نشانده را اضافه کند</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>خطای ناشناخته</value>
@@ -439,7 +439,7 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
     <value>عملیات « {0} » در {1} ثانیه‌ی دیگر اتفاق خواهد افتاد.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>اگر مشکل همچنان ادامه داشت، لطفاً HandBrake را از نو راه‌اندازی کنید.</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>در مورد این خطا اطلاعات بیشتری در دسترس نیست.</value>
@@ -466,6 +466,9 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>بروزرسانی ناموفق بود. شما می‌توانید برای بارگیری بروزرسانی از https://handbrake.fr تلاش کنید.</value>
   </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Storage Size: {0}x{1}</value>
+  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>افزودن به صف</value>
   </data>
@@ -478,7 +481,7 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>صف</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>آیا مطمئن هستید می‌خواهید این صف را پاک کنید؟</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -499,7 +502,7 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>هیچ کاری در انتظاری نیست.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>آیا مطمئن هستید می‌خواهید این کار را ویرایش کنید؟ در این صورت از صف حذف شده و به پنجره‌ی اصلی انتقال می‌یابد.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -558,9 +561,9 @@ Foreign Audio Preferred, else First - If the foreign audio track exists, it will
     <value>Unable to load presets.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake نتوانست پرونده‌ی پیش‌نهاده‌ی شما را باز کند. ممکن است این پرونده از نسخه‌ی قدیمی پشتیبانی نشده‌ی HandBrake باشد یا خراب شده باشد.
+    <value>HandBrake نتوانست پرونده‌ی پیش‌نشانده‌ها‌ی شما را باز کند. ممکن است این پرونده از نسخه‌ی قدیمی پشتیبانی نشده‌ی HandBrake باشد یا خراب شده باشد.
 
-پرونده‌ی پیش‌نهاده‌های قدیمی در اینجا بایگانی شدند:</value>
+پرونده‌ی پیش‌نشانده‌ها‌ی قدیمی در اینجا بایگانی شدند:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value>با {0} خطا یا لغو شناسایی شد.</value>
@@ -628,7 +631,7 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>در هنگام تلاش برای دخیره‌ی ترجیحات مشکلی پیش آمد.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -734,7 +737,7 @@ Remaining Time: {4}</value>
     <value>-- افزودن دسته‌ی جدید --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>افزودن پیش‌نهاده</value>
+    <value>افزودن پیش‌نشانده</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
     <value>دسته:</value>
@@ -857,7 +860,7 @@ Remaining Time: {4}</value>
     <value>Deinterlace:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>پیش‌نهاده:</value>
+    <value>پیش‌نشانده:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
     <value>Deinterlace Preset</value>
@@ -866,7 +869,7 @@ Remaining Time: {4}</value>
     <value>نویز زدایی:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>پیش‌نهاده‌ی نویز زدایی</value>
+    <value>پیش‌نشانده‌ی کاهش نویز</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>میزان نویز زدایی</value>
@@ -878,7 +881,7 @@ Remaining Time: {4}</value>
     <value>پالایه‌ها</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>وارنه کردن</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>سیاه و سفید</value>
@@ -887,16 +890,16 @@ Remaining Time: {4}</value>
     <value>Interlace Detection:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>پیش‌نهاده:</value>
+    <value>پیش‌نشانده:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>چرخاندن:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>واضح کردن:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>پیش‌نهاده‌‌ی واضح کردن </value>
+    <value>پیش‌نشانده‌ی واضح کردن </value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>میزان واضح کردن</value>
@@ -1022,16 +1025,16 @@ Remaining Time: {4}</value>
     <value>ابعاد</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>تغییر نام پیش‌نهاده</value>
+    <value>تغییر نام پیش‌نشانده</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Preset Options Context Menu</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>حذف پیش‌نهاده</value>
+    <value>حذف پیش‌نشانده</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>پیش‌نهاده‌ها</value>
+    <value>پیش‌نشانده‌ها</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>پیش‌نمایش</value>
@@ -1049,10 +1052,10 @@ Remaining Time: {4}</value>
     <value>حذف</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>بازنشانی پیش‌نهاده‌های داخلی</value>
+    <value>بازنشانی پیش‌نشانده‌ها‌ی داخلی</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>ذخیره‌ی پیش‌نهاده‌ی جدید</value>
+    <value>ذخیره‌ی پیش‌نشانده‌ی جدید</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Searching for start time</value>
@@ -1106,7 +1109,7 @@ Remaining Time: {4}</value>
     <value>عنوان:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>بروزرسانی پیش‌نهاده‌ی انتخاب شده</value>
+    <value>بروزرسانی پیش‌نشانده‌ی انتخاب شده</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>ویدیو</value>
@@ -1115,7 +1118,7 @@ Remaining Time: {4}</value>
     <value>بهینه برای وب</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>مدیریت پیش‌نهاده‌ها:</value>
+    <value>مدیریت پیش‌نشانده‌ها:</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>فراداده</value>
@@ -1319,26 +1322,23 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>دلخواه</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Display Width:</value>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>ارتفاع:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>حفظ نسبت ابعاد</value>
+    <value>خودکار</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>چپ</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Modulus:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>خروجی:</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>راست</value>
@@ -1346,14 +1346,11 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>اندازه</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>منبع:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>بالا</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>عرض:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>دلخواه</value>
@@ -1514,7 +1511,7 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>انتخاب زبان:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Selected Languages:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1665,7 +1662,7 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
     <value>تراز فشردگی</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>پیش‌نهاده‌ی فشردگی</value>
+    <value>پیش‌نشانده‌ی فشردگی</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
     <value>Encoder Profile:</value>
@@ -1722,7 +1719,7 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
     <value>افزودن خط</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>تنظیمات فشردگی صوت برای هر کدام از خط‌های انتخاب شده</value>
+    <value>تنظیمات فشردگی صدا برای هر کدام از خط‌های انتخاب شده</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>پاک کردن</value>
@@ -1767,13 +1764,13 @@ VLC و MPC-HC پشتیبانی می‌شوند. پخش‌کننده‌های د�
     <value>_ترجیحات</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_پیش‌نهاده‌ها</value>
+    <value>_پیش‌نشانده‌ها</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
     <value>_صف</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_بازنشانی پیش‌نهاده‌های داخلی</value>
+    <value>_بازنشانی پیش‌نشانده‌ها‌ی داخلی</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
     <value>_تنظیم تنظیمان فعلی به عنوان پیش‌فرض</value>
@@ -2020,9 +2017,6 @@ Where supported, any user presets will have been imported.</value>
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>عنوان:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Preview Rotation and Flip</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>نمایشگر گزارش</value>
   </data>
@@ -2087,10 +2081,10 @@ Where supported, any user presets will have been imported.</value>
     <value>هیچ کدام</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>Foreign Audio Search</value>
+    <value>جستجوی صدا‌ی خارجی</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Foreign Audio Scan</value>
+    <value>بررسی صدا‌ی خارجی</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
     <value>All Matching Selected Languages</value>
@@ -2105,7 +2099,7 @@ Where supported, any user presets will have been imported.</value>
     <value>از خط اول به عنوان الگو استفاده کن</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>No Audio</value>
+    <value>بدون صدا</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
     <value>بخش {0}</value>
@@ -2216,7 +2210,7 @@ Please choose a different preset.</value>
     <value>لغو</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>پیش‌نهاده:</value>
+    <value>پیش‌نشانده:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
     <value>عین منبع باشد</value>
@@ -2231,31 +2225,31 @@ Please choose a different preset.</value>
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (pad to resolution limit)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (pad up to res limit)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>هیچ کدام</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (pad up to res limit)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding Colour:</value>
+    <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>مرزها</value>
+    <value>Borders:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
     <value>تفکیک‌پذیری و مقیاس‌گذاری:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>چرخاندن و بریدن:</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>(فقط ویندوز 10!)</value>
@@ -2290,11 +2284,8 @@ Please choose a different preset.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>دلخواه</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>بیشینه‌ی ارتفاع:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>بیشینه‌ی عرض</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
@@ -2303,28 +2294,28 @@ Please choose a different preset.</value>
     <value>هیچ کدام</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>مدیریت پیش‌نهاده‌ها:</value>
+    <value>مدیریت پیش‌نشانده‌ها:</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>حذف پیش‌نهاده‌های داخلی</value>
+    <value>حذف پیش‌نشانده‌ها‌ی داخلی</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>خارج کردن پیش‌نهاده‌های انتخاب شده</value>
+    <value>صادر کردن پیش‌نشانده‌ی انتخاب شده</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>وارد کردن پیش‌نهاده‌(ها) از پرونده</value>
+    <value>وارد کردن پیش‌نشانده(ها) از پرونده</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>اطلاعات پیش‌نهاده:</value>
+    <value>اطلاعات پیش‌نشانده:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>پیش‌نهاده‌های داخلی نمی‌توانند تغییر کنند.</value>
+    <value>پیش‌نشانده‌ها‌ی داخلی نمی‌توانند تغییر کنند.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>تنظیم پیش‌نهاده‌ی فعلی در حالت پیش‌فرض</value>
+    <value>تنظیم پیش‌نشانده فعلی در حالت پیش‌فرض</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>حذف پیش‌نهاده</value>
+    <value>حذف پیش‌نشانده</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
     <value>(بر روی این دستگاه پشتیبانی نمی‌شود)</value>
@@ -2332,28 +2323,8 @@ Please choose a different preset.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>توقف</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>فراداده</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>نام دسته‌ای که وارد  کردید از قبل وجود دارد. لطفاً یک نام دیگر را وارد کنید.</value>
@@ -2365,10 +2336,10 @@ Fields are limited to:
     <value>یک نام وارد کنید:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>هیچ پیش‌نهاده‌ای انتخاب نشده.</value>
+    <value>هیچ پیش‌نشانده‌ای انتخاب نشده.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>صادر کردن پیش‌نهاده‌های همه‌ی کاربران</value>
+    <value>صادر کردن پیش‌نشانده‌ها‌ی همه‌ی کاربران</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
     <value>سطحی که هشدارهای «فضای دیسک کم است» را نشان می‌دهد:</value>
@@ -2456,5 +2427,56 @@ Fields are limited to:
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>هشدار: لطفاً توجه داشته باشید که این ساخت HandBrake «حالت ایمن» است که پشتیبانی از فشرده‌سازی‌های سخت‌افزاری را شامل نمی‌شود. اگر می‌خواهید از فشرده‌ساز سخت‌افزاری استفاده کنید، لطفاً ساختی غیر «حالت ایمن» را از وبگاه بارگیری کنید.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+
+While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+
+Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+
+This warning will display only twice.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>دلخواه</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB Value:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>بیشینه‌ی ارتفاع:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>بیشینه‌ی عرض</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>

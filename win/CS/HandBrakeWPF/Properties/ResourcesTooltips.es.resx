@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -147,7 +147,7 @@ HQDN3D es un filtro de paso bajo adaptativo, más rápido que NLMeans, pero meno
     <value>Ruta de destino, incluido el directorio y el nombre del archivo. Aquí es donde se creará su nuevo video, y cómo se llamará.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>Agregue un marcador MP4 especial para permitir la reproducción en los dispositivos de la quinta generación de iPod cercanos al 2006. Otras configuraciones pueden afectar a la compatibilidad.</value>
+    <value>Agrega un marcador MP4 especial para permitir la reproducción en antiguos dispositivos iPod de quinta generación (alrededor del 2006). Otros ajustes podrían afectar a la compatibilidad.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
     <value>Formato contenedor. El video, el audio y otras pistas se combinan en un solo archivo de este tipo. Afecta la compatibilidad.</value>
@@ -343,7 +343,7 @@ HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Filtro de Eliminación de Ruido preestablecido. Establece la fuerza del filtro.</value>
+    <value>Preajuste de filtro de eliminación de ruido. Establece la fuerza del filtro.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>Denoise tune. Ajusta aún más el preajuste de Denoise para optimizar la configuración para escenarios específicos.
@@ -464,5 +464,14 @@ La melodía Sprite de Lapsharp es útil para juegos de 2 dimensiones de 1/4-/8-/
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Cuando está habilitado, el sistema de nombre automático siempre usará la ruta predeterminada.
 Cuando está deshabilitado, usará la ruta en el cuadro de destino en la ventana principal si está lleno, de lo contrario, usará la ruta predeterminada.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtro de color.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Filtro de suavizado cromático.</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
   </data>
 </root>

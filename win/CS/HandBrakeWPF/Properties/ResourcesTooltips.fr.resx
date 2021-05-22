@@ -467,4 +467,13 @@ Il utilise un noyau laplacien à 4 voisins qui améliore davantage les contours 
     <value>Lorsque cette option est activée, le système de nom automatique utilisera toujours le chemin par défaut. 
 Lorsqu'elle est désactivée, elle utilisera, s'il est renseigné, le chemin de destination indiqué dans la boîte de dialogue de la fenêtre principale; sinon elle utilisera le chemin par défaut.</value>
   </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtre d'espace colorimétrique.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Filtre de lissage chromatique</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Ce champ peut accepter des valeurs RGB telles que : "0xFF0000" ou des noms de couleur tels que "red". Pour une liste complète des couleurs nommées, consultez la documentation du filtre de remplissage.</value>
+  </data>
 </root>

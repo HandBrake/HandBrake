@@ -442,7 +442,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Die Aktion „{0}“ wird in {1} Sekunden ausgeführt.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Bitte HandBrake neu starten, wenn das Problem anhält.</value>
+    <value>Wenn das Problem bestehen bleibt, versuchen Sie bitte HandBrake neu zu starten.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Für diesen Fehler ist keine weitere Information verfügbar.</value>
@@ -468,6 +468,9 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Update fehlgeschlagen. Es kann versucht werden, das Update von https://handbrake.fr herunterzuladen.</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Originalgröße: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Zur Warteschlange hinzufügen</value>
@@ -881,7 +884,7 @@ Soll sie überschrieben werden?</value>
     <value>Filter</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Spiegeln</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Graustufen</value>
@@ -893,7 +896,7 @@ Soll sie überschrieben werden?</value>
     <value>Voreinstellung:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotieren:</value>
+    <value>Drehung:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Schärfen:</value>
@@ -1323,25 +1326,22 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Eigene</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Anzeigebreite:</value>
+    <value>Anzeigegröße:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Höhe:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Seitenverhältnis beibehalten</value>
+    <value>Automatisch</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Links</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Modulus:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Ausgabe:</value>
+    <value>Finale Bildgröße:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixelformat:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Rechts</value>
@@ -1349,14 +1349,11 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Bildgröße</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Quelle:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Oben</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Breite:</value>
+    <value>Skalierte Größe:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Eigene</value>
@@ -2022,9 +2019,6 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Titel:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Vorschau von Drehung und Spiegeln</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>Aktivitätsprotokoll</value>
   </data>
@@ -2233,31 +2227,31 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Eigene (unbegrenzt)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Füllen (bis zum Auflösungslimit füllen)</value>
+    <value>Umgebung füllen</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Höhe (bis zum Auflösungslimit füllen)</value>
+    <value>Breite füllen (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Keine</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Breite (bis zum Auflösungslimit füllen)</value>
+    <value>Höhe füllen (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Füllen:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding-Farbe:</value>
+    <value>Farbe:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Ränder</value>
+    <value>Ränder:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
     <value>Auflösung und Skalierung:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Drehen und Beschneiden:</value>
+    <value>Ausrichtung und Beschnitt:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Nur Windows 10! )</value>
@@ -2292,11 +2286,8 @@ Bitte eine andere Voreinstellung auswählen.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Eigene</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Maximale Höhe:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Maximale Breite:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximale Größe:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Auflösungslimit:</value>
@@ -2334,28 +2325,8 @@ Bitte eine andere Voreinstellung auswählen.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Metadaten</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru der Standard-Metadaten von der Quelle zur Ausgabedatei (wo unterstützt)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>Diese Einstellung erlaubt das Durchreichen von Standard-Metadatenfeldern von der Quelle zur Ausgabedatei.
-Dies ist auf folgende Felder begrenzt:
-- Name
-- Künstler
-- Albumkünstler
-- Komponist
-- Erscheinungsdatum
-- Kommentar
-- Album
-- Genre
-- Beschreibung
-- Lange Beschreibung</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2458,5 +2429,56 @@ Dies ist auf folgende Felder begrenzt:
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Warnung: Bitte beachten Sie, dass dies ein "Safe Mode"-Build von HandBrake ist, das keine Unterstützung für Hardware-Encoder enthält. Wenn Sie die Hardware-Encoder-Unterstützung nutzen möchten, laden Sie bitte einen nicht-"Safe Mode"-Build von der Website herunter.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Bitte beachten Sie, dass HandBrake nicht mehr unter Windows 7 oder Windows 8 unterstützt wird.
+
+Sie können die Anwendung zwar auf eigenes Risiko weiter verwenden, aber bitte beachten Sie, dass bestimmte Funktionen nicht funktionieren und es andere unbekannte Probleme geben kann. Es gibt keinen Support, wenn diese Probleme auftreten. 
+
+Die Unterstützung für Windows 7 und 8 wurde ab Version 1.3 entfernt. Das bedeutet, dass es keine weiteren Updates zur Behebung von Problemen auf diesen Plattformen geben wird. 
+
+Diese Warnung wird nur zweimal angezeigt.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Schwarz</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Eigene</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Weiß</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB-Wert:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(gefüllt)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Spiegeln:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Bildgröße der Quelle:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Originalgröße: {0}x{1}   Anzeigegröße: {2}x{3}     Bildformat: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Im Dateibrowser-Dialog wurde ein Fehler festgestellt. 
+
+- Bitte beachten Sie, dass lange Dateipfade nicht vollständig unterstützt werden. Bitte halten Sie Dateipfade kürzer als 255 Zeichen. 
+- Das zuletzt verwendete Verzeichnis für dieses Fenster, wurde zurückgesetzt, um Fehler zu vermeiden, wenn Sie das nächste Mal versuchen, eine Datei zu prüfen.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Maximale Höhe:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Maximale Breite:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Bildformat: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Metadaten-Passthru</value>
   </data>
 </root>

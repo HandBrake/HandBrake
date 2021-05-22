@@ -323,7 +323,7 @@ Què ùn hè micca cumpatibile cù certi lettori.</value>
     <value>Ozzioni addiziunale di prerigatura.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currispunde u più à u vostru bisognu.
+    <value>E prerigature sò gruppi di preferenze di cudificazione custruiti per scenarii specifichi. Selezziunate quella chì currisponde u più à u vostru bisognu.
  
  Rimpiazzeghja tutte e preferenze di cudificazione. E preferenze ponu esse addattate dopu a selezzione di a prerigatura.</value>
   </data>
@@ -472,5 +472,8 @@ Quand’ella hè disattivata, impiegherà u chjassu scrittu in a scatula di dial
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
     <value>Filtru d’allisciata cromatica</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Stu campu pò accettà valori RGB cum’è « 0xFF0000 » o nomi di culore cum’è "red". Per ottene una lista cumpleta di i culori, fighjate a ducumentazione nant’à i filtri d’imburrera.</value>
   </data>
 </root>

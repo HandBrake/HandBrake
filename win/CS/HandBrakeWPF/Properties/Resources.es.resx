@@ -127,7 +127,7 @@
 Actívelo si a su dispositivo le cuesta reproducir la salida. (Por ej.: pierde cuadros)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Advertencia: RF 0 es sin pérdida!</value>
+    <value>Advertencia: RF 0 es sin pérdida</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>Un valor de 0 significa sin pérdida y resultará en un tamaño de archivo más grande que el original,
@@ -168,7 +168,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU
     <value>Advertencia: No tiene la selección automática de pistas de audio y subtitulo activada. Puede configurar las pistas por defecto en las opciones.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Los ajustes preestablecidos han sido restablecidos</value>
+    <value>Los preajustes integrados han sido restablecidos.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>Restablecimiento completo</value>
@@ -207,43 +207,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU
     <value>Trabajos pendientes {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Nuevo ajuste por defecto: {0}</value>
+    <value>Nuevo conjunto de preajustes por defecto: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
     <value>Una nueva actualización esta disponible. Puede instalarla desde
 Barra de herramientas &gt; Opciones</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>No hay ajustes seleccionados.</value>
+    <value>No hay preajustes seleccionados.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>No puede modificar los ajustes integrados. Por favor seleccione uno de sus propios ajustes.</value>
+    <value>No puede modificar los preajustes integrados. Por favor, seleccione uno de sus propios preajustes.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>Por favor seleccione una carpeta</value>
+    <value>Por favor, seleccione una carpeta.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
     <value>Preparando para codificar ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>No puede importar un ajuste con el mismo nombre que uno integrado</value>
+    <value>No puede importar un preajuste con el mismo nombre que un preajuste integrado.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>El ajuste "{0}" ya existe. ¿Desea sobrescribirlo?</value>
+    <value>El preajuste "{0}" ya existe. ¿Desea sobrescribirlo?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Ajustes</value>
+    <value>Preajustes</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>¿Está seguro que desea actualizar el ajuste seleccionado?</value>
+    <value>¿Seguro que desea actualizar el preajuste seleccionado?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>El ajuste ha sido actualizado con su configuración actual.</value>
+    <value>El preajuste ha sido actualizado con su configuración actual.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake ha determinado que sus ajustes preestablecidos están desactualizados... Estos ajustes preestablecidos ahora se actualizarán. 
- Los ajustes preestablecidos personalizados no se han actualizado, por lo que es posible que tenga que volver a crearlos eliminándolos y reagregándolos. 
- Se realizó una copia de seguridad del archivo user_presets.xml anterior.</value>
+    <value>HandBrake ha determinado que sus preajustes están desactualizados... Estos preajuste se actualizarán.
+Sus preajustes personalizados no se han actualizado, por lo que es posible que tenga que volver a crearlos, eliminándolos y agregándolos de nuevo.
+Se ha realizado una copia de seguridad del archivo user_presets.xml anterior.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
     <value>Cola finalizada</value>
@@ -258,7 +258,7 @@ Barra de herramientas &gt; Opciones</value>
     <value>Búsqueda fallida</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>Búsqueda fallida... Por favor mire el registro de actividad para mas detalles</value>
+    <value>Búsqueda fallida... Por favor, revise el registro de actividad para más detalles</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
     <value>Escaneando origen, por favor espere...</value>
@@ -270,11 +270,10 @@ Barra de herramientas &gt; Opciones</value>
     <value>Primero debe escanear un origen y configurar su trabajo antes de codificar. Pulse el botón 'Origen' en la barra de herramientas para continuar</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Por favor asegúrese de haber seleccionado uno de sus propios ajustes. 
-No puede exportar los ajustes predefinidos.</value>
+    <value>Por favor asegúrese de haber seleccionado uno de sus propios preajustes. Tenga en cuenta que no puede exportar preajustes integrados.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Por favor seleccione un ajuste a actualizar</value>
+    <value>Por favor, seleccione un preajuste a actualizar</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>Seleccione 'Origen' para continuar</value>
@@ -298,25 +297,26 @@ No puede exportar los ajustes predefinidos.</value>
     <value>Actualizado</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Versión de ajuste predefinido</value>
+    <value>Versión de preajuste</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>El ajuste que desea importar es de una versión diferente de HandBrake.
+    <value>El preajuste que desea importar es de una versión diferente de HandBrake.
+
 Puede no ser posible el importar todos los valores de este ajuste.
 
 ¿Desea continuar?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>No se pudo importar el ajuste</value>
+    <value>¡No se ha podido importar el preajuste!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>No se pudo importar el ajuste porque parece corrupto o de una versión más antigua de HandBrake</value>
+    <value>No se pudo importar el preajuste porque parece corrupto o es de una versión más antigua de HandBrake.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>Primero debe seleccionar la ubicación destino del archivo antes de agregarlo a la cola</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>La ubicación de destino solicitada contiene caracteres ilegales y no sera actualizada</value>
+    <value>La ruta de destino introducida contenía caracteres no permitidos y no se actualizará.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Previsualizar {0}</value>
@@ -349,8 +349,8 @@ Puede no ser posible el importar todos los valores de este ajuste.
     <value>No se puede importar el preajuste seleccionado.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>El preajuste puede estar dañado o desde una versión anterior de HandBrake que no es compatible.  
-    Los preajustes de versiones anteriores deben volver a crearse en la versión actual.</value>
+    <value>El preajuste puede estar corrupto o venir de una versión anterior de HandBrake que no es compatible.
+Los preajustes de versiones anteriores deben volver a crearse en la versión actual.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>Argumentos avanzados adicionales que se pueden pasar al codificador de vídeo. </value>
@@ -393,19 +393,19 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>Iniciar Cola</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>No puede eliminar el preajuste por defecto. Primero establezca otro preajuste como predeterminado . </value>
+    <value>No puede eliminar el preajuste por defecto. Antes establezca otro preajuste como predeterminado.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>¿Está seguro de que desea eliminar el preajuste: </value>
+    <value>¿Seguro que desea eliminar el preajuste: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Codificación: Paso {0}de {1},  {2: 00.00}%, FPS: {3: 000.0}, Promedio de FPS: {4: 000.0},     Tiempo restante: {5}, Transcurrido: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>Un ajuste preestablecido debe tener un nombre. Rellene el campo Nombre. </value>
+    <value>El preajuste debe tener un nombre. Rellene el campo Nombre. </value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>Ya existe un ajuste preestablecido con este nombre. ¿Le gustaría sobrescribirlo? </value>
+    <value>Ya existe un preajuste con este nombre. ¿Quiere sobrescribirlo? </value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
     <value>Primero debe escanear un origen para utilizar la opción 'Source Maximum'. </value>
@@ -414,7 +414,7 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>Los campos Anchura o Altura personalizada deben rellenarse para la opción "Personalizado". </value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>No se puede añadir el ajuste preestablecido </value>
+    <value>No se puede añadir el preajuste</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Error desconocido</value>
@@ -441,7 +441,7 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>La siguiente accion '{0}' acurrira en {1} segundos.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Si el problema persiste, intente reiniciar HandBrake.</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>No hay mas informacion disponible sobre este error.</value>
@@ -467,6 +467,9 @@ Puede encontrar más información en el registro de actividad.</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Falló la actualización. Puede intentar descargar la actualización directamente de https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Storage Size: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Agregar a la cola</value>
@@ -556,12 +559,12 @@ Puede encontrar más información en el registro de actividad.</value>
     <value>Archivo Guardado:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>No se pueden cargar ajustes preestablecidos.</value>
+    <value>No se pueden cargar los preajustes.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake  no pudo cargar el archivo de ajustes preestablecidos. Puede ser debido a una versión antigua no compatible de HandBrake o que el archivo este corrupto. 
+    <value>HandBrake no pudo cargar su archivo de preajustes. Puede ser debido a una versión antigua no compatible de HandBrake o que el archivo este corrupto. 
 
- Su antiguo archivo de ajustes preestablecidos fue archivado en:</value>
+ Su antiguo archivo de preajustes fue archivado en:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value>con {0} errores o cancelaciones detectadas.</value>
@@ -622,8 +625,8 @@ Está seguro de que desea importar los nombres de capítulo?</value>
     <value>Se ha producido un error al intentar detener el análisis. Reinicie HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake no puede actualizar el archivo de ajustes preestablecidos a un nuevo formato de versión.  
-El archivo predefinido se archivará y se creará uno nuevo. Tendrá que volver a crear sus propios ajustes preestablecidos. </value>
+    <value>HandBrake no puede actualizar su archivo de preajustes al formato de la nueva versión.
+Su archivo de preajuste se archivará y se creará uno nuevo. Tendrá que volver a crear sus propios preajustes. </value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Es posible que deba restablecerse cualquier configuración que haya cambiado.</value>
@@ -735,7 +738,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>-- Añadir Nueva Categoria--</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>Añadir Ajuste Preestablecido</value>
+    <value>Añadir preajuste</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
     <value>Categoria:</value>
@@ -849,7 +852,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Personalizar:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Desbloquear</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -858,16 +861,16 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Desentrelazar:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>Ajuste Preestablecido:</value>
+    <value>Preajuste:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Desentrelazado Preestablecido</value>
+    <value>Desentrelazado</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>Denoise:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Denoise Preset</value>
+    <value>Eliminación de ruido</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>Denoise Tune</value>
@@ -879,7 +882,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Filtros</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Dar la vuelta</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Escala de grises</value>
@@ -888,16 +891,16 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Detección de entrelazado:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>Ajuste Preestablecido:</value>
+    <value>Preajuste:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotar:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Agudeza</value>
+    <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Agudeza preestablecidat</value>
+    <value>Agudeza</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>Afinar Agudeza</value>
@@ -963,7 +966,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Alinear Inicio A/V</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Angulo: </value>
+    <value>Ángulo: </value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
     <value>Audio</value>
@@ -984,7 +987,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Destino</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Duracion: </value>
+    <value>Duración: </value>
   </data>
   <data name="MainView_File" xml:space="preserve">
     <value>Guardar Como:</value>
@@ -999,7 +1002,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Ayuda</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G Support</value>
+    <value>Compatibilidad con iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
     <value>Metadatos</value>
@@ -1023,16 +1026,16 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Dimensiones</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Renombrar  ajuste preestablecido</value>
+    <value>Renombrar preajuste</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Opciones predefinidas del Menú contextual</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Borrar Oopciones Preestablecidas</value>
+    <value>Eliminar preajuste</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Ajustes</value>
+    <value>Preajustes</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Previsualizar</value>
@@ -1050,10 +1053,10 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Eliminar</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Restablecer ajustes integrados</value>
+    <value>Restablecer preajustes integrados</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Guardar nuevo ajuste preestablecido</value>
+    <value>Guardar nuevo preajuste</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Buscando la hora de inicio</value>
@@ -1071,7 +1074,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Fuente:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>Abrir Origen</value>
+    <value>Abrir origen</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
     <value>Iniciar Codificación</value>
@@ -1086,7 +1089,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Detener Codificación</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Esta seguro que desea detener esta codificación?</value>
+    <value>¿Seguro que desea detener esta codificación?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
     <value>Elija un origen para codificar antes de intentar importar un archivo de subtítulos.</value>
@@ -1107,13 +1110,13 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Titulo: </value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Actualizar ajuste preestablecido seleccionado</value>
+    <value>Actualizar el preajuste seleccionado</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>Video</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>Optimizado para Web</value>
+    <value>Optimizar para Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
     <value>Administrar preajustes</value>
@@ -1161,10 +1164,10 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Argumentos:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>Nombrado de Archivos Automatico</value>
+    <value>Nombramiento automático de archivos</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>Nombra archivos de salida automáticamente</value>
+    <value>Nombrar automáticamente los archivos de salida</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
     <value>Buscar actualizaciones</value>
@@ -1182,7 +1185,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Coloque una copia de los registros de codificación individuales en la misma ubicación que el vídeo codificado</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>Version Actual</value>
+    <value>Versión actual</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
     <value>Decodificando</value>
@@ -1191,7 +1194,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Ruta predeterminada:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>Descargar Actualización</value>
+    <value>Descargar actualización</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
     <value>Leyendo DVD</value>
@@ -1212,13 +1215,13 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Registro</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Log Verbosity Level:</value>
+    <value>Nivel de detalle en registro:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
     <value>Ruta de registro:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pausa la cola si el espacio en disco es bajo</value>
+    <value>Pausar la cola si hay poco espacio en disco</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Minimizar en la bandeja del sistema (requiere reiniciar)</value>
@@ -1260,7 +1263,7 @@ Puede configurar el nivel en el que aparece esta alerta en las preferencias.
     <value>Quitar puntuación común</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>Remplazar  guiones bajos con un espacio</value>
+    <value>Reemplazar guiones bajos por espacios</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
     <value>Restablecer a 'No hacer nada' cuando la aplicación es vuelta a abrir.</value>
@@ -1321,25 +1324,22 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Personalizado</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Ancho de pantalla:</value>
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Altura:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Mantener relación de aspecto</value>
+    <value>Automático</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Izquierda</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Modulo:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Salida</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Derecha</value>
@@ -1347,20 +1347,17 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Tamaño</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Origen:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Arriba</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Ancho:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Personalizado</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>Importar a archivo</value>
+    <value>Exportar a archivo</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
     <value>Importar desde archivo</value>
@@ -1375,10 +1372,10 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Agregar a la cola</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>Los títulos seleccionados serán agregados usando el ajuste "{0}"</value>
+    <value>Los títulos seleccionados serán agregados usando el preajuste "{0}".</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Avanzado:</value>
+    <value>Video Options:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Audio:</value>
@@ -1396,7 +1393,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Limpiar seleccionados</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>Borrar</value>
+    <value>Eliminar</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
     <value>Destino:</value>
@@ -1414,7 +1411,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Tiempo de finalización:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Exportar Cola</value>
+    <value>Exportar cola</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
     <value>Tamaño:</value>
@@ -1435,7 +1432,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Abrir carpeta de destino</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>Abrir carpeta origen</value>
+    <value>Abrir carpeta de origen</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
     <value>Opciones</value>
@@ -1459,19 +1456,19 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Reintento fallido</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Restablecer trabajos seleccionados</value>
+    <value>Reiniciar los trabajos seleccionados</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Restablecer</value>
+    <value>Reiniciar</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
     <value>Apagar</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>Origen</value>
+    <value>Origen:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>Iniciar Cola</value>
+    <value>Iniciar cola</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
     <value>Tiempo de inicio:</value>
@@ -1504,19 +1501,19 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Agregar todos las pistas restantes</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>Agregar pista nueva</value>
+    <value>Agregar nueva pista</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Agregar pista</value>
+    <value>Tracks</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Idiomas disponibles:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>Seleccione idiomas:</value>
+    <value>Seleccionar idiomas:</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>Seleccione Idiomas:</value>
+    <value>Idiomas seleccionados:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>Configurar comportamientos por defecto</value>
@@ -1534,10 +1531,10 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Seleccione una carpeta para escanear</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Opcionalmente seleccione un título específico:</value>
+    <value>Opcionalmente, elija un título específico:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Seleccione el o los videos que le gustaría codificar:</value>
+    <value>Seleccione los videos que desea codificar:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
     <value>Archivo</value>
@@ -1549,7 +1546,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Abrir este DVD o Bluray</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Abrir una carpeta con uno o mas archivos.</value>
+    <value>Abrir una carpeta con uno o más archivos.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
     <value>Recuperar archivos de cola</value>
@@ -1585,7 +1582,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Comportamiento de quemado:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>Importar subtitulo</value>
+    <value>Importar subtitulos</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Comportamiento de selección de pistas:</value>
@@ -1654,25 +1651,25 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Bitrate promedio (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Codec de video:</value>
+    <value>Video Encoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Velocidad de fotogramas constante</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>Calidad constante</value>
+    <value>Calidad constante:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
     <value>Nivel de codificación:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Codificador preestablecido:</value>
+    <value>Preajuste de codificador:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
     <value>Perfil del Codificador:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Sintonizar Codificador:</value>
+    <value>Optimizar Codificador:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
     <value>Opciones avanzadas:</value>
@@ -1684,22 +1681,22 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Fotogramas (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Optimizar video:</value>
+    <value>Encoder Options: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value> Velocidad máxima de fotogramas</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Calidad</value>
+    <value>Quality: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Primera pasada turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Fotograma Variable</value>
+    <value>Tasa de fotogramas variable</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>Video: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Idioma:</value>
@@ -1717,7 +1714,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Ayuda</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Opciones</value>
+    <value>Preferencias</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>Agregar pista</value>
@@ -1756,43 +1753,43 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>_Archivo</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>Documentación de _HandBrake (HTTPS)</value>
+    <value>_Documentación de HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>A_yuda</value>
+    <value>_Ayuda</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_importar desde archivo</value>
+    <value>_Importar desde archivo</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
     <value>_Preferencias</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_Ajustes</value>
+    <value>_Preajustes</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
     <value>_Cola</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_Restablecer ajustes integrados</value>
+    <value>_Restablecer preajustes integrados</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>E_stablecer actual como por defecto</value>
+    <value>_Establecer actual como por defecto</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>_Mostrar panel de  ajustes</value>
+    <value>_Mostrar panel de preajustes</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>Mo_strar cola</value>
+    <value>_Mostrar cola</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>Herramien_tas</value>
+    <value>_Herramientas</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
     <value>Buscando actualizaciones ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>¿Está seguro de que desea borrar el directorio del archivo de registro?</value>
+    <value>¿Está seguro de que desea limpiar el directorio de archivos de registro?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
     <value>Limpiar registros</value>
@@ -1801,7 +1798,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Descargando...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>¡El directorio de archivos de registro de HandBrake ha sido borrado!</value>
+    <value>¡El directorio de archivos de registro de HandBrake ha sido limpiado!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
     <value>Atención</value>
@@ -1810,7 +1807,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Preparando para actualizar ...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>Por favor seleccione una carpeta</value>
+    <value>Por favor, seleccione una carpeta.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
     <value>Pulse 'Examinar' para establecer la ubicación por defecto</value>
@@ -1840,9 +1837,9 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
     <value>Mostrar 'Agregar selección a la cola' en la barra de herramientas</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>La compatibilidad con la codificación de hardware está deshabilitada actualmente. Asegúrese de que está ejecutando controladores actualizados para todos los adaptadores de gráficos de este sistema. 
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
-Esto no afectará a ninguno de los codificadores de software.</value>
+This will not impact any of the software encoders.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Corrija la configuración de subtítulos antes de continuar.</value>
@@ -1880,8 +1877,7 @@ Tiempo restante: {5}, Transcurrido: {6} {7} </value>
     <value>Modo portátil: No se puede leer portable.ini. Puede haber un error en este archivo. Vuelva a intentar usar portable.ini.template como guía.</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>El motor de HandBrake falló al inicializarse. Esto a menudo se debe a controladores de GPU obsoletos. 
-Actualice los controladores de GPU para cualquier gráfico integrado y/o discreto que tenga su sistema. </value>
+    <value>El motor de HandBrake falló al inicializarse. Esto a menudo se debe a controladores de GPU obsoletos.\n Actualice los controladores de la GPU para cualquier gráfico integrado y/o discreto que tenga su sistema. </value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Opciones de actualización en vivo: {source} {title} {chapters} 
@@ -1897,7 +1893,7 @@ Opciones no en vivo: {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Intentar renombrar el archivo automáticamente</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Sobreescribir el archivo</value>
+    <value>Sobrescribir el archivo</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
     <value>Comportamiento de la Interfaz de Usuario</value>
@@ -1927,7 +1923,7 @@ Opciones no en vivo: {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Prefijo</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Añadir Numero</value>
+    <value>Añadir Número</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
@@ -1949,10 +1945,9 @@ Opciones no en vivo: {date} {time} {creation-date} {creation-time} {quality} {bi
     <value>Recuperación de cola posible</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>El archivo de ajustes preestablecidos contenía ajustes preestablecidos integrados. La función de importación no admite la importación de estos.
-Utilice 'Menú de ajustes preestablecidos -&gt; Restablecer ajustes preestablecidos incorporados' para restaurar los ajustes preestablecidos estándar. 
+    <value>Su archivo de preajustes contiene preajustes integrados. La función de importación no admite la importación de estos. Use 'Menú de preajustes -&gt; Restablecer preajustes integrados' para restaurar los preajustes estándar. 
 
-Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</value>
+Cuando se admita, se habrán importado los preajustes de usuario.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
     <value>Realizar la acción inmediatamente. (Esto desactivará el cuadro de diálogo de confirmación de 60 segundos)</value>
@@ -1967,10 +1962,10 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Reproducir</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>Exportar Cola (CLI Solo)</value>
+    <value>Exportar cola (solo CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Usar el Tema Oscuro. (Requiere Reinicio. Solo Windows 10)</value>
+    <value>Usar el tema oscuro. (Requiere reiniciar, solo Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>No disponible</value>
@@ -1979,10 +1974,10 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>Alimentación de red de AC detectada. Reanudando la codificación... (-0- %) </value>
+    <value>Alimentación de red detectada. Reanudando codificación... ({0} %) </value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>¡El nivel de la batería del sistema es crítica! ({0} %)</value>
+    <value>¡El nivel de batería del sistema es crítico! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
     <value>¡Batería del sistema baja! ({0}%). Su codificación ha sido pausada.</value>
@@ -2023,9 +2018,6 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Título:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Previsualizar Rotación y Voltear</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>Visor de Registro</value>
   </data>
@@ -2048,7 +2040,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Clic en 'Buscar actualizaciones' para buscar nuevas versiones</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; Atras</value>
+    <value>&lt; Atrás</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
     <value>Actualmente Pausado</value>
@@ -2057,10 +2049,10 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Archivos de salida</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>Capitulos</value>
+    <value>Capítulos</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>Fotograma</value>
+    <value>Fotogramas</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
     <value>Previsualizar</value>
@@ -2069,7 +2061,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Segundos</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Todos los idiomas seleccionados coinciden</value>
+    <value>Todos los idiomas seleccionados que coinciden</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
     <value>Primer idioma seleccionado que coincide</value>
@@ -2096,7 +2088,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Escanear audio extranjero</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Todos los idiomas seleccionados coinciden</value>
+    <value>Todos los idiomas seleccionados que coinciden</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
     <value>Usar todas las pistas como plantillas</value>
@@ -2111,7 +2103,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Sin audio</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>Capitulo {0}</value>
+    <value>Capítulo {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
     <value>Automático</value>
@@ -2147,13 +2139,13 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Normal</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>Mensual</value>
+    <value>Mensualmente</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>Semanal</value>
+    <value>Semanalmente</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>Use siempre la ruta por defecto para cada nuevo nombre generado.</value>
+    <value>Usar siempre la ruta por defecto para cada nuevo nombre generado.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
     <value>El rango de puertos debe estar entre 5000 y 32767</value>
@@ -2169,10 +2161,10 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Nivel bajo de batería:</value>
+    <value>Nivel de batería bajo:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pause cualquier trabajo en ejecución cuando la batería esté baja.</value>
+    <value>Pausa cualquier trabajo en ejecución cuando la batería esté baja.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
     <value> Añadir todos los subtítulos restantes </value>
@@ -2185,23 +2177,23 @@ Esto también detendrá cualquier trabajo en ejecución existente.</value>
     <value>Duplicados detectados</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Habilite el hardware QuickSync de baja potencia (cuando sea soportado).</value>
+    <value>Habilitar el hardware QuickSync de bajo consumo (cuando sea soportado).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
     <value>Seleccione un solo trabajo para ver información resumida.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Ejecute cada trabajo en cola en un proceso de trabajo independiente. (Experimental)</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Puerto de red predeterminado para el trabajador:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>El ajuste preestablecido que ha seleccionado no está disponible para su uso en este sistema.
+    <value>El preajuste que ha seleccionado no está disponible para su uso en este sistema.
 
 Esto suele ser una indicación de que su sistema no es compatible con el hardware necesario para utilizarlo.
 
-Por favor, elija un ajuste preestablecido diferente.</value>
+Por favor, elija un preajuste diferente.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
     <value>Aislamiento de procesos</value>
@@ -2219,7 +2211,7 @@ Por favor, elija un ajuste preestablecido diferente.</value>
     <value>Cancelar</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>Ajuste preestablecido:</value>
+    <value>Preajuste:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
     <value>Igual al original</value>
@@ -2228,40 +2220,40 @@ Por favor, elija un ajuste preestablecido diferente.</value>
     <value>Restablecer la configuración</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>¿Está seguro de quere restablecer Handbrake a la configuración por defecto?</value>
+    <value>¿Seguro que quiere restablecer la configuración de HandBrake a valores por defecto?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
     <value>Personalizado (sin límite)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Llenar (hasta el límite de resolución)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Altura (hasta el límite de resolución)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Ninguno</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Ancho (hasta el límite de resolución)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Relleno:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Color de relleno:</value>
+    <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Bordes</value>
+    <value>Borders:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolución y escala</value>
+    <value>Resolution and Scaling:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotar y cortar</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>(Solo en Windows 10)</value>
+    <value>( ¡Solo en Windows 10! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtros:</value>
@@ -2293,14 +2285,11 @@ Por favor, elija un ajuste preestablecido diferente.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Personalizado</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Altura máxima:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Ancho máximo:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Resolución límite:</value>
+    <value>Límite de resolución:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
     <value>Ninguno</value>
@@ -2315,19 +2304,19 @@ Por favor, elija un ajuste preestablecido diferente.</value>
     <value>Exportar preajuste seleccionado</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Importar preajuste(s) de archivo</value>
+    <value>Importar preajuste(s) desde archivo</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Información del preset</value>
+    <value>Información de preajuste:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Los presets por defecto no se pueden modificar.</value>
+    <value>Built in presets can not be modified.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Establecer el preset seleccionado como predeterminado.</value>
+    <value>Establecer el preajuste seleccionado como predeterminado</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>Borrar Oopciones Preestablecidas</value>
+    <value>Eliminar preajuste</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
     <value>(No soportado en este sistema)</value>
@@ -2335,28 +2324,8 @@ Por favor, elija un ajuste preestablecido diferente.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Detener</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Metadatos</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Pasa directamente la metadata basica desde el archivo de origen al archivo destino (cuando se pueda)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>Esta acción permite que los campos básicos de los metadatos sean pasados del archivo origen al archivo de salida.
-Los campos son:
-- Nombre
-- Artista
-- Artista del álbum
-- Compositor
-- Fecha de lanzamiento
-- Comentario
-- Álbum
-- Género
-- Descripción breve
-- Descripción larga</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>El nombre que ingresaste para la categoría ya existe. Por favor, elige un nombre diferente.</value>
@@ -2368,15 +2337,147 @@ Los campos son:
     <value>Ingresa un nombre:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>No hay preset seleccionado.</value>
+    <value>No se ha seleccionado un preajuste.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
     <value>Exportar todos los preajustes del usuario.</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Nivel para mostrar alerta de espacio bajo en disco </value>
+    <value>Alertar de falta de espacio en disco a partir de:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Aviso: Este es el límite superior de trabajos simultáneos. Es posible que se apliquen limitaciones de hardware que reduzcan el número real de trabajos simultáneos durante la codificación.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(No disponible)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is Default:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Use Dark</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Use Light</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Match System</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Requires Restart)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Colourspace:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Colourspace</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Open Preview</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Source Preview:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Job Status:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Invalid Settings. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Invalid Input. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Status Unknown. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Errors detected whist trying to read source.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Unknown failure. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Missing file "hb.dll". Please re-install.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+
+While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+
+Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+
+This warning will display only twice.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB Value:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Altura máxima:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Ancho máximo:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>
