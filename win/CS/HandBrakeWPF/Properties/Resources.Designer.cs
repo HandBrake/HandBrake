@@ -917,7 +917,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the problem presists, please try restarting HandBrake..
+        ///   Looks up a localized string similar to If the problem persists, please try restarting HandBrake..
         /// </summary>
         public static string ErrorViewModel_IfTheProblemPersists {
             get {
@@ -1527,9 +1527,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to update the selected preset?.
         /// </summary>
-        public static string Main_PresetUpdateConfrimation {
+        public static string Main_PresetUpdateConfirmation {
             get {
-                return ResourceManager.GetString("Main_PresetUpdateConfrimation", resourceCulture);
+                return ResourceManager.GetString("Main_PresetUpdateConfirmation", resourceCulture);
             }
         }
         
@@ -1638,9 +1638,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Scan Failed... Please See Activity Log for details..
         /// </summary>
-        public static string Main_ScanFailled_CheckLog {
+        public static string Main_ScanFailed_CheckLog {
             get {
-                return ResourceManager.GetString("Main_ScanFailled_CheckLog", resourceCulture);
+                return ResourceManager.GetString("Main_ScanFailed_CheckLog", resourceCulture);
             }
         }
         
@@ -2905,9 +2905,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Application Toolbar.
         /// </summary>
-        public static string Options_ApplicaitonToolbar {
+        public static string Options_ApplicationToolbar {
             get {
-                return ResourceManager.GetString("Options_ApplicaitonToolbar", resourceCulture);
+                return ResourceManager.GetString("Options_ApplicationToolbar", resourceCulture);
             }
         }
         
@@ -4224,9 +4224,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Display Size:.
         /// </summary>
-        public static string PictureSettingsView_DisplayWitdh {
+        public static string PictureSettingsView_DisplayWidth {
             get {
-                return ResourceManager.GetString("PictureSettingsView_DisplayWitdh", resourceCulture);
+                return ResourceManager.GetString("PictureSettingsView_DisplayWidth", resourceCulture);
             }
         }
         
@@ -5429,9 +5429,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the queue?.
         /// </summary>
-        public static string QueueViewModel_ClearQueueConfrimation {
+        public static string QueueViewModel_ClearQueueConfirmation {
             get {
-                return ResourceManager.GetString("QueueViewModel_ClearQueueConfrimation", resourceCulture);
+                return ResourceManager.GetString("QueueViewModel_ClearQueueConfirmation", resourceCulture);
             }
         }
         
@@ -5447,9 +5447,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window..
         /// </summary>
-        public static string QueueViewModel_EditConfrimation {
+        public static string QueueViewModel_EditConfirmation {
             get {
-                return ResourceManager.GetString("QueueViewModel_EditConfrimation", resourceCulture);
+                return ResourceManager.GetString("QueueViewModel_EditConfirmation", resourceCulture);
             }
         }
         
@@ -5664,9 +5664,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Selected Languages:.
         /// </summary>
-        public static string Shared_ChosenLangages {
+        public static string Shared_ChosenLanguages {
             get {
-                return ResourceManager.GetString("Shared_ChosenLangages", resourceCulture);
+                return ResourceManager.GetString("Shared_ChosenLanguages", resourceCulture);
             }
         }
         
@@ -6573,9 +6573,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A problem occurred when trying to save your preferences..
         /// </summary>
-        public static string UserSettings_AnErrorOccured {
+        public static string UserSettings_AnErrorOccurred {
             get {
-                return ResourceManager.GetString("UserSettings_AnErrorOccured", resourceCulture);
+                return ResourceManager.GetString("UserSettings_AnErrorOccurred", resourceCulture);
             }
         }
         

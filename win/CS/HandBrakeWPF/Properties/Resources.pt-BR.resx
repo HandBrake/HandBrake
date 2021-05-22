@@ -234,7 +234,7 @@ Vá para o menu "Ferramentas" &gt; "Opções" para instalá-la.</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Perfis</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Tem certeza que quer atualizar o perfil selecionado?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -257,7 +257,7 @@ O backup do arquivo 'user_presets.xml' anterior foi salvo.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Falha ao Analisar:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Falha ao Analisar... Por favor, verifique o Log de Atividades para mais detalhes.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -480,7 +480,7 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Fila</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Tem certeza que você quer esvaziar a fila?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -501,7 +501,7 @@ Por favor, verifique as Notas de Versão no site.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Não há tarefas pendentes.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Tem certeza que quer editar esta tarefa? Ela será removida da fila e enviada de volta para a janela principal.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -628,7 +628,7 @@ Seu arquivo de perfis será salvo e criado um novo arquivo. Será necessário re
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Pode ser que as configurações alteradas precisem ser redefinidas na próxima inicialização do HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Um problema ocorreu ao tentar salvar suas configurações.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1320,7 +1320,7 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Personalizado</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Largura da Tela:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1515,7 +1515,7 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Escolher Idiomas:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Idiomas Selecionados:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1830,7 +1830,7 @@ O VLC e o MPC-HC também são compatíveis. Outros reprodutores de mídia també
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Reproduzir arquivo</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra de Ferramentas</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

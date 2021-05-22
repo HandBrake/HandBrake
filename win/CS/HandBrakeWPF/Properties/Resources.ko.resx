@@ -232,7 +232,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_Presets" xml:space="preserve">
     <value>환경 설정</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>선택된 환경 설정으로 업데이트하려는 것이 확실합니까?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -255,7 +255,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>스캔 실패:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>스캔에 실패하였습니다... 자세한 내용은 Activity Log를 참고하십시오.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -477,7 +477,7 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>대기열</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>대기열을 비우시겠습니까?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -498,7 +498,7 @@ Activity log에 추가 정보가 있습니다.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>보류 중인 작업이 없습니다.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -627,7 +627,7 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>설정을 저장하려고 할 때 문제가 발생하였습니다.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1319,7 +1319,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>사용자 설정</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>화면 너비:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1514,7 +1514,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>언어 선택</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>선택한 언어</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1829,7 +1829,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>파일 재생</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>프로그램 툴바</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

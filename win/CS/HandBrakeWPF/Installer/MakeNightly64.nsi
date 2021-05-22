@@ -76,7 +76,7 @@ Function .onInit
   MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running." /SD IDOK
   Abort
 
-  ; Detect if the intsaller is running on Windows XP/Vista and abort if it is.
+  ; Detect if the installer is running on Windows XP/Vista and abort if it is.
   ${IfNot} ${AtLeastWin7}
     MessageBox MB_OK "Windows 7 with Service Pack 1 or later is required in order to run HandBrake."
     Quit

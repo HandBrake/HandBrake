@@ -148,7 +148,7 @@ namespace HandBrakeWPF.Services
             catch (Exception exc)
             {
                 throw new GeneralApplicationException(
-                    Resources.UserSettings_AnErrorOccured,
+                    Resources.UserSettings_AnErrorOccurred,
                     Resources.SettingService_SaveErrorReset,
                     exc);
             }
@@ -167,9 +167,9 @@ namespace HandBrakeWPF.Services
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         string appSettings = reader.ReadToEnd();
-                        Dictionary<string, object> deserialisedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
+                        Dictionary<string, object> deserializedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
 
-                        this.userSettings = deserialisedSettings;
+                        this.userSettings = deserializedSettings;
                     }
                 }
                 else if (HandBrakeVersionHelper.IsNightly() && File.Exists(this.releaseSettingsFile))
@@ -185,8 +185,8 @@ namespace HandBrakeWPF.Services
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         string appSettings = reader.ReadToEnd();
-                        Dictionary<string, object> deserialisedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
-                        this.userSettings = deserialisedSettings;
+                        Dictionary<string, object> deserializedSettings = JsonSerializer.Deserialize<Dictionary<string, object>>(appSettings, JsonSettings.Options);
+                        this.userSettings = deserializedSettings;
                     }
                 }
                 else

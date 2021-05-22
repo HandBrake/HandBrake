@@ -31,7 +31,7 @@ namespace HandBrakeWPF.Views
             ((PresetManagerViewModel)this.DataContext).Close();
         }
 
-        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
+        private void PresetTreeviewItemCollapsed(object sender, RoutedEventArgs e)
         {
             if (e.Source.GetType() == typeof(TreeViewItem))
             {

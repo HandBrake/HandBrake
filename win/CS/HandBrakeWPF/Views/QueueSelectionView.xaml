@@ -4,7 +4,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
         MinWidth="550"
@@ -22,7 +22,7 @@
             <Setter Property="Margin" Value="0,2,0,2" />
         </Style>
         
-        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -100,7 +100,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- Checlist -->
+        <!-- Checklist -->
         <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,10,10,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="{Binding CurrentPreset}" TextWrapping="Wrap" />

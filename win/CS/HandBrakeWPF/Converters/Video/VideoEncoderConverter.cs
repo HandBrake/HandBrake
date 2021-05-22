@@ -46,7 +46,7 @@ namespace HandBrakeWPF.Converters.Video
         /// The culture.
         /// </param>
         /// <returns>
-        /// IEnumberable VideoEncoder or String encoder name.
+        /// IEnumerable VideoEncoder or String encoder name.
         /// </returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

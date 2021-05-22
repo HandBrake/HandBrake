@@ -234,7 +234,7 @@ Barra de herramientas &gt; Opciones</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Ajustes</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea actualizar el ajuste seleccionado?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -257,7 +257,7 @@ Barra de herramientas &gt; Opciones</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Búsqueda fallida</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Búsqueda fallida... Por favor mire el registro de actividad para mas detalles</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -480,7 +480,7 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Cola</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea limpiar la cola?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -501,7 +501,7 @@ Puede encontrar más información en el registro de actividad.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>No hay trabajos pendientes.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>¿Está seguro que desea editar este trabajo? Será quitado de la lista y enviado a la ventana principal.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -628,7 +628,7 @@ El archivo predefinido se archivará y se creará uno nuevo. Tendrá que volver 
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Es posible que deba restablecerse cualquier configuración que haya cambiado.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Se ha producido un problema al intentar guardar sus preferencias.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1320,7 +1320,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Personalizado</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Ancho de pantalla:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1515,7 +1515,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Seleccione idiomas:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Seleccione Idiomas:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1830,7 +1830,7 @@ VLC y MPC-HC son soportados. Otros reproductores pueden funcionar, aunque no han
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Reproducir archivo</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra de herramientas</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

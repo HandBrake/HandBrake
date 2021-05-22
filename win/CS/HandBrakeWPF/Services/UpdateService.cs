@@ -186,19 +186,19 @@ namespace HandBrakeWPF.Services
                        HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
                        long fileSize = webResponse.ContentLength;
 
-                       Stream responceStream = wcDownload.OpenRead(url);
+                       Stream responseStream = wcDownload.OpenRead(url);
                        Stream localStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
                        int bytesSize;
                        byte[] downBuffer = new byte[2048];
 
-                       while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+                       while ((bytesSize = responseStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                        {
                            localStream.Write(downBuffer, 0, bytesSize);
                            progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize });
                        }
 
-                       responceStream.Close();
+                       responseStream.Close();
                        localStream.Close();
 
                        completed(
@@ -255,10 +255,10 @@ namespace HandBrakeWPF.Services
             try
             {
                 byte[] file = File.ReadAllBytes(updateFile);
-                using (RSACryptoServiceProvider verifyProfider = new RSACryptoServiceProvider())
+                using (RSACryptoServiceProvider verifyProvider = new RSACryptoServiceProvider())
                 {
-                    verifyProfider.FromXmlString(publicKey);
-                    return verifyProfider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
+                    verifyProvider.FromXmlString(publicKey);
+                    return verifyProvider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
                 }
             }
             catch (Exception e)

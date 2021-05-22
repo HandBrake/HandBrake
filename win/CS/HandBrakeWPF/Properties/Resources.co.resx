@@ -1826,7 +1826,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Sunà u schedariu</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barra d’attrezzi d’appiecazione</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

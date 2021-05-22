@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities
 
     public class InterfaceLanguageUtilities
     {
-        public static List<InterfaceLanguage> GetUserInterfaceLangauges()
+        public static List<InterfaceLanguage> GetUserInterfaceLanguages()
         {
             return new List<InterfaceLanguage>
                    {
@@ -40,7 +40,7 @@ namespace HandBrakeWPF.Utilities
 
         public static InterfaceLanguage FindInterfaceLanguage(string culture)
         {
-            return GetUserInterfaceLangauges().FirstOrDefault(f => f.Culture == culture);
+            return GetUserInterfaceLanguages().FirstOrDefault(f => f.Culture == culture);
         }
     }
 }

@@ -284,11 +284,11 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="{Binding DisplaySize}" HorizontalAlignment="Left" VerticalAlignment="Center"  />
 
-                <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}" VerticalAlignment="Center" Margin="15,0,0,0" />
+                <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_DisplayWidth}" VerticalAlignment="Center" Margin="15,0,0,0" />
 
                 <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5,0,0,0" Modulus="2"
                                     AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                                    AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWitdh}"/>
+                                    AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWidth}"/>
 
                 <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
                           ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"

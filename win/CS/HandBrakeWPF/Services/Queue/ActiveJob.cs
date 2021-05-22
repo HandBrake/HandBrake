@@ -42,7 +42,7 @@ namespace HandBrakeWPF.Services.Queue
             this.IsPaused = false;
             this.IsEncoding = true;
 
-            if (this.encodeService.IsPasued)
+            if (this.encodeService.IsPaused)
             {
                 this.encodeService.Resume();
                 this.job.Statistics.SetPaused(false);
@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Services.Queue
 
         public void Pause()
         {
-            if (this.encodeService.IsEncoding && !this.encodeService.IsPasued)
+            if (this.encodeService.IsEncoding && !this.encodeService.IsPaused)
             {
                 this.IsPaused = true;
                 this.encodeService.Pause();

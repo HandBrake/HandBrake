@@ -236,7 +236,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Voreinstellungen</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Soll die ausgewählte Voreinstellung wirklich aktualisiert werden?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -259,7 +259,7 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Überprüfen fehlgeschlagen:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Überprüfen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -481,7 +481,7 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Warteschlange</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Die Warteschlange wirklich löschen?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -502,7 +502,7 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Es sind keine Aufgaben anstehend.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Soll diese Aufgabe wirklich bearbeitet werden? Sie wird aus der Warteschlange entfernt und zum Hauptfenster geleitet.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -631,7 +631,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Alle geänderten Einstellungen müssen möglicherweise beim nächsten Start von HandBrake zurückgesetzt werden.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Beim Speichern der Einstellungen ist ein Fehler aufgetreten.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1322,7 +1322,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Eigene</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Anzeigebreite:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1517,7 +1517,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Sprachen auswählen:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Ausgewählte Sprachen:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1832,7 +1832,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Datei abspielen</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Programm-Symbolleiste</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

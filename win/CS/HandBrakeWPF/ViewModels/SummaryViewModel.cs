@@ -236,7 +236,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
                     this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
                     this.SetExtension(string.Format(".{0}", this.Task.OutputFormat.ToString().ToLower()));
-                    this.UpdateDisplayedInfo(); // output format may coreced to another due to container incompatibility
+                    this.UpdateDisplayedInfo(); // output format may be coerced to another due to container incompatibility
 
                     this.OnOutputFormatChanged(new OutputFormatChangedEventArgs(null));
                     this.OnTabStatusChanged(null);

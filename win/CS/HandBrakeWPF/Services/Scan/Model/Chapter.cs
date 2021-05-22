@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   An object representing a Chapter aosciated with a Title, in a DVD
+//   An object representing a Chapter associated with a Title, in a DVD
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System.Globalization;
 
     /// <summary>
-    /// An object representing a Chapter aosciated with a Title, in a DVD
+    /// An object representing a Chapter associated with a Title, in a DVD
     /// </summary>
     public class Chapter
     {

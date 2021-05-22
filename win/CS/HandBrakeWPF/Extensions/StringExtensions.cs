@@ -35,9 +35,9 @@ namespace HandBrakeWPF.Extensions
             return 0;
         }
 
-        public static string RegexReplace(this string input, string pattern, string repacelement)
+        public static string RegexReplace(this string input, string pattern, string replacement)
         {
-            return Regex.Replace(input, pattern, repacelement, RegexOptions.IgnoreCase);
+            return Regex.Replace(input, pattern, replacement, RegexOptions.IgnoreCase);
         }
     }
 }

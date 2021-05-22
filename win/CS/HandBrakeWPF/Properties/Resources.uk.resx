@@ -1830,7 +1830,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Відтворити файл</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Панель інструментів програми</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

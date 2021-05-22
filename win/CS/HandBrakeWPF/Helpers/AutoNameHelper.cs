@@ -142,7 +142,7 @@ namespace HandBrakeWPF.Helpers
                         .Replace(Constants.Chapters, combinedChapterTag)
                         .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
                         .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
-                        .Replace(Constants.CretaionDate, createDate)
+                        .Replace(Constants.CreationDate, createDate)
                         .Replace(Constants.CreationTime, createTime);
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

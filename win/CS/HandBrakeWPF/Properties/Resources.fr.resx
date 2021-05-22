@@ -233,7 +233,7 @@ avec ce programme; sinon écrivez à la Free Software Foundation, Inc.,
   <data name="Main_Presets" xml:space="preserve">
     <value>Préréglages</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir mettre à jour le préréglage sélectionné ?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -256,7 +256,7 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Echec de l'analyse :</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Échec de l'analyse... Veuillez consulter le journal d'activité pour plus de détails.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -478,7 +478,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>File d'attente</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir nettoyer la file ?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -499,7 +499,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Il n'y a pas de travail en attente.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir modifier ce travail ? Il sera retiré de la file et envoyé à la fenêtre principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -628,7 +628,7 @@ Votre fichier de préréglage sera archivé et un nouveau sera créé. Vous devr
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Tous les paramètres que vous avez modifiés devront peut-être être réinitialisés lors du prochain lancement d'HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Un problème est survenu lors de la sauvegarde de vos préférences.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1320,7 +1320,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Personnalisé</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>Largeur d'affichage :</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1515,7 +1515,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Choisir les langues :</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Langues sélectionnées :</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1830,7 +1830,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Lire le fichier</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>Barre d'outils application</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

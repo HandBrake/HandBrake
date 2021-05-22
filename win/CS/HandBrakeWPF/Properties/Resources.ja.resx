@@ -230,7 +230,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="Main_Presets" xml:space="preserve">
     <value>プリセット</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>選択したプリセットを更新してもよろしいですか？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -253,7 +253,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>スキャン失敗:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>スキャンに失敗しました。詳細については、履歴ウィンドウを参照してください。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -477,7 +477,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>キューの表示</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>キューを本当にクリアしますか？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -498,7 +498,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>待機中のジョブはありません</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>本当にこのジョブを編集しますか？キューから削除され、メインウィンドウに送られます。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -626,7 +626,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>変更された設定は次回HandBrake起動時にリセットしなければいけないかもしれません。</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>設定を保存するときに問題が発生しました。</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1318,7 +1318,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>カスタム</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>表示幅:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1513,7 +1513,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>言語を選択してください：</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>選択された言語:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1828,7 +1828,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>ファイルを再生</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>アプリケーションツールバー</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

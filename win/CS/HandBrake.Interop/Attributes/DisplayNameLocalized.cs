@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Localised version of teh DisplayName attribute.
+//   Localised version of the DisplayName attribute.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

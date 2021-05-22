@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Services.Scan
 
         public event ScanCompletedStatus ScanCompleted;
 
-        public event ScanProgessStatus ScanStatusChanged;
+        public event ScanProgressStatus ScanStatusChanged;
 
         public bool IsScanning { get; private set; }
 

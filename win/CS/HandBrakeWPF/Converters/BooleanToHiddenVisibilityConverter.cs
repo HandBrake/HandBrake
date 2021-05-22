@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
 
     /// <summary>
-    /// Boolean to Visibility Converter (Hidden, not Collasped)
+    /// Boolean to Visibility Converter (Hidden, not Collapsed)
     /// </summary>
     public sealed class BooleanToHiddenVisibilityConverter : IValueConverter
     {

@@ -193,11 +193,11 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <returns>A Timespan</returns>
         public TimeSpan CalculateDuration(long startPoint, long endPoint)
         {
-            IEnumerable<Chapter> chapers =
+            IEnumerable<Chapter> chapters =
                 this.Chapters.Where(c => c.ChapterNumber >= startPoint && c.ChapterNumber <= endPoint);
 
             TimeSpan duration = TimeSpan.FromSeconds(0.0);
-            duration = chapers.Aggregate(duration, (current, chapter) => current + chapter.Duration);
+            duration = chapters.Aggregate(duration, (current, chapter) => current + chapter.Duration);
 
             return duration;
         }

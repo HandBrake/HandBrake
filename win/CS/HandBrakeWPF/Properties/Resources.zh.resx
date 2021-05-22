@@ -230,7 +230,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_Presets" xml:space="preserve">
     <value>预设</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>您确定要更新所选预设吗？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -253,7 +253,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>扫描失败：</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>扫描失败...有关详细信息，请参阅活动日志。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -475,7 +475,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>队列</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>你确定要清除队列吗？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -496,7 +496,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>没有待处理的作业。</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>是否确实要编辑此作业？它将从队列中删除并发送到主窗口。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -622,7 +622,7 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>你所更改的任何设置可能会在下次HandBrake 启动时被重置。</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>尝试保存你的偏好设置时出现了问题。</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -1314,7 +1314,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>自定义</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
     <value>显示宽度：</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
@@ -1509,7 +1509,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>选择语言：</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>选择语言：</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1824,7 +1824,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>播放文件</value>
   </data>
-  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
     <value>应用程序工具栏</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">

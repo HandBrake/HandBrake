@@ -23,7 +23,7 @@ namespace HandBrakeWPF.Services.Queue
     {
         private readonly IUserSettingService userSettingService;
 
-        private readonly object lockOjb = new object();
+        private readonly object lockObj = new object();
 
         private readonly HashSet<Guid> qsvInstances = new HashSet<Guid>();
         private readonly HashSet<Guid> nvencInstances = new HashSet<Guid>();
@@ -49,7 +49,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             get
             {
-                lock (this.lockOjb)
+                lock (this.lockObj)
                 {
                     return this.totalInstances.Count;
                 }
@@ -81,7 +81,7 @@ namespace HandBrakeWPF.Services.Queue
 
         public Guid? GetToken(EncodeTask task)
         {
-            lock (this.lockOjb)
+            lock (this.lockObj)
             {
                 switch (task.VideoEncoder)
                 {
@@ -167,7 +167,7 @@ namespace HandBrakeWPF.Services.Queue
                 return;
             }
 
-            lock (this.lockOjb)
+            lock (this.lockObj)
             {
                 if (this.totalInstances.Contains(unlockKey.Value))
                 {

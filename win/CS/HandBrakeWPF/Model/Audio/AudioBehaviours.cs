@@ -20,7 +20,7 @@ namespace HandBrakeWPF.Model.Audio
     public class AudioBehaviours : PropertyChangedBase
     {
         private AudioBehaviourModes selectedBehaviour;
-        private BindingList<string> selectedLangauges;
+        private BindingList<string> selectedLanguages;
         private AudioTrackDefaultsMode trackDefaultBehaviour;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.SelectedBehaviour = AudioBehaviourModes.None;
             this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.FirstTrack;
-            this.SelectedLangauges = new BindingList<string>();
+            this.SelectedLanguages = new BindingList<string>();
             this.BehaviourTracks = new BindingList<AudioBehaviourTrack>();
         }
 
@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
             this.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
-            this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges.ToList());
+            this.SelectedLanguages = new BindingList<string>(behaviours.selectedLanguages.ToList());
             this.BehaviourTracks = behaviours.BehaviourTracks;
         }
 
@@ -92,20 +92,20 @@ namespace HandBrakeWPF.Model.Audio
         /// <summary>
         /// Gets or sets the selected languages.
         /// </summary>
-        public BindingList<string> SelectedLangauges
+        public BindingList<string> SelectedLanguages
         {
             get
             {
-                return this.selectedLangauges;
+                return this.selectedLanguages;
             }
             set
             {
-                if (Equals(value, this.selectedLangauges))
+                if (Equals(value, this.selectedLanguages))
                 {
                     return;
                 }
-                this.selectedLangauges = value;
-                this.NotifyOfPropertyChange(() => this.SelectedLangauges);
+                this.selectedLanguages = value;
+                this.NotifyOfPropertyChange(() => this.SelectedLanguages);
             }
         }
 
@@ -125,14 +125,14 @@ namespace HandBrakeWPF.Model.Audio
             AudioBehaviours cloned = new AudioBehaviours
             {
                 SelectedBehaviour = this.selectedBehaviour,
-                SelectedLangauges = new BindingList<string>(),
+                SelectedLanguages = new BindingList<string>(),
                 SelectedTrackDefaultBehaviour = this.SelectedTrackDefaultBehaviour,
                 BehaviourTracks = this.BehaviourTracks
             };
 
-            foreach (var item in this.SelectedLangauges)
+            foreach (var item in this.SelectedLanguages)
             {
-                cloned.SelectedLangauges.Add(item);
+                cloned.SelectedLanguages.Add(item);
             }
 
             return cloned;

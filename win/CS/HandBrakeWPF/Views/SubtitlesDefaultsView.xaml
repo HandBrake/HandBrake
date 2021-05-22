@@ -99,9 +99,9 @@
                         </DockPanel>
 
                         <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
-                            <ListBox Name="selectedLangauges" ItemsSource="{Binding SubtitleBehaviours.SelectedLangauges}" 
-                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
+                            <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLanguages}"  Margin="0,0,0,5"/>
+                            <ListBox Name="selectedLanguages" ItemsSource="{Binding SubtitleBehaviours.SelectedLanguages}" 
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedLanguagesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120"
                                              dd:DragDrop.DropHandler="{Binding}"
                                              dd:DragDrop.IsDragSource="True"

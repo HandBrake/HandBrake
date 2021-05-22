@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Converters.Audio
         /// The culture.
         /// </param>
         /// <returns>
-        /// IEnumberable AudioEncoder or String encoder name.
+        /// IEnumerable AudioEncoder or String encoder name.
         /// </returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

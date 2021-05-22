@@ -197,8 +197,8 @@ namespace HandBrake.Interop.Interop
         {
             // Fetch the image data from LibHb
             string taskJson = JsonSerializer.Serialize(settings, JsonSettings.Options);
-            IntPtr resultingImageStuct = HBFunctions.hb_get_preview3_json(this.Handle, previewNumber, taskJson);
-            hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
+            IntPtr resultingImageStruct = HBFunctions.hb_get_preview3_json(this.Handle, previewNumber, taskJson);
+            hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStruct);
 
             // Copy the filled image buffer to a managed array.
             int stride_width = image.plane[0].stride;
@@ -212,7 +212,7 @@ namespace HandBrake.Interop.Interop
 
             // Close the image so we don't leak memory.
             IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
-            Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStuct);
+            Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStruct);
             HBFunctions.hb_image_close(nativeJobPtrPtr);
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 

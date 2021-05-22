@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Controls.DropButton
         /// </summary>
         public DropButton()
         {
-            // Bind the ToogleButton.IsChecked property to the drop-down's IsOpen property 
+            // Bind the ToggleButton.IsChecked property to the drop-down's IsOpen property 
             Binding binding = new Binding("DropDown.IsOpen") { Source = this };
             this.SetBinding(IsCheckedProperty, binding);
         }

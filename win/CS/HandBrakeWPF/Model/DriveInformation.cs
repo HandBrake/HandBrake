@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Model
     public class DriveInformation
     {
         /// <summary>
-        /// Gets or sets A Unique ID That represemts this model.
+        /// Gets or sets A Unique ID That represents this model.
         /// </summary>
         public int Id { get; set; }
 
@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Model
         /// Returns  "Drive" + Id  (e.g  Drive2)
         /// </summary>
         /// <returns>
-        /// A String that contrains "Drive" and it's ID
+        /// A String that contains "Drive" and it's ID
         /// </returns>
         public override string ToString()
         {

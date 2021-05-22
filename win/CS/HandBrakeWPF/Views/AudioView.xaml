@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -17,13 +17,13 @@
              x:Name="audioTab">
 
     <UserControl.Resources>
-        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-        <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
         <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
         <Audio:AudioMixdownConverter x:Key="audioMixdownConverter" />
         <Audio:AudioMixdownListConverter x:Key="audioMixdownListConverter" />
-        <Conveters:ThemeImageConverter x:Key="themeConverter" />
+        <Converters:ThemeImageConverter x:Key="themeConverter" />
     </UserControl.Resources>
 
     <Grid>

@@ -50,7 +50,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         void Save();
 
         /// <summary>
-        /// Save the state of the Preset Treview
+        /// Save the state of the Preset Treeview
         /// </summary>
         void SaveCategoryStates();
 

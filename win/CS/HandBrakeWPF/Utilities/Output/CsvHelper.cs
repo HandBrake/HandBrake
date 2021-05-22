@@ -3,14 +3,14 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Utilitiy functions for writing CSV files
+//   Utility functions for writing CSV files
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Utilities.Output
 {
     /// <summary>
-    /// Utilitiy functions for writing CSV files
+    /// Utility functions for writing CSV files
     /// </summary>
     internal sealed class CsvHelper
     {
