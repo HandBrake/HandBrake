@@ -438,7 +438,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>次のアクション "{0}" は {1}秒後に実行されます。</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>もし問題が続くなら、HandBrakeを起動し直してみてください。</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>このエラーについてこれ以上の情報はありません。</value>
@@ -464,6 +464,9 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>更新に失敗しました。https://handbrake.fr から更新をダウンロードすることもできます。</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Storage Size: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>キューに追加</value>
@@ -847,7 +850,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>カスタム:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>デブロック</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -877,7 +880,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>フィルタ</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>反転</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>グレースケール</value>
@@ -889,10 +892,10 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>プリセット:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>回転:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>シャープ化</value>
+    <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>シャープ化プリセット</value>
@@ -1114,7 +1117,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>Web用に最適化</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>プリセットの管理</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>メタデータ</value>
@@ -1319,25 +1322,22 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>カスタム</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>表示幅:</value>
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>高さ:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>アスペクト比を維持</value>
+    <value>自動</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>左</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>モジュール:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>出力</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>ピクセルアスペクト比:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>右</value>
@@ -1345,14 +1345,11 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>サイズ</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>変換元:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>上</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>幅:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>カスタム</value>
@@ -1376,7 +1373,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>選択されたタイトルはプリセット "{0}" を使用して追加されます。</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>詳細</value>
+    <value>Video Options:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>音声:</value>
@@ -1505,7 +1502,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>新規トラック追加</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>トラックを追加</value>
+    <value>Tracks</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>利用可能な言語：</value>
@@ -1652,7 +1649,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>平均ビットレート (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>動画コーデック:</value>
+    <value>Video Encoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>固定フレームレート</value>
@@ -1682,13 +1679,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>フレームレート(FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>映像を最適化:</value>
+    <value>Encoder Options: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>可変フレームレート</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>品質</value>
+    <value>Quality: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>1パス目を高速化</value>
@@ -1697,7 +1694,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>可変フレームレート</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>動画</value>
+    <value>Video: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>言語</value>
@@ -1838,9 +1835,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>ツールバーに'選択済みをキューに追加する'を表示する</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>ハードウェアエンコードが現在無効になっています。お使いのグラフィックアダプタのドライバが最新か確認してください。
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
-これはソフトウェアエンコーダーには影響しません。</value>
+This will not impact any of the software encoders.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>続ける前に字幕設定を修正してください。</value>
@@ -2018,9 +2015,6 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>タイトル:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>回転と反転をプレビュー</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>ログビューア</value>
   </data>
@@ -2187,7 +2181,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>概要を見るにはジョブを一つ選択してください。</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>それぞれのジョブを別のワーカープロセスで実行する(実験的機能)</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>既定のネットワークポート:</value>
@@ -2230,31 +2224,31 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (pad to resolution limit)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (pad up to res limit)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>なし</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (pad up to res limit)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding Colour:</value>
+    <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders</value>
+    <value>Borders:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling</value>
+    <value>Resolution and Scaling:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 Only! )</value>
@@ -2289,11 +2283,8 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>カスタム</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
@@ -2302,7 +2293,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>なし</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>プリセットの管理</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
     <value>Delete Built-in Presets</value>
@@ -2317,7 +2308,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Preset Information:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Build in presets can not be modified.</value>
+    <value>Built in presets can not be modified.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Set selected preset as default</value>
@@ -2331,28 +2322,8 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="QueueView_Stop" xml:space="preserve">
     <value>停止</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>メタデータ</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>The category name you entered already exists. Please choose a different name.</value>
@@ -2374,5 +2345,137 @@ Fields are limited to:
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Not Available)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is Default:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Use Dark</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Use Light</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Match System</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Requires Restart)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Colourspace:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Colourspace</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Open Preview</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Source Preview:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Job Status:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Invalid Settings. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Invalid Input. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Status Unknown. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Errors detected whist trying to read source.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Unknown failure. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Missing file "hb.dll". Please re-install.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+
+While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+
+Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+
+This warning will display only twice.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB Value:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max Height:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max Width:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>

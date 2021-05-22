@@ -279,7 +279,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Выберите 'Источник' для продолжения</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Jobs Pending</value>
+    <value>{0} ожидающих заданий</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Внимание</value>
@@ -441,7 +441,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Следующее действие '{0}' произойдет через '{1}' секунд.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Если проблема сохранится, перезапустите HandBrake.</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Здесь нет подробной информации об этой ошибке.</value>
@@ -467,6 +467,9 @@ Foreign Audio Preferred, else First - Если существует дорожк
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Не удалось установить обновление. Вы можете попробовать скачать обновление с сайта https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Storage Size: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Добавить в очередь</value>
@@ -851,7 +854,7 @@ Do you wish to continue? </value>
     <value>Пользовательский:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Деблокинг</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Удаление "гребенки"</value>
@@ -881,7 +884,7 @@ Do you wish to continue? </value>
     <value>Фильтры</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Отражение</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Оттенки серого</value>
@@ -893,10 +896,10 @@ Do you wish to continue? </value>
     <value>Пресет:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Повернуть:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Увеличение резкости</value>
+    <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Пресет увеличения резкости</value>
@@ -1323,25 +1326,22 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Пользовательский</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Ширина вывода:</value>
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Высота:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Сохранять соотношение сторон</value>
+    <value>Автоматически</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Лево</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Модуль:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Выход</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Право</value>
@@ -1349,14 +1349,11 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Размер</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Источник:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Верх</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Ширина:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Пользовательский</value>
@@ -1380,7 +1377,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Выбранные заглавия будут добавлены используя пресет "{0}".</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Расширенные:</value>
+    <value>Video Options:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Аудио:</value>
@@ -1509,7 +1506,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Добавить новую дорожку</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Добавить дорожку</value>
+    <value>Tracks</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Доступные языки:</value>
@@ -1656,7 +1653,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Сред. битрейт (кбит/с):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Кодек видео:</value>
+    <value>Video Encoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Постоянная</value>
@@ -1686,13 +1683,13 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Частота кадров (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Оптимизировать видео:</value>
+    <value>Encoder Options: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Максимальная частота кадров</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Качество</value>
+    <value>Quality: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Ускорить первый проход</value>
@@ -1701,7 +1698,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Переменная</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Видео</value>
+    <value>Video: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Язык:</value>
@@ -1842,9 +1839,9 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Показать 'Добавить выбранное в очередь' на панели инструментов</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Поддержка аппаратного кодирования в данный момент отключена. Пожалуйста, убедитесь, что драйвера для всех графических адаптеров в системе обновлены до последней версии.
+    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
-Это не повлияет на все другие кодировщики из числа программных.</value>
+This will not impact any of the software encoders.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Пожалуйста, исправьте свои настройки субтитров перед тем, как продолжить.</value>
@@ -2022,9 +2019,6 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Название:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Предпросмотр поворота и отражения</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>Просмотрщик логов</value>
   </data>
@@ -2190,7 +2184,7 @@ This will also stop any existing running jobs.</value>
     <value>Please select a single job to view summary information.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process. (Experimental)</value>
+    <value>Run each queued job in a separate worker process.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Default network port for worker:</value>
@@ -2233,31 +2227,31 @@ Please choose a different preset.</value>
     <value>Custom (Not Limited)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (pad to resolution limit)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (pad up to res limit)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Нет</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (pad up to res limit)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Padding:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Padding Colour:</value>
+    <value>Colour:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders</value>
+    <value>Borders:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling</value>
+    <value>Resolution and Scaling:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Rotate and Crop</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 Only! )</value>
@@ -2292,11 +2286,8 @@ Please choose a different preset.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Пользовательский</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Resolution Limit:</value>
@@ -2320,7 +2311,7 @@ Please choose a different preset.</value>
     <value>Preset Information:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Build in presets can not be modified.</value>
+    <value>Built in presets can not be modified.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Set selected preset as default</value>
@@ -2334,28 +2325,8 @@ Please choose a different preset.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Стоп</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Метаданные</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passthru basic metadata from the source to the destination file (where supported)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>This option will allow basic metadata fields to be passed through from the source to destination file.
-Fields are limited to:
-- Name
-- Artist
-- Album Artist
-- Composer
-- Release Date
-- Comment
-- Album
-- Genre
-- Description
-- Long Description</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>The category name you entered already exists. Please choose a different name.</value>
@@ -2377,5 +2348,137 @@ Fields are limited to:
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
     <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Not Available)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Is Default:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Fine Tune Picture Settings</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Show crop adjustment controls.</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Use Dark</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Use Light</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Match System</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Requires Restart)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Colourspace:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Colourspace</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Open Preview</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Source Preview:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Job Status:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Invalid Settings. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Invalid Input. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Status Unknown. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Errors detected whist trying to read source.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Unknown failure. Check log for details.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Worker Crashed. Check log for details.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Missing file "hb.dll". Please re-install.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+
+While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+
+Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+
+This warning will display only twice.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Пользовательский</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB Value:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>An error was detected in the File Browser Dialog. 
+
+- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
+- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Max Height:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Max Width:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>

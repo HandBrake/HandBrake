@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_Presets" xml:space="preserve">
     <value>Набори</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Ви дійсно хочете оновити вибраний набір?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -256,7 +256,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Помилка сканування:</value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Помилка сканування… За додатковою інформацією зверніться в журнал активності.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -439,7 +439,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Наступна дія '{0}' відбудеться через {1} секунди.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Якщо проблема не зникає, спробуйте перезапустити HandBrake.</value>
+    <value>If the problem persists, please try restarting HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Додаткової інформації про цю помилку немає.</value>
@@ -466,6 +466,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Помилка оновлення. Можете спробувати завантажити оновлення з https://handbrake.fr</value>
   </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Storage Size: {0}x{1}</value>
+  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Додати до черги</value>
   </data>
@@ -478,7 +481,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Черга</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Дійсно хочете очистити чергу?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -499,7 +502,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>В очікуванні немає завдань</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Дійсно змінити це завдання? Воно буде вилучене з черги та відправлене у головне вікно.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -528,7 +531,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Попередній перегляд зображення</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Unable to delete previous preview file. You may still have a preview open in your media player. Please close this.</value>
+    <value>Не вдалося видалити останній файл попереднього перегляду. Можливо, він відкритий у вашому програвачі медіа. Будь ласка, закрийте його.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
     <value>Перед створенням файлу попереднього перегляду слід просканувати джерело та налаштувати параметри кодування.</value>
@@ -628,7 +631,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Будь-які ваші зміни в налаштуваннях можуть бути скинути при наступних запусках HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Виникла проблема при спробі зберегти налаштування.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -849,7 +852,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Власне:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Видалення «гребінки»</value>
@@ -879,7 +882,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Фільтри</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Відбити</value>
+    <value>Horizontal</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Відтінки сірого</value>
@@ -891,10 +894,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Набір:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Поворот:</value>
+    <value>Rotation:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Різкість</value>
+    <value>Sharpen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Набір різкості</value>
@@ -1059,7 +1062,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Пошук часу початку</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>Встановити за замовчуванням</value>
+    <value>Зробити стандартним</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
     <value>Попередній перегляд</value>
@@ -1320,26 +1323,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Власне</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Ширина відображення:</value>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Display Size:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Висота:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Зберігати пропорції</value>
+    <value>Автоматично</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Зліва</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Модуль:</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Результат</value>
+    <value>Final Dimensions:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>Pixel Aspect:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Справа</value>
@@ -1347,14 +1347,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Розмір</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Джерело:</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Зверху</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Ширина:</value>
+    <value>Scaled Size:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Власне</value>
@@ -1378,7 +1375,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Вибрані заголовки будуть додані за допомогою набору  «{0}».</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Додатково:</value>
+    <value>Параметри відео:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Аудіо:</value>
@@ -1447,7 +1444,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Тривалість паузи:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Налаштування зображення:</value>
+    <value>Параметри зображення:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
     <value>Закрити HandBrake</value>
@@ -1507,7 +1504,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Додати нову доріжку</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Додати доріжку</value>
+    <value>Доріжки</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Доступні мови:</value>
@@ -1515,7 +1512,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Виберіть мови:</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Вибрані мови:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -1654,7 +1651,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Середній бітрейт (кбіт/с):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Відеокодек:</value>
+    <value>Кодувальник відео:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Постійна частота кадрів</value>
@@ -1681,16 +1678,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Швидке декодування</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Частота кадрів(FPS):</value>
+    <value>Частота кадрів:</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Оптимізація відео:</value>
+    <value>Параметри кодувальника: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Пікова частота кадрів</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Якість</value>
+    <value>Якість: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Швидкий перший прохід</value>
@@ -1699,7 +1696,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Змінна частота кадрів</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Відео</value>
+    <value>Відео: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
     <value>Мова:</value>
@@ -1840,9 +1837,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Показувати «Додати вибране до черги» на панелі інструментів</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Наразі підтримка апаратного кодування вимкнена. Переконайтеся, що ви використовуєте останні драйвери для всіх відеоадаптерів у цій системі.
+    <value>Підтримка апаратного кодування відключена. Якщо ви не запускали HandBrake з опцією "--no-hardware", будь ласка, переконайтесь, що ви використовуєте оновлені драйвери для всіх графічних адаптерів у цій системі.
 
-Це не вплине на жоден з програмних кодувальників.</value>
+Це не вплине на жоден із програмних кодувальників.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Перш ніж продовжувати, виправте налаштування субтитрів.</value>
@@ -2020,9 +2017,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Заголовок:</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Попередній перегляд «Повороту» та «Відбиття»</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>Переглядач журналу</value>
   </data>
@@ -2188,7 +2182,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Щоб переглянути відомості виберіть якесь завдання.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Запускати кожне завдання в черзі як окремий процес (експериментально)</value>
+    <value>Запускати кожне завдання в черзі як окремий процес.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Стандартний мережевий порт для процесу:</value>
@@ -2210,7 +2204,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Якщо порт вже використовується, програма знайде перший вільний порт у межі +100 від вказаного порту.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>Максимальна кількість одночасних кодувань:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
     <value>Скасувати</value>
@@ -2231,31 +2225,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Спеціальне (без обмежень)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Наповнити (заповнення до межі роздільності)</value>
+    <value>Fill (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>По висоті (заповнення до межі роздільності)</value>
+    <value>Height (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Немає</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>По ширині (заповнення до межі роздільності)</value>
+    <value>Width (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Заповнення:</value>
+    <value>Fill:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Колір заповнення:</value>
+    <value>Колір:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Межі</value>
+    <value>Межі:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Роздільна здатність та масштабування</value>
+    <value>Роздільна здатність та масштабування:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Поворот та обрізання</value>
+    <value>Orientation and Cropping:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Тільки Windows 10! )</value>
@@ -2290,11 +2284,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Власне</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Максимальна висота:</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Максимальна ширина:</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Maximum Size:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Межа роздільності:</value>
@@ -2318,7 +2309,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Інформація про набір:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Неможливо змінити вбудовані набори.</value>
+    <value>Неможливо змінювати вбудовані набори.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
     <value>Встановити вибраний набір стандартним</value>
@@ -2332,28 +2323,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Перервати</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Метадані</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Передати основні метадані з файлу джерела у файл призначення (якщо підтримується)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>Цей параметр дозволяє передавати основні поля метаданих від джерела до файлу призначення.
-Метадані обмежені наступними полями:
-- Назва (Name)
-- Виконавець (Artist)
-- Виконавець альбому (Album Artist)
-- Композитор (Composer)
-- Дата випуску (Release Date)
-- Коментар (Comment)
-- Альбом (Album)
-- Жанр (Genre)
-- Опис (Description)
-- Довгий опис (Long Description)</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Введена назва категорії вже існує. Виберіть іншу назву.</value>
@@ -2374,6 +2345,138 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Значення, коли показуються сповіщення про брак дискового простору:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>Примітка: це максимальна кількість одночасних завдань. Апаратні обмеження можуть знизити фактичну кількість одночасних завдань під час кодування.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Недоступно)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Стандартний:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Так</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Тонке налаштування зображення</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Показувати меню для обрізування</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Темна</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Світла</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Як у системі</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Тема:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Потрібен перезапуск)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Колірний простір:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Колірний простір</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Відкрити попередній перегляд</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Попередній перегляд джерела:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Статус завдання:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Скасовано</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Недійсні налаштування. Погляньте в журнал для отримання детальнішої інформації.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Недійсний ввід. Погляньте в журнал для отримання детальнішої інформації.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Невідомий статус. Погляньте в журнал для отримання детальнішої інформації.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Помилка при спробі прочитати джерело.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Невідома помилка. Погляньте в журнал для отримання детальнішої інформації.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Процес завершився аварійно. Погляньте в журнал для отримання детальнішої інформації.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Відсутній файл "hb.dll". Будь ласка, перевстановіть програму.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Попередження: зверніть увагу, що це збірка HandBrake у "Безпечному режимі", яка не включає підтримку апаратних кодувальників. Якщо ви хочете скористатися підтримкою апаратного кодувальника, завантажте з вебсайту звичайну збірку.</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Зверніть увагу, що HandBrake більше не підтримується в жодній версії Windows 7 або Windows 8.
+
+Незважаючи на це ви можете продовжувати використовувати програму на свій страх і ризик, але майте на увазі, що деякі функції можуть не працювати, та виникнути інші невідомі проблеми. Під час виникнення цих проблем підтримка недоступна. 
+
+Підтримка Windows 7 і 8 вилучена у версіях 1.3. Це означає, що подальших оновлень для виправлення проблем на цих платформах не буде. 
+
+Це попередження показуватиметься лише двічі.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Чорний</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Власне</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Білий</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>Значення RGB:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(padded)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Flip:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Source Dimensions:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Виявлено помилку в діалоговому вікні файлового провідника. 
+
+- Зверніть увагу, довгі шляхи до файлів повністю не підтримуються. Будь ласка, зберігайте шляхи до файлів меншими за 255 символів. 
+- Останній використаний каталог для цього вікна було скинуто для запобігання помилок під час наступної спроби сканувати файл.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Максимальна висота:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Максимальна ширина:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Aspect Ratio: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Passthru Common Metadata</value>
   </data>
 </root>

@@ -151,7 +151,7 @@ dapervoi secondu i termini di a Licenza Publica Generale GNU tale
 chì publicata da a Free Software Foundation ; sia a versione 2 di
 a licenza, o s’è voi preferite, una versione più recente.
 
-Stu prugramma hè distribuitu cù a sperenza d’esse ghjuvevule, ma SENZA NISUNA ASSICURANZA ; senza manc’una assicuranza di CUMMERCIALISAZIONE o di CURRISPUNDENZA À UN IMPIEGU PARTICULARE.  Fighjate a licenza GNU General Public License per sapene di più.
+Stu prugramma hè distribuitu cù a sperenza d’esse ghjuvevule, ma SENZA NISUNA ASSICURANZA ; senza manc’una assicuranza di CUMMERCIALISAZIONE o di CURRISPONDENZA À UN IMPIEGU PARTICULARE.  Fighjate a licenza GNU General Public License per sapene di più.
 
 Duveriate avè ricevutu una copia di a licenza GNU General Public License
 cù stu prugramma ; osinnò, ci vole à scrive à : Free Software Foundation,
@@ -229,7 +229,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   <data name="Main_Presets" xml:space="preserve">
     <value>Prerigature</value>
   </data>
-  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
     <value>Site sicuru di vulè mudificà a prerigatura selezziunata ?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
@@ -252,7 +252,7 @@ U schedariu precedente user_presets.xml hè statu accantatu.</value>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Fiascu di l’analisa : </value>
   </data>
-  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
     <value>Fiascu di l’analisa… Ci vole à fighjà u ghjurnale d’attività per sapene di più.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
@@ -435,7 +435,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>L’azzione seguente « {0} » si farà in {1} seconde.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>S’è stu penseru ùn smarisce micca, ci vole à pruvà di rilancià HandBrake.</value>
+    <value>S’è u penseru cuntinueghja, pruvate di rilancià HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Ùn ci hè mancu un’altra infurmazione di dispunibule per stu sbagliu.</value>
@@ -462,6 +462,9 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
     <value>Rinnovu fiascu. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Dimensione d’allucamentu : {0}x{1}</value>
+  </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Aghjunghje à a fila d’attesa</value>
   </data>
@@ -474,7 +477,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>Fila d’attesa</value>
   </data>
-  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
     <value>Site sicuru di vulè viutà a fila d’attesa ?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -495,7 +498,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
     <value>Ùn ci hè alcunu travagliu in attesa.</value>
   </data>
-  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>Site sicuru di vulè mudificà stu travagliu ? Serà cacciatu da a fila d’attesa è mandatu ver di a finestra principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
@@ -590,18 +593,18 @@ U vostru vechju schedariu di prerigature hè statu archiviatu :</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
     <value>U numeru di capituli nant’à u media di fonte
-è quellu in u schedariu d’entrata ùn currispundenu micca ({0} vs {1}).
+è quellu in u schedariu d’entrata ùn currispondenu micca ({0} vs {1}).
 
 Vulete impurtà i nomi di capitulu quantunque ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
     <value>U numeru di capituli nant’à u media di fonte
-è quellu in u schedariu d’entrata ùn currispundenu micca ({0} vs {1}).
+è quellu in u schedariu d’entrata ùn currispondenu micca ({0} vs {1}).
 
 Vulete impurtà i nomi di capitulu quantunque ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>U numeru di capituli ùn currispunde micca trà u schedariu di fonte è quellu d’entrata</value>
+    <value>U numeru di capituli ùn currisponde micca trà u schedariu di fonte è quellu d’entrata</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
     <value>A durata di i capituli nant’à u media di fonte
@@ -612,7 +615,7 @@ Ghjè sicuramente chì stu schedariu di capitulu fussi creatu da un media di fon
 Site sicuru di vulè impurtà i nomi di capitulu ?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>U numeru di capituli ùn currispunde micca trà u schedariu di fonte è quellu d’entrata</value>
+    <value>A durata di capitulu ùn currisponde micca trà u schedariu di fonte è quella d’entrata</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
     <value>Un sbagliu hè accadutu pruvendu di piantà l’analisa. Ci vole à rilancià HandBrake.</value>
@@ -624,7 +627,7 @@ U vostru schedariu di prerigatura hà da esse archiviatu è un novu hà da esse 
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>Forse, tutte e preferenze chì vo avete cambiate duveranu esse rimesse d’origine à u prossimu lanciu d’HandBrake.</value>
   </data>
-  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
     <value>Un sbagliu hè accadutu pruvendu d’arregistrà e vostre preferenze.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
@@ -875,7 +878,7 @@ Vulete rimpiazzallu ?</value>
     <value>Filtri</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Rivultà</value>
+    <value>Orizuntale</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Scala di grisgiu</value>
@@ -887,7 +890,7 @@ Vulete rimpiazzallu ?</value>
     <value>Prerigatura :</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Girà :</value>
+    <value>Rotazione :</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Arrutà :</value>
@@ -1316,26 +1319,23 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>Persunalizatu</value>
   </data>
-  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Larghezza d’affissera :</value>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Dimensione d’affissame :</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Altezza :</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Cunservà e prupurzioni</value>
+    <value>Autumaticu</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
     <value>Manca</value>
   </data>
-  <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Mudullu :</value>
-  </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Esciuta :</value>
+    <value>Dimensioni finale :</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR :</value>
+    <value>Aspettu di fiura (pixel) :</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Diritta</value>
@@ -1343,14 +1343,11 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="PictureSettingsView_Size" xml:space="preserve">
     <value>Dimensione</value>
   </data>
-  <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Fonte :</value>
-  </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
     <value>Insù</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Larghezza :</value>
+    <value>Dimensione à a scala :</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Persunalizatu</value>
@@ -1511,7 +1508,7 @@ VLC è MPC-HC sò accettati. D’altri lettori ponu dinù funziunà ma ùn sò m
   <data name="Shared_ChooseLanguages" xml:space="preserve">
     <value>Sceglie e lingue :</value>
   </data>
-  <data name="Shared_ChosenLangages" xml:space="preserve">
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
     <value>Lingue selezziunate :</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
@@ -2016,9 +2013,6 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Titulu :</value>
   </data>
-  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Apprezzazione di a rotazione è di u rivoltamentu</value>
-  </data>
   <data name="LogViewModel_Title" xml:space="preserve">
     <value>Fighjata di u ghjurnale</value>
   </data>
@@ -2062,10 +2056,10 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Seconde</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tutte e lingue chì currispundenu</value>
+    <value>Tutte e lingue selezziunate chì currispondenu</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>Prima lingua chì currispunde</value>
+    <value>Prima lingua selezziunata chì currisponde</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
     <value>Alcunu</value>
@@ -2089,13 +2083,13 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>Analisa di traccia audio straniera</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tutte e lingue chì currispundenu</value>
+    <value>Tutte e lingue selezziunate chì currispondenu</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
     <value>Impiegà tutte e traccie cum’è mudellu</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>Prima lingua chì currispunde</value>
+    <value>Prima lingua selezziunata chì currisponde</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
     <value>Impiegà a prima traccia cum’è mudellu</value>
@@ -2227,31 +2221,31 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>Persunalizatu (Micca ristrintu)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Riempie (imburrà fine à a cunfina di a risuluzione)</value>
+    <value>Riempie (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Altezza (imburrà fine à a cunfina di a risuluzione)</value>
+    <value>Altezza (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Alcunu</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Larghezza (imburrà fine à a cunfina di a risuluzione)</value>
+    <value>Larghezza (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Imburrera :</value>
+    <value>Riempiimentu :</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Culore d’imburrera :</value>
+    <value>Culore :</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Bordi</value>
+    <value>Bordi :</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
     <value>Risuluzione è messa à a scala :</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Girà è inquadrà :</value>
+    <value>Orientazione è inquadratura :</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 solu ! )</value>
@@ -2286,11 +2280,8 @@ Ci vole à sceglie una prerigatura sfarente.</value>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
     <value>Persunalizatu</value>
   </data>
-  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Altezza massima :</value>
-  </data>
-  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Larghezza massima :</value>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Dimensione massima :</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Cunfina di risuluzione :</value>
@@ -2328,28 +2319,8 @@ Ci vole à sceglie una prerigatura sfarente.</value>
   <data name="QueueView_Stop" xml:space="preserve">
     <value>Piantà</value>
   </data>
-  <data name="Options_Metadata" xml:space="preserve">
-    <value>Metadati</value>
-  </data>
-  <data name="Options_PassthruMetadata" xml:space="preserve">
-    <value>Passeghju di i metadati basichi da a fonte ver di u schedariu di destinazione (quand’ellu hè accettatu)</value>
-  </data>
-  <data name="Options_PassthruMetadataTooltip" xml:space="preserve">
-    <value>St’ozzione permette à i campi metadati basichi d’esse cupiati da a fonte ver di u schedariu di destinazione.
-I campi sò limitati à :
-- Nome
-- Artista
-- Artista di l’albumu
-- Cumpositore
-- Data d’esciuta
-- Cummentu
-- Albumu
-- Generu
-- Discrizzione
-- Discrizzione longa</value>
-  </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>U nome di categuria scrittu esiste dighjà. Ci vole à sceglie un nome sfarente.</value>
@@ -2452,5 +2423,56 @@ I campi sò limitati à :
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Avertimentu : Fate casu chì sta versione in « Modu assicuratu » d’HandBrake ùn cuntene micca l’accessu à i cudificatori materiale. S’è vò vulete impiegà i cudificatori materiale, ci vole à scaricà da u situ web una versione altra chì quella in « Modu assicuratu ».</value>
+  </data>
+  <data name="OldOperatingSystem" xml:space="preserve">
+    <value>Fate casu chì HandBrake ùn hè più accettatu nant’à tutte e versioni di Windows 7 o Windows 8.
+
+Bench’ella fussi pussibule di cuntinuà à impiegà l’appiecazione à u vostru risicu, sapete chì certe funzioni ùn funziuneghjanu più è chì d’altri penseri ponu accade. Ùn ci hè micca assistenza quandu sti penseri accadenu. 
+
+L’impiegu nant’à Windows 7 è 8 hè statu disprezzatu in e versioni 1.3. Vole si dì ch’ella ùn ci serà più mudificazioni per currege i penseri nant’à sti sistemi. 
+
+St’avertimentu serà affissatu solu una volta.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Neru</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Persunalizatu</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Biancu</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>Valore RGB :</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(imburratu)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Rivultamentu :</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Dimensioni di l’origine :</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Dimensione d’allucamentu : {0}x{1} Dimensione d’affissame : {2}x{3} Prupurzioni : {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Un sbagliu hè statu scupertu in u dialogu di navigazione di schedariu.
+
+- Sapete chì i chjassi longhi di schedariu ùn sò micca accettati. I chjassi di schedariu devenu esse più corti chì 255 caratteri.
+- L’ultimu cartulare impiegatu per sta finestra hè statu reiniziatu per impedisce i sbaglii a prossima volta chì vo pruverete d’analizà un schedariu.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Altezza massima :</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Larghezza massima :</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Prupurzioni : {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Metadati cummuni Passthru</value>
   </data>
 </root>
