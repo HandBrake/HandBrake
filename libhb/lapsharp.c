@@ -39,7 +39,7 @@ static const int    kernel_lap[] =
 };
 
 // Isotropic Laplacian kernel (isolap)
-// Minimial directionality, sharpens all edges similarly
+// Minimal directionality, sharpens all edges similarly
 // size = 3, coef = 1.0 / 5
 static const int    kernel_isolap[] =
 {
@@ -62,7 +62,7 @@ static const int    kernel_log[] =
 };
 
 // Isotropic Laplacian of Gaussian kernel (isolog)
-// Minimial directionality, plus noise and grain rejection
+// Minimal directionality, plus noise and grain rejection
 // σ ~= 1.2
 // size = 5, coef = 1.0 / 15
 static const int    kernel_isolog[] =

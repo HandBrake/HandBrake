@@ -857,7 +857,7 @@ void eedi2_mark_directions_2x( uint8_t * mskp, int msk_pitch, uint8_t * dmskp, i
 }
 
 /**
- * Filters the frane-height edge direction mask
+ * Filters the frame-height edge direction mask
  * @param mskp Pointer to the edge mask
  * @param msk_pitch Stride of mskp
  * @param dmskp Pointer to the edge direction mask being read from
@@ -1357,7 +1357,7 @@ void eedi2_post_process( uint8_t * nmskp, int nmsk_pitch, uint8_t * omskp, int o
  * @param tmp_pitch Stride of tmp
  * @param dst Pointer to the destination to store the blurred field plane
  * @param dst_pitch Stride of dst
- * @param height Height of the hakf-height field-sized frame
+ * @param height Height of the half-height field-sized frame
  * @param width Width of dstp bitmap rows, as opposed to the padded stride in dst_pitch
  */
 void eedi2_gaussian_blur1( uint8_t * src, int src_pitch, uint8_t * tmp, int tmp_pitch, uint8_t * dst, int dst_pitch, int height, int width )

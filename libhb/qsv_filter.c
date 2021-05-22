@@ -165,7 +165,7 @@ static int filter_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
          * same; however, due to some versions of FFmpeg not applying the H.264
          * "crop rect" properly, there can be a mismatch.
          *
-         * Since we want the same bahevior regardless of whether we're using
+         * Since we want the same behavior regardless of whether we're using
          * software or hardware-accelerated decoding, prefer the FFmpeg values.
          *
          * Note that since CropW/CropH may be higher than the decode values, we
@@ -461,7 +461,7 @@ static void hb_qsv_filter_close( hb_filter_object_t * filter )
         // closing local stuff
         qsv_filter_close(qsv,HB_QSV_VPP_DEFAULT);
 
-        // closing the commong stuff
+        // closing the common stuff
         hb_qsv_context_clean(qsv,hb_qsv_full_path_is_enabled(pv->job));
     }
     hb_buffer_list_close(&pv->list);

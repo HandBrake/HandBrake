@@ -273,7 +273,7 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         // The main use case we are trying to cover here is
         // "progressive telecine" where there is a repeating pattern
         // of a new frame followed by some number of repeated frames.
-        // We want to keep the "new frames" and drop the repeates.
+        // We want to keep the "new frames" and drop the repeats.
         out = hb_list_item(pv->frame_rate_list, drop_frame);
 
 #if defined(HB_DEBUG_CFR_DROPS)

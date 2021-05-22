@@ -3327,7 +3327,7 @@ void hb_list_add( hb_list_t * l, void * p )
 /**********************************************************************
  * hb_list_insert
  **********************************************************************
- * Adds an item at the specifiec position in the list, making it bigger
+ * Adds an item at the specified position in the list, making it bigger
  * if necessary.
  * Can safely be called with a NULL pointer to add, it will be ignored.
  *********************************************************************/
@@ -4732,7 +4732,7 @@ void hb_chapter_set_title( hb_chapter_t *chapter, const char *title )
  * Applies information from the given job to the official job instance.
  * @param job Handle to hb_job_t.
  * @param chapter The chapter to apply the name to (1-based).
- * @param titel to apply.
+ * @param title to apply.
  *********************************************************************/
 void hb_chapter_set_title_by_index( hb_job_t * job, int chapter_index, const char * title )
 {

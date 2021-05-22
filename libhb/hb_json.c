@@ -1178,7 +1178,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     job->qsv.ctx->dx_index = adapter_index;
 #endif
     // If both vbitrate and vquality were specified, vbitrate is used;
-    // we need to ensure the unused rate contro mode is always set to an
+    // we need to ensure the unused rate control mode is always set to an
     // invalid value, as if both values are valid, behavior is undefined
     // (some encoders first check for a valid vquality, whereas others
     //  check for a valid vbitrate instead)

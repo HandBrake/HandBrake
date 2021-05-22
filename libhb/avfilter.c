@@ -236,7 +236,7 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     hb_buffer_list_t   list;
     hb_buffer_t      * buf = NULL, * next = NULL;
-    int av_frame_is_not_null = 1; // TODO: find the reason for emply input av_frame for ffmpeg filters
+    int av_frame_is_not_null = 1; // TODO: find the reason for empty input av_frame for ffmpeg filters
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
     mfxFrameSurface1 *surface = NULL;
     HBQSVFramesContext *frames_ctx = NULL;

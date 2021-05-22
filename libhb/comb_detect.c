@@ -421,7 +421,7 @@ static void build_gamma_lut( hb_filter_private_t * pv )
 static void detect_gamma_combed_segment( hb_filter_private_t * pv,
                                          int segment_start, int segment_stop )
 {
-    /* A mish-mash of various comb detection tricks
+    /* A mishmash of various comb detection tricks
        picked up from neuron2's Decomb plugin for
        AviSynth and tritical's IsCombedT and
        IsCombedTIVTC plugins.                       */
@@ -530,7 +530,7 @@ static void detect_gamma_combed_segment( hb_filter_private_t * pv,
 static void detect_combed_segment( hb_filter_private_t * pv,
                                    int segment_start, int segment_stop )
 {
-    /* A mish-mash of various comb detection tricks
+    /* A mishmash of various comb detection tricks
        picked up from neuron2's Decomb plugin for
        AviSynth and tritical's IsCombedT and
        IsCombedTIVTC plugins.                       */

@@ -322,7 +322,7 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     // fifos that will be needed (+1 for null terminator)
     r->fifos = calloc(count + 1, sizeof(hb_fifo_t*));
 
-    // The stream needs to be open before starting the reader thead
+    // The stream needs to be open before starting the reader thread
     // to prevent a race with decoders that may share information
     // with the reader. Specifically avcodec needs this.
     if ( hb_reader_open( r ) )

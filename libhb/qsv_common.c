@@ -905,7 +905,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
             if (MFXInit(hw_impl | hw_preference, &version, &session) == MFX_ERR_NONE)
             {
                 // On linux, the handle to the VA display must be set.
-                // This code is essentiall a NOP other platforms.
+                // This code is essentially a NOP other platforms.
                 hb_display_t * display = hb_qsv_display_init();
 
                 if (display != NULL)
@@ -1369,14 +1369,14 @@ int hb_qsv_is_enabled(hb_job_t *job)
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     static int device_check_completed = 0;
-    static int device_check_succeded = 0;
+    static int device_check_succeeded = 0;
     int codecs_exceptions = 0;
     int qsv_full_path_is_enabled = 0;
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 
     if(!device_check_completed)
     {
-       device_check_succeded = (hb_d3d11va_device_check() >= 0) ? 1 : 0;
+       device_check_succeeded = (hb_d3d11va_device_check() >= 0) ? 1 : 0;
        device_check_completed = 1;
     }
 
@@ -1384,7 +1384,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        device_check_succeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters) && !codecs_exceptions;
+        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters) && !codecs_exceptions;
     return qsv_full_path_is_enabled;
 }
 
@@ -3747,7 +3747,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
             // replace the mem id to mem id from the pool
             output_surface->Data.MemId = mid;
         }
-        // copy input sufrace to sufrace from the pool
+        // copy input surface to surface from the pool
         ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, 0, input_pair->first, 0);
         if (ret < 0)
         {
@@ -3776,7 +3776,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
             // Make sure that we pass QSVMid to QSV encoder
             output_surface->Data.MemId = mid;
         }
-        // copy input sufrace to sufrace from the pool
+        // copy input surface to surface from the pool
         ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, output_index, input_pair->first, input_index);
         if (ret < 0)
         {

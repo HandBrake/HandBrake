@@ -144,7 +144,7 @@ taskset_cycle( taskset_t *ts )
 
     /*
      * Wait until all threads have completed.  Note that we must
-     * loop here as hb_cond_wait() on some platforms (e.g pthead_cond_wait)
+     * loop here as hb_cond_wait() on some platforms (e.g pthread_cond_wait)
      * may unblock prematurely.
      */
     do

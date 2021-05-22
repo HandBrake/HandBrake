@@ -48,7 +48,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
         char * filename;
-        filename = hb_get_temporary_filename("theroa.log");
+        filename = hb_get_temporary_filename("theora.log");
         if ( job->pass_id == HB_PASS_ENCODE_1ST )
         {
             pv->file = hb_fopen(filename, "wb");
