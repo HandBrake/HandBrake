@@ -435,7 +435,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>L’azzione seguente « {0} » si farà in {1} seconde.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>If the problem persists, please try restarting HandBrake.</value>
+    <value>S’è u penseru cuntinueghja, pruvate di rilancià HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Ùn ci hè mancu un’altra infurmazione di dispunibule per stu sbagliu.</value>
