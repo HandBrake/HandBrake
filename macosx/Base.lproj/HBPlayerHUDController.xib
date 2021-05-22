@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,7 +10,7 @@
             <connections>
                 <outlet property="currentTimeLabel" destination="uYx-2C-8et" id="8fD-0Q-308"/>
                 <outlet property="playButton" destination="mLA-ei-4sK" id="Eag-8h-xCG"/>
-                <outlet property="remaingTimeLabel" destination="PVD-pq-1ZG" id="CFb-is-Tcd"/>
+                <outlet property="remainingTimeLabel" destination="PVD-pq-1ZG" id="v4Q-DM-8bq"/>
                 <outlet property="slider" destination="lBp-JT-ehn" id="cNv-P0-agY"/>
                 <outlet property="tracksSelection" destination="Vj1-Za-AUV" id="8Se-0H-ILD"/>
                 <outlet property="view" destination="xT7-Bx-eCV" id="GXR-ZH-hT6"/>
