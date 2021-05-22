@@ -1470,6 +1470,8 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_FFMPEG_VP9:
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_VCE_H265:
         case HB_VCODEC_FFMPEG_VT_H264:
         case HB_VCODEC_FFMPEG_VT_H265:
         case HB_VCODEC_FFMPEG_VT_H265_10BIT:
