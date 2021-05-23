@@ -67,6 +67,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     av_dict_set( &av_opts, "sub_text_format", "ass", 0 );
     if (ctx->subtitle->source == CC608SUB)
     {
+        av_dict_set( &av_opts, "data_field", "first", 0 );
         av_dict_set( &av_opts, "real_time", "1", 0 );
     }
     if (ctx->subtitle->source == VOBSUB && ctx->subtitle->palette_set)
