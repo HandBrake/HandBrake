@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# manincure.rb version 0.66
+# manicure.rb version 0.66
 
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.

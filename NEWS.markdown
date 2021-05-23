@@ -30,7 +30,7 @@
 #### Build system
 
 - Improved Flatpak to better conform to freedesktop metainfo standards
-- Improved Intel QSV Flatpak plugin build effiency using cmake-ninja
+- Improved Intel QSV Flatpak plugin build efficiency using cmake-ninja
 - Added a patch to fix cross compiling libdav1d using GCC 10.x (quality of life improvement)
   - Official HandBrake 1.3.3 Windows release is built using GCC 9.x and is not directly affected by this issue
 
@@ -353,7 +353,7 @@
 - Improved preferences layout
 - Improved auto naming collision behavior and file overwriting
 - Added preference to test selected notification sound
-- Added preference to perform when done action immmediately without countdown
+- Added preference to perform when done action immediately without countdown
 - Added preference to disable preview image on summary tab
 - Added hardware.enabled option to portable.ini
 - Added dark theme for Windows 10
@@ -804,7 +804,7 @@
 - Added custom anamorphic to dimensions tab, it's back!
 - Improved static preview window still previews rendering
 - Improved audio selection behavior controls; dropdowns are now context aware and range limited with better defaults
-- Improved UI constency throughout
+- Improved UI consistency throughout
 - Many other bug fixes and improvements
 
 
@@ -1724,7 +1724,7 @@ Superseded by HandBrake 1.0.5.
 - Nested presets
 - Individual activity logs for each encode
 - Slow and slower deinterlacing and decomb work now in Windows
-- Added resizeable update window
+- Added resizable update window
 - Fixed parsing of non-DVD source audio formats
 - Restored Copy to Clipboard to the Activity Log Window, among other enhancements to it
 - Fixed bug with MKV presets showing up as .m4v
@@ -2152,7 +2152,7 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 - Added option for H.264 Baseline (suitable for iPods)
 - (Very) experimental queue support
 - Fixes for some DVD titles HandBrake would not recognize
-- Fixes audio gliches when encoding from LPCM tracks
+- Fixes audio glitches when encoding from LPCM tracks
 
 ## HandBrake 0.7.0-beta3
 
