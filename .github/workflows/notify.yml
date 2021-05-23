@@ -20,15 +20,3 @@ jobs:
           tls: true
           message: |
             COMMIT: ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }} ${{ join(github.event.commits.*.message) }}
-      - name: Handle Pull Request
-        uses: rectalogic/notify-irc@v1
-        if: github.event_name == 'pull_request' && github.repository == 'HandBrake/HandBrake'
-        with:
-          channel: "#handbrake"
-          nickname: handbrake-bot
-          server: irc.libera.chat
-          sasl_password: ${{ secrets.LIBERACHAT_PWD }}
-          port: 6697
-          tls: true
-          message: |
-            PULL REQUEST: ${{ github.actor }} ${{ github.event.action }} a Pull Request ${{ github.event.pull_request.html_url }}
