@@ -1004,6 +1004,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
 
     frame.width       = in->f.width;
     frame.height      = in->f.height;
+    frame.format      = in->f.fmt;
     frame.data[0]     = in->plane[0].data;
     frame.data[1]     = in->plane[1].data;
     frame.data[2]     = in->plane[2].data;
@@ -1027,6 +1028,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
             frame.data[i] = dsts[i];
             frame.linesize[i] = dsts_stride[i];
         }
+        frame.format = pv->context->pix_fmt;
     }
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
