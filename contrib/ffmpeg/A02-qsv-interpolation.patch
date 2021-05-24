@@ -1,0 +1,45 @@
+From 770d0175fb177bb2f0c48438a519e56717fabd25 Mon Sep 17 00:00:00 2001
+Subject: [PATCH 2/3] qsv scale fix green stripes.
+
+---
+ libavfilter/vf_scale_qsv.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/libavfilter/vf_scale_qsv.c b/libavfilter/vf_scale_qsv.c
+index 3e6b516..247f145 100644
+--- a/libavfilter/vf_scale_qsv.c
++++ b/libavfilter/vf_scale_qsv.c
+@@ -276,7 +276,7 @@ static const mfxHandleType handle_types[] = {
+     MFX_HANDLE_D3D11_DEVICE,
+ };
+ 
+-static int init_out_session(AVFilterContext *ctx)
++static int init_out_session(AVFilterContext *ctx, int in_width, int in_height)
+ {
+ 
+     QSVScaleContext                   *s = ctx->priv;
+@@ -389,8 +389,11 @@ static int init_out_session(AVFilterContext *ctx)
+                                          sizeof(*s->mem_ids_in));
+         if (!s->mem_ids_in)
+             return AVERROR(ENOMEM);
+-        for (i = 0; i < in_frames_hwctx->nb_surfaces; i++)
++        for (i = 0; i < in_frames_hwctx->nb_surfaces; i++) {
++            in_frames_hwctx->surfaces[i].Info.CropW = in_width;
++            in_frames_hwctx->surfaces[i].Info.CropH = in_height;
+             s->mem_ids_in[i] = in_frames_hwctx->surfaces[i].Data.MemId;
++        }
+         s->nb_mem_ids_in = in_frames_hwctx->nb_surfaces;
+ 
+         s->mem_ids_out = av_mallocz_array(out_frames_hwctx->nb_surfaces,
+@@ -466,7 +469,7 @@ static int init_scale_session(AVFilterContext *ctx, int in_width, int in_height,
+     if (ret < 0)
+         return ret;
+ 
+-    ret = init_out_session(ctx);
++    ret = init_out_session(ctx, in_width, in_height);
+     if (ret < 0)
+         return ret;
+ 
+-- 
+2.30.1 (Apple Git-130)
+
