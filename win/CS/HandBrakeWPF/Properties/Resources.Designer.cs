@@ -1627,20 +1627,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scan failed: .
-        /// </summary>
-        public static string Main_ScanFailed_NoReason {
-            get {
-                return ResourceManager.GetString("Main_ScanFailed_NoReason", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Scan Failed... Please See Activity Log for details..
         /// </summary>
         public static string Main_ScanFailed_CheckLog {
             get {
                 return ResourceManager.GetString("Main_ScanFailed_CheckLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan failed: .
+        /// </summary>
+        public static string Main_ScanFailed_NoReason {
+            get {
+                return ResourceManager.GetString("Main_ScanFailed_NoReason", resourceCulture);
             }
         }
         
@@ -3912,6 +3912,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsViewModel_CheckForUpdatesMsg {
             get {
                 return ResourceManager.GetString("OptionsViewModel_CheckForUpdatesMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default auto name path was not valid. {0} must not be before {1}.
+        /// </summary>
+        public static string OptionsViewModel_InvalidAutonamePath {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_InvalidAutonamePath", resourceCulture);
             }
         }
         

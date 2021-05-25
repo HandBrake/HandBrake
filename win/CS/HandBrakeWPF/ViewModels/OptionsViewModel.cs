@@ -364,8 +364,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.autoNameDefaultPath = value;
-                this.NotifyOfPropertyChange(() => this.AutoNameDefaultPath);
+                if (this.IsAutonamePathValid(value))
+                {
+                    this.autoNameDefaultPath = value;
+                    this.NotifyOfPropertyChange(() => this.AutoNameDefaultPath);
+                }
             }
         }
 
@@ -1452,6 +1455,32 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
+            return true;
+        }
+
+        private bool IsAutonamePathValid(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return true;
+            }
+
+            if (path.Contains(Constants.SourcePath) && path.Contains(Constants.SourceFolderName))
+            {
+                int indexOfSourcePath = path.IndexOf(Constants.SourcePath, StringComparison.Ordinal);
+                int indexOfSourceFolderName = path.IndexOf(Constants.SourceFolderName, StringComparison.Ordinal);
+
+                if (indexOfSourceFolderName < indexOfSourcePath)
+                {
+                    this.errorService.ShowMessageBox(
+                        string.Format(Resources.OptionsViewModel_InvalidAutonamePath, Constants.SourceFolderName, Constants.SourcePath),
+                        Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return false;
+                }
+            }
+            
             return true;
         }
     }

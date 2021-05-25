@@ -195,8 +195,7 @@ namespace HandBrakeWPF.Helpers
 
         private static string GetAutonamePath(IUserSettingService userSettingService, EncodeTask task, string sourceName)
         {
-            string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()
-                .Replace("/", "\\");
+            string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().Replace("/", "\\");
 
             // If enabled, use the current Destination path.
             if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath) && !string.IsNullOrEmpty(task.Destination))
@@ -209,22 +208,22 @@ namespace HandBrakeWPF.Helpers
             }
 
             // Handle {source_path} 
-            if (autoNamePath.StartsWith("{source_path}") && !string.IsNullOrEmpty(task.Source))
+            if (autoNamePath.StartsWith(Constants.SourcePath) && !string.IsNullOrEmpty(task.Source))
             {
-                string savedPath = autoNamePath.Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
+                string savedPath = autoNamePath.Replace(Constants.SourcePath + "\\", string.Empty).Replace(Constants.SourcePath, string.Empty);
                 string directory = Directory.Exists(task.Source) ? task.Source : Path.GetDirectoryName(task.Source);
                 autoNamePath = Path.Combine(directory, savedPath);
             }
 
             // Handle {source}
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source}") && !string.IsNullOrEmpty(task.Source))
+            if (autoNamePath.Contains(Constants.Source) && !string.IsNullOrEmpty(task.Source))
             {
                 sourceName = Path.GetInvalidPathChars().Aggregate(sourceName, (current, character) => current.Replace(character.ToString(), string.Empty));
-                autoNamePath = autoNamePath.Replace("{source}", sourceName);
+                autoNamePath = autoNamePath.Replace(Constants.Source, sourceName);
             }
 
             // Handle {source_folder_name}
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(task.Source))
+            if (autoNamePath.Contains(Constants.SourceFolderName) && !string.IsNullOrEmpty(task.Source))
             {
                 // Second Case: We have a Path, with "{source_folder}" in it, therefore we need to replace it with the folder name from the source.
                 string path = Path.GetDirectoryName(task.Source);
@@ -233,7 +232,7 @@ namespace HandBrakeWPF.Helpers
                     string[] filesArray = path.Split(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                     string sourceFolder = filesArray[filesArray.Length - 1];
 
-                    autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Replace("{source_folder_name}", sourceFolder);
+                    autoNamePath = autoNamePath.Replace(Constants.SourceFolderName, sourceFolder);
                 }
             }
 

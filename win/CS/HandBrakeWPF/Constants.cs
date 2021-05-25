@@ -32,8 +32,9 @@ namespace HandBrakeWPF
         public const string CreationTime = "{creation-time}";
         public const string Bitrate = "{bitrate}";
         public const string Preset = "{preset}";
-        public const string Source = "{source}";
 
+        /* Auto-name Path Constants */
+        public const string Source = "{source}";
         public const string SourcePath = "{source_path}";
         public const string SourceFolderName = "{source_folder_name}";
 

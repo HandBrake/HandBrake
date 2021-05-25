@@ -2479,4 +2479,7 @@ This warning will display only twice.</value>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
     <value>Passthru Common Metadata</value>
   </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>The default auto name path was not valid. {0} must not be before {1}</value>
+  </data>
 </root>
