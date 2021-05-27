@@ -74,7 +74,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const h26x_nvenc_preset_names[] =
 {
-    "fast", "medium", "slow", NULL
+    "p1", "p2", "p3", "p4", "p5", "p6", "p7", NULL
 };
 
 static const char * const h264_nvenc_profile_names[] =
@@ -418,14 +418,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             context->bit_rate = 0;
 
-            av_dict_set( &av_opts, "rc", "vbr_hq", 0 );
+            av_dict_set( &av_opts, "rc", "vbr", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
+            av_dict_set( &av_opts, "multipass", "fullres", 0 );
 
             // further Advanced Quality Settings in Constant Quality Mode
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
-            hb_log( "encavcodec: encoding at rc=vbr_hq %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres %.2f", job->vquality );
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
