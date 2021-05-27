@@ -1393,7 +1393,7 @@ fail:
     preset[@"PictureDARWidth"] = @(self.displayWidth);
 
     // Set crop settings
-    preset[@"PictureAutoCrop"] = @(self.cropMode == HBPictureCropModeAutomatic);
+    preset[@"PictureAutoCrop"] = @((BOOL)(self.cropMode == HBPictureCropModeAutomatic));
 
     preset[@"PictureTopCrop"]    = @(self.cropTop);
     preset[@"PictureBottomCrop"] = @(self.cropBottom);
