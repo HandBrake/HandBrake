@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -302,6 +302,19 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="uFS-Tj-SCh"/>
+                            <menuItem title="Switch to Next Title" keyEquivalent="" id="viv-aA-SoB">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="switchToNextTitle:" target="-1" id="DHf-of-5V8"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Switch to Previous Title" keyEquivalent="" id="zgj-Iv-4xJ">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="switchToPreviousTitle:" target="-1" id="RHw-0V-BRR"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="yua-nt-2OC"/>
                             <menuItem title="Show Toolbar" keyEquivalent="t" id="IsV-5A-bqx">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>

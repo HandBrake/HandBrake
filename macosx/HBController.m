@@ -671,6 +671,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         return self.selectedPreset && self.selectedPreset.isBuiltIn == NO;
     }
+    if (action == @selector(switchToNextTitle:) ||
+        action == @selector(switchToPreviousTitle:))
+    {
+        return self.core.titles.count > 1 && self.job != nil;
+    }
 
     return YES;
 }
@@ -1098,6 +1103,36 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         if (![self.job.presetName hasSuffix:NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")])
         {
             self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")];
+        }
+    }
+}
+
+- (IBAction)switchToNextTitle:(id)sender
+{
+    NSArray<HBTitle *> *titles = self.core.titles;
+    if (titles && self.job)
+    {
+        NSUInteger index = [titles indexOfObject:self.job.title];
+        if (index != NSNotFound && index < titles.count - 1)
+        {
+            HBTitle *title = titles[index + 1];
+            HBJob *job = [self jobFromTitle:title];
+            self.job = job;
+        }
+    }
+}
+
+- (IBAction)switchToPreviousTitle:(id)sender
+{
+    NSArray<HBTitle *> *titles = self.core.titles;
+    if (titles && self.job)
+    {
+        NSUInteger index = [titles indexOfObject:self.job.title];
+        if (index != NSNotFound && index > 0)
+        {
+            HBTitle *title = titles[index - 1];
+            HBJob *job = [self jobFromTitle:title];
+            self.job = job;
         }
     }
 }
