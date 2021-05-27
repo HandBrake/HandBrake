@@ -16,14 +16,14 @@ Additionally this abuses AV_PICTURE_TYPE_S for marking Skip frames, a special ty
 
 Signed-off-by: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
 ---
- libavcodec/amfenc.c | 46 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ libavcodec/amfenc.c | 47 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
 diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
-index 384d8efc92..eb4b65e4f2 100644
+index fb23ed7..e754804 100644
 --- a/libavcodec/amfenc.c
 +++ b/libavcodec/amfenc.c
-@@ -680,6 +680,52 @@ int ff_amf_send_frame(AVCodecContext *avctx, const AVFrame *frame)
+@@ -699,6 +699,53 @@ int ff_amf_receive_packet(AVCodecContext *avctx, AVPacket *avpkt)
              break;
          }
  
@@ -73,6 +73,10 @@ index 384d8efc92..eb4b65e4f2 100644
 +                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_IDR);
 +            }
 +        }
- 
++
          // submit surface
          res = ctx->encoder->pVtbl->SubmitInput(ctx->encoder, (AMFData*)surface);
+         if (res == AMF_INPUT_FULL) { // handle full queue
+-- 
+2.30.1 (Apple Git-130)
+
