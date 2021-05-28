@@ -12,7 +12,8 @@ jobs:
 
     - name: Environment Setup
       run: |
-        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax
+        sudo apt-get purge cmake -y
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
         sudo pip3 install meson
 
     - name: Setup Toolchain
@@ -37,7 +38,8 @@ jobs:
     - name: Build CLI and LibHB
       run: |
         export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
-        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=1 --launch
+        export PATH=/usr/bin:$PATH
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=0 --launch
         cd build
         make pkg.create.zip
 
