@@ -163,7 +163,8 @@
                             <CheckBox Grid.Column="3" Margin="5,0,5,0" VerticalAlignment="Center" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" 
                                       Content="{x:Static Properties:Resources.SubtitlesView_ForcedOnly}" FontWeight="Bold" />
 
-                            <CheckBox Grid.Column="4" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold">
+                            <CheckBox Grid.Column="4" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
+                                      ToolTip="{x:Static Properties:ResourcesTooltips.SubtitlesView_BurnIn}">
                                 <CheckBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource canBurnSubtitleConverter}">
                                         <Binding Path="CanBeBurned" />

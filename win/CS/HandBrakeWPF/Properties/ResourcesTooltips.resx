@@ -474,4 +474,11 @@ When disabled, it will use the path in the destination box on the main window if
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
   </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Burn in subtitles to the video stream.
+
+Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+
+For example, PGS subtitles are not supported in MP4</value>
+  </data>
 </root>

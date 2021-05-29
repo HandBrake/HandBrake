@@ -658,6 +658,19 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Burn in subtitles to the video stream.
+        ///
+        ///Note, this will be automatically selected if the source subtitle track format is not supported in the output file type.
+        ///
+        ///For example, PGS subtitles are not supported in MP4.
+        /// </summary>
+        public static string SubtitlesView_BurnIn {
+            get {
+                return ResourceManager.GetString("SubtitlesView_BurnIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set the average bitrate.
         ///
         ///The instantaneous bitrate can be much higher or lower at any point in time.
