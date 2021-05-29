@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -31,10 +30,10 @@ namespace HandBrakeWPF.ViewModels
 
     using Microsoft.Win32;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using SubtitleType = HandBrakeWPF.Services.Encode.Model.Models.SubtitleType;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
+    using SubtitleTrack = Services.Encode.Model.Models.SubtitleTrack;
+    using SubtitleType = Services.Encode.Model.Models.SubtitleType;
 
     /// <summary>
     /// The Subtitles View Model
@@ -660,7 +659,13 @@ namespace HandBrakeWPF.ViewModels
             if (source == null)
             {
                 source = foreignAudioSearchTrack;
+
+                if (this.Task.SubtitleTracks.Any(s => s.SourceTrack.Equals(this.foreignAudioSearchTrack)))
+                {
+                    return; // Don't add more than one Foreign Audio Scan
+                }
             }
+
 
             SubtitleTrack track = new SubtitleTrack
                                       {
@@ -674,8 +679,16 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (subtitle != null && subtitle.IsFakeForeignAudioScanTrack)
                 {
-                    track.Burned = true;
-                    this.SetBurnedToFalseForAllExcept(track);
+                    // Only set burned if it's an an available option.
+                    if (this.Task.OutputFormat == OutputFormat.Mp4 && this.Task.SubtitleTracks.Any(s => s.Burned))
+                    {
+                        track.Burned = false;
+                    }
+                    else
+                    {
+                        track.Burned = true;
+                        this.SetBurnedToFalseForAllExcept(track);
+                    }
                 }
             }
 
