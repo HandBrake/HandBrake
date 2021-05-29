@@ -183,8 +183,8 @@ namespace HandBrakeWPF.ViewModels
             this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.Preset.Task);
             this.audioDefaultsViewModel.Setup(this.Preset, this.Preset.Task);
 
-            this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
-            this.subtitlesDefaultsViewModel.SetupLanguages(subtitleBehaviours);
+            this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
+            this.subtitlesDefaultsViewModel.SetupPreset(subtitleBehaviours);
 
             // Resolution Limits
             this.CustomWidth = task.MaxWidth;
@@ -261,9 +261,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditSubtitleDefaults()
         {
             this.subtitlesDefaultsViewModel.ResetApplied();
-            SubtitlesDefaultsView view = new SubtitlesDefaultsView();
-            view.DataContext = this.subtitlesDefaultsViewModel;
-            view.ShowDialog();
+            this.subtitlesDefaultsViewModel.ShowWindow();
 
             if (subtitlesDefaultsViewModel.IsApplied)
             {

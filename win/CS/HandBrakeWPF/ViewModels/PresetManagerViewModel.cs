@@ -404,12 +404,10 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
+            ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
             subtitlesDefaultsViewModel.ResetApplied();
-            subtitlesDefaultsViewModel.SetupLanguages(this.selectedPreset);
-            SubtitlesDefaultsView view = new SubtitlesDefaultsView();
-            view.DataContext = subtitlesDefaultsViewModel;
-            view.ShowDialog();
+            subtitlesDefaultsViewModel.SetupPreset(this.selectedPreset);
+            subtitlesDefaultsViewModel.ShowWindow();
 
             if (subtitlesDefaultsViewModel.IsApplied)
             {

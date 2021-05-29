@@ -135,6 +135,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Column="0" HorizontalAlignment="Left" Padding="0,2">
@@ -144,8 +145,15 @@
                 </Button>
 
                 <Button Grid.Column="1"
-                        Click="Apply_OnClick"
-                        Content="{x:Static Properties:Resources.Generic_Apply}"
+                        cal:Message.Attach="[Event Click] = [Action Cancel]"
+                        Content="{x:Static Properties:Resources.Generic_Cancel}"
+                        IsCancel="True"
+                        Padding="8,2"
+                        Margin="0,0,5,0"/>
+
+                <Button Grid.Column="2"
+                        cal:Message.Attach="[Event Click] = [Action Save]"
+                        Content="{x:Static Properties:Resources.Generic_Save}"
                         IsDefault="True"
                         Padding="8,2" />
             </Grid>

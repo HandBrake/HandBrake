@@ -65,7 +65,8 @@ namespace HandBrakeWPF.ViewModels
         {
             this.errorService = errorService;
             this.windowManager = windowManager;
-            this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel();
+            this.SubtitleBehaviours = new SubtitleBehaviours();
+            this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
             this.Task = new EncodeTask();
 
             this.Languages = LanguageUtilities.MapLanguages().Keys;
@@ -143,13 +144,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets the default audio behaviours. 
         /// </summary>
-        public SubtitleBehaviours SubtitleBehaviours
-        {
-            get
-            {
-                return this.SubtitleDefaultsViewModel.SubtitleBehaviours;
-            }
-        }
+        public SubtitleBehaviours SubtitleBehaviours { get; private set; }
 
         public bool IsBurnableOnly
         {
@@ -453,11 +448,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
-            SubtitlesDefaultsView view = new SubtitlesDefaultsView();
-            view.DataContext = this.SubtitleDefaultsViewModel;
-
-            if (view.ShowDialog() == true)
+            if (this.SubtitleDefaultsViewModel.ShowWindow())
             {
+                this.SubtitleBehaviours = new SubtitleBehaviours(this.SubtitleDefaultsViewModel.SubtitleBehaviours);
                 this.OnTabStatusChanged(null);
             }
         }
@@ -509,7 +502,9 @@ namespace HandBrakeWPF.ViewModels
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task);
 
-            this.SubtitleDefaultsViewModel.SetupLanguages(preset);
+            this.SubtitleBehaviours = new SubtitleBehaviours(preset.SubtitleTrackBehaviours);
+
+            this.SubtitleDefaultsViewModel.SetupPreset(preset);
             this.AutomaticSubtitleSelection();
         }
 

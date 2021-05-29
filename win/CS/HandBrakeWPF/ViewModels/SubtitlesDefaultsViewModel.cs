@@ -14,6 +14,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
 
+    using Caliburn.Micro;
+
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
@@ -27,34 +29,27 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class SubtitlesDefaultsViewModel : ViewModelBase, ISubtitlesDefaultsViewModel
     {
-        #region Constants and Fields
+        private readonly IWindowManager windowManager;
 
         private SubtitleBehaviours subtitleBehaviours;
         private BindingList<string> availableLanguages;
 
-        #endregion
-
-        #region Constructors and Destructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitlesDefaultsViewModel"/> class. 
         /// </summary>
-        public SubtitlesDefaultsViewModel()
+        public SubtitlesDefaultsViewModel(IWindowManager windowManager)
         {
+            this.windowManager = windowManager;
             this.Languages = LanguageUtilities.MapLanguages().Keys;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
             this.SubtitleBehaviours = new SubtitleBehaviours();
             this.SelectedAvailableToMove = new BindingList<string>();
             this.SelectedLanguagesToMove = new BindingList<string>();
             this.availableLanguages = new BindingList<string>();
-            this.SetupLanguages((Preset)null);
+            this.SetupPreset((Preset)null);
 
             this.Title = Resources.SubtitlesViewModel_SubDefaults;
         }
-
-        #endregion
-
-        #region Properties
 
         public bool IsApplied { get; set; }
 
@@ -137,11 +132,7 @@ namespace HandBrakeWPF.ViewModels
         /// Gets SelectedLanguages.
         /// </summary>
         public BindingList<string> SelectedLanguagesToMove { get; private set; }
-
-        #endregion
-
-        #region Public Methods
-         
+        
         /// <summary>
         /// Audio List Move Left
         /// </summary>
@@ -197,21 +188,17 @@ namespace HandBrakeWPF.ViewModels
             Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/advanced/audio-subtitle-defaults.html");
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// The setup languages.
         /// </summary>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void SetupLanguages(Preset preset)
+        public void SetupPreset(Preset preset)
         {
             if (preset != null)
             {
-                this.SetupLanguages(preset.SubtitleTrackBehaviours);
+                this.SetupPreset(preset.SubtitleTrackBehaviours);
             }
         }
 
@@ -226,7 +213,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="behaviours">
         /// The behaviours.
         /// </param>
-        public void SetupLanguages(SubtitleBehaviours behaviours)
+        public void SetupPreset(SubtitleBehaviours behaviours)
         {
             // Reset
             this.IsApplied = false;
@@ -264,6 +251,23 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
         }
-        #endregion
+
+        public bool ShowWindow()
+        {
+            this.windowManager.ShowDialogAsync(this);
+
+            return this.IsApplied;
+        }
+
+        public void Cancel()
+        {
+            this.IsApplied = false;
+        }
+
+        public void Save()
+        {
+            this.IsApplied = true;
+            this.TryCloseAsync(false);
+        }
     }
 }
