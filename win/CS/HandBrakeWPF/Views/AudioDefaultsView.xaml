@@ -157,7 +157,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:Resources.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="5,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="110" Height="22" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="AudioEncoderFallback" />
@@ -166,7 +166,7 @@
                     <ComboBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}" ConverterParameter="True">
                             <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
-                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                            <Binding Path="DataContext.OutputFormat" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
                         </MultiBinding>
                     </ComboBox.ItemsSource>
                 </ComboBox>
@@ -267,7 +267,7 @@
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                             <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
-                                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                            <Binding Path="DataContext.OutputFormat" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
                                         </MultiBinding>
                                     </ComboBox.ItemsSource>
                                 </ComboBox>
@@ -384,9 +384,10 @@
         </Grid>
 
         <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="7" Grid.ColumnSpan="3" Margin="10,15,0,0" >
-            <Grid Margin="0,10,0,0" Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
@@ -397,8 +398,15 @@
                 </Button>
 
                 <Button Grid.Column="1"
-                        Click="Apply_OnClick"
-                        Content="{x:Static Properties:Resources.Generic_Apply}"
+                        cal:Message.Attach="[Event Click] = [Action Cancel]"
+                        Content="{x:Static Properties:Resources.Generic_Cancel}"
+                        IsCancel="True"
+                        Padding="8,2"
+                        Margin="0,0,5,0"/>
+
+                <Button Grid.Column="2"
+                        cal:Message.Attach="[Event Click] = [Action Save]"
+                        Content="{x:Static Properties:Resources.Generic_Save}"
                         IsDefault="True"
                         Padding="8,2" />
             </Grid>

@@ -362,7 +362,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Audio Settings */
             preset.AudioTrackBehaviours = new AudioBehaviours();
-            preset.Task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
+            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
             preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
                                                                      ? AudioBehaviourModes.AllMatching
                                                                      : AudioBehaviourModes.FirstMatch;
@@ -371,38 +371,38 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (importedPreset.AudioCopyMask != null)
             {
-                preset.Task.AllowedPassthruOptions.SetFalse();
+                preset.AudioTrackBehaviours.AllowedPassthruOptions.SetFalse();
                 foreach (var item in importedPreset.AudioCopyMask)
                 {
                     AudioEncoder encoder = EnumHelper<AudioEncoder>.GetValue(item);
                     switch (encoder)
                     {
                         case AudioEncoder.AacPassthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.Ac3Passthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAC3Pass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass = true;
                             break;
                         case AudioEncoder.EAc3Passthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowEAC3Pass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowEAC3Pass = true;
                             break;
                         case AudioEncoder.DtsHDPassthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowDTSHDPass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSHDPass = true;
                             break;
                         case AudioEncoder.DtsPassthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowDTSPass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSPass = true;
                             break;
                         case AudioEncoder.FlacPassthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowFlacPass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowFlacPass = true;
                             break;
                         case AudioEncoder.Mp2Passthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowMP2Pass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP2Pass = true;
                             break;
                         case AudioEncoder.Mp3Passthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP3Pass = true;
                             break;
                         case AudioEncoder.TrueHDPassthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowTrueHDPass = true;
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass = true;
                             break;
                     }
                 }
@@ -565,8 +565,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Default = export.IsDefault;
 
             // Audio
-            preset.AudioCopyMask = export.Task.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
-            preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.Task.AllowedPassthruOptions.AudioEncoderFallback);
+            preset.AudioCopyMask = export.AudioTrackBehaviours.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
+            preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.AudioTrackBehaviours.AllowedPassthruOptions.AudioEncoderFallback);
             preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLanguages);
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
             preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // 1 = First Track, 0 = All

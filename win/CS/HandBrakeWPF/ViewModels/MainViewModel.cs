@@ -1159,8 +1159,8 @@ namespace HandBrakeWPF.ViewModels
                     temporaryPreset.Name,
                     Resources.MainView_ModifiedPreset);
                 temporaryPreset.Task = new EncodeTask(this.CurrentTask);
-                temporaryPreset.AudioTrackBehaviours = this.AudioViewModel.AudioBehaviours.Clone();
-                temporaryPreset.SubtitleTrackBehaviours = this.SubtitleViewModel.SubtitleBehaviours.Clone();
+                temporaryPreset.AudioTrackBehaviours = new AudioBehaviours(this.AudioViewModel.AudioBehaviours);
+                temporaryPreset.SubtitleTrackBehaviours = new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours);
             }
 
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
@@ -2209,7 +2209,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.VideoViewModel.RefreshTask();
-            this.AudioViewModel.RefreshTask();
+            this.AudioViewModel.RefreshTask(this.CurrentTask.OutputFormat);
             this.SubtitleViewModel.RefreshTask();
         }
     }

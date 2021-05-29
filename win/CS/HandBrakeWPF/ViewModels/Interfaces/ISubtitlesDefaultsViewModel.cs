@@ -25,8 +25,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 
         void SetupPreset(SubtitleBehaviours behaviour);
 
-        void ResetApplied();
-
         bool ShowWindow();
     }
 }

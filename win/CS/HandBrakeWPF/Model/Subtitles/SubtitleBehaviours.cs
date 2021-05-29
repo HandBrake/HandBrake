@@ -14,9 +14,6 @@ namespace HandBrakeWPF.Model.Subtitles
 
     using Caliburn.Micro;
 
-    /// <summary>
-    ///  A class to track the behaviours of audio track selection
-    /// </summary>
     public class SubtitleBehaviours : PropertyChangedBase
     {
         private SubtitleBehaviourModes selectedBehaviour;
@@ -25,9 +22,6 @@ namespace HandBrakeWPF.Model.Subtitles
         private bool addClosedCaptions;
         private SubtitleBurnInBehaviourModes selectedBurnInBehaviour;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubtitleBehaviours"/> class.
-        /// </summary>
         public SubtitleBehaviours()
         {
             this.SelectedBehaviour = SubtitleBehaviourModes.None;
@@ -35,12 +29,6 @@ namespace HandBrakeWPF.Model.Subtitles
             this.SelectedLanguages = new BindingList<string>();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubtitleBehaviours"/> class.
-        /// </summary>
-        /// <param name="behaviours">
-        /// The behaviours.
-        /// </param>
         public SubtitleBehaviours(SubtitleBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.selectedBehaviour;
@@ -50,9 +38,6 @@ namespace HandBrakeWPF.Model.Subtitles
             this.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
         }
 
-        /// <summary>
-        /// Gets or sets the selected behaviour.
-        /// </summary>
         public SubtitleBehaviourModes SelectedBehaviour
         {
             get
@@ -70,9 +55,6 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
-        /// <summary>
-        /// Gets or sets the selected burn in behaviour.
-        /// </summary>
         public SubtitleBurnInBehaviourModes SelectedBurnInBehaviour
         {
             get
@@ -90,9 +72,6 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
-        /// <summary>
-        /// Gets or sets the selected languages.
-        /// </summary>
         public BindingList<string> SelectedLanguages
         {
             get
@@ -110,9 +89,6 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether add foreign audio scan track.
-        /// </summary>
         public bool AddForeignAudioScanTrack
         {
             get
@@ -130,9 +106,6 @@ namespace HandBrakeWPF.Model.Subtitles
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether add closed captions.
-        /// </summary>
         public bool AddClosedCaptions
         {
             get
@@ -148,31 +121,6 @@ namespace HandBrakeWPF.Model.Subtitles
                 this.addClosedCaptions = value;
                 this.NotifyOfPropertyChange(() => this.AddClosedCaptions);
             }
-        }
-
-        /// <summary>
-        /// Clone this object
-        /// </summary>
-        /// <returns>
-        /// The <see cref="object"/>.
-        /// </returns>
-        public SubtitleBehaviours Clone()
-        {
-            SubtitleBehaviours cloned = new SubtitleBehaviours
-            {
-                SelectedBehaviour = this.selectedBehaviour, 
-                SelectedBurnInBehaviour = this.selectedBurnInBehaviour, 
-                SelectedLanguages = new BindingList<string>(), 
-                AddClosedCaptions = this.addClosedCaptions, 
-                AddForeignAudioScanTrack = this.addForeignAudioScanTrack, 
-            };
-
-            foreach (var item in this.SelectedLanguages)
-            {
-                cloned.SelectedLanguages.Add(item);
-            }
-
-            return cloned;
         }
     }
 }

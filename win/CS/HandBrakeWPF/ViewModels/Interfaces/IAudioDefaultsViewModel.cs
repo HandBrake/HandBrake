@@ -10,37 +10,18 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Encode.Model.Models;
 
-    /// <summary>
-    /// The Audio View Model Interface
-    /// </summary>
     public interface IAudioDefaultsViewModel : IViewModelBase
     {
-        /// <summary>
-        /// Gets the audio behaviours.
-        /// </summary>
         AudioBehaviours AudioBehaviours { get; }
 
         bool IsApplied { get; }
 
-        /// <summary>
-        /// The setup languages.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        void Setup(Preset preset, EncodeTask task);
+        void Setup(AudioBehaviours behaviours, OutputFormat outputformat);
 
-        /// <summary>
-        /// The refresh task.
-        /// </summary>
-        void RefreshTask();
+        void RefreshTask(OutputFormat outputFormat);
 
-        void ResetApplied();
+        bool ShowWindow();
     }
 }

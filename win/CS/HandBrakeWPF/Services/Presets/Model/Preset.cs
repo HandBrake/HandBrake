@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Services.Presets.Model
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = Encode.Model.EncodeTask;
 
     public class Preset : PropertyChangedBase, IPresetObject
     {

@@ -202,11 +202,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public void ResetApplied()
-        {
-            this.IsApplied = false;
-        }
-
         /// <summary>
         /// The setup languages.
         /// </summary>
@@ -254,6 +249,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool ShowWindow()
         {
+            this.IsApplied = false;
             this.windowManager.ShowDialogAsync(this);
 
             return this.IsApplied;

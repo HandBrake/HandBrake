@@ -177,13 +177,13 @@ namespace HandBrakeWPF.ViewModels
         public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
             this.Preset.Task = new EncodeTask(task);
-            this.Preset.AudioTrackBehaviours = audioBehaviours.Clone();
-            this.Preset.SubtitleTrackBehaviours = subtitleBehaviours.Clone();
+            this.Preset.AudioTrackBehaviours = new AudioBehaviours(audioBehaviours); 
+            this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(subtitleBehaviours);
 
-            this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.Preset.Task);
-            this.audioDefaultsViewModel.Setup(this.Preset, this.Preset.Task);
+            this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.windowManager);
+            this.audioDefaultsViewModel.Setup(audioBehaviours, task.OutputFormat);
 
-            this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
+            this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel(this.windowManager);
             this.subtitlesDefaultsViewModel.SetupPreset(subtitleBehaviours);
 
             // Resolution Limits
@@ -250,22 +250,21 @@ namespace HandBrakeWPF.ViewModels
 
         public void EditAudioDefaults()
         {
-            this.audioDefaultsViewModel.ResetApplied();
-            this.windowManager.ShowDialogAsync(this.audioDefaultsViewModel);
+            this.audioDefaultsViewModel.ShowWindow();
+
             if (audioDefaultsViewModel.IsApplied)
             {
-                this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
+                this.Preset.AudioTrackBehaviours = new AudioBehaviours(this.audioDefaultsViewModel.AudioBehaviours);
             }
         }
 
         public void EditSubtitleDefaults()
         {
-            this.subtitlesDefaultsViewModel.ResetApplied();
             this.subtitlesDefaultsViewModel.ShowWindow();
 
             if (subtitlesDefaultsViewModel.IsApplied)
             {
-                this.Preset.SubtitleTrackBehaviours = this.subtitlesDefaultsViewModel.SubtitleBehaviours.Clone();
+                this.Preset.SubtitleTrackBehaviours = new SubtitleBehaviours(this.subtitlesDefaultsViewModel.SubtitleBehaviours);
             }
         }
 

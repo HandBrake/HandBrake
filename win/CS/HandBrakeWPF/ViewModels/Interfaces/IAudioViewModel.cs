@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Encode.Model.Models;
 
     /// <summary>
     /// The Audio View Model Interface
@@ -24,6 +25,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>
-        void RefreshTask();
+        void RefreshTask(OutputFormat outputFormat);
     }
 }

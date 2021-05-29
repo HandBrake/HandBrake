@@ -19,11 +19,11 @@ namespace HandBrakeWPF.Converters.Audio
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
+    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
     using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
-    using EncodeTask = Services.Encode.Model.EncodeTask;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
 
     public class AudioEncoderConverter : IMultiValueConverter
@@ -48,11 +48,23 @@ namespace HandBrakeWPF.Converters.Audio
         /// </returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            // TODO -> Be smarter and only show the available Passthru options.
             if (values.Count() >= 2)
             {
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
-                EncodeTask task = values[1] as EncodeTask;
+
+                OutputFormat outputFormat = OutputFormat.Mp4;
+                if (values[1].GetType() == typeof(OutputFormat))
+                {
+                    outputFormat = (OutputFormat)values[1];
+                }
+                else
+                {
+                    EncodeTask task = values[1] as EncodeTask;
+                    if (task != null)
+                    {
+                        outputFormat = task.OutputFormat;
+                    }
+                }
 
                 encoders.Remove(AudioEncoder.None); // Assume we never want to show this.
 
@@ -62,7 +74,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.fdkheaac);
                 }
 
-                if (task != null && task.OutputFormat == OutputFormat.Mp4)
+                if (outputFormat == OutputFormat.Mp4)
                 {
                     encoders.Remove(AudioEncoder.Vorbis);
                     encoders.Remove(AudioEncoder.ffflac);
@@ -72,7 +84,7 @@ namespace HandBrakeWPF.Converters.Audio
 
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
                 }
-                else if (task != null && task.OutputFormat == OutputFormat.WebM)
+                else if (outputFormat == OutputFormat.WebM)
                 {
                     encoders.RemoveAll(ae => !(ae.Equals(AudioEncoder.Vorbis) || ae.Equals(AudioEncoder.Opus)));
                 }

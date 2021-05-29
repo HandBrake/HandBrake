@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
-            this.AllowedPassthruOptions = new AllowedPassthru();
+            this.AudioPassthruOptions = new AllowedPassthru();
             this.MetaData = new MetaData();
             this.Padding = new PaddingFilter();
             this.VideoTunes = new List<VideoTune>();
@@ -60,7 +60,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.PointToPointMode = task.PointToPointMode;
 
             /* Audio */
-            this.AllowedPassthruOptions = new AllowedPassthru(task.AllowedPassthruOptions);
+            this.AudioPassthruOptions = new AllowedPassthru(task.AudioPassthruOptions);
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             foreach (AudioTrack track in task.AudioTracks)
             {
@@ -298,7 +298,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public ObservableCollection<AudioTrack> AudioTracks { get; set; }
 
-        public AllowedPassthru AllowedPassthruOptions { get; set; }
+        public AllowedPassthru AudioPassthruOptions { get; set; }
 
         /* Subtitles */
 

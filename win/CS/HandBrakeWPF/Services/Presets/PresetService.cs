@@ -432,7 +432,6 @@ namespace HandBrakeWPF.Services.Presets
                     Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
                     preset.IsBuildIn = true;
                     preset.Category = category.PresetName;
-                    preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
                     preset.IsPresetDisabled = this.IsPresetDisabled(preset) || hbpreset.PresetDisabled;
 
                     if (hbpreset.Default && hasUserDefault)

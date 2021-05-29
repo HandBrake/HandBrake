@@ -131,7 +131,7 @@
         </Grid>
 
         <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" SnapsToDevicePixels="True" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,15,0,0" >
-            <Grid Margin="0,10,0,0" Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />

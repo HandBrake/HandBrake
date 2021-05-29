@@ -41,7 +41,6 @@ namespace HandBrakeWPF.ViewModels
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
         private readonly IErrorService errorService;
-        private readonly IWindowManager windowManager;
 
         #region Constants and Fields
 
@@ -64,7 +63,6 @@ namespace HandBrakeWPF.ViewModels
         public SubtitlesViewModel(IErrorService errorService, IWindowManager windowManager)
         {
             this.errorService = errorService;
-            this.windowManager = windowManager;
             this.SubtitleBehaviours = new SubtitleBehaviours();
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel(windowManager);
             this.Task = new EncodeTask();
@@ -448,6 +446,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
+            this.SubtitleDefaultsViewModel.SetupPreset(this.SubtitleBehaviours);
             if (this.SubtitleDefaultsViewModel.ShowWindow())
             {
                 this.SubtitleBehaviours = new SubtitleBehaviours(this.SubtitleDefaultsViewModel.SubtitleBehaviours);
