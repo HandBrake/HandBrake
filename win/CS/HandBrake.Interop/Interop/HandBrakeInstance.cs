@@ -17,7 +17,6 @@ namespace HandBrake.Interop.Interop
     using System.Runtime.InteropServices;
     using System.Text.Json;
     using System.Timers;
-    using System.Xml;
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;

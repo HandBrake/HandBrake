@@ -14,7 +14,6 @@ namespace HandBrake.Interop.Interop
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Text.Json;
-    using System.Xml;
 
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;

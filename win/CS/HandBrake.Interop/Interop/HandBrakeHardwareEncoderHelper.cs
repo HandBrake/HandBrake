@@ -11,7 +11,6 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Diagnostics;
-    using System.Dynamic;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;

@@ -16,8 +16,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Accessibility;
-
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
