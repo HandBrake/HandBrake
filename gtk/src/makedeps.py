@@ -47,6 +47,7 @@ dep_map = (
     DepEntry("PictureSharpenPreset", "PictureSharpenTune", "custom", True, True),
     DepEntry("PictureSharpenPreset", "PictureSharpenTuneLabel", "custom", True, True),
     DepEntry("PictureDetelecine", "PictureDetelecineCustom", "custom", False, True),
+    DepEntry("PictureColorspacePreset", "PictureColorspaceCustom", "custom", False, True),
     DepEntry("VideoEncoder", "x264FastDecode", "x264|x264_10bit", False, True),
     DepEntry("VideoEncoder", "VideoOptionExtraWindow", "x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9", False, True),
     DepEntry("VideoEncoder", "VideoOptionExtraLabel", "x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9", False, True),

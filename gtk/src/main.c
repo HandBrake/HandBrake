@@ -1265,6 +1265,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
                                   "detelecine", HB_FILTER_DETELECINE);
     ghb_set_custom_filter_tooltip(ud, "PictureCombDetectCustom",
                                   "interlace detection", HB_FILTER_COMB_DETECT);
+    ghb_set_custom_filter_tooltip(ud, "PictureColorspaceCustom",
+                                  "colorspace", HB_FILTER_COLORSPACE);
 
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(ghb_window));
     GtkWidget * window = GHB_WIDGET(ud->builder, "presets_window");

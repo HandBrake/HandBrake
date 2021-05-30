@@ -435,6 +435,12 @@ static filter_opts_t deint_preset_opts =
     .preset    = TRUE
 };
 
+static filter_opts_t colorspace_preset_opts =
+{
+    .filter_id = HB_FILTER_COLORSPACE,
+    .preset    = TRUE
+};
+
 static filter_opts_t nlmeans_preset_opts =
 {
     .filter_id = HB_FILTER_NLMEANS,
@@ -670,6 +676,12 @@ combo_name_map_t combo_name_map[] =
         &denoise_opts,
         small_opts_set,
         generic_opt_get
+    },
+    {
+        "PictureColorspacePreset",
+        &colorspace_preset_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDenoisePreset",
