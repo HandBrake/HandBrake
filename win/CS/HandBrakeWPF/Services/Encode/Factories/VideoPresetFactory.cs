@@ -70,32 +70,22 @@ namespace HandBrakeWPF.Services.Encode.Factories
         {
             switch (shortName)
             {
-                case "losslesshp":
-                    return "High Performance Lossless";
-                case "lossless":
-                    return "Lossless";
-                case "llhp":
-                    return "High Performance Low Latency";
-                case "llhq":
-                    return "High Quality Low Latency";
-                case "ll":
-                    return "Low Latency";
-                case "bd":
-                    return "Bluray Disk";
-                case "hq":
-                    return "High Quality";
-                case "hp":
-                    return "High Performance";
+                case "fastest":
+                    return "Fastest";
+                case "faster":
+                    return "Faster";
                 case "fast":
                     return "Fast";
                 case "medium":
                     return "Medium";
                 case "slow":
                     return "Slow";
-                case "default":
-                    return "Default";
+                case "slower":
+                    return "Slower";
+                case "slowest":
+                    return "Slowest";
                 case null:
-                    return "Automatic";
+                    return "Medium";
             }
 
             return shortName;

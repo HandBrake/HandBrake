@@ -72,3 +72,24 @@ int hb_check_nvenc_available()
         return 0;
     #endif
 }
+
+char * hb_map_nvenc_preset_name (char * preset){
+
+    if (strcmp(preset, "fastest") == 0) {
+      return "p1";
+    }  else if (strcmp(preset, "faster") == 0) {
+      return "p2";
+    } else if (strcmp(preset, "fast") == 0) {
+       return "p3";
+    } else if (strcmp(preset, "medium") == 0) {
+      return "p4";
+    } else if (strcmp(preset, "slow") == 0) {
+      return "p5";
+    } else if (strcmp(preset, "slower") == 0) {
+       return "p6";
+    } else if (strcmp(preset, "slowest") == 0) {
+      return "p7";
+    }
+
+    return "p4"; // Default to Medium
+}

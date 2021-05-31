@@ -14,6 +14,11 @@
 #include "handbrake/h265_common.h"
 #include "handbrake/nal_units.h"
 
+#if HB_PROJECT_FEATURE_NVENC
+#include "handbrake/nvenc_common.h"
+#endif
+
+
 /*
  * The frame info struct remembers information about each frame across calls
  * to avcodec_encode_video. Since frames are uniquely identified by their
@@ -74,7 +79,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const h26x_nvenc_preset_names[] =
 {
-    "p1", "p2", "p3", "p4", "p5", "p6", "p7", NULL
+    "fastest", "faster", "fast", "medium", "slow", "slower", "slowest", NULL
 };
 
 static const char * const h264_nvenc_profile_names[] =
@@ -1210,10 +1215,14 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
             return apply_vp8_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_VP9:
             return apply_vp9_preset(av_opts, preset);
+            
+#if HB_PROJECT_FEATURE_NVENC
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
-             av_dict_set( av_opts, "preset", preset, 0);
-             break;
+            preset = hb_map_nvenc_preset_name(preset);
+            av_dict_set( av_opts, "preset", preset, 0);
+            break;
+#endif
         default:
             break;
     }
