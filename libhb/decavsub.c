@@ -283,8 +283,9 @@ int decavsubWork( hb_avsub_context_t * ctx,
                   hb_buffer_t ** buf_out )
 {
     hb_buffer_t * in = *buf_in;
+    hb_buffer_settings_t in_s = in->s;
 
-    if (in->s.flags & HB_BUF_FLAG_EOF)
+    if (in_s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_in = NULL;
@@ -314,18 +315,18 @@ int decavsubWork( hb_avsub_context_t * ctx,
 
     ctx->pkt->data = in->data;
     ctx->pkt->size = in->size;
-    ctx->pkt->pts  = in->s.start;
-    if (in->s.duration > 0 || ctx->subtitle->source != PGSSUB)
+    ctx->pkt->pts  = in_s.start;
+    if (in_s.duration > 0 || ctx->subtitle->source != PGSSUB)
     {
-        duration = in->s.duration;
+        duration = in_s.duration;
     }
 
     if (duration <= 0 &&
-        in->s.start != AV_NOPTS_VALUE &&
-        in->s.stop  != AV_NOPTS_VALUE &&
-        in->s.stop > in->s.start)
+        in_s.start != AV_NOPTS_VALUE &&
+        in_s.stop  != AV_NOPTS_VALUE &&
+        in_s.stop > in_s.start)
     {
-        duration = in->s.stop - in->s.start;
+        duration = in_s.stop - in_s.start;
     }
 
     int has_subtitle = 0;
@@ -436,9 +437,9 @@ int decavsubWork( hb_avsub_context_t * ctx,
         }
         else
         {
-            if (in->s.start >= 0)
+            if (in_s.start >= 0)
             {
-                pts = in->s.start;
+                pts = in_s.start;
             }
             else
             {
@@ -651,8 +652,8 @@ int decavsubWork( hb_avsub_context_t * ctx,
                 duration      = 0;
             }
         }
-        out->s.id           = in->s.id;
-        out->s.scr_sequence = in->s.scr_sequence;
+        out->s.id           = in_s.id;
+        out->s.scr_sequence = in_s.scr_sequence;
         out->s.frametype    = HB_FRAME_SUBTITLE;
         out->s.start        = pts;
         if (duration != AV_NOPTS_VALUE)
