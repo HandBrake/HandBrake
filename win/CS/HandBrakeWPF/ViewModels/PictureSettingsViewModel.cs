@@ -756,9 +756,17 @@ namespace HandBrakeWPF.ViewModels
             {
                 case ChangedPictureField.Width:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
+                    if (SelectedAnamorphicMode == Anamorphic.None)
+                    {
+                        setting |= HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_ASPECT;
+                    }
                     break;
                 case ChangedPictureField.Height:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
+                    if (SelectedAnamorphicMode == Anamorphic.None)
+                    {
+                        setting |= HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_ASPECT;
+                    }
                     break;
                 case ChangedPictureField.DisplayWidth:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_WIDTH;
