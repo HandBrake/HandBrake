@@ -50,13 +50,16 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _parDen = 1;
         _width = 1920;
         _height = 1080;
+        _storageWidth = 1920;
+        _storageHeight = 1080;
+        _keepAspectRatio = YES;
+        _displayWidth = 1920;
+        _displayHeight = 1080;
         _anamorphicMode = HBPictureAnarmophicModeNone;
 
         _padMode = HBPicturePadModeNone;
         _padColorMode = HBPicturePadColorModeBlack;
         _padColorCustom = @"";
-
-        [self updatePictureSettings:0];
     }
     return self;
 }
