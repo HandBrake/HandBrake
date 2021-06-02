@@ -1,11 +1,11 @@
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[0] = "Create a new custom preset based on the currently selected settings."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[0]" = "Crie uma nova predefinição personalizada com base nas configurações selecionadas atualmente.";
+
+/* Class = "NSSegmentedCell"; 0di-xq-jgi.ibShadowedToolTips[1] = "Delete the selected preset."; ObjectID = "0di-xq-jgi"; */
+"0di-xq-jgi.ibShadowedToolTips[1]" = "Exclua a predefinição selecionada.";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
 "4tC-UE-40G.title" = "Célula de Texto";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Delete Preset"; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibExternalAccessibilityDescription" = "Excluir Predefinição";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Delete the selected preset."; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibShadowedToolTip" = "Exclua a predefinição selecionada.";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
 "cm5-Kl-dB3.title" = "Redefinir predefinições oficiais";
@@ -15,12 +15,6 @@
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
 "Io0-Vm-Qez.title" = "Nova Categoria";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "New Preset"; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibExternalAccessibilityDescription" = "Nova Predefinição";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Create a new custom preset based on the currently selected settings."; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibShadowedToolTip" = "Crie uma nova predefinição personalizada com base nas configurações selecionadas atualmente.";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
 "LQk-kD-5sj.title" = "Menu de ação predefinições";

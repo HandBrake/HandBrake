@@ -7,20 +7,29 @@
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
 "8e5-zI-IBg.ibExternalAccessibilityDescription" = "Recadrer en haut";
 
-/* Class = "NSButtonCell"; title = "Custom:"; ObjectID = "auT-Ic-0JB"; */
-"auT-Ic-0JB.title" = "Personnalisé :";
-
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibExternalAccessibilityDescription" = "Recadrer en haut";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
 "Cp5-xz-x1h.ibShadowedToolTip" = "Taille du recadrage de la bordure haute, en pixels.";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "Tourner l'image de 90 degrés dans le sens horaire.";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "Personnaliser";
+
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibExternalAccessibilityDescription" = "Recadrer à droite";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
 "php-p6-Nz6.ibShadowedToolTip" = "Taille du recadrage de la bordure droite, en pixels.";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "Aucun";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "Automatique";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
 "sWf-fq-lvl.ibExternalAccessibilityDescription" = "Recadrer en bas";
@@ -30,9 +39,6 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
 "Td7-sa-0TV.ibShadowedToolTip" = "Taille du recadrage de la bordure gauche, en pixels.";
-
-/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "TpA-LI-v0t"; */
-"TpA-LI-v0t.title" = "Automatique";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
 "y7P-yk-q46.ibExternalAccessibilityDescription" = "Recadrer à droite";

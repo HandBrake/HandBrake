@@ -82,6 +82,9 @@
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
 "GbM-vm-RC2.title" = "Comportamento de Seleção de Faixa:";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "GHJ-25-kZl"; */
+"GHJ-25-kZl.ibShadowedToolTip" = "Ative isto se o dispositivo de reprodução for compatível com MP2. Isso permite que o MP2 passe direto para ser selecionado quando a seleção de passagem direta automática for ativada.";
+
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
 "GZP-q7-SYy.title" = "Todos os Idiomas Selecionados Correspondentes";
 
@@ -154,20 +157,11 @@
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "OVr-Jm-VrK"; */
 "OVr-Jm-VrK.title" = "0";
 
-/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Mostrar Todos";
-
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Codec";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PtB-Wp-B9X"; */
 "PtB-Wp-B9X.title" = "OutrosViews";
-
-/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all audio languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Mostrar todas as linguagens de áudio";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Show all audio languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Mostrar todas as linguagens de áudio na lista Idiomas.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibExternalAccessibilityDescription" = "Taxa de amostragem";
@@ -210,6 +204,9 @@
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
 "xnA-03-Bul.ibShadowedToolTip" = "Ganho de áudio em decibéis (dB). Aumenta ou diminui o volume de áudio.";
+
+/* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
+"Z8O-AS-UdA.title" = "MP2";
 
 /* Class = "NSButtonCell"; title = "TrueHD"; ObjectID = "z9d-P3-6UP"; */
 "z9d-P3-6UP.title" = "TrueHD";

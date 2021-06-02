@@ -112,9 +112,6 @@
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
 "399.title" = "Utiliser libdvdnav (au lieu de libdvdread)";
 
-/* Class = "NSTextFieldCell"; title = "DVD Reader:"; ObjectID = "443"; */
-"443.title" = "Lecteur DVD :";
-
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
 "449.title" = "Aucune";
 
@@ -187,8 +184,8 @@
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Toujours effacer les éléments terminés après la fin de l'encodage";
 
-/* Class = "NSTextFieldCell"; title = "Title Scan:"; ObjectID = "c0L-TU-WML"; */
-"c0L-TU-WML.title" = "Scan du titre :";
+/* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
+"c0L-TU-WML.title" = "Scan :";
 
 /* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "Encodeur :";
@@ -226,9 +223,6 @@
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Nettoyer les anciens journaux du journal d'activité principal après 30 jours";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "MLd-Te-AbW"; */
-"MLd-Te-AbW.ibShadowedToolTip" = "Nombre de prévisualisations d'images à scanner. Des valeurs plus élevées peuvent augmenter la précision du recadrage automatique aux dépens du temps de balayage du titre.";
-
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
 
@@ -237,9 +231,6 @@
 
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
 "pUi-lK-cHw.title" = "Remplacer les tirets bas par des espaces";
-
-/* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "qkp-nA-8ES"; */
-"qkp-nA-8ES.ibShadowedToolTip" = "Nombre de prévisualisations d'images à scanner. Des valeurs plus élevées peuvent augmenter la précision du recadrage automatique aux dépens du temps de balayage du titre.";
 
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
 "Tk3-Ig-fFI.ibShadowedToolTip" = "Faites glisser les étiquettes dans le champ Format pour composer un format de dénomination.";

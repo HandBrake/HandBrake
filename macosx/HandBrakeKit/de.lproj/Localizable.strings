@@ -60,10 +60,10 @@
 "%@Output: %dx%d" = "%1$@Anzeige: %2$dx%3$d";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Anzeige %2$dx%3$d, Anamorphisch: %4$dx%5$d Automatisch";
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Anzeige %2$dx%3$d, Anamorph: %4$dx%5$d Automatisch";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Anzeige: %2$dx%3$d, Anamorphisch: %4$dx%5$d Eigene";
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Anzeige: %2$dx%3$d, Anamorph: %4$dx%5$d Eigene";
 
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$d x %2$d Original, %3$d x %4$d Anzeige";
@@ -267,9 +267,6 @@
 /* Audio description */
 "Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Abmischung: %1$@, Samplerate: %2$@, Bitrate: %3$d kbps";
 
-/* HBJob -> Format display name */
-"MKV File" = "MKV-Datei";
-
 /* HBAudio -> Mixdown */
 "Mono" = "Mono";
 
@@ -278,9 +275,6 @@
 
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (Nur rechts)";
-
-/* HBJob -> Format display name */
-"MP4 File" = "MP4-Datei";
 
 /* HBStateFormatter -> pass display name */
 "Muxing…" = "Multiplexen …";
@@ -415,9 +409,6 @@
 
 /* Video description */
 "Video:" = "Video:";
-
-/* HBJob -> Format display name */
-"WebM File" = "WebM-Datei";
 
 /* HBFilters -> filter display name */
 "Yadif" = "Yadif";

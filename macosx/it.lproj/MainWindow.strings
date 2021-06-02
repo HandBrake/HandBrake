@@ -4,9 +4,6 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
 "2vD-zN-YMe.ibShadowedToolTip" = "Salva nuovo preset…";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
-"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "9e9766bb4d6bb85574f2ef2fccf35391_tr";
-
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titolo da analizzare";
 
@@ -162,6 +159,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "Ricarica le impostazioni di conversione dal preset attualmente selezionato. Le modifiche verranno perse.";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
+"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
 "BA0-eg-2Ka.label" = "Sommario";

@@ -70,6 +70,6 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
 "tQ1-PN-kvh.title" = "AutresVues";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Taille de l'image contrôle la manière dont les dimensions de la vidéo sont appliquées lorsque le préréglage est sélectionné.\n\nAucun utilise les dimensions actuellement sélectionnées.\n\nPersonnalisé vous permet de définir une largeur et/ou une hauteur maximum.\n\nMaximum de la source utilise les dimensions complètes de chacune des sources..";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "Limite de Résolution permet de régler une largeur et/ou hauteur maximale.";
 

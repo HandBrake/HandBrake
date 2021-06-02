@@ -179,6 +179,10 @@
 		A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D488A31996270300E9B1BA /* HBTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */ = {isa = PBXBuildFile; fileRef = A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91D54881E378ABD006D0997 /* HBSecurityAccessToken.m in Sources */ = {isa = PBXBuildFile; fileRef = A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */; };
+		A91D84E426676647008987A0 /* HandBrakeXPCService1-InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A91D84E226676647008987A0 /* HandBrakeXPCService1-InfoPlist.strings */; };
+		A91D84E726676647008987A0 /* HandBrakeXPCService2-InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A91D84E526676647008987A0 /* HandBrakeXPCService2-InfoPlist.strings */; };
+		A91D84EA26676647008987A0 /* HandBrakeXPCService3-InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A91D84E826676647008987A0 /* HandBrakeXPCService3-InfoPlist.strings */; };
+		A91D84ED26676647008987A0 /* HandBrakeXPCService4-InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A91D84EB26676647008987A0 /* HandBrakeXPCService4-InfoPlist.strings */; };
 		A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91F97361D7B2A4E00D82DCE /* HBAudioTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */; };
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
@@ -748,6 +752,22 @@
 		A91CE2D31C7DABE40068F46F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSecurityAccessToken.h; sourceTree = "<group>"; };
 		A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSecurityAccessToken.m; sourceTree = "<group>"; };
+		A91D84E326676647008987A0 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "it.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D84E626676647008987A0 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "it.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D84E926676647008987A0 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "it.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D84EC26676647008987A0 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "it.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D8503266766FF008987A0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "de.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D8504266766FF008987A0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "de.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D8505266766FF008987A0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "de.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D8506266766FF008987A0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "de.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D850A26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D850B26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D850C26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D850D26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851126676752008987A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851226676752008987A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851326676752008987A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851426676752008987A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTransformers.h; sourceTree = "<group>"; };
 		A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTransformers.m; sourceTree = "<group>"; };
 		A92268761A6E555500A8D5C5 /* HBAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAppDelegate.h; sourceTree = "<group>"; };
@@ -1721,9 +1741,13 @@
 				A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */,
 				A964D39B22FDE8EE00DFCAEA /* main.m */,
 				A9E8F80423003B2F00AA14E9 /* HandBrakeXPCService1.plist */,
+				A91D84E226676647008987A0 /* HandBrakeXPCService1-InfoPlist.strings */,
 				A9884FA4243E544800B61738 /* HandBrakeXPCService2.plist */,
+				A91D84E526676647008987A0 /* HandBrakeXPCService2-InfoPlist.strings */,
 				A9884FA6243E544E00B61738 /* HandBrakeXPCService3.plist */,
+				A91D84E826676647008987A0 /* HandBrakeXPCService3-InfoPlist.strings */,
 				A9884FA8243E545400B61738 /* HandBrakeXPCService4.plist */,
+				A91D84EB26676647008987A0 /* HandBrakeXPCService4-InfoPlist.strings */,
 				A919992A23003CFC0037F526 /* Localizable.strings */,
 			);
 			path = HandBrakeXPCService;
@@ -2416,6 +2440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A951D9CA243E5B50002579F2 /* Localizable.strings in Resources */,
+				A91D84E726676647008987A0 /* HandBrakeXPCService2-InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2423,6 +2448,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91D84EA26676647008987A0 /* HandBrakeXPCService3-InfoPlist.strings in Resources */,
 				A93341CF243E158B003A82C2 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2432,6 +2458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A93341E0243E158E003A82C2 /* Localizable.strings in Resources */,
+				A91D84ED26676647008987A0 /* HandBrakeXPCService4-InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2439,6 +2466,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91D84E426676647008987A0 /* HandBrakeXPCService1-InfoPlist.strings in Resources */,
 				A919992823003CFC0037F526 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2815,6 +2843,50 @@
 				D0DA2ABC24B384AD003ACA30 /* pt-BR */,
 			);
 			name = AddPreset.xib;
+			sourceTree = "<group>";
+		};
+		A91D84E226676647008987A0 /* HandBrakeXPCService1-InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91D84E326676647008987A0 /* it */,
+				A91D8503266766FF008987A0 /* de */,
+				A91D850A26676733008987A0 /* fr */,
+				A91D851126676752008987A0 /* pt-BR */,
+			);
+			name = "HandBrakeXPCService1-InfoPlist.strings";
+			sourceTree = "<group>";
+		};
+		A91D84E526676647008987A0 /* HandBrakeXPCService2-InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91D84E626676647008987A0 /* it */,
+				A91D8504266766FF008987A0 /* de */,
+				A91D850B26676733008987A0 /* fr */,
+				A91D851226676752008987A0 /* pt-BR */,
+			);
+			name = "HandBrakeXPCService2-InfoPlist.strings";
+			sourceTree = "<group>";
+		};
+		A91D84E826676647008987A0 /* HandBrakeXPCService3-InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91D84E926676647008987A0 /* it */,
+				A91D8505266766FF008987A0 /* de */,
+				A91D850C26676733008987A0 /* fr */,
+				A91D851326676752008987A0 /* pt-BR */,
+			);
+			name = "HandBrakeXPCService3-InfoPlist.strings";
+			sourceTree = "<group>";
+		};
+		A91D84EB26676647008987A0 /* HandBrakeXPCService4-InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91D84EC26676647008987A0 /* it */,
+				A91D8506266766FF008987A0 /* de */,
+				A91D850D26676733008987A0 /* fr */,
+				A91D851426676752008987A0 /* pt-BR */,
+			);
+			name = "HandBrakeXPCService4-InfoPlist.strings";
 			sourceTree = "<group>";
 		};
 		A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */ = {

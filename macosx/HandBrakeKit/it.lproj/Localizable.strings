@@ -267,9 +267,6 @@
 /* Audio description */
 "Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Missaggio: %1$@, Frequenza di campionamento: %2$@, Frequenza dati: %3$d kbps";
 
-/* HBJob -> Format display name */
-"MKV File" = "MKV File";
-
 /* HBAudio -> Mixdown */
 "Mono" = "Mono";
 
@@ -278,9 +275,6 @@
 
 /* HBAudio -> Mixdown */
 "Mono (Right Only)" = "Mono (Solo destro)";
-
-/* HBJob -> Format display name */
-"MP4 File" = "MP4 File";
 
 /* HBStateFormatter -> pass display name */
 "Muxing…" = "Unisco…";
@@ -415,9 +409,6 @@
 
 /* Video description */
 "Video:" = "Video:";
-
-/* HBJob -> Format display name */
-"WebM File" = "WebM File";
 
 /* HBFilters -> filter display name */
 "Yadif" = "Yadif";

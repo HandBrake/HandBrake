@@ -16,6 +16,36 @@
 /* Main Window -> preset modified */
 "(Modified)" = "(Modificado)";
 
+/* Queue status */
+"%lu encode pending" = "%lu codificação pendente";
+
+/* Queue status */
+"%lu encodes pending" = "%lu codificações pendentes";
+
+/* No comment provided by engineer. */
+"%lu jobs selected" = "%lu tarefas selecionadas";
+
+/* Add preset window -> picture setting */
+"480p NTSC SD" = "480p NTSC SD";
+
+/* Add preset window -> picture setting */
+"576p PAL SD" = "576p PAL SD";
+
+/* Add preset window -> picture setting */
+"720p HD" = "720p HD";
+
+/* Add preset window -> picture setting */
+"1080p HD" = "1080p HD";
+
+/* Add preset window -> picture setting */
+"1440p 2.5K Quad HD" = "1440p 2.5K Quad HD";
+
+/* Add preset window -> picture setting */
+"2160p 4K Ultra HD" = "2160p 4K Ultra HD";
+
+/* Add preset window -> picture setting */
+"4320p 8K Ultra HD" = "4320p 8K Ultra HD";
+
 /* Destination same as source alert -> message
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Um arquivo já existe no destino selecionado.";
@@ -136,6 +166,12 @@
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode working" = "Encode trabalhando";
 
+/* No comment provided by engineer. */
+"Encoding %lu Jobs" = "Codificando %lu tarefas";
+
+/* No comment provided by engineer. */
+"Encoding Job: %@" = "Tarefa de codificação: %@";
+
 /* Job statistics */
 "Ended at:" = "Terminou em:";
 
@@ -184,6 +220,9 @@
 
 /* Queue undo action name */
 "Move Jobs in Queue" = "Mova empregos na fila";
+
+/* Queue status */
+"No encode pending" = "Não há codificações pendentes";
 
 /* Preview -> accessibility label */
 "No image" = "Sem imagem";
@@ -289,6 +328,9 @@
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Remover empregos da fila";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Rescanning for editing" = "Reformulando para edição";
+
 /* Toolbar Pause Item */
 "Resume" = "Currículo";
 
@@ -339,9 +381,6 @@
 /* Preferences -> Output Name Token */
 "Source" = "Fonte";
 
-/* Add preset window -> picture setting */
-"Source Maximum" = "Máxima Fonte";
-
 /* Toolbar Start/Stop Item */
 "Start" = "Começo";
 
@@ -359,8 +398,12 @@
 /* Job statistics */
 "Started at:" = "Começou em:";
 
-/* Toolbar Start/Stop Item */
+/* Queue -> Stop action
+   Toolbar Start/Stop Item */
 "Stop" = "Parar";
+
+/* Queue -> Stop action */
+"Stop action." = "Pare a ação.";
 
 /* Queue Alert -> cancel rip third button */
 "Stop After Current Job" = "Pare Após a Tarefa Atual";
@@ -426,6 +469,9 @@
 
 /* Invalid destination alert -> message */
 "Warning!" = "Aviso!";
+
+/* No comment provided by engineer. */
+"Working" = "Trabalhando";
 
 /* Queue Alert -> cancel rip message */
 "You are currently encoding. What would you like to do?" = "Você está atualmente codificando. O que você gostaria de fazer?";

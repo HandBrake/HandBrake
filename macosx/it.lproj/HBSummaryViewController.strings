@@ -7,8 +7,14 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
 "BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Sommario filtri";
 
+/* Class = "NSButtonCell"; title = "Passthru Common Metadata"; ObjectID = "CZZ-bW-jZc"; */
+"CZZ-bW-jZc.title" = "Mantieni metadata";
+
 /* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
 "De0-Je-MAm.title" = "Allinea inizio A/V";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
+"eJx-BO-rhL.ibShadowedToolTip" = "Copia i metadata dalla sorgente alla destinazione";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
 "fPv-Vw-I89.ibShadowedToolTip" = "Allinea i marcatori temporali iniziali di tutti i flussi video e audio inserendo dei fotogrammi vuoti o eliminando fotogrammi. Potrebbe migliorare la sincronizzazione audio/video su riproduttori non conformi che non rispettano gli elenchi di modiche MP4.";
@@ -16,11 +22,17 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Sommario dimensione";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "JNB-kV-52S"; */
+"JNB-kV-52S.ibShadowedToolTip" = "Ottimizza MP4 per il download progressivo. Dopo la codifica, i dati vengono riorganizzati e riscritti per consentire la riproduzione immediata su una rete, senza la necessità di scaricare l'intero file.";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
 "lUi-Oc-208.ibShadowedToolTip" = "Ottimizza MP4 per il download progressivo. Dopo la codifica, i dati vengono riorganizzati e riscritti per consentire la riproduzione immediata su una rete, senza la necessità di scaricare l'intero file.";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Anteprima";
+
+/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "ma8-UR-dx2"; */
+"ma8-UR-dx2.title" = "Ottimizza per web";
 
 /* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
 "OCw-f6-uA0.title" = "Filtri:";

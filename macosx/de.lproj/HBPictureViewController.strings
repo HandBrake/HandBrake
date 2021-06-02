@@ -59,7 +59,7 @@
 "7rG-Qv-khx.title" = "Automatisch";
 
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
-"8vS-Mw-bny.title" = "Anamorphisch:";
+"8vS-Mw-bny.title" = "Anamorph:";
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
 "09f-sT-7la.ibExternalAccessibilityDescription" = "Oben füllen";
@@ -68,7 +68,7 @@
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Skalierte Breite";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "Skalierte Videobreite. Ist die Breite in Pixel in die das Video encodiert werden soll. Die skalierte Breite kann von der Anzeigegröße abweichen, abhängig von den anamorphischen Einstellungen und der Füllung.";
+"9hH-As-JSa.ibShadowedToolTip" = "Skalierte Videobreite. Ist die Breite in Pixel in die das Video encodiert werden soll. Die skalierte Breite kann von der Anzeigegröße abweichen, abhängig von den anamorphen Einstellungen und der Füllung.";
 
 /* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
 "21C-Hg-mk4.title" = "480p NTSC SD";
@@ -176,7 +176,7 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Speicherhöhe";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Skalierte Videohöhe. Ist die Höhe in Pixel in die das Video encodiert werden soll. Die skalierte Höhe kann von der Anzeigegröße abweichen, abhängig von den anamorphischen Einstellungen und der Füllung.";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Skalierte Videohöhe. Ist die Höhe in Pixel in die das Video encodiert werden soll. Die skalierte Höhe kann von der Anzeigegröße abweichen, abhängig von den anamorphen Einstellungen und der Füllung.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";

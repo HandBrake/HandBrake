@@ -140,7 +140,7 @@
 "EqJ-eR-Fz7.title" = "Orizzontale";
 
 /* Class = "NSTextFieldCell"; title = "Flipping:"; ObjectID = "ewx-pd-ANc"; */
-"ewx-pd-ANc.title" = "Specchia:";
+"ewx-pd-ANc.title" = "Specchio:";
 
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
 "f12-Dh-fDw.title" = "Personalizzato";
@@ -371,7 +371,7 @@
 "Xao-1P-xPT.title" = "720p HD";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis"; ObjectID = "xNB-9k-4uD"; */
-"xNB-9k-4uD.ibShadowedToolTip" = "Capovolge (rispecchia) l'immagine sull'asse orizzontale";
+"xNB-9k-4uD.ibShadowedToolTip" = "Capovolge (specchia) l'immagine sull'asse orizzontale";
 
 /* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
 "Xun-U2-N6F.title" = "Personalizzato";
