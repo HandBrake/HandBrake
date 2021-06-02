@@ -1013,7 +1013,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     // Set up filter fifos
     hb_fifo_t *fifo_in, * fifo_first, * fifo_last;
 
-    fifo_in = fifo_first = hb_fifo_init(2, 2);
+    fifo_last = fifo_in = fifo_first = hb_fifo_init(2, 2);
     for( ii = 0; ii < hb_list_count( list_filter ); ii++)
     {
         filter = hb_list_item(list_filter, ii);
