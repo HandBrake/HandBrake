@@ -3313,28 +3313,61 @@ ptop_output_cb(GtkWidget *widget, signal_user_data_t *ud)
     return TRUE;
 }
 
-G_MODULE_EXPORT void
-start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+static void sanitize_ptop(signal_user_data_t * ud, int end_changed)
 {
     int64_t start, end;
 
-    ghb_widget_to_setting(ud->settings, widget);
-
-    GhbValue *dest  = ghb_get_job_dest_settings(ud->settings);
-    GhbValue *range = ghb_get_job_range_settings(ud->settings);
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
         start = ghb_dict_get_int(ud->settings, "start_point");
         end   = ghb_dict_get_int(ud->settings, "end_point");
         if (start > end)
         {
-            ghb_ui_update(ud, "end_point", ghb_int_value(start));
-            end = start;
+            if (end_changed == 1)
+                ghb_ui_update(ud, "start_point", ghb_int_value(end));
+            else
+                ghb_ui_update(ud, "end_point", ghb_int_value(start));
         }
-        ghb_check_dependency(ud, widget, NULL);
+    }
+    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+    {
+        start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
+        end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
+        if (start >= end)
+        {
+            if (end_changed == 1)
+                ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
+            else
+                ghb_ui_update(ud, "end_point", ghb_int_value(start+1));
+        }
+    }
+    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+    {
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end   = ghb_dict_get_int(ud->settings, "end_point");
+        if (start > end)
+        {
+            if (end_changed == 1)
+                ghb_ui_update(ud, "start_point", ghb_int_value(end));
+            else
+                ghb_ui_update(ud, "end_point", ghb_int_value(start));
+        }
+    }
+}
+
+static void update_ptop(signal_user_data_t * ud)
+{
+    int64_t start, end;
+    GhbValue *dest  = ghb_get_job_dest_settings(ud->settings);
+    GhbValue *range = ghb_get_job_range_settings(ud->settings);
+
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+    {
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end   = ghb_dict_get_int(ud->settings, "end_point");
         if (check_name_template(ud, "{chapters}"))
             set_destination(ud);
-        widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+        GtkWidget *widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         gtk_widget_set_sensitive(widget, end > start);
         update_title_duration(ud);
 
@@ -3349,12 +3382,6 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
         end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
-        if (start >= end)
-        {
-            ghb_ui_update(ud, "end_point", ghb_int_value(start+1));
-            end = start + 90000;
-        }
-        ghb_check_dependency(ud, widget, NULL);
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start);
@@ -3364,12 +3391,6 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         start = ghb_dict_get_int(ud->settings, "start_point");
         end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (start > end)
-        {
-            ghb_ui_update(ud, "end_point", ghb_int_value(start));
-            end = start;
-        }
-        ghb_check_dependency(ud, widget, NULL);
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start);
@@ -3378,67 +3399,39 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+ptop_edited_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+        return;
+
+    const gchar *text, *key;
+    int val = 0;
+
+    text = ghb_editable_get_text(widget);
+    if (text == NULL || text[0] == 0)
+        return;
+    val = g_strtod(text, NULL);
+    key = ghb_get_setting_key(widget);
+    ghb_dict_set_int(ud->settings, key, val);
+    update_ptop(ud);
+}
+
+G_MODULE_EXPORT void
+start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    sanitize_ptop(ud, 0);
+    ghb_check_dependency(ud, widget, NULL);
+    update_ptop(ud);
+}
+
+G_MODULE_EXPORT void
 end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    int64_t start, end;
-
     ghb_widget_to_setting(ud->settings, widget);
-
-    GhbValue *dest  = ghb_get_job_dest_settings(ud->settings);
-    GhbValue *range = ghb_get_job_range_settings(ud->settings);
-    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (start > end)
-        {
-            ghb_ui_update(ud, "start_point", ghb_int_value(end));
-            start = end;
-        }
-        ghb_check_dependency(ud, widget, NULL);
-        if (check_name_template(ud, "{chapters}"))
-            set_destination(ud);
-        widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-        gtk_widget_set_sensitive(widget, end > start);
-        update_title_duration(ud);
-
-        gboolean markers;
-        markers  = ghb_dict_get_int(ud->settings, "ChapterMarkers");
-        markers &= (end > start);
-        ghb_dict_set_bool(dest, "ChapterMarkers", markers);
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
-    {
-        start = ghb_dict_get_double(ud->settings, "start_point") * 90000;
-        end   = ghb_dict_get_double(ud->settings, "end_point") * 90000;
-        if (start >= end)
-        {
-            ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
-            start = end - 90000;
-        }
-        ghb_check_dependency(ud, widget, NULL);
-        update_title_duration(ud);
-
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end   = ghb_dict_get_int(ud->settings, "end_point");
-        if (start > end)
-        {
-            ghb_ui_update(ud, "start_point", ghb_int_value(end));
-            start = end;
-        }
-        ghb_check_dependency(ud, widget, NULL);
-        update_title_duration(ud);
-
-        ghb_dict_set_int(range, "Start", start);
-        ghb_dict_set_int(range, "End", end);
-    }
+    sanitize_ptop(ud, 1);
+    ghb_check_dependency(ud, widget, NULL);
+    update_ptop(ud);
 }
 
 G_MODULE_EXPORT void

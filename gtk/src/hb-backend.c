@@ -3291,6 +3291,8 @@ ghb_chapter_range_get_duration(const hb_title_t *title, gint sc, gint ec)
     duration = title->duration;
 
     count = hb_list_count(title->list_chapter);
+    if (sc < 1)     sc = 1;
+    if (ec < 1)     ec = 1;
     if (sc > count) sc = count;
     if (ec > count) ec = count;
 

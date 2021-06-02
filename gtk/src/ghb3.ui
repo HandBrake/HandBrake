@@ -2709,6 +2709,7 @@ This is often the feature title of a DVD.</property>
                         <property name="tooltip_text" translatable="yes">Set the first chapter to encode.</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="numeric">True</property>
+                        <signal name="changed" handler="ptop_edited_cb" swapped="no"/>
                         <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
                         <signal name="output" handler="ptop_output_cb" swapped="no"/>
                         <signal name="input" handler="ptop_input_cb" swapped="no"/>
@@ -2736,6 +2737,7 @@ This is often the feature title of a DVD.</property>
                         <property name="tooltip_text" translatable="yes">Set the last chapter to encode.</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="numeric">True</property>
+                        <signal name="changed" handler="ptop_edited_cb" swapped="no"/>
                         <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
                         <signal name="output" handler="ptop_output_cb" swapped="no"/>
                         <signal name="input" handler="ptop_input_cb" swapped="no"/>
