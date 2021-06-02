@@ -9017,7 +9017,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <child>
                       <object class="GtkCheckButton" id="preview_show_crop">
                         <property name="label" translatable="yes">Show Crop</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Show Cropped area of the preview</property>

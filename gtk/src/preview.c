@@ -1487,6 +1487,9 @@ preview_resize_cb(
 G_MODULE_EXPORT void
 show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+#if 0
+    // Disabled until we reimplement this or come up with something better
+    //
     g_debug("show_crop_changed_cb ()");
     ghb_widget_to_setting(ud->prefs, widget);
     ghb_check_dependency(ud, widget, NULL);
@@ -1495,5 +1498,6 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_set_scale(ud, 0);
     ghb_pref_save(ud->prefs, "preview_show_crop");
     ghb_rescale_preview_image(ud);
+#endif
 }
 
