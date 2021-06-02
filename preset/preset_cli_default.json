@@ -74,7 +74,7 @@
                     "PictureKeepRatio": true,
                     "PictureLooseCrop": false,
                     "PictureModulus": 2,
-                    "PicturePAR": "loose",
+                    "PicturePAR": "auto",
                     "PicturePARWidth": 853,
                     "PicturePARHeight": 720,
                     "PictureRotate": "angle=0:hflip=0",
