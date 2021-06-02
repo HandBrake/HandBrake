@@ -302,6 +302,10 @@ int ghb_get_copy_mask(GhbValue *settings)
 {
     gint mask = 0;
 
+    if (ghb_dict_get_bool(settings, "AudioAllowMP2Pass"))
+    {
+        mask |= HB_ACODEC_MP2_PASS;
+    }
     if (ghb_dict_get_bool(settings, "AudioAllowMP3Pass"))
     {
         mask |= HB_ACODEC_MP3_PASS;
