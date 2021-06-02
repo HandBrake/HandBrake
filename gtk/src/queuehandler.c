@@ -1197,7 +1197,7 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
     {
         result = _("Scanning Title");
     }
-    else if (status->state & GHB_STATE_SCANNING)
+    else if (status->state & GHB_STATE_PAUSED)
     {
         result = _("Encoding Paused");
     }
