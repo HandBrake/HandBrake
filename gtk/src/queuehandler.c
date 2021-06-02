@@ -447,7 +447,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
 
     // Append Filters to video summary
     gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace;
+    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
 
     ctext       = ghb_dict_get_string(uiDict, "PictureDetelecine");
     detel       = ctext != NULL && !!strcasecmp(ctext, "off");
@@ -470,6 +470,8 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     gray        = ghb_dict_get_bool(uiDict, "VideoGrayScale");
     ctext       = ghb_dict_get_string(uiDict, "PictureColorspacePreset");
     colorspace  = ctext != NULL && !!strcasecmp(ctext, "off");
+    ctext       = ghb_dict_get_string(uiDict, "PictureChromaSmoothPreset");
+    chroma_smooth = ctext != NULL && !!strcasecmp(ctext, "off");
 
     sep = "\n";
     if (detel)
@@ -511,6 +513,12 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     if (denoise)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DENOISE);
+        g_string_append_printf(str, "%s%s", sep, filter->name);
+        sep = ", ";
+    }
+    if (chroma_smooth)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_CHROMA_SMOOTH);
         g_string_append_printf(str, "%s%s", sep, filter->name);
         sep = ", ";
     }

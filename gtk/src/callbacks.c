@@ -2469,7 +2469,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
 
     // Filters
     gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace;
+    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
     const char * sval;
 
     sval        = ghb_dict_get_string(ud->settings, "PictureDetelecine");
@@ -2493,6 +2493,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     gray        = ghb_dict_get_bool(ud->settings, "VideoGrayScale");
     sval        = ghb_dict_get_string(ud->settings, "PictureColorspacePreset");
     colorspace  = sval != NULL && !!strcasecmp(sval, "off");
+    sval        = ghb_dict_get_string(ud->settings, "PictureChromaSmoothPreset");
+    chroma_smooth  = sval != NULL && !!strcasecmp(sval, "off");
 
     str = g_string_new("");
     sval = "";
@@ -2535,6 +2537,12 @@ ghb_update_summary_info(signal_user_data_t *ud)
     if (denoise)
     {
         hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DENOISE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (chroma_smooth)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_CHROMA_SMOOTH);
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }

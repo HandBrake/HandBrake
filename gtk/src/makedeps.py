@@ -37,6 +37,9 @@ dep_map = (
     DepEntry("PictureDenoisePreset", "PictureDenoiseCustom", "custom", False, True),
     DepEntry("PictureDenoisePreset", "PictureDenoiseTune", "custom", True, True),
     DepEntry("PictureDenoisePreset", "PictureDenoiseTuneLabel", "custom", True, True),
+    DepEntry("PictureChromaSmoothPreset", "PictureChromaSmoothTune", "off|custom", True, True),
+    DepEntry("PictureChromaSmoothPreset", "PictureChromaSmoothTuneLabel", "off|custom", True, True),
+    DepEntry("PictureChromaSmoothPreset", "PictureChromaSmoothCustom", "custom", False, True),
 
     DepEntry("PictureSharpenFilter", "PictureSharpenPreset", "off", True, True),
     DepEntry("PictureSharpenFilter", "PictureSharpenPresetLabel", "off", True, True),

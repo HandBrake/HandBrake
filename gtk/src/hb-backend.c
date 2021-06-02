@@ -417,6 +417,18 @@ typedef struct
     gboolean preset;
 } filter_opts_t;
 
+static filter_opts_t chroma_smooth_preset_opts =
+{
+    .filter_id = HB_FILTER_CHROMA_SMOOTH,
+    .preset    = TRUE
+};
+
+static filter_opts_t chroma_smooth_tune_opts =
+{
+    .filter_id = HB_FILTER_CHROMA_SMOOTH,
+    .preset    = FALSE
+};
+
 static filter_opts_t deblock_preset_opts =
 {
     .filter_id = HB_FILTER_DEBLOCK,
@@ -692,6 +704,18 @@ combo_name_map_t combo_name_map[] =
     {
         "PictureDenoiseTune",
         &nlmeans_tune_opts,
+        filter_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureChromaSmoothPreset",
+        &chroma_smooth_preset_opts,
+        filter_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureChromaSmoothTune",
+        &chroma_smooth_tune_opts,
         filter_opts_set,
         filter_opt_get
     },
