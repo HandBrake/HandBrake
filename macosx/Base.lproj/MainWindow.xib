@@ -8,28 +8,28 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
             <connections>
+                <outlet property="audioTab" destination="1475" id="KFs-lZ-jXC"/>
                 <outlet property="bottomConstrain" destination="Unb-Sk-dKC" id="f1i-gz-VIc"/>
-                <outlet property="fAudioTab" destination="1475" id="AJX-Da-Tfc"/>
-                <outlet property="fChaptersTitlesTab" destination="1989" id="df9-TK-GBD"/>
-                <outlet property="fFiltersTab" destination="0UB-bG-kwS" id="9at-ML-tDd"/>
-                <outlet property="fMainTabView" destination="1474" id="sl5-BZ-ymC"/>
-                <outlet property="fPictureTab" destination="eij-Sn-QmJ" id="Ccp-rO-nqD"/>
-                <outlet property="fScanHorizontalLine" destination="3205" id="W26-Wu-2YJ"/>
-                <outlet property="fScanIndicator" destination="3203" id="cG1-SY-gbt"/>
-                <outlet property="fSrcDVD2Field" destination="1539" id="pxg-Wl-Mn7"/>
-                <outlet property="fSrcTitlePopUp" destination="1541" id="glh-1k-i69"/>
-                <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
-                <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
+                <outlet property="chaptersTab" destination="1989" id="Qic-V7-Bqk"/>
+                <outlet property="filtersTab" destination="0UB-bG-kwS" id="8wc-MY-h6a"/>
+                <outlet property="mainTabView" destination="1474" id="LnD-zT-6M5"/>
                 <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
                 <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
+                <outlet property="pictureTab" destination="eij-Sn-QmJ" id="8Ww-MT-bhs"/>
                 <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
                 <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
                 <outlet property="progressField" destination="XL7-L5-bkf" id="DCJ-FQ-VIv"/>
                 <outlet property="ripToolbarItem" destination="byg-kj-sEM" id="C7B-wO-F1Q"/>
+                <outlet property="scanHorizontalLine" destination="3205" id="9af-9F-Sst"/>
+                <outlet property="scanIndicator" destination="3203" id="dh4-U8-kDp"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
+                <outlet property="sourceLabel" destination="1539" id="C8K-CB-tqm"/>
                 <outlet property="statusField" destination="1123" id="ujy-WJ-FLy"/>
+                <outlet property="subtitlesTab" destination="5194" id="G40-yx-m4P"/>
                 <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
+                <outlet property="titlePopUp" destination="1541" id="543-h9-MCd"/>
+                <outlet property="videoTab" destination="1477" id="oWL-hy-Yj4"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
             </connections>
         </customObject>
@@ -59,37 +59,37 @@
                             </tabViewItem>
                             <tabViewItem label="Dimensions" identifier="2" id="eij-Sn-QmJ" userLabel="PictureTab">
                                 <view key="view" id="nvx-9b-6fF">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Filters" identifier="" id="0UB-bG-kwS">
                                 <view key="view" id="JAj-E3-Cq2">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Video" identifier="1" id="1477">
                                 <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Audio" identifier="3" id="1475">
                                 <view key="view" id="1476">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Subtitles" identifier="4" id="5194">
                                 <view key="view" id="5195">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Chapters" identifier="5" id="1989">
                                 <view key="view" id="1990">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="25" width="839" height="377"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -460,7 +460,7 @@ IA
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="Kfe-4R-KRB"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="Kfe-4R-KRB"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>

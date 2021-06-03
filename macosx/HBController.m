@@ -42,106 +42,91 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSMenuItemValidation, NSDraggingDestination, NSPopoverDelegate>
-{
-    IBOutlet NSTabView *fMainTabView;
 
-    // Picture controller
-    HBPictureViewController * fPictureViewController;
-    IBOutlet NSTabViewItem  * fPictureTab;
+@property (nonatomic, readonly, strong) HBCore *core;
+@property (nonatomic, readonly, strong) HBAppDelegate *delegate;
 
-    // Filters controller
-    HBFiltersViewController * fFiltersViewController;
-    IBOutlet NSTabViewItem  * fFiltersTab;
-
-    // Video view controller
-    HBVideoController       * fVideoController;
-    IBOutlet NSTabViewItem  * fVideoTab;
-
-    // Subtitles view controller
-    HBSubtitlesController   * fSubtitlesViewController;
-    IBOutlet NSTabViewItem  * fSubtitlesTab;
-
-    // Audio view controller
-    HBAudioController       * fAudioController;
-    IBOutlet NSTabViewItem  * fAudioTab;
-
-    // Chapters view controller
-    HBChapterTitlesController    * fChapterTitlesController;
-    IBOutlet NSTabViewItem       * fChaptersTitlesTab;
-
-    // Picture Preview
-    HBPreviewController          * fPreviewController;
-
-    // Source box
-    IBOutlet NSProgressIndicator * fScanIndicator;
-    IBOutlet NSBox               * fScanHorizontalLine;
-
-    IBOutlet NSTextField         * fSrcDVD2Field;
-    IBOutlet NSPopUpButton       * fSrcTitlePopUp;
-
-    // User Preset
-    HBPresetsManager             * presetManager;
-    HBPresetsViewController      * fPresetsView;
-}
+@property (nonatomic, weak) IBOutlet NSTextField *sourceLabel;
+@property (nonatomic, weak) IBOutlet NSPopUpButton *titlePopUp;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstrain;
-
-@property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
-@property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
-@property (nonatomic, strong) NSPopover *presetsPopover;
-
-@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
-
-@property (nonatomic, strong) HBSummaryViewController *summaryController;
-@property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
-
-@property (nonatomic, weak) IBOutlet NSView *openTitleView;
-@property (nonatomic, readwrite) BOOL scanSpecificTitle;
-@property (nonatomic, readwrite) NSInteger scanSpecificTitleIdx;
-
-@property (nonatomic, readwrite, strong) HBTitleSelectionController *titlesSelectionController;
-
-/// The current job.
-@property (nonatomic, nullable) HBJob *job;
-@property (nonatomic, nullable) HBAutoNamer *autoNamer;
-
-/// The selected preset.
-@property (nonatomic, nullable, strong) HBPreset *selectedPreset;
-
-/// The current modified preset.
-@property (nonatomic, strong) HBPreset *currentPreset;
-
-/// The current destination.
-@property (nonatomic, strong) NSURL *destinationURL;
-
-/// The HBCore used for scanning.
-@property (nonatomic, strong) HBCore *core;
-
-/// The app delegate.
-@property (nonatomic, strong) HBAppDelegate *delegate;
-
-/// The queue.
-@property (nonatomic, weak) HBQueue *queue;
-@property (nonatomic) id observerToken;
-
-/// Queue progress info
-@property (nonatomic) IBOutlet NSTextField *statusField;
-@property (nonatomic) IBOutlet NSTextField *progressField;
-@property (nonatomic, copy) NSString *progress;
-
 @property (nonatomic, readwrite) NSColor *labelColor;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
-
-// Alerts
 @property (nonatomic) BOOL suppressCopyProtectionWarning;
+
+#pragma mark - Scan UI
+
+@property (nonatomic, weak) IBOutlet NSProgressIndicator *scanIndicator;
+@property (nonatomic, weak) IBOutlet NSBox *scanHorizontalLine;
+
+#pragma mark - Controllers
+
+@property (nonatomic, readonly, strong) HBSummaryViewController *summaryController;
+@property (nonatomic, readonly, strong) HBPictureViewController *pictureViewController;
+@property (nonatomic, readonly, strong) HBFiltersViewController *filtersViewController;
+@property (nonatomic, readonly, strong) HBVideoController *videoController;
+@property (nonatomic, readonly, strong) HBAudioController *audioController;
+@property (nonatomic, readonly, strong) HBSubtitlesController *subtitlesViewController;
+@property (nonatomic, readonly, strong) HBChapterTitlesController *chapterTitlesController;
+
+@property (nonatomic, strong) IBOutlet NSTabView *mainTabView;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *pictureTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *filtersTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *videoTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *audioTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *subtitlesTab;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *chaptersTab;
+
+@property (nonatomic, readonly, strong) HBPreviewController *previewController;
+@property (nonatomic, strong) HBTitleSelectionController *titlesSelectionController;
+
+#pragma mark - Presets
+
+@property (nonatomic, readonly, strong) HBPresetsManager *presetManager;
+@property (nonatomic, readonly, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
+@property (nonatomic, readonly, strong) HBPresetsViewController *presetView;
+
+@property (nonatomic, readonly, strong) NSPopover *presetsPopover;
+@property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
+
+@property (nonatomic, nullable, strong) HBPreset *selectedPreset;
+@property (nonatomic, strong) HBPreset *currentPreset;
+
+#pragma mark - Open panel accessory view
+
+@property (nonatomic, weak) IBOutlet NSView *openTitleView;
+@property (nonatomic) BOOL scanSpecificTitle;
+@property (nonatomic) NSInteger scanSpecificTitleIdx;
+
+#pragma mark - Job
+
+@property (nonatomic, strong) NSURL *destinationURL;
+
+@property (nonatomic, nullable) HBJob *job;
+@property (nonatomic, nullable) HBAutoNamer *autoNamer;
+
+#pragma mark - Queue
+
+@property (nonatomic, readonly, weak) HBQueue *queue;
+@property (nonatomic) id observerToken;
+
+#define WINDOW_HEIGHT_OFFSET 30
+@property (nonatomic) IBOutlet NSTextField *statusField;
+@property (nonatomic) IBOutlet NSTextField *progressField;
+@property (nonatomic, copy) NSString *progress;
+
+#pragma mark - Toolbar
 
 @property (nonatomic) IBOutlet NSToolbarItem *openSourceToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *presetsItem;
+
+@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
 @end
 
@@ -150,8 +135,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)_touchBar_updateQueueButtonsState;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
-
-#define WINDOW_HEIGHT_OFFSET 30
 
 @implementation HBController
 
@@ -165,13 +148,13 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"ScanCore"];
 
         // Inits the controllers
-        fPreviewController = [[HBPreviewController alloc] init];
-        fPreviewController.documentController = self;
+        _previewController = [[HBPreviewController alloc] init];
+        _previewController.documentController = self;
 
         _delegate = delegate;
         _queue = queue;
 
-        presetManager = manager;
+        _presetManager = manager;
         _selectedPreset = manager.defaultPreset;
         _currentPreset = manager.defaultPreset;
 
@@ -224,52 +207,46 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
     [self.window registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
-    [fMainTabView registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
+    [self.mainTabView registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
 
-    fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
-    fPresetsView.delegate = self;
+    _presetView = [[HBPresetsViewController alloc] initWithPresetManager:self.presetManager];
+    _presetView.delegate = self;
 
     // Set up the presets popover
-    self.presetsPopover = [[NSPopover alloc] init];
+    _presetsPopover = [[NSPopover alloc] init];
 
-    self.presetsPopover.contentViewController = fPresetsView;
-    self.presetsPopover.contentSize = NSMakeSize(300, 580);
-    self.presetsPopover.animates = YES;
+    _presetsPopover.contentViewController = self.presetView;
+    _presetsPopover.contentSize = NSMakeSize(300, 580);
+    _presetsPopover.animates = YES;
 
     // AppKit will close the popover when the user interacts with a user interface element outside the popover.
     // note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.
-    self.presetsPopover.behavior = NSPopoverBehaviorSemitransient;
-    self.presetsPopover.delegate = self;
+    _presetsPopover.behavior = NSPopoverBehaviorSemitransient;
+    _presetsPopover.delegate = self;
 
-    [fPresetsView view];
+    [self.presetView view];
 
-    // Set up the summary view
-    self.summaryController = [[HBSummaryViewController alloc] init];
+    // Setup the view controllers
+    _summaryController = [[HBSummaryViewController alloc] init];
     self.summaryTab.view = self.summaryController.view;
 
-    // Set up the chapters title view
-    fChapterTitlesController = [[HBChapterTitlesController alloc] init];
-    [fChaptersTitlesTab setView:[fChapterTitlesController view]];
+    _pictureViewController = [[HBPictureViewController alloc] init];
+    self.pictureTab.view = self.pictureViewController.view;
 
-    // setup the subtitles view
-    fSubtitlesViewController = [[HBSubtitlesController alloc] init];
-    [fSubtitlesTab setView:[fSubtitlesViewController view]];
+    _filtersViewController = [[HBFiltersViewController alloc] init];
+    self.filtersTab.view = self.filtersViewController.view;
 
-    // setup the audio controller
-    fAudioController = [[HBAudioController alloc] init];
-    [fAudioTab setView:[fAudioController view]];
+    _videoController = [[HBVideoController alloc] init];
+    self.videoTab.view = self.videoController.view;
 
-    // setup the video view controller
-    fVideoController = [[HBVideoController alloc] init];
-    [fVideoTab setView:[fVideoController view]];
+    _audioController = [[HBAudioController alloc] init];
+    self.audioTab.view = self.audioController.view;
 
-    // setup the picture view controller
-    fPictureViewController = [[HBPictureViewController alloc] init];
-    [fPictureTab setView:[fPictureViewController view]];
+    _subtitlesViewController = [[HBSubtitlesController alloc] init];
+    self.subtitlesTab.view = self.subtitlesViewController.view;
 
-    // setup the filters view controller
-    fFiltersViewController = [[HBFiltersViewController alloc] init];
-    [fFiltersTab setView:[fFiltersViewController view]];
+    _chapterTitlesController = [[HBChapterTitlesController alloc] init];
+    self.chaptersTab.view = self.chapterTitlesController.view;
 
     // Add the observers
     [self.core addObserver:self forKeyPath:@"state"
@@ -308,10 +285,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateQueueUI];
 
     // Presets menu
-    self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
-                                                                  action:@selector(selectPresetFromMenu:)
-                                                                    size:[NSFont smallSystemFontSize]
-                                                          presetsManager:presetManager];
+    _presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
+                                                              action:@selector(selectPresetFromMenu:)
+                                                                size:[NSFont smallSystemFontSize]
+                                                      presetsManager:self.presetManager];
     [self.presetsMenuBuilder build];
 
     // Log level
@@ -456,7 +433,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         self.labelColor = [NSColor disabledControlTextColor];
     }
 
-    fPresetsView.enabled = enabled;
+    self.presetView.enabled = enabled;
 }
 
 - (void)setNilValueForKey:(NSString *)key
@@ -718,7 +695,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 
     self.job = nil;
-    [fSrcTitlePopUp removeAllItems];
+    [self.titlePopUp removeAllItems];
     self.window.representedURL = nil;
     self.window.title = NSLocalizedString(@"HandBrake", @"Main Window -> title");
 
@@ -759,23 +736,23 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                   previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
            progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
-             self->fSrcDVD2Field.stringValue = info;
-             self->fScanIndicator.hidden = NO;
-             self->fScanHorizontalLine.hidden = YES;
-             self->fScanIndicator.doubleValue = progress.percent;
+             self.sourceLabel.stringValue = info;
+             self.scanIndicator.hidden = NO;
+             self.scanHorizontalLine.hidden = YES;
+             self.scanIndicator.doubleValue = progress.percent;
          }
          completionHandler:^(HBCoreResult result)
          {
-             self->fScanHorizontalLine.hidden = NO;
-             self->fScanIndicator.hidden = YES;
-             self->fScanIndicator.indeterminate = NO;
-             self->fScanIndicator.doubleValue = 0.0;
+             self.scanHorizontalLine.hidden = NO;
+             self.scanIndicator.hidden = YES;
+             self.scanIndicator.indeterminate = NO;
+             self.scanIndicator.doubleValue = 0.0;
 
              if (result == HBCoreResultDone)
              {
                  for (HBTitle *title in self.core.titles)
                  {
-                     [self->fSrcTitlePopUp addItemWithTitle:title.description];
+                     [self.titlePopUp addItemWithTitle:title.description];
                  }
                  self.window.representedURL = mediaURL;
                  self.window.title = mediaURL.lastPathComponent;
@@ -783,7 +760,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              else
              {
                  // We display a message if a valid source was not chosen
-                 self->fSrcDVD2Field.stringValue = NSLocalizedString(@"No Valid Source Found", @"Main Window -> Info text");
+                 self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Source Found", @"Main Window -> Info text");
              }
 
              // Set the last searched source directory in the prefs here
@@ -962,51 +939,49 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 
     [self removeJobObservers];
-
-    // Retain the new job
     _job = job;
 
     // Set the jobs info to the view controllers
     self.summaryController.job = job;
-    fPictureViewController.picture = job.picture;
-    fFiltersViewController.filters = job.filters;
-    fVideoController.video = job.video;
-    fAudioController.audio = job.audio;
-    fSubtitlesViewController.subtitles = job.subtitles;
-    fChapterTitlesController.job = job;
+    self.pictureViewController.picture = job.picture;
+    self.filtersViewController.filters = job.filters;
+    self.videoController.video = job.video;
+    self.audioController.audio = job.audio;
+    self.subtitlesViewController.subtitles = job.subtitles;
+    self.chapterTitlesController.job = job;
 
     if (job)
     {
         HBPreviewGenerator *generator = [[HBPreviewGenerator alloc] initWithCore:self.core job:job];
-        fPreviewController.generator = generator;
+        self.previewController.generator = generator;
         self.summaryController.generator = generator;
 
         HBTitle *title = job.title;
 
         // Update the title selection popup.
-        [fSrcTitlePopUp selectItemWithTitle:title.description];
+        [self.titlePopUp selectItemWithTitle:title.description];
 
         // Grok the output file name from title.name upon title change
         if (title.isStream && self.core.titles.count > 1)
         {
             // Change the source to read out the parent folder also
-            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@, %@", title.url.URLByDeletingLastPathComponent.lastPathComponent, title.name, title.shortFormatDescription];
+            self.sourceLabel.stringValue = [NSString stringWithFormat:@"%@/%@, %@", title.url.URLByDeletingLastPathComponent.lastPathComponent,
+                                            title.name, title.shortFormatDescription];
         }
         else
         {
-            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@, %@", title.name, title.shortFormatDescription];
+            self.sourceLabel.stringValue = [NSString stringWithFormat:@"%@, %@", title.name, title.shortFormatDescription];
         }
     }
     else
     {
-        [fPreviewController.generator invalidate];
-        fPreviewController.generator = nil;
+        [self.previewController.generator invalidate];
+        self.previewController.generator = nil;
         self.summaryController.generator = nil;
     }
-    fPreviewController.picture = job.picture;
+    self.previewController.picture = job.picture;
 
     [self enableUI:(job != nil)];
-
     [self addJobObservers];
 }
 
@@ -1392,21 +1367,21 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)showPreviewWindow:(id)sender
 {
-	[fPreviewController showWindow:sender];
+	[self.previewController showWindow:sender];
 }
 
 - (IBAction)showTabView:(id)sender
 {
     NSInteger tag = [sender tag];
-    [fMainTabView selectTabViewItemAtIndex:tag];
+    [self.mainTabView selectTabViewItemAtIndex:tag];
 }
 
 #pragma mark - Presets View Controller Delegate
 
 - (void)selectionDidChange
 {
-    self.selectedPreset = fPresetsView.selectedPreset;
-    [self applyPreset:fPresetsView.selectedPreset];
+    self.selectedPreset = self.presetView.selectedPreset;
+    [self applyPreset:self.presetView.selectedPreset];
 }
 
 #pragma mark -  Presets
@@ -1495,7 +1470,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     // Show the add panel
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
-                                                                                 presetManager:presetManager
+                                                                                 presetManager:self.presetManager
                                                                                    customWidth:self.job.picture.maxWidth
                                                                                   customHeight:self.job.picture.maxHeight
                                                                            resolutionLimitMode:self.job.picture.resolutionLimitMode];
@@ -1505,7 +1480,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.selectedPreset = addPresetController.preset;
             [self applyPreset:addPresetController.preset];
-            self->fPresetsView.selectedPreset = addPresetController.preset;
+            self.presetView.selectedPreset = addPresetController.preset;
         }
     }];
 }
@@ -1522,7 +1497,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window HB_endEditing];
 
     __block HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:self.selectedPreset
-                                                                                          presetManager:presetManager];
+                                                                                                  presetManager:self.presetManager];
     [self.window beginSheet:renamePresetController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
@@ -1536,60 +1511,60 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)exportPreset:(id)sender
 {
-    fPresetsView.selectedPreset = self.selectedPreset;
-    [fPresetsView exportPreset:sender];
+    self.presetView.selectedPreset = self.selectedPreset;
+    [self.presetView exportPreset:sender];
 }
 
 - (IBAction)importPreset:(id)sender
 {
-    [fPresetsView importPreset:sender];
+    [self.presetView importPreset:sender];
 }
 
 #pragma mark - Preset Menu
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
-    self.selectedPreset = presetManager.defaultPreset;
-    [self applyPreset:presetManager.defaultPreset];
-    fPresetsView.selectedPreset = presetManager.defaultPreset;
+    self.selectedPreset = self.presetManager.defaultPreset;
+    [self applyPreset:self.presetManager.defaultPreset];
+    self.presetView.selectedPreset = self.presetManager.defaultPreset;
 }
 
 - (IBAction)setDefaultPreset:(id)sender
 {
-    [presetManager setDefaultPreset:self.selectedPreset];
+    [self.presetManager setDefaultPreset:self.selectedPreset];
 }
 
 - (IBAction)savePreset:(id)sender
 {
     [self.window HB_endEditing];
 
-    NSIndexPath *indexPath = [presetManager indexPathOfPreset:self.selectedPreset];
+    NSIndexPath *indexPath = [self.presetManager indexPathOfPreset:self.selectedPreset];
     if (indexPath)
     {
         HBMutablePreset *preset = [self createPresetFromCurrentSettings];
         preset.name = self.selectedPreset.name;
         preset.isDefault = self.selectedPreset.isDefault;
 
-        [presetManager replacePresetAtIndexPath:indexPath withPreset:preset];
+        [self.presetManager replacePresetAtIndexPath:indexPath withPreset:preset];
 
         self.job.presetName = preset.name;
         self.selectedPreset = preset;
-        fPresetsView.selectedPreset = preset;
+        self.presetView.selectedPreset = preset;
 
-        [presetManager savePresets];
+        [self.presetManager savePresets];
         [self.window.undoManager removeAllActions];
     }
 }
 
 - (IBAction)deletePreset:(id)sender
 {
-    fPresetsView.selectedPreset = self.selectedPreset;
-    [fPresetsView deletePreset:self];
+    self.presetView.selectedPreset = self.selectedPreset;
+    [self.presetView deletePreset:self];
 }
 
 - (IBAction)insertCategory:(id)sender
 {
-    [fPresetsView insertCategory:sender];
+    [self.presetView insertCategory:sender];
 }
 
 - (IBAction)selectPresetFromMenu:(id)sender
@@ -1599,7 +1574,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     self.selectedPreset = preset;
     [self applyPreset:preset];
-    fPresetsView.selectedPreset = preset;
+    self.presetView.selectedPreset = preset;
 }
 
 @end
