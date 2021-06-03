@@ -722,6 +722,9 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     self.window.representedURL = nil;
     self.window.title = NSLocalizedString(@"HandBrake", @"Main Window -> title");
 
+    // Clear the undo manager, we can't undo this action
+    [self.window.undoManager removeAllActions];
+
     NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
 
     NSError *outError = NULL;
@@ -730,7 +733,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     BOOL canScan = [self.core canScan:mediaURL error:&outError];
 
     // Notify the user that we don't support removal of copy protection.
-    if (canScan && [outError code] == 101 && !self.suppressCopyProtectionWarning)
+    if (canScan && outError.code == 101 && !self.suppressCopyProtectionWarning)
     {
         self.suppressCopyProtectionWarning = YES;
         if ([self runCopyProtectionAlert] == NSAlertFirstButtonReturn)
@@ -794,6 +797,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              }
 
              completionHandler(self.core.titles);
+
+             // Clear the undo manager, the completion handle
+             // set the job in the main window
+             // and don't want to make it undoable
+             [self.window.undoManager removeAllActions];
              [self.window.toolbar validateVisibleItems];
              if (@available(macOS 10.12.2, *))
              {
@@ -872,6 +880,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
                 self.selectedPreset = nil;
                 self.job = job;
+                job.undo = self.window.undoManager;
 
                 handler(YES);
             }
@@ -909,6 +918,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         job.outputFileName = self.job.outputFileName;
     }
 
+    job.undo = self.window.undoManager;
+
     return job;
 }
 
@@ -945,16 +956,15 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)setJob:(HBJob *)job
 {
-    [self removeJobObservers];
+    if (job != _job)
+    {
+        [[self.window.undoManager prepareWithInvocationTarget:self] setJob:_job];
+    }
 
-    // Clear the undo manager
-    [_job.undo removeAllActions];
-    _job.undo = nil;
+    [self removeJobObservers];
 
     // Retain the new job
     _job = job;
-
-    job.undo = self.window.undoManager;
 
     // Set the jobs info to the view controllers
     self.summaryController.job = job;
@@ -1430,9 +1440,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     if (selectedPreset != _selectedPreset)
     {
-        NSUndoManager *undo = self.window.undoManager;
-        [[undo prepareWithInvocationTarget:self] setSelectedPreset:_selectedPreset];
-
+        [[self.window.undoManager prepareWithInvocationTarget:self] setSelectedPreset:_selectedPreset];
         _selectedPreset = selectedPreset;
     }
 }
@@ -1443,9 +1451,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if (currentPreset != _currentPreset)
     {
-        NSUndoManager *undo = self.window.undoManager;
-        [[undo prepareWithInvocationTarget:self] setCurrentPreset:_currentPreset];
-
+        [[self.window.undoManager prepareWithInvocationTarget:self] setCurrentPreset:_currentPreset];
         _currentPreset = currentPreset;
     }
 }
