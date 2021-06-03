@@ -689,10 +689,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (void)scanURL:(NSURL *)fileURL titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
     // Save the current settings
-    if (self.job)
-    {
-        self.currentPreset = [self createPresetFromCurrentSettings];
-    }
+    [self updateCurrentPreset];
 
     self.job = nil;
     [self.titlePopUp removeAllItems];
@@ -855,9 +852,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                     job.title = titles.firstObject;
                 }
 
-                self.selectedPreset = nil;
                 self.job = job;
                 job.undo = self.window.undoManager;
+
+                self.currentPreset = [self createPresetFromCurrentSettings];
+                self.selectedPreset = nil;
 
                 handler(YES);
             }
@@ -876,10 +875,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 - (HBJob *)jobFromTitle:(HBTitle *)title
 {
     // If there is already a title load, save the current settings to a preset
-    if (self.job)
-    {
-        self.currentPreset = [self createPresetFromCurrentSettings];
-    }
+    // Save the current settings
+    [self updateCurrentPreset];
 
     HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
     job.outputURL = self.destinationURL;
@@ -1490,6 +1487,24 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     HBMutablePreset *preset = [self.currentPreset mutableCopy];
     [self.job writeToPreset:preset];
     return preset;
+}
+
+- (void)updateCurrentPreset
+{
+    if (self.job)
+    {
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBKeepPresetEdits] == NO)
+        {
+            if (self.selectedPreset)
+            {
+                self.currentPreset = self.selectedPreset;
+            }
+        }
+        else
+        {
+            self.currentPreset = [self createPresetFromCurrentSettings];
+        }
+    }
 }
 
 - (IBAction)showRenamePresetPanel:(id)sender

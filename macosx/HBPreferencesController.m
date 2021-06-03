@@ -42,6 +42,8 @@ NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
 NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedItems";
 NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
 
+NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
+
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
 
@@ -81,7 +83,7 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
 {
     NSURL *moviesURL = HBUtilities.defaultDestinationURL;
 
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+    [NSUserDefaults.standardUserDefaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @".mp4",
@@ -102,7 +104,8 @@ NSString * const HBQueueWorkerCounts             = @"HBQueueWorkerCounts";
         HBQueuePauseIfLowSpace:             @YES,
         HBQueueMinFreeSpace:                @"2",
         HBQueueAutoClearCompletedItems:     @NO,
-        HBQueueWorkerCounts:                @1
+        HBQueueWorkerCounts:                @1,
+        HBKeepPresetEdits:                  @YES
     }];
 
     // Overwrite the update check interval because previous versions
