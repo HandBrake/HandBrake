@@ -9099,7 +9099,7 @@ const char hb_builtin_presets_json[] =
 "                    \"PictureLeftCrop\": 0,\n"
 "                    \"PictureLooseCrop\": false,\n"
 "                    \"PictureModulus\": 2,\n"
-"                    \"PicturePAR\": \"loose\",\n"
+"                    \"PicturePAR\": \"auto\",\n"
 "                    \"PicturePARHeight\": 720,\n"
 "                    \"PicturePARWidth\": 853,\n"
 "                    \"PictureRightCrop\": 0,\n"
