@@ -22,19 +22,20 @@ namespace HandBrakeWPF.Utilities
             return new List<InterfaceLanguage>
                    {
                        new InterfaceLanguage(null, Resources.Language_UseSystem),
-                       new InterfaceLanguage("en", "English"),
-                       new InterfaceLanguage("de", "German (Deutsch)"),
+                       new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
                        new InterfaceLanguage("zh", "Chinese (中文)"),
+                       new InterfaceLanguage("co", "Corsican (Corsu)"),
+                       new InterfaceLanguage("en", "English"),
                        new InterfaceLanguage("fr", "French (Français)"),
+                       new InterfaceLanguage("de", "German (Deutsch)"),
+                       new InterfaceLanguage("it", "Italian (Italiano)"),
+                       new InterfaceLanguage("ja", "Japanese (日本語 (にほんご))"),
+                       new InterfaceLanguage("ko", "Korean (한국어)"),
+                       new InterfaceLanguage("fa-IR", "Persian (Iran) (فارسی)"),
                        new InterfaceLanguage("ru", "Russian (Русский)"),
                        new InterfaceLanguage("es", "Spanish (Español)"),
                        new InterfaceLanguage("tr", "Turkish (Türkçe)"),
-                       new InterfaceLanguage("ko", "Korean (한국어)"),
-                       new InterfaceLanguage("ja", "Japanese (日本語 (にほんご))"),
-                       new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
-                       new InterfaceLanguage("co", "Corsican (Corsu)"),
                        new InterfaceLanguage("uk", "Ukrainian (Українська)"),
-                       new InterfaceLanguage("fa-IR", "Persian (Iran) (فارسی)"),
                    };
         }
 

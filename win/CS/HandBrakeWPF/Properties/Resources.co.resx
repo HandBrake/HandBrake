@@ -2475,4 +2475,7 @@ St’avertimentu serà affissatu solu una volta.</value>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
     <value>Metadati cummuni Passthru</value>
   </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>U chjassu predefinitu di nome autumaticu ùn era micca accetevule. {0} ùn deve micca stà nanzu à {1}</value>
+  </data>
 </root>

@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -162,9 +162,9 @@ HQDN3D ist ein adaptiver Tiefpassfilter, schneller als NLMeans, aber weniger eff
 Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphisch ermöglicht beliebige Ausgabedimensionen unter Beibehaltung des ursprünglichen Aussehens während der Wiedergabe.
+    <value>Anamorph ermöglicht beliebige Ausgabedimensionen unter Beibehaltung des ursprünglichen Aussehens während der Wiedergabe.
 
-Aus, deaktiviert Anamorphisch. Die Abmessungen des Ausgabevideos und der Anzeige sind identisch. Nur nützlich für die Kompatibilität mit bestimmten älteren Geräten.
+Aus, deaktiviert Anamorph. Die Abmessungen des Ausgabevideos und der Anzeige sind identisch. Nur nützlich für die Kompatibilität mit bestimmten älteren Geräten.
 
 Auto, maximiert die Auflösung der Ausgabe unter Beibehaltung des ursprünglichen Bildseitenverhältnisses. Empfohlen.
 
@@ -471,5 +471,12 @@ Wenn nicht aktiviert, wird der Pfad im Zielfeld des Hauptfensters verwendet, wen
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Dieses Feld kann RGB-Werte wie z. B.: "0xFF0000" oder Farbnamen wie z. B. "rot". Eine vollständige Liste der benannten Farben finden Sie in der Dokumentation des Auffüllfilters. </value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Untertitel in das Video einbrennen.
+
+Hinweis: Dies wird automatisch ausgewählt, wenn das Format der Quelluntertitelspur im Ausgabedateityp nicht unterstützt wird.
+
+Zum Beispiel werden PGS-Untertitel in MP4 nicht unterstützt.</value>
   </data>
 </root>
