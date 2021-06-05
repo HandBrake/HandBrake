@@ -217,6 +217,9 @@
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "secondi";
 
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "L3N-te-KLg"; */
+"L3N-te-KLg.title" = "Mantieni le modifiche delle preimpostazioni quando selezioni un nuovo titolo";
+
 /* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
 "l8v-ns-6UR.title" = "1";
 
@@ -243,6 +246,9 @@
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
 "Uxv-oN-c1r.title" = "Ripristina a \"Non far nulla\" all'avvio";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
+"wiP-Ia-DfB.title" = "Preset:";
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Rimuovi la punteggiatura comune";
