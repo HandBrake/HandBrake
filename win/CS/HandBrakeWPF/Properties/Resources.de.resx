@@ -1311,7 +1311,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Granularitätsaufteilung bei konstanter Qualität:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphisch:</value>
+    <value>Anamorph:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
     <value>Automatisch</value>
@@ -2480,5 +2480,8 @@ Diese Warnung wird nur zweimal angezeigt.</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
     <value>Metadaten-Passthru</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Der automatische Standardpfad ist nicht gültig. {0} darf nicht vor {1} sein.</value>
   </data>
 </root>

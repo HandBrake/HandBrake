@@ -118,2150 +118,2150 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>Kodlayıcı parametrelerinin tam listesi: 
+    <value>L'elenco completo dei parametri del codificatore:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>Kod çözücü CPU kullanımını azaltın.
+    <value>Riduce l'utilizzo della CPU da parte del decodificatore.
 
-Cihazınız çıktıyı çalmaya zorlanıyorsa bunu ayarlayın. (yani, bırakılan kareler)</value>
+Impostalo se il dispositivo non riesce a riprodurre l'output. (es. Perdita di fotogrammi)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Uyarı: RF 0 Kayıpsızdır!</value>
+    <value>Avviso: RF 0 è senza perdita!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>0 değeri, kayıpsız demektir ve kaynak kayıpsız olmadığı sürece, orijinal kaynaktan daha
-büyük bir dosya boyutuna neden olur.
+    <value>Un valore pari a 0 significa senza perdita di dati e avrà come risultato una dimensione del file maggiore della sorgente originale,
+a meno che la fonte fosse già senza perdite.
 
-x264 ve x265'in ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık gelir.
+Per x264 e x265 la scala è logaritmica quindi a valori più bassi si avrà una qualità superiore.
 
-Dolayısıyla değerdeki küçük artışlar, sonuçta ortaya çıkan dosya boyutunda giderek daha büyük artışlara neden olur.</value>
+Quindi piccoli aumenti di valore comporteranno aumenti progressivamente maggiori nella dimensione del file finale.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>İsteğe bağlı olarak bu ön ayar ile bir resim ayarlarını saklayabilirsiniz. 3 mod vardır:
+    <value>Opzionalmente si può memorizzare l'impostazione delle immagini con questa preimpostazione. Ci sono 3 modalità:
 
-Yok: Resim ayarları önceden ayarlanmış durumda değildir. Bir kaynak yüklerken kaynak özünürlük sınırları dahilinde kalacaktır. Bu aynı zamanda anamorfik, modül, kırpma vs.'yi de etkiler.
+Nessuno: Le Impostazioni immagine non vengono memorizzate nella preimpostazione. Quando si carica una sorgente, rimarranno così come sono entro i limiti della risoluzione sorgente. Questo riguarda anche l'anamorfico, il modulo, il ritaglio, ecc.
 
-Özel: İsteğe bağlı olarak bir Maksimum genişlik ve Yükseklik ayarlayabilirsiniz. Bunu yaparken bir kodlama bu değerlerden daha küçük veya ona eşit olacaktır. En Boy Oranını Koru otomatik olarak açılır.
+Personalizzato: puoi facoltativamente impostare Larghezza e Altezza massime. Quando lo fai, una codifica sarà inferiore o uguale a questi valori. 'Mantenere proporzioni' verrà automaticamente attivato.
 
-Maksimum Kaynak: Her zaman mümkün olduğunda kaynakların çözünürlüğünde kodlayın.</value>
+Sorgente massima: codifica sempre alla risoluzione delle fonti, laddove possibile.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Bu program ücretsiz bir yazılımdır; lisansın 2 sürümünü veya
-(sizin seçeceğiniz) herhangi bir sonraki sürümünü Özgür Yazılım Vakfı
-tarafından yayınlanan GNU Genel Kamu Lisansı koşulları altında
-yeniden dağıtabilir ve/veya değiştirebilirsiniz.
+    <value>Questo programma è software libero; può essere redistribuito e/o
+modificato sotto i termini della licenza GNU General Public License, così come
+viene pubblicata dalla Free Software Foundation; sia nella versione 2 di tale 
+licenza che, alternativamente, in qualsiasi versione ad essa successiva.
 
-Bu program faydalı olacağı umuduyla dağıtılmıştır.
-Ancak HERHANGİ BİR TİCARÎ veya
-BELİRLİ BİR AMACA UYGUNLUK GARANTİSİ yoktur.
-Daha fazla bilgi için GNU Genel Kamu Lisansına bakın.
-
-Bu programla birlikte GNU Genel Kamu Lisansının bir
-kopyasını almış olmalısınız; değilse, Özgür Yazılım'a yazın
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+Questo programma viene distribuito con la speranza che possa risultare 
+in qualche modo utile, ma SENZA ALCUNA GARANZIA; neanche con 
+l'implicita garanzia di COMMERCIABILITÀ o di IDONEITÀ PER UN 
+QUALSIASI SCOPO. Consultare la licenza GNU General Public License per
+ulteriori informazioni. Una copia della licenza GNU General Public License
+dovrebbe essere distribuita assieme a questo programma; se così non fosse,
+rivolgersi alla Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, 
+Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>UYARI: Otomatik dosya adlandırma açık değil. Lütfen bunu seçeneklerde etkinleştirin.</value>
+    <value>ATTENZIONE: non hai la creazione automatica del nome del file attivata. Puoi abilitarla nelle impostazioni.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>UYARI: Şu anda otomatik ses ve altyazı parçası seçim ayarınız yok. Varsayılan parça seçimi davranışını seçeneklerde ayarlayabilirsiniz.</value>
+    <value>ATTENZIONE: al momento non disponi dell'impostazioni di selezione automatica della traccia audio e dei sottotitoli. È possibile impostare il comportamento predefinito di selezione traccia nelle impostazioni.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Yerleşik ön ayarlar sıfırlandı.</value>
+    <value>Le preimpostazioni originali sono state ripristinate.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>Sıfırlama Tamamlandı</value>
+    <value>Ripristino completato</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>Daha Yüksek Kalite |</value>
+    <value>Alta qualità |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| Daha Düşük Kalite</value>
+    <value>| Bassa qualità</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>Plasebo Kalitesi |</value>
+    <value>Qualità di controllo |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Hata</value>
+    <value>Errore</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>Otomatik dosya adlandırma özelliğini açmalısınız ve sıraya ekleyebilmeniz için tercihlerde varsayılan bir yol belirlemelisiniz.</value>
+    <value>È necessario attivare la creazione automatica del nome E impostare un percorso predefinito nelle preferenze, prima di poter aggiungere file alla coda.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Uyarı</value>
+    <value>Attenzione</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>Emin misiniz?</value>
+    <value>Sei sicuro?</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten kodlama yapıyor.</value>
+    <value>HandBrake sta già convertendo.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Sırada aynı dizini hedefleyen işler var. Lütfen bu iş için farklı bir yol seçin.</value>
+    <value>Ci sono già processi in coda con lo stesso percorso di destinazione. Si prega di scegliere un percorso diverso per questo processo.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   Bekleyen İşler {0}</value>
+    <value>Processi in corso {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Yeni Varsayılan Ön Ayar Seti: {0}</value>
+    <value>Nuova preimpostazione predefinita impostata: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Yeni Bir Güncelleme Var.  Yüklemek İçin Araçlar &gt; Ayarlar Menüsünü Ziyaret Edin. </value>
+    <value>Un nuovo aggiornamento è disponibile. Vai al menu Strumenti &gt; Opzioni per l'installazione</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>Ön Ayar seçilmedi.</value>
+    <value>Nessuna preimpostazione selezionata.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Yerleşik ön ayarlarda değişiklik yapamazsınız. Lütfen kendi ön ayarlarınızdan birini seçin.</value>
+    <value>Non è possibile modificare le preimpostazioni predefinite. Seleziona una delle tue preimpostazioni.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>Lütfen bir klasör seçin.</value>
+    <value>Si prega di selezionare una cartella.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>Kodlamaya hazırlanıyor ...</value>
+    <value>Preparazione per la codifica...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>Yerleşik bir ön ayarla aynı ada sahip bir ön ayarı içe aktaramazsınız.</value>
+    <value>Non è possibile importare una preimpostazione con lo stesso nome di una preimpostazione di base.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>Ön ayar "{0}" zaten var. Üzerine yazmak ister misiniz?</value>
+    <value>La preimpostazione "{0}" esiste già. Vuoi sovrascriverla?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Ön ayarlar</value>
+    <value>Preimpostazioni</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>Seçilen ön ayarı güncellemek istediğinizden emin misiniz?</value>
+    <value>Sei sicuro di voler aggiornare la preimpostazione selezionata?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Ön ayar şimdi geçerli ayarlarınızla güncellendi.</value>
+    <value>La preimpostazione è stata aggiornata con le impostazioni correnti.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını belirledi ... Bu ön ayar şimdi güncellenecek.
-Özel ön ayarlarınız güncellenmedi, bu yüzden silip yeniden ekleyerek bunları yeniden oluşturmanız gerekebilir. 
-Önceki user_presets.xml dosyası yedeklendi.</value>
+    <value>HandBrake ha determinato che le preimpostazioni integrate non sono aggiornate... Queste preimpostazioni ora saranno aggiornate.
+Le preimpostazioni personalizzate non sono state aggiornate, quindi potresti doverle ricreare eliminandole e aggiungendole di nuovo.
+È stato eseguito il backup del precedente file user_presets.xml.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>Sıra Bitti</value>
+    <value>Coda terminata</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>Tarama İptal Edildi.</value>
+    <value>Scansione annullata.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>Tarama Tamamlandı</value>
+    <value>Scansione completata</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>Tarama başarısız oldu: </value>
+    <value>Scansione non riuscita:</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>Tarama Başarısız... Lütfen ayrıntılar için Etkinlik Günlüğüne bakınız.</value>
+    <value>Scansione non riuscita... Puoi controllare il registro delle attività per i dettagli.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Kaynak taranıyor, lütfen bekleyin...</value>
+    <value>Scansione sorgente, attendi...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>Başlık Taranıyor {0} / {1} ({2}%)</value>
+    <value>Scansione titoli {0} di {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>İlk önce bir kaynak taramanız ve bir kodlamaya başlamadan önce işinizi kurmanız gerekir. Devam etmek için araç çubuğundaki 'Kaynak' düğmesini tıklayın.</value>
+    <value>È necessario prima eseguire la scansione di una fonte e configurare il processo prima di iniziare una codifica. Fai clic sul pulsante "Sorgente" sulla barra degli strumenti per continuare.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Lütfen kendi ön ayarlarınızdan birini seçtiğinizden emin olun. Yerleşik ön ayarları dışa aktaramayacağınızı lütfen unutmayın.</value>
+    <value>Assicurati di aver selezionato una delle tue preimpostazioni. Ricorda che non puoi esportare preimpostazioni predefinite.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Lütfen güncellemek için bir ön ayar seçin.</value>
+    <value>Seleziona una preimpostazione da aggiornare.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>Devam etmek için 'Kaynak'ı seçin</value>
+    <value>Seleziona 'Sorgente' per continuare</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Bekleyen İşler</value>
+    <value>{0} operazioni in corso</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Bildirim</value>
+    <value>Avviso</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>Üzerine yazılsın mı?</value>
+    <value>Vuoi sovrascrivere?</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Soru</value>
+    <value>Domanda</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>Hazır</value>
+    <value>Pronto</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>Güncellenmiş</value>
+    <value>Aggiornato</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Ön Ayar Sürümü</value>
+    <value>Versione preimpostazione</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>Almaya çalıştığınız ön ayar, HandBrake'in farklı bir sürümünden. 
-Tüm değerleri bu ön ayardan içe aktarmak mümkün olmayabilir. 
+    <value>La preimpostazione che stai tentando di importare proviene da una versione diversa di HandBrake.
+Potrebbe non essere possibile importare tutti i valori.
 
-Devam etmek istiyor musunuz?</value>
+Vuoi procedere?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Ön ayar içe alınamıyor!</value>
+    <value>Impossibile importare la preimpostazione!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Ön ayar bozulmuş gibi veya HandBrake'nin eski bir sürümünden içe alınamıyor.</value>
+    <value>Impossibile importare la preimpostazione in quanto sembra danneggiata o proviene da una versione precedente di HandBrake.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>Sıraya eklemeden önce çıktı dosyasının hedef yolunu ayarlamanız gerekir.</value>
+    <value>È necessario innanzitutto impostare il percorso di destinazione per il file di output prima di aggiungerlo alla coda.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>Girilen hedef yolu geçersiz karakterler içeriyor ve güncellenmeyecek.</value>
+    <value>Il percorso di destinazione inserito contiene caratteri non validi e perciò non verrà aggiornato.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Önizleme {0}</value>
+    <value>Anteprima {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>Önizleme (Ölçekli)</value>
+    <value>Anteprima (Ridimensionata)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>Çıktı: {0}</value>
+    <value>Output: {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Çıktı dosyasının biçimi. Desteklenen herhangi bir dosya sistemi karakterine ek olarak, başlığı değiştirdiğinizde veya bir kaynağı taradığınızda değiştirilecek aşağıdaki yer tutucuları da kullanabilirsiniz.
+    <value>Il formato del file di output. Oltre a qualsiasi carattere del file system supportato, è possibile utilizzare i seguenti segnaposti che verranno sostituiti quando si modifica il titolo o si scansiona una sorgente.
 
-Canlı güncelleme seçenekleri: {source} {title} {chapters} 
-Canlı olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
+Opzioni live: {source} {title} {chapter}
+Opzioni non live: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Questi cambiano solo se si scansiona una nuova sorgente, si cambiano titolo o capitoli)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Mevcut ek Seçenekler: {source_path} veya {source_folder_name} veya {source}</value>
+    <value>Opzioni aggiuntive disponibili: {source_path} o {source_folder_name} o {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>Kaynak dosyayla aynı yol ve dosya adına sahip bir dosyayı kodlayamazsınız. Lütfen hedef dosya adını kaynak dosyayla eşleşmeyecek şekilde güncelleyin.</value>
+    <value>Il file di destinazione non può avere lo stesso percorso e nome file del file sorgente. Aggiorna il nome del file di destinazione in modo che non corrisponda al file di origine.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>Sisteminiz HandBrake'in bir web tarayıcısı başlatmasını engelledi.</value>
+    <value>Il tuo sistema ha impedito a HandBrake di avviare il browser.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>Doğrudan web sitesini ziyaret ederek yardım sayfalarına erişebilirsiniz: https://handbrake.fr</value>
+    <value>È comunque possibile accedere alla guida visitando il sito Web all'indirizzo: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>Seçilen ön ayar içe alınamıyor!</value>
+    <value>Impossibile importare la preimpostazione selezionata.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>Ön ayar bozuk veya desteklenmeyen daha eski bir HandBrake sürümünden olabilir. 
-Eski sürümlerdeki ön ayarlar geçerli sürümde yeniden oluşturulmalıdır.</value>
+    <value>La preimpostazione potrebbe essere danneggiata o proveniente da una versione precedente di HandBrake che non è supportata.
+Le preimpostazioni di versioni precedenti devono essere ricreate nella versione corrente.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Video kodlayıcısına aktarılabilen gelişmiş ek komutlar.</value>
+    <value>Ulteriori argomenti avanzati che possono essere passati al codificatore video.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Yok - Yalnızca kabın formatı desteklemediği parçalar yanacaktır.
-Yabancı Ses İzleme - Varsa Yabancı Ses izleme özelliği yanacaktır. 
-İlk İz - İlk iz yanacak.
-Önce Yabancı Ses Tercih Edildi, İlk Önce - Yabancı ses parçası varsa, yanacak veya ilk parça seçilecektir.</value>
+    <value>Nessuno - Vengono masterizzate solo le tracce che hanno un formato che il contenitore non supporta.
+Traccia audio lingua straniera - Verrà masterizzata la traccia audio in lingua straniera, se disponibile.
+Prima traccia: verrà masterizzata la prima traccia.
+Preferisci traccia lingua straiera, altrimenti usa la Prima - Se la traccia audio in lingua straniera esiste, verrà masterizzata, altrimenti verrà selezionata la prima traccia.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM Altyazı Uyumluluğu</value>
+    <value>Compatibilità sottotitoli WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake'deki WebM yalnızca yanan altyazıları destekler.
+    <value>Il WebM su HandBrake supporta solo sottotitoli in sovraimpressione.
 
-Altyazı seçimlerinizi değiştirmelisiniz.
+Dovresti cambiare la selezione dei sottotitoli.
 
-Devam ederseniz, yanmayan alt yazılarınız kaybolur.</value>
+Altrimenti, i sottotitoli non in sovraimpressione andranno perduti.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>Geçerli bir kaynak veya başlık bulunamadı.</value>
+    <value>Nessuna sorgente o titoli validi trovati.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake, seçilen kaynağı kodlayacak başlıkları olan geçerli bir kaynak bulamadığından kodlayamayacak. 
-Bu, aşağıdaki nedenlerden biri olabilir:
-- Her kaynak başlığının süresi, 'Tercihler &gt; Gelişmiş' bölümündeki "Minimum Başlık Süresi" eşik seçeneğinin altındadır. 
-- Kaynak dosya geçerli bir video dosyası değil veya HnadBrake'nin desteklemediği bir formatta.
-- Kaynak kopya korumalı olabilir veya DRM içerebilir. HandBrake'in kopya korumalarının kaldırılmasını desteklemediğini lütfen unutmayın.
+    <value>HandBrake non è in grado di codificare la sorgente selezionata in quanto non ha rilevato una sorgente valida con dei titoli codificabili.
+Ciò potrebbe essere stato causato da una delle seguenti ragioni:
+- La durata di ciascun titolo della sorgente potrebbe essere al di sotto della soglia di "Durata Minima del Titolo" indicata nella relativa opzione in 'Preferenze &gt; Avanzate'.
+- Il file sorgente non è un file video valido oppure non è in un formato supportato da HandBrake.
+- La sorgente potrebbe essere protetta da copia oppure contenere DRM. Si ricorda che HandBrake non supporta la rimozione di sistemi di protezione copia.
 
-Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
+Il Registro delle Attività potrebbe fornire ulteriori informazioni.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>Sıra{0}</value>
+    <value>Coda {0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>Kodlamaya Başla</value>
+    <value>Avvia codifica</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>Sırayı Başlat</value>
+    <value>Avvia coda</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>Varsayılan ön ayarı silemezsiniz. Lütfen ilk önce varsayılan olarak başka bir ön ayar ayarlayın.</value>
+    <value>Non è possibile eliminare la preimpostazione predefinita. Come prima cosa, imposta un'altra preimpostazione come predefinita.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Ön ayarı silmek istediğinizden emin misiniz: </value>
+    <value>Sei sicuro di voler eliminare la preimpostazione:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6} {7}</value>
+    <value>Conversione: Passaggio {0} di {1}, {2:00.00}%, FPS: {3:000.0}, FPS medio: {4:000.0}, Tempo rimanente: {5}, Trascorso: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>Bir Ön Ayarın bir Adı olmalı. Lütfen Ön Ayar Adı alanını doldurun.</value>
+    <value>Una preimpostazione deve avere un nome. Compila il campo Nome preimpostazione.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>Bu ada sahip bir Ön Ayar zaten var. Üzerine yazmak ister misiniz?</value>
+    <value>Una preimpostazione con questo nome esiste già. Vuoi sovrascriverla?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>'Kaynak Maksimum' Seçeneğini kullanmak için önce bir kaynak taramanız gerekir.</value>
+    <value>È necessario prima eseguire la scansione di una sorgente per utilizzare l'opzione 'Massimo della Sorgente'.</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>'Özel' seçeneği için Özel Genişlik veya Yükseklik alanlarının doldurulması zorunludur.</value>
+    <value>I campi di Larghezza o di Altezza Personalizzata devono essere riempiti per l'opzione 'Personalizzato'.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>Ön ayar eklenemiyor</value>
+    <value>Impossibile aggiungere la preimpostazione</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Bilinmeyen Hata</value>
+    <value>Errore sconosciuto</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>Ses Varsayılanları</value>
+    <value>Valori audio predefiniti</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>Ses Parçaları</value>
+    <value>Tracce audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Seçim Davranışı</value>
+    <value>Comportamento selezione</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>Parçalara Geri Dön</value>
+    <value>Torna alle tracce</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Bölüm İşaretleyicileri dosyası kaydedilemiyor! </value>
+    <value>Impossibile salvare file dei Marcatori dei Capitoli!</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>Bölüm işaretleyici isimleri kodunuzda kaydedilmeyecektir.</value>
+    <value>I nomi dei marcatori dei capitoli NON saranno salvati durante la codifica</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>Aşağıdaki eylem '{0}'  {1} saniye içinde gerçekleşecek.</value>
+    <value>La seguente azione '{0}' avverrà in {1} secondi.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Eğer sorun devam ederse HandBreak'i yeninden başlatmayı deneyin.</value>
+    <value>Se il problema persiste, prova a riavviare HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>Bu hata hakkında daha fazla bilgi mevcut değil.</value>
+    <value>Non ci sono ulteriori informazioni su questo errore.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>Bilinmeyen bir Hata oluştu.</value>
+    <value>Si è verificato un Errore Sconosciuto.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Yeni Bir Güncelleme Var! Lütfen sürüm notları için web sitesini kontrol ediniz.</value>
+    <value>È disponibile una nuova versione! Controlla il sito web per le note di rilascio.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Sisteminiz, HandBrake'nin 64bit sürümünü destekliyor! Bu, 32bit sürümde performans ve kararlılık geliştirmeleri sunar.
-    Lütfen sürüm notları için web sitesini kontrol ediniz.</value>
+    <value>Il sistema supporta la versione a 64 bit di HandBrake! Quest'ultima offre migliori prestazioni e stabilità rispetto alla versione a 32 bit.
+Controlla il sito web per le note di rilascio.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>Şu anda yeni güncellemeler yok.</value>
+    <value>Non ci sono nuovi aggiornamenti in questo momento.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>Güncelleme İndirildi</value>
+    <value>Aggiornamento scaricato</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>Güncelleme Servisi Kullanılamıyor. Güncelleştirmeyi https://handbrake.fr adresinden indirmeyi deneyebilirsiniz.</value>
+    <value>Servizio di Aggiornamento non disponibile. Puoi provare a scaricare l'aggiornamento dal sito web https://handbrake.fr</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>Güncelleme başarısız oldu. Güncelleştirmeyi https://handbrake.fr adresinden indirmeyi deneyebilirsiniz.</value>
+    <value>Aggiornamento non riuscito. Puoi provare a scaricare l'aggiornamento dal sito web https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Depolama Boyutu: {0}x{1}</value>
+    <value>Dim. di Archiviazione: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>Sıraya ekle</value>
+    <value>Aggiungi alla coda</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>Bekleyen kodlama yok</value>
+    <value>Nessuna conversione in sospeso</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>Şu anda kodlama işi yok</value>
+    <value>Nessuna operazione di codifica in corso</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>Sıra</value>
+    <value>Coda</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
-    <value>Sırayı temizlemek istediğine emin misin?</value>
+    <value>Sei sicuro di voler pulire la coda?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Onayla</value>
+    <value>Conferma</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} bekleyen işler</value>
+    <value>{0} operazioni in esecuzione</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>Sıra Duraklatıldı</value>
+    <value>Coda in pausa</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Seçilen işleri silmek istediğinizden emin misiniz?</value>
+    <value>Sei sicuro di voler eliminare le operazioni selezionate?</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>Bu kodlama şu anda devam ediyor. Silerseniz, kodlama durur. Devam etmek istediğinizden emin misiniz?</value>
+    <value>Questa codifica è attualmente in corso. Se la cancelli, la codifica verrà interrotta. Sei sicuro di voler procedere?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>Bekleyen iş yok.</value>
+    <value>Non ci sono operazioni da eseguire.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>Bu işi düzenlemek istediğinize emin misiniz? Sıradan kaldırılacak ve ana pencereye gönderilecektir.</value>
+    <value>Sei sicuro di voler modificare questo processo? Verrà rimosso dalla coda e messo nella schermata principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>Sıra Hazır</value>
+    <value>Coda pronta</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>Sıra Çalışmıyor</value>
+    <value>Coda non in Lavorazione</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>Sıra Tamamlandı</value>
+    <value>Coda completata</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>Son Sıraya Alınan İş Bitti</value>
+    <value>Ultimo Processo in Coda Terminato</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>Sıra Başlatıldı</value>
+    <value>Coda avviata</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
+    <value>Conversione: Passaggio {0} di {1}, {2:00.00}%, FPS: {3:000.0}, FPS medio: {4:000.0}, Tempo rimanente: {5}, Trascorso: {6:d\:hh\:mm\:ss} </value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>Bir Kodlama şu anda çalışıyor. HandBrake'den çıkmak bu kodlamayı durduracaktır.
-HandBrake'den çıkmak istediğinize emin misiniz?</value>
+    <value>Una Codifica è attualmente in corso. Chiudere HandBrake interromperà questa codifica.
+Sei sicuro di voler chiudere HandBrake?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Resim Önizlemesi</value>
+    <value>Anteprima immagine</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Önceki önizleme dosyası silinemiyor. Medya yürütücünüzde hala açık bir önizlemeniz olabilir. Lütfen bunu kapatın.</value>
+    <value>Impossibile eliminare il file di anteprima precedente. Potresti avere ancora un'anteprima aperta nel riproduttore multimediale. Chiudilo prima di continuare.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>Önizleme oluşturmadan önce ilk önce bir kaynağı taramanız ve kodunuzu ayarlamalısınız.</value>
+    <value>È necessario eseguire la scansione di una sorgente ed impostare la codifica prima di creare un'anteprima.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>Önizleme dosyası bulunamadı. Dosya silindi ya da kodlama başarısız oldu. Ayrıntılar için etkinlik günlüğünü kontrol edin.</value>
+    <value>Impossibile trovare il file di anteprima. O il file è stato cancellato o la codifica non è riuscita. Controllare il registro delle attività per i dettagli.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten bir video kodluyor! Aynı anda sadece bir dosya kodlanabilir.</value>
+    <value>HandBrake sta già codificando un video! È possibile codificare solo un video alla volta.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>Altyazı Varsayılanları</value>
+    <value>Valori predefiniti sottotitoli</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>Altyazı İzleri</value>
+    <value>Tracce sottotitoli</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>Parçalara Geri Dön</value>
+    <value>Torna alle tracce</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Seçim Davranışı</value>
+    <value>Comportamento selezione</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>Arşivlenmiş Dosya:</value>
+    <value>File archiviato:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>Ön ayarlar yüklenemiyor.</value>
+    <value>Impossibile caricare le preimpostazioni.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake ön ayarlı dosyanızı yükleyemedi. Daha önce desteklenmeyen bir HandBrake sürümünden alınmış veya bozulmuş olabilir. 
+    <value>Impossibile caricare il file delle preimpostazioni. Tale file potrebbe provenire da una vecchia versione di HandBrake non più supportata o potrebbe essersi corrotto.
 
-Eski ön ayarlı dosyanız şu şekilde arşivlendi:</value>
+Il vecchio file delle preimpostazioni è stato salvato in:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> ile {0} hata veya iptal tespit edildi.</value>
+    <value>con {0} errori o annullamenti rilevati.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>Düşük Disk Alanı</value>
+    <value>Spazio insufficiente</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>Uyarı, disk alanı azalıyor. Eğer boş alanınız biterse HandBrake bu kodlamayı tamamlayamaz. </value>
+    <value>Attenzione, lo spazio su disco si sta esaurendo. HandBrake non potrà completare la codifica se lo spazio è insufficiente.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>{0} satırı geçersiz. Hiçbir şey içe aktarılmayacak..</value>
+    <value>La riga {0} non è valida. Non verrà importato nulla.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>Bölüm dosyası içe aktarılamıyor</value>
+    <value>Impossibile caricare il file dei capitoli</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>Bölümler dosyasındaki tüm satırlar en az 2 veri sütununa sahip olmalıdır</value>
+    <value>Tutte le righe nel file dei capitoli devono avere almeno 2 colonne di dati</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>Bölümler dosyasındaki ilk sütun yalnızca sıfırdan (0) büyük bir tam sayı sayı içermelidir</value>
+    <value>La prima colonna nel file dei capitoli deve contenere esclusivamente un numero intero di valore superiore a zero (0)</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>'{0}' türündeki bölüm dosyaları şu anda desteklenmiyor.</value>
+    <value>I file dei capitoli di tipo '{0}' non sono al momento supportati.</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>Desteklenmeyen bölüm dosyası türü</value>
+    <value>Tipo di file dei capitoli non supportato</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>Kaynak medya için geçersiz bölüm bilgisi</value>
+    <value>Informazioni sui capitoli della sorgente non valide.</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>Kaynak ortamdaki bölümlerin sayısı
-ve giriş dosyasındaki bölüm sayısı eşleşmiyor ({0} vs {1}).
+    <value>Il numero di capitoli della sorgente
+ed il numero di capitoli del file di ingresso non corrispondono ({0}  contro {1}).
 
-Bölüm adlarını hala içe aktarmak istiyor musunuz?</value>
+Vuoi comunque importare i nomi dei capitoli?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>Kaynak ortamdaki bölümlerin sayısı
-ve giriş dosyasındaki bölüm sayısı eşleşmiyor ({0} vs {1}).
+    <value>Il numero di capitoli della sorgente
+ed il numero di capitoli del file di ingresso non corrispondono ({0}  contro {1}).
 
-Bölüm adlarını hala içe aktarmak istiyor musunuz?</value>
+Vuoi comunque importare i nomi dei capitoli?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>Bölüm sayısı kaynak ve giriş dosyası arasında eşleşmiyor</value>
+    <value>Il numero di capitoli non corrisponde tra la sorgente ed il file di ingresso</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>Bölümlerin kaynak medyada bildirilen süresi 
-ve girdi dosyasındaki bölümlerin süresi büyük ölçüde farklılık gösterir.
+    <value>La durata indicata dai capitoli della sorgente
+e la durata dei capitoli del file di ingresso sono molto diverse.
 
-Bu bölüm dosyasının farklı bir kaynak medyadan üretilmiş olması çok muhtemeldir.
+È possibile che il file dei capitoli sia stato generato da una sorgente differente.
 
-Bölüm adlarını içe aktarmak istediğinizden emin misiniz?</value>
+Voui ugualmente importare i nomi dei capitoli?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>Bölüm süresi kaynak ve giriş dosyası arasında eşleşmiyor</value>
+    <value>La durata dei capitoli tra la sorgente ed il file di ingresso non corrisponde.</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Taramayı durdurmaya çalışırken bir hata oluştu. Lütfen HandBrake'yi yeniden başlatın.</value>
+    <value>Si è verificato un errore durante il tentativo di fermare la scansione. Si prega di riavviare HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake, ön ayar dosyanızı yeni sürüm biçimine yükseltemiyor.
-Ön ayar dosyanız arşivlenecek ve yeni bir dosya oluşturulacaktır. Kendi ön ayarlarınızı yeniden oluşturmanız gerekecektir.</value>
+    <value>HandBrake non è riuscito ad aggiornare il file delle preimpostazioni al nuovo formato.
+Il file delle preimpostazioni corrente verrà archiviato e ne verrà creato uno nuovo. Sarà necessario ricreare le proprie preimpostazioni.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>Değiştirdiğiniz ayarların, bir sonraki HandBrake'yi başlattığında sıfırlanması gerekebilir.</value>
+    <value>Qualsiasi impostazione modificata dall'utente potrebbe essere ripristinata al prossimo avvio di HandBrake.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>Tercihlerinizi kaydetmeye çalışırken bir sorun oluştu.</value>
+    <value>Si è verificato un errore nel tentativo di salvare le preferenze.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>Uyarı, ayarlarınız sıfırlandı!</value>
+    <value>Attenzione! Le opzioni sono state ripristinate!</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>Kullanıcı ayarları dosyanız bozulmuş veya erişilemez. Ayarlar varsayılanlara sıfırlandı.</value>
+    <value>Il file delle impostazioni utente è corrotto o inaccessibile. Le impostazioni sono state quindi ripristinate.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>Kullanıcı ayarları dosyası yüklenemiyor: {0}</value>
+    <value>Impossibile caricare il file delle impostazioni utente: {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>Kullanıcı ayarları dosyanız erişilemez veya bozulmuş görünüyor. Dosyayı silmek ve HandBrake'nin yeni bir tane oluşturmasına izin vermek zorunda kalabilirsiniz.</value>
+    <value>Il file di configurazione utente potrebbe essere non accessibile o corrotto. Potrebbe essere necessario cancellarlo e lasciare che HandBrake ne generi uno nuovo.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>Seçtiğiniz çıktı dizini yok veya dosya yazma izniniz yok.</value>
+    <value>Il percorso di uscita scelto non esiste, oppure non hai i permessi di scriverci dentro dei file.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>Klasör Oluşturulsun mu?</value>
+    <value>Vuoi creare la cartella?</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>Yazmaya çalıştığınız klasör yok. HandBrake'nin aşağıdaki klasörü oluşturmasını ister misiniz?
+    <value>La cartella in cui si cerca di scrivere non esiste. Vuoi che HandBrake crei questa cartella?
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>Hedef dizini başlatılamıyor.</value>
+    <value>Impossibile aprire la cartella di destinazione.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>Lütfen geçerli bir hedef dizininin olduğunu kontrol edin.</value>
+    <value>Controlla di avere un percorso di destinazione valido.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>İşleme Geçişi {0} of {1}, (Altyazı Taraması)  {2:00.00}%, Kalan Tarama Süresi: {3},  Geçen: {4}</value>
+    <value>Passaggio {0} di {1}, (Scansione Sottotitoli)  {2:00.00}%, Tempo Restante Scansione: {3},  Trascorso: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>Ek Bilgi Yok</value>
+    <value>Nessuna informazione aggiuntiva</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, Geçiş {2} / {3})</value>
+    <value>{0} - ({1}%, Passaggio {2} di {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1}%, Geçiş {2} / {3}
-Kalan Süre: {4}</value>
+    <value>{1}%, Passaggio {2} di {3}
+Tempo rimanente: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Sıra Duraklatıldı. Uyarı, kodladığınız sürücünün disk alanı yetersiz. Lütfen biraz yer açın ve devam etmek için Başlat'a basın. Ayrıca tercihlerinde minimum alan seviyesini ayarlayabilirsiniz.</value>
+    <value>Coda in Pausa. Attenzione, il disco scelto per la codifica sta esaurendo lo spazio. Si prega di liberare spazio e premere avvia per continuare. È possibile modificare il livello di spazio minimo necessario nelle preferenze.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>Sıra Duraklatıldı</value>
+    <value>Coda in pausa</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>Sıra Duraklatıldı</value>
+    <value>Coda in pausa</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Hedef dizininizde disk alanı az. 
+    <value>La cartella di destinazione non dispone di spazio sufficiente.
 
-Bu uyarının tercihlerde görünme düzeyini yapılandırabilirsiniz. 
+Puoi modificare il livello in cui appare questo avviso nelle preferenze.
 
-Devam etmek istiyor musunuz? </value>
+Continuare?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Hata veya Tamamlanma durumu olmadığından iş durumu sıfırlanamıyor</value>
+    <value>Impossibile ripristinare lo stato del processo, poichè non è in errore o terminato</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>Sıra dosyası geri yüklenemiyor.</value>
+    <value>Impossibile ripristinare il file della coda.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>Dosya bozulmuş veya HandBrake'nin daha eski bir uyumsuz sürümünden olabilir</value>
+    <value>Il file potrebbe essere corrotto o provenire da una vecchia versione di HandBrake non più compatibile</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake zaten bir dosyayı kodluyor.</value>
+    <value>HandBrake sta già codificando un file.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>Lütfen şu anki kodlamayı durdur. Sorun devam ederse, lütfen HandBrake'yi yeniden başlatın.</value>
+    <value>Si prega di interrompere la codifica in corso. Se il problema persiste, riavviare HandBrake</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>Önizleme ({0}% gerçek boyut)</value>
+    <value>Anteprima ({0}% dimensione effettiva)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake'nin çalışması için Windows 7 veya daha sonraki bir 64bit sürümü gerekir.</value>
+    <value>HandBrake richiede una versione a 64bit di Windows 7 o successiva</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake'nin çalışması için Windows 7 veya üstü gerekir. 0.9.9 (XP) ve 0.10.5 (Vista) sürümleri bu sürümleri destekleyen son sürümdü.</value>
+    <value>HandBrake richiede Windows 7 o successivo. La versione 0.9.9 (XP) e la 0.10.5 (Vista) sono le ultime versioni a supportare questi sistemi.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Gerisini eklemeye çalışırken devam etmek ister misiniz?</value>
+    <value>Vuoi procedere provando ad aggiungere i rimanenti?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>'{0}' dosyası zaten var!
-Üzerine yazmak ister misiniz?</value>
+    <value>Il file '{0}' esiste già!
+Vuoi sovrascriverlo?</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>Sistem panosu şu anda kullanılamıyor.</value>
+    <value>Gli appunti di sistema non sono al momento disponibili.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>Bu, panoyu kendi kullanımı için izleyen veya kilitleyen başka bir uygulamadan kaynaklanıyor olabilir. Pano açılıncaya kadar kullanamazsınız.</value>
+    <value>Ciò potrebbe essere causato da un altro programma che monitora o blocca gli appunti di sistema. Non è possibile usare gli appunti di sistema finchè questi non vengono sbloccati.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>Lisans: </value>
+    <value>Licenza:</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>Versiyon: </value>
+    <value>Versione:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- Yeni Kategori Ekle --</value>
+    <value>-- Aggiungi nuova categoria --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>Ön Ayar Ekle</value>
+    <value>Aggiungi preimpostazione</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>Kategori:</value>
+    <value>Categoria:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>Açıklama:</value>
+    <value>Descrizione:</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>Ad:</value>
+    <value>Nome:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>Boyutlar:</value>
+    <value>Dimensioni:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Kaynak İzi Seçimi</value>
+    <value>Selezione Traccia Sorgente</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Şunun geçişine izin ver:</value>
+    <value>Permetti passthru di:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>Yeni bir başlık veya kaynak video seçtiğinizde Ses İzlerinin otomatik olarak nasıl seçileceğini ve yapılandırılacağını yapılandırın.</value>
+    <value>Configura il modo in cui le Tracce Audio sono selezionate e configurate automaticamente quando viene selezionato un nuovo titolo o sorgente video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'Otomatik Geçiş' Davranışı:</value>
+    <value>Comportamento 'Passthru Automatico':</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>Bit Hızı</value>
+    <value>Bitrate</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>Codec</value>
+    <value>Codificatore</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>Artırmak</value>
+    <value>Guadagno</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>Saklamak</value>
+    <value>Nascondi</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>Kanal Birleştirme</value>
+    <value>Mixdown</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Yedek kodlayıcı:</value>
+    <value>Codificatore di ripiego:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Tekrar yüklemek</value>
+    <value>Ricarica</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>Aynı oran</value>
+    <value>Frequenza di campionamento</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>Göstermek</value>
+    <value>Vedi</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>Parça Adı</value>
+    <value>Nome traccia</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Parça Seçme Davranışı:</value>
+    <value>Comportamento Selezione Tracce:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>Ek Parçalar İçin:</value>
+    <value>Per le Tracce Aggiuntive:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Ses codec bileşeni olarak 'Otomatik Geçiş' seçildiğinde.</value>
+    <value>Se 'Passthru Automatico' è selezionato come codificatore audio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>Bölüm İşaretleyicileri</value>
+    <value>Marcatori di capitolo</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>Bölüm Adı</value>
+    <value>Nome del capitolo</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Bölüm Numarası</value>
+    <value>Numero del capitolo</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>Bölüm işaretleyicileri oluşturun</value>
+    <value>Crea marcatori capitoli</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>Süre</value>
+    <value>Durata</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Dışa Aktar</value>
+    <value>Esporta</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>İçe Aktar</value>
+    <value>Importa</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>Adları Dışa Aktar</value>
+    <value>Esporta nomi</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>Adları İçe Aktar</value>
+    <value>Importa nomi</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>Bölüm Adlarını Sıfırla</value>
+    <value>Ripristina nomi dei capitoli</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>İşlemi İptal Et</value>
+    <value>Annulla azione</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>İlerlemek</value>
+    <value>Procedi</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>İşlem Yapıldığında</value>
+    <value>Azione Quando Finisce</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>Hata Detayları:</value>
+    <value>Dettagli errore:</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>Özel:</value>
+    <value>Personalizzato:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Serbest bırakmak:</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
-    <value>Ayrıştırma</value>
+    <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Binişiklik Giderme -Deinterlace-:</value>
+    <value>Deinterlacciamento:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>Ön Ayar:</value>
+    <value>Preimpostazione:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Binişiklik Giderme -Deinterlace- Ön Ayarı</value>
+    <value>Preimpostazione Deinterlacciamento</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>Parazit Azaltma:</value>
+    <value>Riduzione del rumore:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Parazit Azaltma Ön Ayarı</value>
+    <value>Preimpostazione Riduzione del Rumore:</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Parazit Azaltma Ayarı</value>
+    <value>Regolazione della riduzione del rumore</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>Telesine Etkisi Giderme:</value>
+    <value>Detelecine:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>Filtreler</value>
+    <value>Filtri</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Yatay</value>
+    <value>Orizzontale</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>Gri tonlama</value>
+    <value>Scala di grigi</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Geçmeli Algılama:</value>
+    <value>Rilevamento interlacciamento:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>Ön Ayar:</value>
+    <value>Preimpostazione:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Döndürme:</value>
+    <value>Rotazione:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Keskinleştirmek:</value>
+    <value>Nitidezza:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Keskinleştirme Ön Ayarı</value>
+    <value>Preimpostazione Nitidezza</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Keskinleştirme Ayarı</value>
+    <value>Regolazione Nitidezza</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Ayarlama:</value>
+    <value>Regolazione:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>Ekle</value>
+    <value>Aggiungi</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>İptal</value>
+    <value>Annulla</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>Temizle</value>
+    <value>Pulisci</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>Kapat</value>
+    <value>Chiudi</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>Panoya kopyala</value>
+    <value>Copia negli appunti</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>Sola Taşı</value>
+    <value>Sposta a sinistra</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>Sağa Taşı</value>
+    <value>Sposta a destra</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>Kaydet</value>
+    <value>Salva</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>Panoya kopyala</value>
+    <value>Copia negli appunti</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>Günlüğü Kodla</value>
+    <value>Registro di codifica</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>Günlük Dizinini Aç</value>
+    <value>Apri cartella Log</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>Tarama Günlüğü</value>
+    <value>Scansiona Log</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>Etkinlik Günlüğü</value>
+    <value>Registro delle attività</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>Tümünü Ekle</value>
+    <value>Aggiungi tutti</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>Geçerliyi Ekle</value>
+    <value>Aggiungi corrente</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>Seçimi Ekle</value>
+    <value>Aggiungi selezione</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>Sıraya ekle</value>
+    <value>Aggiungi alla coda</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>Gelişmiş</value>
+    <value>Avanzate</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Hizala A/V Başlat</value>
+    <value>Allinea Avvio A/V</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Açı:</value>
+    <value>Angolo:</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>Ses</value>
+    <value>Audio</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>Ses Parçaları</value>
+    <value>Tracce audio</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>Araştır</value>
+    <value>Sfoglia</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>Bölümler</value>
+    <value>Capitoli</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>Konteyner</value>
+    <value>Contenitore</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Hedef</value>
+    <value>Destinazione</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Süre:</value>
+    <value>Durata:</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>Farklı kaydet:</value>
+    <value>Salva come:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>Filtreler</value>
+    <value>Filtri</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>Biçim:</value>
+    <value>Formato:</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>Yardım</value>
+    <value>Aiuto</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G Desteği</value>
+    <value>Supporto iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Meta veri</value>
+    <value>Metadati</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(Değiştirilmiş)</value>
+    <value>(Modificato)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Muxing: Bu biraz zaman alabilir...</value>
+    <value>Multiplando: Potrebbe volerci un po' di tempo...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>Seçenekler</value>
+    <value>Opzioni</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>Çıktı Ayarları</value>
+    <value>Impostazioni output</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Duraklat</value>
+    <value>Pausa</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>Boyutlar</value>
+    <value>Dimensioni</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Yeniden Adlandırma Ön Ayarı</value>
+    <value>Rinomina preimpostazione</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Ön Ayar Seçenekleri Bağlam Menüsü</value>
+    <value>Menù Contestuale Opzioni delle Preimpostazioni</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Silme Ön Ayarı</value>
+    <value>Elimina preimpostazione</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Ön Ayarlar</value>
+    <value>Preimpostazioni</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>Önizleme</value>
+    <value>Anteprima</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Kodlama: {0}, {1:00.00}%, Kalan Süre: {2}, {3}</value>
+    <value>Conversione in corso: {0}, {1:00.00}%, Tempo rimanente: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Aralık</value>
+    <value>Intervallo:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>Tekrar yükle</value>
+    <value>Ricarica</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>Kaldır</value>
+    <value>Rimuovi</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Yerleşik Ön Ayarları Sıfırla</value>
+    <value>Ripristina Preimpostazioni Predefinite</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Yeni Kaydetme Ön Ayarı</value>
+    <value>Salva Nuova Preimpostazione</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>Başlangıç ​​zamanı aranıyor</value>
+    <value>Cercando il tempo di inizio</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>Varsayılana Ayarla</value>
+    <value>Imposta predefinito</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>Önizleme</value>
+    <value>Anteprima</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>Sıra</value>
+    <value>Coda</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>Kaynak:</value>
+    <value>Sorgente:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>Kaynak Aç</value>
+    <value>Apri sorgente</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>Kodlamaya Başla</value>
+    <value>Avvia conversione</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>Sırayı Başlat</value>
+    <value>Avvia coda</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>Durdur</value>
+    <value>Ferma</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>Kodlamayı Durdur</value>
+    <value>Ferma conversione</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Bu kodlamayı durdurmak istediğinize emin misiniz?</value>
+    <value>Sei sicuro di voler fermare la conversione?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>Lütfen bir altyazı dosyasını içe aktarmayı denemeden önce kodlanacak bir kaynak seçin.</value>
+    <value>Scegli una sorgente da convertire prima di provare a importare un file di sottotitoli.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>Altyazı</value>
+    <value>Sottotitoli</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>Altyazı Parçaları</value>
+    <value>Tracce sottotitoli</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>Özet</value>
+    <value>Sommario</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
-    <value> - </value>
+    <value>-</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Başlık:</value>
+    <value>Titolo:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Seçilen Ön Ayarı Güncelle</value>
+    <value>Aggiorna Preimpostazione Selezionata</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>Video</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>Web Optimize Edilmiş</value>
+    <value>Ottimizzato per il web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Ön Ayarları Yönet</value>
+    <value>Gestisci Preimpostazioni</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Meta veri</value>
+    <value>Metadati</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Nvidia NVENC Kodlayıcıların kullanımına izin ver</value>
+    <value>Permetti l'uso del codificatore Nvidia NVENC</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Intel QuickSync Kodlayıcıların kullanımına izin ver</value>
+    <value>Permetti l'uso del codificatore Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE Kodlayıcıların kullanımına izin ver</value>
+    <value>Permetti l'uso del codificatore AMD VCE</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>Girilen dosya formatı geçersiz karakterler içeriyordu. Bunlar kaldırıldı. </value>
+    <value>Il formato del file inserito contieneva caratteri non validi che sono stati rimossi.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>Her kodlama tamamlandığında bir ses çal</value>
+    <value>Riproduci un suono al termine di ogni codifica</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>Sıra tamamlandığında bir ses çal</value>
+    <value>Riproduci un suono al termine della coda</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Özet sekmesinde önizlemeleri göster.</value>
+    <value>Mostra le preview nella scheda di riepilogo.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>Kodlama durumunu uygulama başlık çubuğunda göster.</value>
+    <value>Mostra lo stato della codifica nella barra del titolo.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>7 günden daha eski olan Günlük dosyalarını temizle</value>
+    <value>Pulisci i registri più vecchi di 7 giorni</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>HandBrake Hakkında</value>
+    <value>Informazioni su HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>Gelişmiş</value>
+    <value>Avanzate</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>Gelişmiş Seçenekler</value>
+    <value>Opzioni avanzate</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>Argümanlar:</value>
+    <value>Argomenti:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>Otomatik Dosya Adlandırma</value>
+    <value>Creazione automatica del nome</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>Çıktı dosyalarını otomatik olarak adlandırın</value>
+    <value>Crea automaticamente il nome dei file di uscita</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Güncellemeleri Kontrol Et</value>
+    <value>Controlla Aggiornamenti</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Kodlama tamamlandıktan sonra tamamlanan sıra öğelerini her zaman temizleyin</value>
+    <value>Rimuovi sempre gli elementi completati dalla coda dopo la fine di una codifica.</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>Günlük Geçmişini Temizle</value>
+    <value>Pulisci registro</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Tek tek kodlama günlüklerinin bir kopyasını belirtilen bir konuma yerleştirin:</value>
+    <value>Metti una copia del registro di ogni codifica in una posizione specifica:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Tek tek kodlama günlüklerinin bir kopyasını kodlanan video ile aynı konuma yerleştirin</value>
+    <value>Metti una copia del registro di ogni codifica nella stessa posizione del video codificato</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>Geçerli Sürüm</value>
+    <value>Versione attuale</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>Şifre Çözme</value>
+    <value>Decodifica</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>Varsayılan Yol:</value>
+    <value>Percorso predefinito:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>Güncellemeyi İndir</value>
+    <value>Scarica aggiornamento</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD Okuma</value>
+    <value>Lettura DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav'ı Devre Dışı Bırakın. (bunun yerine libdvdread kullanılacaktır) </value>
+    <value>Disabilita LibDVDNav. (Al suo posto verrà usato libdvdread)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>Kodlamış</value>
+    <value>Codifica</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>Dosya Formatı:</value>
+    <value>Formato file:</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>Genel</value>
+    <value>Generale</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Günlük</value>
+    <value>Scrittura del Registro</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Günlük Ayrıntı Düzeyi:</value>
+    <value>Livello verbosità del registro:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Günlük Yolu:</value>
+    <value>Percorso registro:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Disk alanı azsa sırayı duraklatın</value>
+    <value>Metti in pausa la coda se non c'è spazio su disco</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>Sistem tepsisine simge durumuna küçültme (Yeniden başlatma gerektirir)</value>
+    <value>Minimizza nella barra delle applicazioni (Richiede Riavvio)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Saniye cinsinden en düşük DVD ve Blu-ray başlık süresi. Daha kısa olan başlıklar atlanacaktır:</value>
+    <value>Durata minima in secondi dei titoli DVD e Blu-ray. Titoli più brevi verranno ignorati</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 Dosya Uzantısı:</value>
+    <value>Estensione MP4:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>Başlangıçta</value>
+    <value>All'avvio</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>Çıktı Dosyaları</value>
+    <value>File di uscita</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>Yol:</value>
+    <value>Percorso:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Media Player Yolu</value>
+    <value>Percorso del Riproduttore Video</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>Kodlama yaparken sistemin uyumasını önleyin</value>
+    <value>Impedisci la sospensione del sistema durante la codifica</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Taranacak resim önizleme sayısı:</value>
+    <value>Numero di immagini di anteprima da scansionare: </value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Öncelik Seviyesi:</value>
+    <value>Livello priorità:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Varsa video kodunu çözmek için Intel QuickSync'i kullanın.</value>
+    <value>Preferisci l'uso di Intel QuickSync per la decodifica video, se disponibile.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Ayrıca, QuickSync kodlayıcı kullanmıyorken QSV Kod Çözme özelliğini kullanın. (yani, x265)</value>
+    <value>Usa la Decodifica QSV se non è in uso il Codificatore QuickSync (es. x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Genel noktalama işaretlerini kaldırın</value>
+    <value>Rimuovi la punteggiatura comune </value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>Alt çizgileri bir boşluk ile değiştirin</value>
+    <value>Sostituisci i trattini bassi con uno spazio</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>Uygulama yeniden başlatıldığında 'Hiçbir şey yapma' olarak sıfırlayın.</value>
+    <value>Reimposta su "Non fare nulla" quando l'applicazione viene riavviata.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>Ölçekleyici Seç:</value>
+    <value>Scegli Adattatore:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>Ölçekleme</value>
+    <value>Ridimensionamento:</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>Dosyayı gönder:</value>
+    <value>Invia file a:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>Davayı Başlık Davası olarak değiştir</value>
+    <value>Cambia minuscole/maiuscole in Tutte Iniziali Maiuscole </value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>Güncellemeler</value>
+    <value>Aggiornamenti</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>Kullanıcı Arayüzü</value>
+    <value>Interfaccia utente</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>Sürüm:</value>
+    <value>Versione:</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
     <value>Video</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Bu yol, yalnızca video önizleme özelliği için kullanılır.
-VLC ve MPC-HC desteklenmektedir. Diğer oyuncular da çalışabilir ancak onaylanmamıştır.</value>
+    <value>Questo percorso viene utilizzato solamente per la funzione di anteprima video.
+Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzionare, ma non è garantito.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>Günlük Dizinini Görüntüle</value>
+    <value>Apri Cartella del Registro</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>Bittiğinde</value>
+    <value>Alla fine</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 Ayarları</value>
+    <value>Impostazioni x264/5</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>Sabit kalitede kesirli parçalanma:</value>
+    <value>Granularità frazionaria di qualità costante:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorfik:</value>
+    <value>Anamorfico:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>Otomatik</value>
+    <value>Automatico</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>Alt</value>
+    <value>Sotto</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Kırpma:</value>
+    <value>Ritaglio:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>Özel</value>
+    <value>Personalizzata</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Ekran Boyutu:</value>
+    <value>Dim. di visualizzazione: </value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>Yükseklik:</value>
+    <value>Altezza:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Otomatik</value>
+    <value>Automatico</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>Sol</value>
+    <value>Sinistra</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Son Boyutlar:</value>
+    <value>Dimensioni al termine:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Piksel Görüntüsü:</value>
+    <value>Rapporto Pixel:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>Sağ</value>
+    <value>Destra</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>Boyut</value>
+    <value>Dimensione</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>Üst</value>
+    <value>Sopra</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Ölçeklenmiş Boyut:</value>
+    <value>Ridimensionato: </value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>Özel</value>
+    <value>Personalizzata</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>Dosyaya aktar</value>
+    <value>Esporta in un file</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>Dosyadan içe aktar</value>
+    <value>Importa da un file</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>Resmî</value>
+    <value>Ufficiale</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>Başlıkları seç:</value>
+    <value>Scegli titoli:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>Sıraya Ekle</value>
+    <value>Aggiungi alla coda</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>Seçilen başlıklar  "{0}"  ön ayarı kullanılarak eklenecektir.</value>
+    <value>I titoli selezionati verranno aggiunti usando la preimpostazione "{0}"</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Video Seçenekleri:</value>
+    <value>Opzioni Video:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>Ses:</value>
+    <value>Audio:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>Tümünü Temizle</value>
+    <value>Pulisci tutto</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>Tamamlananları Temizle</value>
+    <value>Pulisci completati</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>Sırayı Temizle</value>
+    <value>Pulisci coda</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>Seçileni Temizle</value>
+    <value>Pulisci selezionati</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>Sil</value>
+    <value>Elimina</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Hedef:</value>
+    <value>Destinazione:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>Hiçbir şey yapma</value>
+    <value>Non fare niente</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Kodlama Zamanı:</value>
+    <value>Tempo conversione:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>Düzenle</value>
+    <value>Modifica</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>Bitiş Zamanı:</value>
+    <value>Tempo finale:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Sırayı Dışa Aktar</value>
+    <value>Esporta coda</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Dosya boyutu: </value>
+    <value>Dimensione file:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>Uyku</value>
+    <value>Iberna</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>Kilit Sistemi</value>
+    <value>Blocca sistema</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>Kodlama tamamlandıktan sonra günlük kullanılabilir olacaktır.</value>
+    <value>Il registro sarà disponibile al termine della conversione.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>Oturumu Kapat</value>
+    <value>Disconnetti</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>Hedef Dizini Aç</value>
+    <value>Apri cartella di destinazione</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>Kaynak Dizini Aç</value>
+    <value>Apri cartella della sorgente</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>Seçenekler</value>
+    <value>Opzioni</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Duraklat</value>
+    <value>Pausa</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Duraklatılan Süre:</value>
+    <value>Durata in pausa:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Resim Ayarları:</value>
+    <value>Impostazioni immagine:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake'den Çık</value>
+    <value>Chiudi HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>Tüm İşleri Yeniden Dene</value>
+    <value>Riprova tutte le conversioni</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Yeniden Deneme Başarısız</value>
+    <value>Riprova le conversioni fallite</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Seçilen İşleri Sıfırla</value>
+    <value>Ripristina operazioni selezionate</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Sıfırla</value>
+    <value>Ripristina</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>Kapat</value>
+    <value>Spegni</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>Kaynak:</value>
+    <value>Sorgente:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>Sırayı Başlat</value>
+    <value>Avvia coda</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>Başlangıç Zamanı:</value>
+    <value>Avvia tempo:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>İstatistik</value>
+    <value>Statistiche</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Kodlama tamamlandıktan sonra istatistikler hazır olur.</value>
+    <value>Le statistiche saranno disponibili al termine della conversione.</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>Altyazı:</value>
+    <value>Sottotitoli</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>Özet</value>
+    <value>Sommario</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>Uyku</value>
+    <value>Sospendi</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
     <value>Video:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>Bittiğinde:</value>
+    <value>Quando finisce:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>Kalan Tüm Seçilen Dilleri Ekleyin</value>
+    <value>Aggiungi Tutte le Lingue Selezionate Restanti</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>Kalan Tüm Parçaları Ekle</value>
+    <value>Aggiungi Tutte le Tracce Restanti</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>Yeni Parça Ekle</value>
+    <value>Aggiungi nuova traccia</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Parçalar</value>
+    <value>Tracce</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>Mevcut Diller:</value>
+    <value>Lingue disponibili:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>Dilleri Seç:</value>
+    <value>Scegli lingue:</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>Seçilen Diller:</value>
+    <value>Lingue selezionate:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>Varsayılan Davranışları Yapılandır</value>
+    <value>Configura funzioni predefinite</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Tekrar yükle</value>
+    <value>Ricarica</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Taranacak Diski Seçin</value>
+    <value>Scegli disco da leggere</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Taranacak Dosyayı Seçin</value>
+    <value>Scegli file da leggere</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Taranacak Klasörü Seçin</value>
+    <value>Scegli cartella da leggere</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>İsteğe bağlı olarak belirli bir başlık seçin:</value>
+    <value>Scegli un titolo specifico (Opzionale):</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Ardından kodlamak istediğiniz video ya da videoları seçin:</value>
+    <value>Quindi scegli i video che desideri convertire:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>Dosya</value>
+    <value>File</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>Klasör (Toplu Tarama)</value>
+    <value>Cartella (Scansione gruppo di file)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>Bu DVD'yi veya Bluray Drive'ı açın</value>
+    <value>Apri questo DVD o BlueRay</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Bir veya daha fazla dosya içeren bir klasör açın.</value>
+    <value>Apri una cartella con uno o più file.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Sıra Dosyalarını Kurtar</value>
+    <value>Ripristina coda da file</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>Bir önceki sıra arşivi kullanılabilir. </value>
+    <value>È disponibile il salvataggio di una coda precedente.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Tek bir video dosyasını açın</value>
+    <value>Apri un singolo file video.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>Kaynak Seçimi</value>
+    <value>Seleziona sorgente</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>Süre:</value>
+    <value>Durata:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Canlı Önizleme</value>
+    <value>Anteprima Live</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>Bir önizleme resmi seçin</value>
+    <value>Seleziona un'immagine di anteprima</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Sistem varsayılan video oynatıcıyı tercih et</value>
+    <value>Preferisci il lettore video predefinito del sistema</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>Mümkün olduğunda Kapalı Başlıklar ekleyin</value>
+    <value>Aggiungi Sottotitoli se disponibili</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>'Yabancı Ses Taraması' ekle</value>
+    <value>Aggiungi 'Scansione Audio in Lingua Straniera'</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>Yanma Davranışı:</value>
+    <value>Comportamento della Sovraimpressione:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>Altyazı İçe Aktar</value>
+    <value>Importa sottotitolo</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Parça Seçme Davranışı:</value>
+    <value>Comportamento Selezione Tracce:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Kalan Tüm Kapalı Başlıkları Ekle</value>
+    <value>Aggiungi tutti i Sottotitoli Restanti</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>Yeni bir başlık veya kaynak video seçtiğinizde Altyazı İzlerinin otomatik olarak nasıl seçileceğini ve yapılandırılacağını yapılandırın.</value>
+    <value>Configura il modo in cui le tracce dei Sottotitoli vengono automaticamente selezionate e configurate quando selezioni un nuovo titolo o sorgente video.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>Ek Ses Parçaları</value>
+    <value>Tracce Audio Aggiuntive</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>Ek Altyazı Parçaları</value>
+    <value>Tracce dei Sottotitoli Aggiuntive</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Yakılan</value>
+    <value>Sovraimpresso</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>Bölüm İşaretleyicileri</value>
+    <value>Marcatori di capitolo</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>Karelenme azaltıcı</value>
+    <value>Deblock</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>Telesine etkisi giderme</value>
+    <value>Detelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>Görüntüle</value>
+    <value>schermo</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>Gri tonlama</value>
+    <value>Scala di grigi</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>Ses Parçası Yok</value>
+    <value>Nessuna Traccia audio</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>Bölüm İşaretçisi Yok</value>
+    <value>Nessun Marcatore di Capitolo</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>Filtre Yok</value>
+    <value>Nessun filtro</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>Kaynak Yok</value>
+    <value>Nessuna Sorgente</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>Altyazı Parçaları Yok</value>
+    <value>Nessuna Traccia Sottotitolo</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>Parça Yok</value>
+    <value>Nessuna Traccia</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>Önizleme {0} / {1}</value>
+    <value>Anteprima {0} di {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>Dönme</value>
+    <value>Rotazione</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>depolama</value>
+    <value>spazio</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2 Geçişli Kodlama</value>
+    <value>Codifica a 2 passaggi</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>Avg bit hızı (kbps):</value>
+    <value>Bitrate Medio (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Video Kodlayıcı:</value>
+    <value>Codificatore Video:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>Sabit Kare hızı</value>
+    <value>Frequenza Fotogrammi Costante</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>Sabit Kalite:</value>
+    <value>Qualità Costante:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Kodlayıcı Seviyesi:</value>
+    <value>Livello Codificatore:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Kodlayıcı Ön Ayarı:</value>
+    <value>Preimpostazione codificatore:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Kodlayıcı Profili:</value>
+    <value>Profilo Encoder:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Kodlayıcı Ayarı:</value>
+    <value>Regolazione Codificatore:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Gelişmiş Seçenekler:</value>
+    <value>Opzioni avanzate:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>Hızlı Kod Çözme</value>
+    <value>Codifica Veloce</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Kare Hızı (FPS):</value>
+    <value>Frequenza Fotogrammi (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Kodlayıcı Seçenekleri:</value>
+    <value>Opzioni Codificatore:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Tepe Kare Hızı</value>
+    <value>Framerate di Picco:</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Kalite:</value>
+    <value>Qualità:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo ilk geçiş</value>
+    <value>Primo passaggio turbo </value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Değişken Kare Hızı</value>
+    <value>Frequenza Fotogrammi Variabile</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
     <value>Video:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>Dil:</value>
+    <value>Lingua:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Sistem Dilini Kullan</value>
+    <value>Usa Lingua di sistema</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>HandBrake Hakkında</value>
+    <value>Riguardo HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Veya buraya bir dosya veya klasör bırakın ...</value>
+    <value>Oppure trascina un file o una cartella qui ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>Yardım</value>
+    <value>Aiuto</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Tercihler</value>
+    <value>Preferenze</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>Parça Ekle</value>
+    <value>Aggiungi traccia</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Seçilen her parça için ses kodlayıcı ayarları:</value>
+    <value>Impostazioni del codificatore audio per ogni traccia data:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>Temizle</value>
+    <value>Pulisci</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Yanmak</value>
+    <value>Masterizza</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>Varsayılan</value>
+    <value>Predefinito</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>Sadece Zorla</value>
+    <value>Solo forzato</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Hakkında...</value>
+    <value>_Riguardo...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_Etkinlik Günlüğü</value>
+    <value>_Log delle Attività</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Güncellemeleri Kontrol Et</value>
+    <value>_Controlla Aggiornamenti</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_Çıkış</value>
+    <value>_Esci</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_Dosyaya aktar</value>
+    <value>_Esporta in un file</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_Dosya</value>
+    <value>_File</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake Belgeleme (HTTPS)</value>
+    <value>_Documentazione HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_Yardım</value>
+    <value>_Aiuto</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_Dosyadan içe aktar</value>
+    <value>_Importa da un file</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_Tercihler</value>
+    <value>_Preferenze</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_Ön Ayarlar</value>
+    <value>_Preimpostazioni</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_Sıra</value>
+    <value>_Coda</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_Yerleşik Ön Ayarları Sıfırla</value>
+    <value>_Ripristina Preimpostazioni Predefinite</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_Geçerliyi Varsayılan Olarak Ayarla</value>
+    <value>_Imposta Attuale come Predefinito</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>Ön Ayar Panelini Göster</value>
+    <value>M_ostra Pannello Predefiniti</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_Sıra Göster</value>
+    <value>_Vedi Coda</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_Araçlar</value>
+    <value>_Strumenti</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Güncellemeleri Kontrol Et ...</value>
+    <value>Sto cercando aggiornamenti...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>Günlük dosyası dizinini temizlemek istediğinizden emin misiniz?</value>
+    <value>Sei sicuro di voler cancellare la directory dei file di registro?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>Günlükleri Temizle</value>
+    <value>Pulisci Log</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>İndiriliyor...</value>
+    <value>Scaricamento...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake Günlük dosyası dizini temizlendi!</value>
+    <value>La directory del file di registro di HandBrake è stata cancellata!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>Bildirim</value>
+    <value>Avviso</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Güncelleme için hazırlanıyor ...</value>
+    <value>Preparando per l'aggiornamento</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>Lütfen bir klasör seçin.</value>
+    <value>Si prega di selezionare una cartella.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>Varsayılan konumu ayarlamak için 'Gözat'a tıklayın</value>
+    <value>Fare clic su 'Sfoglia' per impostare la posizione predefinita</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>Saklamak</value>
+    <value>Nascondi</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>Göstermek</value>
+    <value>Mostra</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>Sıraya 'Tümünü Ekle'</value>
+    <value>'Aggiungi tutti' alla coda</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>Sıraya 'Seçileni Ekle'</value>
+    <value>'Aggiungi selezione' alla coda</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>Dosyayı Oynat</value>
+    <value>Avvia File</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>Uygulama Araç Çubuğu</value>
+    <value>Barra degli strumenti dell'applicazione</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Araç çubuğunda 'Tümünü Sıraya Ekle' seçeneğini göster</value>
+    <value>Mostra 'Aggiungi tutto alla coda' sulla barra degli strumenti</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>Araç çubuğunda 'Sıraya Seçileni Ekle' seçeneğini göster</value>
+    <value>Mostra 'Aggiungi selezione alla coda' sulla barra degli strumenti</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Donanım kodlama desteği şu anda devre dışı bırakıldı. HandBrake'i "--no-hardware" seçeneğiyle başlatmadıysanız, lütfen bu sistemdeki tüm grafik bağdaştırıcıları için güncel sürücüleri çalıştırdığınızdan emin olun.
+    <value>Il supporto alla codifica hardware è attualmente disabilitato. Se non hai avviato HandBrake con il parametro "-no-hardware", accertati di aver installato gli ultimi driver disponibili per le schede grafiche del tuo sistema.
 
-Bu, herhangi bir yazılım kodlayıcısını etkilemez.</value>
+Ciò non avrà alcun impatto sui codificatori software.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>Lütfen devam etmeden önce altyazı ayarlarınızı düzeltin.</value>
+    <value>Correggi le impostazioni dei sottotitoli prima di continuare.</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>Uygula</value>
+    <value>Applica</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>Kodlamayı Sürdür</value>
+    <value>Riprendi codifica</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>Eylemler</value>
+    <value>Azioni</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>Sırayı İçe Aktar</value>
+    <value>Importa coda</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},
-Kalan Süre: {5},  Geçen: {6} {7}</value>
+    <value>Conversione: Passaggio {0} di {1}, {2:00.00}%, FPS: {3:000.0}, FPS medio: {4:000.0}
+Tempo rimanente: {5}, Trascorso: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>Seçileni Sil</value>
+    <value>Elimina selezionati</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Taşınabilir Mod: TMP dizini oluşturulamıyor. Lütfen yolun doğru olduğunu ve yazılabilir olduğunu kontrol edin.
+    <value>Modalità Portatile: Impossibile creare la cartella TMP. Controllare che il percorso sia corretto e si abbiano i permessi di scrittura.
 
-    {0}</value>
+{0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Taşınabilir Mod: Depolama dizini oluşturulamıyor. Lütfen yolun doğru olduğunu ve yazılabilir olduğunu kontrol edin.
+    <value>Modalità Portatile: Impossibile creare la cartella di Archiviazione. Controllare che il percorso sia corretto e si abbiano i permessi di scrittura.
 
-    {0}</value>
+{0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>Taşınabilir Mod: portable.ini okunamıyor. Bu dosyada bir hata olabilir. Lütfen portable.ini.template'i kılavuz olarak kullanmayı deneyin.</value>
+    <value>Modalità Portatile: Impossibile leggere il file portable.ini. Potrebbe esserci un errore in questo file. Riprova usando portable.ini.template come riferimento.</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake'nin motoru başlatılamadı. Bu genellikle güncel olmayan GPU sürücülerinden kaynaklanır.\n  Lütfen sisteminizde bulunan tüm yerleşik ve ayrı grafikler için GPU sürücülerini güncelleyin.</value>
+    <value>Inizializzazione motore di HandBrake fallita. Ciò è spesso causato da driver GPU obsoleti.\n Si prega di aggiornare i driver di ogni GPU integrata o dedicata del sistema</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Canlı Güncelleme Seçenekleri: {source} {title} {chapters} 
-Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
+    <value>Opzioni live: {source} {title} {chapter}
+Opzioni non live: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Queste cambiano solo se si scansiona una nuova sorgente, si cambiano titolo o capitoli)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Mevcut Seçenekler: {source_path} {source_folder_name} {source}</value>
+    <value>Opzioni disponibili: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Dosyanın üzerine yazılmasını isteyin</value>
+    <value>Chiedi prima di sovrascrivere il file</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Dosyayı otomatik olarak yeniden adlandırmayı deneyin</value>
+    <value>Prova a rinominare automaticamente il file</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Dosyanın üzerine yaz</value>
+    <value>Sovrascrivi il file</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>Kullanıcı Arabirimi Davranışı</value>
+    <value>Comportamento interfaccia utente</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>Dosya üzerine yazma davranışı:</value>
+    <value>Comportamento sovrascrittura file:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>Kodlama Tamamlandı</value>
+    <value>Codifica completata</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Bildirimler</value>
+    <value>Notifiche</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>Sıra Tamamlandı</value>
+    <value>Coda completata</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>Bittiğinde:</value>
+    <value>Quando finisce:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Dosya adı çarpışma davranışı:</value>
+    <value>Comportamento per file omonimi:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>Sonek</value>
+    <value>Suffisso</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>Önek</value>
+    <value>Prefisso</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Numara Ekle</value>
+    <value>Aggiungi numero</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>FiltersView_DeblockPreset</value>
+    <value>VistaFiltri_PreimpostazioneDeblock</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Karelenme Azaltıcı İnce Ayarı</value>
+    <value>Regolazione Deblock</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>'Video' sekmesinde kodlayıcı seçimi yapılacaktır.</value>
+    <value>La scelta del codificatore sarà disponibile nella sezione 'Video'</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake, tamamlanmamış birden fazla sıra dosyası algıladı. Bunlar birden fazla HandBrake çalışması örneğinden olacaktır. Tüm bitmemiş işleri kurtarmak ister misiniz?</value>
+    <value>HandBrake ha rilevato multipli file di code non terminate. Questi dovrebbero essere stati formati da multiple istanze di HandBrake avviate. Vuoi riprendere i processi non terminati?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake, son başlatılmasından bu yana sıradaki bitmemiş öğeleri algıladı. Bunları kurtarmak ister misiniz?</value>
+    <value>HandBrake ha rilevato elementi non finiti in coda dall'ultima volta che il programma è stato avviato. Vuoi ripristinarli?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>Sıra Kurtarma Mümkün</value>
+    <value>Ripristino Coda Disponibile</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Ön ayar dosyanız, yerleşik ön ayarları içeriyordu. İçe aktarma işlevi bunların içe aktarılmasını desteklemez. Standart ön ayarları geri yüklemek için lütfen 'Ön Ayarlar Menüsü -&gt; Yerleşik Ön Ayarları Sıfırla'yı kullanın.
+    <value>Il file delle preimpostazioni contiene delle preimpostazioni predefinite, che non possono essere processate dalla funzione di importazione. Usare 'Menu Preset -&gt; Ripristina Preimpostazioni Predefinite' per reimpostare le preimpostazioni predefinite.
 
-Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak.</value>
+Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Hemen harekete geçin. (Bu 60 saniyelik onay iletişim kutusunu devre dışı bırakır)</value>
+    <value>Esegui azione immediatamente. (Ciò disabiliterà la finestra di dialogo da 60 secondi)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Araştır</value>
+    <value>Sfoglia</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>Ses dosyası ayarlanmadı. Bir wav veya mp3 dosyasını oynatmayı seçmek için lütfen 'Gözat'ı tıklayın.</value>
+    <value>Nessun file audio impostato. Premi 'Sfoglia' per selezionare un file wav o mp3 per la riproduzione.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>Oynat</value>
+    <value>Riproduci</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>Sırayı Dışa Aktar (Yalnızca CLI)</value>
+    <value>Esporta coda (solo CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Karanlık Temayı Kullan. (Yeniden başlatma gerektirir, yalnızca Windows 10)</value>
+    <value>Usa Tema Scuro. (Richiede il riavvio, solo Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>Mevcut Değil</value>
+    <value>Non disponibile</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>AC Şebeke gücü tespit edildi. Kodlamaya devam ediliyor... ({0} %)</value>
+    <value>Alimentazione connessa. Ripresa della codifica.. ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>Sistem Pili Kritik! ({0} %)</value>
+    <value>Livello Batteria di Sistema Critico! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Sistem Pili Düşük! ({0} %). Kodlamanız duraklatıldı.</value>
+    <value>Livello Batteria Basso! ({0} %). La codifica è stata messa in pausa.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Kalan sürücü depolaması, hedef sürücüde {0} GB altına düştü. Kodlama duraklatılıyor...</value>
+    <value>Lo spazio rimanente sul disco di destinazione è sceso sotto a {0} GB. Codifica in pausa...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Otomatik Ses Seçimlerini Yapılandırma</value>
+    <value>Configura Selezione Audio Automatica</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Otomatik Altyazı Seçimlerini Yapılandırma</value>
+    <value>Configura Selezione dei Sottotitoli Automatica</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>Sistem</value>
+    <value>Sistema</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Aktörler:</value>
+    <value>Attori:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Yorumlar:</value>
+    <value>Commenti:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>Açıklama:</value>
+    <value>Descrizione:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>Yönetici:</value>
+    <value>Regista:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>Tür:</value>
+    <value>Genere:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>Plan</value>
+    <value>Trama:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>Yayın Tarihi:</value>
+    <value>Data di uscita:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>Başlık:</value>
+    <value>Titolo:</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>Günlük Görüntüleyici</value>
+    <value>Visualizzatore Registro</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>Görünüş:</value>
+    <value>Aspetto:</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>Filtreler:</value>
+    <value>Filtri:</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>Boyut:</value>
+    <value>Dimensione:</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>Parçalar:</value>
+    <value>Tracce:</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>Genel</value>
+    <value>Generale</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>Yeni sürümleri kontrol etmek için 'Güncellemeleri Kontrol Et'i tıklayın</value>
+    <value>Premi 'Controlla Aggiornamenti' per verificare la presenza di una nuova versione</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; Geri</value>
+    <value>&lt; Indietro</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>Şu Anda Duraklatıldı</value>
+    <value>Attualmente in Pausa</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>Çıktı Dosyaları</value>
+    <value>File di uscita</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>Bölümler</value>
+    <value>Capitoli</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>Çerçeveler</value>
+    <value>Fotogrammi</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>Önizleme</value>
+    <value>Anteprima</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>Saniye</value>
+    <value>Secondi</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tüm Seçilen Dillerin Eşleşmesi</value>
+    <value>Tutte le Lingue Corrispondenti Selezionate</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>Seçilen Dilin İlk Eşleşmesi</value>
+    <value>La Prima Lingua Corrispondente Selezionata</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>Yok</value>
+    <value>Nessuna</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>İlk Parça</value>
+    <value>Prima traccia</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>Yabancı Ses Tercih Edildi, Başka İlk</value>
+    <value>Preferisci Audio in Lingua Straniera, altrimenti la Prima</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>Yabancı Ses Parçası</value>
+    <value>Traccia Audio in Lingua Straniera</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>Yok</value>
+    <value>Nessuna</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>Yabancı Ses Ara</value>
+    <value>Ricerca Audio in Lingua Straniera</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Yabancı Ses Taraması</value>
+    <value>Scansione Audio in Lingua Straniera</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Tüm Seçilen Dillerin Eşleşmesi</value>
+    <value>Tutte le Lingue Corrispondenti Selezionate</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>Tüm Parçaları şablon olarak kullan</value>
+    <value>Usa Tutte le Tracce come modelli</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>Seçilen Dilin İlk Eşleşmesi</value>
+    <value>La Prima Lingua Corrispondente Selezionata</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>İlk Parçayı şablon olarak kullan</value>
+    <value>Usa la Prima Traccia come modello</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>Ses Yok</value>
+    <value>Senza audio</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>Bölüm {0}</value>
+    <value>Capitolo {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>Otomatik</value>
+    <value>Automatico</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>Her zaman M4V kullan</value>
+    <value>Utilizza sempre M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>Her zaman MP4 kullan</value>
+    <value>Utilizza sempre MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>Özel</value>
+    <value>Personalizzata</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>Yok</value>
+    <value>Nessuna</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>Her zaman Kaynak Çözünürlüğünü kullan</value>
+    <value>Usa Sempre la Risoluzione della Sorgente</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Normalin Üstünde</value>
+    <value>Più del Normale</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Normalin Altında</value>
+    <value>Meno del Normale</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>Yüksek</value>
+    <value>Alta</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>Düşük</value>
+    <value>Bassa</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>Normal</value>
+    <value>Normale</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>Aylık</value>
+    <value>Mensile</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>Haftalık</value>
+    <value>Settimanale</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>Üretilen her yeni ad için her zaman varsayılan yolu kullanın.</value>
+    <value>Usa sempre il percorso predefinito per ogni nuovo nome generato.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>Bağlantı noktası aralığı 5000 ile 32767 arasında olmalıdır</value>
+    <value>L'intervallo di porte deve essere tra 5000 e 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Değiştirme Yer tutucuları: {source} {destination}</value>
+    <value>Sostituzione segnaposto: {source} {destination}</value>
     <comment>Note: {source} and {destination} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>HandBrake'in yeni bir sürümü var!</value>
+    <value>È disponibile una nuova versione di HandBrake!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Telif Hakkı (C) 2003-2021 HandBrake Ekibi</value>
+    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Düşük pil seviyesi:</value>
+    <value>Livello batteria basso:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pil azaldığında çalışan işleri duraklatın.</value>
+    <value>Metti in pausa tutte le operazioni correnti se il livello della batteria è troppo basso.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>Kalan Tüm Kapalı Başlıkları Ekle</value>
+    <value>Aggiungi tutti i Sottotitoli Restanti</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>İçe aktarmaya çalıştığınız sıra dosyasında yinelenen işler algılandı. Mevcut kayıtların üzerine yazmak ister misiniz? 
-Bu, mevcut çalışan işleri de durduracaktır.</value>
+    <value>Sono stati rilevati dei processi duplicati nel file di coda da importare. Vuoi sovrascrivere le voci esistenti?
+Ciò interromperà qualsiasi processo in corso.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>Yinelenenler Algılandı</value>
+    <value>Rilevati dei Duplicati</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Düşük Güçlü QuickSync Donanımını etkinleştirin (desteklendiğinde).</value>
+    <value>Abilita Hardware QuickSync a Bassi Consumi (se supportato).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Özet bilgileri görüntülemek için lütfen tek bir iş seçin.</value>
+    <value>Seleziona un processo per visualizzarne una breve descrizione.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Sıraya alınan her işi ayrı bir çalışan işlemde çalıştırın.</value>
+    <value>Avvia ogni elemento in coda in un processo di lavoro separato.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Çalışan için varsayılan ağ bağlantı noktası:</value>
+    <value>Porta di rete predefinita del processatore:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>Seçtiğiniz ön ayar bu sistemde kullanılamıyor.
+    <value>La preimpostazione selezionata non è disponibile per questo sistema.
 
-Bu genellikle sisteminizin onu kullanmak için gerekli donanımı desteklemediğinin bir göstergesidir.
+Di solito è un'indicazione che il sistema non dispone dell'hardware richiesto per utilizzarla.
 
-Lütfen farklı bir ön ayar seçin.</value>
+Scegliere una preimpostazione differente.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>İşleyiş İzolasyonu</value>
+    <value>Isolamento del Processo</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>Bu özelliğin kullanılmasının belirtilen bağlantı noktasında 127.0.0.1'e bağlı bir HTTP sunucusu başlatacağını lütfen unutmayın.</value>
+    <value>Attenzione, usando questa funzione partirà un server HTTP in 127.0.0.1 sulla porta scelta.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>Ayarlanan bağlantı noktası kullanımdaysa, tanımlanan bağlantı noktasından +100 içinde ilk boş bağlantı noktasını bulur.</value>
+    <value>Se la porta scelta è gia in uso, prenderà la prima porta libera in un range di +100 dalla tale porta.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maksimum eşzamanlı kodlama sayısı:</value>
+    <value>Numero massimo di codifiche simultanee:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>İptal</value>
+    <value>Annulla</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>Ön Ayar:</value>
+    <value>Preimpostazione:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Kaynakla aynı</value>
+    <value>Uguale alla sorgente</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>Ayarları Sıfırla</value>
+    <value>Ripristina Impostazioni</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>HandBrake'i varsayılan ayarlara sıfırlamak istediğinizden emin misiniz?</value>
+    <value>Sei sicuro di voler ripristinare le impostazioni di HandBrake a quelle predefinite?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>Özel (Sınırlı Değil)</value>
+    <value>Personalizzata (Non Limitata)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Doldur (Surround)</value>
+    <value>Riempimento (Intorno)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Boy (Pillarbox)</value>
+    <value>Altezza (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>Yok</value>
+    <value>Nessuna</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>En (Letterbox)</value>
+    <value>Larghezza (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Doldur:</value>
+    <value>Riempi:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Renk:</value>
+    <value>Colore:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Kenarlıklar:</value>
+    <value>Bordi:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Çözünürlük ve Ölçeklendirme:</value>
+    <value>Risoluzione e Ridimensionamento:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Yönlendirme ve Kırpma:</value>
+    <value>Orientamento e Ritaglio:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Sadece Windows 10! )</value>
+    <value>( Solo per Windows 10! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>Filtreler:</value>
+    <value>Filtri:</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>Varsayılan</value>
+    <value>Predefinito</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>Zorunlu</value>
+    <value>Forzato</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2282,204 +2282,204 @@ Lütfen farklı bir ön ayar seçin.</value>
     <value>4320p 8K Ultra HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>Özel</value>
+    <value>Personalizzata</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Azami Boyut:</value>
+    <value>Dimensione Massima:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Çözünürlük Sınırı:</value>
+    <value>Limite della Risoluzione:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>Yok</value>
+    <value>Nessuna</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Ön Ayarları Yönet</value>
+    <value>Gestisci Preimpostazioni</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Hazır Ön Ayarları Sil</value>
+    <value>Elimina Preimpostazioni Predefinite</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Seçili ön ayarı dışarı aktar</value>
+    <value>Esporta preimpostazioni selezionate</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Dosyadan ön Ayar(lar)ı içeri aktar</value>
+    <value>Importa Preimpostazioni da file</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Ön Ayar Bilgisi:</value>
+    <value>Informazioni sulla Preimpostazione:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Yerleşik ön ayarlar değiştirilemez.</value>
+    <value>Le Preimpostazioni predefinite non possono essere modificate.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Seçilen ön ayarı varsayılan yap</value>
+    <value>Imposta Preimpostazione selezionata come predefinita</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>Silme Ön Ayarı</value>
+    <value>Elimina preimpostazione</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(Bu sistemde desteklenmiyor)</value>
+    <value>(Non supportato su questo sistema)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>Durdur</value>
+    <value>Ferma</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>Girdiğiniz kategori adı zaten mevcut. Lütfen farklı bir isim seçin.</value>
+    <value>Il nome della categoria è gia esistente. Inserirne uno diverso.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>Kategori adı boştu. Lütfen bir isim girin.</value>
+    <value>Il nome della categoria è vuoto. Inserire un nome.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>İsim girin:</value>
+    <value>Inserisci un nome:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>Seçili ön ayar yok.</value>
+    <value>Nessuna preimpostazione selezionata.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Tüm kullanıcı ön ayarlarını dışa aktar</value>
+    <value>Esporta tutte le preimpostazioni dell'utente</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Düşük disk alanı uyarılarının gösterdiği düzey:</value>
+    <value>Livello al quale viene mostrato l'avviso di spazio su disco in esaurimento:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Not: Bu, eşzamanlı işlerin üst sınırıdır. Kodlama sırasında eşzamanlı işlerin gerçek sayısını azaltan donanım sınırlamaları etkili olabilir.</value>
+    <value>Nota: questo è il numero massimo di processi simultanei. Limitazioni hardware potrebbero ridurre il numero effettivo di processi simultanei durante la codifica.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(Mevcut Değil)</value>
+    <value>(Non Disponibile)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>Varsayılan:</value>
+    <value>È Predefinito:</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Hayır</value>
+    <value>No</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Evet</value>
+    <value>Sì</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>İnce Ayar Görüntü Ayarları</value>
+    <value>Impostazioni di Regolazione Fine dell'Immagine</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>Kırpma ayarlama kontrollerini göster.</value>
+    <value>Mostra controlli di modifica del ritaglio.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>Koyu Kullan</value>
+    <value>Usa Scuro</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>Işık Kullan</value>
+    <value>Usa Chiaro</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>Eşleme Sistemi</value>
+    <value>Uguale al Sistema</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
     <value>Tema:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(Yeniden Başlatma Gerektirir)</value>
+    <value>(Richiede Riavvio)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
     <value>Chroma Smooth:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Renk alanı:</value>
+    <value>Spazio Colore:</value>
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
-    <value>Renk alanı</value>
+    <value>Spazio Colore</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>Önizlemeyi Aç</value>
+    <value>Apri Anteprima</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>Kaynak Önizlemesi:</value>
+    <value>Anteprima della Sorgente:</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>İş Durumu:</value>
+    <value>Stato del Processo:</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
-    <value>İptal edildi</value>
+    <value>Annullato</value>
   </data>
   <data name="QueueView_JobStatus_Complete" xml:space="preserve">
-    <value>Tamamlandı</value>
+    <value>Completato</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Geçersiz Ayarlar. Ayrıntılar için günlüğü kontrol edin.</value>
+    <value>Impostazioni non valide. Controlla il registro per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Geçersiz Girdi. Ayrıntılar için günlüğü kontrol edin.</value>
+    <value>Ingresso non valido. Controlla il registro per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Durum Bilinmiyor. Ayrıntılar için günlüğü kontrol edin.</value>
+    <value>Stato Sconosciuto. Controlla il registro per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Kaynağı okumaya çalışırken hatalar tespit edildi.</value>
+    <value>Errori riscontrati durante la lettura della sorgente.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Bilinmeyen başarısızlık. Ayrıntılar için günlüğü kontrol edin.</value>
+    <value>Errore sconosciuto. Controlla il registro per ulteriori dettagli.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Çalışma Çöktü. Ayrıntılar için günlüğü kontrol edin.</value>
+    <value>Il processatore è andato in crash. Controlla il registro per ulteriori dettagli.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>Eksik "hb.dll" dosyası. Lütfen yeniden yükleyin.</value>
+    <value>File "hb.dll" mancante. Si prega di reinstallare.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>Uyarı: Lütfen bunun, donanım kodlayıcıları için destek içermeyen bir HandBrake "Güvenli Mod" yapısı olduğunu unutmayın. Donanım kodlayıcı desteğini kullanmak istiyorsanız, lütfen web sitesinden "Güvenli Mod" olmayan bir yapı indirin.</value>
+    <value>Attenzione: questa è una build in "Modalità Sicura" di HandBrake che non include supporto ai codificatori hardware. Se si desidera utilizzare un codificatore hardware, si prega di scaricare una build non in "Modalità Sicura" dal sito.</value>
   </data>
   <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Lütfen HandBrake'in Windows 7 veya Windows 8'in hiçbir sürümünde desteklenmediğini unutmayın.
+    <value>Si comunica che HandBrake non è più supportato da nessuna versione di Windows 7 o Windows 8.
 
-Uygulamayı kendi sorumluluğunuzda kullanmaya devam edebilirsiniz, ancak lütfen bazı özelliklerin çalışmadığını ve bilinmeyen başka sorunlar olabileceğini unutmayın. Bu sorunlar ortaya çıktığında herhangi bir destek sunulmamaktadır.
+Nonostante il programma possa comunque essere utilizzato a proprio rischio e pericolo, alcune funzionalità potrebbero non funzionare od esserci problemi non noti. Non verrà offerto supporto in caso si manifestino questi problemi.
 
-Windows 7 ve 8 desteği, 1.3 serisinde kullanımdan kaldırıldı. Bu, bu platformlardaki sorunları düzeltmek için başka güncelleme olmayacağı anlamına gelir.
+Il supporto per Windows 7 e 8 è stato rimosso a partire dalla 1.3. Ciò significa che non ci saranno aggiornamenti in futuro per questi sistemi.
 
-Bu uyarı yalnızca iki kez görüntülenecektir.</value>
+Questo avviso verrà mostrato solo due volte.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>Siyah</value>
+    <value>Nero</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
-    <value>Özel</value>
+    <value>Personalizzata</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>Beyaz</value>
+    <value>Bianco</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB Değeri:</value>
+    <value>Valore RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(ses yalıtımlı)</value>
+    <value>(riempito)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>Çevir:</value>
+    <value>Capovolgi:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Kaynak Boyutları:</value>
+    <value>Dimensioni della Sorgente:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>Depolama Boyutu: {0}x{1}     Ekran Boyutu: {2}x{3}      Görüntü Oranı: {4}</value>
+    <value>Dim. di Archiviazione: {0}x{1}   Dim. di Visualizzazione: {2}x{3}  Rapp. d'Aspetto:  {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>Dosya Göz Atacı Diyolağunda bir hata tespit edildi. 
+    <value>Si è verificato un errore nella Finestra Sfoglia File.
 
-- Lütfen uzun dosya yollarının tam olarak desteklenmediğini unutmayın. Lütfen dosya yollarını 255 karakterden kısa tutun. 
-- Bu pencerede son kullanılan klasör daha sonra dosya tararken sorun yaşamanızı önlemek için sıfırlandı.</value>
+- Attenzione, i percorsi file troppo lunghi non sono supportati. La lunghezza del percorso file deve essere inferiore a 255 caratteri.
+- L'ultimo percorso usato in questa finestra è stato reimpostato per evitare errori nella prossima scansione file.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Azami Yükseklik:</value>
+    <value>Altezza Massima:</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Azami Genişlik:</value>
+    <value>Larghezza Massima:</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>Görüntü Oranı: {0}</value>
+    <value>Rapporto d'Aspetto: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Ortak Üstveriyi Doğrudan Aktar</value>
+    <value>Passthru Metadati Comuni</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>Varsayılan otomatik isim yolu geçerli değildi. {0}  {1}'den önce gelmemeli.</value>
+    <value>Il percorso preimpostato di assegnazione automatica dei nomi non è valido. {0} non deve trovarsi prima di {1}</value>
   </data>
 </root>
