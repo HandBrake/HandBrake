@@ -1,5 +1,100 @@
 # HandBrake News
 
+## HandBrake 1.4.0
+
+### All platforms
+
+#### General
+- The HandBrake engine is now 10 and 12bit capable. Please note that not all filters support 10 and 12 bits. Using such a filter will cause the pipeline to run at 8bit. Please see the documentation for more information.
+- HDR10 metadata will be passed through from the source file if present. 
+- Static Previews that are generated during file scans are now stored in compressed jpeg format (previously stored as YUV420).  Temporary disk space usage and disk writes are massively reduced. This uses libjpeg-turbo
+
+#### Filters
+- New Filter: Chroma Smooth
+- New Filter: Colourspace Selection. 
+- New Filter: Support for QuickSync hardware accelerated Crop/Scale when using full path.
+
+#### Video
+- Performance: VFR and Crop/Scale filters are skipped when not required which yields a minor speed improvement when using hardware encoders)
+- QuickSync:  Significant overhaul of memory management including improved zero-copy support where software filters are not used. 
+
+#### Audio
+- MP2 Audio Passthru support.
+
+#### Subtitles
+- New General purpose subtitle decoder
+  - Added support for DVB Subtitles (Passthru and Burn-In)
+  - Added support for EIA608 Closed Captions.
+  - Replaced current decoders for PGS, SRT and SSA  with those in ffmpeg. This should correct a number of rendering issues on Burn-In
+- Reduced default CC burn-in font-size.
+- Added support for importing external subtitles (ASS and SUP formats)
+- Improvements and fixes to TX3G support.
+
+#### Third-party libraries
+- The following 3rd party libraries have changed:
+  - ffmpeg 4.4
+  - AMF 1.4.18 (AMD VCE encoding)
+  - nv-codec-headers 11.0.10.1 (Nvidia NVENC encoding)
+  - libmfx 1.34
+  - x264
+  - x265
+  - freetype 2.10.4
+  - fribidi 1.0.10
+  - harfbuzz 2.8.1
+  - jansson 2.13.1
+  - libass 0.15.1
+  - libbluray 1.3.0
+  - libdvdnav 6.1.1
+  - libdvdread 6.1.2
+  - dav1d 0.9.0
+  - libvorbis 1.3.7
+  - libvpx 1.10.0
+  - x264 161 r3043
+  - x265 20210203-12666 snapshot
+  - zimg and libjpeg-turbo are new dependencies. 
+
+### General UI Updates (Applies to Windows, macOS and Linux)
+- The "Dimensions" tab has been redesigned. 
+  - The Rotate and Flip filter has been moved from the filters tab.
+  - Added support for padding
+  - Added support to control the resolution limit.
+  - Added limited support for upscaling
+
+### Linux
+- Minor usability tweaks and fixes.
+- Updated translations (levels of completeness vary)
+
+### Mac
+- Support for Apple Silicon (macOS only)
+- Minor improvements and fixes for macOS 11
+- Updated Sparkle Updater library.
+- Updated translations (levels of completeness vary)
+
+### Windows
+- Please note, the Windows UI now requires  "Microsoft .NET 5 Desktop Runtime"
+- Process Isolation
+  - When enabled, any encodes that are started are run under a separate "handbrake.worker.exe" process. 
+  - This protects the main UI from any crashes that could occur whilst processing a file and allows the queue to continue.
+  - Multiple jobs can be run simultaneously to improve CPU utilisation on high core count systems.
+- Audio Tab
+  - Minor improvement to the usability of auto-passthru. To prevent confusion, the "auto-passhtru" audio "encoder" option is now only available on the defaults screen and not the main audio tab. 
+- Queue Improvements
+  - Restored lost "Stop" functionality in the new queue design that landed in 1.3. 
+- Presets
+  - The legacy preset side panel has been removed. The presets button on the toolbar will now offer a "preset manager" and list the available for selection.
+  - The inline-preset view from 1.3 is now permanent. 
+- Installer Improvements
+  - Existing NSIS installer: Option to create a shortcut for "all users" as the last step. 
+  - An MSI based installed (mostly for system-admins) is now available to allow for easier deployments. Feedback welcome.
+- Preference Updates: 
+  - New Auto Name option: Always use the default path for each new source / title selected
+  - "Send File To" Arguments now supports "{source}" and "{destination}" replacement placeholders. 
+  - Added a preference to configure the "Pause on Low Battery" feature. 
+- UI Performance: Optimisations to allow better performance when handling large sets of files (1000+)
+- Updated translations (levels of completeness vary)
+- Miscellaneous bug fixes and improvements
+
+
 ## HandBrake 1.3.3
 
 ### All platforms

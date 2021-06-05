@@ -44,7 +44,7 @@ Windows UI:
 ## Services and Software
 
 - [handbrake.fr](https://handbrake.fr) web hosting courtesy of Eric Petit
-- [Freenode IRC](https://freenode.net/)
+- [Libera.Chat IRC](https://libera.chat/)
 - [GitHub](https://github.com)
 - [JetBrains](https://www.jetbrains.com/?from=HandBrake) Thanks for providing an All Products License!
 - [phpBB](http://www.phpbb.com/)

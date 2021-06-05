@@ -29,7 +29,7 @@ Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/cont
 
 We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/public) 
 
-Please read our [Translations Guide](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) and follow the instructions if you are interested in joining the translation effort.
+Please read our [Translations Guide](https://github.com/HandBrake/HandBrake/blob/master/TRANSLATION.markdown) and follow the instructions if you are interested in joining the translation effort.
 
 
 ## Additional Information
