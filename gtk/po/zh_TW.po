@@ -4,8 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# cappelikan <cappelikan@gmail.com>, 2019
-# Олександр (6c6c6) <6c6c6.ukr@gmail.com>, 2020
+# toto6038 <toto6038@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
@@ -14,13 +13,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-17 08:17-0600\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Олександр (6c6c6) <6c6c6.ukr@gmail.com>, 2020\n"
-"Language-Team: Ukrainian (Ukraine) (https://www.transifex.com/HandBrakeProject/teams/92423/uk_UA/)\n"
+"Last-Translator: toto6038 <toto6038@gmail.com>, 2020\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/HandBrakeProject/teams/92423/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: uk_UA\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: src/ghb3.ui:23
 msgid ""
@@ -28,13 +27,13 @@ msgid ""
 "\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Візуалізуйте підзаголовки на відео. \n"
+"在影片中算繪字幕。\n"
 "\n"
-"Підзаголовок буде частиною відео, і його неможливо відключити."
+"字幕將會成為影片的一部分，且無法關閉。"
 
 #: src/ghb3.ui:26
 msgid "<b>Burned In</b>"
-msgstr "<b>Пропалено в</b>"
+msgstr ""
 
 #: src/ghb3.ui:32 src/ghb3.ui:9122
 msgid ""
@@ -46,17 +45,10 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
-"Встановити за замовчуванням вихідний трек субтитрів.\n"
-"\n"
-"Більшість гравців автоматично відображатиме це\n"
-"трек субтитрів під час відтворення відео.\n"
-"\n"
-"Це корисно для створення \"вимушеної\" доріжки\n"
-"у вашому виході."
 
 #: src/ghb3.ui:39
 msgid "<b>Default</b>"
-msgstr "<b>За замовчуванням</b>"
+msgstr ""
 
 #: src/ghb3.ui:45 src/ghb3.ui:9084
 msgid ""
@@ -67,16 +59,10 @@ msgid ""
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
 msgstr ""
-"Використовуйте лише субтитри, які були позначені прапором\n"
-"як змушений у вихідному треку субтитрів\n"
-"\n"
-"\"Примусові\" субтитри зазвичай використовуються для показу\n"
-"субтитри під час сцен, де хтось виступає\n"
-"іноземна мова."
 
 #: src/ghb3.ui:51
 msgid "<b>Forced Only</b>"
-msgstr "<b>Тільки примусово</b>"
+msgstr ""
 
 #: src/ghb3.ui:57
 msgid ""
@@ -87,16 +73,10 @@ msgid ""
 "does not coincide with the start of the video.\n"
 "This setting allows you to synchronize the files."
 msgstr ""
-"Додавання (або віднімання) зміщення (у мілісекундах)\n"
-"до початку треку субтитрів SRT.\n"
-"\n"
-"Часто запуск зовнішнього файлу SRT\n"
-"не збігається з початком відео.\n"
-"Цей параметр дозволяє синхронізувати файли."
 
 #: src/ghb3.ui:63
 msgid "<b>SRT Offset</b>"
-msgstr "<b>Зсув SRT</b>"
+msgstr ""
 
 #: src/ghb3.ui:69
 msgid ""
@@ -112,21 +92,10 @@ msgid ""
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
 msgstr ""
-"Доріжка субтитрів джерела\n"
-"\n"
-"Ви можете вибрати будь-який із субтитрів\n"
-"розпізнається у вашому вихідному файлі.\n"
-"\n"
-"Крім того, є спеціальний варіант треку\n"
-"\"Сканування іноземного аудіо\". Ця опція додасть\n"
-"додатковий перехід до коду, який шукає\n"
-"субтитри, які можуть відповідати іноземному\n"
-"мовна сцена. Цей варіант найкраще використовувати в\n"
-"сполучення з опцією \"Примусово\"."
 
 #: src/ghb3.ui:80
 msgid "<b>Track</b>"
-msgstr "<b>Доріжка</b>"
+msgstr ""
 
 #: src/ghb3.ui:87
 msgid "Open Source Directory"
@@ -174,43 +143,43 @@ msgstr ""
 
 #: src/ghb3.ui:163 src/ghb3.ui:2128
 msgid "_Presets"
-msgstr "_Шаблони"
+msgstr "預設檔 (P)"
 
 #: src/ghb3.ui:171 src/ghb3.ui:2136
 msgid "Set De_fault"
-msgstr "Встановити _типовим"
+msgstr "設成預設 (D)"
 
 #: src/ghb3.ui:185 src/ghb3.ui:2150
 msgid "_Save"
-msgstr "_Зберегти"
+msgstr "儲存 (S)"
 
 #: src/ghb3.ui:194 src/ghb3.ui:2159
 msgid "Save _As"
-msgstr "Зберегти _як"
+msgstr "另存為 (A)"
 
 #: src/ghb3.ui:203 src/ghb3.ui:2168
 msgid "_Rename"
-msgstr "_Прейменувати"
+msgstr "重新命名 (R)"
 
 #: src/ghb3.ui:212 src/ghb3.ui:2177
 msgid "_Delete"
-msgstr "_Видалити"
+msgstr "刪除 (D)"
 
 #: src/ghb3.ui:226 src/ghb3.ui:2191
 msgid "_Import"
-msgstr "_Імпорт"
+msgstr "匯入 (I)"
 
 #: src/ghb3.ui:235 src/ghb3.ui:2200
 msgid "_Export"
-msgstr "_Експорт"
+msgstr "匯出 (E)"
 
 #: src/ghb3.ui:249 src/ghb3.ui:2214
 msgid "Reset _Built-in Presets"
-msgstr "Скинути _вбудовані шаблони"
+msgstr "重置內建預設檔 (B)"
 
 #: src/ghb3.ui:304
 msgid "<b>Presets List</b>"
-msgstr "<b>Список шаблонів</b>"
+msgstr "<b>預設檔清單</b>"
 
 #: src/ghb3.ui:318
 msgid "HandBrake Queue"
@@ -227,22 +196,22 @@ msgstr ""
 #: src/ghb3.ui:404 src/ghb3.ui:2324 src/queuehandler.c:2378
 #: src/queuehandler.c:2391 src/queuehandler.c:2402
 msgid "Start Encoding"
-msgstr "Почати кодування"
+msgstr "開始編碼"
 
 #: src/ghb3.ui:406 src/ghb3.ui:2326 src/ghb3.ui:6432 src/queuehandler.c:2377
 #: src/queuehandler.c:2390
 msgid "Start"
-msgstr "Розпочати"
+msgstr "開始"
 
 #: src/ghb3.ui:420 src/ghb3.ui:2339 src/queuehandler.c:2416
 #: src/queuehandler.c:2429 src/queuehandler.c:2440
 msgid "Pause Encoding"
-msgstr "Призупинити кодування"
+msgstr "暫停編碼"
 
 #: src/ghb3.ui:422 src/ghb3.ui:2341 src/queuehandler.c:2415
 #: src/queuehandler.c:2428
 msgid "Pause"
-msgstr "Призупинити"
+msgstr "暫停"
 
 #: src/ghb3.ui:480
 msgid "Options"
@@ -264,7 +233,7 @@ msgstr ""
 
 #: src/ghb3.ui:647
 msgid "Edit"
-msgstr ""
+msgstr "編輯 "
 
 #: src/ghb3.ui:692
 msgid "Actions"
@@ -272,7 +241,7 @@ msgstr ""
 
 #: src/ghb3.ui:741 src/ghb3.ui:4825
 msgid "Preset:"
-msgstr ""
+msgstr "預設檔："
 
 #: src/ghb3.ui:777
 msgid "Source:"
@@ -348,26 +317,24 @@ msgstr ""
 
 #: src/ghb3.ui:1710
 msgid "About HandBrake"
-msgstr "Про HandBrake"
+msgstr "關於 HandBrake"
 
 #: src/ghb3.ui:1716
 msgid ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
 msgstr ""
-"Авторство © 2008 -  John Stebbins\n"
-"Авторство © 2004 - , розробники HandBrake"
+"版權所有 ©️ 2008 - John Stebbins\n"
+"版權所有 ©️ 2004 - , HandBrake 開發團隊"
 
 #: src/ghb3.ui:1718
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr ""
-"HandBrake, що розповсюджується відповідно до ліцензії GPL, це "
-"багатоплатформовий, багатопотоковий відеотранскодер."
+msgstr "HandBrake 是一款依據 GPL 授權、跨平台、多執行緒的影片轉碼器。"
 
 #: src/ghb3.ui:1720
 msgid "https://handbrake.fr"
-msgstr ""
+msgstr "https://handbrake.fr"
 
 #: src/ghb3.ui:1721
 msgid ""
@@ -380,131 +347,131 @@ msgstr ""
 
 #: src/ghb3.ui:1907
 msgid "HandBrake"
-msgstr ""
+msgstr "HandBrake"
 
 #: src/ghb3.ui:1930
 msgid "_File"
-msgstr "_Файл"
+msgstr "檔案 (F)"
 
 #: src/ghb3.ui:1938
 msgid "Open _Source"
-msgstr "Відкрити _джерело"
+msgstr "打開來源 (S)"
 
 #: src/ghb3.ui:1947
 msgid "Open Single _Title"
-msgstr "Відкрити один _файл"
+msgstr ""
 
 #: src/ghb3.ui:1956
 msgid "Set _Destination"
-msgstr "Встановити _призначення"
+msgstr ""
 
 #: src/ghb3.ui:1971
 msgid "_Preferences"
-msgstr "_Налаштування"
+msgstr "偏好設定 (P)"
 
 #: src/ghb3.ui:1986
 msgid "_Quit"
-msgstr "_Вихід"
+msgstr "退出 (Q)"
 
 #: src/ghb3.ui:2001 src/ghb3.ui:2095
 msgid "_Queue"
-msgstr "_Черга"
+msgstr "佇列 (Q)"
 
 #: src/ghb3.ui:2009
 msgid "_Add"
-msgstr "_Додати"
+msgstr "新增 (A)"
 
 #: src/ghb3.ui:2018
 msgid "Add _Multiple"
-msgstr "Додати _кілька"
+msgstr ""
 
 #: src/ghb3.ui:2027 src/queuehandler.c:2401
 msgid "_Start Encoding"
-msgstr "_Почати кодування"
+msgstr "開始編碼 (S)"
 
 #: src/ghb3.ui:2036 src/queuehandler.c:2439
 msgid "_Pause Encoding"
-msgstr "П_ризупинити кодування"
+msgstr "暫停編碼 (P)"
 
 #: src/ghb3.ui:2045
 msgid "S_ave Queue"
-msgstr "З_берегти чергу"
+msgstr "儲存佇列 (A)"
 
 #: src/ghb3.ui:2054
 msgid "_Load Queue File"
-msgstr "_Завантажити файл черги"
+msgstr "載入佇列檔案 (L)"
 
 #: src/ghb3.ui:2069
 msgid "_View"
-msgstr "_Вигляд"
+msgstr "檢視 (V)"
 
 #: src/ghb3.ui:2077
 msgid "HandBrake For _Dumbies"
-msgstr "HandBrake для _чайників"
+msgstr ""
 
 #: src/ghb3.ui:2086
 msgid "Presets _List"
-msgstr "Список _шаблонів"
+msgstr "預設檔清單 (L)"
 
 #: src/ghb3.ui:2104
 msgid "_Preview"
-msgstr "_Перегляд"
+msgstr "預覽 (P)"
 
 #: src/ghb3.ui:2113
 msgid "_Activity Window"
-msgstr "Вікно _активності"
+msgstr ""
 
 #: src/ghb3.ui:2229
 msgid "_Help"
-msgstr "_Допомога"
+msgstr "協助 (H)"
 
 #: src/ghb3.ui:2237
 msgid "_About"
-msgstr "_Про програму"
+msgstr "關於 (A)"
 
 #: src/ghb3.ui:2246
 msgid "_Guide"
-msgstr "_Керівництво"
+msgstr "導覽 (G)"
 
 #: src/ghb3.ui:2284 src/callbacks.c:4123
 msgid "Choose Video Source"
-msgstr "Вибрати початкове відео"
+msgstr "選擇影片來源"
 
 #: src/ghb3.ui:2286 src/callbacks.c:4122
 msgid "Open Source"
-msgstr "Відкрити джерело"
+msgstr "打開來源"
 
 #: src/ghb3.ui:2309
 msgid "Add to Queue"
-msgstr "Додати до черги"
+msgstr "新增至佇列"
 
 #: src/ghb3.ui:2311
 msgid "Add To Queue"
-msgstr "Додати до черги"
+msgstr "新增至佇列"
 
 #: src/ghb3.ui:2366
 msgid "Show Presets Window"
-msgstr "Показати вікно шаблонів"
+msgstr "顯示預設檔視窗"
 
 #: src/ghb3.ui:2368
 msgid "Presets"
-msgstr "Шаблони"
+msgstr "預設檔"
 
 #: src/ghb3.ui:2381
 msgid "Show Preview Window"
-msgstr "Показати вікно перегляду"
+msgstr "顯示預設檔視窗"
 
 #: src/ghb3.ui:2383
 msgid "Preview"
-msgstr "Попередній перегляд"
+msgstr "預覽"
 
 #: src/ghb3.ui:2396
 msgid "Show Queue"
-msgstr "Показати чергу"
+msgstr "顯示佇列"
 
 #: src/ghb3.ui:2398 src/callbacks.c:4567
 msgid "Queue"
-msgstr ""
+msgstr "佇列"
 
 #: src/ghb3.ui:2411
 msgid "Show Activity Window"
@@ -516,17 +483,17 @@ msgstr ""
 
 #: src/ghb3.ui:2443
 msgid "<b>Source:</b>"
-msgstr ""
+msgstr "<b>來源：</b>"
 
 #: src/ghb3.ui:2469 src/hb-backend.c:59 src/hb-backend.c:71
 #: src/hb-backend.c:84 src/hb-backend.c:249 src/hb-backend.c:334
 #: src/hb-backend.c:2421 src/hb-backend.c:2647 src/subtitlehandler.c:1365
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: src/ghb3.ui:2514 src/callbacks.c:4095
 msgid "Scanning..."
-msgstr ""
+msgstr "掃描中..."
 
 #: src/ghb3.ui:2548
 msgid "<b>Title:</b>"
@@ -565,7 +532,7 @@ msgstr ""
 
 #: src/ghb3.ui:2683
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: src/ghb3.ui:2695
 msgid "Set the last chapter to encode."
@@ -573,11 +540,11 @@ msgstr ""
 
 #: src/ghb3.ui:2720
 msgid "<b>Preset:</b>"
-msgstr ""
+msgstr "<b>預設檔：</b>"
 
 #: src/ghb3.ui:2756
 msgid "Choose Preset"
-msgstr ""
+msgstr "選擇預設檔"
 
 #: src/ghb3.ui:2787
 msgid "<u><i>Modified</i></u>"
@@ -585,7 +552,7 @@ msgstr ""
 
 #: src/ghb3.ui:2796 src/ghb3.ui:5169 src/ghb3.ui:5913
 msgid "Reload"
-msgstr ""
+msgstr "重新載入"
 
 #: src/ghb3.ui:2799
 msgid ""
@@ -595,7 +562,7 @@ msgstr ""
 
 #: src/ghb3.ui:2811
 msgid "Save New Preset"
-msgstr ""
+msgstr "儲存新的預設檔"
 
 #: src/ghb3.ui:2814
 msgid "Save the current settings to a new Preset."
@@ -603,7 +570,7 @@ msgstr ""
 
 #: src/ghb3.ui:2896
 msgid "Format:"
-msgstr ""
+msgstr "格式："
 
 #: src/ghb3.ui:2914
 msgid "Format to mux encoded tracks to."
@@ -611,7 +578,7 @@ msgstr ""
 
 #: src/ghb3.ui:2926 src/queuehandler.c:290
 msgid "Web Optimized"
-msgstr ""
+msgstr "針對網頁最佳化"
 
 #: src/ghb3.ui:2931
 msgid ""
@@ -632,7 +599,7 @@ msgstr ""
 
 #: src/ghb3.ui:2969
 msgid "iPod 5G Support"
-msgstr ""
+msgstr "iPod 5G 支援"
 
 #: src/ghb3.ui:2974
 msgid "Add iPod Atom needed by some older iPods."
@@ -644,15 +611,15 @@ msgstr ""
 
 #: src/ghb3.ui:3014
 msgid "hh:mm:ss"
-msgstr ""
+msgstr "HH:MM:SS"
 
 #: src/ghb3.ui:3029
 msgid "Tracks:"
-msgstr ""
+msgstr "軌道："
 
 #: src/ghb3.ui:3069
 msgid "Filters:"
-msgstr ""
+msgstr "濾鏡："
 
 #: src/ghb3.ui:3109
 msgid "Size:"
@@ -660,15 +627,15 @@ msgstr ""
 
 #: src/ghb3.ui:3134 src/ghb3.ui:3355
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: src/ghb3.ui:3227
 msgid "Auto Crop"
-msgstr ""
+msgstr "自動裁切"
 
 #: src/ghb3.ui:3232
 msgid "Automatically crop black borders around edges of the video."
-msgstr ""
+msgstr "自動裁切影片周圍的黑邊。"
 
 #: src/ghb3.ui:3246
 msgid "Loose Crop"
@@ -719,7 +686,7 @@ msgstr ""
 
 #: src/ghb3.ui:3433 src/ghb3.ui:3648
 msgid "Width:"
-msgstr ""
+msgstr "寬度："
 
 #: src/ghb3.ui:3448
 msgid ""
@@ -729,7 +696,7 @@ msgstr ""
 
 #: src/ghb3.ui:3466 src/ghb3.ui:3680
 msgid "Height:"
-msgstr ""
+msgstr "高度："
 
 #: src/ghb3.ui:3481
 msgid ""
@@ -757,7 +724,7 @@ msgstr ""
 
 #: src/ghb3.ui:3550
 msgid "Alignment:"
-msgstr ""
+msgstr "對齊："
 
 #: src/ghb3.ui:3565
 msgid ""
@@ -773,12 +740,12 @@ msgstr ""
 
 #: src/ghb3.ui:3625
 msgid "Keep Aspect"
-msgstr ""
+msgstr "保持長寬比"
 
 #: src/ghb3.ui:3630
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
-msgstr ""
+msgstr "若被啟用，來源的原先長寬比將被保留。"
 
 #: src/ghb3.ui:3663
 msgid ""
@@ -800,7 +767,7 @@ msgstr ""
 
 #: src/ghb3.ui:3759
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: src/ghb3.ui:3774
 msgid ""
@@ -815,7 +782,7 @@ msgstr ""
 
 #: src/ghb3.ui:3809
 msgid "--:--"
-msgstr ""
+msgstr "--:--"
 
 #: src/ghb3.ui:3830
 msgid "<b>Display Geometry</b>"
@@ -910,7 +877,7 @@ msgstr ""
 
 #: src/ghb3.ui:4180
 msgid "Denoise Filter:"
-msgstr ""
+msgstr "降噪濾鏡："
 
 #: src/ghb3.ui:4196 src/ghb3.ui:4229 src/ghb3.ui:4262
 msgid ""
@@ -918,10 +885,13 @@ msgid ""
 "Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
+"降噪濾鏡可減少或移除噪訊及顆粒。\n"
+"膠片顆粒或其他高頻噪訊是極難壓縮的。\n"
+"針對此類來源使用此濾鏡以產生較小的檔案。"
 
 #: src/ghb3.ui:4213
 msgid "Denoise Preset:"
-msgstr ""
+msgstr "降噪預設檔："
 
 #: src/ghb3.ui:4246
 msgid "Denoise Tune:"
@@ -936,17 +906,19 @@ msgstr ""
 
 #: src/ghb3.ui:4305
 msgid "Sharpen Filter:"
-msgstr ""
+msgstr "銳利化濾鏡："
 
 #: src/ghb3.ui:4321 src/ghb3.ui:4353 src/ghb3.ui:4385
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
 msgstr ""
+"銳利化濾鏡可在影片強化邊緣及其他\n"
+"高頻細節。"
 
 #: src/ghb3.ui:4337
 msgid "Sharpen Preset:"
-msgstr ""
+msgstr "銳利化預設檔："
 
 #: src/ghb3.ui:4369
 msgid "Sharpen Tune:"
@@ -958,31 +930,31 @@ msgstr ""
 
 #: src/ghb3.ui:4443
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr ""
+msgstr "將影片旋轉順時鐘 90 度"
 
 #: src/ghb3.ui:4457
 msgid "Grayscale"
-msgstr ""
+msgstr "灰階"
 
 #: src/ghb3.ui:4462
 msgid "If enabled, filter colour components out of video."
-msgstr ""
+msgstr "若被啟用，影片中的彩色部分將被剔除。"
 
 #: src/ghb3.ui:4473
 msgid "Filters"
-msgstr ""
+msgstr "濾鏡"
 
 #: src/ghb3.ui:4504
 msgid "Video Encoder:"
-msgstr ""
+msgstr "影片編碼器："
 
 #: src/ghb3.ui:4518
 msgid "Available video encoders."
-msgstr ""
+msgstr "可用的影片編碼器。"
 
 #: src/ghb3.ui:4534
 msgid "Framerate:"
-msgstr ""
+msgstr "影格率："
 
 #: src/ghb3.ui:4549
 msgid ""
@@ -991,14 +963,17 @@ msgid ""
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
 msgstr ""
+"輸出的影格率。\n"
+"\n"
+"推薦「和來源相同」。若您的來源影片具有可變動的影格率，「和來源相同」將保留它。"
 
 #: src/ghb3.ui:4564
 msgid "Constant Framerate"
-msgstr ""
+msgstr "固定影格率"
 
 #: src/ghb3.ui:4569
 msgid "Enables constant framerate output."
-msgstr ""
+msgstr "啟用固定影格率輸出。"
 
 #: src/ghb3.ui:4583
 msgid "Peak Framerate (VFR)"
@@ -1014,7 +989,7 @@ msgstr ""
 
 #: src/ghb3.ui:4606
 msgid "Variable Framerate"
-msgstr ""
+msgstr "可變動的影格率"
 
 #: src/ghb3.ui:4611
 msgid ""
@@ -1022,6 +997,9 @@ msgid ""
 "\n"
 "VFR is not compatible with some players."
 msgstr ""
+"啟用可變動的影格率 (VFR)。\n"
+"\n"
+"VFR 與有些播放器不相容。"
 
 #: src/ghb3.ui:4647 src/ghb3.ui:4679
 msgid ""
@@ -1041,11 +1019,11 @@ msgstr ""
 
 #: src/ghb3.ui:4674
 msgid "Constant Quality:"
-msgstr ""
+msgstr "固定品質："
 
 #: src/ghb3.ui:4705
 msgid "Bitrate (kbps):    "
-msgstr ""
+msgstr "位元速率 (kbps)："
 
 #: src/ghb3.ui:4710 src/ghb3.ui:4732
 msgid ""
@@ -1055,6 +1033,11 @@ msgid ""
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
+"設定平均位元速率。\n"
+"\n"
+"瞬時的位元速率可在某時間點高得多或低得多。\n"
+"但長時間的平均位元速率數值可在此設定。若您需要\n"
+"限制瞬時的位元速率，請使用 x264 的 vbv-bufsize 及 vbv-maxrate 設定。"
 
 #: src/ghb3.ui:4749
 msgid "2-Pass Encoding"
@@ -1104,7 +1087,7 @@ msgstr ""
 
 #: src/ghb3.ui:4898
 msgid "Fast Decode"
-msgstr ""
+msgstr "快速解碼"
 
 #: src/ghb3.ui:4903
 msgid ""
@@ -1112,10 +1095,13 @@ msgid ""
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
 msgstr ""
+"減少解碼器的 CPU 使用率。\n"
+"\n"
+"若您的裝置在播放輸出檔時有困難（如：丟失影格）請選此。"
 
 #: src/ghb3.ui:4921
 msgid "Zero Latency"
-msgstr ""
+msgstr "零延遲"
 
 #: src/ghb3.ui:4925
 msgid ""
@@ -1126,10 +1112,16 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
+"最小化輸入至編碼器及輸出至解碼器間的延遲。\n"
+"\n"
+"對於廣播或串流直播尤為有用。\n"
+"\n"
+"由於 HandBrake 並不適合串流直播用途，\n"
+"此設定作用不大。"
 
 #: src/ghb3.ui:4949
 msgid "Profile:"
-msgstr ""
+msgstr "設定檔："
 
 #: src/ghb3.ui:4966
 msgid ""
@@ -1151,7 +1143,7 @@ msgstr ""
 
 #: src/ghb3.ui:5026
 msgid "More Settings:"
-msgstr ""
+msgstr "更多設定："
 
 #: src/ghb3.ui:5044
 msgid ""
@@ -1162,25 +1154,25 @@ msgstr ""
 
 #: src/ghb3.ui:5078 src/main.c:1155
 msgid "Video"
-msgstr ""
+msgstr "影片"
 
 #. Add Button
 #: src/ghb3.ui:5144 src/ghb3.ui:5337 src/ghb3.ui:5874 src/ghb3.ui:6094
 #: src/audiohandler.c:1744
 msgid "Add"
-msgstr ""
+msgstr "新增"
 
 #: src/ghb3.ui:5146
 msgid "Add new audio settings to the list"
-msgstr ""
+msgstr "增加新音訊設定至清單"
 
 #: src/ghb3.ui:5156 src/ghb3.ui:5886
 msgid "Add All"
-msgstr ""
+msgstr "新增全部"
 
 #: src/ghb3.ui:5158
 msgid "Add all audio tracks to the list"
-msgstr ""
+msgstr "新增所有音軌至清單"
 
 #: src/ghb3.ui:5171
 msgid "Reload all audio settings from defaults"
@@ -1188,7 +1180,7 @@ msgstr ""
 
 #: src/ghb3.ui:5215 src/ghb3.ui:5959
 msgid "Track List"
-msgstr ""
+msgstr "軌道清單"
 
 #: src/ghb3.ui:5246 src/ghb3.ui:5994
 msgid "Selection Behavior:"
@@ -1196,7 +1188,7 @@ msgstr ""
 
 #: src/ghb3.ui:5261
 msgid "Choose which audio tracks of the source media are used."
-msgstr ""
+msgstr "選擇要使用的來源媒體音軌。"
 
 #: src/ghb3.ui:5322
 msgid ""
@@ -1206,15 +1198,15 @@ msgstr ""
 
 #: src/ghb3.ui:5353 src/ghb3.ui:6110
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: src/ghb3.ui:5371 src/ghb3.ui:6128
 msgid "Available Languages"
-msgstr ""
+msgstr "可用的語言"
 
 #: src/ghb3.ui:5384 src/ghb3.ui:6141
 msgid "Selected Languages"
-msgstr ""
+msgstr "已選的語言"
 
 #: src/ghb3.ui:5400
 msgid "Use only first encoder for secondary audio"
@@ -1232,7 +1224,7 @@ msgstr ""
 
 #: src/ghb3.ui:5452
 msgid "MP3"
-msgstr ""
+msgstr "MP3"
 
 #: src/ghb3.ui:5457
 msgid ""
@@ -1292,7 +1284,7 @@ msgstr ""
 
 #: src/ghb3.ui:5578
 msgid "TrueHD"
-msgstr ""
+msgstr "TrueHD"
 
 #: src/ghb3.ui:5583
 msgid ""
@@ -1322,20 +1314,19 @@ msgstr ""
 
 #: src/ghb3.ui:5678
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>Налаштування перетворення аудіо:</b>"
+msgstr "<b>音訊編碼器設定：</b>"
 
 #: src/ghb3.ui:5679
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
-"Кожна обрана початкова доріжка буде перетворена з усіма обраними кодеками"
 
 #: src/ghb3.ui:5704 src/ghb3.ui:9279
 msgid "Encoder"
-msgstr ""
+msgstr "編碼器"
 
 #: src/ghb3.ui:5715 src/ghb3.ui:9292
 msgid "Bitrate/Quality"
-msgstr ""
+msgstr "位元速率/品質"
 
 #: src/ghb3.ui:5726
 msgid "Mixdown"
@@ -1343,15 +1334,15 @@ msgstr ""
 
 #: src/ghb3.ui:5737
 msgid "Samplerate"
-msgstr ""
+msgstr "取樣率"
 
 #: src/ghb3.ui:5748 src/ghb3.ui:9336
 msgid "Gain"
-msgstr ""
+msgstr "增益"
 
 #: src/ghb3.ui:5759 src/ghb3.ui:9355
 msgid "DRC"
-msgstr ""
+msgstr "DRC"
 
 #: src/ghb3.ui:5796 src/ghb3.ui:6354
 msgid "Track Selection"
@@ -1359,15 +1350,15 @@ msgstr ""
 
 #: src/ghb3.ui:5808
 msgid "Audio"
-msgstr ""
+msgstr "音訊"
 
 #: src/ghb3.ui:5876
 msgid "Add new subtitle settings to the list"
-msgstr ""
+msgstr "新增字幕設定至清單"
 
 #: src/ghb3.ui:5888
 msgid "Add all subtitle tracks to the list"
-msgstr ""
+msgstr "新增所有字幕軌至清單"
 
 #: src/ghb3.ui:5898 src/queuehandler.c:607 src/queuehandler.c:1038
 #: src/subtitlehandler.c:413
@@ -1400,7 +1391,7 @@ msgstr ""
 
 #: src/ghb3.ui:6155
 msgid "Preferred Language: None"
-msgstr ""
+msgstr "偏好的語言：無"
 
 #: src/ghb3.ui:6182
 msgid "Add Foreign Audio Scan Pass"
@@ -1453,7 +1444,7 @@ msgstr ""
 
 #: src/ghb3.ui:6295
 msgid "DVD Subtitles"
-msgstr "Субтитри DVD"
+msgstr "DVD 字幕"
 
 #: src/ghb3.ui:6300
 msgid ""
@@ -1465,7 +1456,7 @@ msgstr ""
 
 #: src/ghb3.ui:6314
 msgid "Blu-ray Subtitles"
-msgstr "Субтитри Blu-ray"
+msgstr "藍光字幕"
 
 #: src/ghb3.ui:6319
 msgid ""
@@ -1489,7 +1480,7 @@ msgstr ""
 
 #: src/ghb3.ui:6366
 msgid "Subtitles"
-msgstr "Субтитри"
+msgstr "字幕"
 
 #: src/ghb3.ui:6381 src/queuehandler.c:280
 msgid "Chapter Markers"
@@ -1513,19 +1504,19 @@ msgstr ""
 
 #: src/ghb3.ui:6492
 msgid "Chapters"
-msgstr ""
+msgstr "章節："
 
 #: src/ghb3.ui:6547
 msgid "Actors:"
-msgstr ""
+msgstr "演員："
 
 #: src/ghb3.ui:6582
 msgid "Director:"
-msgstr ""
+msgstr "導演："
 
 #: src/ghb3.ui:6617
 msgid "Release Date:"
-msgstr ""
+msgstr "釋出日期："
 
 #: src/ghb3.ui:6652
 msgid "Comment:"
@@ -1533,11 +1524,11 @@ msgstr ""
 
 #: src/ghb3.ui:6687
 msgid "Genre:"
-msgstr ""
+msgstr "類型："
 
 #: src/ghb3.ui:6722
 msgid "Description:"
-msgstr ""
+msgstr "敘述："
 
 #: src/ghb3.ui:6757
 msgid "Plot:"
@@ -1549,7 +1540,7 @@ msgstr ""
 
 #: src/ghb3.ui:6824
 msgid "<b>Save As:</b>"
-msgstr ""
+msgstr "<b>另存為：</b>"
 
 #: src/ghb3.ui:6838
 msgid "Destination filename for your encode."
@@ -1576,16 +1567,16 @@ msgstr ""
 #: src/queuehandler.c:1835 src/queuehandler.c:1852 src/queuehandler.c:1866
 #: src/queuehandler.c:1881
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: src/ghb3.ui:6976 src/ghb3.ui:7120 src/ghb3.ui:7884 src/ghb3.ui:8036
 #: src/ghb3.ui:8762 src/ghb3.ui:9167
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/ghb3.ui:7005
 msgid "Select All"
-msgstr ""
+msgstr "選擇全部"
 
 #: src/ghb3.ui:7009
 msgid "Mark all titles for adding to the queue"
@@ -1593,7 +1584,7 @@ msgstr ""
 
 #: src/ghb3.ui:7022
 msgid "Clear All"
-msgstr ""
+msgstr "清除全部"
 
 #: src/ghb3.ui:7026
 msgid "Unmark all titles"
@@ -1601,19 +1592,19 @@ msgstr ""
 
 #: src/ghb3.ui:7087
 msgid "Destination files OK.  No duplicates detected."
-msgstr ""
+msgstr "目的地檔案正常。未偵測到重複檔案。"
 
 #: src/ghb3.ui:7109
 msgid "Preferences"
-msgstr ""
+msgstr "偏好設定。"
 
 #: src/ghb3.ui:7215
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "自動檢查更新"
 
 #: src/ghb3.ui:7252
 msgid "When all encodes are complete"
-msgstr ""
+msgstr "當所有編碼工作完成"
 
 #: src/ghb3.ui:7274
 msgid "Use automatic naming (uses modified source name)"
@@ -1625,7 +1616,7 @@ msgstr ""
 
 #: src/ghb3.ui:7299
 msgid "Auto-Name Template"
-msgstr ""
+msgstr "自動命名樣板"
 
 #: src/ghb3.ui:7310
 msgid ""
@@ -1654,10 +1645,12 @@ msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
+"已完成的工作預設將留在佇列中，並被標示已完成。\n"
+"若您希望佇列自動清除已完成的工作，請勾選。"
 
 #: src/ghb3.ui:7446
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 #: src/ghb3.ui:7489
 msgid "Constant Quality fractional granularity"
@@ -1669,11 +1662,11 @@ msgstr ""
 
 #: src/ghb3.ui:7529
 msgid "Monitor destination disk free space"
-msgstr ""
+msgstr "監測目的地磁碟剩餘空間"
 
 #: src/ghb3.ui:7533 src/ghb3.ui:7555 src/ghb3.ui:7736
 msgid "Pause encoding if free disk space drops below limit"
-msgstr ""
+msgstr "在剩餘磁碟空間低於限制時暫停編碼"
 
 #: src/ghb3.ui:7570
 msgid "MB Limit"
@@ -1733,19 +1726,19 @@ msgstr ""
 
 #: src/ghb3.ui:7921
 msgid "<span size=\"x-large\">Rename Preset</span>"
-msgstr ""
+msgstr "<span size=\"x-large\">重新命名預設檔</span>"
 
 #: src/ghb3.ui:7941
 msgid "Name:"
-msgstr ""
+msgstr "名稱："
 
 #: src/ghb3.ui:7998 src/ghb3.ui:8345
 msgid "<b>Description</b>"
-msgstr ""
+msgstr "<b>敘述</b>"
 
 #: src/ghb3.ui:8079
 msgid "Category:"
-msgstr ""
+msgstr "類別："
 
 #: src/ghb3.ui:8094
 msgid "Set the category that this preset will be shown under."
@@ -1753,11 +1746,11 @@ msgstr ""
 
 #: src/ghb3.ui:8110
 msgid "Category Name:"
-msgstr ""
+msgstr "類別名稱："
 
 #: src/ghb3.ui:8143
 msgid "Preset Name:"
-msgstr ""
+msgstr "預設檔名稱："
 
 #: src/ghb3.ui:8177
 msgid "Default Preset"
@@ -1773,11 +1766,11 @@ msgstr ""
 
 #: src/ghb3.ui:8234
 msgid "Maximum Width:"
-msgstr "Максимальна ширина:"
+msgstr "最大寬度："
 
 #: src/ghb3.ui:8239
 msgid "Enable maximum width limit."
-msgstr "Увімкнути обмеження максимальної ширини."
+msgstr "啟用最大寬度限制。"
 
 #: src/ghb3.ui:8257
 msgid ""
@@ -1789,11 +1782,11 @@ msgstr ""
 
 #: src/ghb3.ui:8274
 msgid "Maximum Height:"
-msgstr "Максимальна висота:"
+msgstr "最大高度："
 
 #: src/ghb3.ui:8279
 msgid "Enable maximum height limit."
-msgstr "Увімкнути обмеження максимальної висоти."
+msgstr "啟用最大高度限制。"
 
 #: src/ghb3.ui:8297
 msgid ""
@@ -1819,7 +1812,7 @@ msgstr ""
 
 #: src/ghb3.ui:8520
 msgid "<b>Duration:</b>"
-msgstr "<b>Тривалість:</b>"
+msgstr ""
 
 #: src/ghb3.ui:8532
 msgid "Set the duration of the live preview in seconds."
@@ -1843,11 +1836,11 @@ msgstr ""
 
 #: src/ghb3.ui:8599
 msgid "_Cancel"
-msgstr ""
+msgstr "取消 (C)"
 
 #: src/ghb3.ui:8611
 msgid "_Open"
-msgstr ""
+msgstr "開啟 (O)"
 
 #: src/ghb3.ui:8645
 msgid "Title Number:"
@@ -1855,15 +1848,15 @@ msgstr ""
 
 #: src/ghb3.ui:8681
 msgid "Detected DVD devices:"
-msgstr ""
+msgstr "偵測到的 DVD 裝置："
 
 #: src/ghb3.ui:8791
 msgid "Import SRT"
-msgstr ""
+msgstr "匯入 SRT"
 
 #: src/ghb3.ui:8796
 msgid "Enable settings to import an SRT subtitle file"
-msgstr ""
+msgstr "啟用此設定以匯入 SRT 字幕檔"
 
 #: src/ghb3.ui:8807
 msgid "Import SSA"
@@ -1875,15 +1868,15 @@ msgstr ""
 
 #: src/ghb3.ui:8824
 msgid "Embedded Subtitle List"
-msgstr ""
+msgstr "內嵌式字幕清單"
 
 #: src/ghb3.ui:8829
 msgid "Enable settings to select embedded subtitles"
-msgstr ""
+msgstr "啟用此設定以選擇內嵌式字幕"
 
 #: src/ghb3.ui:8856 src/ghb3.ui:9199
 msgid "Source Track"
-msgstr ""
+msgstr "來源軌道"
 
 #: src/ghb3.ui:8871
 msgid "List of subtitle tracks available from your source."
@@ -1891,7 +1884,7 @@ msgstr ""
 
 #: src/ghb3.ui:8885 src/ghb3.ui:9229
 msgid "Track Name:"
-msgstr ""
+msgstr "軌道名稱"
 
 #: src/ghb3.ui:8901
 msgid ""
@@ -1902,7 +1895,7 @@ msgstr ""
 
 #: src/ghb3.ui:8934
 msgid "Language"
-msgstr "Мова"
+msgstr "語言"
 
 #: src/ghb3.ui:8948
 msgid "Character Code"
@@ -1910,7 +1903,7 @@ msgstr ""
 
 #: src/ghb3.ui:8962
 msgid "File:"
-msgstr ""
+msgstr "檔案："
 
 #: src/ghb3.ui:8977
 msgid "Offset (ms)"
@@ -1933,7 +1926,7 @@ msgstr ""
 
 #: src/ghb3.ui:9034
 msgid "Select the SRT file to import."
-msgstr ""
+msgstr "選擇要匯入的 SRT 檔案。"
 
 #: src/ghb3.ui:9037
 msgid "Import File"
@@ -1959,7 +1952,7 @@ msgstr ""
 
 #: src/ghb3.ui:9117
 msgid "Set Default Track"
-msgstr ""
+msgstr "設定預設軌道"
 
 #: src/ghb3.ui:9215
 msgid "List of audio tracks available from your source."
@@ -1978,7 +1971,7 @@ msgstr ""
 
 #: src/ghb3.ui:9321
 msgid "Sample Rate"
-msgstr ""
+msgstr "取樣率"
 
 #: src/ghb3.ui:9351 src/ghb3.ui:9590 src/audiohandler.c:1917
 msgid ""
@@ -1994,19 +1987,19 @@ msgstr ""
 
 #: src/ghb3.ui:9394 src/audiohandler.c:1782
 msgid "Bitrate"
-msgstr ""
+msgstr "位元速率"
 
 #: src/ghb3.ui:9399
 msgid "Enable bitrate setting"
-msgstr ""
+msgstr "啟用位元速率設定"
 
 #: src/ghb3.ui:9409 src/audiohandler.c:1787
 msgid "Quality"
-msgstr "Якість"
+msgstr "品質"
 
 #: src/ghb3.ui:9414
 msgid "Enable quality setting"
-msgstr ""
+msgstr "啟用品質設定"
 
 #: src/ghb3.ui:9435 src/audiohandler.c:1801
 msgid "Set the bitrate to encode this track with."
@@ -2028,7 +2021,7 @@ msgstr ""
 
 #: src/ghb3.ui:9520 src/audiohandler.c:1866
 msgid "Set the sample rate of the output audio track."
-msgstr ""
+msgstr "設定輸出檔案的音軌取樣率。"
 
 #: src/ghb3.ui:9543 src/audiohandler.c:1887
 msgid ""
@@ -2039,7 +2032,7 @@ msgstr ""
 #. Audio Gain Label
 #: src/ghb3.ui:9561 src/audiohandler.c:1897
 msgid "0dB"
-msgstr ""
+msgstr "0dB"
 
 #. Audio DRC Label
 #: src/ghb3.ui:9608 src/audiohandler.c:416 src/audiohandler.c:754
@@ -2048,56 +2041,56 @@ msgstr ""
 #: src/hb-backend.c:224 src/hb-backend.c:236 src/hb-backend.c:262
 #: src/hb-backend.c:274 src/hb-backend.c:286 src/hb-backend.c:347
 msgid "Off"
-msgstr ""
+msgstr "關閉"
 
 #: src/ghb3.ui:9644
 msgid "Skip This Version"
-msgstr ""
+msgstr "略過此版本"
 
 #: src/ghb3.ui:9652
 msgid "Remind Me Later"
-msgstr ""
+msgstr "稍後提醒我"
 
 #: src/ghb3.ui:9721
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr ""
+msgstr "<b>新版的 HandBrake 已可使用！</b>"
 
 #: src/ghb3.ui:9737
 msgid "HandBrake xxx is now available (you have yyy)."
-msgstr ""
+msgstr "HandBrake xxx 目前已可使用 (您有 yyy)。"
 
 #: src/ghb3.ui:9765
 msgid "<b>Release Notes</b>"
-msgstr "<b>Нотатки релізу</b>"
+msgstr "<b>發行公告</b>"
 
 #: src/audiohandler.c:428 src/audiohandler.c:750 src/audiohandler.c:1225
 #, c-format
 msgid "%ddB"
-msgstr ""
+msgstr "%ddB"
 
 #: src/audiohandler.c:726
 msgid "Quality: "
-msgstr "Якість:"
+msgstr "品質："
 
 #: src/audiohandler.c:733
 #, c-format
 msgid "Bitrate: %dkbps\n"
-msgstr ""
+msgstr "位元速率： %d kbps\n"
 
 #: src/audiohandler.c:745
 #, c-format
 msgid "%.4gkHz"
-msgstr ""
+msgstr "%.4gkHz"
 
 #: src/audiohandler.c:760
 #, c-format
 msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr ""
+msgstr "<small>%d - %s (%.4gkHz)</small>"
 
 #: src/audiohandler.c:765
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr ""
+msgstr "位元速率：%.4gkbps"
 
 #: src/audiohandler.c:771
 msgid "<small>Passthrough</small>"
@@ -2110,6 +2103,9 @@ msgid ""
 "DRC: %s\n"
 "Track Name: %s"
 msgstr ""
+"%s增益：%s\n"
+"DRC：%s\n"
+"軌道名稱：%s"
 
 #: src/audiohandler.c:785
 #, c-format
@@ -2117,6 +2113,8 @@ msgid ""
 "%sGain: %s\n"
 "DRC: %s"
 msgstr ""
+"%s增益：%s\n"
+"DRC：%s"
 
 #: src/audiohandler.c:1746
 msgid ""
@@ -2132,25 +2130,25 @@ msgstr ""
 
 #: src/audiohandler.c:1946
 msgid "Remove this audio encoder"
-msgstr ""
+msgstr "刪除此音訊編碼器"
 
 #: src/callbacks.c:793 src/callbacks.c:2144
 msgid "Closing HandBrake will terminate encoding.\n"
-msgstr ""
+msgstr "關閉 HandBrake 將終止編碼。\n"
 
 #: src/callbacks.c:1378
 msgid "Not Selected"
-msgstr "Не обрано"
+msgstr ""
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
 #: src/callbacks.c:1711 src/callbacks.c:4182
 msgid "Scanning ..."
-msgstr ""
+msgstr "掃描中..."
 
 #: src/callbacks.c:1747 src/callbacks.c:1748
 msgid "Stop Scan"
-msgstr ""
+msgstr "停止掃描"
 
 #: src/callbacks.c:2735 src/hb-backend.c:2085 src/hb-backend.c:2205
 #: src/hb-backend.c:2217
@@ -2159,7 +2157,7 @@ msgstr ""
 
 #: src/callbacks.c:2736
 msgid "New Video"
-msgstr ""
+msgstr "新影片"
 
 #: src/callbacks.c:3522 src/callbacks.c:3544 src/callbacks.c:3563
 #: src/callbacks.c:3595
@@ -2177,19 +2175,19 @@ msgstr ""
 
 #: src/callbacks.c:3669 src/callbacks.c:3711 src/queuehandler.c:1777
 msgid "Cancel Current and Stop"
-msgstr ""
+msgstr "取消目前的，並停止"
 
 #: src/callbacks.c:3670
 msgid "Cancel Current, Start Next"
-msgstr ""
+msgstr "取消目前的，並開始下一個"
 
 #: src/callbacks.c:3671
 msgid "Finish Current, then Stop"
-msgstr ""
+msgstr "完成目前的，並停止"
 
 #: src/callbacks.c:3672 src/callbacks.c:3712
 msgid "Continue Encoding"
-msgstr ""
+msgstr "繼續編碼"
 
 #: src/callbacks.c:3890
 #, c-format
@@ -2204,7 +2202,7 @@ msgstr ""
 #: src/callbacks.c:3951 src/callbacks.c:4019
 #, c-format
 msgid "job %d of %d, "
-msgstr ""
+msgstr "工作 %d/%d，"
 
 #: src/callbacks.c:3961
 #, c-format
@@ -2247,19 +2245,19 @@ msgstr ""
 
 #: src/callbacks.c:4193
 msgid "Paused"
-msgstr "Призупинено"
+msgstr ""
 
 #: src/callbacks.c:4224
 msgid "Encode Done!"
-msgstr ""
+msgstr "編碼完成！"
 
 #: src/callbacks.c:4228
 msgid "Encode Canceled."
-msgstr ""
+msgstr "已取消編碼。"
 
 #: src/callbacks.c:4233
 msgid "Encode Failed."
-msgstr ""
+msgstr "編碼失敗。"
 
 #: src/callbacks.c:4275
 msgid "Muxing: This may take a while..."
@@ -2267,16 +2265,16 @@ msgstr ""
 
 #: src/callbacks.c:4877
 msgid "Scan this DVD source"
-msgstr "Просканувати цей DVD"
+msgstr "掃描此 DVD 來源"
 
 #: src/callbacks.c:5265
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr ""
+msgstr "HandBrake %s/%s 已經可供使用（您有 %s/%d）。"
 
 #: src/callbacks.c:5446
 msgid "Encode Complete"
-msgstr ""
+msgstr "編碼完畢"
 
 #: src/callbacks.c:5448
 msgid "Put down that cocktail, Your HandBrake queue is done!"
@@ -2284,11 +2282,11 @@ msgstr ""
 
 #: src/callbacks.c:5461 src/callbacks.c:5471 src/callbacks.c:5479
 msgid "Your encode is complete."
-msgstr ""
+msgstr "您的編碼工作已經完成。"
 
 #: src/callbacks.c:5462
 msgid "Shutting down the computer"
-msgstr ""
+msgstr "關機"
 
 #: src/callbacks.c:5472
 msgid "Putting computer to sleep"
@@ -2296,7 +2294,7 @@ msgstr ""
 
 #: src/callbacks.c:5480
 msgid "Quitting Handbrake"
-msgstr ""
+msgstr "退出 HandBrake"
 
 #: src/hb-backend.c:60 src/hb-backend.c:85
 msgid "First Track Matching Selected Languages"
@@ -2320,7 +2318,7 @@ msgstr ""
 
 #: src/hb-backend.c:96
 msgid "Chapters:"
-msgstr ""
+msgstr "章節："
 
 #: src/hb-backend.c:97
 msgid "Seconds:"
@@ -2332,15 +2330,15 @@ msgstr ""
 
 #: src/hb-backend.c:108
 msgid "Do Nothing"
-msgstr ""
+msgstr "什麼都不做"
 
 #: src/hb-backend.c:109
 msgid "Show Notification"
-msgstr ""
+msgstr "顯示通知"
 
 #: src/hb-backend.c:110
 msgid "Quit Handbrake"
-msgstr "Вийти з Handbrake"
+msgstr "退出 HandBrake"
 
 #: src/hb-backend.c:111
 msgid "Put Computer To Sleep"
@@ -2348,11 +2346,11 @@ msgstr ""
 
 #: src/hb-backend.c:112
 msgid "Shutdown Computer"
-msgstr "Вимкнути комп’ютер"
+msgstr "關機"
 
 #: src/hb-backend.c:123 src/hb-backend.c:252
 msgid "Automatic"
-msgstr "Автоматично"
+msgstr ""
 
 #: src/hb-backend.c:124
 msgid "Loose"
@@ -2364,15 +2362,15 @@ msgstr ""
 
 #: src/hb-backend.c:161
 msgid "Week"
-msgstr "Тиждень"
+msgstr ""
 
 #: src/hb-backend.c:162
 msgid "Month"
-msgstr "Місяць"
+msgstr ""
 
 #: src/hb-backend.c:163
 msgid "Year"
-msgstr "Рік"
+msgstr ""
 
 #: src/hb-backend.c:164
 msgid "Immortal"
@@ -2380,19 +2378,19 @@ msgstr ""
 
 #: src/hb-backend.c:174
 msgid "Never"
-msgstr "Ніколи"
+msgstr "永不"
 
 #: src/hb-backend.c:175
 msgid "Daily"
-msgstr "Щоденно"
+msgstr "每天"
 
 #: src/hb-backend.c:176
 msgid "Weekly"
-msgstr "Щотижня"
+msgstr "每週"
 
 #: src/hb-backend.c:177
 msgid "Monthly"
-msgstr "Щомісячно"
+msgstr "每月"
 
 #: src/hb-backend.c:201
 msgid "Decomb"
@@ -2404,11 +2402,11 @@ msgstr ""
 
 #: src/hb-backend.c:213
 msgid "NLMeans"
-msgstr ""
+msgstr "NLMeans"
 
 #: src/hb-backend.c:214
 msgid "HQDN3D"
-msgstr ""
+msgstr "HQDN3D"
 
 #: src/hb-backend.c:225
 msgid "Unsharp"
@@ -2420,15 +2418,15 @@ msgstr ""
 
 #: src/hb-backend.c:237
 msgid "90 Degrees"
-msgstr "90 градусів"
+msgstr "90 度"
 
 #: src/hb-backend.c:238
 msgid "180 Degrees"
-msgstr "180 градусів"
+msgstr "180 度"
 
 #: src/hb-backend.c:239
 msgid "270 Degrees"
-msgstr "270 градусів"
+msgstr "270 度"
 
 #: src/hb-backend.c:250
 msgid "Spatial"
@@ -2540,7 +2538,7 @@ msgstr ""
 
 #: src/hb-backend.c:336 src/main.c:1151 src/queuehandler.c:1607
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: src/hb-backend.c:348
 msgid "Encode only"
@@ -2598,7 +2596,7 @@ msgstr ""
 #. No audio. set some default
 #: src/hb-backend.c:2574
 msgid "No Audio"
-msgstr ""
+msgstr "無音訊"
 
 #: src/hb-backend.c:4170
 #, c-format
@@ -2663,6 +2661,12 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"無效的降噪設定：\n"
+"\n"
+"濾鏡：\t%s\n"
+"預設檔：\t%s\n"
+"微調：\t%s\n"
+"自訂：\t%s\n"
 
 #: src/hb-backend.c:4305
 #, c-format
@@ -2674,6 +2678,12 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"無效的銳利化設定：\n"
+"\n"
+"濾鏡：\t%s\n"
+"預設檔：\t%s\n"
+"微調：\t%s\n"
+"自訂：\t%s\n"
 
 #: src/hb-backend.c:4339
 msgid ""
@@ -2694,7 +2704,7 @@ msgstr ""
 #: src/hb-backend.c:4358 src/hb-backend.c:4415 src/hb-backend.c:4435
 #: src/hb-backend.c:4455 src/hb-backend.c:4516 src/hb-backend.c:4571
 msgid "Continue"
-msgstr ""
+msgstr "繼續"
 
 #. No valid title, stop right there
 #: src/hb-backend.c:4384 src/hb-backend.c:4480
@@ -2753,11 +2763,11 @@ msgstr ""
 
 #: src/main.c:235 src/main.c:300
 msgid "Track Information"
-msgstr ""
+msgstr "軌道資訊"
 
 #: src/main.c:362
 msgid "Preset Name"
-msgstr ""
+msgstr "預設檔名稱"
 
 #: src/main.c:580
 msgid "The device or file to encode"
@@ -2796,7 +2806,7 @@ msgstr ""
 
 #: src/presets.c:1851
 msgid "Get me out of here!"
-msgstr ""
+msgstr "帶我離開這裡！"
 
 #: src/presets.c:1851
 msgid "Load backup presets"
@@ -2804,11 +2814,11 @@ msgstr ""
 
 #: src/presets.c:1997
 msgid "All (*)"
-msgstr ""
+msgstr "全部 (*)"
 
 #: src/presets.c:2002
 msgid "Presets (*.json)"
-msgstr ""
+msgstr "預設檔 (*.json)"
 
 #: src/presets.c:2008
 msgid "Legacy Presets (*.plist)"
@@ -2816,7 +2826,7 @@ msgstr ""
 
 #: src/presets.c:2104
 msgid "Export Preset"
-msgstr ""
+msgstr "匯出預設檔"
 
 #: src/presets.c:2445
 #, c-format
@@ -2828,11 +2838,11 @@ msgstr ""
 
 #: src/presets.c:2446
 msgid "folder"
-msgstr ""
+msgstr "資料夾"
 
 #: src/presets.c:2446
 msgid "preset"
-msgstr ""
+msgstr "預設檔"
 
 #: src/preview.c:487
 #, c-format
@@ -3000,7 +3010,7 @@ msgstr ""
 #. Should never happen
 #: src/queuehandler.c:1173
 msgid "Error"
-msgstr "Помилка"
+msgstr "錯誤"
 
 #: src/queuehandler.c:1177
 #, c-format
@@ -3053,7 +3063,7 @@ msgstr ""
 
 #: src/queuehandler.c:1835 src/queuehandler.c:1881
 msgid "Overwrite"
-msgstr "Перезаписати"
+msgstr ""
 
 #: src/queuehandler.c:1848
 #, c-format
@@ -3062,9 +3072,6 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
-"Призначення: %s\n"
-"\n"
-"Це непридатна тека."
 
 #: src/queuehandler.c:1862
 #, c-format
@@ -3090,7 +3097,7 @@ msgstr ""
 #. Title label
 #: src/queuehandler.c:2197
 msgid "No Title"
-msgstr "Без назви"
+msgstr ""
 
 #: src/queuehandler.c:2207
 msgid ""
@@ -3101,49 +3108,47 @@ msgstr ""
 
 #: src/queuehandler.c:2371 src/queuehandler.c:2384
 msgid "Stop"
-msgstr "Зупинити"
+msgstr ""
 
 #: src/queuehandler.c:2372 src/queuehandler.c:2385 src/queuehandler.c:2397
 msgid "Stop Encoding"
-msgstr "Зупинити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2396
 msgid "S_top Encoding"
-msgstr "З_упинити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2409 src/queuehandler.c:2422
 msgid "Resume"
-msgstr "Відновити"
+msgstr ""
 
 #: src/queuehandler.c:2410 src/queuehandler.c:2423 src/queuehandler.c:2435
 msgid "Resume Encoding"
-msgstr "Відновити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2434
 msgid "_Resume Encoding"
-msgstr "_Відновити кодування"
+msgstr "繼續編碼 (R)"
 
 #: src/queuehandler.c:3065
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
 msgstr ""
-"Виконується кодування. Що б Ви хотіли зробити?\n"
-"\n"
 
 #: src/subtitlehandler.c:1379
 #, c-format
 msgid "Preferred Language: %s"
-msgstr "Привілейовані мови: %s"
+msgstr "偏好的語言：%s"
 
 #: src/subtitlehandler.c:1393
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Додати %s доріжку субтитрів, якщо типове аудіо не %s"
+msgstr ""
 
 #: src/subtitlehandler.c:1398
 msgid "Add subtitle track if default audio is not your preferred language"
-msgstr "Додати доріжку субтитрів, якщо типове аудіо не привілейованою мовою"
+msgstr ""
 
 #: src/videohandler.c:202
 #, c-format
@@ -3153,10 +3158,6 @@ msgid ""
 "Expanded Options:\n"
 "\"%s\""
 msgstr ""
-"%s\n"
-"\n"
-"Розширені опції:\n"
-"„%s“"
 
 #: src/videohandler.c:205
 #, c-format
@@ -3166,10 +3167,6 @@ msgid ""
 "Expanded Options:\n"
 "\"\""
 msgstr ""
-"%s\n"
-"\n"
-"Розширені опції:\n"
-"„“"
 
 #: src/videohandler.c:349
 #, c-format

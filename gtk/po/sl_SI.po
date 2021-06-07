@@ -4,8 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# cappelikan <cappelikan@gmail.com>, 2019
-# Олександр (6c6c6) <6c6c6.ukr@gmail.com>, 2020
+# Martin Srebotnjak <miles@filmsi.net>, 2021
 # 
 #, fuzzy
 msgid ""
@@ -14,13 +13,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-17 08:17-0600\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Олександр (6c6c6) <6c6c6.ukr@gmail.com>, 2020\n"
-"Language-Team: Ukrainian (Ukraine) (https://www.transifex.com/HandBrakeProject/teams/92423/uk_UA/)\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>, 2021\n"
+"Language-Team: Slovenian (Slovenia) (https://www.transifex.com/HandBrakeProject/teams/92423/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: uk_UA\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Language: sl_SI\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #: src/ghb3.ui:23
 msgid ""
@@ -28,13 +27,10 @@ msgid ""
 "\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Візуалізуйте підзаголовки на відео. \n"
-"\n"
-"Підзаголовок буде частиною відео, і його неможливо відключити."
 
 #: src/ghb3.ui:26
 msgid "<b>Burned In</b>"
-msgstr "<b>Пропалено в</b>"
+msgstr ""
 
 #: src/ghb3.ui:32 src/ghb3.ui:9122
 msgid ""
@@ -46,17 +42,10 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
-"Встановити за замовчуванням вихідний трек субтитрів.\n"
-"\n"
-"Більшість гравців автоматично відображатиме це\n"
-"трек субтитрів під час відтворення відео.\n"
-"\n"
-"Це корисно для створення \"вимушеної\" доріжки\n"
-"у вашому виході."
 
 #: src/ghb3.ui:39
 msgid "<b>Default</b>"
-msgstr "<b>За замовчуванням</b>"
+msgstr ""
 
 #: src/ghb3.ui:45 src/ghb3.ui:9084
 msgid ""
@@ -67,16 +56,10 @@ msgid ""
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
 msgstr ""
-"Використовуйте лише субтитри, які були позначені прапором\n"
-"як змушений у вихідному треку субтитрів\n"
-"\n"
-"\"Примусові\" субтитри зазвичай використовуються для показу\n"
-"субтитри під час сцен, де хтось виступає\n"
-"іноземна мова."
 
 #: src/ghb3.ui:51
 msgid "<b>Forced Only</b>"
-msgstr "<b>Тільки примусово</b>"
+msgstr ""
 
 #: src/ghb3.ui:57
 msgid ""
@@ -87,16 +70,10 @@ msgid ""
 "does not coincide with the start of the video.\n"
 "This setting allows you to synchronize the files."
 msgstr ""
-"Додавання (або віднімання) зміщення (у мілісекундах)\n"
-"до початку треку субтитрів SRT.\n"
-"\n"
-"Часто запуск зовнішнього файлу SRT\n"
-"не збігається з початком відео.\n"
-"Цей параметр дозволяє синхронізувати файли."
 
 #: src/ghb3.ui:63
 msgid "<b>SRT Offset</b>"
-msgstr "<b>Зсув SRT</b>"
+msgstr ""
 
 #: src/ghb3.ui:69
 msgid ""
@@ -112,21 +89,10 @@ msgid ""
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
 msgstr ""
-"Доріжка субтитрів джерела\n"
-"\n"
-"Ви можете вибрати будь-який із субтитрів\n"
-"розпізнається у вашому вихідному файлі.\n"
-"\n"
-"Крім того, є спеціальний варіант треку\n"
-"\"Сканування іноземного аудіо\". Ця опція додасть\n"
-"додатковий перехід до коду, який шукає\n"
-"субтитри, які можуть відповідати іноземному\n"
-"мовна сцена. Цей варіант найкраще використовувати в\n"
-"сполучення з опцією \"Примусово\"."
 
 #: src/ghb3.ui:80
 msgid "<b>Track</b>"
-msgstr "<b>Доріжка</b>"
+msgstr ""
 
 #: src/ghb3.ui:87
 msgid "Open Source Directory"
@@ -174,43 +140,43 @@ msgstr ""
 
 #: src/ghb3.ui:163 src/ghb3.ui:2128
 msgid "_Presets"
-msgstr "_Шаблони"
+msgstr "_Prednastavitve"
 
 #: src/ghb3.ui:171 src/ghb3.ui:2136
 msgid "Set De_fault"
-msgstr "Встановити _типовим"
+msgstr "Nastavi kot priv_zeto"
 
 #: src/ghb3.ui:185 src/ghb3.ui:2150
 msgid "_Save"
-msgstr "_Зберегти"
+msgstr "_Shrani"
 
 #: src/ghb3.ui:194 src/ghb3.ui:2159
 msgid "Save _As"
-msgstr "Зберегти _як"
+msgstr "Shrani _kot"
 
 #: src/ghb3.ui:203 src/ghb3.ui:2168
 msgid "_Rename"
-msgstr "_Прейменувати"
+msgstr "_Preimenuj"
 
 #: src/ghb3.ui:212 src/ghb3.ui:2177
 msgid "_Delete"
-msgstr "_Видалити"
+msgstr "_Izbriši"
 
 #: src/ghb3.ui:226 src/ghb3.ui:2191
 msgid "_Import"
-msgstr "_Імпорт"
+msgstr "_Uvozi"
 
 #: src/ghb3.ui:235 src/ghb3.ui:2200
 msgid "_Export"
-msgstr "_Експорт"
+msgstr "_Izvozi"
 
 #: src/ghb3.ui:249 src/ghb3.ui:2214
 msgid "Reset _Built-in Presets"
-msgstr "Скинути _вбудовані шаблони"
+msgstr ""
 
 #: src/ghb3.ui:304
 msgid "<b>Presets List</b>"
-msgstr "<b>Список шаблонів</b>"
+msgstr ""
 
 #: src/ghb3.ui:318
 msgid "HandBrake Queue"
@@ -227,22 +193,22 @@ msgstr ""
 #: src/ghb3.ui:404 src/ghb3.ui:2324 src/queuehandler.c:2378
 #: src/queuehandler.c:2391 src/queuehandler.c:2402
 msgid "Start Encoding"
-msgstr "Почати кодування"
+msgstr ""
 
 #: src/ghb3.ui:406 src/ghb3.ui:2326 src/ghb3.ui:6432 src/queuehandler.c:2377
 #: src/queuehandler.c:2390
 msgid "Start"
-msgstr "Розпочати"
+msgstr ""
 
 #: src/ghb3.ui:420 src/ghb3.ui:2339 src/queuehandler.c:2416
 #: src/queuehandler.c:2429 src/queuehandler.c:2440
 msgid "Pause Encoding"
-msgstr "Призупинити кодування"
+msgstr ""
 
 #: src/ghb3.ui:422 src/ghb3.ui:2341 src/queuehandler.c:2415
 #: src/queuehandler.c:2428
 msgid "Pause"
-msgstr "Призупинити"
+msgstr ""
 
 #: src/ghb3.ui:480
 msgid "Options"
@@ -348,22 +314,18 @@ msgstr ""
 
 #: src/ghb3.ui:1710
 msgid "About HandBrake"
-msgstr "Про HandBrake"
+msgstr "O programu HandBrake"
 
 #: src/ghb3.ui:1716
 msgid ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
 msgstr ""
-"Авторство © 2008 -  John Stebbins\n"
-"Авторство © 2004 - , розробники HandBrake"
 
 #: src/ghb3.ui:1718
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"HandBrake, що розповсюджується відповідно до ліцензії GPL, це "
-"багатоплатформовий, багатопотоковий відеотранскодер."
 
 #: src/ghb3.ui:1720
 msgid "https://handbrake.fr"
@@ -380,131 +342,131 @@ msgstr ""
 
 #: src/ghb3.ui:1907
 msgid "HandBrake"
-msgstr ""
+msgstr "HandBrake"
 
 #: src/ghb3.ui:1930
 msgid "_File"
-msgstr "_Файл"
+msgstr "_Datoteka"
 
 #: src/ghb3.ui:1938
 msgid "Open _Source"
-msgstr "Відкрити _джерело"
+msgstr "Odpri _vir"
 
 #: src/ghb3.ui:1947
 msgid "Open Single _Title"
-msgstr "Відкрити один _файл"
+msgstr ""
 
 #: src/ghb3.ui:1956
 msgid "Set _Destination"
-msgstr "Встановити _призначення"
+msgstr ""
 
 #: src/ghb3.ui:1971
 msgid "_Preferences"
-msgstr "_Налаштування"
+msgstr "_Nastavitve"
 
 #: src/ghb3.ui:1986
 msgid "_Quit"
-msgstr "_Вихід"
+msgstr "I_zhod"
 
 #: src/ghb3.ui:2001 src/ghb3.ui:2095
 msgid "_Queue"
-msgstr "_Черга"
+msgstr "_Vrsta"
 
 #: src/ghb3.ui:2009
 msgid "_Add"
-msgstr "_Додати"
+msgstr "_Dodaj"
 
 #: src/ghb3.ui:2018
 msgid "Add _Multiple"
-msgstr "Додати _кілька"
+msgstr ""
 
 #: src/ghb3.ui:2027 src/queuehandler.c:2401
 msgid "_Start Encoding"
-msgstr "_Почати кодування"
+msgstr ""
 
 #: src/ghb3.ui:2036 src/queuehandler.c:2439
 msgid "_Pause Encoding"
-msgstr "П_ризупинити кодування"
+msgstr ""
 
 #: src/ghb3.ui:2045
 msgid "S_ave Queue"
-msgstr "З_берегти чергу"
+msgstr "S_hrani vrsto"
 
 #: src/ghb3.ui:2054
 msgid "_Load Queue File"
-msgstr "_Завантажити файл черги"
+msgstr ""
 
 #: src/ghb3.ui:2069
 msgid "_View"
-msgstr "_Вигляд"
+msgstr "_Pogled"
 
 #: src/ghb3.ui:2077
 msgid "HandBrake For _Dumbies"
-msgstr "HandBrake для _чайників"
+msgstr ""
 
 #: src/ghb3.ui:2086
 msgid "Presets _List"
-msgstr "Список _шаблонів"
+msgstr ""
 
 #: src/ghb3.ui:2104
 msgid "_Preview"
-msgstr "_Перегляд"
+msgstr "_Predogled"
 
 #: src/ghb3.ui:2113
 msgid "_Activity Window"
-msgstr "Вікно _активності"
+msgstr ""
 
 #: src/ghb3.ui:2229
 msgid "_Help"
-msgstr "_Допомога"
+msgstr "Po_moč"
 
 #: src/ghb3.ui:2237
 msgid "_About"
-msgstr "_Про програму"
+msgstr "_O programu"
 
 #: src/ghb3.ui:2246
 msgid "_Guide"
-msgstr "_Керівництво"
+msgstr "_Vodnik"
 
 #: src/ghb3.ui:2284 src/callbacks.c:4123
 msgid "Choose Video Source"
-msgstr "Вибрати початкове відео"
+msgstr ""
 
 #: src/ghb3.ui:2286 src/callbacks.c:4122
 msgid "Open Source"
-msgstr "Відкрити джерело"
+msgstr "Odpri vir"
 
 #: src/ghb3.ui:2309
 msgid "Add to Queue"
-msgstr "Додати до черги"
+msgstr "Dodaj v vrsto"
 
 #: src/ghb3.ui:2311
 msgid "Add To Queue"
-msgstr "Додати до черги"
+msgstr "Dodaj v vrsto"
 
 #: src/ghb3.ui:2366
 msgid "Show Presets Window"
-msgstr "Показати вікно шаблонів"
+msgstr ""
 
 #: src/ghb3.ui:2368
 msgid "Presets"
-msgstr "Шаблони"
+msgstr "Prednastavitve"
 
 #: src/ghb3.ui:2381
 msgid "Show Preview Window"
-msgstr "Показати вікно перегляду"
+msgstr ""
 
 #: src/ghb3.ui:2383
 msgid "Preview"
-msgstr "Попередній перегляд"
+msgstr "Predogled"
 
 #: src/ghb3.ui:2396
 msgid "Show Queue"
-msgstr "Показати чергу"
+msgstr "Pokaži vrsto"
 
 #: src/ghb3.ui:2398 src/callbacks.c:4567
 msgid "Queue"
-msgstr ""
+msgstr "Vrsta"
 
 #: src/ghb3.ui:2411
 msgid "Show Activity Window"
@@ -512,7 +474,7 @@ msgstr ""
 
 #: src/ghb3.ui:2413
 msgid "Activity"
-msgstr ""
+msgstr "Dejavnost"
 
 #: src/ghb3.ui:2443
 msgid "<b>Source:</b>"
@@ -522,7 +484,7 @@ msgstr ""
 #: src/hb-backend.c:84 src/hb-backend.c:249 src/hb-backend.c:334
 #: src/hb-backend.c:2421 src/hb-backend.c:2647 src/subtitlehandler.c:1365
 msgid "None"
-msgstr ""
+msgstr "Brez"
 
 #: src/ghb3.ui:2514 src/callbacks.c:4095
 msgid "Scanning..."
@@ -640,7 +602,7 @@ msgstr ""
 
 #: src/ghb3.ui:2996
 msgid "Duration:"
-msgstr ""
+msgstr "Trajanje:"
 
 #: src/ghb3.ui:3014
 msgid "hh:mm:ss"
@@ -1242,7 +1204,7 @@ msgstr ""
 
 #: src/ghb3.ui:5473
 msgid "AAC"
-msgstr "AAC"
+msgstr ""
 
 #: src/ghb3.ui:5478
 msgid ""
@@ -1252,7 +1214,7 @@ msgstr ""
 
 #: src/ghb3.ui:5494
 msgid "AC-3"
-msgstr "AC-3"
+msgstr ""
 
 #: src/ghb3.ui:5499
 msgid ""
@@ -1262,7 +1224,7 @@ msgstr ""
 
 #: src/ghb3.ui:5515
 msgid "DTS"
-msgstr "DTS"
+msgstr ""
 
 #: src/ghb3.ui:5520
 msgid ""
@@ -1272,7 +1234,7 @@ msgstr ""
 
 #: src/ghb3.ui:5536
 msgid "DTS-HD"
-msgstr "DTS-HD"
+msgstr ""
 
 #: src/ghb3.ui:5541
 msgid ""
@@ -1282,7 +1244,7 @@ msgstr ""
 
 #: src/ghb3.ui:5557
 msgid "EAC-3"
-msgstr "EAC-3"
+msgstr ""
 
 #: src/ghb3.ui:5562
 msgid ""
@@ -1302,7 +1264,7 @@ msgstr ""
 
 #: src/ghb3.ui:5599
 msgid "FLAC"
-msgstr "FLAC"
+msgstr ""
 
 #: src/ghb3.ui:5604
 msgid ""
@@ -1322,12 +1284,11 @@ msgstr ""
 
 #: src/ghb3.ui:5678
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>Налаштування перетворення аудіо:</b>"
+msgstr ""
 
 #: src/ghb3.ui:5679
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
-"Кожна обрана початкова доріжка буде перетворена з усіма обраними кодеками"
 
 #: src/ghb3.ui:5704 src/ghb3.ui:9279
 msgid "Encoder"
@@ -1453,7 +1414,7 @@ msgstr ""
 
 #: src/ghb3.ui:6295
 msgid "DVD Subtitles"
-msgstr "Субтитри DVD"
+msgstr ""
 
 #: src/ghb3.ui:6300
 msgid ""
@@ -1465,7 +1426,7 @@ msgstr ""
 
 #: src/ghb3.ui:6314
 msgid "Blu-ray Subtitles"
-msgstr "Субтитри Blu-ray"
+msgstr ""
 
 #: src/ghb3.ui:6319
 msgid ""
@@ -1489,7 +1450,7 @@ msgstr ""
 
 #: src/ghb3.ui:6366
 msgid "Subtitles"
-msgstr "Субтитри"
+msgstr ""
 
 #: src/ghb3.ui:6381 src/queuehandler.c:280
 msgid "Chapter Markers"
@@ -1773,11 +1734,11 @@ msgstr ""
 
 #: src/ghb3.ui:8234
 msgid "Maximum Width:"
-msgstr "Максимальна ширина:"
+msgstr ""
 
 #: src/ghb3.ui:8239
 msgid "Enable maximum width limit."
-msgstr "Увімкнути обмеження максимальної ширини."
+msgstr ""
 
 #: src/ghb3.ui:8257
 msgid ""
@@ -1789,11 +1750,11 @@ msgstr ""
 
 #: src/ghb3.ui:8274
 msgid "Maximum Height:"
-msgstr "Максимальна висота:"
+msgstr ""
 
 #: src/ghb3.ui:8279
 msgid "Enable maximum height limit."
-msgstr "Увімкнути обмеження максимальної висоти."
+msgstr ""
 
 #: src/ghb3.ui:8297
 msgid ""
@@ -1819,7 +1780,7 @@ msgstr ""
 
 #: src/ghb3.ui:8520
 msgid "<b>Duration:</b>"
-msgstr "<b>Тривалість:</b>"
+msgstr ""
 
 #: src/ghb3.ui:8532
 msgid "Set the duration of the live preview in seconds."
@@ -1902,7 +1863,7 @@ msgstr ""
 
 #: src/ghb3.ui:8934
 msgid "Language"
-msgstr "Мова"
+msgstr ""
 
 #: src/ghb3.ui:8948
 msgid "Character Code"
@@ -2002,7 +1963,7 @@ msgstr ""
 
 #: src/ghb3.ui:9409 src/audiohandler.c:1787
 msgid "Quality"
-msgstr "Якість"
+msgstr ""
 
 #: src/ghb3.ui:9414
 msgid "Enable quality setting"
@@ -2068,7 +2029,7 @@ msgstr ""
 
 #: src/ghb3.ui:9765
 msgid "<b>Release Notes</b>"
-msgstr "<b>Нотатки релізу</b>"
+msgstr ""
 
 #: src/audiohandler.c:428 src/audiohandler.c:750 src/audiohandler.c:1225
 #, c-format
@@ -2077,7 +2038,7 @@ msgstr ""
 
 #: src/audiohandler.c:726
 msgid "Quality: "
-msgstr "Якість:"
+msgstr ""
 
 #: src/audiohandler.c:733
 #, c-format
@@ -2140,7 +2101,7 @@ msgstr ""
 
 #: src/callbacks.c:1378
 msgid "Not Selected"
-msgstr "Не обрано"
+msgstr ""
 
 #. This needs to be in scanning and working since scanning
 #. happens fast enough that it can be missed
@@ -2247,7 +2208,7 @@ msgstr ""
 
 #: src/callbacks.c:4193
 msgid "Paused"
-msgstr "Призупинено"
+msgstr ""
 
 #: src/callbacks.c:4224
 msgid "Encode Done!"
@@ -2267,7 +2228,7 @@ msgstr ""
 
 #: src/callbacks.c:4877
 msgid "Scan this DVD source"
-msgstr "Просканувати цей DVD"
+msgstr ""
 
 #: src/callbacks.c:5265
 #, c-format
@@ -2340,7 +2301,7 @@ msgstr ""
 
 #: src/hb-backend.c:110
 msgid "Quit Handbrake"
-msgstr "Вийти з Handbrake"
+msgstr ""
 
 #: src/hb-backend.c:111
 msgid "Put Computer To Sleep"
@@ -2348,11 +2309,11 @@ msgstr ""
 
 #: src/hb-backend.c:112
 msgid "Shutdown Computer"
-msgstr "Вимкнути комп’ютер"
+msgstr ""
 
 #: src/hb-backend.c:123 src/hb-backend.c:252
 msgid "Automatic"
-msgstr "Автоматично"
+msgstr ""
 
 #: src/hb-backend.c:124
 msgid "Loose"
@@ -2364,15 +2325,15 @@ msgstr ""
 
 #: src/hb-backend.c:161
 msgid "Week"
-msgstr "Тиждень"
+msgstr ""
 
 #: src/hb-backend.c:162
 msgid "Month"
-msgstr "Місяць"
+msgstr ""
 
 #: src/hb-backend.c:163
 msgid "Year"
-msgstr "Рік"
+msgstr ""
 
 #: src/hb-backend.c:164
 msgid "Immortal"
@@ -2380,19 +2341,19 @@ msgstr ""
 
 #: src/hb-backend.c:174
 msgid "Never"
-msgstr "Ніколи"
+msgstr ""
 
 #: src/hb-backend.c:175
 msgid "Daily"
-msgstr "Щоденно"
+msgstr ""
 
 #: src/hb-backend.c:176
 msgid "Weekly"
-msgstr "Щотижня"
+msgstr ""
 
 #: src/hb-backend.c:177
 msgid "Monthly"
-msgstr "Щомісячно"
+msgstr ""
 
 #: src/hb-backend.c:201
 msgid "Decomb"
@@ -2420,15 +2381,15 @@ msgstr ""
 
 #: src/hb-backend.c:237
 msgid "90 Degrees"
-msgstr "90 градусів"
+msgstr ""
 
 #: src/hb-backend.c:238
 msgid "180 Degrees"
-msgstr "180 градусів"
+msgstr ""
 
 #: src/hb-backend.c:239
 msgid "270 Degrees"
-msgstr "270 градусів"
+msgstr ""
 
 #: src/hb-backend.c:250
 msgid "Spatial"
@@ -3000,7 +2961,7 @@ msgstr ""
 #. Should never happen
 #: src/queuehandler.c:1173
 msgid "Error"
-msgstr "Помилка"
+msgstr ""
 
 #: src/queuehandler.c:1177
 #, c-format
@@ -3053,7 +3014,7 @@ msgstr ""
 
 #: src/queuehandler.c:1835 src/queuehandler.c:1881
 msgid "Overwrite"
-msgstr "Перезаписати"
+msgstr ""
 
 #: src/queuehandler.c:1848
 #, c-format
@@ -3062,9 +3023,6 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
-"Призначення: %s\n"
-"\n"
-"Це непридатна тека."
 
 #: src/queuehandler.c:1862
 #, c-format
@@ -3090,7 +3048,7 @@ msgstr ""
 #. Title label
 #: src/queuehandler.c:2197
 msgid "No Title"
-msgstr "Без назви"
+msgstr ""
 
 #: src/queuehandler.c:2207
 msgid ""
@@ -3101,49 +3059,47 @@ msgstr ""
 
 #: src/queuehandler.c:2371 src/queuehandler.c:2384
 msgid "Stop"
-msgstr "Зупинити"
+msgstr ""
 
 #: src/queuehandler.c:2372 src/queuehandler.c:2385 src/queuehandler.c:2397
 msgid "Stop Encoding"
-msgstr "Зупинити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2396
 msgid "S_top Encoding"
-msgstr "З_упинити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2409 src/queuehandler.c:2422
 msgid "Resume"
-msgstr "Відновити"
+msgstr ""
 
 #: src/queuehandler.c:2410 src/queuehandler.c:2423 src/queuehandler.c:2435
 msgid "Resume Encoding"
-msgstr "Відновити кодування"
+msgstr ""
 
 #: src/queuehandler.c:2434
 msgid "_Resume Encoding"
-msgstr "_Відновити кодування"
+msgstr ""
 
 #: src/queuehandler.c:3065
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
 msgstr ""
-"Виконується кодування. Що б Ви хотіли зробити?\n"
-"\n"
 
 #: src/subtitlehandler.c:1379
 #, c-format
 msgid "Preferred Language: %s"
-msgstr "Привілейовані мови: %s"
+msgstr ""
 
 #: src/subtitlehandler.c:1393
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Додати %s доріжку субтитрів, якщо типове аудіо не %s"
+msgstr ""
 
 #: src/subtitlehandler.c:1398
 msgid "Add subtitle track if default audio is not your preferred language"
-msgstr "Додати доріжку субтитрів, якщо типове аудіо не привілейованою мовою"
+msgstr ""
 
 #: src/videohandler.c:202
 #, c-format
@@ -3153,10 +3109,6 @@ msgid ""
 "Expanded Options:\n"
 "\"%s\""
 msgstr ""
-"%s\n"
-"\n"
-"Розширені опції:\n"
-"„%s“"
 
 #: src/videohandler.c:205
 #, c-format
@@ -3166,10 +3118,6 @@ msgid ""
 "Expanded Options:\n"
 "\"\""
 msgstr ""
-"%s\n"
-"\n"
-"Розширені опції:\n"
-"„“"
 
 #: src/videohandler.c:349
 #, c-format
