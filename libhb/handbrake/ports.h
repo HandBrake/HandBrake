@@ -140,7 +140,7 @@ char * hb_utf8_to_cp(const char *src);
 /************************************************************************
  * DVD utils
  ***********************************************************************/
-int hb_dvd_region(char *device, int *region_mask);
+int hb_dvd_region(const char *device, int *region_mask);
 
 #if defined( SYS_DARWIN )
 int macOS_get_user_config_directory( char path[512] );

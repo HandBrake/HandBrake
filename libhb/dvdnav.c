@@ -103,12 +103,11 @@ static char * hb_dvdnav_name( char * path )
  **********************************************************************/
 static int hb_dvdnav_reset( hb_dvdnav_t * d )
 {
-    char * path_ccp = hb_utf8_to_cp( d->path );
     if ( d->dvdnav )
         dvdnav_close( d->dvdnav );
 
     /* Open device */
-    if( dvdnav_open(&d->dvdnav, path_ccp) != DVDNAV_STATUS_OK )
+    if( dvdnav_open(&d->dvdnav, d->path) != DVDNAV_STATUS_OK )
     {
         /*
          * Not an error, may be a stream - which we'll try in a moment.
@@ -137,13 +136,10 @@ static int hb_dvdnav_reset( hb_dvdnav_t * d )
         goto fail;
     }
 
-    free( path_ccp );
-
     return 1;
 
 fail:
     if( d->dvdnav ) dvdnav_close( d->dvdnav );
-    free( path_ccp );
     return 0;
 }
 
@@ -157,21 +153,13 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
     hb_dvd_t * e;
     hb_dvdnav_t * d;
     int region_mask;
-    char * path_ccp;
 
     e = calloc( sizeof( hb_dvd_t ), 1 );
     d = &(e->dvdnav);
     d->h = h;
 
-    /*
-     * Convert UTF-8 path to current code page on Windows
-     * hb_utf8_to_cp() is the same as strdup on non-Windows,
-     * so no #ifdef required here
-     */
-    path_ccp = hb_utf8_to_cp( path );
-
 	/* Log DVD drive region code */
-    if ( hb_dvd_region( path_ccp, &region_mask ) == 0 )
+    if ( hb_dvd_region( path, &region_mask ) == 0 )
     {
         hb_log( "dvd: Region mask 0x%02x", region_mask );
         if ( region_mask == 0xFF )
@@ -181,7 +169,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
     }
 
     /* Open device */
-    if( dvdnav_open(&d->dvdnav, path_ccp) != DVDNAV_STATUS_OK )
+    if( dvdnav_open(&d->dvdnav, path) != DVDNAV_STATUS_OK )
     {
         /*
          * Not an error, may be a stream - which we'll try in a moment.
@@ -211,7 +199,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
     }
 
     /* Open device */
-    if( !( d->reader = DVDOpen( path_ccp ) ) )
+    if( !( d->reader = DVDOpen( path ) ) )
     {
         /*
          * Not an error, may be a stream - which we'll try in a moment.
@@ -227,8 +215,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
         goto fail;
     }
 
-    d->path = strdup( path ); /* hb_dvdnav_title_scan assumes UTF-8 path, so not path_ccp here */
-    free( path_ccp );
+    d->path = strdup( path );
 
     return e;
 
@@ -237,7 +224,6 @@ fail:
     if( d->vmg )    ifoClose( d->vmg );
     if( d->reader ) DVDClose( d->reader );
     free( e );
-    free( path_ccp );
     return NULL;
 }
 
