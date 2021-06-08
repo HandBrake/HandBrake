@@ -1203,437 +1203,437 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>การเข้ารหัส</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>文件格式：</value>
+    <value>รูปแบบไฟล์：</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>常规</value>
+    <value>ทั่วไป</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>日志记录</value>
+    <value>การบันทึก</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>日志详细级别：</value>
+    <value>บันทึกระดับการใช้คำฟุ่มเฟือย：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>日志文件路径：</value>
+    <value>เส้นทางไฟล์บันทึก：</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pause queue if disk space is low</value>
+    <value>หยุดคิวชั่วคราวหากพื้นที่ดิสก์เหลือน้อย</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>最小化到系统托盘(需要重启)</value>
+    <value>ย่อเล็กสุดไปที่ถาดระบบ (ต้องรีสตาร์ท)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>DVD和蓝光标题的最短持续时间"秒"。将跳过较短的标题：</value>
+    <value>DVDและระยะเวลาที่สั้นที่สุดของชื่อ Blu-ray "วินาที" หัวข้อที่สั้นกว่าจะถูกข้าม：</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 文件扩展名：</value>
+    <value>MP4 นามสกุลไฟล์：</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>启动时</value>
+    <value>เมื่อเริ่มต้น</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>输出文件</value>
+    <value>ไฟล์เอาต์พุต</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>路径：</value>
+    <value>เส้นทาง：</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>Path to Media Player</value>
+    <value>เส้นทาง Media Player</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>在编码时防止系统进入睡眠状态</value>
+    <value>ป้องกันไม่ให้ระบบเข้าสู่โหมดสลีปขณะเข้ารหัส</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>要扫描的预览图片数：</value>
+    <value>จำนวนภาพตัวอย่างที่จะสแกน：</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>优先级：</value>
+    <value>ลำดับความสำคัญ：</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>如果可用，优先使用 Intel QuickSync 解码视频。</value>
+    <value>หากมี ให้ใช้ Intel QuickSync เพื่อถอดรหัสวิดีโอก่อน</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>在没有使用QuickSync 编码器时使用QSV 解码器。(如 x265)</value>
+    <value>ใช้ตัวถอดรหัส QSV เมื่อไม่ได้ใช้ตัวเข้ารหัส QuickSync (เช่น x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>移除常见的标点符号</value>
+    <value>ลบเครื่องหมายวรรคตอนทั่วไป</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>用空格替换下划线</value>
+    <value>แทนที่ขีดล่างด้วยช่องว่าง</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>当应用重启时重置为“无操作”。</value>
+    <value>รีเซ็ตเป็น "ไม่ดำเนินการ" เมื่อรีสตาร์ทแอป</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>选择缩放器：</value>
+    <value>เลือก Scaler：</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>缩放</value>
+    <value>ซูม</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>发送文件至：</value>
+    <value>ส่งไฟล์ไปที่：</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>更改大写格式为词首字母大写</value>
+    <value>เปลี่ยนรูปแบบการใช้อักษรตัวพิมพ์ใหญ่เป็นอักษรตัวแรกของคำ</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>更新</value>
+    <value>อัพเดท</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>用户界面</value>
+    <value>หน้าจอผู้ใช้</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>版本：</value>
+    <value>รุ่น：</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>视频</value>
+    <value>วีดีโอ</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>This path is used for the video preview feature only.
-VLC and MPC-HC are supported. Other players may also work but are not validated.</value>
+    <value>เส้นทางนี้ใช้สำหรับคุณลักษณะการแสดงตัวอย่างวิดีโอเท่านั้น
+รองรับ VLC และ MPC-HC ผู้เล่นรายอื่นอาจใช้งานได้ แต่ไม่ผ่านการตรวจสอบ</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>查看日志目录</value>
+    <value>ดูไดเรกทอรีบันทึก</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>当完成时</value>
+    <value>เมื่อทำเสร็จแล้ว</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 设置</value>
+    <value>x264/5 ติดตั้ง</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>固定质量模式的最小刻度：</value>
+    <value>สเกลขั้นต่ำสำหรับโหมดคุณภาพคงที่：</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>变形：</value>
+    <value>อะนามอร์ฟิค：</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>自动</value>
+    <value>อัตโนมัติ</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>下</value>
+    <value>ด้านล่าง</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Cropping:</value>
+    <value>การครอบตัด:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>ปรับแต่ง</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Display Size:</value>
+    <value>ขนาดจอแสดงผล:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>高度：</value>
+    <value>ความสูง：</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>自动</value>
+    <value>อัตโนมัติ</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>左</value>
+    <value>ซ้าย</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Final Dimensions:</value>
+    <value>มิติสุดท้าย:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixel Aspect:</value>
+    <value>ลักษณะพิเซล:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>右</value>
+    <value>ขวา</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>大小：</value>
+    <value>ขนาด：</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>上</value>
+    <value>บน</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Scaled Size:</value>
+    <value>ขนาดที่ปรับขนาด:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>ปรับแต่ง</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>导出文件</value>
+    <value>ส่งออกไฟล์</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>导入文件</value>
+    <value>นำเข้าไฟล์</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>官方的</value>
+    <value>ทางการ</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>选择标题：</value>
+    <value>เลือกชื่อเรื่อง：</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>添加到队列中</value>
+    <value>เพิ่มในคิว</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>选中的标题将会使用 "{0}" 预设添加</value>
+    <value>ชื่อที่เลือกจะถูกใช้ "{0}" พรีเซต</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Video Options:</value>
+    <value>ตัวเลือกวิดีโอ:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>音频：</value>
+    <value>เสียง：</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>清除全部</value>
+    <value>ลบทั้งหมด</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>清除已完成的</value>
+    <value>ล้างเรียบร้อย</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>清除队列</value>
+    <value>ล้างคิว</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>清除选中的</value>
+    <value>ล้างรายการที่เลือก</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>删除</value>
+    <value>ลบ</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>目标路径：</value>
+    <value>เส้นทางเป้าหมาย：</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>无操作</value>
+    <value>ไม่มีการตอบสนอง</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>编码时间：</value>
+    <value>ระยะเวลาเข้ารหัส：</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>编辑</value>
+    <value>แก้ไข</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>结束时间：</value>
+    <value>เวลาที่สิ้นสุด：</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>导出队列</value>
+    <value>ส่งออกคิว</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>文件大小：</value>
+    <value>ขนาดไฟล์：</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>休眠</value>
+    <value>อยู่เฉยๆ</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>锁定系统</value>
+    <value>ล็อคระบบ</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>日志将在编码完成后可用。</value>
+    <value>บันทึกจะพร้อมใช้งานหลังจากการเข้ารหัสเสร็จสิ้น</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>登出</value>
+    <value>ออกจากระบบ</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>打开目标目录</value>
+    <value>เปิดไดเรกทอรีเป้าหมาย</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>打开源目录</value>
+    <value>เปิดไดเร็กทอรีแหล่งที่มา</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>选项</value>
+    <value>ตัวเลือก</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>暂停</value>
+    <value>หมดเวลา</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>暂停时常：</value>
+    <value>ระยะเวลาหยุดชั่วคราว：</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>图像设置：</value>
+    <value>การตั้งค่ารูปภาพ：</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>退出HandBrake</value>
+    <value>ออกจาก HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>重试所有任务</value>
+    <value>ลองงานทั้งหมดอีกครั้ง</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>重试失败的</value>
+    <value>ลองใหม่ไม่สำเร็จ</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>重置选中的任务</value>
+    <value>รีเซ็ตงานที่เลือก</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>重置</value>
+    <value>รีเซ็ต</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>关机</value>
+    <value>ปิดตัว</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>แหล่งที่มา：</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>启动队列</value>
+    <value>เริ่มคิว</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>开始时间：</value>
+    <value>เวลาเริ่มต้น：</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>统计数据</value>
+    <value>ข้อมูลสถิติ</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>统计数据将在编码完成后可用。</value>
+    <value>สถิติจะพร้อมใช้งานหลังจากการเข้ารหัสเสร็จสิ้น</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>字幕：</value>
+    <value>คำบรรยาย：</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>概要</value>
+    <value>ภาพรวม</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>睡眠</value>
+    <value>สลีป</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>视频：</value>
+    <value>วีดีโอ：</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>เมื่อทำเสร็จแล้ว：</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>添加所有剩余选中的语言</value>
+    <value>เพิ่มภาษาที่เลือกที่เหลือทั้งหมด</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>添加所有剩余的轨道</value>
+    <value>เพิ่มแทร็กที่เหลือทั้งหมด</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>添加新轨道</value>
+    <value>เพิ่มแทร็กใหม่</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Tracks</value>
+    <value>แทร็ก</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>可用的语言：</value>
+    <value>ภาษาที่ใช้ได้：</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>选择语言：</value>
+    <value>เลือกภาษา：</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>选择语言：</value>
+    <value>เลือกภาษา：</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>配置默认行为</value>
+    <value>กำหนดค่าพฤติกรรมเริ่มต้น</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>重新加载</value>
+    <value>โหลดซ้ำ</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>选择要扫描的光盘</value>
+    <value>เลือกแผ่นดิสก์ที่จะสแกน</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>选择要扫描的文件</value>
+    <value>เลือกไฟล์ที่จะสแกน</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>选择要扫描的文件夹</value>
+    <value>เลือกโฟลเดอร์ที่จะสแกน</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>视需要选择一个具体的标题：</value>
+    <value>เลือกหัวข้อเฉพาะที่ต้องการ：</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>然后选择你想编码的视频：</value>
+    <value>จากนั้นเลือกวิดีโอที่คุณต้องการเข้ารหัส：</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>文件</value>
+    <value>ไฟล์</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>文件夹(批量扫描)</value>
+    <value>โฟลเดอร์ (สแกนแบทช์)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>打开DVD或蓝光驱动器</value>
+    <value>เปิด DVD หรือไดรฟ์ Blu-ray</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>打开有一个或多个文件的文件夹。</value>
+    <value>เปิดโฟลเดอร์ที่มีไฟล์ตั้งแต่หนึ่งไฟล์ขึ้นไป</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>恢复队列文件</value>
+    <value>กู้คืนไฟล์คิว</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>以前的队列存档可用。</value>
+    <value>ไฟล์เก็บถาวรคิวก่อนหน้าจะพร้อมใช้งาน</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>打开单个视频文件。</value>
+    <value>เปิดไฟล์วิดีโอเดียว</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>选择源</value>
+    <value>เลือกแหล่งที่มา</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>时长：</value>
+    <value>ระยะเวลา:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>实时预览</value>
+    <value>แสดงตัวอย่างแบบเรียลไทม์</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>选择预览图片</value>
+    <value>เลือกภาพตัวอย่าง</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Prefer system default video player</value>
+    <value>ต้องการเครื่องเล่นวิดีโอเริ่มต้นของระบบ</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>添加隐藏式字幕（可用时）</value>
+    <value>เพิ่มคำบรรยาย (ถ้ามี)</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>添加“外部音频扫描”</value>
+    <value>เพิ่ม "การสแกนเสียงภายนอก"</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>烧录行为：</value>
+    <value>พฤติกรรมเบิร์น：</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>导入字幕</value>
+    <value>นำเข้าคำบรรยาย</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>轨道เลือกพฤติกรรม：</value>
+    <value>ติดตามการเลือกพฤติกรรม：</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>เพิ่มคำบรรยายที่เหลือทั้งหมด</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>选择新标题或源视频时自动选择和配置字幕轨道的方式。</value>
+    <value>วิธีเลือกและกำหนดค่าแทร็กคำบรรยายโดยอัตโนมัติเมื่อเลือกชื่อใหม่หรือวิดีโอต้นทาง</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>额外的音频轨道</value>
+    <value>แทร็กเสียงเพิ่มเติม</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>额外的字幕轨道</value>
+    <value>แทร็กคำบรรยายเพิ่มเติม</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>已烧录</value>
+    <value>เบิร์น</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>章节标记</value>
+    <value>เครื่องหมายเรื่อง</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>去块滤波</value>
+    <value>ปลดบล็อค</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>反胶卷过带</value>
+    <value>ฟิล์มถอยหลัง</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>显示</value>
+    <value>แสดง</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>灰度</value>
+    <value>ระดับสีเทา</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>没有音频轨道</value>
+    <value>ไม่มีแทร็กเสียง</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>没有章节标记</value>
+    <value>ไม่มีเครื่องหมายเรื่อง</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>无滤镜</value>
+    <value>ไม่มีตัวกรอง</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>没有源</value>
+    <value>ไม่มีแหล่งที่มา</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>没有字幕轨</value>
+    <value>ไม่มีคำบรรยาย</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>无轨道</value>
+    <value>ไม่มีแทร็ก</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>预览 {0} / {1}</value>
+    <value>ดูตัวอย่าง {0} / {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
     <value>旋转</value>
@@ -2102,7 +2102,7 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
     <value>章节 {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>自动</value>
+    <value>อัตโนมัติ</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
     <value>始终使用 M4V</value>
