@@ -882,7 +882,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>แนวนอน</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>สีเทา</value>
+    <value>โทนสีเทา</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
     <value>การตรวจจับอินเทอร์เลซ：</value>
@@ -1612,7 +1612,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>แสดง</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>ระดับสีเทา</value>
+    <value>โทนสีเทา</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
     <value>ไม่มีแทร็กเสียง</value>
