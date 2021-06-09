@@ -124,14 +124,14 @@
   <data name="Video_x264FastDecode" xml:space="preserve">
     <value>ลดการใช้ตัวถอดรหัสบน CPU
 
-เลือกตัวเลือกนี้เมื่ออุปกรณ์ของคุณไม่สามารถเล่นเอาต์พุตได้อย่างราบรื่น (เช่น เฟรมหลุด)</value>
+เลือกตัวเลือกนี้เมื่ออุปกรณ์ของคุณไม่สามารถเล่นส่งออกได้อย่างราบรื่น (เช่น เฟรมหลุด)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>คำเตือน: RF 0 ไม่มีการสูญเสีย!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>A value of 0 means lossless and will result in a file size that is larger than the original source, 
-เว้นแต่แหล่งที่มาของไฟล์จะไม่สูญเสียไปด้วย
+เว้นแต่ไฟล์ต้นทางของไฟล์จะไม่สูญเสียไปด้วย
 
 อัตราส่วนเป็นแบบลอการิทึมเมื่อใช้ x264 และ x265 และค่าที่ต่ำกว่าจะสัมพันธ์กับคุณภาพที่สูงขึ้น
 
@@ -140,26 +140,26 @@
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
     <value>คุณสามารถเลือกใช้พรีเซ็ตนี้เพื่อจัดเก็บการตั้งค่าภาพที่มี 3 โหมด:
 
-None:  การตั้งค่าภาพจะไม่ถูกเก็บไว้ในพรีเซ็ต เมื่อโหลดแหล่งที่มาของไฟล์แล้ว แหล่งที่มาของไฟล์จะยังอยู่ในช่วงความละเอียดของแหล่งที่มา สิ่งนี้จะส่งผลต่อการเสียรูป โมดูลัส การตัด ฯลฯ
+None:  การตั้งค่าภาพจะไม่ถูกเก็บไว้ในพรีเซ็ต เมื่อโหลดไฟล์ต้นทางของไฟล์แล้ว ไฟล์ต้นทางของไฟล์จะยังอยู่ในช่วงความละเอียดของไฟล์ต้นทาง สิ่งนี้จะส่งผลต่อการเสียรูป โมดูลัส การตัด ฯลฯ
 
 Custom: คุณสามารถเลือกกำหนดความกว้างและความสูงสูงสุดได้ เมื่อทำเช่นนั้น ความกว้างและความสูงของวิดีโอที่ส่งออกจะไม่เกินค่าที่ตั้งไว้ รักษาอัตราส่วนภาพจะเปิดขึ้นโดยอัตโนมัติ
 
-Source Maximum:  เข้ารหัสที่ความละเอียดของแหล่งที่มาเสมอหากเป็นไปได้</value>
+Source Maximum:  เข้ารหัสที่ความละเอียดของไฟล์ต้นทางเสมอหากเป็นไปได้</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+    <value>โปรแกรมนี้เป็นซอฟต์แวร์ฟรี คุณสามารถแจกจ่ายซ้ำและ/หรือ
+แก้ไขภายใต้เงื่อนไขของสัญญาอนุญาตสาธารณะทั่วไปของกนู
+ตามที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี ทั้งรุ่น2
+ของใบอนุญาตหรือ (ตามที่คุณเลือก) เวอร์ชันที่ใหม่กว่า
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+โปรแกรมนี้เผยแพร่โดยหวังว่าจะเป็นประโยชน์
+แต่ไม่มีการรับประกันใดๆ โดยไม่มีการรับประกันโดยนัยของ
+ความสามารถในการขายหรือความเหมาะสมสำหรับวัตถุประสงค์เฉพาะ ดู
+GNU General Public License สำหรับรายละเอียดเพิ่มเติม
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+คุณควรได้รับสำเนาใบอนุญาตสาธารณะทั่วไป (GNU_ แล้ว
+ร่วมกับโปรแกรมนี้ ถ้าไม่เขียนถึงซอฟต์แวร์เสรี
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>คำเตือน: ไม่ได้เปิดตัวเลือกการตั้งชื่อไฟล์อัตโนมัติ กรุณาเปิดใช้งานในการตั้งค่า</value>
@@ -168,7 +168,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>คำเตือน: ขณะนี้คุณไม่มีการตั้งค่าสำหรับการเลือกแทร็กเสียงและคำบรรยายโดยอัตโนมัติ คุณสามารถตั้งค่าพฤติกรรมนี้โดยเลือกแทร็กเริ่มต้นได้ในตัวเลือก</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>ค่าพรีเซตในโปรแกรมได้รับการรีเซ็ตแล้ว</value>
+    <value>ค่าพรีเซ็ตในโปรแกรมได้รับการรีเซ็ตแล้ว</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>รีเซ็ตเสร็จสมบูรณ์</value>
@@ -260,13 +260,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>การสแกนล้มเหลว... ดูบันทึกกิจกรรมสำหรับรายละเอียด</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>กำลังสแกนแหล่งที่มาของไฟล์ โปรดรอสักครู่...</value>
+    <value>กำลังสแกนไฟล์ต้นทางของไฟล์ โปรดรอสักครู่...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
     <value>กำลังสแกนส่วนหัว {0}/{1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>ก่อนเริ่มการเข้ารหัส คุณต้องสแกนไฟล์ต้นทางก่อนเพื่อตั้งค่างาน คลิกปุ่ม "เพิ่มแหล่งที่มา" บนแถบเครื่องมือเพื่อดำเนินการต่อ</value>
+    <value>ก่อนเริ่มการเข้ารหัส คุณต้องสแกนไฟล์ต้นทางก่อนเพื่อตั้งค่างาน คลิกปุ่ม "เพิ่มไฟล์ต้นทาง" บนแถบเครื่องมือเพื่อดำเนินการต่อ</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>ตรวจสอบให้แน่ใจว่าคุณได้เลือกพรีเซ็ตของคุณเอง โปรดทราบว่าคุณไม่สามารถส่งออกพรีเซ็ตได้</value>
@@ -275,7 +275,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>โปรดเลือกพรีเซ็ตที่จะอัปเดต</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>เลือก "แหล่งที่มา" เพื่อดำเนินการต่อ</value>
+    <value>เลือก "ไฟล์ต้นทาง" เพื่อดำเนินการต่อ</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
     <value>{0} งานที่รอดำเนินการ</value>
@@ -311,7 +311,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>ไม่สามารถนำเข้าค่าที่ตั้งล่วงหน้าได้เนื่องจากดูเหมือนว่าไฟล์จะเสียหายหรือเพราะ HandBrake เป็นเวอร์ชันเก่า</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>ก่อนเพิ่มลงในคิว คุณต้องตั้งค่าพาธปลายทางสำหรับไฟล์เอาต์พุตก่อน</value>
+    <value>ก่อนเพิ่มลงในคิว คุณต้องตั้งค่าพาธปลายทางสำหรับไฟล์ส่งออกก่อน</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
     <value>เส้นทางเป้าหมายที่ป้อนมีอักขระที่ไม่ถูกต้อง และจะไม่ได้รับการอัปเดต</value>
@@ -326,7 +326,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>ส่งออก：{0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>รูปแบบของไฟล์ที่ส่งออก นอกจากอักขระระบบไฟล์ที่รองรับแล้ว คุณยังสามารถใช้ตัวยึดตำแหน่งต่อไปนี้ ซึ่งจะถูกแทนที่เมื่อคุณเปลี่ยนชื่อหรือแหล่งที่มาของการสแกน
+    <value>รูปแบบของไฟล์ที่ส่งออก นอกจากอักขระระบบไฟล์ที่รองรับแล้ว คุณยังสามารถใช้ตัวยึดตำแหน่งต่อไปนี้ ซึ่งจะถูกแทนที่เมื่อคุณเปลี่ยนชื่อหรือไฟล์ต้นทางของการสแกน
 
 ตัวเลือกการอัปเดตตามเวลาจริง：{source} {title} {chapters} 
 ตัวเลือกที่ไม่ใช่เรียลไทม์：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （เปลี่ยนเฉพาะเมื่อสแกนแหล่งใหม่ เปลี่ยนชื่อหรือเรื่อง）</value>
@@ -347,7 +347,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>ไม่สามารถนำเข้าพรีเซ็ตที่เลือกได้</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>ค่าพรีเซตอาจเสียหายหรือเพราะ HandBrake รุ่นเก่าที่ไม่รองรับ
+    <value>ค่าพรีเซ็ตอาจเสียหายหรือเพราะ HandBrake รุ่นเก่าที่ไม่รองรับ
 ต้องสร้างพรีเซ็ตเวอร์ชันเก่าในเวอร์ชันปัจจุบัน</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
@@ -370,14 +370,14 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
 หากคุณดำเนินการต่อ คำบรรยายที่ไม่ได้บันทึกของคุณจะหายไป</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>ไม่พบแหล่งที่มาหรือชื่อที่ถูกต้อง</value>
+    <value>ไม่พบไฟล์ต้นทางหรือชื่อที่ถูกต้อง</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake ไม่สามารถเข้ารหัสแหล่งที่มาที่เลือกได้ เนื่องจากไม่พบแหล่งที่ถูกต้องที่สามารถเข้ารหัสได้
+    <value>HandBrake ไม่สามารถเข้ารหัสไฟล์ต้นทางที่เลือกได้ เนื่องจากไม่พบแหล่งที่ถูกต้องที่สามารถเข้ารหัสได้
 อาจเกิดจากสาเหตุใดสาเหตุหนึ่งดังต่อไปนี้：
-- ระยะเวลาของชื่อแหล่งที่มาแต่ละรายการจะต่ำกว่า "ค่ากำหนด&gt;ตัวเลือกเกณฑ์ "ระยะเวลาชื่อเรื่องขั้นต่ำ" ในขั้นสูง
+- ระยะเวลาของชื่อไฟล์ต้นทางแต่ละรายการจะต่ำกว่า "ค่ากำหนด&gt;ตัวเลือกเกณฑ์ "ระยะเวลาชื่อเรื่องขั้นต่ำ" ในขั้นสูง
 - ไฟล์ต้นฉบับไม่ใช่ไฟล์วิดีโอที่ถูกต้อง หรืออยู่ในรูปแบบที่ HandBrake ไม่รองรับ
-- แหล่งที่มาสามารถป้องกันการคัดลอกหรือรวม DRM โปรดทราบว่า HandBrake ไม่สนับสนุนการลบการป้องกันการคัดลอก
+- ไฟล์ต้นทางสามารถป้องกันการคัดลอกหรือรวม DRM โปรดทราบว่า HandBrake ไม่สนับสนุนการลบการป้องกันการคัดลอก
 
 บันทึกกิจกรรมอาจมีข้อมูลเพิ่มเติม</value>
   </data>
@@ -391,7 +391,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เริ่มคิว</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>ไม่สามารถลบค่าพรีเซตเริ่มต้นได้ โปรดตั้งค่าล่วงหน้าอื่นเป็นค่าเริ่มต้นก่อน</value>
+    <value>ไม่สามารถลบค่าพรีเซ็ตเริ่มต้นได้ โปรดตั้งค่าล่วงหน้าอื่นเป็นค่าเริ่มต้นก่อน</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
     <value>คุณแน่ใจหรือว่าต้องการลบพรีเซ็ต：</value>
@@ -400,19 +400,19 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>ค่าที่ตั้งล่วงหน้าต้องมีชื่อ กรุณากรอกข้อมูลในช่องชื่อพรีเซต</value>
+    <value>ค่าที่ตั้งล่วงหน้าต้องมีชื่อ กรุณากรอกข้อมูลในช่องชื่อพรีเซ็ต</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
     <value>มีพรีเซ็ตที่มีชื่อนี้อยู่แล้ว คุณต้องการที่จะเขียนทับหรือไม่</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>ต้องสแกนต้นทางก่อนจึงจะสามารถใช้ตัวเลือก "แหล่งที่มาสูงสุด" ได้</value>
+    <value>ต้องสแกนต้นทางก่อนจึงจะสามารถใช้ตัวเลือก "ไฟล์ต้นทางสูงสุด" ได้</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
     <value>ต้องกรอกข้อมูลในฟิลด์ความกว้างหรือความสูงที่กำหนดเองสำหรับตัวเลือก "กำหนดเอง"</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>ไม่สามารถเพิ่มค่าพรีเซต</value>
+    <value>ไม่สามารถเพิ่มค่าพรีเซ็ต</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>ความผิดพลาดที่ไม่ทราบสาเหตุ</value>
@@ -534,7 +534,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไม่สามารถลบไฟล์แสดงตัวอย่างก่อนหน้า คุณอาจยังคงเปิดการแสดงตัวอย่างในโปรแกรมเล่นสื่อของคุณ โปรดปิดสิ่งนี้</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>ก่อนสร้างตัวอย่าง คุณต้องสแกนแหล่งที่มาและตั้งค่าการเข้ารหัส</value>
+    <value>ก่อนสร้างตัวอย่าง คุณต้องสแกนไฟล์ต้นทางและตั้งค่าการเข้ารหัส</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>ไม่พบไฟล์แสดงตัวอย่าง ไฟล์ถูกลบหรือการเข้ารหัสล้มเหลว ตรวจสอบบันทึกกิจกรรมเพื่อดูรายละเอียด</value>
@@ -561,7 +561,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไม่สามารถโหลดพรีเซ็ตได้</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake ไม่สามารถโหลดไฟล์พรีเซตของคุณ อาจมาจาก HandBrake เวอร์ชันเก่าที่ไม่รองรับหรืออาจเสียหาย
+    <value>HandBrake ไม่สามารถโหลดไฟล์พรีเซ็ตของคุณ อาจมาจาก HandBrake เวอร์ชันเก่าที่ไม่รองรับหรืออาจเสียหาย
 
 ไฟล์พรีเซ็ตเก่าของคุณถูกเก็บถาวรเป็น：</value>
   </data>
@@ -622,8 +622,8 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เกิดข้อผิดพลาดขณะพยายามหยุดการสแกน โปรดรีสตาร์ท HandBrake</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake ไม่สามารถอัพเกรดไฟล์พรีเซตเป็นรูปแบบเวอร์ชันใหม่
-ไฟล์พรีเซตของคุณจะถูกเก็บถาวร คุณต้องสร้างพรีเซ็ตของคุณเอง</value>
+    <value>HandBrake ไม่สามารถอัพเกรดไฟล์พรีเซ็ตเป็นรูปแบบเวอร์ชันใหม่
+ไฟล์พรีเซ็ตของคุณจะถูกเก็บถาวร คุณต้องสร้างพรีเซ็ตของคุณเอง</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>การตั้งค่าใดๆ ที่คุณเปลี่ยนแปลงอาจถูกรีเซ็ตในครั้งถัดไปที่ HandBrake เริ่มทำงาน</value>
@@ -644,7 +644,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไฟล์การตั้งค่าผู้ใช้ของคุณไม่สามารถเข้าถึงได้หรือเสียหาย คุณอาจต้องลบและปล่อยให้ HandBrake สร้างใหม่</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>ไดเร็กทอรีเอาต์พุตที่คุณเลือกไม่มีอยู่หรือไม่ได้รับอนุญาตให้เขียนไฟล์</value>
+    <value>ไดเร็กทอรีส่งออกที่คุณเลือกไม่มีอยู่หรือไม่ได้รับอนุญาตให้เขียนไฟล์</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
     <value>สร้างโฟลเดอร์หรือไม่</value>
@@ -735,7 +735,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>-- เพิ่มหมวดหมู่ใหม่ --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>เพิ่มพรีเซต</value>
+    <value>เพิ่มพรีเซ็ต</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
     <value>ประเภท：</value>
@@ -750,7 +750,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ขนาด：</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>ติดตามการเลือกแหล่งที่มา</value>
+    <value>ติดตามการเลือกไฟล์ต้นทาง</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>อนุญาตให้ผ่าน：</value>
@@ -771,7 +771,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>Gain</value>
+    <value>อัตราขยาย</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
     <value>ซ่อน</value>
@@ -861,13 +861,13 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ลดเสียงรบกวน：</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>พรีเซตไม่สอดแทรก</value>
+    <value>พรีเซ็ตไม่สอดแทรก</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>ลดเสียงรบกวน：</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>พรีเซตลดเสียงรบกวน</value>
+    <value>พรีเซ็ตลดเสียงรบกวน</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>การปรับลดเสียงรบกวน</value>
@@ -888,7 +888,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>การตรวจจับอินเทอร์เลซ：</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>พรีเซต：</value>
+    <value>พรีเซ็ต：</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
     <value>การหมุน:</value>
@@ -897,7 +897,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ความคม:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>พรีเซตความคม</value>
+    <value>พรีเซ็ตความคม</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>ปรับปรุงความคม</value>
@@ -1014,7 +1014,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ตัวเลือก</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>การตั้งค่าเอาต์พุต</value>
+    <value>การตั้งค่าส่งออก</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
     <value>หมดเวลา</value>
@@ -1023,16 +1023,16 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ขนาด</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>เปลี่ยนชื่อพรีเซต</value>
+    <value>เปลี่ยนชื่อพรีเซ็ต</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>เมนูบริบทตัวเลือกพรีเซต</value>
+    <value>เมนูบริบทตัวเลือกพรีเซ็ต</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>ลบพรีเซต</value>
+    <value>ลบพรีเซ็ต</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>พรีเซต</value>
+    <value>พรีเซ็ต</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>ดูตัวอย่าง</value>
@@ -1068,10 +1068,10 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>คิว</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>แหล่งที่มา：</value>
+    <value>ไฟล์ต้นทาง：</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>เปิดแหล่งที่มา</value>
+    <value>เปิดไฟล์ต้นทาง</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
     <value>เริ่มการเข้ารหัส</value>
@@ -1089,7 +1089,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>คุณแน่ใจหรือไม่ว่าต้องการหยุดการเข้ารหัสนี้</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>โปรดเลือกแหล่งที่มาที่จะเข้ารหัสก่อนนำเข้าไฟล์คำบรรยาย</value>
+    <value>โปรดเลือกไฟล์ต้นทางที่จะเข้ารหัสก่อนนำเข้าไฟล์คำบรรยาย</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
     <value>คำบรรยาย</value>
@@ -1116,7 +1116,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เพิ่มประสิทธิภาพ Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>จัดการพรีเซต</value>
+    <value>จัดการพรีเซ็ต</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>ข้อมูลอภิพันธ์</value>
@@ -1233,7 +1233,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เมื่อเริ่มต้น</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>ไฟล์เอาต์พุต</value>
+    <value>ไฟล์ส่งออก</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
     <value>เส้นทาง：</value>
@@ -1369,7 +1369,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เพิ่มในคิว</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>ชื่อที่เลือกจะถูกใช้ "{0}" พรีเซต</value>
+    <value>ชื่อที่เลือกจะถูกใช้ "{0}" พรีเซ็ต</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
     <value>ตัวเลือกวิดีโอ:</value>
@@ -1429,7 +1429,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เปิดไดเรกทอรีเป้าหมาย</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>เปิดไดเร็กทอรีแหล่งที่มา</value>
+    <value>เปิดไดเร็กทอรีไฟล์ต้นทาง</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
     <value>ตัวเลือก</value>
@@ -1462,7 +1462,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ปิดตัว</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>แหล่งที่มา：</value>
+    <value>ไฟล์ต้นทาง：</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
     <value>เริ่มคิว</value>
@@ -1555,7 +1555,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>เปิดไฟล์วิดีโอเดียว</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>เลือกแหล่งที่มา</value>
+    <value>เลือกไฟล์ต้นทาง</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>ระยะเวลา:</value>
@@ -1624,7 +1624,7 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ไม่มีตัวกรอง</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>ไม่มีแหล่งที่มา</value>
+    <value>ไม่มีไฟล์ต้นทาง</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
     <value>ไม่มีคำบรรยาย</value>
@@ -1645,193 +1645,193 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>การเข้ารหัสรอง</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>平均码率(kbps)：</value>
+    <value>อัตราบิตเฉลี่ย(kbps)：</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Video Encoder:</value>
+    <value>ตัวเข้ารหัสวิดีโอ:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>固定帧率</value>
+    <value>อัตราเฟรมคงที่</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>固定质量：</value>
+    <value>คุณภาพคงที่：</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>编码器级别：</value>
+    <value>ระดับตัวเข้ารหัส：</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>编码器预设：</value>
+    <value>พรีเซ็ตตัวเข้ารหัส：</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>编码器配置文件：</value>
+    <value>โปรไฟล์ตัวเข้ารหัส：</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>编码器调优：</value>
+    <value>ปรับตัวเข้ารหัส：</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>高级选项：</value>
+    <value>ตัวเลือกขั้นสูง：</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>快速解码</value>
+    <value>ถอดรหัสเร็ว</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>帧率 (FPS):</value>
+    <value>อัตราเฟรม (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Encoder Options: </value>
+    <value>ตัวเลือกตัวเข้ารหัส: </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>峰值帧率</value>
+    <value>อัตราเฟรมสูงสุด</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Quality: </value>
+    <value>คุณภาพ: </value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Turbo 一次通过</value>
+    <value>Turbo 一ผ่าน</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>可变帧率</value>
+    <value>อัตราเฟรมตัวแปร</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video: </value>
+    <value>วีดีโอ: </value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>语言：</value>
+    <value>ภาษา：</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>使用系统语言</value>
+    <value>ใช้ภาษาของระบบ</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>关于 HandBrake</value>
+    <value>เกี่ยวกับ HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>或者将文件或文件夹拖放到这里...</value>
+    <value>หรือลากและวางไฟล์หรือโฟลเดอร์ที่นี่...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>帮助</value>
+    <value>ตัวช่วย</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>首选项</value>
+    <value>ตัวเลือก</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>添加轨道</value>
+    <value>เพิ่มแทร็ก</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>为每个轨道设置音频码器：</value>
+    <value>ตั้งค่าตัวเข้ารหัสเสียงสำหรับแต่ละแทร็ก：</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>清除</value>
+    <value>ล้าง</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>烧入</value>
+    <value>เบิร์นเข้า</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>默认</value>
+    <value>ค่าเริ่มต้น</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>仅限强制</value>
+    <value>บังคับเท่านั้น</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_关于...</value>
+    <value>_เกี่ยวกับ...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_活动日志</value>
+    <value>_บันทึกกิจกรรม</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_检查更新</value>
+    <value>_ตรวจสอบสำหรับการอัพเดต</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_退出</value>
+    <value>_ออก</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_导出到文件</value>
+    <value>_ส่งออกเป็นไฟล์</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_文件</value>
+    <value>_ไฟล์</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake 文档 (HTTPS)</value>
+    <value>_HandBrake เอกสาร (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_帮助</value>
+    <value>_ตัวช่วย</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_从文件导入</value>
+    <value>_นำเข้าจากไฟล์</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_首选项</value>
+    <value>_ตัวเลือก</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_预设</value>
+    <value>_พรีเซ็ต</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_队列</value>
+    <value>_คิว</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
     <value>_รีเซ็ตพรีเซ็ตในโปรแกรม</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_将当前设置为默认值</value>
+    <value>_ตั้งปัจจุบันเป็นค่าเริ่มต้น</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>_显示预设面板</value>
+    <value>_แสดงแผงพรีเซ็ต</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_显示队列</value>
+    <value>_แสดงคิว</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_工具</value>
+    <value>_เครื่องมือ</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>检查更新 ...</value>
+    <value>ตรวจสอบสำหรับการอัพเดต ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>您确定要清除日志文件目录吗？</value>
+    <value>คุณแน่ใจหรือว่าต้องการล้างไดเร็กทอรีล็อกไฟล์นี้</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>清除日志</value>
+    <value>ล้างบันทึก</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>正在下载...</value>
+    <value>กำลังดาวน์โหลด...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake 的日志文件目录已被清除！</value>
+    <value>HandBrake ไดเร็กทอรีล็อกไฟล์ถูกล้างแล้ว</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>注意</value>
+    <value>บันทึก</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>准备更新...</value>
+    <value>พร้อมอัพเดทแล้ว...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>请选择一个文件夹。</value>
+    <value>โปรดเลือกโฟลเดอร์</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>单击“浏览”以设置默认位置</value>
+    <value>คลิก "เรียกดู" เพื่อตั้งค่าตำแหน่งเริ่มต้น</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>隐藏</value>
+    <value>ซ่อน</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>显示</value>
+    <value>แสดง</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>“添加所有”至队列</value>
+    <value>"เพิ่มทั้งหมด" ในคิว</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>“添加选中”至队列</value>
+    <value>"เพิ่มรายการที่เลือก" ลงในคิว</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>播放文件</value>
+    <value>เล่นไฟล์</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>应用程序工具栏</value>
+    <value>แถบเครื่องมือแอปพลิเคชัน</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>在工具栏中显示“添加所有至队列”</value>
+    <value>แสดง "เพิ่มทั้งหมดลงในคิว" ในแถบเครื่องมือ</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>在工具栏中显示“添加选中至队列”</value>
+    <value>แสดง "เพิ่มรายการที่เลือกในคิว" ในแถบเครื่องมือ</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
     <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
@@ -1839,426 +1839,426 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
 This will not impact any of the software encoders.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>请更正您的字幕设置然后再继续。</value>
+    <value>โปรดแก้ไขการตั้งค่าคำบรรยายของคุณก่อนดำเนินการต่อ</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>应用</value>
+    <value>ใช้งาน</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>继续编码</value>
+    <value>เข้ารหัสต่อไป</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>活动</value>
+    <value>กิจกรรม</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>导入列队</value>
+    <value>นำเข้าคิว</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
-Time Remaining: {5},  Elapsed: {6} {7}</value>
+    <value>การเข้ารหัส: ผ่านไปแล้ว {0} จาก {1},  {2:00.00}%, FPS: {3:000.0},  เฉลี่ย FPS: {4:000.0}
+เวลาที่เหลืออยู่: {5},  ผ่านไปแล้ว: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>删除所选</value>
+    <value>ลบรายการที่เลือก</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建TMP目录。请检查路径是否正确且可写。
+    <value>โหมดพกพา：ไม่สามารถสร้างไดเร็กทอรี TMP โปรดตรวจสอบว่าเส้นทางถูกต้องและเขียนได้
 
     {0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>便携模式：无法创建存储目录。请检查路径是否正确且可写。
+    <value>โหมดพกพา: ไม่สามารถสร้างไดเร็กทอรีที่เก็บข้อมูลได้ โปรดตรวจสอบว่าเส้นทางถูกต้องและเขียนได้
 
     {0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
+    <value>โหมดพกพา: ไม่สามารถอ่าน portable.ini อาจมีข้อผิดพลาดในไฟล์นี้ กรุณาใช้ portable.ini.template ลองอีกครั้งเป็นเทมเพลต</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 无法初始化引擎。这通常是由过时的GPU驱动程序引起的。\n 请更新显卡驱动程序。</value>
+    <value>HandBrake ไม่สามารถเริ่มต้น engine ได้ ซึ่งมักเกิดจากไดรเวอร์ GPU ที่ล้าสมัย\n โปรดอัปเดตไดรเวอร์การ์ดแสดงผล</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>实时更新选项：{source} {title} {chapters} 
-非实时更新选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+    <value>ตัวเลือกการอัปเดตตามเวลาจริง：{source} {title} {chapters} 
+ตัวเลือกการอัปเดตตามเวลาจริง：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （เปลี่ยนแปลงเฉพาะเมื่อสแกนแหล่งใหม่ เปลี่ยนชื่อหรือบท）</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>可用的附加选项: {source_path} {source_folder_name} {source}</value>
+    <value>มีตัวเลือกเพิ่มเติม: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>询问是否覆盖文件</value>
+    <value>ถามว่าจะเขียนทับไฟล์หรือไม่</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>自动重命名文件</value>
+    <value>เปลี่ยนชื่อไฟล์โดยอัตโนมัติ</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>覆盖文件</value>
+    <value>เขียนทับไฟล์</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>用户界面操作</value>
+    <value>การทำงานของส่วนต่อประสานผู้ใช้</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>文件覆盖操作</value>
+    <value>การดำเนินการเขียนทับไฟล์</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>编码完成</value>
+    <value>การเข้ารหัสเสร็จสมบูรณ์</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>通知</value>
+    <value>ประกาศ</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>คิวเสร็จสมบูรณ์</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>当完成时：</value>
+    <value>เมื่อทำเสร็จแล้ว：</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>文件名冲突操作</value>
+    <value>การดำเนินชื่อไฟล์ขัดแย้ง</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>后缀</value>
+    <value>คำต่อท้าย</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>前缀</value>
+    <value>คำนำหน้า</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>添加编号</value>
+    <value>เพิ่มหมายเลข</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>过滤器视图——去块效应滤波器预设</value>
+    <value>กรองมุมมอง-ปลดบล็อคตัวกรองพรีเซ็ต</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>去块效应滤波器调整</value>
+    <value>การปรับปลดบล็อคตัวกรอง</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>编码器的选择将在“视频”选项卡上提供。</value>
+    <value>ตัวเลือกของตัวเข้ารหัสจะมีอยู่ในแท็บ "วิดีโอ"</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake 检测到多个未完成的队列文件。恢复这些文件将使 HandBrake 运行多个实例。 你想恢复所有未完成的工作吗？</value>
+    <value>HandBrake ตรวจพบไฟล์คิวที่ยังไม่เสร็จหลายไฟล์ การกู้คืนไฟล์เหล่านี้จะทำให้ HandBrake เรียกใช้หลายอินสแตนซ์ คุณต้องการกู้คืนงานที่ยังไม่เสร็จทั้งหมดหรือไม่</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake 检测到上次启动时队列中尚有未完成的项目。你想恢复这些项目吗？</value>
+    <value>HandBrake ตรวจพบว่ามีรายการที่ยังไม่เสร็จในคิวเมื่อเริ่มต้นครั้งล่าสุด คุณต้องการกู้คืนรายการเหล่านี้หรือไม่</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>有可恢复的队列</value>
+    <value>คิวที่กู้คืนได้</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>您的预设文件包含内置预设，但导入功能不支持导入内置预设。请使用“预设菜单  -&gt; 重置内置预设”来恢复标准预设。
+    <value>ไฟล์พรีเซ็ตของคุณมีพรีเซ็ตในตัว แต่ฟังก์ชันนำเข้าไม่รองรับการนำเข้าพรีเซ็ตในตัว โปรดใช้ เมนูพรีเซ็ต  -&gt; รีเซ็ตพรีเซ็ตในโปรแกรม" เพื่อคืนค่าพรีเซ็ตมาตรฐาน
 
-将导入所有支持的用户预设。</value>
+พรีเซ็ตผู้ใช้ที่รองรับทั้งหมดจะถูกนำเข้า</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>立即执行操作。（这将禁用60秒确认对话框）</value>
+    <value>ดำเนินการทันที (การดำเนินการนี้จะปิดใช้งานกล่องโต้ตอบการยืนยัน 60 วินาที)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>浏览</value>
+    <value>เรียกดู</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>没有设置音频文件。请单击“浏览”以选择要播放的wav或mp3文件。</value>
+    <value>ไม่ได้ตั้งค่าไฟล์เสียง กรุณาคลิก "เรียกดู" เพื่อเลือกไฟล์ wav หรือ mp3 ที่จะเล่น</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>播放</value>
+    <value>เล่น</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>导出列队（仅限命令行界面）</value>
+    <value>ส่งออกคิว (อินเทอร์เฟซบรรทัดคำสั่งเท่านั้น)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>使用黑暗主题。（需要重启软件，仅支持 Windows 10）</value>
+    <value>ใช้ธีมสีเข้ม (จำเป็นต้องรีสตาร์ทซอฟต์แวร์ รองรับเฉพาะ Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>不可用</value>
+    <value>ไม่พร้อมใช้งาน</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>已检测到交流电源。正在恢复编码... ({0} %)</value>
+    <value>ตรวจพบไฟ AC กำลังดำเนินการเข้ารหัสต่อ... ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>系统电量严重不足! ({0} %)</value>
+    <value>ระบบต่ำมาก! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>System Battery Low! ({0} %). Your encode has been paused.</value>
+    <value>ระบบแบตเตอรี่เหลือน้อย! ({0} %). การเข้ารหัสของคุณถูกหยุดชั่วคราว</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>目标磁盘剩余存储容量少于 {0} GB。正在暂停编码...</value>
+    <value>ความจุที่เหลือของดิสก์เป้าหมายน้อยกว่า {0} GB。กำลังหยุดการเข้ารหัส...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>配置自动音频选择</value>
+    <value>กำหนดค่าการเลือกเสียงอัตโนมัติ</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>配置自动字幕选择</value>
+    <value>กำหนดค่าการเลือกคำบรรยายอัตโนมัติ</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>系统</value>
+    <value>ระบบ</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>演员：</value>
+    <value>ผู้กระทำ：</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>评论：</value>
+    <value>ความคิดเห็น：</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>描述：</value>
+    <value>คำอธิบาย：</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>导演：</value>
+    <value>ผู้กำกับ：</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>类型：</value>
+    <value>ชนิด：</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>剧情：</value>
+    <value>โครงเรื่อง：</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>发行日期：</value>
+    <value>วันที่ออก：</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>标题：</value>
+    <value>หัวข้อ：</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>日志查看器</value>
+    <value>ดูบันทึกโปรแกรม</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>详情：</value>
+    <value>รายละเอียด：</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>กรอง：</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>大小：</value>
+    <value>ขนาด：</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>轨道：</value>
+    <value>ติดตาม：</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>常规</value>
+    <value>ทั่วไป</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>点击“检查更新”检查新版本</value>
+    <value>คลิก "ตรวจสอบการอัปเดต" เพื่อตรวจสอบเวอร์ชันใหม่</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; 返回</value>
+    <value>&lt; กลับ</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>目前已暂停</value>
+    <value>ถูกระงับชั่วคราว</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>输出文件</value>
+    <value>ไฟล์ส่งออก</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>章节</value>
+    <value>บท</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>帧数</value>
+    <value>จำนวนเฟรม</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>预览</value>
+    <value>ดูตัวอย่าง</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>秒</value>
+    <value>วินาที</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>ภาษาที่เลือกที่ตรงกันทั้งหมด</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>คำบรรยาแรกให้ตรงกับภาษาที่เลือก</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>无</value>
+    <value>ไม่มี</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>第一个轨道</value>
+    <value>แทร็กเสียงแรก</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>外部音频优先，否则第一个优先</value>
+    <value>เสียงภายนอกมีความสำคัญ มิฉะนั้น เสียงแรกจะมีความสำคัญกว่า</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>外部音轨</value>
+    <value>แทร็กเสียงภายนอก</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>无</value>
+    <value>ไม่มี</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>外部音频搜索</value>
+    <value>การค้นหาเสียงภายนอก</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>外部音频扫描</value>
+    <value>การสแกนเสียงภายนอก</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>所有匹配选中的语言</value>
+    <value>ภาษาที่เลือกที่ตรงกันทั้งหมด</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>使用所有轨道作为模板</value>
+    <value>ใช้แทร็กทั้งหมดเป็นเทมเพลต</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>第一个匹配选中的语言</value>
+    <value>เสียงแรกให้ตรงกับภาษาที่เลือก</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>使用首轨作为模板</value>
+    <value>ใช้แทร็กแรกเป็นเทมเพลต</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>无音频</value>
+    <value>ไม่มีเสียง</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>章节 {0}</value>
+    <value>เรื่อง {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
     <value>อัตโนมัติ</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>始终使用 M4V</value>
+    <value>ใช้ M4V ตลอด</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>始终使用 MP4</value>
+    <value>ใช้ MP4 ตลอด</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>ปรับแต่ง</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>无</value>
+    <value>ไม่มี</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>始终使用源分辨率</value>
+    <value>ใช้ความละเอียดของไฟล์ต้นทางเสมอ</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>高于标准</value>
+    <value>เหนือมาตรฐาน</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>低于标准</value>
+    <value>ต่ำกว่ามาตรฐาน</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>高</value>
+    <value>สูง</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>低</value>
+    <value>ต่ำ</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>标准</value>
+    <value>มาตรฐาน</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>每月</value>
+    <value>รายเดือน</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>每周</value>
+    <value>รายสัปดาห์</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>始终为生成的每个新名称使用默认路径。</value>
+    <value>ใช้เส้นทางเริ่มต้นสำหรับชื่อใหม่ที่สร้างขึ้นทุกครั้ง</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>端口范围必须在5000到32767之间</value>
+    <value>ช่วงพอร์ตต้องอยู่ระหว่าง 5000 ถึง 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>替换占位符: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>แทนที่ตัวยึดตำแหน่ง: {source} {destination}</value>
+    <comment>Note: {source} and {destination} ไม่สามารถแปลได้ </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>有新版本的 HandBrake 可供使用！</value>
+    <value>มีรุ่นใหม่ HandBrake พร้อมใช้งานแล้ว</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2021 The HandBrake Team</value>
+    <value>ลิขสิทธิ์t (C) 2003-2021 ทีม HandBrake </value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>Low battery level:</value>
+    <value>ระดับแบตเตอรี่ต่ำ:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Pause any running jobs when the battery gets low.</value>
+    <value>หยุดงานที่กำลังทำงานอยู่ชั่วคราวเมื่อแบตเตอรี่เหลือน้อย</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>添加所有剩余的隐藏式字幕</value>
+    <value>เพิ่มคำบรรยายที่เหลือทั้งหมด</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>Duplicate jobs were detected in the queue file that you are trying to import. Do you wish to overwrite the existing records? 
-This will also stop any existing running jobs.</value>
+    <value>ตรวจพบงานที่ซ้ำกันในไฟล์คิวที่คุณกำลังพยายามนำเข้า คุณต้องการเขียนทับระเบียนที่มีอยู่หรือไม่
+การดำเนินการนี้จะหยุดงานที่กำลังทำงานอยู่</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>Duplicates Detected</value>
+    <value>ตรวจพบรายการซ้ำ</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>Enable Low Power QuickSync Hardware (where supported).</value>
+    <value>เปิดใช้งานพลังงานต่ำกับฮาร์ดแวร์ QuickSync (ที่รองรับ)</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Please select a single job to view summary information.</value>
+    <value>โปรดเลือกงานเดียวเพื่อดูข้อมูลสรุป</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Run each queued job in a separate worker process.</value>
+    <value>เรียกใช้งานที่อยู่ในคิวแต่ละงานในกระบวนการของผู้ปฏิบัติงานที่แยกจากกัน</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>Default network port for worker:</value>
+    <value>พอร์ตเครือข่ายเริ่มต้นสำหรับผู้ปฏิบัติงาน:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>The preset you have selected is not available for use on this system.
+    <value>พรีเซ็ตที่คุณเลือกไม่สามารถใช้กับระบบนี้ได้
 
-This is typically an indication that your system does not support the hardware required to utilise it.
+โดยทั่วไปจะเป็นการบ่งชี้ว่าระบบของคุณไม่รองรับฮาร์ดแวร์ที่จำเป็นต่อการใช้งาน
 
-Please choose a different preset.</value>
+โปรดเลือกพรีเซ็ตอื่น</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>Process Isolation</value>
+    <value>การแยกกระบวนการ</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>Please note, using this feature will start an HTTP server bound to 127.0.0.1 on the port stated.</value>
+    <value>โปรดทราบว่าการใช้คุณสมบัตินี้จะเริ่มต้นเซิร์ฟเวอร์ HTTP ที่ผูกกับ 127.0.0.1 บนพอร์ตที่ระบุ</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>If the set port is in use, it will find the first free port within +100 from the defined port.</value>
+    <value>หากใช้พอร์ตที่กำหนดไว้ จะพบพอร์ตว่างแรกภายใน +100 จากพอร์ตที่กำหนด</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>Maximum number of simultaneous encodes:</value>
+    <value>จำนวนการเข้ารหัสพร้อมกันสูงสุด:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>取消</value>
+    <value>ยกเลิก</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>预设：</value>
+    <value>พรีเซ็ต：</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>Same as source</value>
+    <value>เหมือนกับไฟล์ต้นทาง</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>Reset Settings</value>
+    <value>คืนค่าการตั้งค่า</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>Are you sure you wish to reset HandBrake to default settings?</value>
+    <value>คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ต HandBrake เป็นการตั้งค่าเริ่มต้น</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>Custom (Not Limited)</value>
+    <value>กำหนดเอง (ไม่จำกัด)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>เติม (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Pillarbox)</value>
+    <value>ความสูง (Pillarbox)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>无</value>
+    <value>ไม่มี</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Letterbox)</value>
+    <value>ความกว้าง (Letterbox)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Fill:</value>
+    <value>เติม:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Colour:</value>
+    <value>สี:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>Borders:</value>
+    <value>ขอบ:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>Resolution and Scaling:</value>
+    <value>ความละเอียดและมาตราส่วน:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Orientation and Cropping:</value>
+    <value>การวางแนวและการครอบตัด:</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 Only! )</value>
+    <value>( Windows 10 เท่านั้น! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>滤镜：</value>
+    <value>ตัง้ค่าตัวกรอง：</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>默认</value>
+    <value>ค่าเริ่มต้น</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>Forced</value>
+    <value>บังคับ</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2267,7 +2267,7 @@ Please choose a different preset.</value>
     <value>480p NTSC SD</value>
   </data>
   <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
-    <value>2160p 4K Ultra HD</value>
+    <value>2160p 4K ที่สุด HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
     <value>576p PAL SD</value>
@@ -2276,190 +2276,190 @@ Please choose a different preset.</value>
     <value>720p HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
-    <value>4320p 8K Ultra HD</value>
+    <value>4320p 8K ที่สุด HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>ปรับแต่ง</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Maximum Size:</value>
+    <value>ขนาดสูงสุด:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>Resolution Limit:</value>
+    <value>ขีดจำกัดความละเอียด:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>无</value>
+    <value>ไม่มี</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>Manage Presets</value>
+    <value>จัดการพรีเซ็ต</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>Delete Built-in Presets</value>
+    <value>ลบพรีเซ็ตในโปรแกรม</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>Export selected preset</value>
+    <value>ส่งออกค่าพรีเซ็ตที่เลือก</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>Import Preset(s) from file</value>
+    <value>นำเข้าพรีเซ็ต(s) จากไฟล์</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>Preset Information:</value>
+    <value>ข้อมูลพรีเซ็ต:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>Built in presets can not be modified.</value>
+    <value>พรีเซ็ตในโปรแกรมไม่สามารถแก้ไขได้</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>Set selected preset as default</value>
+    <value>ตั้งค่าพรีเซ็ตที่เลือกเป็นค่าเริ่มต้น</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>删除预设</value>
+    <value>ลบที่พรีเซ็ต</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(Not supported on this system)</value>
+    <value>(ไม่รองรับระบบนี้)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>停止</value>
+    <value>หยุด</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>The category name you entered already exists. Please choose a different name.</value>
+    <value>ชื่อหมวดหมู่ที่คุณป้อนมีอยู่แล้ว โปรดเลือกชื่ออื่น</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>The category name was empty. Please provide a name.</value>
+    <value>ชื่อหมวดหมู่ว่างเปล่า กรุณาระบุชื่อ</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Enter a name: </value>
+    <value>ใส่ชื่อ: </value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>There is no preset selected.</value>
+    <value>ไม่ได้เลือกพรีเซ็ต</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>Export all user presets</value>
+    <value>ส่งออกพรีเซ็ตของผู้ใช้ทั้งหมด</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>Level at which low disk space alerts show:</value>
+    <value>ระดับที่จะแสดงการแจ้งเตือนพื้นที่ดิสก์เหลือน้อย:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Notice: This is the upper limit of simultaneous jobs. Hardware limitations may take effect which lowers the actual number of simultaneous jobs during encoding.</value>
+    <value>หมายเหตุ: นี่คือขีดจำกัดสูงสุดของงานพร้อมกัน ข้อจำกัดของฮาร์ดแวร์อาจมีผลซึ่งจะลดจำนวนงานที่เกิดขึ้นจริงพร้อมกันระหว่างการเข้ารหัส</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(Not Available)</value>
+    <value>(ไม่ว่าง)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>Is Default:</value>
+    <value>เป็นค่าเริ่มต้น:</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>ไม่</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>ใช่</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>Fine Tune Picture Settings</value>
+    <value>ปรับแต่งการตั้งค่าภาพอย่างละเอียด</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>Show crop adjustment controls.</value>
+    <value>แสดงการควบคุมการปรับการตัด</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>Use Dark</value>
+    <value>ใช้โหมดมืด</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>Use Light</value>
+    <value>ใช้โหมดสว่าง</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>Match System</value>
+    <value>จับคู่จากระบบ</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
-    <value>Theme:</value>
+    <value>ธีม:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(Requires Restart)</value>
+    <value>(ต้องรีสตาร์ท)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth:</value>
+    <value>ปรับสีให้เรียบ:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace:</value>
+    <value>ปริภูมิสี:</value>
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
-    <value>Colourspace</value>
+    <value>ปริภูมิสี</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>Open Preview</value>
+    <value>เปิดดูตัวอย่าง</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>Source Preview:</value>
+    <value>ดูตัวอย่างไฟล์ต้นทาง:</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>Job Status:</value>
+    <value>สถานะงาน:</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
-    <value>Cancelled</value>
+    <value>ยกเลิก</value>
   </data>
   <data name="QueueView_JobStatus_Complete" xml:space="preserve">
-    <value>Complete</value>
+    <value>เสร็จสมบูรณ์</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Invalid Settings. Check log for details.</value>
+    <value>การตั้งค่าไม่ถูกต้อง ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Invalid Input. Check log for details.</value>
+    <value>อินพุตไม่ถูกต้อง ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Status Unknown. Check log for details.</value>
+    <value>ไม่ทราบสถานะ ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Errors detected whist trying to read source.</value>
+    <value>ตรวจพบข้อผิดพลาดขณะพยายามอ่านไฟล์ต้นทาง</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Unknown failure. Check log for details.</value>
+    <value>กระบวนการล้มเหลวที่ไม่รู้จัก ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Worker Crashed. Check log for details.</value>
+    <value>จำนวนงานเสีย ตรวจสอบบันทึกสำหรับรายละเอียด</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>Missing file "hb.dll". Please re-install.</value>
+    <value>ไฟล์ "hb.dll" หายไป กรุณาติดตั้งใหม่</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+    <value>คำเตือน: โปรดทราบว่านี่เป็นรุ่น "โหมดปลอดภัย" ของ HandBrake ที่ไม่รองรับตัวเข้ารหัสฮาร์ดแวร์ หากคุณต้องการใช้การสนับสนุนตัวเข้ารหัสฮาร์ดแวร์ โปรดดาวน์โหลดรุ่นที่ไม่ใช่ "โหมดปลอดภัย" จากเว็บไซต์</value>
   </data>
   <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+    <value>โปรดทราบว่า HandBrake ไม่รองรับ Windows 7 หรือ Windows 8 เวอร์ชันใดๆ อีกต่อไป
 
-While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+แม้ว่าคุณจะสามารถใช้แอปพลิเคชันต่อไปได้โดยยอมรับความเสี่ยงเอง แต่โปรดทราบว่าคุณลักษณะบางอย่างไม่ทำงานและอาจมีปัญหาอื่นๆ ที่ไม่ทราบสาเหตุ ไม่มีการสนับสนุนเมื่อเกิดปัญหาเหล่านี้
 
-Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+การสนับสนุนสำหรับ Windows 7 และ 8 เลิกใช้แล้วในซีรีส์ 1.3 ซึ่งหมายความว่าจะไม่มีการอัปเดตเพิ่มเติมเพื่อแก้ไขปัญหาบนแพลตฟอร์มเหล่านี้ 
 
-This warning will display only twice.</value>
+คำเตือนนี้จะแสดงเพียงสองครั้งเท่านั้น</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>Black</value>
+    <value>สีดำ</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
-    <value>自定义</value>
+    <value>ปรับแต่งเอง</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>White</value>
+    <value>ขาว</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB Value:</value>
+    <value>ค่า RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(padded)</value>
+    <value>(ขยาย)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>Flip:</value>
+    <value>พลิก:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>ขนาดแหล่งที่มา:</value>
+    <value>ขนาดไฟล์ต้นทาง:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
     <value>ขนาดการจัดเก็บ: {0}x{1}     ขนาดจอแสดงผล: {2}x{3}      อัตราส่วนภาพ: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>ตรวจพบข้อผิดพลาดในกล่องโต้ตอบ File Browser
+    <value>ตรวจพบข้อผิดพลาดในกล่องโต้ตอบไฟล์เบราว์เซอร์
 
 - โปรดทราบว่าเส้นทางของไฟล์ที่ยาวไม่ได้รับการสนับสนุนอย่างสมบูรณ์ โปรดเก็บเส้นทางของไฟล์ให้สั้นกว่า 255 อักขระ
 - ไดเร็กทอรีที่ใช้ล่าสุดสำหรับหน้าต่างนี้ ได้รับการรีเซ็ตเพื่อป้องกันข้อผิดพลาดในครั้งต่อไปที่คุณพยายามสแกนไฟล์</value>
