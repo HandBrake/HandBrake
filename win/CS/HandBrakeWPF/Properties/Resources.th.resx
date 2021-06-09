@@ -1636,13 +1636,13 @@ Foreign Audio Preferred, else First - หากมีแทร็กภาษา
     <value>ดูตัวอย่าง {0} / {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>旋转</value>
+    <value>หมุน</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>存储空间</value>
+    <value>การจัดเก็บ</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>二次编码</value>
+    <value>การเข้ารหัสรอง</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>平均码率(kbps)：</value>
@@ -2453,34 +2453,34 @@ This warning will display only twice.</value>
     <value>Flip:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Source Dimensions:</value>
+    <value>ขนาดแหล่งที่มา:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+    <value>ขนาดการจัดเก็บ: {0}x{1}     ขนาดจอแสดงผล: {2}x{3}      อัตราส่วนภาพ: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>An error was detected in the File Browser Dialog. 
+    <value>ตรวจพบข้อผิดพลาดในกล่องโต้ตอบ File Browser
 
-- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
-- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+- โปรดทราบว่าเส้นทางของไฟล์ที่ยาวไม่ได้รับการสนับสนุนอย่างสมบูรณ์ โปรดเก็บเส้นทางของไฟล์ให้สั้นกว่า 255 อักขระ
+- ไดเร็กทอรีที่ใช้ล่าสุดสำหรับหน้าต่างนี้ ได้รับการรีเซ็ตเพื่อป้องกันข้อผิดพลาดในครั้งต่อไปที่คุณพยายามสแกนไฟล์</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>Max Height:</value>
+    <value>ความสูงสูงสุด:</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>Max Width:</value>
+    <value>ความกว้างสูงสุด:</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>Aspect Ratio: {0}</value>
+    <value>อัตราส่วนภาพ: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru Common Metadata</value>
+    <value>ข้อมูลเมตาทั่วไปของ Passthru</value>
   </data>
 
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru Common Metadata</value>
+    <value>ข้อมูลเมตาทั่วไปของ Passthru</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>The default auto name path was not valid. {0} must not be before {1}</value>
+    <value>เส้นทางชื่ออัตโนมัติเริ่มต้นไม่ถูกต้อง {0} ต้องไม่มาก่อน {1}</value>
   </data>
 </root>
