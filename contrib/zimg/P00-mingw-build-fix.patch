@@ -1,0 +1,21 @@
+--- a/src/zimg/common/arm/cpuinfo_arm.cpp 2020-08-23 14:47:57.000000000 +0100
++++ b/src/zimg/common/arm/cpuinfo_arm.cpp        2021-06-10 00:15:40.000000000 +0100
+@@ -4,7 +4,6 @@
+   #define NOMINMAX
+   #define STRICT
+   #define WIN32_LEAN_AND_MEAN
+-  #include <Windows.h>
+ #elif defined(__linux__)
+   #include <sys/auxv.h>
+   #include <asm/hwcap.h>
+@@ -26,8 +25,8 @@
+        caps.neon  = 1;
+        caps.vfpv4 = 1;
+ #elif defined(_WIN32)
+-	caps.neon  = IsProcessorFeaturePresent(PF_ARM_NEON_INSTRUCTIONS_AVAILABLE);
+-	caps.vfpv4 = IsProcessorFeaturePresent(PF_ARM_FMAC_INSTRUCTIONS_AVAILABLE);
++	caps.neon  = 1;
++	caps.vfpv4 = 1;
+ #elif defined(__linux__)
+        long hwcaps = getauxval(AT_HWCAP);
+        caps.neon  = !!(hwcaps & HWCAP_NEON);
