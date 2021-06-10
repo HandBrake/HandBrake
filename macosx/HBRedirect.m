@@ -3,18 +3,19 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBRedirect.h"
+#import "HBDirectUtilities.h"
 
+HB_OBJC_DIRECT_MEMBERS
 @interface HBOutputRedirectListenerEntry : NSObject
-{
-@public
-    id<HBOutputRedirectListening> listener;
-    dispatch_queue_t queue;
-}
+
+@property (nonatomic, readonly) id<HBOutputRedirectListening> listener;
+@property (nonatomic, readonly) dispatch_queue_t queue;
 
 - (instancetype)initWithListener:(id<HBOutputRedirectListening>)listener queue:(dispatch_queue_t)queue;
 
 @end
 
+HB_OBJC_DIRECT_MEMBERS
 @implementation HBOutputRedirectListenerEntry
 
 - (instancetype)initWithListener:(id<HBOutputRedirectListening>)entryListener queue:(dispatch_queue_t)entryQueue
@@ -22,14 +23,15 @@
     self = [super init];
     if (self)
     {
-        self->listener = entryListener;
-        self->queue = entryQueue;
+        _listener = entryListener;
+        _queue = entryQueue;
     }
     return self;
 }
 
 @end
 
+HB_OBJC_DIRECT_MEMBERS
 @interface HBRedirect ()
 
 /// Set that contains all registered listeners for this output.
@@ -40,6 +42,7 @@
 
 @end
 
+HB_OBJC_DIRECT_MEMBERS
 @implementation HBRedirect
 
 /**
@@ -62,7 +65,7 @@
 {
     for (HBOutputRedirectListenerEntry *entry in _listenerEntries)
     {
-        if  (entry->listener == listener)
+        if  (entry.listener == listener)
         {
             return entry;
         }
@@ -137,8 +140,8 @@
 {
     for (HBOutputRedirectListenerEntry *entry in _listenerEntries)
     {
-        dispatch_async(entry->queue, ^{
-            [entry->listener redirect:string type:self->_type];
+        dispatch_async(entry.queue, ^{
+            [entry.listener redirect:string type:self->_type];
         });
     }
 }

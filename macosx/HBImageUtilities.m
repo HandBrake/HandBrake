@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBImageUtilities.h"
-#import <Cocoa/Cocoa.h>
+#import <CoreVideo/CoreVideo.h>
 #include "handbrake/handbrake.h"
 
 CGImageRef CreateScaledCGImageFromCGImage(CGImageRef image, CGFloat thumbnailHeight)

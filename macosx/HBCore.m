@@ -10,6 +10,7 @@
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 #import "HBImageUtilities.h"
+#import "HBDirectUtilities.h"
 
 #import "HBStateFormatter+Private.h"
 #import "HBTitle+Private.h"
@@ -66,6 +67,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 
 @end
 
+HB_OBJC_DIRECT_MEMBERS
 @implementation HBCore
 
 + (void)setDVDNav:(BOOL)enabled
