@@ -1,0 +1,54 @@
+name: Windows Build (ARM)
+
+on: [push, pull_request]
+
+jobs:
+  build_mingw:
+    name: CLI / LibHB (ARM)
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Environment Setup
+      run: |
+        sudo apt-get purge cmake -y
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        sudo pip3 install meson
+
+    - name: Setup Toolchain
+      run: |
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-msvcrt.tar.gz
+        SHA=$(sha1sum llvm-mingw-msvcrt.tar.gz)
+        EXPECTED="ea5eaf2f67c4e0ca40a6d6889de51bb4ce9ca3c6  llvm-mingw-msvcrt.tar.gz"
+        if [ "$SHA" == "$EXPECTED" ];
+        then
+            echo "Toolchain Verified. Extracting ..."
+            mkdir toolchains
+            mv llvm-mingw-msvcrt.tar.gz toolchains
+            cd toolchains
+            tar xvf llvm-mingw-msvcrt.tar.gz
+        else
+            echo "Toolchain Verification FAILED. Exiting!"
+            return -1
+        fi
+
+    - name: Build CLI and LibHB
+      run: |
+        export PATH="/home/runner/work/HandBrake/HandBrake/toolchains/llvm-mingw-msvcrt/bin:${PATH}"
+        export PATH=/usr/bin:$PATH
+        ./configure --cross=aarch64-w64-mingw32 --enable-mf --launch-jobs=0 --launch
+        cd build
+        make pkg.create.zip
+
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrakeCLI
+        path: ./build/HandBrakeCLI.exe
+
+    - name: Upload LibHB
+      uses: actions/upload-artifact@v2
+      with:
+        name: LibHandBrake
+        path: ./build/libhb/hb.dll
