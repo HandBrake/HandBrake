@@ -34,6 +34,7 @@ namespace HandBrakeWPF.Utilities
                        new InterfaceLanguage("fa-IR", "Persian (Iran) (فارسی)"),
                        new InterfaceLanguage("ru", "Russian (Русский)"),
                        new InterfaceLanguage("es", "Spanish (Español)"),
+                       new InterfaceLanguage("th", "Thai (ไทย)"),
                        new InterfaceLanguage("tr", "Turkish (Türkçe)"),
                        new InterfaceLanguage("uk", "Ukrainian (Українська)"),
                    };
