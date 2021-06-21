@@ -210,13 +210,13 @@ Les lecteurs redimensionneront l'image afin d'obtenir l'aspect spécifié.</valu
 Les dimensions réelles de l’affichage seront différentes si le format des pixels n’est pas 1:1.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>Supprimer le travail de la file.</value>
+    <value>Supprimer la tâche de la file d'attente.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>Réinitialiser l'état du travail à En Attente.</value>
+    <value>Réinitialiser l'état de la tâche à "En Attente".</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>Renvoyer le travail dans la fenêtre principale pour édition.</value>
+    <value>Renvoyer la tâche dans la fenêtre principale pour édition.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
     <value>Définissez le débit moyen.
@@ -475,5 +475,12 @@ Lorsqu'elle est désactivée, elle utilisera, s'il est renseigné, le chemin de 
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
     <value>Ce champ peut accepter des valeurs RGB telles que : "0xFF0000" ou des noms de couleur tels que "red". Pour une liste complète des couleurs nommées, consultez la documentation du filtre de remplissage.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Incruster les sous-titres dans le flux vidéo.
+
+Remarque : cette option sera automatiquement sélectionnée si le format de la piste de sous-titres source n'est pas pris en charge par le type de fichier de sortie.
+
+Par exemple, les sous-titres PGS ne sont pas pris en charge par le format MP4.</value>
   </data>
 </root>

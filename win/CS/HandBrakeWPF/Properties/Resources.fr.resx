@@ -201,10 +201,10 @@ avec ce programme; sinon écrivez à la Free Software Foundation, Inc.,
     <value>HandBrake est déjà en train d'encoder.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Il y a des travaux dans la file avec le même chemin de destination. Veuillez choisir un chemin différent pour ce travail.</value>
+    <value>Il y a des tâches dans la file d'attente avec le même chemin de destination. Veuillez choisir un chemin différent pour cette tâche.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>{0} travaux en attente</value>
+    <value>{0} tâche·s en attente</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>Nouveau préréglage par défaut : {0}</value>
@@ -266,7 +266,7 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
     <value>Analyse du titre {0} sur {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Vous devez d'abord analyser une source et configurer votre travail avant de démarrer un encodage. Cliquez sur le bouton "Source" dans la barre d'outils pour continuer.</value>
+    <value>Vous devez d'abord analyser une source et configurer votre tâche avant de démarrer un encodage. Cliquez sur le bouton "Source" dans la barre d'outils pour continuer.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>Assurez-vous d'avoir sélectionné l'un de vos propres préréglages. Veuillez noter que vous ne pouvez pas exporter les préréglages intégrés.</value>
@@ -278,7 +278,7 @@ Le précédent fichier user_presets.xml a été sauvegardé.</value>
     <value>Sélectionnez "Ouvrir source" pour continuer</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} travaux en attente </value>
+    <value>{0} tâche·s en attente </value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Remarque</value>
@@ -439,7 +439,7 @@ Le journal d'activité peut contenir des informations supplémentaires.</value>
     <value>L'action suivante '{0}' se produira dans {1} secondes.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>If the problem persists, please try restarting HandBrake.</value>
+    <value>Si le problème persiste, essayez de redémarrer HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
     <value>Il n'y a pas d'autres informations disponibles sur cette erreur.</value>
@@ -467,7 +467,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Échec de la mise à jour. Vous pouvez essayer de télécharger la mise à jour depuis https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Storage Size: {0}x{1}</value>
+    <value>Taille de stockage : {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Ajouter à la file</value>
@@ -476,7 +476,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Aucun encodage en attente</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>Aucun travail d'encodage en cours</value>
+    <value>Aucune tâche d'encodage en cours</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
     <value>File d'attente</value>
@@ -488,22 +488,22 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>Confirmer</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} travaux en attente </value>
+    <value>{0} tâche·s en attente </value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>File mise en pause</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?</value>
+    <value>Êtes-vous sûr de vouloir supprimer les tâches sélectionnées ?</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
     <value>Cet encodage est en cours. Si vous le supprimez, l'encodage sera arrêté. Êtes-vous sûr de vouloir continuer ?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>Il n'y a pas de travail en attente.</value>
+    <value>Il n'y a aucune tâche en attente.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir modifier ce travail ? Il sera retiré de la file et envoyé à la fenêtre principale.</value>
+    <value>Êtes-vous sûr de vouloir modifier cette tâche ? Elle sera retirée de la file d'attente et envoyée à la fenêtre principale.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
     <value>File prête</value>
@@ -515,7 +515,7 @@ Veuillez consulter le site Web pour les notes de version.</value>
     <value>File terminée</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>Dernier travail en attente terminé</value>
+    <value>Dernière tâche en attente terminée</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
     <value>File démarrée</value>
@@ -692,7 +692,7 @@ Vous pouvez configurer le niveau auquel cette alerte apparaît dans les préfér
 Souhaitez-vous continuer ?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Impossible de réinitialiser l'état du travail car il ne s'agit pas d'un état "Erreur" ou "Terminé"</value>
+    <value>Impossible de réinitialiser l'état de la tâche car il ne s'agit pas d'un état "Erreur" ou "Terminé"</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
     <value>Impossible de restaurer le fichier de file d'attente.</value>
@@ -894,7 +894,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Préréglage :</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotation:</value>
+    <value>Rotation :</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Netteté :</value>
@@ -1324,7 +1324,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Personnalisé</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>Display Size:</value>
+    <value>Taille d'affichage :</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Hauteur :</value>
@@ -1336,10 +1336,10 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Gauche</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Final Dimensions:</value>
+    <value>Dimensions finales :</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixel Aspect:</value>
+    <value>Format des pixels :</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Droite</value>
@@ -1351,7 +1351,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Haut</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Scaled Size:</value>
+    <value>Taille à l'échelle :</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Personnalisé</value>
@@ -1375,7 +1375,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Les titres sélectionnés seront ajoutés en utilisant le préréglage "{0}"</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Video Options:</value>
+    <value>Options vidéo :</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
     <value>Audio :</value>
@@ -1450,13 +1450,13 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Fermer HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>Relancer tous les travaux</value>
+    <value>Relancer tous les tâches</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
     <value>Échec de la nouvelle tentative</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Réinitialiser les travaux sélectionnés</value>
+    <value>Réinitialiser les tâches sélectionnées</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
     <value>Réinitialiser</value>
@@ -1504,7 +1504,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Ajouter une nouvelle piste</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Tracks</value>
+    <value>Pistes</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
     <value>Langues disponibles :</value>
@@ -1651,7 +1651,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Débit moyen (kbps) :</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Video Encoder:</value>
+    <value>Encodeur vidéo :</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Framerate constant</value>
@@ -1681,7 +1681,7 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Framerate (IPS)</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Encoder Options: </value>
+    <value>Options de l'encodeur : </value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
     <value>Framerate de pointe</value>
@@ -1837,9 +1837,9 @@ VLC et MPC-HC sont pris en charge. D'autres lecteurs peuvent également fonction
     <value>Afficher 'Ajouter la sélection à la file' dans la barre d'outils</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardware encoding support is currently disabled. If you did not start HandBrake with the "--no-hardware" option, please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+    <value>Le support de l'encodage matériel est actuellement désactivé. Si vous n'avez pas démarré HandBrake avec l'option "--no-hardware", veuillez vous assurer que vous utilisez des pilotes à jour pour toutes les cartes graphiques de votre système.
 
-This will not impact any of the software encoders.</value>
+Ceci n'aura aucun impact sur les encodeurs logiciels.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Veuillez corriger vos paramètres de sous-titres avant de continuer.</value>
@@ -1935,7 +1935,7 @@ Options en différé : {date} {heure} {date-de-création} {heure-de-création} 
     <value>Le choix de l'encodeur sera disponible dans l'onglet 'Vidéo'.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake a détecté plusieurs fichiers de file d'attente inachevés. Ceux-ci proviennent de plusieurs instances d'HandBrake. Souhaitez-vous récupérer tous les travaux inachevés ?</value>
+    <value>HandBrake a détecté plusieurs fichiers de file d'attente inachevés. Ceux-ci proviennent de plusieurs instances d'HandBrake. Souhaitez-vous récupérer tous les tâches inachevées ?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
     <value>HandBrake a détecté des éléments inachevés dans la file d'attente de la dernière session de l'application. Voulez-vous les récupérer ?</value>
@@ -2163,14 +2163,14 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>Niveau de batterie faible :</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>Suspendre tout travail en cours lorsque la batterie est faible.</value>
+    <value>Suspendre toute tâche en cours lorsque la batterie est faible.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
     <value>Ajouter tous les sous-titres restants</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
     <value>Des doublons ont été détectés dans la file d'attente que vous essayez d'importer. Souhaitez-vous écraser les fichiers existants ?
-Cela mettra également fin à tout travail en cours.</value>
+Cela mettra également fin à toute tâche en cours.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
     <value>Doublons détectés</value>
@@ -2179,10 +2179,10 @@ Cela mettra également fin à tout travail en cours.</value>
     <value>Activer le QuickSync basse consommation (si supporté).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>Veuillez sélectionner un seul travail pour voir les informations de synthèse.</value>
+    <value>Veuillez sélectionner une seule tâche pour voir le récapitulatif.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>Exécutez chaque travail en file d'attente dans un processus de travail distinct.</value>
+    <value>Exécutez chaque tâche en file d'attente dans un processus de travail distinct.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
     <value>Port réseau par défaut pour le travailleur :</value>
@@ -2225,22 +2225,22 @@ Veuillez choisir un autre préréglage.</value>
     <value>Personnalisé (Non limité)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>Fill (Surround)</value>
+    <value>Remplissage (Périphérie)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>Height (Pillarbox)</value>
+    <value>Hauteur (encadrement horizontal)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
     <value>Aucun</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>Width (Letterbox)</value>
+    <value>Largeur (encadrement vertical)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>Fill:</value>
+    <value>Remplir :</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>Colour:</value>
+    <value>Couleur :</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
     <value>Bordures :</value>
@@ -2249,7 +2249,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Résolution et mise à l'échelle :</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>Orientation and Cropping:</value>
+    <value>Orientation et recadrage :</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
     <value>( Windows 10 uniquement ! )</value>
@@ -2285,7 +2285,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Personnalisé</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>Maximum Size:</value>
+    <value>Taille maximale :</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
     <value>Limite de résolution :</value>
@@ -2393,10 +2393,10 @@ Veuillez choisir un autre préréglage.</value>
     <value>Ouvrir l'aperçu</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>Source Preview:</value>
+    <value>Aperçu de la source :</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>Job Status:</value>
+    <value>Statut de la tâche :</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
     <value>Annulé</value>
@@ -2405,37 +2405,37 @@ Veuillez choisir un autre préréglage.</value>
     <value>Terminé</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>Invalid Settings. Check log for details.</value>
+    <value>Paramètres invalides. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>Invalid Input. Check log for details.</value>
+    <value>Entrée invalide. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>Status Unknown. Check log for details.</value>
+    <value>Statut inconnu. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>Errors detected whist trying to read source.</value>
+    <value>Erreurs détectées lors de la lecture de la source.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>Unknown failure. Check log for details.</value>
+    <value>Erreur inconnue. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>Worker Crashed. Check log for details.</value>
+    <value>Le processus de travail a cessé de fonctionner. Vérifiez le journal pour plus de détails.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
     <value>Fichier "hb.dll" manquant. Veuillez réinstaller.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
+    <value>Avertissement : Veuillez noter qu'il s'agit d'une version "Sans Échec" d'HandBrake qui ne prend pas en charge les encodeurs matériels. Si vous souhaitez utiliser la prise en charge des encodeurs matériels, veuillez télécharger une version qui ne soit pas "Sans Échec" sur le site Web.</value>
   </data>
   <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
+    <value>Veuillez noter qu'HandBrake ne supporte plus aucune version de Windows 7 ou Windows 8.
 
-While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
+Bien que vous puissiez continuer à utiliser l'application, sachez que certaines fonctionnalités ne sont pas fonctionnelles et qu'il peut y avoir d'autres problèmes inconnus. Aucune assistance n'est disponible lorsque ces problèmes surviennent. 
 
-Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
+La prise en charge de Windows 7 et 8 a été supprimée dans la série 1.3. Cela signifie qu'il n'y aura pas d'autres mises à jour pour corriger les problèmes sur ces plateformes. 
 
-This warning will display only twice.</value>
+Cet avertissement ne s'affichera que deux fois.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Noir</value>
@@ -2450,22 +2450,22 @@ This warning will display only twice.</value>
     <value>Valeur RGB :</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(padded)</value>
+    <value>(rempli)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>Flip:</value>
+    <value>Retourner :</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>Source Dimensions:</value>
+    <value>Dimensions de la source :</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>Storage Size: {0}x{1}     Display Size: {2}x{3}      Aspect Ratio: {4}</value>
+    <value>Taille de stockage : {0}x{1}     Taille d'affichage : {2}x{3}      Proportions : {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>An error was detected in the File Browser Dialog. 
+    <value>Une erreur a été détectée dans la boîte de dialogue du navigateur de fichiers. 
 
-- Please note, long file paths are not fully supported. Please keep file paths shorter than 255 characters. 
-- The last used directory for this window, has been reset to prevent errors the next time you try to scan a file.</value>
+- Veuillez noter que les longs chemins de fichier ne sont pas entièrement pris en charge. Les chemins d'accès aux fichiers doivent être inférieurs à 255 caractères. 
+- Le dernier répertoire utilisé pour cette fenêtre a été réinitialisé afin d'éviter les erreurs la prochaine fois que vous essaierez d'analyser un fichier.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>Hauteur maximale :</value>
@@ -2474,9 +2474,12 @@ This warning will display only twice.</value>
     <value>Largeur maximale :</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>Aspect Ratio: {0}</value>
+    <value>Proportions : {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru Common Metadata</value>
+    <value>Passthru Métadonnées communes</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Le nom par défaut du chemin d'accès n'était pas valide. {0} ne doit pas être avant {1}</value>
   </data>
 </root>

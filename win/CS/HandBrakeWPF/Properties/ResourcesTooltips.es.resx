@@ -472,6 +472,13 @@ Cuando está deshabilitado, usará la ruta en el cuadro de destino en la ventana
     <value>Filtro de suavizado cromático.</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>Este campo puede aceptar valores RGB como: "0xFF0000" o nombres de colores como "red". Para obtener una lista completa de colores con nombre, consulte la documentación del filtro de relleno.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Incrustar subtítulos en el vídeo.
+
+Tenga en cuenta que esto se seleccionará automáticamente si el formato de la pista de subtítulos de origen no es compatible con el tipo de archivo de salida.
+
+Por ejemplo, los subtítulos PGS no son compatibles con MP4</value>
   </data>
 </root>

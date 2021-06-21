@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 아티팩트를 줄입니다.</value>
+    <value>블록 제거는 낮은 품질의 비디오 압축으로 인해 발생하는 블록 아티팩트를 줄여줍니다.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>decomb 또는 deinterlace 필터 옵션을 선택하십시오.
+    <value>decomb 또는 인터레이스 해제 필터 옵션을 선택하십시오.
 
 decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이스로 바꾸어줍니다. 
 이것은 인터레이스 되지 않은 프레임의 품질을 보존합니다.
@@ -138,10 +138,10 @@ NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니�
 HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항을 유지하는데 덜 효과적입니다.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>Detelecine은 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 telecine의 결과물인 comb artifact를 제거합니다. </value>
+    <value>텔레시네 해제는 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 텔레시네의 결과물인 comb 아티팩트를 제거합니다. </value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale은 비디오의 색상 구성 요소를 제거합니다. 보통Black&amp;amp; White 비디오라고 불립니다.</value>
+    <value>그레이스케일은 비디오의 색상 구성 요소를 제거합니다. 보통 흑백 동영상이라고 불립니다.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>디렉토리 및 파일 이름을 포함한 대상 경로. 이곳에서 새로운 비디오가 생성되고 이름이 지정됩니다.</value>
@@ -163,15 +163,15 @@ HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항�
 Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>아나모픽은 재생하는 동안 원래의 화면을 유지하면서 임의의 저장 치수를 허용합니다.
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+없음은 아나모픽을 비활성화합니다. 비디오 저장 치수와 화면 치수는 동일합니다. 특정한 기존 장치들과의 호환성에만 유용합니다.
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+자동은 원래 화면 종횡비를 유지하면서 저장 해상도를 최대화합니다. 추천합니다.
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+루스는 자동과 비슷하지만 저장 종횡비를 유지하려고 합니다. 이로 인해 자동에 비해 약간의 저장 해상도 손실이 발생할 수 있습니다.
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+사용자 지정은 모든 매개 변수를 수동으로 설정할 수 있습니다. 잘못된 원본 디스플레이 화면을 수정하고 포스트 프로덕션에서 고급 제어가 필요한 전문가에게 유용합니다.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>
@@ -189,7 +189,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
     <value>위에서부터 비디오 자르기</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>비디오가 저장 될 높이입니다. 픽셀 종횡비가 1:1이 아닌 경우 실제 디스플레이 크기가 달라집니다.</value>
+    <value>이 높이가 비디오를 저장할 높이입니다.
+픽셀 종횡비가 1:1이 아닌 경우 실제 화면 치수가 다릅니다.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
     <value>수동으로 비디오 자르기</value>
@@ -201,15 +202,16 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
 호환성 문제가 발생하지 않는 한 2를  사용해야합니다.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>픽셀 가로 세로는 픽셀들의 모양을 결정합니다.
-1:1 비율은 정사각형 픽셀을 정의합니다. 다른 값들은 직사각형 모양을 정의합니다.
-사용자들은 특정 가로 세로를 얻기 위해 이미지 크기를 조정할 것입니다.</value>
+    <value>가로세로 픽셀은 픽셀들의 모양을 결정합니다.
+1:1 비율은 정사각형 픽셀을 정의합니다. 다른 값은 직사각형 모양을 정의합니다.
+재생기들은 지정된 화면을 얻기 위해 이미지 크기를 조정할 것입니다.</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>비디오가 저장 될 너비입니다. 픽셀 종횡비가 1:1이 아닌 경우 실제 디스플레이 크기가 달라집니다.</value>
+    <value>이 너비는 비디오를 저장할 너비입니다.
+픽셀 종횡비가 1:1이 아닌 경우 실제 화면 치수가 다릅니다.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>queue에서 job 삭제합니다.</value>
+    <value>대기열에서 작업을 삭제합니다.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
     <value>작업 상태를 대기로 재설정합니다.</value>
@@ -234,7 +236,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
     <value>일반적인 시나리오에 최적화되도록 설정하십시오.
 
 이는 특정 소스 특성의 효율성을 향상시커거나 출력 파일의 특성을 
-설정할 수 있습니다. 변경 사항은 환경 설정 후 다른 모든 파라미터보다 
+설정할 수 있습니다. 변경 사항은 사전설정 후 다른 모든 파라미터보다 
 먼저 적용됩니다.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
@@ -253,7 +255,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
   <data name="Video_Level" xml:space="preserve">
     <value>지정된 레벨을 준수하도록 설정하고 보장합니다.
 
-다른 모든 설정을 무시하십시오.</value>
+다른 모든 설정을 재정의합니다.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
     <value>프레임 속도 설정에 의해 결정된 최고 속도로 가변 프레임 속도 출력을 활성화합니다.</value>
@@ -267,9 +269,9 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
 이 옵션을 가장 느리게 설정해야 합니다.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>지정된 프로파일을 준수하고 설정합니다.
+    <value>지정된 프로필을 준수하도록 설정하고 보장합니다.
 
-다른 모든 설정을 무시합니다.</value>
+다른 모든 설정을 재정의합니다.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
     <value>원하는 품질 요소을 설정하십시오.
@@ -308,18 +310,18 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
     <value>인코딩할 비디오 각도. 다양한 각도의 DVD와 Blu-rau만 적용 가능합니다.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>새로운 환경 설정을 추가하십시오.</value>
+    <value>새로운 사전설정을 추가하십시오.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>추가적인 환경 설정 옵션.</value>
+    <value>추가적인 사전설정 옵션.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>환경 설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 설정을 선택하십시오.
+    <value>사전설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 설정을 선택하십시오.
 
-모든 인코딩 설정을 무시합니다. 환경 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
+모든 인코딩 설정을 재정의합니다. 사전 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>선택된 환경 설정을 제거하십시오.</value>
+    <value>선택된 사전설정을 제거하십시오.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
     <value>모든 제목 대신 특정 제목만 스캔하십시오.</value>
@@ -336,12 +338,12 @@ HQDN3D 구문: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Denoise 필터 환경 설정. 필터의 강도를 설정합니다.</value>
+    <value>Denoise 필터 사전설정. 필터의 강도를 설정합니다.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise 설정. Denoise 환경 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>Denoise 설정. Denoise 사전설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-- 없음은 기본 환경 설정을 사용합니다.
+- 없음은 기본 사전설정을 사용합니다.
 
 - Film은 대부분 라이브 액션 콘텐츠와 함께 사용하기 위한 설정을 개선합니다.
 
@@ -356,14 +358,14 @@ HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
 - Sprite는 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 고화질 비디오용으로 설계되지 않았습니다.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace는 comb 아티팩트를 그림에서 제거합니다.
+    <value>인터레이스 해제는 comb 아티팩트를 그림에서 제거합니다.
 
-Yadif는 유명하고 빠른 deinterlacer 입니다.
+Yadif는 유명하고 빠른 인터레이스 해제 도구 입니다.
 
-Decomb은 속도와 품질을 위해 복수의 interpolation 알고리즘을 전환합니다.</value>
+Decomb은 속도와 품질을 위해 복수의 보간 알고리즘을 전환합니다.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>사용자 설정 비인터레이스 파라미터.
+    <value>사용자 설정 인터레이스 해제 매개 변수.
 
 Yadif 구문: mode=m:parity=p
 
@@ -374,7 +376,7 @@ Decomb 구문: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:di
 Decomb 기본값: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Deinterlace 필터 환경 설정.
+    <value>인터레이스 해제 필터 사전설정.
 
 기본값은 속도와 품질의 균형을 맞춥니다.
 
@@ -388,7 +390,7 @@ Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 �
     <value>가로축에서 그림을 뒤집습니다.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace Detection이 활성화된 경우 Deinterlace filter가 interlace된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
+    <value>인터레이스 감지가 활성화된 경우 인터레이스 해제 필터가 인터레이스된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>사용자 설정 인터레이스 검출 파라미터.
@@ -425,12 +427,12 @@ Unsharp은 일반적인 용도의 unsharp masking 필터입니다. 화질을 흐
 Lapsharp은 Laplacian edge 필터를 근사하게 하는 콘벌루션 커널을 사용하여 선명하게 하며, 때때로 unsharp masking보다 더욱 높은 품질의 결과물을 생산하기도 합니다.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>선명도 필터 환경 설정. 필터의 강도를 설정합니다. </value>
+    <value>선명도 필터 사전설정. 필터의 강도를 설정합니다. </value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>선명도 설정. 선명도 환경 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>선명도 설정. 선명도 사전설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-없음은 기본 환경 설정을 사용합니다.
+없음은 기본 사전설정을 사용합니다.
 
 Unsharp은 Ultrafine, Fine, Medium, Coarse, Very Coarse 선명화를 설정할 수 있습니다. 출력 화면 해상도 및 세부 정보에 기반해서 하나를 선택하십시오.
 
@@ -446,7 +448,7 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
     <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>환경 설정을 제어하는 옵션.</value>
+    <value>사전설정을 제어하는 옵션.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
     <value>이 범위의 종점.</value>
@@ -459,12 +461,19 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
 비활성화 시, 이름을 입력하였다면, 기본 윈도우의 대상 경로를 사용하게 되며, 입력하지 않았다면, 기본 경로를 사용하게 됩니다.</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace Filter.</value>
+    <value>Colourspace 필터.</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>Chroma Smooth 필터</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>이 필드는 다음과 같은 RGB 값을 사용할 수 있습니다: "0xFF0000" 또는 "빨간색"과 같은 색상 이름입니다. 이름이 지정된 색상의 전체 목록은 패딩 필터 문서를 참조하십시오.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>비디오 스트림에 자막을 추가합니다.
+
+출력 파일 형식에서 원본 자막 트랙 형식이 지원되지 않을 경우, 이 옵션이 자동으로 선택됩니다.
+
+예를 들어, PGS 자막은 MP4에서 지원되지 않습니다.</value>
   </data>
 </root>
