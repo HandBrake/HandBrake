@@ -148,6 +148,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.IPod5GSupport = task.IPod5GSupport;
             this.OutputFormat = task.OutputFormat;
             this.OptimizeMP4 = task.OptimizeMP4;
+            this.AlignAVStart = task.AlignAVStart;
 
             /* Other */
             this.MetaData = new MetaData(task.MetaData);
