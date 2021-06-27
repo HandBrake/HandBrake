@@ -988,6 +988,10 @@ namespace HandBrakeWPF.ViewModels
                                          ?? VideoTune.None;
                     }
                 }
+                else if (preset.Task.VideoEncoder == VideoEncoder.VP8 || preset.Task.VideoEncoder == VideoEncoder.VP9)
+                {
+                    this.VideoPresetValue = preset.Task.VideoPreset != null ? this.VideoPresets.IndexOf(preset.Task.VideoPreset) : 0;
+                }
             }
 
             this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
@@ -1515,19 +1519,14 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
             this.NotifyOfPropertyChange(() => this.DisplayTwoPass);
 
-            // Handle some quicksync specific options.
-            if (selectedEncoder == VideoEncoder.QuickSync || selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
-            {
-                this.TwoPass = false;
-                this.TurboFirstPass = false;
-                this.SelectedFramerate = null;
-            }
-
             if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265 
                                                           || selectedEncoder == VideoEncoder.VceH264 
                                                           || selectedEncoder == VideoEncoder.VceH265
                                                           || selectedEncoder == VideoEncoder.MFH264
-                                                          || selectedEncoder == VideoEncoder.MFH265)
+                                                          || selectedEncoder == VideoEncoder.MFH265
+                                                          || selectedEncoder == VideoEncoder.QuickSync
+                                                          || selectedEncoder == VideoEncoder.QuickSyncH265
+                                                          || selectedEncoder == VideoEncoder.QuickSyncH26510b)
             {
                 this.TwoPass = false;
                 this.TurboFirstPass = false;
