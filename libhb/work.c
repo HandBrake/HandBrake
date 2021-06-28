@@ -1367,21 +1367,7 @@ static void do_job(hb_job_t *job)
         memset(interjob, 0, sizeof(*interjob));
         interjob->sequence_id = job->sequence_id;
     }
-#if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_is_enabled(job))
-    {
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (hb_qsv_full_path_is_enabled(job))
-        {
-            // Temporary workaround for the driver in case when low_power mode is disabled, should be removed later
-            if (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H265)
-            {
-                job->vcodec = HB_VCODEC_QSV_H265_10BIT;
-            }
-        }
-#endif
-    }
-#endif
+
     job->list_work = hb_list_init();
     w = hb_get_work(job->h, WORK_READER);
     hb_list_add(job->list_work, w);

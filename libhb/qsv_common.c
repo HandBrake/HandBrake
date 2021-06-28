@@ -1291,8 +1291,7 @@ int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param
         case AV_CODEC_ID_H264:
             if (pix_fmt == AV_PIX_FMT_NV12     ||
                 pix_fmt == AV_PIX_FMT_YUV420P  ||
-                pix_fmt == AV_PIX_FMT_YUVJ420P ||
-                pix_fmt == AV_PIX_FMT_YUV420P10)
+                pix_fmt == AV_PIX_FMT_YUVJ420P)
             {
                 return hb_qsv_decode_h264_is_supported(adapter_index);
             }
@@ -1366,11 +1365,29 @@ int hb_qsv_is_enabled(hb_job_t *job)
     return hb_qsv_decode_is_enabled(job) || hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 }
 
+static int hb_qsv_get_bit_depth_by_codec(int codec_id)
+{
+    int pix_fmt_bit_depth = 0;
+
+    switch (codec_id)
+    {
+        case HB_VCODEC_QSV_H264:
+        case HB_VCODEC_QSV_H265_8BIT:
+            pix_fmt_bit_depth = 8;
+            break;
+        case HB_VCODEC_QSV_H265_10BIT:
+            pix_fmt_bit_depth = 10;
+            break;
+        default:
+            break;
+    }
+    return pix_fmt_bit_depth;
+}
+
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     static int device_check_completed = 0;
     static int device_check_succeeded = 0;
-    int codecs_exceptions = 0;
     int qsv_full_path_is_enabled = 0;
     hb_qsv_info_t *info = hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec);
 
@@ -1380,11 +1397,17 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
        device_check_completed = 1;
     }
 
-    codecs_exceptions = (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H264);
+    int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
+    int pix_fmt_bit_depth = hb_qsv_get_bit_depth_by_codec(job->vcodec);
+
+    if (pix_fmt_bit_depth != title_bit_depth)
+    {
+        return 0;
+    }
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters) && !codecs_exceptions;
+        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters);
     return qsv_full_path_is_enabled;
 }
 
