@@ -4310,6 +4310,7 @@ hb_qsv_context* hb_qsv_context_init()
         hb_error( "hb_qsv_context_init: qsv ctx alloc failed" );
         return NULL;
     }
+    ctx->dx_index = hb_qsv_get_default_adapter_index();
     hb_qsv_add_context_usage(ctx, 0);
     return ctx;
 }
