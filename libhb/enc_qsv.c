@@ -998,6 +998,199 @@ int qsv_enc_init(hb_work_private_t *pv)
     return 0;
 }
 
+static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *videoParam)
+{
+    const mfxExtCodingOption  *option1 = NULL;
+    const mfxExtCodingOption2 *option2 = NULL;
+    const mfxExtVideoSignalInfo *extVideoSignalInfo = NULL;
+
+    // log code path and main output settings
+    hb_log("encqsvInit: using %s%s path",
+           pv->is_sys_mem ? "encode-only" : "full QSV",
+           videoParam->mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "" );
+    hb_log("encqsvInit: %s %s profile @ level %s",
+           hb_qsv_codec_name  (videoParam->mfx.CodecId),
+           hb_qsv_profile_name(videoParam->mfx.CodecId, videoParam->mfx.CodecProfile),
+           hb_qsv_level_name  (videoParam->mfx.CodecId, videoParam->mfx.CodecLevel));
+    hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
+           videoParam->mfx.TargetUsage, videoParam->AsyncDepth);
+    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
+           videoParam->mfx.GopRefDist, videoParam->mfx.GopPicSize, videoParam->mfx.NumRefFrame);
+
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
+    {
+        hb_log("encqsvInit: BFramesMax %d BRefType %s",
+               videoParam->mfx.GopRefDist > 1 ?
+               videoParam->mfx.GopRefDist - 1 : 0,
+               pv->param.gop.b_pyramid ? "pyramid" : "off");
+    }
+    else
+    {
+        hb_log("encqsvInit: BFramesMax %d",
+               videoParam->mfx.GopRefDist > 1 ?
+               videoParam->mfx.GopRefDist - 1 : 0);
+    }
+
+    for (int i = 0; i < videoParam->NumExtParam; i++)
+    {
+        mfxExtCodingOption *option = (mfxExtCodingOption*)videoParam->ExtParam[i];
+        if (option->Header.BufferId == MFX_EXTBUFF_VIDEO_SIGNAL_INFO)
+        {
+            extVideoSignalInfo = (mfxExtVideoSignalInfo*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION)
+        {
+            option1 = (mfxExtCodingOption*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION2)
+        {
+            option2 = (mfxExtCodingOption2*)videoParam->ExtParam[i];
+        }
+        else
+        {
+            hb_log("Unknown Header.BufferId=%d", option->Header.BufferId);
+        }
+    }
+
+    if (option2 && (option2->AdaptiveI != MFX_CODINGOPTION_OFF ||
+        option2->AdaptiveB != MFX_CODINGOPTION_OFF))
+    {
+        if (videoParam->mfx.GopRefDist > 1)
+        {
+            hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
+                hb_qsv_codingoption_get_name(option2->AdaptiveI),
+                hb_qsv_codingoption_get_name(option2->AdaptiveB));
+        }
+        else
+        {
+            hb_log("encqsvInit: AdaptiveI %s",
+                hb_qsv_codingoption_get_name(option2->AdaptiveI));
+        }
+    }
+
+    if (videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+    {
+        char qpi[7], qpp[9], qpb[9];
+        snprintf(qpi, sizeof(qpi),  "QPI %"PRIu16"", videoParam->mfx.QPI);
+        snprintf(qpp, sizeof(qpp), " QPP %"PRIu16"", videoParam->mfx.QPP);
+        snprintf(qpb, sizeof(qpb), " QPB %"PRIu16"", videoParam->mfx.QPB);
+        hb_log("encqsvInit: RateControlMethod CQP with %s%s%s", qpi,
+               videoParam->mfx.GopPicSize > 1 ? qpp : "",
+               videoParam->mfx.GopRefDist > 1 ? qpb : "");
+    }
+    else
+    {
+        switch (videoParam->mfx.RateControlMethod)
+        {
+            case MFX_RATECONTROL_LA:
+                hb_log("encqsvInit: RateControlMethod LA TargetKbps %"PRIu16" LookAheadDepth %"PRIu16"",
+                       videoParam->mfx.TargetKbps, (option2 != NULL) ? option2->LookAheadDepth : 0);
+                break;
+            case MFX_RATECONTROL_LA_ICQ:
+                hb_log("encqsvInit: RateControlMethod LA_ICQ ICQQuality %"PRIu16" LookAheadDepth %"PRIu16"",
+                       videoParam->mfx.ICQQuality, (option2 != NULL) ? option2->LookAheadDepth : 0);
+                break;
+            case MFX_RATECONTROL_ICQ:
+                hb_log("encqsvInit: RateControlMethod ICQ ICQQuality %"PRIu16"",
+                       videoParam->mfx.ICQQuality);
+                break;
+            case MFX_RATECONTROL_CBR:
+            case MFX_RATECONTROL_VBR:
+                hb_log("encqsvInit: RateControlMethod %s TargetKbps %"PRIu16" MaxKbps %"PRIu16" BufferSizeInKB %"PRIu16" InitialDelayInKB %"PRIu16"",
+                       videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CBR ? "CBR" : "VBR",
+                       videoParam->mfx.TargetKbps,     videoParam->mfx.MaxKbps,
+                       videoParam->mfx.BufferSizeInKB, videoParam->mfx.InitialDelayInKB);
+                break;
+            default:
+                hb_log("encqsvInit: invalid rate control method %"PRIu16"",
+                       videoParam->mfx.RateControlMethod);
+                return -1;
+        }
+    }
+
+    if (option2 && (videoParam->mfx.RateControlMethod == MFX_RATECONTROL_LA ||
+        videoParam->mfx.RateControlMethod == MFX_RATECONTROL_LA_ICQ))
+    {
+        switch (option2->LookAheadDS)
+        {
+            case MFX_LOOKAHEAD_DS_UNKNOWN:
+                hb_log("encqsvInit: LookAheadDS unknown (auto)");
+                break;
+            case MFX_LOOKAHEAD_DS_OFF: // default
+                break;
+            case MFX_LOOKAHEAD_DS_2x:
+                hb_log("encqsvInit: LookAheadDS 2x");
+                break;
+            case MFX_LOOKAHEAD_DS_4x:
+                hb_log("encqsvInit: LookAheadDS 4x");
+                break;
+            default:
+                hb_log("encqsvInit: invalid LookAheadDS value 0x%"PRIx16"",
+                       option2->LookAheadDS);
+                break;
+        }
+    }
+
+    switch (videoParam->mfx.FrameInfo.PicStruct)
+    {
+        case MFX_PICSTRUCT_PROGRESSIVE: // default
+            break;
+        case MFX_PICSTRUCT_FIELD_TFF:
+            hb_log("encqsvInit: PicStruct top field first");
+            break;
+        case MFX_PICSTRUCT_FIELD_BFF:
+            hb_log("encqsvInit: PicStruct bottom field first");
+            break;
+        default:
+            hb_error("encqsvInit: invalid PicStruct value 0x%"PRIx16"",
+                     videoParam->mfx.FrameInfo.PicStruct);
+            return -1;
+    }
+
+    if (videoParam->mfx.CodecId == MFX_CODEC_AVC)
+    {
+        if (option1 && (option1->CAVLC != MFX_CODINGOPTION_OFF))
+        {
+            hb_log("encqsvInit: CAVLC %s",
+                hb_qsv_codingoption_get_name(option1->CAVLC));
+        }
+    }
+
+    if (option2 && (option2->ExtBRC != MFX_CODINGOPTION_OFF))
+    {
+        hb_log("encqsvInit: ExtBRC %s",
+            hb_qsv_codingoption_get_name(option2->ExtBRC));
+    }
+
+    if (option2 && (option2->MBBRC != MFX_CODINGOPTION_OFF))
+    {
+        hb_log("encqsvInit: MBBRC %s",
+            hb_qsv_codingoption_get_name(option2->MBBRC));
+    }
+
+    if (option2)
+    {
+        switch (option2->Trellis)
+        {
+            case MFX_TRELLIS_OFF: // default
+                break;
+            case MFX_TRELLIS_UNKNOWN:
+                hb_log("encqsvInit: Trellis unknown (auto)");
+                break;
+            default:
+                hb_log("encqsvInit: Trellis on (%s%s%s)",
+                       (option2->Trellis & MFX_TRELLIS_I) ? "I" : "",
+                       (option2->Trellis & MFX_TRELLIS_P) &&
+                       (videoParam->mfx.GopPicSize > 1)    ? "P" : "",
+                       (option2->Trellis & MFX_TRELLIS_B) &&
+                       (videoParam->mfx.GopRefDist > 1)    ? "B" : "");
+                break;
+        }
+    }
+
+    return 0;
+}
+
 /***********************************************************************
  * encqsvInit
  ***********************************************************************
@@ -1460,6 +1653,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (err < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("encqsvInit: MFXVideoENCODE_Init failed (%d)", err);
+        log_encoder_params(pv, pv->param.videoParam);
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
         return -1;
@@ -1574,173 +1768,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->list_dts = hb_list_init();
     }
 
-    // log code path and main output settings
-    hb_log("encqsvInit: using %s%s path",
-           pv->is_sys_mem ? "encode-only" : "full QSV",
-           videoParam.mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "" );
-    hb_log("encqsvInit: %s %s profile @ level %s",
-           hb_qsv_codec_name  (videoParam.mfx.CodecId),
-           hb_qsv_profile_name(videoParam.mfx.CodecId, videoParam.mfx.CodecProfile),
-           hb_qsv_level_name  (videoParam.mfx.CodecId, videoParam.mfx.CodecLevel));
-    hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
-           videoParam.mfx.TargetUsage, videoParam.AsyncDepth);
-    hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
-           videoParam.mfx.GopRefDist, videoParam.mfx.GopPicSize, videoParam.mfx.NumRefFrame);
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
-    {
-        hb_log("encqsvInit: BFramesMax %d BRefType %s",
-               videoParam.mfx.GopRefDist > 1 ?
-               videoParam.mfx.GopRefDist - 1 : 0,
-               pv->param.gop.b_pyramid ? "pyramid" : "off");
-    }
-    else
-    {
-        hb_log("encqsvInit: BFramesMax %d",
-               videoParam.mfx.GopRefDist > 1 ?
-               videoParam.mfx.GopRefDist - 1 : 0);
-    }
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT)
-    {
-        if (option2->AdaptiveI != MFX_CODINGOPTION_OFF ||
-            option2->AdaptiveB != MFX_CODINGOPTION_OFF)
-        {
-            if (videoParam.mfx.GopRefDist > 1)
-            {
-                hb_log("encqsvInit: AdaptiveI %s AdaptiveB %s",
-                       hb_qsv_codingoption_get_name(option2->AdaptiveI),
-                       hb_qsv_codingoption_get_name(option2->AdaptiveB));
-            }
-            else
-            {
-                hb_log("encqsvInit: AdaptiveI %s",
-                       hb_qsv_codingoption_get_name(option2->AdaptiveI));
-            }
-        }
-    }
-    if (videoParam.mfx.RateControlMethod == MFX_RATECONTROL_CQP)
-    {
-        char qpi[7], qpp[9], qpb[9];
-        snprintf(qpi, sizeof(qpi),  "QPI %"PRIu16"", videoParam.mfx.QPI);
-        snprintf(qpp, sizeof(qpp), " QPP %"PRIu16"", videoParam.mfx.QPP);
-        snprintf(qpb, sizeof(qpb), " QPB %"PRIu16"", videoParam.mfx.QPB);
-        hb_log("encqsvInit: RateControlMethod CQP with %s%s%s", qpi,
-               videoParam.mfx.GopPicSize > 1 ? qpp : "",
-               videoParam.mfx.GopRefDist > 1 ? qpb : "");
-    }
-    else
-    {
-        switch (videoParam.mfx.RateControlMethod)
-        {
-            case MFX_RATECONTROL_LA:
-                hb_log("encqsvInit: RateControlMethod LA TargetKbps %"PRIu16" LookAheadDepth %"PRIu16"",
-                       videoParam.mfx.TargetKbps, option2->LookAheadDepth);
-                break;
-            case MFX_RATECONTROL_LA_ICQ:
-                hb_log("encqsvInit: RateControlMethod LA_ICQ ICQQuality %"PRIu16" LookAheadDepth %"PRIu16"",
-                       videoParam.mfx.ICQQuality, option2->LookAheadDepth);
-                break;
-            case MFX_RATECONTROL_ICQ:
-                hb_log("encqsvInit: RateControlMethod ICQ ICQQuality %"PRIu16"",
-                       videoParam.mfx.ICQQuality);
-                break;
-            case MFX_RATECONTROL_CBR:
-            case MFX_RATECONTROL_VBR:
-                hb_log("encqsvInit: RateControlMethod %s TargetKbps %"PRIu16" MaxKbps %"PRIu16" BufferSizeInKB %"PRIu16" InitialDelayInKB %"PRIu16"",
-                       videoParam.mfx.RateControlMethod == MFX_RATECONTROL_CBR ? "CBR" : "VBR",
-                       videoParam.mfx.TargetKbps,     videoParam.mfx.MaxKbps,
-                       videoParam.mfx.BufferSizeInKB, videoParam.mfx.InitialDelayInKB);
-                break;
-            default:
-                hb_log("encqsvInit: invalid rate control method %"PRIu16"",
-                       videoParam.mfx.RateControlMethod);
-                return -1;
-        }
-    }
-    if ((pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_LA_DOWNS) &&
-        (videoParam.mfx.RateControlMethod == MFX_RATECONTROL_LA ||
-         videoParam.mfx.RateControlMethod == MFX_RATECONTROL_LA_ICQ))
-    {
-        switch (option2->LookAheadDS)
-        {
-            case MFX_LOOKAHEAD_DS_UNKNOWN:
-                hb_log("encqsvInit: LookAheadDS unknown (auto)");
-                break;
-            case MFX_LOOKAHEAD_DS_OFF: // default
-                break;
-            case MFX_LOOKAHEAD_DS_2x:
-                hb_log("encqsvInit: LookAheadDS 2x");
-                break;
-            case MFX_LOOKAHEAD_DS_4x:
-                hb_log("encqsvInit: LookAheadDS 4x");
-                break;
-            default:
-                hb_log("encqsvInit: invalid LookAheadDS value 0x%"PRIx16"",
-                       option2->LookAheadDS);
-                break;
-        }
-    }
-    switch (videoParam.mfx.FrameInfo.PicStruct)
-    {
-        case MFX_PICSTRUCT_PROGRESSIVE: // default
-            break;
-        case MFX_PICSTRUCT_FIELD_TFF:
-            hb_log("encqsvInit: PicStruct top field first");
-            break;
-        case MFX_PICSTRUCT_FIELD_BFF:
-            hb_log("encqsvInit: PicStruct bottom field first");
-            break;
-        default:
-            hb_error("encqsvInit: invalid PicStruct value 0x%"PRIx16"",
-                     videoParam.mfx.FrameInfo.PicStruct);
-            return -1;
-    }
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION1)
-    {
-        if (videoParam.mfx.CodecId == MFX_CODEC_AVC)
-        {
-            if (option1->CAVLC != MFX_CODINGOPTION_OFF)
-            {
-                hb_log("encqsvInit: CAVLC %s",
-                       hb_qsv_codingoption_get_name(option1->CAVLC));
-            }
-        }
-    }
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC)
-    {
-        if (option2->ExtBRC != MFX_CODINGOPTION_OFF)
-        {
-            hb_log("encqsvInit: ExtBRC %s",
-                   hb_qsv_codingoption_get_name(option2->ExtBRC));
-        }
-    }
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_MBBRC)
-    {
-        if (option2->MBBRC != MFX_CODINGOPTION_ON)
-        {
-            hb_log("encqsvInit: MBBRC %s",
-                   hb_qsv_codingoption_get_name(option2->MBBRC));
-        }
-    }
-    if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS)
-    {
-        switch (option2->Trellis)
-        {
-            case MFX_TRELLIS_OFF: // default
-                break;
-            case MFX_TRELLIS_UNKNOWN:
-                hb_log("encqsvInit: Trellis unknown (auto)");
-                break;
-            default:
-                hb_log("encqsvInit: Trellis on (%s%s%s)",
-                       (option2->Trellis & MFX_TRELLIS_I) ? "I" : "",
-                       (option2->Trellis & MFX_TRELLIS_P) &&
-                       (videoParam.mfx.GopPicSize > 1)    ? "P" : "",
-                       (option2->Trellis & MFX_TRELLIS_B) &&
-                       (videoParam.mfx.GopRefDist > 1)    ? "B" : "");
-                break;
-        }
-    }
-
+    log_encoder_params(pv, &videoParam);
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
     pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
