@@ -2833,12 +2833,10 @@ int qsv_map_mfx_platform_codename(int mfx_platform_codename)
     case MFX_PLATFORM_ELKHARTLAKE:
     case MFX_PLATFORM_JASPERLAKE:
     case MFX_PLATFORM_TIGERLAKE:
+    case MFX_PLATFORM_ROCKETLAKE:
+    case MFX_PLATFORM_ALDERLAKE_S:
         platform = HB_CPU_PLATFORM_INTEL_TGL;
         break;
-    // TODO: update mfx_dispatch to add MFX_PLATFORM_ALDERLAKE_S
-    // case MFX_PLATFORM_ALDERLAKE_S:
-    //     platform = HB_CPU_PLATFORM_INTEL_TGL;
-    //     break;
 #endif
     default:
         platform = HB_CPU_PLATFORM_UNSPECIFIED;
