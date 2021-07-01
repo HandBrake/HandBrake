@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an idea for this project. Please note, requesting third-party library updates is not required; we periodically update these in batches.
+labels: [Enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+       Please fill out the following fields with as much detail as possible:
+  - type: textarea
+    id: feature
+    attributes:
+      label: Description of the feature or enhancement you'd like to see in HandBrake
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: What Operating System are you running?
+      placeholder: e.g. Windows 10, macOS 11, Ubuntu 20.04
+    validations:
+      required: true
+  - type: input
+    id: hb-version
+    attributes:
+      label: What version of HandBrake are you running?
+      placeholder: e.g. 1.3.3, Nightly 10c4c78
+    validations:
+      required: false
+  - type: input
+    id: hb-download
+    attributes:
+      label: Where did you download HandBrake from?
+      placeholder: e.g. handbrake.fr, github, flathub etc.
+    validations:
+      required: false
+  - type: textarea
+    id: activity-log
+    attributes:
+      label: Activity Log, Crash Log or any other details
+      description: An Activity Log is required for support. Please read https://handbrake.fr/docs/en/latest/help/activity-log.html for more information.
+      render: text
+    validations:
+      required: false
