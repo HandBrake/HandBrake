@@ -30,14 +30,10 @@ body:
           required: false
         - label: Linux (GTK)
           required: false
- - type: checkboxes
-    id: terms
-    attributes:
-      label: Please confirm that you agree to:
-      options:
-        - label: Our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md)
-          required: true
-        - label: Our [Community Rules](https://forum.handbrake.fr/app.php/rules)
-          required: true
-        - label: Our [Translation Guidelines](https://github.com/HandBrake/HandBrake/blob/master/TRANSLATION.markdown)
-          required: true
+- type: checkboxes
+  attributes:
+    label: Community Guidelines
+    description: Please confirm that you agree to the following
+    options:
+      - label: I agree to follow this project's [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md)
+        required: true
