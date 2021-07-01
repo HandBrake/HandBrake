@@ -37,7 +37,7 @@ body:
     id: activity-log
     attributes:
       label: Activity Log, Crash Log or any other details
-      description: An Activity Log is required for support. Please read https://handbrake.fr/docs/en/latest/help/activity-log.html for more information.
+      description: If the request is off the back of failure or unsupported file format, please post a log as it can help us track down what is missing. Please read https://handbrake.fr/docs/en/latest/help/activity-log.html for more information.
       render: text
     validations:
       required: false
