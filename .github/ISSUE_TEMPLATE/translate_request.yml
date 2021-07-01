@@ -1,0 +1,42 @@
+name: Translation Team request
+description: Request to join our Translation Team on Transifex.
+body:
+  - type: markdown
+    attributes:
+      value: |
+       Please fill out the following form to request Transifex account be added to the HandBrake translation teams.
+  - type: input
+    id: transifex-user
+    attributes:
+      label: Transifex username
+    validations:
+      required: true
+  - type: input
+    id: hb-lang
+    attributes:
+      label: Which Language would you like to translate
+      placeholder: e.g. French, German etc.
+    validations:
+      required: false
+ - type: checkboxes
+    id: terms
+    attributes:
+      label: Which Operating system do you wish to translate?
+      options:
+        - label: Windows
+          required: false
+        - label: macOS
+          required: false
+        - label: Linux (GTK)
+          required: false
+ - type: checkboxes
+    id: terms
+    attributes:
+      label: Please confirm that you agree to:
+      options:
+        - label: Our [Code of Conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md)
+          required: true
+        - label: Our [Community Rules](https://forum.handbrake.fr/app.php/rules)
+          required: true
+        - label: Our [Translation Guidelines](https://github.com/HandBrake/HandBrake/blob/master/TRANSLATION.markdown)
+          required: true
