@@ -1,5 +1,6 @@
 name: Translation Team request
 description: Request to join our Translation Team on Transifex.
+labels:
 body:
   - type: markdown
     attributes:
@@ -19,7 +20,7 @@ body:
     validations:
       required: false
  - type: checkboxes
-    id: terms
+    id: os-choice
     attributes:
       label: Which Operating system do you wish to translate?
       options:
