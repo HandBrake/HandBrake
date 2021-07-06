@@ -119,7 +119,7 @@
 
                     <TextBlock Text="{x:Static Properties:Resources.Options_General}" FontSize="20" FontFamily="Segoe UI Light"  />
 
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{Binding CheckForUpdatesAllowed, Converter={StaticResource boolToVisConverter}}">
 
                         <TextBlock Text="{x:Static Properties:Resources.Options_OnStartup}" FontSize="14" Margin="0,0,0,10"/>
 
@@ -129,7 +129,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,10">
 
                         <TextBlock Text="{x:Static Properties:Resources.Options_UserInterface}" FontSize="14" Margin="0,0,0,10"/>
 

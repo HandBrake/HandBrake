@@ -172,6 +172,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool CheckForUpdatesAllowed { get; set; }
+
         public bool ResetWhenDoneAction
         {
             get => this.resetWhenDoneAction;
@@ -975,7 +977,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public bool IsSimultaneousEncodesSupported => Utilities.SystemInfo.GetCpuCoreCount >= 4;
-
+        
         #region Public Methods
 
         public void Close()
@@ -1104,8 +1106,15 @@ namespace HandBrakeWPF.ViewModels
             string culture = this.userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
             this.SelectedLanguage = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
 
+            this.CheckForUpdatesAllowed = true;
             this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
             this.CheckForUpdatesFrequency = (UpdateCheck)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
+            if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
+            {
+                this.CheckForUpdates = false;
+                this.CheckForUpdatesAllowed = false;
+            }
+
             this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
             this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
