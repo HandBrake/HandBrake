@@ -120,13 +120,29 @@ namespace HandBrakeWPF
                 }
             }
 
-            int oldOsWarningCount = userSettingService.GetUserSetting<int>(UserSettingConstants.OldOsWarning);
-            if (!SystemInfo.IsWindows10() && oldOsWarningCount < 2)
+            int runCounter = userSettingService.GetUserSetting<int>(UserSettingConstants.RunCounter);
+            if (!SystemInfo.IsWindows10() && runCounter < 2)
             {
                 MessageBox.Show(HandBrakeWPF.Properties.Resources.OldOperatingSystem, HandBrakeWPF.Properties.Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
-                userSettingService.SetUserSetting(UserSettingConstants.OldOsWarning, oldOsWarningCount + 1); // Only display once.
             }
 
+            // Check if the user would like to check for updates AFTER the first run, but only once. 
+            if (runCounter == 1)
+            {
+                if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
+                {
+                    return; // If Portable Mode has disabled it, don't bother the user. Just accept it's disabled. 
+                }
+
+                MessageBoxResult result = MessageBox.Show(HandBrakeWPF.Properties.Resources.FirstRun_EnableUpdateCheck, HandBrakeWPF.Properties.Resources.FirstRun_EnableUpdateCheckHeader, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                // Be explicit setting it to true/false as it may have been turned on during first-run.
+                userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, result == MessageBoxResult.Yes);
+            }
+
+            // Increment the counter so we can change startup behavior for the above warning and update check question.
+            userSettingService.SetUserSetting(UserSettingConstants.RunCounter, runCounter + 1); // Only display once.
+
+            // App Theme
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             if (SystemInfo.IsWindows10())
             {

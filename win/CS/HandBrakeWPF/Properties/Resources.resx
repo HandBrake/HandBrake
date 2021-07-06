@@ -2482,4 +2482,12 @@ This warning will display only twice.</value>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>The default auto name path was not valid. {0} must not be before {1}</value>
   </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Would you like to allow HandBrake to automatically check for updates?
+
+You can change your choice at any time by changing the options in Preferences -&gt; General -&gt; Check for Updates</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Check for updates?</value>
+  </data>
 </root>

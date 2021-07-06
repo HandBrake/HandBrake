@@ -1196,6 +1196,26 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Would you like to allow HandBrake to automatically check for updates?
+        ///
+        ///You can change your choice at any time by changing the options in Preferences -&gt; General -&gt; Check for Updates.
+        /// </summary>
+        public static string FirstRun_EnableUpdateCheck {
+            get {
+                return ResourceManager.GetString("FirstRun_EnableUpdateCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for updates?.
+        /// </summary>
+        public static string FirstRun_EnableUpdateCheckHeader {
+            get {
+                return ResourceManager.GetString("FirstRun_EnableUpdateCheckHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Generic_Add {

@@ -255,7 +255,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.Verbosity, 1);
 
             // General
-            defaults.Add(UserSettingConstants.UpdateStatus, true);
+            defaults.Add(UserSettingConstants.UpdateStatus, false);
             defaults.Add(UserSettingConstants.LastUpdateCheckDate, DateTime.Now.Date.AddDays(-30));
             defaults.Add(UserSettingConstants.DaysBetweenUpdateCheck, 1);
             defaults.Add(UserSettingConstants.DarkThemeMode, DarkThemeMode.Light);
@@ -325,7 +325,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ScalingMode, 0);
             defaults.Add(UserSettingConstants.ForcePresetReset, 3);
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
-            defaults.Add(UserSettingConstants.OldOsWarning, 0);
+            defaults.Add(UserSettingConstants.RunCounter, 0);
             
             return defaults;
         }
