@@ -64,26 +64,15 @@ static hb_fifo_t fifo_list =
 };
 #endif
 
-/* we round the requested buffer size up to the next power of 2 so there can
- * be at most 32 possible pools when the size is a 32 bit int. To avoid a lot
- * of slow & error-prone run-time checking we allow for all 32. */
-#define MAX_BUFFER_POOLS  32
-#define BUFFER_POOL_FIRST 10
-#define BUFFER_POOL_LAST  25
-/* the buffer pool only exists to avoid the two malloc and two free calls that
- * it would otherwise take to allocate & free a buffer. but we don't want to
- * tie up a lot of memory in the pool because this allocator isn't as general
- * as malloc so memory tied up here puts more pressure on the malloc pool.
- * A pool of 16 elements will avoid 94% of the malloc/free calls without wasting
- * too much memory. */
-#define BUFFER_POOL_MAX_ELEMENTS 32
+#define HB_BUFFER_POOL_SIZES    13   // Number of unique buffer sizes
+#define HB_BUFFER_POOL_BUFFERS  128  // Increase until memory pool use ~= overall memory use
 
 struct hb_buffer_pools_s
 {
     int64_t allocated;
     hb_lock_t *lock;
 #if !defined(HB_NO_BUFFER_POOL)
-    hb_fifo_t *pool[MAX_BUFFER_POOLS];
+    hb_fifo_t *pool[HB_BUFFER_POOL_SIZES];
 #endif
 #if defined(HB_BUFFER_DEBUG)
     hb_list_t *alloc_list;
@@ -105,25 +94,47 @@ void hb_buffer_pool_init( void )
 #endif
 
 #if !defined(HB_NO_BUFFER_POOL)
-    /* we allocate pools for sizes 2^10 through 2^25. requests larger than
-     * 2^25 will get passed through to malloc. */
-    int i;
+    // Create buffers for each size increment, more for smaller sizes
+    // Requests exceeding largest buffer size will be passed through to malloc
 
-    // Create larger queue for 2^10 bucket since all allocations smaller than
-    // 2^10 come from here.
-    buffers.pool[BUFFER_POOL_FIRST] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS*10, 1);
-    buffers.pool[BUFFER_POOL_FIRST]->buffer_size = 1 << 10;
+    buffers.pool[0] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS * 32, 1);
+    buffers.pool[0]->buffer_size = 4096;
 
-    /* requests smaller than 2^10 are satisfied from the 2^10 pool. */
-    for ( i = 1; i < BUFFER_POOL_FIRST; ++i )
-    {
-        buffers.pool[i] = buffers.pool[BUFFER_POOL_FIRST];
-    }
-    for ( i = BUFFER_POOL_FIRST + 1; i <= BUFFER_POOL_LAST; ++i )
-    {
-        buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS, 1);
-        buffers.pool[i]->buffer_size = 1 << i;
-    }
+    buffers.pool[1] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS * 8, 1);
+    buffers.pool[1]->buffer_size = 16384;
+
+    buffers.pool[2] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS * 4, 1);
+    buffers.pool[2]->buffer_size = 65536;
+
+    buffers.pool[3] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[3]->buffer_size = 262144;
+
+    buffers.pool[4] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[4]->buffer_size = 1048576; // 480p/576p
+
+    buffers.pool[5] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[5]->buffer_size = 2097152; // 540p, 720p
+
+    buffers.pool[6] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[6]->buffer_size = 4194304; // 1080p
+
+    buffers.pool[7] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[7]->buffer_size = 8388608; // 1440p
+
+    buffers.pool[8] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[8]->buffer_size = 16777216; // 2160p 4K
+
+    buffers.pool[9] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[9]->buffer_size = 33554432; // 2880p 5K
+
+    buffers.pool[10] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[10]->buffer_size = 44040192; // 3240p 6K
+
+    buffers.pool[11] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[11]->buffer_size = 54525952; // 3780p 7K
+
+    buffers.pool[12] = hb_fifo_init(HB_BUFFER_POOL_BUFFERS, 1);
+    buffers.pool[12]->buffer_size = 71303168; // 4320p 8K
 #endif
 }
 
@@ -196,7 +207,7 @@ static void buffer_pool_validate( hb_fifo_t * f )
 static void buffer_pools_validate( void )
 {
     int ii;
-    for ( ii = BUFFER_POOL_FIRST; ii <= BUFFER_POOL_LAST; ++ii )
+    for ( ii = 0; ii < HB_BUFFER_POOL_SIZES; ++ii )
     {
         buffer_pool_validate( buffers.pool[ii] );
     }
@@ -290,7 +301,7 @@ void hb_buffer_pool_free( void )
 #if !defined(HB_NO_BUFFER_POOL)
     hb_buffer_t * b;
     int           count;
-    for( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i)
+    for( i = 0; i < HB_BUFFER_POOL_SIZES; ++i)
     {
         count = 0;
         while( ( b = hb_fifo_get(buffers.pool[i]) ) )
@@ -322,6 +333,7 @@ void hb_buffer_pool_free( void )
     }
 #endif
 
+    hb_deep_log(2, "Max available buffer size %d", buffers.pool[HB_BUFFER_POOL_SIZES-1]->buffer_size);
     hb_deep_log( 2, "Allocated %"PRId64" bytes of buffers on this pass and Freed %"PRId64" bytes, "
            "%"PRId64" bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
     buffers.allocated = 0;
@@ -332,9 +344,9 @@ static hb_fifo_t *size_to_pool( int size )
 {
 #if !defined(HB_NO_BUFFER_POOL)
     int i;
-    for ( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i )
+    for ( i = 0; i < HB_BUFFER_POOL_SIZES; ++i )
     {
-        if ( size <= (1 << i) )
+        if ( size <= buffers.pool[i]->buffer_size )
         {
             return buffers.pool[i];
         }
