@@ -1,0 +1,31 @@
+$(eval $(call import.MODULE.defs,CARGOC,cargo-c))
+$(eval $(call import.CONTRIB.defs,CARGOC))
+
+CARGOC.FETCH.url      = https://github.com/lu-zero/cargo-c/archive/v0.7.3.tar.gz
+CARGOC.FETCH.sha256   = 533c65d555330e86b91415753efc140ffdb900abd59b5b6403352c4264941a99
+CARGOC.FETCH.basename = cargo-c-0.7.3.tar.gz
+
+define CARGOC.CONFIGURE
+    $(CARGO.exe) fetch --manifest-path=$(CARGOC.EXTRACT.dir/)Cargo.toml
+    $(TOUCH.exe) $@
+endef
+
+CARGOC.BUILD.make       = $(CARGO.exe) build
+CARGOC.BUILD.extra      = --offline --release --features=cargo/vendored-openssl
+CARGOC.BUILD.args.dir   = --manifest-path=$(CARGOC.EXTRACT.dir/)Cargo.toml
+
+define CARGOC.INSTALL
+    $(MKDIR.exe) -p $(CONTRIB.build/)bin/
+    $(CP.exe) $(CARGOC.EXTRACT.dir/)target/release/cargo-cbuild $(CONTRIB.build/)bin/
+    $(CP.exe) $(CARGOC.EXTRACT.dir/)target/release/cargo-cinstall $(CONTRIB.build/)bin/
+    $(TOUCH.exe) $@
+endef
+
+define CARGOC.UNINSTALL
+    $(RM.exe) -f $(CONTRIB.build/)bin/cargo-cbuild $(CONTRIB.build/)bin/cargo-cinstall
+    $(RM.exe) -f $(CARGOC.INSTALL.target)
+endef
+
+CARGOC.CLEAN.make       = $(CARGO.exe) clean
+CARGOC.CLEAN.args.dir   = --manifest-path=$(CARGOC.EXTRACT.dir/)Cargo.toml
+CARGOC.CLEAN.ntargets   =
