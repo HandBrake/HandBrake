@@ -4324,6 +4324,10 @@ int hb_qsv_release_surface_from_pool_by_surface_pointer(HBQSVFramesContext* hb_e
 
 hb_qsv_context* hb_qsv_context_init()
 {
+    if (!hb_qsv_available()) {
+        return 0;
+    }
+  
     hb_qsv_context *ctx;
     ctx = av_mallocz(sizeof(hb_qsv_context));
     if (!ctx)

@@ -481,7 +481,10 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     int adapter_index;
 
 #if HB_PROJECT_FEATURE_QSV
-    adapter_index = job->qsv.ctx->dx_index;
+    if (job->qsv.ctx){
+        adapter_index = job->qsv.ctx->dx_index;
+    }
+    
 #else
     adapter_index = 0;
 #endif
@@ -1175,7 +1178,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_options(job, video_options);
 
 #if HB_PROJECT_FEATURE_QSV
-    job->qsv.ctx->dx_index = adapter_index;
+    if (job->qsv.ctx) {
+        job->qsv.ctx->dx_index = adapter_index;
+    }
 #endif
     // If both vbitrate and vquality were specified, vbitrate is used;
     // we need to ensure the unused rate control mode is always set to an
