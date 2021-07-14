@@ -141,7 +141,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
     <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale removes the color component of the video. Often referred to as Black &amp;amp; White video.</value>
+    <value>Grayscale removes the color component of the video. Often referred to as Black &amp; White video.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Destination path, including directory and file name. This is where your new video will be created, and what it will be named.</value>
