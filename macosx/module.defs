@@ -101,7 +101,8 @@ MACOSX.UB.xpcServices/ = $(MACOSX.UB.app/)XPCServices/
 MACOSX.UB.contents = $(MACOSX.UB.app/)MacOS/HandBrake \
               $(MACOSX.UB.frameworks/)HandBrakeKit.framework/Versions/A/HandBrakeKit \
               $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Sparkle \
-              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Resources/Autoupdate \
+              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Autoupdate \
+              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Updater.app/Contents/MacOS/Updater \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService.xpc/Contents/MacOS/HandBrakeXPCService \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService2.xpc/Contents/MacOS/HandBrakeXPCService2 \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService3.xpc/Contents/MacOS/HandBrakeXPCService3 \

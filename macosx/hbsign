@@ -158,8 +158,8 @@ for TARGET in "${@}"; do
         find "${TARGET}"/Contents/Frameworks -type f -name ".DS_Store" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.textile" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \; >/dev/null 2>&1
-        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Updater.app
-        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate
+        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A/Updater.app
+        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A/Autoupdate
 
         echo "  Signing Frameworks"
         sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A
