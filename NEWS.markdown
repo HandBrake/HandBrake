@@ -5,7 +5,7 @@
 ### All platforms
 
 #### General
-- The HandBrake engine is now 10 and 12bit capable. Please note that not all filters support 10 and 12 bits. Using such a filter will cause the pipeline to run at 8bit. Please see the documentation for more information.
+- The HandBrake engine is now 10 and 12bit capable. Please note that not all filters support 10 and 12 bits. Using an 8bit filter will cause the pipeline to run at 8bit. Please see the documentation for more information.
 - HDR10 metadata will be passed through from the source file if present. 
 - Static Previews that are generated during file scans are now stored in compressed jpeg format (previously stored as YUV420).  Temporary disk space usage and disk writes are massively reduced. This uses libjpeg-turbo
 
@@ -14,9 +14,16 @@
 - New Filter: Colourspace Selection. 
 - New Filter: Support for QuickSync hardware accelerated Crop/Scale when using full path.
 
-#### Video
-- Performance: VFR and Crop/Scale filters are skipped when not required which yields a minor speed improvement when using hardware encoders)
-- QuickSync:  Significant overhaul of memory management including improved zero-copy support where software filters are not used. 
+#### Hardware Encoding
+
+- New Encoder: Media Foundation:
+  - For Windows based ARM64 devices powered by Qualcomm Chipsets. 
+- Updates to the AMD VCN encoder:
+  - Quality tuning for VCN's constrained vbr rate control mode. Results are the same or better than cqp mode, and bit rate is much more predictable.
+  - Included optimised H265 presets for 1080p and 4K content.
+- Updates to the Intel QuickSync encoder:
+  - Minor performance improvement by skipping VFR and Crop/Scale filters when they are not required. 
+  - Overhauled memory management including improved zero-copy support where software filters are not used which should also improve performance. 
 
 #### Audio
 - MP2 Audio Passthru support.
@@ -27,17 +34,13 @@
   - Added support for EIA608 Closed Captions.
   - Replaced current decoders for PGS, SRT and SSA  with those in ffmpeg. This should correct a number of rendering issues on Burn-In
 - Reduced default CC burn-in font-size.
-- Added support for importing external subtitles (ASS and SUP formats)
-- Improvements and fixes to TX3G support.
 
 #### Third-party libraries
 - The following 3rd party libraries have changed:
   - ffmpeg 4.4
-  - AMF 1.4.18 (AMD VCE encoding)
+  - AMF 1.4.18 (AMD VCN encoding)
   - nv-codec-headers 11.0.10.1 (Nvidia NVENC encoding)
   - libmfx 1.34
-  - x264
-  - x265
   - freetype 2.10.4
   - fribidi 1.0.10
   - harfbuzz 2.8.1
@@ -90,6 +93,7 @@
   - New Auto Name option: Always use the default path for each new source / title selected
   - "Send File To" Arguments now supports "{source}" and "{destination}" replacement placeholders. 
   - Added a preference to configure the "Pause on Low Battery" feature. 
+  - Check for Updates is now "opt-in" for new installs. 
 - UI Performance: Optimisations to allow better performance when handling large sets of files (1000+)
 - Updated translations (levels of completeness vary)
 - Miscellaneous bug fixes and improvements
