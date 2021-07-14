@@ -444,13 +444,13 @@ void hb_display_job_info(hb_job_t *job)
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s %d-bit",
-               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->pix_fmt));
+        hb_log("   + decoder: %s %d-bit (%s)",
+               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->pix_fmt), av_get_pix_fmt_name(job->pix_fmt));
     }
     else
 #endif
     {
-        hb_log("   + decoder: %s %d-bit", title->video_codec_name, hb_get_bit_depth(job->pix_fmt));
+        hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->pix_fmt), av_get_pix_fmt_name(job->pix_fmt));
     }
 
     if( title->video_bitrate )

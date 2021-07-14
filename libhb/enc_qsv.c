@@ -1,3 +1,4 @@
+
 /* ********************************************************************* *\
 
 Copyright (C) 2013 Intel Corporation.  All rights reserved.
@@ -850,7 +851,7 @@ int qsv_enc_init(hb_work_private_t *pv)
         {
             pv->sws_context_to_nv12 = hb_sws_get_context(
                                         job->width, job->height,
-                                        AV_PIX_FMT_YUV420P, job->color_range,
+                                        job->pix_fmt, job->color_range,
                                         job->width, job->height,
                                         AV_PIX_FMT_P010LE, job->color_range,
                                         SWS_LANCZOS|SWS_ACCURATE_RND,
@@ -860,7 +861,7 @@ int qsv_enc_init(hb_work_private_t *pv)
         {
             pv->sws_context_to_nv12 = hb_sws_get_context(
                                         job->width, job->height,
-                                        AV_PIX_FMT_YUV420P, job->color_range,
+                                        job->pix_fmt, job->color_range,
                                         job->width, job->height,
                                         AV_PIX_FMT_NV12, job->color_range,
                                         SWS_LANCZOS|SWS_ACCURATE_RND,

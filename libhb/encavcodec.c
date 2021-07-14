@@ -117,6 +117,26 @@ static const char * const h265_mf_profile_name[] =
     "auto", "main",  NULL
 };
 
+static const enum AVPixelFormat pix_fmts[] =
+{
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat h26x_vt_pix_fmts[] =
+{
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat h265_10bit_vt_pix_fmts[] =
+{
+    AV_PIX_FMT_P010LE, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat h26x_mf_pix_fmts[] =
+{
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -911,22 +931,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_dict_set(&av_opts, "profile", "main10", 0);
         context->max_b_frames = 16;
-
-        if (job->pix_fmt != AV_PIX_FMT_P010LE)
-        {
-            pv->sws = hb_sws_get_context(
-                                         job->width, job->height,
-                                         context->pix_fmt, job->color_range,
-                                         job->width, job->height,
-                                         AV_PIX_FMT_P010LE, job->color_range,
-                                         SWS_LANCZOS|SWS_ACCURATE_RND,
-                                         SWS_CS_DEFAULT);
-
-            pv->sws_buf = hb_frame_buffer_init(
-                             AV_PIX_FMT_P010LE, job->width, job->height);
-
-            context->pix_fmt = AV_PIX_FMT_P010LE;
-        }
+        context->pix_fmt = AV_PIX_FMT_P010LE;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
@@ -1033,22 +1038,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
     {
         av_dict_set(&av_opts, "hw_encoding", "1", 0);
-
-        if (job->pix_fmt != AV_PIX_FMT_NV12)
-        {
-            pv->sws = hb_sws_get_context(
-                                         job->width, job->height,
-                                         context->pix_fmt, job->color_range,
-                                         job->width, job->height,
-                                         AV_PIX_FMT_NV12, job->color_range,
-                                         SWS_LANCZOS|SWS_ACCURATE_RND,
-                                         SWS_CS_DEFAULT);
-
-            pv->sws_buf = hb_frame_buffer_init(
-                             AV_PIX_FMT_NV12, job->width, job->height);
-
-            context->pix_fmt = AV_PIX_FMT_NV12;
-        }
+        context->pix_fmt = AV_PIX_FMT_NV12;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
@@ -1057,6 +1047,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // support setting this to either 1 or 2, while others only support
         // setting it to 1.
         context->max_b_frames = 1;
+    }
+
+    if (job->pix_fmt != context->pix_fmt)
+    {
+        // Some encoders require a specific input pixel format
+        // that could be different from the current pipeline format.
+        // Configure a sws context to handle this unlucky case.
+        pv->sws = hb_sws_get_context(
+                                     job->width, job->height,
+                                     job->pix_fmt, job->color_range,
+                                     job->width, job->height,
+                                     context->pix_fmt, job->color_range,
+                                     SWS_LANCZOS|SWS_ACCURATE_RND,
+                                     SWS_CS_DEFAULT);
+        pv->sws_buf = hb_frame_buffer_init(context->pix_fmt, job->width, job->height);
     }
 
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
@@ -1632,5 +1637,23 @@ const char* const* hb_av_profile_get_names(int encoder)
 
          default:
              return NULL;
+     }
+}
+
+const int* hb_av_get_pix_fmts(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_FFMPEG_VT_H264:
+        case HB_VCODEC_FFMPEG_VT_H265:
+            return h26x_vt_pix_fmts;
+        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+            return h265_10bit_vt_pix_fmts;
+        case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_MF_H265:
+            return h26x_mf_pix_fmts;
+
+         default:
+             return pix_fmts;
      }
 }
