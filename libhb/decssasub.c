@@ -30,11 +30,11 @@
 
 struct hb_work_private_s
 {
-    AVFormatContext    * ic;
-    hb_avsub_context_t * ctx;
-    AVPacket           * pkt;
-    hb_job_t           * job;
-    hb_subtitle_t      * subtitle;
+    AVFormatContext       * ic;
+    hb_decavsub_context_t * ctx;
+    AVPacket              * pkt;
+    hb_job_t              * job;
+    hb_subtitle_t         * subtitle;
 
     // Time of first desired subtitle adjusted by reader_pts_offset
     uint64_t start_time;
@@ -107,6 +107,12 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     if (extradataInit(pv))
+    {
+        goto fail;
+    }
+
+    pv->ctx = decavsubInit(w, job);
+    if (pv->ctx == NULL)
     {
         goto fail;
     }

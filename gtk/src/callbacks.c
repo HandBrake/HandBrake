@@ -2411,7 +2411,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, ", Burned🔥");
         }
         else if (def)
         {
@@ -2443,7 +2443,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, ", Burned🔥");
         }
         else if (def)
         {

@@ -628,7 +628,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         }
         if (burn)
         {
-            g_string_append_printf(str, _(", Burned"));
+            g_string_append_printf(str, _(", Burned🔥"));
         }
         else if (def)
         {
@@ -659,7 +659,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         }
         if (burn)
         {
-            g_string_append_printf(str, _(", Burned"));
+            g_string_append_printf(str, _(", Burned🔥"));
         }
         else if (def)
         {

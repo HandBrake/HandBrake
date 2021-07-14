@@ -143,6 +143,7 @@ void hb_limit_rational( int *x, int *y, int64_t num, int64_t den, int limit );
 void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
 void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
 
+void hb_update_str( char **dst, const char *src );
 void hb_job_set_encoder_preset (hb_job_t *job, const char *preset);
 void hb_job_set_encoder_tune   (hb_job_t *job, const char *tune);
 void hb_job_set_encoder_options(hb_job_t *job, const char *options);
@@ -159,6 +160,8 @@ hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
 int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
                                int fs, int width, int height);
+void hb_subtitle_config_copy(hb_subtitle_config_t *dst,
+                             const hb_subtitle_config_t *src);
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );
@@ -170,7 +173,10 @@ int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg,
                const char *lang);
 int hb_subtitle_can_force( int source );
 int hb_subtitle_can_burn( int source );
+int hb_subtitle_can_export( int source );
 int hb_subtitle_can_pass( int source, int mux );
+int hb_subtitle_must_burn(hb_subtitle_t * subtitle, int mux);
+int hb_subtitle_extradata_init(hb_subtitle_t * subtitle);
 
 int hb_audio_can_apply_drc(uint32_t codec, uint32_t codec_param, int encoder);
 int hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx,
@@ -326,6 +332,16 @@ struct hb_subtitle_config_s
     int          force;
     int          default_track;
     const char * name;
+    char       * external_filename;
+    enum subtitle_output_codec {
+        HB_SCODEC_PASS = 0,
+        HB_SCODEC_SSA,
+        HB_SCODEC_TX3G,
+        HB_SCODEC_PGS,
+        HB_SCODEC_DVD,
+        HB_SCODEC_VTT
+    } codec;
+    uint32_t     codec_param;    /* Per-codec config info */
 
     /* SRT subtitle tracks only */
     const char * src_filename;
@@ -1055,9 +1071,10 @@ struct hb_subtitle_s
     uint32_t        substream_type; /* substream for multiplexed streams */
     hb_rational_t   timebase;
 
-    hb_fifo_t     * fifo_in;        /* SPU ES */
-    hb_fifo_t     * fifo_raw;       /* Decoded SPU */
-    hb_fifo_t     * fifo_out;       /* Correct Timestamps, ready to be muxed */
+    hb_fifo_t     * fifo_in;   /* Input to decoder */
+    hb_fifo_t     * fifo_raw;  /* Decoder output, input to sync */
+    hb_fifo_t     * fifo_sync; /* Sync output, input to encoder */
+    hb_fifo_t     * fifo_out;  /* Encoder output, input to mux */
     hb_mux_data_t * mux_data;
 #endif
 };
@@ -1299,15 +1316,16 @@ struct hb_work_object_s
 #endif
 };
 
+extern hb_work_object_t hb_workpass;
 extern hb_work_object_t hb_sync_video;
 extern hb_work_object_t hb_sync_audio;
 extern hb_work_object_t hb_sync_subtitle;
 extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
-extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
+extern hb_work_object_t hb_encavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encx264;

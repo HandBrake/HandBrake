@@ -13,7 +13,6 @@
 #include "libavutil/intreadwrite.h"
 
 #include "handbrake/handbrake.h"
-#include "handbrake/ssautil.h"
 #include "handbrake/lang.h"
 #include "handbrake/hbffmpeg.h"
 
@@ -26,7 +25,8 @@ struct hb_mux_data_s
         MUX_TYPE_SUBTITLE
     } type;
 
-    AVStream    *st;
+    AVFormatContext * oc;
+    AVStream        * st;
 
     int64_t  duration;
 
@@ -36,7 +36,6 @@ struct hb_mux_data_s
     int16_t  current_chapter;
 
     AVBSFContext            * bitstream_context;
-    hb_tx3g_style_context_t * tx3g;
 };
 
 struct hb_mux_object_s
@@ -132,6 +131,25 @@ static char* lookup_lang_code(int mux, char *iso639_2)
             break;
     }
     return out;
+}
+
+const char * get_subtitle_muxer(int source)
+{
+    switch (source)
+    {
+        case CC608SUB:
+        case CC708SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        case SSASUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
+            return "ass";
+        case PGSSUB:
+            return "sup";
+    }
+
+    return NULL;
 }
 
 /**********************************************************************
@@ -837,21 +855,6 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
-    char * subidx_fmt =
-        "size: %dx%d\n"
-        "org: %d, %d\n"
-        "scale: 100%%, 100%%\n"
-        "alpha: 100%%\n"
-        "smooth: OFF\n"
-        "fadein/out: 50, 50\n"
-        "align: OFF at LEFT TOP\n"
-        "time offset: 0\n"
-        "forced subs: %s\n"
-        "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
-        "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
-        "custom colors: OFF, tridx: 0000, "
-        "colors: 000000, 000000, 000000, 000000\n";
-
     int subtitle_default = -1;
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
@@ -875,10 +878,9 @@ static int avformatInit( hb_mux_object_t * m )
 
     for( ii = 0; ii < hb_list_count( job->list_subtitle ); ii++ )
     {
-        hb_subtitle_t * subtitle;
-        uint32_t        rgb[16];
-        char            subidx[2048];
-        int             len;
+        hb_subtitle_t   * subtitle;
+        AVFormatContext * oc;
+        const char      * subtitle_muxer_name = NULL;
 
         subtitle = hb_list_item( job->list_subtitle, ii );
         if (subtitle->config.dest != PASSTHRUSUB)
@@ -887,8 +889,39 @@ static int avformatInit( hb_mux_object_t * m )
         track = m->tracks[m->ntracks++] = calloc(1, sizeof( hb_mux_data_t ) );
         subtitle->mux_data = track;
 
+        if (subtitle->config.external_filename != NULL)
+        {
+            subtitle_muxer_name = get_subtitle_muxer(subtitle->source);
+            if (subtitle_muxer_name == NULL)
+            {
+                hb_error( "No muxer for subtitle source %d", subtitle->source );
+                goto error;
+            }
+            ret = avformat_alloc_output_context2(&track->oc, NULL,
+                subtitle_muxer_name, subtitle->config.external_filename);
+            if (ret < 0)
+            {
+                hb_error( "Could not initialize subtitle avformat context." );
+                goto error;
+            }
+
+            oc = track->oc;
+            ret = avio_open2(&oc->pb, subtitle->config.external_filename,
+                             AVIO_FLAG_WRITE, &track->oc->interrupt_callback,
+                             NULL);
+            if( ret < 0 )
+            {
+                hb_error( "subtitle avio_open2 failed, errno %d", ret);
+                goto error;
+            }
+        }
+        else
+        {
+            oc = m->oc;
+        }
+
         track->type = MUX_TYPE_SUBTITLE;
-        track->st = avformat_new_stream(m->oc, NULL);
+        track->st = avformat_new_stream(oc, NULL);
         if (track->st == NULL)
         {
             hb_error("Could not initialize subtitle stream");
@@ -906,27 +939,20 @@ static int avformatInit( hb_mux_object_t * m )
         {
             case VOBSUB:
             {
-                int jj;
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
 
-                for (jj = 0; jj < 16; jj++)
-                    rgb[jj] = hb_yuv2rgb(subtitle->palette[jj]);
-                len = snprintf(subidx, 2048, subidx_fmt,
-                        subtitle->width, subtitle->height,
-                        0, 0, "OFF",
-                        rgb[0], rgb[1], rgb[2], rgb[3],
-                        rgb[4], rgb[5], rgb[6], rgb[7],
-                        rgb[8], rgb[9], rgb[10], rgb[11],
-                        rgb[12], rgb[13], rgb[14], rgb[15]);
-
-                priv_size = len + 1;
-                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (priv_data == NULL)
+                if (subtitle->extradata_size)
                 {
-                    hb_error("VOBSUB extradata: malloc failure");
-                    goto error;
+                    priv_size = subtitle->extradata_size;
+                    priv_data = av_malloc(priv_size +
+                                          AV_INPUT_BUFFER_PADDING_SIZE);
+                    if (priv_data == NULL)
+                    {
+                        hb_error("VOBSUB extradata: malloc failure");
+                        goto error;
+                    }
+                    memcpy(priv_data, subtitle->extradata, priv_size);
                 }
-                memcpy(priv_data, subidx, priv_size);
             } break;
 
             case PGSSUB:
@@ -947,88 +973,32 @@ static int avformatInit( hb_mux_object_t * m )
             case IMPORTSRT:
             case IMPORTSSA:
             {
-                if (job->mux == HB_MUX_AV_MP4)
+                if (job->mux == HB_MUX_AV_MP4 &&
+                    subtitle->config.external_filename == NULL)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
-                    track->tx3g = hb_tx3g_style_init(
-                                job->height, (char*)subtitle->extradata);
                 }
                 else
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_ASS;
                     need_fonts = 1;
 
-                    if (subtitle->extradata_size)
+                }
+                if (subtitle->extradata_size)
+                {
+                    priv_size = subtitle->extradata_size;
+                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                    if (priv_data == NULL)
                     {
-                        priv_size = subtitle->extradata_size;
-                        priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-                        if (priv_data == NULL)
-                        {
-                            hb_error("SSA extradata: malloc failure");
-                            goto error;
-                        }
-                        memcpy(priv_data, subtitle->extradata, priv_size);
+                        hb_error("Subtitle extradata: malloc failure");
+                        goto error;
                     }
+                    memcpy(priv_data, subtitle->extradata, priv_size);
                 }
             } break;
 
             default:
                 continue;
-        }
-        if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
-        {
-            // Build codec extradata for tx3g.
-            // If we were using a libav codec to generate this data
-            // this would (or should) be done for us.
-            uint8_t properties[] = {
-                0x00, 0x00, 0x00, 0x00,     // Display Flags
-                0x01,                       // Horiz. Justification
-                0xff,                       // Vert. Justification
-                0x00, 0x00, 0x00, 0xff,     // Bg color
-                0x00, 0x00, 0x00, 0x00,     // Default text box
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,     // Reserved
-                0x00, 0x01,                 // Font ID
-                0x00,                       // Font face
-                0x18,                       // Font size
-                0xff, 0xff, 0xff, 0xff,     // Fg color
-                // Font table:
-                0x00, 0x00, 0x00, 0x12,     // Font table size
-                'f','t','a','b',            // Tag
-                0x00, 0x01,                 // Count
-                0x00, 0x01,                 // Font ID
-                0x05,                       // Font name length
-                'A','r','i','a','l'         // Font name
-            };
-
-            int width, height, font_size;
-            width     = job->width * job->par.num / job->par.den;
-            font_size = 0.05 * job->height;
-            if (font_size < 12)
-            {
-                font_size = 12;
-            }
-            else if (font_size > 255)
-            {
-                font_size = 255;
-            }
-            properties[25] = font_size;
-            height = 3 * font_size;
-            track->st->codecpar->width  = width;
-            track->st->codecpar->height = height;
-            properties[14] = height >> 8;
-            properties[15] = height & 0xff;
-            properties[16] = width >> 8;
-            properties[17] = width & 0xff;
-
-            priv_size = sizeof(properties);
-            priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
-            if (priv_data == NULL)
-            {
-                hb_error("TX3G extradata: malloc failure");
-                goto error;
-            }
-            memcpy(priv_data, properties, priv_size);
         }
         track->st->codecpar->extradata = priv_data;
         track->st->codecpar->extradata_size = priv_size;
@@ -1161,12 +1131,32 @@ static int avformatInit( hb_mux_object_t * m )
     }
     av_dict_free( &av_opts );
 
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            ret = avformat_write_header(m->tracks[ii]->oc, NULL);
+            if( ret < 0 )
+            {
+                hb_error( "muxavformat: avformat_write_header external track failed!");
+                goto error;
+            }
+        }
+    }
+
     return 0;
 
 error:
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            avformat_free_context(m->tracks[ii]->oc);
+        }
+    }
     *job->done_error = HB_ERROR_INIT;
     *job->die = 1;
     return -1;
@@ -1212,10 +1202,12 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
-    int64_t    dts, pts, duration = AV_NOPTS_VALUE;
-    hb_job_t * job     = m->job;
-    uint8_t  * sub_out = NULL;
+    int64_t           dts, pts, duration = AV_NOPTS_VALUE;
+    hb_job_t        * job     = m->job;
+    uint8_t         * sub_out = NULL;
+    AVFormatContext * oc;
 
+    oc = track->oc != NULL ? track->oc : m->oc;
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
         // compute dts duration for MP4 files
@@ -1228,7 +1220,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     if (buf == NULL)
     {
-        if (job->mux == HB_MUX_AV_MP4 && track->type == MUX_TYPE_SUBTITLE)
+        if (job->mux == HB_MUX_AV_MP4 &&
+            track->oc == NULL && track->type == MUX_TYPE_SUBTITLE)
         {
             // Write a final "empty" subtitle to terminate the last
             // subtitle that was written
@@ -1384,7 +1377,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
 
         case MUX_TYPE_SUBTITLE:
         {
-            if (job->mux == HB_MUX_AV_MP4)
+            if (job->mux == HB_MUX_AV_MP4 && track->oc == NULL)
             {
                 /* Write an empty sample */
                 if ( track->duration < pts )
@@ -1409,41 +1402,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         *job->die = 1;
                         return -1;
                     }
-                }
-                if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
-                {
-                    uint8_t  * styleatom;
-                    uint16_t   stylesize = 0;
-                    uint8_t  * buffer;
-                    uint16_t   buffersize = 0;
-
-                    /*
-                     * Copy the subtitle into buffer stripping markup and
-                     * creating style atoms for them.
-                     */
-                    hb_muxmp4_process_subtitle_style(
-                        track->tx3g, buf->data, &buffer,
-                        &styleatom, &stylesize);
-
-                    if (buffer != NULL)
-                    {
-                        buffersize = strlen((char*)buffer);
-                        if (styleatom == NULL)
-                        {
-                            stylesize = 0;
-                        }
-                        sub_out = malloc(2 + buffersize + stylesize);
-
-                        /* Write the subtitle sample */
-                        memcpy(sub_out + 2, buffer, buffersize);
-                        memcpy(sub_out + 2 + buffersize, styleatom, stylesize);
-                        sub_out[0] = (buffersize >> 8) & 0xff;
-                        sub_out[1] = buffersize & 0xff;
-                        m->pkt->data = sub_out;
-                        m->pkt->size = buffersize + stylesize + 2;
-                    }
-                    free(buffer);
-                    free(styleatom);
                 }
             }
             if (m->pkt->data == NULL)
@@ -1485,7 +1443,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
 
     m->pkt->stream_index = track->st->index;
-    int ret = av_interleaved_write_frame(m->oc, m->pkt);
+    int ret = av_interleaved_write_frame(oc, m->pkt);
     av_packet_unref(m->pkt);
     if (sub_out != NULL)
     {
@@ -1494,10 +1452,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     // Many avformat muxer functions do not check the error status
     // of the AVIOContext.  So we need to check it ourselves to detect
     // write errors (like disk full condition).
-    if (ret < 0 || m->oc->pb->error != 0)
+    if (ret < 0 || oc->pb->error != 0)
     {
         char errstr[64];
-        av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
+        av_strerror(ret < 0 ? ret : oc->pb->error, errstr, sizeof(errstr));
         hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
                  track->st->index, errstr);
         *job->done_error = HB_ERROR_UNKNOWN;
@@ -1531,10 +1489,6 @@ static int avformatEnd(hb_mux_object_t *m)
         if (m->tracks[ii]->bitstream_context)
         {
             av_bsf_free(&m->tracks[ii]->bitstream_context);
-        }
-        if (m->tracks[ii]->tx3g)
-        {
-            hb_tx3g_style_close(&m->tracks[ii]->tx3g);
         }
     }
 
@@ -1604,8 +1558,19 @@ static int avformatEnd(hb_mux_object_t *m)
     avformat_free_context(m->oc);
     av_packet_free(&m->pkt);
     av_packet_free(&m->empty_pkt);
-    free(m->tracks);
     m->oc = NULL;
+
+    for (ii = 0; ii < m->ntracks; ii++)
+    {
+        if (m->tracks[ii]->oc != NULL)
+        {
+            av_write_trailer(m->tracks[ii]->oc);
+            avio_close(m->tracks[ii]->oc->pb);
+            avformat_free_context(m->tracks[ii]->oc);
+            m->tracks[ii]->oc = NULL;
+        }
+    }
+    free(m->tracks);
 
     return 0;
 }

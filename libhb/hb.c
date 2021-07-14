@@ -2191,6 +2191,7 @@ int hb_global_init()
     hb_avcodec_init();
 
     /* HB work objects */
+    hb_register(&hb_workpass);
     hb_register(&hb_muxer);
     hb_register(&hb_reader);
     hb_register(&hb_sync_video);
@@ -2200,9 +2201,9 @@ int hb_global_init()
     hb_register(&hb_decavcodeca);
     hb_register(&hb_declpcm);
     hb_register(&hb_decavsub);
+    hb_register(&hb_encavsub);
     hb_register(&hb_decsrtsub);
     hb_register(&hb_decssasub);
-    hb_register(&hb_dectx3gsub);
     hb_register(&hb_encavcodec);
     hb_register(&hb_encavcodeca);
 #ifdef __APPLE__

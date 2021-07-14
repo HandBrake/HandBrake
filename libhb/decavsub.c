@@ -11,7 +11,7 @@
 #include "handbrake/hbffmpeg.h"
 #include "handbrake/decavsub.h"
 
-struct hb_avsub_context_s
+struct hb_decavsub_context_s
 {
     AVCodecContext * context;
     AVPacket       * pkt;
@@ -36,15 +36,22 @@ struct hb_avsub_context_s
 
 struct hb_work_private_s
 {
-    hb_avsub_context_t * ctx;
+    hb_decavsub_context_t * ctx;
 };
 
-hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
+/***********************************************************************
+ * decavsubInit
+ ***********************************************************************
+ * Init function for libav subtitle decoding that may be wrapped
+ * by HB subtitle decoder
+ **********************************************************************/
+hb_decavsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_avsub_context_t * ctx = calloc( 1, sizeof( hb_avsub_context_t ) );
+    hb_decavsub_context_t * ctx = calloc( 1, sizeof( hb_decavsub_context_t ) );
 
     if (ctx == NULL)
     {
+        hb_error("decavsubInit: calloc ctx failed");
         return NULL;
     }
     ctx->seen_forced_sub       = 0;
@@ -53,53 +60,54 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     ctx->subtitle              = w->subtitle;
 
     AVCodec        * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
+    if (codec == NULL)
+    {
+        hb_error("encavsubInit: avcodec_find_decoder failed");
+        goto fail;
+    }
     AVCodecContext * context = avcodec_alloc_context3(codec);
-    context->codec = codec;
+    if (context == NULL)
+    {
+        hb_error("decavsubInit: avcodec_alloc_context3 failed");
+        goto fail;
+    }
 
-    hb_buffer_list_clear(&ctx->list);
-    hb_buffer_list_clear(&ctx->list_pass);
-    ctx->context               = context;
+    ctx->context              = context;
+    context->codec            = codec;
     context->pkt_timebase.num = ctx->subtitle->timebase.num;
     context->pkt_timebase.den = ctx->subtitle->timebase.den;
+    context->extradata        = av_malloc(ctx->subtitle->extradata_size);
+    if (context->extradata == NULL)
+    {
+        hb_error("decavsubInit: av_malloc extradata failed");
+        goto fail;
+    }
+    memcpy(context->extradata, ctx->subtitle->extradata,
+                               ctx->subtitle->extradata_size);
+    context->extradata_size   = ctx->subtitle->extradata_size;
 
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
     av_dict_set( &av_opts, "sub_text_format", "ass", 0 );
-    if (ctx->subtitle->source == CC608SUB)
+    if (ctx->subtitle->codec_param == AV_CODEC_ID_EIA_608)
     {
         av_dict_set( &av_opts, "data_field", "first", 0 );
         av_dict_set( &av_opts, "real_time", "1", 0 );
     }
-    if (ctx->subtitle->source == VOBSUB && ctx->subtitle->palette_set)
+    if (ctx->subtitle->codec_param == AV_CODEC_ID_MOV_TEXT)
     {
-        char * palette = hb_strdup_printf(
-            "%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x",
-            hb_yuv2rgb(ctx->subtitle->palette[0]),
-            hb_yuv2rgb(ctx->subtitle->palette[1]),
-            hb_yuv2rgb(ctx->subtitle->palette[2]),
-            hb_yuv2rgb(ctx->subtitle->palette[3]),
-            hb_yuv2rgb(ctx->subtitle->palette[4]),
-            hb_yuv2rgb(ctx->subtitle->palette[5]),
-            hb_yuv2rgb(ctx->subtitle->palette[6]),
-            hb_yuv2rgb(ctx->subtitle->palette[7]),
-            hb_yuv2rgb(ctx->subtitle->palette[8]),
-            hb_yuv2rgb(ctx->subtitle->palette[9]),
-            hb_yuv2rgb(ctx->subtitle->palette[10]),
-            hb_yuv2rgb(ctx->subtitle->palette[11]),
-            hb_yuv2rgb(ctx->subtitle->palette[12]),
-            hb_yuv2rgb(ctx->subtitle->palette[13]),
-            hb_yuv2rgb(ctx->subtitle->palette[14]),
-            hb_yuv2rgb(ctx->subtitle->palette[15]));
-        av_dict_set( &av_opts, "palette", palette, 0 );
-        free(palette);
+        char * width = hb_strdup_printf("%d", job->title->geometry.width);
+        char * height = hb_strdup_printf("%d", job->title->geometry.height);
+        av_dict_set( &av_opts, "width", width, 0 );
+        av_dict_set( &av_opts, "height", height, 0 );
+        free(width);
+        free(height);
     }
-
     if (hb_avcodec_open(ctx->context, codec, &av_opts, 0))
     {
         av_dict_free( &av_opts );
-        free(ctx);
-        hb_log("decsubInit: avcodec_open failed");
-        return NULL;
+        hb_error("decavsubInit: avcodec_open failed");
+        goto fail;
     }
     av_dict_free( &av_opts );
 
@@ -110,32 +118,36 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
         return NULL;
     }
 
-    if (ctx->subtitle->format == TEXTSUB)
+    // avcodec may create or change subtitle header
+    if (context->subtitle_header != NULL && context->subtitle_header_size > 0)
     {
-        int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-        int width  = job->title->geometry.width -  job->crop[2] - job->crop[3];
-        switch (ctx->subtitle->codec_param)
+        uint8_t * tmp = malloc(context->subtitle_header_size);
+        if (tmp == NULL)
         {
-            case AV_CODEC_ID_ASS:
-            {
-                // Extradata should already be filled in by demux
-            } break;
+            hb_error("decavsubInit: malloc subtitle extradata failed");
+            goto fail;
+        }
+        memcpy(tmp, context->subtitle_header, context->subtitle_header_size);
+        free(ctx->subtitle->extradata);
+        ctx->subtitle->extradata = tmp;
+        ctx->subtitle->extradata_size = context->subtitle_header_size;
+    }
+    hb_buffer_list_clear(&ctx->list);
+    hb_buffer_list_clear(&ctx->list_pass);
 
-            case AV_CODEC_ID_EIA_608:
-            {
-                // Mono font for CC
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_MONO,
-                    20, 384, 288);
-            } break;
+    return ctx;
 
-            default:
-            {
-                hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_SANS,
-                    .066 * job->title->geometry.height, width, height);
-            } break;
+fail:
+    if (ctx != NULL)
+    {
+        if (ctx->context != NULL)
+        {
+            avcodec_free_context(&ctx->context);
         }
     }
-    return ctx;
+    free(ctx);
+
+    return NULL;
 }
 
 static int decsubInit( hb_work_object_t * w, hb_job_t * job )
@@ -145,6 +157,7 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     if (pv == NULL)
     {
+        hb_error("decsubInit: calloc private data failed");
         return 1;
     }
 
@@ -278,7 +291,7 @@ static const char * ssa_text(const char * ssa)
     return text;
 }
 
-int decavsubWork( hb_avsub_context_t * ctx,
+int decavsubWork( hb_decavsub_context_t * ctx,
                   hb_buffer_t ** buf_in,
                   hb_buffer_t ** buf_out )
 {
@@ -296,8 +309,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
     }
 
     if (!ctx->job->indepth_scan &&
-        ctx->subtitle->config.dest == PASSTHRUSUB &&
-        hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
+        !hb_subtitle_must_burn(ctx->subtitle, ctx->job->mux))
     {
         // Append to buffer list.  It will be sent to fifo after we determine
         // if this is a packet we need.
@@ -509,8 +521,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             }
             hb_buffer_list_close(&ctx->list_pass);
         }
-        else if (ctx->subtitle->config.dest == PASSTHRUSUB &&
-                 hb_subtitle_can_pass(ctx->subtitle->source, ctx->job->mux))
+        else if (!hb_subtitle_must_burn(ctx->subtitle, ctx->job->mux))
         {
             // PICTURESUB && PASSTHROUGHSUB
 
@@ -679,7 +690,7 @@ static int decsubWork( hb_work_object_t * w,
     return decavsubWork(pv->ctx, buf_in, buf_out );
 }
 
-void decavsubClose( hb_avsub_context_t * ctx )
+void decavsubClose( hb_decavsub_context_t * ctx )
 {
     if (ctx == NULL)
     {
