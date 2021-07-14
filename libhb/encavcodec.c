@@ -808,7 +808,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: GOP Size    %d",    context->gop_size );
             if (vce_h265_max_rate > 0)
             {
-                hb_log( "encavcodec: Max Rate    %d", context->rc_max_rate/1000 );
+                hb_log( "encavcodec: Max Rate    %"PRId64"", context->rc_max_rate/1000 );
                 hb_log( "encavcodec: Buffer Size %d", context->rc_buffer_size/1000 );
                 hb_log( "encavcodec: Max AU Size %d", vce_h265_max_au_size/1000 );
             }
