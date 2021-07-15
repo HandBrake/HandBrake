@@ -15,7 +15,7 @@ X265_10.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_10.CONFIGURE.pref
 X265_10.CONFIGURE.deps        =
 X265_10.CONFIGURE.static      =
 X265_10.CONFIGURE.shared      = -DENABLE_SHARED=OFF
-X265_10.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
+X265_10.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy -DCMAKE_CXX_FLAGS=-flax-vector-conversions
 
 ifneq (1,$(FEATURE.numa))
     X265_10.CONFIGURE.extra  += -DENABLE_LIBNUMA=OFF
@@ -37,6 +37,10 @@ else
     else
         X265_10.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
     endif
+endif
+
+ifeq (aarch64,$(HOST.machine))
+    X265_10.CONFIGURE.extra += -DCMAKE_CXX_FLAGS=-flax-vector-conversions
 endif
 
 ifeq (1,$(HOST.cross))
