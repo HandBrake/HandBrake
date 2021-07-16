@@ -147,7 +147,7 @@ char * hb_utf8_to_cp(const char *src)
     return dst;
 }
 
-int hb_dvd_region(const char *device, int *region_mask)
+int hb_dvd_region(char *device, int *region_mask)
 {
 #if defined( DVD_LU_SEND_RPC_STATE ) && defined( DVD_AUTH )
     struct stat  st;
