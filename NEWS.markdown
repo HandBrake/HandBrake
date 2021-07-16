@@ -16,7 +16,7 @@
 
 #### Hardware Encoding
 
-- New Encoder: Media Foundation:
+- New Encoder: Media Foundation
   - For Windows based ARM64 devices powered by Qualcomm Chipsets. 
 - Updates to the AMD VCN encoder:
   - Quality tuning for VCN's constrained vbr rate control mode. Results are the same or better than cqp mode, and bit rate is much more predictable.
@@ -48,7 +48,7 @@
   - libass 0.15.1
   - libbluray 1.3.0
   - libdvdnav 6.1.1
-  - libdvdread 6.1.2
+  - libdvdread 6.1.1
   - dav1d 0.9.0
   - libvorbis 1.3.7
   - libvpx 1.10.0
@@ -69,6 +69,15 @@
 
 ### Mac
 - Support for Apple Silicon (macOS only)
+- Support for running multiple simultaneous jobs.
+- Support eyetv packages with .ts enclosed media file
+- Improved UI navigation
+  - Added two menu items to quickly switch between titles
+  - Improved undo/redo support
+  - Drag & drop import/export support in the presets popover
+- Preference Updates: 
+  - Added a preference to control whether the current edited preset should be re-applied when changing title
+- Improved Security Scoped Bookmarks management
 - Minor improvements and fixes for macOS 11
 - Updated Sparkle Updater library.
 - Updated translations (levels of completeness vary)
