@@ -449,13 +449,6 @@
 			remoteGlobalIDString = EA4311A0229D5FBC00A5503D;
 			remoteInfo = ed25519;
 		};
-		A9442D0F24DAC03A005EDF62 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A9442CDD24DABFED005EDF62 /* Sparkle.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 72A5D59C1D6927730009E5AC;
-			remoteInfo = SparkleCore;
-		};
 		A9442D1124DAC03A005EDF62 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9442CDD24DABFED005EDF62 /* Sparkle.xcodeproj */;
@@ -1678,7 +1671,6 @@
 			isa = PBXGroup;
 			children = (
 				A9442CF024DABFED005EDF62 /* Sparkle.framework */,
-				A9442D1024DAC03A005EDF62 /* SparkleCore.framework */,
 				A9442CF824DABFED005EDF62 /* Autoupdate */,
 				A9442D1224DAC03A005EDF62 /* org.sparkle-project.InstallerLauncher.xpc */,
 				A9442D1424DAC03A005EDF62 /* org.sparkle-project.InstallerConnection.xpc */,
@@ -2179,7 +2171,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = HB;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
@@ -2328,13 +2320,6 @@
 			fileType = archive.ar;
 			path = libed25519.a;
 			remoteRef = A9442D0524DABFED005EDF62 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A9442D1024DAC03A005EDF62 /* SparkleCore.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SparkleCore.framework;
-			remoteRef = A9442D0F24DAC03A005EDF62 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A9442D1224DAC03A005EDF62 /* org.sparkle-project.InstallerLauncher.xpc */ = {
