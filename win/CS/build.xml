@@ -66,6 +66,7 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"    Condition="'$(Profile)'=='Nightly'"/>
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\portable.ini.template $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
   </Target>
 
   <!-- ******* Create Installers ******* -->
@@ -87,6 +88,12 @@
 
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-ARM64-Win_GUI.msi /Y" Condition="'$(Platform)'=='arm64'" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Installer\bin\$(Configuration)\HandBrake.msi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\HandBrake-$(Profile)-x86_64-Win_GUI.msi /Y" Condition="'$(Platform)'=='x64'" />
+
+    <!-- Tidy up -->
+    <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.nsi" />
+    <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.bmp" />
+    <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.ico" />
+    <Exec Command="del $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\*.pdb" Condition="'$(Profile)'=='Release'" />
   </Target>
 
 
