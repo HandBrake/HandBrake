@@ -22,6 +22,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using GeneralApplicationException = Exceptions.GeneralApplicationException;
@@ -33,6 +34,8 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class UserSettingService : IUserSettingService
     {
+        private readonly ILog logService;
+
         private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly()), "settings.json");
         private readonly string releaseSettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.json");
         private readonly string nightlySettingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.json");
@@ -41,8 +44,9 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="UserSettingService"/> class.
         /// </summary>
-        public UserSettingService()
+        public UserSettingService(ILog logService)
         {
+            this.logService = logService;
             this.Load();
         }
 
@@ -82,17 +86,27 @@ namespace HandBrakeWPF.Services
         /// </returns>
         public T GetUserSetting<T>(string name)
         {
-            if (this.userSettings.ContainsKey(name))
+            try
             {
-                object settingValue = this.userSettings[name];
-                if (settingValue is JsonElement)
+                if (this.userSettings.ContainsKey(name))
                 {
-                    T rawValue = JsonSerializer.Deserialize<T>(((JsonElement)settingValue).GetRawText(), JsonSettings.Options);
-                    return rawValue;
+                    object settingValue = this.userSettings[name];
+                    if (settingValue is JsonElement)
+                    {
+                        T rawValue = JsonSerializer.Deserialize<T>(
+                            ((JsonElement)settingValue).GetRawText(),
+                            JsonSettings.Options);
+                        return rawValue;
+                    }
+
+                    T objectElement = (T)this.userSettings[name];
+                    return objectElement;
                 }
-                
-                T objectElement = (T)this.userSettings[name];
-                return objectElement;
+            }
+            catch (Exception e)
+            {
+                this.logService.LogMessage("Unable to fetch user setting:  " + name + " - " + e);
+                return GetDefaultValue<T>(name);
             }
 
             return default(T);
@@ -328,6 +342,26 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.RunCounter, 0);
             
             return defaults;
+        }
+
+        private T GetDefaultValue<T>(string name)
+        {
+            try
+            {
+                // If the current setting is corrupt, return the default and log it.
+                Dictionary<string, object> defaults = this.GetDefaults();
+                if (defaults.ContainsKey(name))
+                {
+                    return (T)this.userSettings[name];
+                }
+            }
+            catch (Exception e)
+            {
+                this.logService.LogMessage("Unable to fetch default setting:  " + name + " - " + e);
+                return default(T);
+            }
+
+            return default(T);
         }
     }
 }
