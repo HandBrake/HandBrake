@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
-    <ProjectReference Include="..\HandBrakeWPF\HandBrakeWPF.csproj" />
   </ItemGroup>
 
 </Project>
