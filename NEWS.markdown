@@ -1,5 +1,21 @@
 # HandBrake News
 
+## Upgrade Notice
+Before updating, please make sure there are no pending encodes in the Queue.
+Please also make a backup of any custom presets and app preferences you have as they may not be compatible with newer versions.
+
+## HandBrake 1.4.1
+
+### Mac
+
+- Fix an issue where the Quality Slider was being ignored when using the VideoToolbox encoder.
+
+### Windows
+
+- Added Upgrade notice to the installer welcome page.
+- Fixed a crash in the User Settings which would prevent all settings from loading. 
+
+
 ## HandBrake 1.4.0
 
 ### All platforms
