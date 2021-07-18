@@ -53,7 +53,7 @@
   - libvorbis 1.3.7
   - libvpx 1.10.0
   - x264 161 r3043
-  - x265 20210203-12666 snapshot
+  - x265 3.5
   - zimg and libjpeg-turbo are new dependencies. 
 
 ### General UI Updates (Applies to Windows, macOS and Linux)
