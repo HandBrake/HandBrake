@@ -130,47 +130,47 @@ msgstr "<b>Track</b>"
 
 #: src/ghb3.ui:87
 msgid "Open Source Directory"
-msgstr ""
+msgstr "Open bronmap"
 
 #: src/ghb3.ui:91
 msgid "Open Destination Directory"
-msgstr ""
+msgstr "Open doelmap"
 
 #: src/ghb3.ui:95
 msgid "Open Encode Log Directory"
-msgstr ""
+msgstr "Open map encoderingslog"
 
 #: src/ghb3.ui:99
 msgid "Open Encode Log"
-msgstr ""
+msgstr "Open encoderingslog"
 
 #: src/ghb3.ui:108
 msgid "Reset Failed Jobs"
-msgstr ""
+msgstr "Mislukte taken herstellen"
 
 #: src/ghb3.ui:112
 msgid "Reset All Jobs"
-msgstr ""
+msgstr "Alle taken herstellen"
 
 #: src/ghb3.ui:116
 msgid "Clear Completed Jobs"
-msgstr ""
+msgstr "Voltooide taken opruimen"
 
 #: src/ghb3.ui:120
 msgid "Clear All Jobs"
-msgstr ""
+msgstr "Alle taken opruimen"
 
 #: src/ghb3.ui:124
 msgid "Import Queue"
-msgstr ""
+msgstr "Wachtrij importeren"
 
 #: src/ghb3.ui:128
 msgid "Export Queue"
-msgstr ""
+msgstr "Wachtrij exporteren"
 
 #: src/ghb3.ui:135
 msgid "HandBrake Presets"
-msgstr ""
+msgstr "Handbrake-voorinstellingen"
 
 #: src/ghb3.ui:163 src/ghb3.ui:2128
 msgid "_Presets"
@@ -214,15 +214,15 @@ msgstr "<b>Lijst met voorinstellingen</b>"
 
 #: src/ghb3.ui:318
 msgid "HandBrake Queue"
-msgstr ""
+msgstr "HandBrake wachtrij"
 
 #: src/ghb3.ui:352
 msgid "<span size=\"x-large\">Queue</span>"
-msgstr ""
+msgstr "<span size=\"x-large\">Wachtrij</span>"
 
 #: src/ghb3.ui:367
 msgid "0 jobs pending"
-msgstr ""
+msgstr "0 taken in afwachting"
 
 #: src/ghb3.ui:404 src/ghb3.ui:2324 src/queuehandler.c:2378
 #: src/queuehandler.c:2391 src/queuehandler.c:2402
@@ -246,15 +246,15 @@ msgstr "Pauzeer"
 
 #: src/ghb3.ui:480
 msgid "Options"
-msgstr ""
+msgstr "Opties"
 
 #: src/ghb3.ui:549
 msgid "When Done:"
-msgstr ""
+msgstr "Wanneer voltooid:"
 
 #: src/ghb3.ui:630
 msgid "Reset"
-msgstr ""
+msgstr "Herstellen"
 
 #: src/ghb3.ui:632
 msgid ""
@@ -270,7 +270,7 @@ msgstr "Bewerken"
 
 #: src/ghb3.ui:692
 msgid "Actions"
-msgstr ""
+msgstr "Acties"
 
 #: src/ghb3.ui:741 src/ghb3.ui:4825
 msgid "Preset:"
@@ -278,7 +278,7 @@ msgstr "Voorinstelling:"
 
 #: src/ghb3.ui:777
 msgid "Source:"
-msgstr ""
+msgstr "Bron:"
 
 #: src/ghb3.ui:818 src/ghb3.ui:6512
 msgid "Title:"
@@ -286,23 +286,23 @@ msgstr "Titel:"
 
 #: src/ghb3.ui:858
 msgid "Destination:"
-msgstr ""
+msgstr "Doel:"
 
 #: src/ghb3.ui:899
 msgid "Dimensions:"
-msgstr ""
+msgstr "Afmetingen:"
 
 #: src/ghb3.ui:935
 msgid "Video:"
-msgstr ""
+msgstr "Video:"
 
 #: src/ghb3.ui:971
 msgid "Audio:"
-msgstr ""
+msgstr "Audio:"
 
 #: src/ghb3.ui:1007
 msgid "Subtitles:"
-msgstr ""
+msgstr "Ondertitels:"
 
 #: src/ghb3.ui:1046 src/ghb3.ui:3185
 msgid "Summary"
@@ -310,43 +310,43 @@ msgstr "Samenvatting"
 
 #: src/ghb3.ui:1084
 msgid "Pass:"
-msgstr ""
+msgstr "Passage:"
 
 #: src/ghb3.ui:1120
 msgid "Start Time:"
-msgstr ""
+msgstr "Starttijd:"
 
 #: src/ghb3.ui:1156
 msgid "End Time:"
-msgstr ""
+msgstr "Eindtijd:"
 
 #: src/ghb3.ui:1196
 msgid "Paused Duration:"
-msgstr ""
+msgstr "Gepauseerde duurtijd:"
 
 #: src/ghb3.ui:1236
 msgid "Encode Time:"
-msgstr ""
+msgstr "Encoderingstijd:"
 
 #: src/ghb3.ui:1272
 msgid "File Size:"
-msgstr ""
+msgstr "Bestandsgrootte:"
 
 #: src/ghb3.ui:1308
 msgid "Status:"
-msgstr ""
+msgstr "Status:"
 
 #: src/ghb3.ui:1347
 msgid "Statistics"
-msgstr ""
+msgstr "Statistieken"
 
 #: src/ghb3.ui:1412
 msgid "Activity Log"
-msgstr ""
+msgstr "Activiteitslog"
 
 #: src/ghb3.ui:1435
 msgid "HandBrake Activity Log"
-msgstr ""
+msgstr "Handbrake-activiteitslog"
 
 #: src/ghb3.ui:1710
 msgid "About HandBrake"
@@ -379,6 +379,11 @@ msgid ""
 "\n"
 "You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
+"HandBrake is gratis software; U kunt het herverdelen en/of aanpassen onder de termen van de GNU General Public License zoals gepubliceerd door de Free Software Foundation\n"
+"\n"
+"HandBrake wordt verdeeld in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de geïmpliceerde garantie van VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor meer details.\n"
+"\n"
+"U zou een kopie van de GNU General Public License samen met Glade moeten ontvangen hebben; is dit niet het geval, schrijf dan naar de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: src/ghb3.ui:1907
 msgid "HandBrake"
@@ -782,6 +787,16 @@ msgid ""
 "        storage resolution while preserving the original\n"
 "        display aspect ratio</tt></small>"
 msgstr ""
+"<b>Anamorfe Modes:</b>\n"
+"<small><tt>\n"
+"Geen      - Forceer pixel-aspectverhouding op 1:1.\n"
+"Los         - Gebruik een pixel-aspectverhouding die zo dicht\n"
+"        mogelijk overeenkomt met de pixel-aspectverhouding\n"
+"        van de bron, terwijl de oorspronkelijke beeldverhouding\n"
+"        behouden blijft.\n"
+"Automatisch - Gebruik een pixel-aspectverhouding die de\n"
+"        opslagresolutie maximaliseert, terwijl de\n"
+"        oorspronkelijke beeldverhouding behouden blijft.</tt></small>"
 
 #: src/ghb3.ui:3550
 msgid "Alignment:"
@@ -958,7 +973,7 @@ msgstr ""
 
 #: src/ghb3.ui:4090
 msgid "Deblock Filter:"
-msgstr ""
+msgstr "Ontblokkingsfilter:"
 
 #: src/ghb3.ui:4106 src/ghb3.ui:4138
 msgid ""
@@ -970,7 +985,7 @@ msgstr ""
 
 #: src/ghb3.ui:4122
 msgid "Deblock Tune:"
-msgstr ""
+msgstr "Ontblokking-regeling:"
 
 #: src/ghb3.ui:4152
 msgid ""
@@ -978,6 +993,9 @@ msgid ""
 "\n"
 "strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
+"Aangepaste ontblokkingfilter string-formaat\n"
+"\n"
+"strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ghb3.ui:4180
 msgid "Denoise Filter:"
@@ -1203,6 +1221,14 @@ msgid ""
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
+"Past de encoder-instellingen aan om compressie-efficiëntie tegen\n"
+"encoderingssnelheid af te wegen.\n"
+"\n"
+"Dit past de standaard encoder-instellingen toe.\n"
+"De string met regelingen, profielen, niveaus en geavanceerde opties wordt\n"
+"hierop toegepast. Over het algemeen zouden deze opties zo traag\n"
+"als draaglijk moeten ingesteld worden, aangezien tragere instellingen\n"
+"een betere kwaliteit of kleinere bestanden oplevert."
 
 #: src/ghb3.ui:4865
 msgid "Tune:"
@@ -2814,6 +2840,10 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"Ongeldige detelecine-instellingen:\n"
+"\n"
+"Voorinstelling:\t%s\n"
+"Aangepast:\t%s\n"
 
 #: src/hb-backend.c:4177
 #, c-format

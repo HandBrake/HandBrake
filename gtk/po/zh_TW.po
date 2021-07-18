@@ -5,6 +5,7 @@
 # 
 # Translators:
 # toto6038 <toto6038@gmail.com>, 2020
+# byStarTW (pan93412) <pan93412@gmail.com>, 2021
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-17 08:17-0600\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: toto6038 <toto6038@gmail.com>, 2020\n"
+"Last-Translator: byStarTW (pan93412) <pan93412@gmail.com>, 2021\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/HandBrakeProject/teams/92423/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -143,39 +144,39 @@ msgstr ""
 
 #: src/ghb3.ui:163 src/ghb3.ui:2128
 msgid "_Presets"
-msgstr "預設檔 (P)"
+msgstr "預設檔 (_P)"
 
 #: src/ghb3.ui:171 src/ghb3.ui:2136
 msgid "Set De_fault"
-msgstr "設成預設 (D)"
+msgstr "設成預設 (_F)"
 
 #: src/ghb3.ui:185 src/ghb3.ui:2150
 msgid "_Save"
-msgstr "儲存 (S)"
+msgstr "儲存 (_S)"
 
 #: src/ghb3.ui:194 src/ghb3.ui:2159
 msgid "Save _As"
-msgstr "另存為 (A)"
+msgstr "另存為 (_A)"
 
 #: src/ghb3.ui:203 src/ghb3.ui:2168
 msgid "_Rename"
-msgstr "重新命名 (R)"
+msgstr "重新命名 (_R)"
 
 #: src/ghb3.ui:212 src/ghb3.ui:2177
 msgid "_Delete"
-msgstr "刪除 (D)"
+msgstr "刪除 (_D)"
 
 #: src/ghb3.ui:226 src/ghb3.ui:2191
 msgid "_Import"
-msgstr "匯入 (I)"
+msgstr "匯入 (_I)"
 
 #: src/ghb3.ui:235 src/ghb3.ui:2200
 msgid "_Export"
-msgstr "匯出 (E)"
+msgstr "匯出 (_E)"
 
 #: src/ghb3.ui:249 src/ghb3.ui:2214
 msgid "Reset _Built-in Presets"
-msgstr "重置內建預設檔 (B)"
+msgstr "重置內建預設檔 (_B)"
 
 #: src/ghb3.ui:304
 msgid "<b>Presets List</b>"
