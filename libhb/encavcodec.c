@@ -816,10 +816,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
         {
             context->flags |= AV_CODEC_FLAG_QSCALE;
-            context->global_quality = job->vquality;
+            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
 
             hb_log( "encavcodec: encoding at constant quality %d",
-                    context->global_quality );
+                   (int)job->vquality );
         }
         else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
                  job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
