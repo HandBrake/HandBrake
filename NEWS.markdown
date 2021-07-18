@@ -84,6 +84,7 @@
 
 ### Windows
 - Please note, the Windows UI now requires  "Microsoft .NET 5 Desktop Runtime"
+- Windows 10 is now the minimum version supported. The app will still run on Windows 7 and 8.1 however you will receive a message noting that it is not supported (twice) after which it will continue to run. Please note some functionality may not work correctly on these older operating systems and no support will be provided.
 - Process Isolation
   - When enabled, any encodes that are started are run under a separate "handbrake.worker.exe" process. 
   - This protects the main UI from any crashes that could occur whilst processing a file and allows the queue to continue.
