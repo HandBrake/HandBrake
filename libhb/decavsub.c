@@ -344,7 +344,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
         if (usedBytes == 0)
         {
             // We expect avcodec_decode_subtitle2 to return the number
-            // of bytes consumed, or an error.  If for some unforseen reason
+            // of bytes consumed, or an error.  If for some unforeseen reason
             // it returns 0, lets not get stuck in an infinite loop!
             usedBytes = ctx->pkt->size;
         }

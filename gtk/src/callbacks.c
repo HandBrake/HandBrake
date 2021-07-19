@@ -1349,7 +1349,7 @@ dvd_device_changed_cb(GtkComboBoxText *combo, signal_user_data_t *ud)
 
         dialog = GHB_WIDGET(ud->builder, "source_dialog");
         device = gtk_combo_box_text_get_active_text(combo);
-        // Protext against unexpected NULL return value
+        // Protects against unexpected NULL return value
         if (device != NULL)
         {
             name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
@@ -5395,7 +5395,7 @@ easter_egg_cb(
 
             case 3:
             {
-                // Its a tripple left mouse button click
+                // It's a triple left mouse button click
                 GtkWidget *widget;
                 widget = GHB_WIDGET(ud->builder, "allow_tweaks");
                 gtk_widget_show(widget);
