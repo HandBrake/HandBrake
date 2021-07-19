@@ -65,7 +65,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model
         }
 
         /// <summary>
-        /// Returns the display string for this langauge.
+        /// Returns the display string for this language.
         /// </summary>
         /// <returns>The display string for this language.</returns>
         public override string ToString()
