@@ -36,6 +36,7 @@ ifeq (1,$(HOST.cross))
                                     -DHB_HAVE_GRAPHITE2=OFF \
                                     -DHB_HAVE_ICU=OFF \
                                     -DHB_HAVE_UNISCRIBE=OFF
+        HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
         HARFBUZZ.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(HARFBUZZ.CONFIGURE.host)"
     else
