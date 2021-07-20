@@ -10,7 +10,8 @@
 # - hardware.enabled => true | false (Enables the hardware encoders such as QSV, NVENC or VCE)
 # - process.isolation.enabled => true | false 
 #	(Process Isolation uses an HTTP server on 127.0.0.1 port 8037 or within +100 if in use. This is 'HandBrake.worker.exe' and it is designed to protect the user interface and queue should one job cause an application crash.)
-#       (Disabled by default for portable mode, but recommended to turn it on.)        
+#   (Disabled by default for portable mode, but recommended to turn it on.) 
+# - software.render => true | false  (Only set to true if you are experiencing UI corruption or glitches)
 #
 # Set to 'cwd' to use the current applications directory. It will automatically create "storage" and "tmp" folders in this instance.
 # Leave blank to use the system "TMP" directory and the "AppData" user profile folder.
@@ -21,3 +22,4 @@ tmp.dir = cwd
 update.check = false
 hardware.enabled = true
 process.isolation.enabled = false
+software.rendering = false
