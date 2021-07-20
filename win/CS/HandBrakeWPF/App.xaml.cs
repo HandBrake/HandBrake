@@ -15,9 +15,10 @@ namespace HandBrakeWPF
     using System.IO;
     using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Interop;
+    using System.Windows.Media;
 
     using Caliburn.Micro;
 
@@ -97,6 +98,8 @@ namespace HandBrakeWPF
                 StartupOptions.AutoRestartQueue = true;
             }
 
+           
+            
             // Portable Mode
             if (Portable.IsPortable())
             {
@@ -124,6 +127,12 @@ namespace HandBrakeWPF
             if (!SystemInfo.IsWindows10() && runCounter < 2)
             {
                 MessageBox.Show(HandBrakeWPF.Properties.Resources.OldOperatingSystem, HandBrakeWPF.Properties.Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            // Software Rendering 
+            if (e.Args.Any(f => f.Equals("--force-software-rendering")) || Portable.IsForcingSoftwareRendering() || userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceSoftwareRendering))
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }
 
             // Check if the user would like to check for updates AFTER the first run, but only once. 

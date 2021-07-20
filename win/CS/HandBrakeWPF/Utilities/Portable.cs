@@ -208,6 +208,22 @@ namespace HandBrakeWPF.Utilities
 
             return true; // Default to On.
         }
+        
+        public static bool IsForcingSoftwareRendering()
+        {
+            if (keyPairs.ContainsKey("software.rendering"))
+            {
+                string enabled = keyPairs["software.rendering"];
+                if (!string.IsNullOrEmpty(enabled) && enabled.Trim() == "true")
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false; // Default to Off.
+        }
 
         /// <summary>
         /// The get temp directory.
