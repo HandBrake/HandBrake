@@ -50,7 +50,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.gz",
+                    "url": "https://github.com/libass/libass/releases/download/0.15.1/libass-0.15.1.tar.gz",
                     "sha256": "8d5a5c920b90b70a108007ffcd2289ac652c0e03fc88e6eecefa37df0f2e7fdf"
                 }
             ]
