@@ -79,6 +79,9 @@ namespace HandBrakeWPF.Services.Scan.Model
                 {
                     this.SourceName = Path.GetFileName(this.ScanPath);
                 }
+
+                source.SourceName = this.SourceName;
+
             }
         }
     }
