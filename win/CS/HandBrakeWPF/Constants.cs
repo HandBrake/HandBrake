@@ -18,6 +18,9 @@ namespace HandBrakeWPF
         public const string Appcast64 = "https://handbrake.fr/appcast.x86_64.xml";
         public const string AppcastUnstable64 = "https://handbrake.fr/appcast_unstable.x86_64.xml";
 
+        public const string Appcast64Arm = "https://handbrake.fr/appcast.arm64.xml";
+        public const string AppcastUnstable64Arm = "https://handbrake.fr/appcast_unstable.arm64.xml";
+
         /* Languages */
         public const string Any = "(Any)";
         public const string Undefined = "und";

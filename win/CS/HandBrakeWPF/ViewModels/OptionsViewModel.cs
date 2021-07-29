@@ -1434,8 +1434,27 @@ namespace HandBrakeWPF.ViewModels
 
             if (info.WasSuccessful)
             {
-                Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
-                Execute.OnUIThread(() => Application.Current.Shutdown());
+                try
+                {
+                    // Elevation required to run the installer.
+                    Process installer = new Process();
+                    installer = new Process
+                                {
+                                    StartInfo =
+                                    {
+                                        FileName = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"),
+                                        UseShellExecute = true,
+                                        Verb = "runas"
+                                    }
+                                };
+
+                    installer.Start();
+                    Execute.OnUIThread(() => Application.Current.Shutdown());
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc);
+                }
             }
         }
 
