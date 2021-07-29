@@ -23,7 +23,6 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
@@ -107,12 +106,13 @@ namespace HandBrakeWPF.ViewModels
         private bool alwaysUseDefaultPath;
         private bool pauseOnLowBattery;
         private int lowBatteryLevel;
-        
+        private string whenDoneAudioFileFullPath;
+
         // Experimental
         private int remoteServicePort;
         private bool remoteServiceEnabled;
-
         private bool enableQuickSyncLowPower;
+        private int simultaneousEncodes;
 
         public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
         {
@@ -299,7 +299,16 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public string WhenDoneAudioFileFullPath { get; set; }
+        public string WhenDoneAudioFileFullPath
+        {
+            get => this.whenDoneAudioFileFullPath;
+            set
+            {
+                if (value == this.whenDoneAudioFileFullPath) return;
+                this.whenDoneAudioFileFullPath = value;
+                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFileFullPath);
+            }
+        }
 
         public bool PlaySoundWhenDone
         {
@@ -966,7 +975,16 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsProcessIsolationAllowed { get; } = Portable.IsProcessIsolationEnabled();
 
-        public int SimultaneousEncodes { get; set; }
+        public int SimultaneousEncodes
+        {
+            get => this.simultaneousEncodes;
+            set
+            {
+                if (value == this.simultaneousEncodes) return;
+                this.simultaneousEncodes = value;
+                this.NotifyOfPropertyChange(() => this.SimultaneousEncodes);
+            }
+        }
 
         public BindingList<int> SimultaneousEncodesList
         {
