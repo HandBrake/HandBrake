@@ -3999,6 +3999,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Before Updating:
+        ///- Make sure there are no pending encodes in the queue. 
+        ///- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions..
+        /// </summary>
+        public static string OptionsViewModel_UpdateNotice {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_UpdateNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Service Unavailable. You can try downloading the update from https://handbrake.fr.
         /// </summary>
         public static string OptionsViewModel_UpdateServiceUnavailable {

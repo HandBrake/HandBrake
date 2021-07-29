@@ -2490,4 +2490,9 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
     <value>Check for updates?</value>
   </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Before Updating:
+- Make sure there are no pending encodes in the queue. 
+- Backup or make a note of any custom presets you have created as they may not be fully compatible with newer versions.</value>
+  </data>
 </root>

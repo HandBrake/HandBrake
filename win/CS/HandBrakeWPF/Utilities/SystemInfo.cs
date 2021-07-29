@@ -50,11 +50,13 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
+        public static bool IsArmDevice => RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
+        
         public static int GetCpuCoreCount
         {
             get
             {
-                if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                if (IsArmDevice)
                 {
                     // TODO find a better way to get logical count. 
                     // This is for ARM64 code path as System.Management is not available.
@@ -98,7 +100,7 @@ namespace HandBrakeWPF.Utilities
             {
                 List<string> gpuInfo = new List<string>();
 
-                if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                if (IsArmDevice)
                 {
                     // We don't have .NET Framework on ARM64 devices so cannot use System.Management
                     // Default to ARM Chipset for now.

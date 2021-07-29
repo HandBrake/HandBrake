@@ -536,6 +536,8 @@
 
                     <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
 
+                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_UpdateNotice}" Margin="20,10,10,0" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" TextWrapping="Wrap" />
+
                 </StackPanel>
 
                 <StackPanel Name="About" Orientation="Vertical" Margin="10,5,0,0"
