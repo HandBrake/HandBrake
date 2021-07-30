@@ -3485,7 +3485,7 @@ void hb_qsv_get_free_surface_from_pool_with_range(HBQSVFramesContext* hb_enc_qsv
     }
 }
 
-static ID3D11Texture2D* hb_qsv_create_dx11_texture_with_bytes(ID3D11Device* device, const byte* bytes, int width, int height, int stride, DXGI_FORMAT texture_format)
+static ID3D11Texture2D* hb_qsv_create_dx11_texture_with_bytes(ID3D11Device* device, const byte* bytes, int stride, int width, int height, DXGI_FORMAT texture_format)
 {
     if (device == NULL)
     {
@@ -3585,6 +3585,8 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
     if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
     {
         DXGI_FORMAT texture_format;
+        ID3D11Texture2D* output_surface;
+        D3D11_TEXTURE2D_DESC desc = { 0 };
         if (job->pix_fmt == AV_PIX_FMT_NV12)
         {
             texture_format = DXGI_FORMAT_NV12;
@@ -3598,16 +3600,18 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
             hb_error("hb_qsv_attach_surface_to_video_buffer: unsupported texture_format=%d", job->pix_fmt);
             return -1;
         }
-        ID3D11Texture2D* blank_surface = hb_qsv_create_dx11_texture_with_bytes(job->qsv.ctx->device_manager_handle, buf->data, job->qsv.enc_info.align_width, job->qsv.enc_info.align_height, buf->plane[0].stride, texture_format);
+        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
+        output_surface = mid->handle_pair->first;
+        ID3D11Texture2D_GetDesc(output_surface, &desc);
+        ID3D11Texture2D* blank_surface = hb_qsv_create_dx11_texture_with_bytes(job->qsv.ctx->device_manager_handle, buf->data, buf->plane[0].stride, desc.Width, desc.Height, texture_format);
         if (!blank_surface)
         {
             hb_error("hb_qsv_attach_surface_to_video_buffer: hb_qsv_create_dx11_texture_with_bytes() failed");
             return -1;
         }
-        hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);
         mfxHDLPair* output_pair = (mfxHDLPair*)surface->Data.MemId;
         int output_index = (int)(intptr_t)output_pair->second == MFX_INFINITE ? 0 : (int)(intptr_t)output_pair->second;
-        int ret = hb_qsv_copy_surface(job->qsv.ctx, mid->handle_pair->first, output_index, blank_surface, 0);
+        int ret = hb_qsv_copy_surface(job->qsv.ctx, output_surface, output_index, blank_surface, 0);
         if (ret < 0)
         {
             hb_error("hb_qsv_attach_surface_to_video_buffer: hb_qsv_copy_surface() failed");
