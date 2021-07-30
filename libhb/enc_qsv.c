@@ -1590,7 +1590,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
      * this is fine since the actual encode will use the same
      * values for all parameters relevant to the output bitstream
      */
-    mfxStatus err;
+    int err;
+    mfxStatus sts;
     mfxVersion version;
     mfxVideoParam videoParam;
     mfxExtBuffer *extParamArray[3];
@@ -1600,10 +1601,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
-    err = MFXInit(pv->qsv_info->implementation, &version, &session);
-    if (err != MFX_ERR_NONE)
+    sts = MFXInit(pv->qsv_info->implementation, &version, &session);
+    if (sts != MFX_ERR_NONE)
     {
-        hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", err, pv->qsv_info->implementation);
+        hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", sts, pv->qsv_info->implementation);
         return -1;
     }
 
@@ -1620,10 +1621,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Query the API version for hb_qsv_load_plugins */
-    err = MFXQueryVersion(session, &version);
-    if (err != MFX_ERR_NONE)
+    sts = MFXQueryVersion(session, &version);
+    if (sts != MFX_ERR_NONE)
     {
-        hb_error("encqsvInit: MFXQueryVersion failed (%d)", err);
+        hb_error("encqsvInit: MFXQueryVersion failed (%d)", sts);
         MFXClose(session);
         return -1;
     }
@@ -1637,23 +1638,27 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
-    err = MFXVideoENCODE_Init(session, pv->param.videoParam);
+    sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
 // workaround for the early 15.33.x driver, should be removed later
 #define HB_DRIVER_FIX_33
 #ifdef  HB_DRIVER_FIX_33
     int la_workaround = 0;
-    if (err < MFX_ERR_NONE &&
+    if (sts < MFX_ERR_NONE &&
         pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_LA)
     {
         pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CBR;
-        err = MFXVideoENCODE_Init(session, pv->param.videoParam);
+        sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
         la_workaround = 1;
     }
 #endif
-    if (err < MFX_ERR_NONE) // ignore warnings
+    if (sts < MFX_ERR_NONE) // ignore warnings
     {
-        hb_error("encqsvInit: MFXVideoENCODE_Init failed (%d)", err);
-        log_encoder_params(pv, pv->param.videoParam);
+        hb_error("encqsvInit: MFXVideoENCODE_Init failed (%d)", sts);
+        err = log_encoder_params(pv, pv->param.videoParam);
+        if (err < 0)
+        {
+            hb_error("encqsvInit: log_encoder_params failed (%d)", err);
+        }
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
         return -1;
@@ -1691,10 +1696,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)option2;
     }
-    err = MFXVideoENCODE_GetVideoParam(session, &videoParam);
-    if (err != MFX_ERR_NONE)
+    sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
+    if (sts != MFX_ERR_NONE)
     {
-        hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", err);
+        hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", sts);
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
         return -1;
@@ -1768,7 +1773,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->list_dts = hb_list_init();
     }
 
-    log_encoder_params(pv, &videoParam);
+    err = log_encoder_params(pv, &videoParam);
+    if (err < 0)
+    {
+        hb_error("encqsvInit: log_encoder_params failed (%d)", err);
+        return -1;
+    }
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
     pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
