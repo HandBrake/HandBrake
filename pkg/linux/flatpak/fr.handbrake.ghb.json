@@ -51,7 +51,7 @@
                 {
                     "type": "archive",
                     "url": "https://github.com/libass/libass/releases/download/0.15.1/libass-0.15.1.tar.gz",
-                    "sha256": "8d5a5c920b90b70a108007ffcd2289ac652c0e03fc88e6eecefa37df0f2e7fdf"
+                    "sha256": "101e2be1bf52e8fc265e7ca2225af8bd678839ba13720b969883eb9da43048a6"
                 }
             ]
         },
