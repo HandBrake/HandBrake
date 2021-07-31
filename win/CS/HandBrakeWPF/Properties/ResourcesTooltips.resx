@@ -481,4 +481,9 @@ Note, this will be automatically selected if the source subtitle track format is
 
 For example, PGS subtitles are not supported in MP4</value>
   </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Flat - Presets are displayed as a flat list.
+Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
+Categories - All presets are shown under a sub menu per category.</value>
+  </data>
 </root>

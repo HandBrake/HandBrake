@@ -12,6 +12,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ToolbarLight.xaml" />
+        <ResourceDictionary Source="Controls/ContextMenuLight.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

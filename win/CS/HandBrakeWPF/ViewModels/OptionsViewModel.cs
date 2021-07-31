@@ -107,8 +107,7 @@ namespace HandBrakeWPF.ViewModels
         private bool pauseOnLowBattery;
         private int lowBatteryLevel;
         private string whenDoneAudioFileFullPath;
-
-        // Experimental
+        private PresetDisplayMode selectedPresetDisplayMode;
         private int remoteServicePort;
         private bool remoteServiceEnabled;
         private bool enableQuickSyncLowPower;
@@ -364,6 +363,19 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.darkThemeMode) return;
                 this.darkThemeMode = value;
                 this.NotifyOfPropertyChange(() => this.DarkThemeMode);
+            }
+        }
+
+        public BindingList<PresetDisplayMode> PresetDisplayModes { get; } = new BindingList<PresetDisplayMode>(EnumHelper<PresetDisplayMode>.GetEnumList().ToList());
+
+        public PresetDisplayMode SelectedPresetDisplayMode
+        {
+            get => this.selectedPresetDisplayMode;
+            set
+            {
+                if (value == this.selectedPresetDisplayMode) return;
+                this.selectedPresetDisplayMode = value;
+                this.NotifyOfPropertyChange(() => this.SelectedPresetDisplayMode);
             }
         }
 
@@ -1138,7 +1150,8 @@ namespace HandBrakeWPF.ViewModels
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
             this.DarkThemeMode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
-
+            this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetDisplayMode);
+            
             // #############################
             // When Done
             // #############################
@@ -1339,6 +1352,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PresetDisplayMode, this.SelectedPresetDisplayMode);
 
             /* When Done */
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);

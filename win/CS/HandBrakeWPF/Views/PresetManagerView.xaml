@@ -70,7 +70,6 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True" >
                                         <Setter Property="FontStyle" Value="Italic" />
-                                        <Setter Property="FontSize" Value="14" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="False" >
                                         <Setter Property="FontStyle" Value="Normal" />
@@ -79,6 +78,8 @@
                             </Style>
                         </StackPanel.Resources>
                         <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{x:Static Properties:Resources.Preset_Default}" Margin="10,0,0,0" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}"  />
+                        <TextBlock Text="{x:Static Properties:Resources.Preset_NotAvailable}" Margin="10,0,0,0" Visibility="{Binding IsPresetDisabled, Converter={StaticResource boolToVisConverter}}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
 

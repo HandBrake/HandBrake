@@ -3,13 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 
-    <SolidColorBrush x:Key="Menu.Static.Background" Color="#363636" />  <!-- Ui.Mid -->
-    <SolidColorBrush x:Key="Menu.Static.Border" Color="#C0C0C0" /><!-- Ui.ContrastLight -->
-    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="WhiteSmoke" />
+    <!-- Aero2 Defaults -->
+    <SolidColorBrush x:Key="Menu.Static.Background" Color="#FFF0F0F0" />
+    <SolidColorBrush x:Key="Menu.Static.Border" Color="#FF999999" />
+    <SolidColorBrush x:Key="Menu.Static.Foreground" Color="#FF212121" />
 
-    <SolidColorBrush x:Key="Menu.Static.Separator" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Menu.Static.Separator" Color="#FFD7D7D7" />
 
-    <SolidColorBrush x:Key="Menu.Disabled.Background" Color="#363636" /><!-- Ui.Mid -->
+    <SolidColorBrush x:Key="Menu.Disabled.Background" Color="#3DDADADA" />
     <SolidColorBrush x:Key="Menu.Disabled.Border" Color="#FFDADADA" />
     <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#FF707070" />
 
@@ -95,7 +96,8 @@
                                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ComputedVerticalScrollBarVisibility" />
                                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="VerticalOffset" />
                                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ExtentHeight" />
-                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ViewportHeight" /> </MultiBinding>
+                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ViewportHeight" />
+                                </MultiBinding>
                             </RepeatButton.Visibility>
                             <Path Fill="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}" Data="{StaticResource DownArrow}" />
                         </RepeatButton>
@@ -137,7 +139,7 @@
                                                    Fill="{Binding ElementName=ContextMenuBorder,Path=Background}" />
                                     </Canvas>
                                     <Rectangle Fill="{DynamicResource Ui.Mid}" HorizontalAlignment="Left" Width="28" Margin="1,2" RadiusX="2" RadiusY="2"/>
-                                    <Rectangle HorizontalAlignment="Left" Width="1" Margin="29,2,0,2" Fill="{DynamicResource Ui.WhiteSmoke}"/>
+                                    <Rectangle HorizontalAlignment="Left" Width="1" Margin="29,2,0,2" Fill="{StaticResource Menu.Static.Separator}"/>
                                     <!--<Rectangle HorizontalAlignment="Left" Width="1" Margin="30,2,0,2" Fill="White"/>-->
                                     <ItemsPresenter Name="ItemsPresenter" Margin="{TemplateBinding Padding}"
                                                 KeyboardNavigation.DirectionalNavigation="Cycle"
@@ -403,7 +405,8 @@
                     PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}"
                     Placement="Right"
                     HorizontalOffset="-2"
-                    VerticalOffset="-3"> <!-- Override MaxHeight -->
+                    VerticalOffset="-3">
+                    <!-- Override MaxHeight -->
                     <Border x:Name="SubMenuBorder"
                         Background="{StaticResource Menu.Static.Background}"
                         BorderBrush="{StaticResource Menu.Static.Border}"

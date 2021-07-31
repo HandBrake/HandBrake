@@ -119,7 +119,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="32"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -132,11 +131,11 @@
                 <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Grid.Row="1" Panel.ZIndex="0" Grid.ColumnSpan="2"
                        MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" MouseWheel="PreviewImage_OnMouseWheel" />
 
-                <Border Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,5,0,5">
-                    <TextBlock Text="{Binding PreviewInfo}" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
+                <Border Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Black" BorderBrush="White"  CornerRadius="5" BorderThickness="1" Opacity="0.75" Margin="0,5,0,5">
+                    <TextBlock Text="{Binding PreviewInfo}" Foreground="White" Padding="12,6" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
                 </Border>
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Width="84" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}">
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Center" Margin="0,3,0,0" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="42" />
                         <ColumnDefinition Width="42" />

@@ -79,5 +79,8 @@ namespace HandBrakeWPF
         public const string PreviewShowPictureSettingsOverlay = "PreviewShowPictureSettingsOverlay";
         public const string RunCounter = "HandBrakeRunCounter";
         public const string ForceSoftwareRendering = "ForceSoftwareRendering";
+
+        // Hidden Settings
+        public const string PresetDisplayMode = "PresetDisplayMode";
     }
 }
