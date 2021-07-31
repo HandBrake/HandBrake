@@ -342,6 +342,9 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
 
+            // Hidden Settings
+            defaults.Add(UserSettingConstants.PresetDisplayMode, 1);
+
             return defaults;
         }
 

@@ -240,7 +240,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grayscale removes the color component of the video. Often referred to as Black &amp;amp; White video..
+        ///   Looks up a localized string similar to Grayscale removes the color component of the video. Often referred to as Black &amp; White video..
         /// </summary>
         public static string FilterView_Grayscale {
             get {
@@ -488,6 +488,17 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_AlwaysUseDefaultPath {
             get {
                 return ResourceManager.GetString("OptionsView_AlwaysUseDefaultPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flat - Presets are displayed as a flat list.
+        ///Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
+        ///Categories - All presets are shown under a sub menu per category..
+        /// </summary>
+        public static string OptionsView_PresetDisplayModes {
+            get {
+                return ResourceManager.GetString("OptionsView_PresetDisplayModes", resourceCulture);
             }
         }
         

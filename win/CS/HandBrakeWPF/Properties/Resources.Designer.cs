@@ -3782,6 +3782,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose how presets are displayed in menus:.
+        /// </summary>
+        public static string OptionsView_PresetDisplayMode {
+            get {
+                return ResourceManager.GetString("OptionsView_PresetDisplayMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Process Isolation.
         /// </summary>
         public static string OptionsView_ProcessIsolation {
@@ -4563,6 +4572,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Default).
+        /// </summary>
+        public static string Preset_Default {
+            get {
+                return ResourceManager.GetString("Preset_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to file.
         /// </summary>
         public static string Preset_Export {
@@ -4634,6 +4652,33 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_UnableToImport_Message {
             get {
                 return ResourceManager.GetString("Preset_UnableToImport_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        public static string PresetDisplayMode_Category {
+            get {
+                return ResourceManager.GetString("PresetDisplayMode_Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flat.
+        /// </summary>
+        public static string PresetDisplayMode_Flat {
+            get {
+                return ResourceManager.GetString("PresetDisplayMode_Flat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Partially Flat.
+        /// </summary>
+        public static string PresetDisplayMode_Partial {
+            get {
+                return ResourceManager.GetString("PresetDisplayMode_Partial", resourceCulture);
             }
         }
         

@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Extensions
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
 
     public static class ListExtensions
     {
@@ -73,6 +74,19 @@ namespace HandBrakeWPF.Extensions
             if (index >= 0)
             {
                 list.Swap<T>(index, index + 1);
+            }
+        }
+
+        public static IEnumerable<T> TakeLast<T>(this IList<T> list, int n)
+        {
+            if (list.Count - n < 0)
+            {
+                n = list.Count;
+            }
+
+            for (var i = list.Count - n; i < list.Count; i++)
+            {
+                yield return list[i];
             }
         }
     }
