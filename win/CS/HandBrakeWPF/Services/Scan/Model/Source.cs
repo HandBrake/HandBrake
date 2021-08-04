@@ -73,13 +73,10 @@ namespace HandBrakeWPF.Services.Scan.Model
                         this.SourceName = item.VolumeLabel;
                     }
                 }
-
-                // Otherwise, it may be a path of files.
-                if (string.IsNullOrEmpty(this.SourceName))
-                {
-                    this.SourceName = Path.GetFileName(this.ScanPath);
-                }
             }
+
+            source.SourceName = this.SourceName;
+
         }
     }
 }
