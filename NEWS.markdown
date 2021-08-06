@@ -81,7 +81,12 @@ Please also make a backup of any custom presets and app preferences you have as 
 
 ### Linux
 - Minor usability tweaks and fixes.
-- Updated translations (levels of completeness vary)
+- Added new translations (levels of completeness vary):
+  - Chinese (Taiwan)
+  - Hebrew
+  - Sinhala
+  - Slovenian
+- Updated existing translations (levels of completeness vary).
 
 ### Mac
 - Support for Apple Silicon (macOS only)
@@ -96,7 +101,9 @@ Please also make a backup of any custom presets and app preferences you have as 
 - Improved Security Scoped Bookmarks management
 - Minor improvements and fixes for macOS 11
 - Updated Sparkle Updater library.
-- Updated translations (levels of completeness vary)
+- Added new translations:
+  - Brazilian Portuguese
+- Updated existing translations.
 
 ### Windows
 - Please note, the Windows UI now requires  "Microsoft .NET 5 Desktop Runtime"
@@ -121,7 +128,15 @@ Please also make a backup of any custom presets and app preferences you have as 
   - Added a preference to configure the "Pause on Low Battery" feature. 
   - Check for Updates is now "opt-in" for new installs. 
 - UI Performance: Optimisations to allow better performance when handling large sets of files (1000+)
-- Updated translations (levels of completeness vary)
+- Added new translations (levels of completeness vary):
+  - Brazilian Portuguese
+  - Corsican
+  - Italian
+  - Japanese
+  - Persian (Iran)
+  - Thai
+  - Ukrainian
+- Updated existing translations (levels of completeness vary).
 - Miscellaneous bug fixes and improvements
 
 
