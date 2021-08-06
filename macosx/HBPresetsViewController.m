@@ -143,7 +143,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
     if (action == @selector(setDefault:))
     {
-        if (![self.treeController.selectedObjects.firstObject isLeaf])
+        if (![self.treeController.selectedObjects.firstObject isLeaf] ||
+            ![self.treeController.selectedObjects.firstObject isSupported])
         {
             return NO;
         }
