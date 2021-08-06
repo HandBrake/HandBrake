@@ -69,8 +69,11 @@
 
     if (preset.isLeaf)
     {
-        item.action = self.action;
-        item.representedObject = preset;
+        if (preset.isSupported)
+        {
+            item.action = self.action;
+            item.representedObject = preset;
+        }
 
         // Make the default preset font bold.
         if ([preset isEqualTo:self.manager.defaultPreset])
