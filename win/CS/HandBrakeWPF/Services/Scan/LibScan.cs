@@ -265,7 +265,7 @@ namespace HandBrakeWPF.Services.Scan
                 Source sourceData = null;
                 if (this.instance?.Titles != null)
                 {
-                    sourceData = new Source { Titles = this.ConvertTitles(this.instance.Titles), ScanPath = path };
+                    sourceData = new Source(path, this.ConvertTitles(this.instance.Titles), null);
                 }
 
                 this.IsScanning = false;

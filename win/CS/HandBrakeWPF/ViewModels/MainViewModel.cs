@@ -316,7 +316,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.scannedSource = value;
-                this.NotifyOfPropertyChange(() => ScannedSource);
+                this.NotifyOfPropertyChange(() => this.ScannedSource);
+                this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
             }
         }
 
@@ -1828,9 +1829,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 // Copy all the Scan data into the UI
-                scannedSource.CopyTo(this.ScannedSource);
-                this.NotifyOfPropertyChange(() => this.ScannedSource);
-                this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
+                this.ScannedSource = new Source(scannedSource);
 
                 // Select the Users Title
                 this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault();
@@ -2004,11 +2003,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (e.ScannedSource != null && !e.Cancelled)
             {
-                if (this.ScannedSource == null)
-                {
-                    this.ScannedSource = new Source();
-                }
-                e.ScannedSource.CopyTo(this.ScannedSource);
+                this.ScannedSource = new Source(e.ScannedSource);
             }
             else
             {

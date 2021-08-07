@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Services.Scan.Model
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Xaml;
     using System.Xml.Serialization;
 
     using HandBrakeWPF.Model;
@@ -31,55 +30,57 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Titles = new List<Title>();
         }
 
+        public Source(Source scannedSource) : this(scannedSource.ScanPath, scannedSource.Titles, scannedSource.SourceName)
+        { 
+        }
+
+        public Source(string scanPath, List<Title> titles, string sourceName)
+        {
+            this.ScanPath = scanPath;
+            this.Titles = titles;
+            this.SourceName = sourceName;
+
+            if (string.IsNullOrEmpty(sourceName))
+            {
+                // Scan Path is a File.
+                if (File.Exists(this.ScanPath))
+                {
+                    this.SourceName = Path.GetFileNameWithoutExtension(this.ScanPath);
+                }
+
+                // Scan Path is a folder.
+                if (Directory.Exists(this.ScanPath))
+                {
+                    // Check to see if it's a Drive. If yes, use the volume label.
+                    foreach (DriveInformation item in DriveUtilities.GetDrives())
+                    {
+                        if (item.RootDirectory.Contains(this.ScanPath.Replace("\\\\", "\\")))
+                        {
+                            this.SourceName = item.VolumeLabel;
+                        }
+                    }
+
+                    // Otherwise, it may be a path of files.
+                    if (string.IsNullOrEmpty(this.SourceName))
+                    {
+                        this.SourceName = Path.GetFileName(this.ScanPath);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Gets or sets ScanPath.
         /// The Path used by the Scan Service.
         /// </summary>
-        public string ScanPath { get; set; }
+        public string ScanPath { get; }
 
         /// <summary>
         /// Gets or sets Titles. A list of titles from the source
         /// </summary>
         [XmlIgnore]
-        public List<Title> Titles { get; set; }
+        public List<Title> Titles { get; }
 
-        public string SourceName { get; private set; }
-
-        /// <summary>
-        /// Copy this Source to another Source Model
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        public void CopyTo(Source source)
-        {
-            source.Titles = this.Titles;
-            source.ScanPath = this.ScanPath;
-
-            // Scan Path is a File.
-            if (File.Exists(this.ScanPath))
-            {
-                this.SourceName = Path.GetFileNameWithoutExtension(this.ScanPath);
-            }
-
-            // Scan Path is a folder.
-            if (Directory.Exists(this.ScanPath))
-            {
-                // Check to see if it's a Drive. If yes, use the volume label.
-                foreach (DriveInformation item in DriveUtilities.GetDrives())
-                {
-                    if (item.RootDirectory.Contains(this.ScanPath.Replace("\\\\", "\\")))
-                    {
-                        this.SourceName = item.VolumeLabel;
-                    }
-                }
-
-                // Otherwise, it may be a path of files.
-                if (string.IsNullOrEmpty(this.SourceName))
-                {
-                    this.SourceName = Path.GetFileName(this.ScanPath);
-                }
-            }
-        }
+        public string SourceName { get; }
     }
 }
