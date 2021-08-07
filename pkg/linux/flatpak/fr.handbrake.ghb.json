@@ -13,6 +13,7 @@
         "--filesystem=xdg-run/dconf",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
+        "--filesystem=xdg-config/gtk-3.0",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*",
