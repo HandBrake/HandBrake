@@ -6,15 +6,27 @@ Please also make a backup of any custom presets and app preferences you have as 
 
 ## HandBrake 1.4.1
 
-### Mac
+### All platforms
 
-- Fix an issue where the Quality Slider was being ignored when using the VideoToolbox encoder.
+#### General
+- Fixed a crash when using "Align AV" on Intel based systems. (#3683)
+
+#### Command line interface
+- Fixed a regression that prevented upscaling (#3746)
+
+### Mac
+- Fix an issue where the Quality Slider was being ignored when using the VideoToolbox encoder. (#3751)
+- Fixed an issue where incompatible hardware presets could be selected. 
 
 ### Windows
-
-- Added Upgrade notice to the installer welcome page.
-- Fixed a crash in the User Settings which would prevent all settings from loading. 
-
+- Windows UI builds are now available for ARM64 devices. 
+- Added upgrade notices to the installer welcome page advising of .NET Desktop Runtime 5 requirements and to complete existing queue. (#3693)
+- Added support for software rendering to workaround issues with Variable Refresh Rate and 3rd party software causing rendering corruption (#3755)
+- Added a new preference to define how the preset toolbar button renders the preset list. (#3697)
+- Fixed a crash in the User Settings which would prevent all settings from loading.
+- Fixed "Reset Settings" where certain settings would not reset (#3726)
+- Fixed issues with the built-in updater that may cause it to fail to run the installer if the app is not running as admin.
+- Fixed an issue that required and app restart to apply changes to the max simultaneous encodes setting. 
 
 ## HandBrake 1.4.0
 
