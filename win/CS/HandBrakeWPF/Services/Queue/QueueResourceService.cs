@@ -43,6 +43,19 @@ namespace HandBrakeWPF.Services.Queue
         public QueueResourceService(IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
+            this.userSettingService.SettingChanged += this.UserSettingService_SettingChanged;
+        }
+
+        private void UserSettingService_SettingChanged(object sender, HandBrakeWPF.EventArgs.SettingChangedEventArgs e)
+        {
+            if (e.Key == UserSettingConstants.SimultaneousEncodes)
+            {
+                this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+                if (this.maxAllowedInstances > Utilities.SystemInfo.GetCpuCoreCount)
+                {
+                    this.maxAllowedInstances = Utilities.SystemInfo.GetCpuCoreCount;
+                }
+            }
         }
 
         public int TotalActiveInstances
