@@ -4246,11 +4246,13 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "PictureForceWidth", hb_value_int(width));
         hb_dict_set(preset, "PictureUseMaximumSize", hb_value_bool(0));
+        hb_dict_set(preset, "PictureAllowUpscaling", hb_value_bool(1));
     }
     if (height > 0)
     {
         hb_dict_set(preset, "PictureForceHeight", hb_value_int(height));
         hb_dict_set(preset, "PictureUseMaximumSize", hb_value_bool(0));
+        hb_dict_set(preset, "PictureAllowUpscaling", hb_value_bool(1));
     }
     if (crop[0] >= 0 || crop[1] >= 0 || crop[2] >= 0 || crop[3] >= 0)
     {
