@@ -154,9 +154,11 @@ typedef struct {
     int      next;          // next pointer for list
                             // hb_ts_stream_t points to a list of
                             // hb_pes_stream_t
-    hb_buffer_t  *probe_buf;
-    int      probe_next_size;
-    int      probe_count;
+    hb_buffer_t * probe_buf;
+    int           probe_next_size;
+    int           probe_count;
+    uint8_t *     extradata;
+    int           extradata_size;
 } hb_pes_stream_t;
 
 struct hb_stream_s
@@ -661,6 +663,16 @@ static void hb_stream_delete_dynamic( hb_stream_t *d )
             {
                 hb_buffer_close(&(d->ts.list[i].buf));
                 d->ts.list[i].buf = NULL;
+            }
+        }
+    }
+    if ( d->pes.list )
+    {
+        for (i = 0; i < d->pes.count; i++)
+        {
+            if (d->pes.list[i].extradata)
+            {
+                free(d->pes.list[i].extradata);
             }
         }
     }
@@ -1987,6 +1999,13 @@ static void pes_add_subtitle_to_title(
                     subtitle->source = DVBSUB;
                     subtitle->format = PICTURESUB;
                     subtitle->config.dest = RENDERSUB;
+                    if (pes->extradata != NULL)
+                    {
+                        subtitle->extradata = malloc(pes->extradata_size);
+                        subtitle->extradata_size = pes->extradata_size;
+                        memcpy(subtitle->extradata, pes->extradata,
+                                                    pes->extradata_size);
+                    }
                     break;
                 case AV_CODEC_ID_HDMV_PGS_SUBTITLE:
                     subtitle->source = PGSSUB;
@@ -2624,13 +2643,39 @@ static void decode_element_descriptors(
 
             case 0x59:  // DVB Subtitleing descriptor
             {
+                int lang_count = len / 8;
+
                 stream->pes.list[pes_idx].stream_type = 0x00;
                 stream->pes.list[pes_idx].stream_kind = S;
                 stream->pes.list[pes_idx].codec = WORK_DECAVSUB;
                 stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_DVB_SUBTITLE;
                 strncpy(stream->pes.list[pes_idx].codec_name,
                         "DVB Subtitling", 80);
-                bits_skip(bb, 8 * len);
+                if (lang_count > 0)
+                {
+                    uint8_t * extradata = malloc(5);
+                    char      code[3];
+
+                    stream->pes.list[pes_idx].extradata = extradata;
+                    stream->pes.list[pes_idx].extradata_size = 5;
+                    code[0] = bits_get(bb, 8);
+                    code[1] = bits_get(bb, 8);
+                    code[2] = bits_get(bb, 8);
+
+                    extradata[4] = bits_get(bb, 8);
+                    *extradata++ = bits_get(bb, 8);
+                    *extradata++ = bits_get(bb, 8);
+                    *extradata++ = bits_get(bb, 8);
+                    *extradata++ = bits_get(bb, 8);
+
+                    stream->pes.list[pes_idx].lang_code =
+                                        lang_to_code(lang_for_code2(code));
+                    bits_skip(bb, 8 * (len - 8));
+                }
+                else
+                {
+                    bits_skip(bb, 8 * len);
+                }
             } break;
 
             case 0x6a:  // DVB AC-3 descriptor
