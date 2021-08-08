@@ -937,6 +937,12 @@ static int avformatInit( hb_mux_object_t * m )
             case DVBSUB:
             {
                 track->st->codecpar->codec_id = AV_CODEC_ID_DVB_SUBTITLE;
+                if (subtitle->extradata != NULL)
+                {
+                    priv_size = subtitle->extradata_size;
+                    priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                    memcpy(priv_data, subtitle->extradata, priv_size);
+                }
             } break;
 
             case CC608SUB:
