@@ -862,6 +862,11 @@ static int hb_dvdread_seek( hb_dvd_t * e, float f )
 
     count = f * d->title_block_count;
 
+    if (d->file == NULL)
+    {
+        return 1;
+    }
+
     for( i = d->cell_start; i <= d->cell_end; i++ )
     {
         sizeCell = d->pgc->cell_playback[i].last_sector + 1 -
