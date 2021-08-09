@@ -1,0 +1,47 @@
+From bfffc82c88b55071901f7d00ebe3e66168cd5a6d Mon Sep 17 00:00:00 2001
+From: Oleg Oshmyan <chortos@inbox.lv>
+Date: Fri, 21 May 2021 23:07:42 +0300
+Subject: [PATCH 05/39] coretext: deduplicate found fonts in match_fonts
+
+We ask Core Text to match multiple name fields, and a single font may
+match several at once. In this case, by default, Core Text duly returns
+the font multiple times, and we add it to fontselect multiple times.
+This does not break anything, but it is a waste, so ask Core Text
+to deduplicate the returned list.
+
+This is supposedly available since Mac OS X 10.5.
+We support Core Text on 10.6+.
+---
+ libass/ass_coretext.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/libass/ass_coretext.c b/libass/ass_coretext.c
+index 64ec8ee..f331639 100644
+--- a/libass/ass_coretext.c
++++ b/libass/ass_coretext.c
+@@ -242,7 +242,21 @@ static void match_fonts(void *priv, ASS_Library *lib, ASS_FontProvider *provider
+     if (!descriptors)
+         goto cleanup;
+ 
+-    ctcoll = CTFontCollectionCreateWithFontDescriptors(descriptors, 0);
++    const int nonzero = 1;
++    CFNumberRef cfnonzero = CFNumberCreate(NULL, kCFNumberIntType, &nonzero);
++    if (!cfnonzero)
++        goto cleanup;
++    CFDictionaryRef options =
++        CFDictionaryCreate(NULL,
++            (const void **)&kCTFontCollectionRemoveDuplicatesOption,
++            (const void **)&cfnonzero,
++            1, NULL, NULL);
++    CFRelease(cfnonzero);
++    if (!options)
++        goto cleanup;
++
++    ctcoll = CTFontCollectionCreateWithFontDescriptors(descriptors, options);
++    CFRelease(options);
+     if (!ctcoll)
+         goto cleanup;
+ 
+-- 
+2.30.1 (Apple Git-130)
+
