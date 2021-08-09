@@ -50,13 +50,13 @@
         // Register the default preferences
         [HBPreferencesController registerUserDefaults];
 
+        _outputPanel = [[HBOutputPanelController alloc] init];
+
         [HBCore initGlobal];
         [HBCore registerErrorHandler:^(NSString *error) {
             fprintf(stderr, "error: %s\n", error.UTF8String);
         }];
         [HBCore setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
-
-        _outputPanel = [[HBOutputPanelController alloc] init];
 
         // we init the HBPresetsManager
         NSURL *appSupportURL = HBUtilities.appSupportURL;
