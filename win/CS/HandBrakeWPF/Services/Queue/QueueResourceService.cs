@@ -173,6 +173,18 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
+        public void ClearTokens()
+        {
+            lock (this.lockObj)
+            {
+                qsvInstances.Clear();
+                nvencInstances.Clear();
+                vceInstances.Clear();
+                mfInstances.Clear();
+                this.totalInstances.Clear();
+            }
+        }
+
         public void ReleaseToken(VideoEncoder encoder, Guid? unlockKey)
         {
             if (unlockKey == null)
@@ -259,13 +271,21 @@ namespace HandBrakeWPF.Services.Queue
 
             // For now, it's not expected we'll see users with more than 2 Intel GPUs. Typically 1 CPU, 1 Discrete will likely be the norm.
             // Use the modulus of the above counter to flip between the 2 Intel encoders. 
-            // We don't set GPU for the jobs  1, 3, 5, 7, 9 .... etc  (Default to first)
-            // We do set the GPU for jobs 2, 4, 5, 8, 10 .... etc 
+            // We set GPU for the jobs  1, 3, 5, 7, 9 to index 0
+            // We set the GPU for jobs 2, 4, 5, 8, 10  to index 1 
             if (modulus == 1)
             {
+                // GPU List 1
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                                                   ? string.Format("gpu={0}", this.qsvGpus[1])
                                                   : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[1]);
+            }
+            else
+            {
+                // GPU List 0
+                task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
+                    ? string.Format("gpu={0}", this.qsvGpus[0])
+                    : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[0]);
             }
         }
     }
