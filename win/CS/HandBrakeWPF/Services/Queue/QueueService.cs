@@ -693,6 +693,7 @@ namespace HandBrakeWPF.Services.Queue
 
         private void InvokeQueueCompleted(QueueCompletedEventArgs e)
         {
+            this.hardwareResourceManager.ClearTokens();
             this.IsProcessing = false;
             this.QueueCompleted?.Invoke(this, e);
         }
