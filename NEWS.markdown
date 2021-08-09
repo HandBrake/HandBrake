@@ -10,9 +10,16 @@ Please also make a backup of any custom presets and app preferences you have as 
 
 #### General
 - Fixed a crash when using "Align AV" on Intel based systems. (#3683)
+- Fixed a crash when reading certain DVD's with missing VOB files
+
+#### Subtitles
+- Backport some libass patches which should correct some issues with font and font-weight selections. (#3736)
 
 #### Command line interface
-- Fixed a regression that prevented upscaling (#3746)
+- Fixed a regression that prevented upscaling when using -w and -h (#3746)
+
+### Linux
+- Added: flatpak permission to show bookmarks in file dialogs (#3748)
 
 ### Mac
 - Fix an issue where the Quality Slider was being ignored when using the VideoToolbox encoder. (#3751)
@@ -21,12 +28,14 @@ Please also make a backup of any custom presets and app preferences you have as 
 ### Windows
 - Windows UI builds are now available for ARM64 devices. 
 - Added upgrade notices to the installer welcome page advising of .NET Desktop Runtime 5 requirements and to complete existing queue. (#3693)
-- Added support for software rendering to workaround issues with Variable Refresh Rate and 3rd party software causing rendering corruption (#3755)
+- Added support for software rendering which can be enabled to workaround issues with Variable Refresh Rate and 3rd party software causing rendering corruption (#3755)
 - Added a new preference to define how the preset toolbar button renders the preset list. (#3697)
-- Fixed a crash in the User Settings which would prevent all settings from loading.
-- Fixed "Reset Settings" where certain settings would not reset (#3726)
-- Fixed issues with the built-in updater that may cause it to fail to run the installer if the app is not running as admin.
+- Fixed a crash which would prevent all user settings from loading in some circumstances. 
+- Fixed "Reset Settings" button in preferences. Certain settings were not reset correctly. (#3726)
+- Fixed issues with the built-in updater that may cause it to fail to run the installer if the app was not running as admin.
 - Fixed an issue that required and app restart to apply changes to the max simultaneous encodes setting. 
+- Fixed an issue with Audio Defaults fallback encoder quality/bitrate/mixdown settings would not display correct values (#3739)
+- Fixed an with QSV multi-instance support where multiple Intel GPU's are used.
 
 ## HandBrake 1.4.0
 

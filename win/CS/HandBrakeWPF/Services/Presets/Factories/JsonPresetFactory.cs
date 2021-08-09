@@ -423,7 +423,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             {
                 foreach (var audioTrack in importedPreset.AudioList)
                 {
-                    AudioBehaviourTrack track = new AudioBehaviourTrack();
+                    AudioBehaviourTrack track = new AudioBehaviourTrack(EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback));
                     
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
