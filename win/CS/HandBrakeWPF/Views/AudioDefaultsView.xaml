@@ -27,6 +27,7 @@
         <Audio:AudioBehaviourConverter x:Key="audioBehaviourConverter" />
         <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
         <Converters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
+        <Audio:AudioRateTypeForDefaultsConverter x:Key="audioRateTypeForDefaultsConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
         <Audio:AudioControlVisibilityConverter x:Key="audioControlVisibilityConverter" />
     </Window.Resources>
@@ -273,8 +274,13 @@
                                 </ComboBox>
 
                                 <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch" 
-                                      ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
-                                      SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}">
+                                          SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}">
+                                    <ComboBox.ItemsSource>
+                                        <MultiBinding Converter="{StaticResource audioRateTypeForDefaultsConverter}">
+                                            <Binding Path="Encoder" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                        </MultiBinding>
+                                    </ComboBox.ItemsSource>
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
                                             <Binding Path="IsRateTypeVisible" />

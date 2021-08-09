@@ -40,11 +40,12 @@ namespace HandBrakeWPF.Model.Audio
         private AudioEncoderRateType encoderRateType;
         private double? quality;
         private IEnumerable<HBMixdown> mixdowns;
+        private AudioEncoder fallbackEncoder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioBehaviourTrack"/> class. 
         /// </summary>
-        public AudioBehaviourTrack()
+        public AudioBehaviourTrack(AudioEncoder fallback)
         {
             // Default Values
             this.Encoder = AudioEncoder.ffaac;
@@ -53,6 +54,7 @@ namespace HandBrakeWPF.Model.Audio
             this.Bitrate = 160;
             this.DRC = 0;
             this.EncoderRateType = AudioEncoderRateType.Bitrate;
+            this.fallbackEncoder = fallback;
 
             this.SetupLimits();
         }
@@ -74,6 +76,7 @@ namespace HandBrakeWPF.Model.Audio
             this.sampleRate = track.SampleRate;
             this.Quality = track.Quality;
             this.encoderRateType = track.EncoderRateType;
+            this.fallbackEncoder = track.fallbackEncoder;
 
             this.SetupLimits();
         }
@@ -473,6 +476,12 @@ namespace HandBrakeWPF.Model.Audio
             get { return this; }
         }
 
+        public void SetFallbackEncoder(AudioEncoder fallbackEncoder)
+        {
+            this.fallbackEncoder = fallbackEncoder;
+            this.SetupLimits();
+        }
+
         #region Handler Methods
 
         /// <summary>
@@ -498,7 +507,7 @@ namespace HandBrakeWPF.Model.Audio
             int low = 32;
 
             // Based on the users settings, find the high and low bitrates.
-            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder hbaenc = GetEncoderForLimits();
             HBRate rate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(t => t.Name == this.SampleRate.ToString(CultureInfo.InvariantCulture));
             HBMixdown mixdown = this.mixDown ?? HandBrakeEncoderHelpers.GetMixdown("dpl2");
 
@@ -526,7 +535,7 @@ namespace HandBrakeWPF.Model.Audio
         /// </summary>
         private void SetupQualityCompressionLimits()
         {
-            HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder hbAudioEncoder = GetEncoderForLimits();
             if (hbAudioEncoder.SupportsQuality)
             {
                 RangeLimits limits = null;
@@ -589,7 +598,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns.ToList());
   
-            HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder audioEncoder = GetEncoderForLimits();
 
             BindingList<HBMixdown> mixdownList = new BindingList<HBMixdown>();
             foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
@@ -634,6 +643,17 @@ namespace HandBrakeWPF.Model.Audio
             // {
             //    this.MixDown = sanitisedMixdown.ShortName;
             // }
+        }
+
+        private HBAudioEncoder GetEncoderForLimits()
+        {
+            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            if (hbaenc != null && hbaenc.IsPassthrough)
+            {
+                hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.fallbackEncoder));
+            }
+
+            return hbaenc;
         }
 
         #endregion
