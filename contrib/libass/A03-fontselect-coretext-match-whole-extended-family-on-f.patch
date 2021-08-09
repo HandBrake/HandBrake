@@ -1,0 +1,328 @@
+From 6fc9855dac44699242ded580040838da032c3a9d Mon Sep 17 00:00:00 2001
+From: Oleg Oshmyan <chortos@inbox.lv>
+Date: Sun, 23 May 2021 05:19:28 +0300
+Subject: [PATCH 06/39] fontselect, coretext: match whole extended family on
+ fallback
+
+Currently implemented only for coretext,
+but other providers may/should add this later.
+
+This improves fallback font choice by considering the whole extended family.
+
+This also fixes remaining cases of Core Text fallback failure caused by
+differences among the names recognized by Core Text, the name we choose
+to return from get_fallback, and the names we seek in find_font.
+
+This partly reverts commit 152d0484e98f118d01987138695cf40579c9e297.
+This fixes https://github.com/libass/libass/issues/512.
+---
+ libass/ass_coretext.c   | 58 +++++++++++++++++------------------------
+ libass/ass_fontconfig.c |  2 +-
+ libass/ass_fontselect.c | 41 +++++++++++++++++++++--------
+ libass/ass_fontselect.h | 21 +++++++++++----
+ 4 files changed, 71 insertions(+), 51 deletions(-)
+
+diff --git a/libass/ass_coretext.c b/libass/ass_coretext.c
+index f331639..4041046 100644
+--- a/libass/ass_coretext.c
++++ b/libass/ass_coretext.c
+@@ -129,21 +129,30 @@ static char *get_name(CTFontDescriptorRef fontd, CFStringRef attr)
+ static bool fill_family_name(CTFontDescriptorRef fontd,
+                              ASS_FontProviderMetaData *info)
+ {
+-    if (info->n_family)
+-        return true;
+-
+     char *family_name = get_name(fontd, kCTFontFamilyNameAttribute);
+     if (!family_name)
+         return false;
+ 
+-    info->families = malloc(sizeof(char *));
+-    if (!info->families) {
+-        free(family_name);
+-        return false;
++    info->extended_family = family_name;
++
++    if (!info->n_family) {
++        family_name = strdup(family_name);
++        if (!family_name) {
++            free(info->extended_family);
++            return false;
++        }
++
++        info->families = malloc(sizeof(char *));
++        if (!info->families) {
++            free(family_name);
++            free(info->extended_family);
++            return false;
++        }
++
++        info->families[0] = family_name;
++        info->n_family++;
+     }
+ 
+-    info->families[0] = family_name;
+-    info->n_family++;
+     return true;
+ }
+ 
+@@ -196,6 +205,7 @@ static void process_descriptors(ASS_Library *lib, FT_Library ftlib,
+         free(meta.fullnames);
+ 
+         free(meta.postscript_name);
++        free(meta.extended_family);
+ 
+         free(path);
+     }
+@@ -280,8 +290,6 @@ cleanup:
+ static char *get_fallback(void *priv, ASS_Library *lib,
+                           const char *family, uint32_t codepoint)
+ {
+-    FT_Library ftlib = priv;
+-
+     CFStringRef name = CFStringCreateWithBytes(
+         0, (UInt8 *)family, strlen(family), kCFStringEncodingUTF8, false);
+     if (!name)
+@@ -308,33 +316,15 @@ static char *get_fallback(void *priv, ASS_Library *lib,
+     if (!fb)
+         return NULL;
+ 
+-    CTFontDescriptorRef fontd = CTFontCopyFontDescriptor(fb);
++    CFStringRef cffamily = CTFontCopyFamilyName(fb);
+     CFRelease(fb);
+-    if (!fontd)
++    if (!cffamily)
+         return NULL;
+ 
+-    char *res_name = NULL;
+-    char *path = NULL;
+-    ASS_FontProviderMetaData meta = {0};
+-    if (get_font_info_ct(lib, ftlib, fontd, &path, &meta))
+-        res_name = meta.families[0];
+-
+-    CFRelease(fontd);
+-
+-    for (int i = 1 /* skip res_name */; i < meta.n_family; i++)
+-        free(meta.families[i]);
+-
+-    for (int i = 0; i < meta.n_fullname; i++)
+-        free(meta.fullnames[i]);
+-
+-    free(meta.families);
+-    free(meta.fullnames);
+-
+-    free(meta.postscript_name);
+-
+-    free(path);
++    char *res_family = cfstr2buf(cffamily);
++    CFRelease(cffamily);
+ 
+-    return res_name;
++    return res_family;
+ }
+ 
+ static void get_substitutions(void *priv, const char *name,
+diff --git a/libass/ass_fontconfig.c b/libass/ass_fontconfig.c
+index a4ffb42..e5065b5 100644
+--- a/libass/ass_fontconfig.c
++++ b/libass/ass_fontconfig.c
+@@ -87,7 +87,7 @@ static void scan_fonts(FcConfig *config, ASS_FontProvider *provider)
+ {
+     int i;
+     FcFontSet *fonts;
+-    ASS_FontProviderMetaData meta;
++    ASS_FontProviderMetaData meta = {0};
+ 
+     // get list of fonts
+     fonts = FcConfigGetFonts(config, FcSetSystem);
+diff --git a/libass/ass_fontselect.c b/libass/ass_fontselect.c
+index 3013f4a..ef79066 100644
+--- a/libass/ass_fontselect.c
++++ b/libass/ass_fontselect.c
+@@ -71,6 +71,8 @@ struct font_info {
+     char *postscript_name; // can be used as an alternative to index to
+                            // identify a font inside a collection
+ 
++    char *extended_family;
++
+     // font source
+     ASS_FontProvider *provider;
+ 
+@@ -235,6 +237,8 @@ static void ass_font_provider_free_fontinfo(ASS_FontInfo *info)
+     if (info->postscript_name)
+         free(info->postscript_name);
+ 
++    if (info->extended_family)
++        free(info->extended_family);
+ }
+ 
+ /**
+@@ -334,6 +338,12 @@ ass_font_provider_add_font(ASS_FontProvider *provider,
+             goto error;
+     }
+ 
++    if (meta->extended_family) {
++        info->extended_family = strdup(meta->extended_family);
++        if (info->extended_family == NULL)
++            goto error;
++    }
++
+     if (path) {
+         info->path = strdup(path);
+         if (info->path == NULL)
+@@ -423,12 +433,17 @@ static bool check_postscript(ASS_FontInfo *fi)
+ /**
+  * \brief Return whether the given font is in the given family.
+  */
+-static bool matches_family_name(ASS_FontInfo *f, const char *family)
++static bool matches_family_name(ASS_FontInfo *f, const char *family,
++                                bool match_extended_family)
+ {
+     for (int i = 0; i < f->n_family; i++) {
+         if (ass_strcasecmp(f->families[i], family) == 0)
+             return true;
+     }
++    if (match_extended_family && f->extended_family) {
++        if (ass_strcasecmp(f->extended_family, family) == 0)
++            return true;
++    }
+     return false;
+ }
+ 
+@@ -517,7 +532,8 @@ static bool check_glyph(ASS_FontInfo *fi, uint32_t code)
+ 
+ static char *
+ find_font(ASS_FontSelector *priv, ASS_Library *library,
+-          ASS_FontProviderMetaData meta, unsigned bold, unsigned italic,
++          ASS_FontProviderMetaData meta, bool match_extended_family,
++          unsigned bold, unsigned italic,
+           int *index, char **postscript_name, int *uid, ASS_FontStream *stream,
+           uint32_t code, bool *name_match)
+ {
+@@ -542,7 +558,7 @@ find_font(ASS_FontSelector *priv, ASS_Library *library,
+             ASS_FontInfo *font = &priv->font_infos[x];
+             unsigned score = UINT_MAX;
+ 
+-            if (matches_family_name(font, fullname)) {
++            if (matches_family_name(font, fullname, match_extended_family)) {
+                 // If there's a family match, compare font attributes
+                 // to determine best match in that particular family
+                 score = font_attributes_similarity(font, &req);
+@@ -620,7 +636,8 @@ find_font(ASS_FontSelector *priv, ASS_Library *library,
+ }
+ 
+ static char *select_font(ASS_FontSelector *priv, ASS_Library *library,
+-                         const char *family, unsigned bold, unsigned italic,
++                         const char *family, bool match_extended_family,
++                         unsigned bold, unsigned italic,
+                          int *index, char **postscript_name, int *uid,
+                          ASS_FontStream *stream, uint32_t code)
+ {
+@@ -647,8 +664,9 @@ static char *select_font(ASS_FontSelector *priv, ASS_Library *library,
+         meta = default_meta;
+     }
+ 
+-    result = find_font(priv, library, meta, bold, italic, index,
+-                       postscript_name, uid, stream, code, &name_match);
++    result = find_font(priv, library, meta, match_extended_family,
++                       bold, italic, index, postscript_name, uid,
++                       stream, code, &name_match);
+ 
+     // If no matching font was found, it might not exist in the font list
+     // yet. Call the match_fonts callback to fill in the missing fonts
+@@ -662,8 +680,9 @@ static char *select_font(ASS_FontSelector *priv, ASS_Library *library,
+                                                 library, default_provider,
+                                                 meta.fullnames[i]);
+         }
+-        result = find_font(priv, library, meta, bold, italic, index,
+-                           postscript_name, uid, stream, code, &name_match);
++        result = find_font(priv, library, meta, match_extended_family,
++                           bold, italic, index, postscript_name, uid,
++                           stream, code, &name_match);
+     }
+ 
+     // cleanup
+@@ -699,11 +718,11 @@ char *ass_font_select(ASS_FontSelector *priv, ASS_Library *library,
+     ASS_FontProvider *default_provider = priv->default_provider;
+ 
+     if (family && *family)
+-        res = select_font(priv, library, family, bold, italic, index,
++        res = select_font(priv, library, family, false, bold, italic, index,
+                 postscript_name, uid, data, code);
+ 
+     if (!res && priv->family_default) {
+-        res = select_font(priv, library, priv->family_default, bold,
++        res = select_font(priv, library, priv->family_default, false, bold,
+                 italic, index, postscript_name, uid, data, code);
+         if (res)
+             ass_msg(library, MSGL_WARN, "fontselect: Using default "
+@@ -720,7 +739,7 @@ char *ass_font_select(ASS_FontSelector *priv, ASS_Library *library,
+                 default_provider->priv, library, search_family, code);
+ 
+         if (fallback_family) {
+-            res = select_font(priv, library, fallback_family, bold, italic,
++            res = select_font(priv, library, fallback_family, true, bold, italic,
+                     index, postscript_name, uid, data, code);
+             free(fallback_family);
+         }
+diff --git a/libass/ass_fontselect.h b/libass/ass_fontselect.h
+index 942ea00..ce71b90 100644
+--- a/libass/ass_fontselect.h
++++ b/libass/ass_fontselect.h
+@@ -132,7 +132,7 @@ typedef void    (*SubstituteFontFunc)(void *priv, const char *name,
+                                       ASS_FontProviderMetaData *meta);
+ 
+ /**
+- * Get an appropriate fallback font for a given codepoint.
++ * Get an appropriate fallback extended font family for a given codepoint.
+  *
+  * This is called by fontselect whenever a glyph is not found in the
+  * physical font list of a logical font. fontselect will try to add the
+@@ -147,7 +147,7 @@ typedef void    (*SubstituteFontFunc)(void *priv, const char *name,
+  * \param lib ASS_Library instance
+  * \param family original font family name (try matching a similar font) (never NULL)
+  * \param codepoint Unicode codepoint (UTF-32)
+- * \return output font family, allocated with malloc(), must be freed
++ * \return output extended font family, allocated with malloc(), must be freed
+  *         by caller.
+  */
+ typedef char   *(*GetFallbackFunc)(void *priv,
+@@ -173,21 +173,32 @@ typedef struct font_provider_funcs {
+  */
+ struct ass_font_provider_meta_data {
+     /**
+-     * List of localized font family names, e.g. "Arial".
++     * List of localized font family names,
++     * e.g. "Arial", "Arial Narrow" or "Arial Black".
+      */
+     char **families;
+ 
+     /**
+-     * List of localized full names, e.g. "Arial Bold".
++     * List of localized full names, e.g. "Arial Bold",
++     * "Arial Narrow Bold", "Arial Black" or "Arial Black Normal".
+      * The English name should be listed first to speed up typical matching.
+      */
+     char **fullnames;
+ 
+     /**
+-     * The PostScript name, e.g. "Arial-BoldMT".
++     * The PostScript name, e.g. "Arial-BoldMT",
++     * "ArialNarrow-Bold" or "Arial-Black".
+      */
+     char *postscript_name;
+ 
++    /**
++     * Any name that identifies an extended font family, e.g. "Arial".
++     * This could be the full designer-named typographic family or (perhaps
++     * even better) a (sub)family limited to weight/width/slant variations.
++     * Names returned by get_fallback are matched against this field.
++     */
++    char *extended_family;
++
+     int n_family;       // Number of localized family names
+     int n_fullname;     // Number of localized full names
+ 
+-- 
+2.30.1 (Apple Git-130)
+
