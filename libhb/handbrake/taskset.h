@@ -14,42 +14,41 @@
 
 #include "handbrake/bits.h"
 
+typedef struct hb_tasket_thread_t {
+    hb_thread_t      * thread;
+    hb_lock_t        * lock;
+    hb_cond_t        * begin_cond;
+    hb_cond_t        * complete_cond;
+    int                begin;
+    int                complete;
+    int                stop;
+} taskset_thread_t;
+
 typedef struct hb_taskset_s {
     int                thread_count;
+    thread_func_t    * work_func;
     int                arg_size;
-    int                bitmap_elements;
-    hb_thread_t     ** task_threads;
+    const char       * task_descr;
     uint8_t          * task_threads_args;
-    uint32_t         * task_begin_bitmap;    // Threads can begin
-    uint32_t         * task_complete_bitmap; // Threads have completed
-    uint32_t         * task_stop_bitmap;     // Threads should exit
-    hb_lock_t        * task_cond_lock;       // Held during condition tests
-    hb_cond_t        * task_begin;           // Threads can begin work
-    hb_cond_t        * task_complete;        // Threads have finished work.
+    int                task_thread_started;
+    taskset_thread_t * task_threads;
 } taskset_t;
 
-int taskset_init( taskset_t *, int /*thread_count*/, size_t /*user_arg_size*/ );
+typedef struct hb_taskset_thread_arg_s {
+    taskset_t *taskset;
+    int segment;
+} taskset_thread_arg_t;
+
+int taskset_init( taskset_t *, const char* /* descr */, int /*thread_count*/, size_t /*user_arg_size*/, thread_func_t *);
 void taskset_cycle( taskset_t * );
 void taskset_fini( taskset_t * );
 
-int  taskset_thread_spawn( taskset_t *, int /*thr_idx*/, const char * /*descr*/,
-                           thread_func_t *, int /*priority*/ );
-void taskset_thread_wait4start( taskset_t *, int );
-void taskset_thread_complete( taskset_t *, int );
-
 static inline void *taskset_thread_args( taskset_t *, int );
-static inline int   taskset_thread_stop( taskset_t *, int );
 
 static inline void *
 taskset_thread_args( taskset_t *ts, int thr_idx )
 {
     return( ts->task_threads_args + ( ts->arg_size * thr_idx ) );
-}
-
-static inline int
-taskset_thread_stop( taskset_t *ts, int thr_idx )
-{
-    return bit_is_set( ts->task_stop_bitmap, thr_idx );
 }
 
 #endif /* HANDBRAKE_TASKSET_H */

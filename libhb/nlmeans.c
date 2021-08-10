@@ -117,8 +117,8 @@ struct PixelSum
 
 typedef struct
 {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
-    int segment;
     hb_buffer_t *out;
 } nlmeans_thread_arg_t;
 
@@ -155,7 +155,7 @@ static int nlmeans_work(hb_filter_object_t *filter,
                            hb_buffer_t **buf_out);
 static void nlmeans_close(hb_filter_object_t *filter);
 
-static void nlmeans_filter_thread(void *thread_args_v);
+static void nlmeans_filter_work(void *thread_args_v);
 
 static const char nlmeans_template[] =
     "y-strength=^"HB_FLOAT_REG"$:y-origin-tune=^"HB_FLOAT_REG"$:"
@@ -1005,8 +1005,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
     }
 
     pv->thread_data = malloc(pv->threads * sizeof(nlmeans_thread_arg_t*));
-    if (taskset_init(&pv->taskset, pv->threads,
-                     sizeof(nlmeans_thread_arg_t)) == 0)
+    if (taskset_init(&pv->taskset, "nlmeans_filter", pv->threads,
+                     sizeof(nlmeans_thread_arg_t), nlmeans_filter_work) == 0)
     {
         hb_error("NLMeans could not initialize taskset");
         goto fail;
@@ -1021,13 +1021,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
             goto fail;
         }
         pv->thread_data[ii]->pv = pv;
-        pv->thread_data[ii]->segment = ii;
-        if (taskset_thread_spawn(&pv->taskset, ii, "nlmeans_filter",
-                                 nlmeans_filter_thread, HB_NORMAL_PRIORITY) == 0)
-        {
-            hb_error("NLMeans could not spawn thread");
-            goto fail;
-        }
+        pv->thread_data[ii]->arg.taskset = &pv->taskset;
+        pv->thread_data[ii]->arg.segment = ii;
     }
     pv->output = *init;
 
@@ -1082,79 +1077,64 @@ static void nlmeans_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
-static void nlmeans_filter_thread(void *thread_args_v)
+static void nlmeans_filter_work(void *thread_args_v)
 {
     nlmeans_thread_arg_t *thread_data = thread_args_v;
     hb_filter_private_t *pv = thread_data->pv;
-    int segment = thread_data->segment;
+    int segment = thread_data->arg.segment;
+    Frame *frame = &pv->frame[segment];
 
-    hb_deep_log(3, "NLMeans thread started for segment %d", segment);
+    hb_buffer_t *buf;
+    buf = hb_frame_buffer_init(pv->output.pix_fmt,
+                               frame->width, frame->height);
+    buf->f.color_prim      = pv->output.color_prim;
+    buf->f.color_transfer  = pv->output.color_transfer;
+    buf->f.color_matrix    = pv->output.color_matrix;
+    buf->f.color_range     = pv->output.color_range ;
+    buf->f.chroma_location = pv->output.chroma_location;
 
-    while (1)
+
+    NLMeansFunctions *functions = &pv->functions;
+
+    for (int c = 0; c < 3; c++)
     {
-        // Wait until there is work to do.
-        taskset_thread_wait4start(&pv->taskset, segment);
-
-        if (taskset_thread_stop(&pv->taskset, segment))
+        if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
         {
-            break;
+            nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
+            nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                             buf->plane[c].width, buf->plane[c].stride,
+                             buf->plane[c].height);
+            continue;
+        }
+        if (pv->strength[c] == 0)
+        {
+            nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
+                             buf->plane[c].width, buf->plane[c].stride,
+                             buf->plane[c].height);
+            continue;
         }
 
-        Frame *frame = &pv->frame[segment];
-        hb_buffer_t *buf;
-        buf = hb_frame_buffer_init(pv->output.pix_fmt,
-                                   frame->width, frame->height);
-        buf->f.color_prim      = pv->output.color_prim;
-        buf->f.color_transfer  = pv->output.color_transfer;
-        buf->f.color_matrix    = pv->output.color_matrix;
-        buf->f.color_range     = pv->output.color_range;
-        buf->f.chroma_location = pv->output.chroma_location;
-
-        NLMeansFunctions *functions = &pv->functions;
-
-        for (int c = 0; c < 3; c++)
-        {
-            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
-            {
-                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
-                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
-                                 buf->plane[c].width, buf->plane[c].stride,
-                                 buf->plane[c].height);
-                continue;
-            }
-            if (pv->strength[c] == 0)
-            {
-                nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
-                                 buf->plane[c].width, buf->plane[c].stride,
-                                 buf->plane[c].height);
-                continue;
-            }
-
-            // Process current plane
-            nlmeans_plane(functions,
-                          frame,
-                          pv->prefilter[c],
-                          c,
-                          pv->nframes[c],
-                          buf->plane[c].data,
-                          buf->plane[c].width,
-                          buf->plane[c].stride,
-                          buf->plane[c].height,
-                          pv->strength[c],
-                          pv->origin_tune[c],
-                          pv->patch_size[c],
-                          pv->range[c],
-                          pv->exptable[c],
-                          pv->weight_fact_table[c],
-                          pv->diff_max[c]);
-        }
-        buf->s = pv->frame[segment].s;
-        thread_data->out = buf;
-
-        // Finished this segment, notify.
-        taskset_thread_complete(&pv->taskset, segment);
+        // Process current plane
+        nlmeans_plane(functions,
+                      frame,
+                      pv->prefilter[c],
+                      c,
+                      pv->nframes[c],
+                      buf->plane[c].data,
+                      buf->plane[c].width,
+                      buf->plane[c].stride,
+                      buf->plane[c].height,
+                      pv->strength[c],
+                      pv->origin_tune[c],
+                      pv->patch_size[c],
+                      pv->range[c],
+                      pv->exptable[c],
+                      pv->weight_fact_table[c],
+                      pv->diff_max[c]);
     }
-    taskset_thread_complete(&pv->taskset, segment);
+    buf->s = pv->frame[segment].s;
+    thread_data->out = buf;
+
 }
 
 static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)

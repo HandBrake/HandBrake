@@ -11,109 +11,78 @@
 #include "handbrake/ports.h"
 #include "handbrake/taskset.h"
 
+static void taskset_thread_f( void *thread_args_v );
+
 int
-taskset_init( taskset_t *ts, int thread_count, size_t arg_size )
+taskset_init( taskset_t *ts, const char *descr, int thread_count, size_t arg_size, thread_func_t *work_func)
 {
-    int init_step;
+    int init_step, i;
 
     init_step = 0;
     memset( ts, 0, sizeof( *ts ) );
+    ts->work_func = work_func;
     ts->thread_count = thread_count;
+    ts->task_descr = descr;
+
     ts->arg_size = arg_size;
-    ts->bitmap_elements = ( ts->thread_count + 31 ) / 32;
-    ts->task_threads = malloc( sizeof( hb_thread_t* ) * ts->thread_count );
-    if( ts->task_threads == NULL )
-        goto fail;
-    init_step++;
 
     if( arg_size != 0 )
     {
         ts->task_threads_args = malloc( arg_size * ts->thread_count );
-        if( ts->task_threads == NULL )
+        if( ts->task_threads_args == NULL )
             goto fail;
     }
-    init_step++;
-
-    ts->task_begin_bitmap = malloc( sizeof( uint32_t  ) * ts->bitmap_elements );
-    if( ts->task_begin_bitmap == NULL )
-        goto fail;
-    init_step++;
-
-    ts->task_complete_bitmap = malloc( sizeof( uint32_t ) * ts->bitmap_elements );
-    if( ts->task_complete_bitmap == NULL )
-        goto fail;
-    init_step++;
-
-    ts->task_stop_bitmap = malloc( sizeof( uint32_t ) * ts->bitmap_elements );
-    if( ts->task_stop_bitmap == NULL )
-        goto fail;
-    init_step++;
-
-    ts->task_cond_lock = hb_lock_init();
-    if( ts->task_cond_lock == NULL)
-        goto fail;
-    init_step++;
-
-    ts->task_begin = hb_cond_init();
-    if( ts->task_begin == NULL)
-        goto fail;
-    init_step++;
-
-    ts->task_complete = hb_cond_init();
-    if( ts->task_complete == NULL)
-        goto fail;
-    init_step++;
-
     /*
      * Initialize all arg data to 0.
      */
     memset(ts->task_threads_args, 0, ts->arg_size * ts->thread_count );
 
-    /*
-     * Initialize bitmaps to all bits set.  This means that any unused bits
-     * in the bitmap are already in the "condition satisfied" state allowing
-     * us to test the bitmap 32bits at a time without having to mask off
-     * the end.
-     */
-    memset(ts->task_begin_bitmap, 0xFF, sizeof( uint32_t ) * ts->bitmap_elements );
-    memset(ts->task_complete_bitmap, 0xFF, sizeof( uint32_t ) * ts->bitmap_elements );
-    memset(ts->task_stop_bitmap, 0, sizeof( uint32_t ) * ts->bitmap_elements );
+    init_step++;
 
-    /*
-     * Important to start off with the threads locked waiting
-     * on input, no work completed, and not asked to stop.
-     */
-    bit_nclear( ts->task_begin_bitmap, 0, ts->thread_count - 1 );
-    bit_nclear( ts->task_complete_bitmap, 0, ts->thread_count - 1 );
-    bit_nclear( ts->task_stop_bitmap, 0, ts->thread_count - 1 );
+    ts->task_thread_started = 0;
+    ts->task_threads = calloc( ts->thread_count, sizeof( taskset_thread_t) );
+    if( ts->task_threads == NULL )
+        goto fail;
+
+    init_step++;
+
+    for ( i = 0; i < ts->thread_count; i++ ) {
+        taskset_thread_t *thread = &ts->task_threads[i];
+
+        thread->lock = hb_lock_init();
+        if ( thread->lock == NULL )
+            goto fail;
+
+        thread->begin_cond = hb_cond_init();
+        if ( thread->begin_cond == NULL )
+            goto fail;
+
+        thread->complete_cond = hb_cond_init();
+        if ( thread->complete_cond == NULL )
+            goto fail;
+    }
     return (1);
 
 fail:
     switch (init_step)
     {
         default:
-            hb_cond_close( &ts->task_complete );
-            /* FALL THROUGH */
-        case 7:
-            hb_cond_close( &ts->task_begin );
-            /* FALL THROUGH */
-        case 6:
-            hb_lock_close( &ts->task_cond_lock );
-            /* FALL THROUGH */
-        case 5:
-            free( ts->task_stop_bitmap );
-            /* FALL THROUGH */
-        case 4:
-            free( ts->task_complete_bitmap );
-            /* FALL THROUGH */
         case 3:
-            free( ts->task_begin_bitmap );
+            for ( i = 0; i < ts->thread_count; i++ ) {
+                taskset_thread_t *thread = &ts->task_threads[i];
+                if ( thread->begin_cond )
+                    hb_cond_close( &thread->begin_cond );
+                if ( thread->complete_cond )
+                    hb_cond_close( &thread->complete_cond );
+                if ( thread->lock )
+                    hb_lock_close( &thread->lock );
+            }
             /* FALL THROUGH */
         case 2:
-            free( ts->task_threads_args );
+            free( ts->task_threads );
             /* FALL THROUGH */
         case 1:
-            free( ts->task_threads );
+            free( ts->task_threads_args );
             /* FALL THROUGH */
         case 0:
             break;
@@ -121,61 +90,72 @@ fail:
     return (0);
 }
 
-int
-taskset_thread_spawn( taskset_t *ts, int thr_idx, const char *descr,
-                      thread_func_t *func, int priority )
+static taskset_thread_t*
+taskset_thread( taskset_t *ts, int thr_idx )
 {
-    ts->task_threads[thr_idx] = hb_thread_init( descr, func,
-                                                taskset_thread_args( ts, thr_idx ),
-                                                priority);
-    return( ts->task_threads[thr_idx] != NULL );
+    return &ts->task_threads[thr_idx];
 }
 
 void
 taskset_cycle( taskset_t *ts )
 {
-    hb_lock( ts->task_cond_lock );
+    int i;
+    if ( !ts->task_thread_started ) {
+        for ( i = 0; i < ts->thread_count; i++ ) {
+            taskset_thread_t *thread = taskset_thread( ts, i );
+            thread->thread = hb_thread_init( ts->task_descr, taskset_thread_f,
+                                           taskset_thread_args( ts, i ),
+                                            HB_NORMAL_PRIORITY );
+        }
+        ts->task_thread_started = 1;
+    }
 
     /*
      * Signal all threads that their work is available.
      */
-    bit_nset( ts->task_begin_bitmap, 0, ts->thread_count - 1 );
-    hb_cond_broadcast( ts->task_begin );
+    for (i = 0; i < ts->thread_count; i++) {
+        taskset_thread_t *thread = taskset_thread( ts, i );
+        hb_lock( thread->lock );
+        thread->begin = 1;
+        hb_cond_signal( thread->begin_cond );
+        hb_unlock( thread->lock );
+    }
 
     /*
      * Wait until all threads have completed.  Note that we must
      * loop here as hb_cond_wait() on some platforms (e.g pthread_cond_wait)
      * may unblock prematurely.
      */
-    do
+    for ( i = 0; i < ts->thread_count; i++ )
     {
-        hb_cond_wait( ts->task_complete, ts->task_cond_lock );
-    } while ( !allbits_set( ts->task_complete_bitmap, ts->bitmap_elements ) );
-
-    /*
-     * Clear completion indications for next time.
-     */
-    bit_nclear( ts->task_complete_bitmap, 0, ts->thread_count - 1 );
-
-    hb_unlock( ts->task_cond_lock );
+        taskset_thread_t *thread = taskset_thread( ts, i );
+        hb_lock( thread->lock );
+        while (!thread->complete) {
+            hb_cond_wait( thread->complete_cond, thread->lock);
+        }
+        thread->complete = 0;
+        hb_unlock( thread->lock );
+    }
 }
 
 /*
  * Block current thread until work is available for it.
  */
-void
-taskset_thread_wait4start( taskset_t *ts, int thr_idx )
+static void
+taskset_thread_wait4start( taskset_thread_t *thread )
 {
-    hb_lock( ts->task_cond_lock );
-    while ( bit_is_clear( ts->task_begin_bitmap, thr_idx ) )
-        hb_cond_wait( ts->task_begin, ts->task_cond_lock );
+    hb_lock( thread->lock );
+    while ( !thread->begin )
+    {
+        hb_cond_wait( thread->begin_cond, thread->lock );
+    }
 
     /*
      * We've been released for one run.  Insure we block the next
      * time through the loop.
      */
-    bit_clear( ts->task_begin_bitmap, thr_idx );
-    hb_unlock( ts->task_cond_lock );
+    thread->begin = 0;
+    hb_unlock( thread->lock );
 }
 
 /*
@@ -183,51 +163,83 @@ taskset_thread_wait4start( taskset_t *ts, int thr_idx )
  * and if all threads in this task set have completed, wakeup
  * anyone waiting for this condition.
  */
-void
-taskset_thread_complete( taskset_t *ts, int thr_idx )
+static void
+taskset_thread_complete( taskset_thread_t *thread )
 {
-    hb_lock( ts->task_cond_lock );
-    bit_set( ts->task_complete_bitmap, thr_idx );
-    if( allbits_set( ts->task_complete_bitmap, ts->bitmap_elements ) )
-    {
-        hb_cond_signal( ts->task_complete );
-    }
-    hb_unlock( ts->task_cond_lock );
+    hb_lock( thread->lock );
+    thread->complete = 1;
+    hb_cond_signal( thread->complete_cond );
+    hb_unlock( thread->lock );
 }
+
+static void
+taskset_thread_f( void *thread_args_v )
+{
+    taskset_thread_arg_t *thread_args = thread_args_v;
+    int segment = thread_args->segment;
+    taskset_thread_t *thread = taskset_thread( thread_args->taskset, segment );
+
+    while (1)
+    {
+        /*
+         * Wait here until there is work to do.
+         */
+        taskset_thread_wait4start( thread );
+
+        if( thread->stop )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            break;
+        }
+
+        thread_args->taskset->work_func( thread_args_v );
+
+        taskset_thread_complete( thread );
+    }
+
+    /*
+     * Finished this segment, let everyone know.
+     */
+    taskset_thread_complete( thread );
+}
+
 
 void
 taskset_fini( taskset_t *ts )
 {
     int i;
-
-    hb_lock( ts->task_cond_lock );
-    /*
-     * Tell each thread to stop, and then cleanup.
-     */
-    bit_nset( ts->task_stop_bitmap, 0, ts->thread_count - 1 );
-    bit_nset( ts->task_begin_bitmap, 0, ts->thread_count - 1 );
-    hb_cond_broadcast( ts->task_begin );
-
-    /*
-     * Wait for all threads to exit.
-     */
-    hb_cond_wait( ts->task_complete, ts->task_cond_lock );
-    hb_unlock( ts->task_cond_lock );
-
-    /*
-     * Clean up taskset memory.
-     */
-    for( i = 0; i < ts->thread_count; i++)
-    {
-        hb_thread_close( &ts->task_threads[i] );
+    if ( ts->task_thread_started ) {
+        /*
+         * Tell each thread to stop, and then cleanup.
+         */
+        for ( i = 0; i < ts->thread_count; i++ )
+        {
+            taskset_thread_t *thread = taskset_thread( ts, i );
+            hb_lock( thread->lock );
+            thread->begin = 1;
+            thread->stop = 1;
+            hb_cond_signal( thread->begin_cond );
+            while ( !thread->complete ) {
+                hb_cond_wait( thread->complete_cond, thread->lock );
+            }
+            hb_unlock( thread->lock );
+        }
+        /*
+         * Clean up taskset memory.
+         */
+        for( i = 0; i < ts->thread_count; i++ )
+        {
+            taskset_thread_t *thread = taskset_thread( ts, i );
+            hb_thread_close( &thread->thread );
+            hb_lock_close( &thread->lock );
+            hb_cond_close( &thread->begin_cond );
+            hb_cond_close( &thread->complete_cond );
+        }
     }
-    hb_lock_close( &ts->task_cond_lock );
-    hb_cond_close( &ts->task_begin );
-    hb_cond_close( &ts->task_complete );
     free( ts->task_threads );
+
     if( ts->task_threads_args != NULL )
         free( ts->task_threads_args );
-    free( ts->task_begin_bitmap );
-    free( ts->task_complete_bitmap );
-    free( ts->task_stop_bitmap );
 }

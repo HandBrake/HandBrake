@@ -17,8 +17,8 @@
 
 typedef struct
 {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
-    int segment;
     hb_buffer_t *out;
 } mt_frame_thread_arg_t;
 
@@ -38,7 +38,7 @@ static int mt_frame_work(hb_filter_object_t *filter,
                          hb_buffer_t **buf_out);
 static void mt_frame_close(hb_filter_object_t *filter);
 
-static void mt_frame_filter_thread(void *thread_args_v);
+static void mt_frame_filter_work(void *);
 
 static const char mt_frame_template[] = "";
 
@@ -67,8 +67,8 @@ static int mt_frame_init(hb_filter_object_t * filter,
     pv->buf = calloc(pv->thread_count, sizeof(hb_buffer_t*));
 
     pv->thread_data = malloc(pv->thread_count * sizeof(mt_frame_thread_arg_t*));
-    if (taskset_init(&pv->taskset, pv->thread_count,
-                     sizeof(mt_frame_thread_arg_t)) == 0)
+    if (taskset_init(&pv->taskset, "mt_frame_filter", pv->thread_count,
+                     sizeof(mt_frame_thread_arg_t), mt_frame_filter_work) == 0)
     {
         hb_error("MTFrame could not initialize taskset");
         goto fail;
@@ -82,14 +82,10 @@ static int mt_frame_init(hb_filter_object_t * filter,
             hb_error("MTFrame could not create thread args");
             goto fail;
         }
+
         pv->thread_data[ii]->pv = pv;
-        pv->thread_data[ii]->segment = ii;
-        if (taskset_thread_spawn(&pv->taskset, ii, "mt_frame_filter",
-                             mt_frame_filter_thread, HB_NORMAL_PRIORITY) == 0)
-        {
-            hb_error("MTFrame could not spawn thread");
-            goto fail;
-        }
+        pv->thread_data[ii]->arg.taskset = &pv->taskset;
+        pv->thread_data[ii]->arg.segment = ii;
     }
 
     if (pv->sub_filter->init_thread != NULL)
@@ -126,43 +122,26 @@ static void mt_frame_close(hb_filter_object_t *filter)
     filter->private_data = NULL;
 }
 
-static void mt_frame_filter_thread(void *thread_args_v)
+static void mt_frame_filter_work(void *thread_args_v)
 {
     mt_frame_thread_arg_t *thread_data = thread_args_v;
     hb_filter_private_t *pv = thread_data->pv;
-    int segment = thread_data->segment;
+    int segment = thread_data->arg.segment;
 
-    hb_log("MTFrame thread started for segment %d", segment);
-
-    while (1)
+    if (pv->sub_filter->work_thread != NULL)
     {
-        // Wait until there is work to do.
-        taskset_thread_wait4start(&pv->taskset, segment);
-
-        if (taskset_thread_stop(&pv->taskset, segment))
-        {
-            break;
-        }
-
-        if (pv->sub_filter->work_thread != NULL)
-        {
-            pv->sub_filter->work_thread(pv->sub_filter,
-                                 &pv->buf[segment], &thread_data->out, segment);
-        }
-        else
-        {
-            pv->sub_filter->work(pv->sub_filter,
-                                 &pv->buf[segment], &thread_data->out);
-        }
-        if (pv->buf[segment] != NULL)
-        {
-            hb_buffer_close(&pv->buf[segment]);
-        }
-
-        // Finished this segment, notify.
-        taskset_thread_complete(&pv->taskset, segment);
+        pv->sub_filter->work_thread(pv->sub_filter,
+                             &pv->buf[segment], &thread_data->out, segment);
     }
-    taskset_thread_complete(&pv->taskset, segment);
+    else
+    {
+        pv->sub_filter->work(pv->sub_filter,
+                             &pv->buf[segment], &thread_data->out);
+    }
+    if (pv->buf[segment] != NULL)
+    {
+        hb_buffer_close(&pv->buf[segment]);
+    }
 }
 
 static hb_buffer_t * mt_frame_filter(hb_filter_private_t *pv)
