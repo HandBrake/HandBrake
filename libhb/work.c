@@ -1844,8 +1844,10 @@ cleanup:
     }
     hb_buffer_pool_free();
 #if HB_PROJECT_FEATURE_QSV
-    if (hb_qsv_is_enabled(job))
+    if (!job->indepth_scan && hb_qsv_is_enabled(job))
+    {
         hb_qsv_context_uninit(job);
+    }
 #endif
 }
 
