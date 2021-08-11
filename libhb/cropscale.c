@@ -107,6 +107,14 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             return result;
         }
 
+        if (top > 0 || bottom > 0 || left > 0 || right > 0)
+        {
+            hb_dict_set_int(avsettings, "cx", left);
+            hb_dict_set_int(avsettings, "cy", top);
+            hb_dict_set_int(avsettings, "cw", cropped_width);
+            hb_dict_set_int(avsettings, "ch", cropped_height);
+        }
+
         hb_dict_set_int(avsettings, "w", width);
         hb_dict_set_int(avsettings, "h", height);
         if (init->job->qsv.ctx->vpp_scale_mode)
@@ -119,7 +127,7 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         }
         hb_log("qsv: scaling filter mode %s", init->job->qsv.ctx->vpp_scale_mode ? init->job->qsv.ctx->vpp_scale_mode : "default");
         hb_log("qsv: scaling filter interpolation method %s", init->job->qsv.ctx->vpp_interpolation_method ? init->job->qsv.ctx->vpp_interpolation_method : "default");
-        hb_dict_set(avfilter, "scale_qsv", avsettings);
+        hb_dict_set(avfilter, "vpp_qsv", avsettings);
 
         AVHWFramesContext *frames_ctx;
         AVQSVFramesContext *frames_hwctx;
