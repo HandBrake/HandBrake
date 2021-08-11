@@ -486,7 +486,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                         {
-                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
+                            this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName ?? this.ScannedSource?.SourceName, this.selectedPreset);
                         }
                     }
 
@@ -528,7 +528,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                     {
-                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
+                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName ?? this.ScannedSource?.SourceName, this.selectedPreset);
                     }
                 }
 
@@ -552,7 +552,7 @@ namespace HandBrakeWPF.ViewModels
                 if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
                     this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
-                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.ScannedSource?.SourceName ?? this.SelectedTitle?.DisplaySourceName, this.selectedPreset);
+                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName ?? this.ScannedSource?.SourceName, this.selectedPreset);
                 }
 
                 if (this.SelectedStartPoint > this.SelectedEndPoint && this.SelectedPointToPoint == PointToPointMode.Chapters)
