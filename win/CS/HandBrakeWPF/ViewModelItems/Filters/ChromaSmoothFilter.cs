@@ -146,7 +146,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 return false;
             }
 
-            if (this.SelectedTune.Key != preset?.Task?.ChromaSmoothTune.Key)
+            if (this.SelectedTune?.Key != preset?.Task?.ChromaSmoothTune?.Key)
             {
                 return false;
             }
