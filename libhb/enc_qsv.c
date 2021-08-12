@@ -1083,8 +1083,8 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         switch (videoParam->mfx.RateControlMethod)
         {
             case MFX_RATECONTROL_LA:
-                hb_log("encqsvInit: RateControlMethod LA TargetKbps %"PRIu16" LookAheadDepth %"PRIu16"",
-                       videoParam->mfx.TargetKbps, (option2 != NULL) ? option2->LookAheadDepth : 0);
+                hb_log("encqsvInit: RateControlMethod LA TargetKbps %"PRIu16" BRCParamMultiplier %"PRIu16" LookAheadDepth %"PRIu16"",
+                       videoParam->mfx.TargetKbps, videoParam->mfx.BRCParamMultiplier, (option2 != NULL) ? option2->LookAheadDepth : 0);
                 break;
             case MFX_RATECONTROL_LA_ICQ:
                 hb_log("encqsvInit: RateControlMethod LA_ICQ ICQQuality %"PRIu16" LookAheadDepth %"PRIu16"",
@@ -1096,10 +1096,10 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
                 break;
             case MFX_RATECONTROL_CBR:
             case MFX_RATECONTROL_VBR:
-                hb_log("encqsvInit: RateControlMethod %s TargetKbps %"PRIu16" MaxKbps %"PRIu16" BufferSizeInKB %"PRIu16" InitialDelayInKB %"PRIu16"",
+                hb_log("encqsvInit: RateControlMethod %s TargetKbps %"PRIu16" MaxKbps %"PRIu16" BufferSizeInKB %"PRIu16" InitialDelayInKB %"PRIu16" BRCParamMultiplier %"PRIu16"",
                        videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CBR ? "CBR" : "VBR",
                        videoParam->mfx.TargetKbps,     videoParam->mfx.MaxKbps,
-                       videoParam->mfx.BufferSizeInKB, videoParam->mfx.InitialDelayInKB);
+                       videoParam->mfx.BufferSizeInKB, videoParam->mfx.InitialDelayInKB, videoParam->mfx.BRCParamMultiplier);
                 break;
             default:
                 hb_log("encqsvInit: invalid rate control method %"PRIu16"",
@@ -1198,6 +1198,7 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
  **********************************************************************/
 int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 {
+    int brc_param_multiplier;
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data       = pv;
 
@@ -1419,6 +1420,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         job->qsv.ctx->la_is_enabled = pv->param.rc.lookahead ? 1 : 0;
     }
 #endif
+    //libmfx BRC parameters are 16 bits thus maybe overflow, then BRCParamMultiplier is needed
+    brc_param_multiplier = (FFMAX(FFMAX3(job->vbitrate, pv->param.rc.vbv_max_bitrate, pv->param.rc.vbv_buffer_size / 8),
+                            pv->param.rc.vbv_buffer_init / 8) + 0x10000) / 0x10000;
     // set VBV here (this will be overridden for CQP and ignored for LA)
     // only set BufferSizeInKB, InitialDelayInKB and MaxKbps if we have
     // them - otherwise Media SDK will pick values for us automatically
@@ -1426,18 +1430,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         if (pv->param.rc.vbv_buffer_init > 1.0)
         {
-            pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_init / 8);
+            pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_init / 8) / brc_param_multiplier;
         }
         else if (pv->param.rc.vbv_buffer_init > 0.0)
         {
             pv->param.videoParam->mfx.InitialDelayInKB = (pv->param.rc.vbv_buffer_size *
-                                                          pv->param.rc.vbv_buffer_init / 8);
+                                                          pv->param.rc.vbv_buffer_init / 8) / brc_param_multiplier;
         }
-        pv->param.videoParam->mfx.BufferSizeInKB = (pv->param.rc.vbv_buffer_size / 8);
+        pv->param.videoParam->mfx.BufferSizeInKB       = (pv->param.rc.vbv_buffer_size / 8) / brc_param_multiplier;
+        pv->param.videoParam->mfx.BRCParamMultiplier   = brc_param_multiplier;
     }
     if (pv->param.rc.vbv_max_bitrate > 0)
     {
-        pv->param.videoParam->mfx.MaxKbps = pv->param.rc.vbv_max_bitrate;
+        pv->param.videoParam->mfx.MaxKbps              = pv->param.rc.vbv_max_bitrate / brc_param_multiplier;
+        pv->param.videoParam->mfx.BRCParamMultiplier   = brc_param_multiplier;
     }
 
     // set rate control parameters
@@ -1481,8 +1487,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         if (pv->param.rc.lookahead)
         {
             // introduced in API 1.7
-            pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_LA;
-            pv->param.videoParam->mfx.TargetKbps        = job->vbitrate;
+            pv->param.videoParam->mfx.RateControlMethod  = MFX_RATECONTROL_LA;
+            pv->param.videoParam->mfx.TargetKbps         = job->vbitrate / brc_param_multiplier;
+            pv->param.videoParam->mfx.BRCParamMultiplier = brc_param_multiplier;
             // ignored, but some drivers will change AsyncDepth because of it
             pv->param.codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
         }
@@ -1497,7 +1504,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             {
                 pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_VBR;
             }
-            pv->param.videoParam->mfx.TargetKbps = job->vbitrate;
+            pv->param.videoParam->mfx.TargetKbps            = job->vbitrate / brc_param_multiplier;
+            pv->param.videoParam->mfx.BRCParamMultiplier    = brc_param_multiplier;
         }
     }
     else
