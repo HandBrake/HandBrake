@@ -12,21 +12,18 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Converters;
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using OutputFormat = Services.Encode.Model.Models.OutputFormat;
+    using VideoEncodeRateType = Model.Video.VideoEncodeRateType;
 
     /// <summary>
     /// The Destination AutoName Helper
@@ -37,13 +34,15 @@ namespace HandBrakeWPF.Helpers
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string AutoName(EncodeTask task, string sourceOrLabelName, Preset presetName)
+        public static string AutoName(EncodeTask task, string titleName, string sourceDisplayName, Preset presetName)
         {
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             if (task.Destination == null)
             {
                 task.Destination = string.Empty;
             }
+
+            string sourceOrLabelName = !string.IsNullOrEmpty(titleName) ? titleName : sourceDisplayName;
 
             if (task.Title != 0)
             {
