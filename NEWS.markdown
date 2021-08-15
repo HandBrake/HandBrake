@@ -4,6 +4,8 @@
 Before updating, please make sure there are no pending encodes in the Queue.
 Please also make a backup of any custom presets and app preferences you have as they may not be compatible with newer versions.
 
+For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
+
 ## HandBrake 1.4.1
 
 ### All platforms
@@ -12,8 +14,13 @@ Please also make a backup of any custom presets and app preferences you have as 
 - Fixed a crash when using "Align AV" on Intel based systems. (#3683)
 - Fixed a crash when reading certain DVD's with missing VOB files
 
+#### Hardware Encoding
+- Fixed an issue with QuickSync accelerated Crop/Scale generating incorrect aspect ratios (#3236)
+- Fixed a crash after a subtitle scan when using the QuickSync encoder. (#3741)
+
 #### Subtitles
 - Backport some libass patches which should correct some issues with font and font-weight selections. (#3736)
+- Fixed an issue that could prevent 3rd party software handling HandBrake files with dvb subtitles.
 
 #### Command line interface
 - Fixed a regression that prevented upscaling when using -w and -h (#3746)
@@ -36,6 +43,7 @@ Please also make a backup of any custom presets and app preferences you have as 
 - Fixed an issue that required and app restart to apply changes to the max simultaneous encodes setting. 
 - Fixed an issue with Audio Defaults fallback encoder quality/bitrate/mixdown settings would not display correct values (#3739)
 - Fixed an with QSV multi-instance support where multiple Intel GPU's are used.
+
 
 ## HandBrake 1.4.0
 
