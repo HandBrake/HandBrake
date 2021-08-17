@@ -357,7 +357,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddTrack()
         {
-            this.BehaviourTracks.AddNew();
+            this.BehaviourTracks.Add(new AudioBehaviourTrack(this.AudioEncoderFallback));
             foreach (var item in this.BehaviourTracks)
             {
                 item.SetFallbackEncoder(this.AudioEncoderFallback);
