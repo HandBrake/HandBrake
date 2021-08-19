@@ -6,6 +6,29 @@ Please also make a backup of any custom presets and app preferences you have as 
 
 For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
 
+
+## HandBrake 1.4.2
+
+### All platforms
+
+#### General
+
+#### Hardware Encoding
+
+#### Subtitles
+
+#### Command line interface
+
+### Linux
+
+### Mac
+
+### Windows
+- Fix a crash on the Audio Defaults screen whilst trying to add Tracks (#3785)
+- Fixed incorrect taskbar icon state when running multiple encodes (#3791)
+
+
+
 ## HandBrake 1.4.1
 
 ### All platforms
