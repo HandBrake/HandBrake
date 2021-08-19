@@ -2156,6 +2156,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else if (queueJobStatuses.Count > 1)
                     {
+                        this.windowsSeven.SetTaskBarProgressToNoProgress();
                         this.ProgramStatusLabel = string.Format("{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.", this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
