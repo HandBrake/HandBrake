@@ -2510,4 +2510,7 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
     <value>Choose how presets are displayed in menus:</value>
   </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Preset:</value>
+  </data>
 </root>

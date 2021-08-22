@@ -5422,6 +5422,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preset:.
+        /// </summary>
+        public static string QueueView_SelectedPresets {
+            get {
+                return ResourceManager.GetString("QueueView_SelectedPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source:.
         /// </summary>
         public static string QueueView_Source {
