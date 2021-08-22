@@ -50,9 +50,9 @@ namespace HandBrakeWPF.Services.Queue.Model
                     this.presetKey = this.presetKey + " (Modified)";
                 }
             }
-
             id = id + 1;
             this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
+            this.SelectedPresetKey = this.presetKey;
 
             this.Statistics = new QueueStats();
             this.TaskId = Guid.NewGuid().ToString();
@@ -88,14 +88,14 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public QueueStats Statistics { get; set; }
 
+        public string SelectedPresetKey { get; set; }
+
         [JsonIgnore]
         public QueueProgressStatus JobProgress { get; set; }
 
         [JsonIgnore]
         public bool IsJobStatusVisible => this.Status == QueueItemStatus.InProgress;
         
-        [JsonIgnore]
-        public string SelectedPresetKey => this.presetKey;
 
         [JsonIgnore]
         public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
