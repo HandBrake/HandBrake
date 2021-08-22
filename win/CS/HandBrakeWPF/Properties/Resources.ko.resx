@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -2323,7 +2323,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>멈춤</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>입력한 카테고리 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
@@ -2480,5 +2480,8 @@ Windows 7 및 8에 대한 지원은 1.3 시리즈에서 더 이상 사용되지 
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>기본 자동 이름 경로가 잘못되었습니다. {0}은(는) {1} 앞에 있으면 안됩니다</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>사전설정:</value>
   </data>
 </root>
