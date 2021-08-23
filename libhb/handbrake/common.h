@@ -1468,6 +1468,7 @@ char ** hb_str_vsplit( const char * str, char delem );
 
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
+int hb_rgb2yuv_bt709(int rgb);
 
 const char * hb_subsource_name( int source );
 
