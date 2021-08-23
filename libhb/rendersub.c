@@ -563,7 +563,7 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     unsigned g = ( frame->color >> 16 ) & 0xff;
     unsigned b = ( frame->color >>  8 ) & 0xff;
 
-    int yuv = hb_rgb2yuv((r << 16) | (g << 8) | b );
+    int yuv = hb_rgb2yuv_bt709((r << 16) | (g << 8) | b );
 
     unsigned frameY = (yuv >> 16) & 0xff;
     unsigned frameV = (yuv >> 8 ) & 0xff;

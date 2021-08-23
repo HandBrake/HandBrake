@@ -5528,7 +5528,7 @@ int hb_yuv2rgb(int yuv)
 /**********************************************************************
  * hb_rgb2yuv
  **********************************************************************
- * Converts an RGB pixel to a YCrCb pixel.
+ * Converts an RGB pixel to a limited range Bt.601 YCrCb pixel.
  *
  * This conversion is lossy (due to rounding and clamping).
  *
@@ -5547,6 +5547,30 @@ int hb_rgb2yuv(int rgb)
     y  =  16. + ( 0.257 * r) + (0.504 * g) + (0.098 * b);
     Cb = 128. + (-0.148 * r) - (0.291 * g) + (0.439 * b);
     Cr = 128. + ( 0.439 * r) - (0.368 * g) - (0.071 * b);
+
+    y = (y < 0) ? 0 : y;
+    Cb = (Cb < 0) ? 0 : Cb;
+    Cr = (Cr < 0) ? 0 : Cr;
+
+    y = (y > 255) ? 255 : y;
+    Cb = (Cb > 255) ? 255 : Cb;
+    Cr = (Cr > 255) ? 255 : Cr;
+
+    return (y << 16) | (Cr << 8) | Cb;
+}
+
+int hb_rgb2yuv_bt709(int rgb)
+{
+    double r, g, b;
+    int y, Cr, Cb;
+
+    r = (rgb >> 16) & 0xff;
+    g = (rgb >>  8) & 0xff;
+    b = (rgb      ) & 0xff;
+
+    y  =  16. + ( 0.1826 * r) + (0.6142 * g) + (0.0620 * b);
+    Cb = 128. + (-0.1006 * r) - (0.3386 * g) + (0.4392 * b);
+    Cr = 128. + ( 0.4392 * r) - (0.3986 * g) - (0.0403 * b);
 
     y = (y < 0) ? 0 : y;
     Cb = (Cb < 0) ? 0 : Cb;
