@@ -28,7 +28,6 @@
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
-        <Converters:PresetConverter x:Key="presetConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:InverseBooleanConverter x:Key="notBooleanConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
