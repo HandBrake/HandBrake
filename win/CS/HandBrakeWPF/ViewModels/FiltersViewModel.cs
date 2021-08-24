@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -26,14 +27,14 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = new EncodeTask();
    
-            this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.GrayscaleFilter = new GrayscaleFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.ColourSpaceFilter = new ColourSpaceFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
-            this.ChromaSmoothFilter = new ChromaSmoothFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.GrayscaleFilter = new GrayscaleFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.ColourSpaceFilter = new ColourSpaceFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
+            this.ChromaSmoothFilter = new ChromaSmoothFilter(this.CurrentTask, () => this.OnTabStatusChanged(new TabStatusEventArgs(TabStatusEventType.FilterType)));
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;

@@ -71,12 +71,12 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUpdateService updateService;
         private readonly IWindowManager windowManager;
         private readonly INotifyIconService notifyIconService;
-
         private readonly ILog logService;
-
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
         private readonly Win7 windowsSeven = new Win7();
+        private readonly DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
+
         private string windowName;
         private string sourceLabel;
         private string statusLabel;
@@ -1888,6 +1888,13 @@ namespace HandBrakeWPF.ViewModels
                 return; // Don't process this when we are setting up.
             }
 
+            // Update Preview if needed
+            if (e != null && e.TabKey != null && e.TabKey.Equals(TabStatusEventType.FilterType) && this.StaticPreviewViewModel.IsOpen)
+            {
+                delayedPreviewprocessor.PerformTask(() => this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource), 1000);
+            }
+
+            // Preset Check
             bool matchesPreset = this.PictureSettingsViewModel.MatchesPreset(this.selectedPreset);
 
             if (!this.SummaryViewModel.MatchesPreset(this.selectedPreset))
