@@ -25,6 +25,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.EventArgs;
     using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -44,7 +45,7 @@ namespace HandBrakeWPF.ViewModels
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
 
-        private string selectedLogFile;
+        private LogFile selectedLogFile;
 
         public LogViewModel(IErrorService errorService, ILogInstanceManager logInstanceManager, IQueueService queueService)
         {
@@ -58,9 +59,9 @@ namespace HandBrakeWPF.ViewModels
 
         public string ActivityLog => this.log.ToString();
 
-        public BindingList<string> LogFiles { get; private set; }
+        public BindingList<LogFile> LogFiles { get; private set; }
 
-        public string SelectedLogFile
+        public LogFile SelectedLogFile
         {
             get => this.selectedLogFile;
             set
@@ -141,9 +142,9 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile);
+            this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile.LogFileName);
             string logDir = DirectoryUtilities.GetLogDirectory();
-            string logFile = Path.Combine(logDir, this.selectedLogFile);
+            string logFile = Path.Combine(logDir, this.selectedLogFile.LogFileName);
 
             // This is not an active log, so read from disk.
             if (this.logService == null)
@@ -248,18 +249,18 @@ namespace HandBrakeWPF.ViewModels
             lock (readLockObject)
             {
                 BindingList<string> activeLogs = new BindingList<string>(this.logInstanceManager.GetLogFiles());
-                BindingList<string> logfiles = new BindingList<string>();
+                BindingList<LogFile> logfiles = new BindingList<LogFile>();
 
                 // Add Inactive Logs First.
                 foreach (string logFile in this.queueService.GetLogFilePaths())
                 {
-                    logfiles.Add(Path.GetFileName(logFile));
+                    logfiles.Add(new LogFile(Path.GetFileName(logFile), true));
                 }
 
                 // Add active logs second.
                 foreach (var log in activeLogs)
                 {
-                    logfiles.Add(log);
+                    logfiles.Add(new LogFile(log, false));
                 }
 
                 this.LogFiles = logfiles;
@@ -267,11 +268,11 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.SelectedLogFile = this.LogFiles.FirstOrDefault(c => c.Equals(filename, StringComparison.InvariantCultureIgnoreCase));
+                    this.SelectedLogFile = this.LogFiles.FirstOrDefault(c => c.LogFileName.Equals(filename, StringComparison.InvariantCultureIgnoreCase));
                 }
                 else
                 {
-                    this.SelectedLogFile = this.LogFiles.LastOrDefault(c => !c.Contains("activity_log_main"));
+                    this.SelectedLogFile = this.LogFiles.LastOrDefault(c => !c.LogFileName.Contains("activity_log_main"));
                 }
 
                 if (this.SelectedLogFile == null)
