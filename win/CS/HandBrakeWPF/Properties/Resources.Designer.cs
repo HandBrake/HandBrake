@@ -1351,6 +1351,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Finished].
+        /// </summary>
+        public static string LogViewModel_Complete {
+            get {
+                return ResourceManager.GetString("LogViewModel_Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log Viewer.
         /// </summary>
         public static string LogViewModel_Title {

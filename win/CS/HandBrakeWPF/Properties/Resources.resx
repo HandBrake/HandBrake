@@ -2513,4 +2513,7 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>Preset:</value>
   </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Finished]</value>
+  </data>
 </root>
