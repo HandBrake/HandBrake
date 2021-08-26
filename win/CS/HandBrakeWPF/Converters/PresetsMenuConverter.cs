@@ -59,6 +59,14 @@ namespace HandBrakeWPF.Converters
             // Generate the Preset Manager Item
             if (parameter != null && "true".Equals(parameter))
             {
+                MenuItem savePresetMenuItem = new MenuItem
+                                                 {
+                                                     Header = Resources.MainView_SaveNewPreset,
+                                                     Tag = null,
+                                                     Command = new AddPresetCommand()
+                                                 };
+                groupedMenu.Add(savePresetMenuItem);
+
                 MenuItem presetManagerMenuItem = new MenuItem
                                         {
                                             Header = Resources.PresetManger_Title,
@@ -66,7 +74,22 @@ namespace HandBrakeWPF.Converters
                                             Command = new OpenPresetManagerCommand()
                                         };
                 groupedMenu.Add(presetManagerMenuItem);
+
+
                 groupedMenu.Add(new Separator());
+
+                MenuItem presetLabelMenuItem = new MenuItem
+                                                 {
+                                                     Header = "Presets:",
+                                                     Tag = null,
+                                                     IsEnabled = false,
+                                                     FontSize = 12,
+                                                     Margin = new Thickness(0,2,0,2)
+                                                 };
+
+                presetLabelMenuItem.FontWeight = FontWeights.Bold;
+                presetLabelMenuItem.FontStyle = FontStyles.Normal;
+                groupedMenu.Add(presetLabelMenuItem);
             }
 
             IEnumerable<IPresetObject> presetObjects = presets.ToList();
