@@ -634,12 +634,6 @@ namespace HandBrakeWPF.ViewModels
         private void SelectedItems_ListChanged(object sender, ListChangedEventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.JobInfoVisible);
-
-            if (!this.JobInfoVisible)
-            {
-                this.SelectedTabIndex = 0;
-                this.NotifyOfPropertyChange(() => this.SelectedTabIndex);
-            }
         }
         
         private void QueueManager_QueueChanged(object sender, EventArgs e)

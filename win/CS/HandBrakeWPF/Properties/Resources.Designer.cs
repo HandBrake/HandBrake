@@ -2542,7 +2542,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update Selected Preset.
+        ///   Looks up a localized string similar to Update Current Preset.
         /// </summary>
         public static string MainView_UpdateSelectedPreset {
             get {

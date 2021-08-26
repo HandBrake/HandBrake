@@ -1110,7 +1110,7 @@ Would you like to overwrite it?</value>
     <value>Title: </value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Update Selected Preset</value>
+    <value>Update Current Preset</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>Video</value>
