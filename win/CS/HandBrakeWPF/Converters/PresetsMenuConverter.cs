@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Converters
     public class PresetsMenuConverter : IValueConverter
     {
         private readonly IUserSettingService userSettingService;
-
+        
         public PresetsMenuConverter()
         {
             this.userSettingService = IoC.Get<IUserSettingService>();
@@ -77,19 +77,6 @@ namespace HandBrakeWPF.Converters
 
 
                 groupedMenu.Add(new Separator());
-
-                MenuItem presetLabelMenuItem = new MenuItem
-                                                 {
-                                                     Header = "Presets:",
-                                                     Tag = null,
-                                                     IsEnabled = false,
-                                                     FontSize = 12,
-                                                     Margin = new Thickness(0,2,0,2)
-                                                 };
-
-                presetLabelMenuItem.FontWeight = FontWeights.Bold;
-                presetLabelMenuItem.FontStyle = FontStyles.Normal;
-                groupedMenu.Add(presetLabelMenuItem);
             }
 
             IEnumerable<IPresetObject> presetObjects = presets.ToList();
@@ -103,39 +90,51 @@ namespace HandBrakeWPF.Converters
                     break;
 
                 case PresetDisplayMode.Partial:
-                    GenerateTopUserPresets(groupedMenu, presetObjects.FirstOrDefault(p => p.Category == PresetService.UserPresetCategoryName));
-                    GeneratePresets(groupedMenu, presetObjects.ToList());
+                    GenerateUserPresets(groupedMenu, presetObjects.FirstOrDefault(p => p.Category == PresetService.UserPresetCategoryName));
+                    GeneratePresets(groupedMenu, presetObjects.ToList(), mode);
                     break;
 
                 case PresetDisplayMode.Category:
-                    GeneratePresets(groupedMenu, presetObjects.ToList());
+                    GeneratePresets(groupedMenu, presetObjects.ToList(), mode);
                     break;
             }
 
             return groupedMenu;
         }
         
-        private void GenerateTopUserPresets(List<object> groupedMenu, IPresetObject userPresets)
+        private void GenerateUserPresets(List<object> groupedMenu, IPresetObject userPresets)
         {
             PresetDisplayCategory category = userPresets as PresetDisplayCategory;
             if (category != null)
             {
-                foreach (var preset in category.Presets.TakeLast(8).Reverse())
-                {
-                    groupedMenu.Add(GeneratePresetMenuItem(preset));
-                }
-
                 if (category.Presets.Count != 0)
                 {
+                    groupedMenu.Add(GenerateMenuHeader(category.Category));
                     groupedMenu.Add(new Separator());
+                }
+
+                foreach (var preset in category.Presets.Reverse())
+                {
+                    groupedMenu.Add(GeneratePresetMenuItem(preset));
                 }
             }
         }
 
-        private void GeneratePresets(List<object> groupedMenu, IList<IPresetObject> userPresets)
+        private void GeneratePresets(List<object> groupedMenu, IList<IPresetObject> userPresets, PresetDisplayMode displayMode)
         {
+            if (displayMode == PresetDisplayMode.Partial)
+            {
+                groupedMenu.Add(GenerateMenuHeader(Resources.Main_Presets));
+                groupedMenu.Add(new Separator());
+            }
+
             foreach (IPresetObject presetCategory in userPresets)
             {
+                if (displayMode == PresetDisplayMode.Partial && PresetService.UserPresetCategoryName.Equals(presetCategory.Category))
+                {
+                    continue; // In Partially Flat mode, we show the user presets flat so no need to include the category. 
+                }
+
                 PresetDisplayCategory category = presetCategory as PresetDisplayCategory;
                 if (category != null)
                 {
@@ -148,7 +147,6 @@ namespace HandBrakeWPF.Converters
         {
             MenuItem group = new MenuItem();
             group.Header = category.Category;
-
             foreach (var preset in category.Presets)
             {
                 group.Items.Add(GeneratePresetMenuItem(preset));
@@ -164,6 +162,8 @@ namespace HandBrakeWPF.Converters
                 PresetDisplayCategory category = presetCategory as PresetDisplayCategory;
                 if (category != null)
                 {
+                    groupedMenu.Add(GenerateMenuHeader(category.Category));
+
                     if (groupedMenu.Count != 0 && groupedMenu.LastOrDefault()?.GetType() != typeof(Separator))
                     {
                         groupedMenu.Add(new Separator());
@@ -193,6 +193,24 @@ namespace HandBrakeWPF.Converters
             }
             
             return newMenuItem;
+        }
+
+        private MenuItem GenerateMenuHeader(string name)
+        {
+            MenuItem presetLabelMenuItem = new MenuItem
+                                           {
+                                               Header = name,
+                                               Tag = null,
+                                               IsEnabled = false,
+                                               FontSize = 12.5,
+                                               Margin = new Thickness(0, 2, 0, 2)
+                                           };
+
+            presetLabelMenuItem.FontWeight = FontWeights.Bold;
+            presetLabelMenuItem.FontStyle = FontStyles.Normal;
+            presetLabelMenuItem.Margin = new Thickness(0, 4, 0, 0);
+
+            return presetLabelMenuItem;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
