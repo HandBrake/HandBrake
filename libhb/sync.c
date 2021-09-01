@@ -371,7 +371,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     {
         if (buf == NULL)
         {
-            buf = hb_frame_buffer_init(stream->common->job->pix_fmt,
+            buf = hb_frame_buffer_init(stream->common->job->input_pix_fmt,
                                    stream->common->job->title->geometry.width,
                                    stream->common->job->title->geometry.height);
             uint8_t *planes[4];
@@ -381,7 +381,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                 planes[i] = buf->plane[i].data;
                 linesizes[i] = buf->plane[i].stride;
             }
-            av_image_fill_black(planes, linesizes, stream->common->job->pix_fmt,
+            av_image_fill_black(planes, linesizes, stream->common->job->input_pix_fmt,
                                 stream->common->job->color_range, buf->f.width, buf->f.height);
             buf->f.color_prim = stream->common->job->title->color_prim;
             buf->f.color_transfer = stream->common->job->title->color_transfer;

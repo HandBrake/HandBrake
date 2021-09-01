@@ -260,7 +260,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Bit depth */
-    pv->bit_depth = hb_get_bit_depth(job->pix_fmt);
+    pv->bit_depth = hb_get_bit_depth(job->output_pix_fmt);
 
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;

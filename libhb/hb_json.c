@@ -620,8 +620,10 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     hb_dict_set(source_dict, "Range", range_dict);
 
     hb_dict_t *video_dict = hb_dict_get(dict, "Video");
-    hb_dict_set(video_dict, "ColorFormat",
-                hb_value_int(job->pix_fmt));
+    hb_dict_set(video_dict, "ColorInputFormat",
+                hb_value_int(job->input_pix_fmt));
+    hb_dict_set(video_dict, "ColorOutputFormat",
+                hb_value_int(job->output_pix_fmt));
     hb_dict_set(video_dict, "ColorRange",
                 hb_value_int(job->color_range));
     hb_dict_set(video_dict, "ColorPrimaries",
@@ -1015,7 +1017,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
     //       TwoPass, Turbo,
-    //       ColorFormat, ColorRange,
+    //       ColorInputFormat, ColorOutputFormat, ColorRange,
     //       ColorPrimaries, ColorTransfer, ColorMatrix,
     //       Mastering,
     //       ContentLightLevel,
@@ -1023,7 +1025,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //       QSV {Decode, AsyncDepth, AdapterIndex}}
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b,"
-    "   s?i, s?i,"
+    "   s?i, s?i, s?i,"
     "   s?i, s?i, s?i,"
     "   s?o,"
     "   s?o,"
@@ -1070,7 +1072,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Options",              unpack_s(&video_options),
             "TwoPass",              unpack_b(&job->twopass),
             "Turbo",                unpack_b(&job->fastfirstpass),
-            "ColorFormat",          unpack_i(&job->pix_fmt),
+            "ColorInputFormat",     unpack_i(&job->input_pix_fmt),
+            "ColorOutputFormat",    unpack_i(&job->output_pix_fmt),
             "ColorRange",           unpack_i(&job->color_range),
             "ColorPrimaries",       unpack_i(&job->color_prim),
             "ColorTransfer",        unpack_i(&job->color_transfer),
