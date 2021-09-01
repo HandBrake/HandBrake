@@ -1516,6 +1516,20 @@ int hb_video_encoder_is_supported(int encoder)
     return 0;
 }
 
+int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt)
+{
+    const int *pix_fmts = hb_video_encoder_get_pix_fmts(encoder);
+    while (*pix_fmts != AV_PIX_FMT_NONE)
+    {
+        if (pix_fmt == *pix_fmts)
+        {
+            return 1;
+        }
+        pix_fmts++;
+    }
+    return 0;
+}
+
 int hb_video_encoder_get_depth(int encoder)
 {
     switch (encoder)
@@ -3921,7 +3935,8 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
-    job->pix_fmt        = AV_PIX_FMT_YUV420P;
+    job->input_pix_fmt  = AV_PIX_FMT_YUV420P;
+    job->output_pix_fmt = AV_PIX_FMT_YUV420P;
     job->color_prim     = title->color_prim;
     job->color_transfer = title->color_transfer;
     job->color_matrix   = title->color_matrix;
@@ -4330,6 +4345,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
 
         case HB_FILTER_GRAYSCALE:
             filter = &hb_filter_grayscale;
+            break;
+
+        case HB_FILTER_FORMAT:
+            filter = &hb_filter_format;
             break;
 
 #if HB_PROJECT_FEATURE_QSV
@@ -5944,8 +5963,8 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
                     return 0;
                 }
             case HB_FILTER_RENDER_SUB:
-               if (pix_fmt != AV_PIX_FMT_YUV420P   ||
-                   pix_fmt != AV_PIX_FMT_YUV420P10 ||
+               if (pix_fmt != AV_PIX_FMT_YUV420P   &&
+                   pix_fmt != AV_PIX_FMT_YUV420P10 &&
                    pix_fmt != AV_PIX_FMT_YUV420P12)
                {
                    return 0;
@@ -5956,9 +5975,14 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
     return 1;
 }
 
+static const enum AVPixelFormat pipeline_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010LE, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
 int hb_get_best_pix_fmt(hb_job_t * job)
 {
-    const int *pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+    const int *pix_fmts = pipeline_pix_fmts;
 
     while (*pix_fmts != AV_PIX_FMT_NONE)
     {

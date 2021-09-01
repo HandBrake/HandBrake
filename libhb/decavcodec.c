@@ -1174,7 +1174,7 @@ int reinit_video_filters(hb_work_private_t * pv)
             orig_width = pv->job->title->geometry.width;
             orig_height = pv->job->title->geometry.height;
         }
-        pix_fmt = pv->job->pix_fmt;
+        pix_fmt = pv->job->input_pix_fmt;
         color_range = pv->job->color_range;
     }
 

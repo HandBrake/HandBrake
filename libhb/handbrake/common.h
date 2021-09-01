@@ -409,6 +409,7 @@ const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
+int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
@@ -609,7 +610,10 @@ struct hb_job_s
     char           *encoder_level;
     int             areBframes;
 
-    int             pix_fmt;
+    // Pixel format from decoder to the end of the filters chain
+    int             input_pix_fmt;
+    // Pixel format from the end of filters chain to the encoder
+    int             output_pix_fmt;
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
@@ -1422,6 +1426,7 @@ enum
     HB_FILTER_GRAYSCALE,
     HB_FILTER_PAD,
     HB_FILTER_COLORSPACE,
+    HB_FILTER_FORMAT,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
