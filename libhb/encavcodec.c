@@ -51,9 +51,6 @@ struct hb_work_private_s
     } frame_info[FRAME_INFO_SIZE];
 
     hb_chapter_queue_t * chapter_queue;
-
-    struct SwsContext  * sws;
-    hb_buffer_t        * sws_buf;
 };
 
 int  encavcodecInit( hb_work_object_t *, hb_job_t * );
@@ -119,7 +116,7 @@ static const char * const h265_mf_profile_name[] =
 
 static const enum AVPixelFormat pix_fmts[] =
 {
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat h26x_vt_pix_fmts[] =
@@ -129,12 +126,12 @@ static const enum AVPixelFormat h26x_vt_pix_fmts[] =
 
 static const enum AVPixelFormat h265_10bit_vt_pix_fmts[] =
 {
-    AV_PIX_FMT_P010LE, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 {
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
@@ -862,7 +859,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->pix_fmt   = job->pix_fmt;
+    context->pix_fmt   = job->output_pix_fmt;
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
@@ -1049,21 +1046,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->max_b_frames = 1;
     }
 
-    if (job->pix_fmt != context->pix_fmt)
-    {
-        // Some encoders require a specific input pixel format
-        // that could be different from the current pipeline format.
-        // Configure a sws context to handle this unlucky case.
-        pv->sws = hb_sws_get_context(
-                                     job->width, job->height,
-                                     job->pix_fmt, job->color_range,
-                                     job->width, job->height,
-                                     context->pix_fmt, job->color_range,
-                                     SWS_LANCZOS|SWS_ACCURATE_RND,
-                                     SWS_CS_DEFAULT);
-        pv->sws_buf = hb_frame_buffer_init(context->pix_fmt, job->width, job->height);
-    }
-
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
@@ -1211,14 +1193,6 @@ void encavcodecClose( hb_work_object_t * w )
             avcodec_flush_buffers( pv->context );
         }
         hb_avcodec_free_context(&pv->context);
-    }
-    if (pv->sws != NULL)
-    {
-        sws_freeContext(pv->sws);
-    }
-    if (pv->sws_buf != NULL)
-    {
-        hb_buffer_close(&pv->sws_buf);
     }
     if( pv->file )
     {
@@ -1378,25 +1352,6 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.linesize[0] = in->plane[0].stride;
     frame.linesize[1] = in->plane[1].stride;
     frame.linesize[2] = in->plane[2].stride;
-
-    if (pv->sws)
-    {
-        uint8_t *srcs[]   = { in->plane[0].data, in->plane[1].data, in->plane[2].data };
-        int srcs_stride[] = { in->plane[0].stride, in->plane[1].stride, in->plane[2].stride };
-        uint8_t *dsts[]   = { pv->sws_buf->plane[0].data, pv->sws_buf->plane[1].data, NULL };
-        int dsts_stride[] = { pv->sws_buf->plane[0].stride, pv->sws_buf->plane[1].stride, 0 };
-
-        sws_scale(pv->sws,
-                  (const uint8_t* const*)srcs, srcs_stride,
-                  0, in->f.height, dsts, dsts_stride);
-
-        for (int i = 0; i < 3; i++)
-        {
-            frame.data[i] = dsts[i];
-            frame.linesize[i] = dsts_stride[i];
-        }
-        frame.format = pv->context->pix_fmt;
-    }
 
     if (in->s.new_chap > 0 && pv->job->chapter_markers)
     {

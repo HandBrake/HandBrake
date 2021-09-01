@@ -476,6 +476,7 @@ extern hb_filter_object_t hb_filter_unsharp;
 extern hb_filter_object_t hb_filter_avfilter;
 extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
+extern hb_filter_object_t hb_filter_format;
 
 #if HB_PROJECT_FEATURE_QSV
 extern hb_filter_object_t hb_filter_qsv;

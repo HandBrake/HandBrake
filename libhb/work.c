@@ -445,12 +445,12 @@ void hb_display_job_info(hb_job_t *job)
     if (hb_qsv_decode_is_enabled(job))
     {
         hb_log("   + decoder: %s %d-bit (%s)",
-               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->pix_fmt), av_get_pix_fmt_name(job->pix_fmt));
+               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     }
     else
 #endif
     {
-        hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->pix_fmt), av_get_pix_fmt_name(job->pix_fmt));
+        hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     }
 
     if( title->video_bitrate )
@@ -1271,8 +1271,10 @@ static int sanitize_audio(hb_job_t *job)
     return 0;
 }
 
-static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
+static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
 {
+    hb_list_t *list = job->list_filter;
+
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
     {
@@ -1334,6 +1336,15 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
                 hb_log("Skipping crop/scale filter");
             }
         }
+    }
+
+    const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+    const int encoder_pix_fmt = *encoder_pix_fmts;
+
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt) == 0)
+    {
+        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+        hb_add_filter(job, filter, hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt)));
     }
 }
 
@@ -1400,7 +1411,11 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
-        sanitize_filter_list(job->list_filter, title->geometry);
+        // Select the optimal pixel format
+        // for the pipeline
+        job->input_pix_fmt = hb_get_best_pix_fmt(job);
+
+        sanitize_filter_list(job, title->geometry);
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         // sanitize_qsv looks for subtitle render filter, so must happen after
@@ -1420,7 +1435,7 @@ static void do_job(hb_job_t *job)
         init.time_base.num = 1;
         init.time_base.den = 90000;
         init.job = job;
-        init.pix_fmt = hb_get_best_pix_fmt(job);
+        init.pix_fmt = job->input_pix_fmt;
         init.color_range = AVCOL_RANGE_MPEG;
 
         init.color_prim = title->color_prim;
@@ -1446,7 +1461,7 @@ static void do_job(hb_job_t *job)
             }
             i++;
         }
-        job->pix_fmt = init.pix_fmt;
+        job->output_pix_fmt = init.pix_fmt;
         job->color_prim = init.color_prim;
         job->color_transfer = init.color_transfer;
         job->color_matrix = init.color_matrix;

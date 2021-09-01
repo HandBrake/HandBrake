@@ -1359,7 +1359,7 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
     return ((job != NULL && job->qsv.decode) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
             hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(),
-            job->title->video_codec_param, job->pix_fmt);
+            job->title->video_codec_param, job->input_pix_fmt);
 }
 
 static int hb_dxva2_device_check();
@@ -3612,17 +3612,17 @@ int hb_qsv_attach_surface_to_video_buffer(hb_job_t *job, hb_buffer_t* buf, int i
         DXGI_FORMAT texture_format;
         ID3D11Texture2D* output_surface;
         D3D11_TEXTURE2D_DESC desc = { 0 };
-        if (job->pix_fmt == AV_PIX_FMT_NV12)
+        if (job->input_pix_fmt == AV_PIX_FMT_NV12)
         {
             texture_format = DXGI_FORMAT_NV12;
         }
-        else if(job->pix_fmt == AV_PIX_FMT_P010)
+        else if(job->input_pix_fmt == AV_PIX_FMT_P010)
         {
             texture_format = DXGI_FORMAT_P010;
         }
         else
         {
-            hb_error("hb_qsv_attach_surface_to_video_buffer: unsupported texture_format=%d", job->pix_fmt);
+            hb_error("hb_qsv_attach_surface_to_video_buffer: unsupported texture_format=%d", job->input_pix_fmt);
             return -1;
         }
         hb_qsv_get_free_surface_from_pool_with_range(hb_qsv_frames_ctx, 0, HB_QSV_POOL_SURFACE_SIZE, &mid, &surface);

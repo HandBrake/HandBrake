@@ -99,12 +99,6 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
         hb_error("hb_avfilter_graph_init: avfilter_graph_alloc failed");
         goto fail;
     }
-#if HB_PROJECT_FEATURE_QSV
-    if (!hb_qsv_hw_filters_are_enabled(graph->job))
-#endif
-    {
-        av_opt_set(graph->avgraph, "scale_sws_opts", "lanczos+accurate_rnd", 0);
-    }
     result = avfilter_graph_parse2(graph->avgraph, settings_str, &in, &out);
     if (result < 0 || in == NULL || out == NULL)
     {
@@ -351,6 +345,7 @@ void hb_avfilter_combine( hb_list_t * list)
             case HB_FILTER_PAD:
             case HB_FILTER_ROTATE:
             case HB_FILTER_COLORSPACE:
+            case HB_FILTER_FORMAT:
             {
                 settings = pv->avfilters;
             } break;

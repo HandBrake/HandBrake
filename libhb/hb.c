@@ -945,7 +945,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
         ii++;
     }
 
-    job->pix_fmt = init.pix_fmt;
+    job->output_pix_fmt = init.pix_fmt;
     job->color_prim = init.color_prim;
     job->color_transfer = init.color_transfer;
     job->color_matrix = init.color_matrix;
