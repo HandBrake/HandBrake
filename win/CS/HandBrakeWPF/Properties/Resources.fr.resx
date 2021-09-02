@@ -1059,7 +1059,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Enregistrer le nouveau préréglage</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>Recherche de l'heure de démarage</value>
+    <value>Recherche de l'heure de démarrage</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
     <value>Définir la valeur par défaut</value>
