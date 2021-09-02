@@ -928,7 +928,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_dict_set(&av_opts, "profile", "main10", 0);
         context->max_b_frames = 16;
-        context->pix_fmt = AV_PIX_FMT_P010LE;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
@@ -1035,7 +1034,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
     {
         av_dict_set(&av_opts, "hw_encoding", "1", 0);
-        context->pix_fmt = AV_PIX_FMT_NV12;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
