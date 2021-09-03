@@ -1338,6 +1338,8 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
     }
 
+    // Some encoders require a specific input pixel format
+    // that could be different from the current pipeline format.
     const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
     const int encoder_pix_fmt = *encoder_pix_fmts;
 
