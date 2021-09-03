@@ -1345,7 +1345,7 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
         int encoder_pix_fmt = *encoder_pix_fmts;
 
-#if defined(_WIN32) || defined(__MINGW32__)
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         if (!hb_qsv_full_path_is_enabled(job))
         {
             // Formats supported by QSV pipeline via system memory

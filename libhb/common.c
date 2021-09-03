@@ -5934,7 +5934,7 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
 
     if (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)
     {
-#if defined(_WIN32) || defined(__MINGW32__)
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
         if (hb_qsv_full_path_is_enabled(job))
         {
             // Formats supported in QSV pipeline via video memory
