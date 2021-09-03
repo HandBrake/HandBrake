@@ -1338,13 +1338,27 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
     }
 
-    // Some encoders require a specific input pixel format
-    // that could be different from the current pipeline format.
-    const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
-    const int encoder_pix_fmt = *encoder_pix_fmts;
-
     if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt) == 0)
     {
+        // Some encoders require a specific input pixel format
+        // that could be different from the current pipeline format.
+        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+        int encoder_pix_fmt = *encoder_pix_fmts;
+
+#if defined(_WIN32) || defined(__MINGW32__)
+        if (!hb_qsv_full_path_is_enabled(job))
+        {
+            // Formats supported by QSV pipeline via system memory
+            if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
+                encoder_pix_fmt != AV_PIX_FMT_YUV420P)
+            {
+                // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
+                encoder_pix_fmts++;
+                encoder_pix_fmt = *encoder_pix_fmts;
+            }
+        }
+#endif
+
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
         hb_add_filter(job, filter, hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt)));
     }

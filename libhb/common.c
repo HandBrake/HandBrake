@@ -5932,14 +5932,27 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
         return 0;
     }
 
-    // Allow biplanar formats only if
-    // hardware decoding is enabled.
-    if (pix_fmt == AV_PIX_FMT_P010LE ||
-        pix_fmt == AV_PIX_FMT_NV12)
+    if (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)
     {
-        if (!(job->title->video_decode_support & HB_DECODE_SUPPORT_QSV))
+#if defined(_WIN32) || defined(__MINGW32__)
+        if (hb_qsv_full_path_is_enabled(job))
         {
-            return 0;
+            // Formats supported in QSV pipeline via video memory
+            if (pix_fmt != AV_PIX_FMT_P010LE &&
+                pix_fmt != AV_PIX_FMT_NV12)
+            {
+                return 0;
+            }
+        }
+        else
+#endif
+        {
+            // Formats supported by QSV pipeline via system memory
+            if (pix_fmt != AV_PIX_FMT_YUV420P10 &&
+                pix_fmt != AV_PIX_FMT_YUV420P)
+            {
+                return 0;
+            }
         }
     }
 
