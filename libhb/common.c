@@ -5933,7 +5933,7 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
     }
 
     // Allow biplanar formats only if
-    // hardware decoder is supported.
+    // hardware decoding is enabled.
     if (pix_fmt == AV_PIX_FMT_P010LE ||
         pix_fmt == AV_PIX_FMT_NV12)
     {
