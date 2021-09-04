@@ -5955,6 +5955,16 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
             }
         }
     }
+    else
+    {
+        // Allow biplanar formats only if
+        // hardware decoding is enabled.
+        if (pix_fmt == AV_PIX_FMT_P010LE ||
+            pix_fmt == AV_PIX_FMT_NV12)
+        {
+            return 0;
+        }
+    }
 
     for (int i = 0; i < hb_list_count(job->list_filter); i++)
     {
