@@ -5323,6 +5323,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move To Bottom.
+        /// </summary>
+        public static string QueueView_MoveToBottom {
+            get {
+                return ResourceManager.GetString("QueueView_MoveToBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move To Top.
+        /// </summary>
+        public static string QueueView_MoveToTop {
+            get {
+                return ResourceManager.GetString("QueueView_MoveToTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Available.
         /// </summary>
         public static string QueueView_NotAvailable {
@@ -5553,6 +5571,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_EditConfirmation {
             get {
                 return ResourceManager.GetString("QueueViewModel_EditConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Job?.
+        /// </summary>
+        public static string QueueViewModel_EditJob {
+            get {
+                return ResourceManager.GetString("QueueViewModel_EditJob", resourceCulture);
             }
         }
         

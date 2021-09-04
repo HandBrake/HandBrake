@@ -10,7 +10,6 @@ namespace HandBrakeWPF.Views
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Windows.Media.Animation;
 
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels;
@@ -88,10 +87,11 @@ namespace HandBrakeWPF.Views
 
             this.DeleteMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_DeleteSelected : Properties.Resources.QueueView_Delete;
             this.DeleteMenuItem.IsEnabled = this.mouseActiveQueueTask != null || this.queueJobs.SelectedItems.Count >= 1;
-
             this.EditMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openSourceDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
             this.openDestDir.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count == 1;
+            this.moveToBottomMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count >= 1;
+            this.moveToTopMenuItem.IsEnabled = this.mouseActiveQueueTask != null && this.queueJobs.SelectedItems.Count >= 1;
         }
 
         private static T FindParent<T>(DependencyObject from) where T : class

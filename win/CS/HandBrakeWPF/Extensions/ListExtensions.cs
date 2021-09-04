@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Extensions
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     public static class ListExtensions
     {
@@ -77,6 +78,42 @@ namespace HandBrakeWPF.Extensions
             }
         }
 
+        public static void MoveToTop<T>(this IList list, IList<T> items)
+        {
+            List<T> moveList = items.ToList(); // Decouple from upstream.
+
+            // Remove all the existing items
+            foreach (var item in moveList)
+            {
+                list.Remove(item);
+            }
+
+            // Insert all items in order at the top of the list.
+            int index = 0;
+            foreach (var item in moveList)
+            {
+                list.Insert(index, item);
+                index = index +1;
+            }
+        }
+
+        public static void MoveToBottom<T>(this IList list, IList<T> items)
+        {
+            List<T> moveList = items.ToList(); // Decouple from upstream.
+
+            // Remove all the existing items
+            foreach (var item in moveList)
+            {
+                list.Remove(item);
+            }
+
+            // Insert all items in order at the top of the list.
+            foreach (var item in moveList)
+            {
+                list.Add(item);
+            }
+        }
+        
         public static IEnumerable<T> TakeLast<T>(this IList<T> list, int n)
         {
             if (list.Count - n < 0)

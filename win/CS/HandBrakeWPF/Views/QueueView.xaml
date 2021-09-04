@@ -172,10 +172,13 @@
                         <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
                             <Separator />
-                            <MenuItem x:Name="ResetMenuItem" Header="{x:Static Properties:Resources.QueueView_Reset}" Click="QueueItem_Retry" />
-                            <MenuItem x:Name="DeleteMenuItem" Header="{x:Static Properties:Resources.QueueView_Delete}" Click="QueueItem_Delete" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" cal:Message.Attach="[Event Click] = [Action MoveToTop]" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" cal:Message.Attach="[Event Click] = [Action MoveToBottom]" />
                             <Separator />
-                            <MenuItem x:Name="EditMenuItem" Header="{x:Static Properties:Resources.QueueView_Edit}" Click="QueueItem_Edit" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" />
+                            <Separator />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_Edit}" x:Name="EditMenuItem" Click="QueueItem_Edit" />
                             <Separator />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />

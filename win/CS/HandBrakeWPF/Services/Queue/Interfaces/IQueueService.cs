@@ -16,12 +16,8 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.EventArgs;
-    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
 
-    /// <summary>
-    /// The Queue Processor
-    /// </summary>
     public interface IQueueService
     {
         /// <summary>
@@ -168,20 +164,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         QueueTask GetNextJobForProcessing();
 
         /// <summary>
-        /// Moves an item down one position in the queue.
+        /// Moves items in the queue list
         /// </summary>
-        /// <param name="index">
-        /// The zero-based location of the job in the queue.
-        /// </param>
-        void MoveDown(int index);
+        void MoveToBottom(IList<QueueTask> moveItems);
 
         /// <summary>
-        /// Moves an item up one position in the queue.
+        /// Moves items in the queue list
         /// </summary>
-        /// <param name="index">
-        /// The zero-based location of the job in the queue.
-        /// </param>
-        void MoveUp(int index);
+        void MoveToTop(IList<QueueTask> moveItems);
 
         /// <summary>
         /// Remove a job from the Queue.

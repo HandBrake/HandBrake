@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
@@ -367,29 +368,15 @@ namespace HandBrakeWPF.Services.Queue
             return null;
         }
 
-        public void MoveDown(int index)
+        public void MoveToBottom(IList<QueueTask> moveItems)
         {
-            if (index < this.queue.Count - 1)
-            {
-                QueueTask item = this.queue[index];
-
-                this.queue.RemoveAt(index);
-                this.queue.Insert((index + 1), item);
-            }
-
+            this.queue.MoveToBottom(moveItems);
             this.InvokeQueueChanged(EventArgs.Empty);
         }
 
-        public void MoveUp(int index)
+        public void MoveToTop(IList<QueueTask> moveItems)
         {
-            if (index > 0)
-            {
-                QueueTask item = this.queue[index];
-
-                this.queue.RemoveAt(index);
-                this.queue.Insert((index - 1), item);
-            }
-
+            this.queue.MoveToTop(moveItems);
             this.InvokeQueueChanged(EventArgs.Empty);
         }
 

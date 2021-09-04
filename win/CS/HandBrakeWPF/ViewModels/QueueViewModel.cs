@@ -398,7 +398,7 @@ namespace HandBrakeWPF.ViewModels
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
                 Resources.QueueViewModel_EditConfirmation,
-                "Modify Job?",
+                Resources.QueueViewModel_EditJob,
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -482,32 +482,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public void MoveUp()
+        public void MoveToTop()
         {
-            Dictionary<int, QueueTask> tasks = new Dictionary<int, QueueTask>();
-            foreach (var item in this.SelectedItems)
-            {
-                tasks.Add(this.QueueTasks.IndexOf(item), item);
-            }
-
-            foreach (var item in tasks.OrderBy(s => s.Key))
-            {
-                this.QueueTasks.MoveUp(item.Value);
-            }
+            this.queueProcessor.MoveToTop(this.SelectedItems);
         }
 
-        public void MoveDown()
+        public void MoveToBottom()
         {
-            Dictionary<int, QueueTask> tasks = new Dictionary<int, QueueTask>();
-            foreach (var item in this.SelectedItems)
-            {
-                tasks.Add(this.QueueTasks.IndexOf(item), item);
-            }
-
-            foreach (var item in tasks.OrderByDescending(s => s.Key))
-            {
-                this.QueueTasks.MoveDown(item.Value);
-            }
+            this.queueProcessor.MoveToBottom(this.SelectedItems);
         }
 
         public void Activate()

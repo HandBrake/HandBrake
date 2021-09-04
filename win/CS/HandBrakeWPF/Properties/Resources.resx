@@ -2516,4 +2516,13 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="LogViewModel_Complete" xml:space="preserve">
     <value>[Finished]</value>
   </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Edit Job?</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Move To Bottom</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Move To Top</value>
+  </data>
 </root>
