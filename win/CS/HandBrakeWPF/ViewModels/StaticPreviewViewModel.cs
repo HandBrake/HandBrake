@@ -486,31 +486,35 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (File.Exists(this.CurrentlyPlaying))
                 {
+                    string mediaPlayerPath = userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath);
                     string args = "\"" + this.CurrentlyPlaying + "\"";
 
                     if (this.UseSystemDefaultPlayer)
                     {
+                        this.logService.LogMessage(string.Format("# VideoPreview: Using system media player. ({0})", args));
                         Process.Start(args);
                     }
                     else
                     {
-                        if (File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath)))
+                        if (File.Exists(mediaPlayerPath))
                         {
-                            ProcessStartInfo process = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.MediaPlayerPath), args);
+                            this.logService.LogMessage(string.Format("# Video Preview: Playing file using defined media player. ({0})", args));
+                            this.logService.LogMessage(string.Format("# Video Preview: Media Player Path: {0}", mediaPlayerPath));
+                            ProcessStartInfo process = new ProcessStartInfo(mediaPlayerPath, args);
                             Process.Start(process);
                             return;
                         }
                         else
                         {
                             // Fallback to the System Default
+                            this.logService.LogMessage(string.Format("# Video Preview: Falling back to system media player. ({0})", args));
                             Process.Start(args);
                         }
                     }
                 }
                 else
                 {
-                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToPlayFile, 
-                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToPlayFile, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }
