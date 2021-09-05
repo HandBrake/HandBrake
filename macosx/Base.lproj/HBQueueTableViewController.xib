@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19158" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19158"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -244,6 +244,19 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="removeCompleted:" target="-2" id="nUM-Me-Fr2"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="gAB-qh-tsQ"/>
+                <menuItem title="Move to Bottom" id="HwR-LP-IK8">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="moveSelectedQueueItemsToBottom:" target="-2" id="YLg-ZK-de9"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Move to Top" id="NN5-Yq-Cth">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="moveSelectedQueueItemsToTop:" target="-2" id="6GU-to-Keg"/>
                     </connections>
                 </menuItem>
             </items>

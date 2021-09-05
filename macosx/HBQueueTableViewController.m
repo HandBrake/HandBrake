@@ -104,6 +104,20 @@
     [self.delegate tableViewRemoveItemsAtIndexes:targetedRows];
 }
 
+- (IBAction)moveSelectedQueueItemsToTop:(id)sender
+{
+    NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+    NSArray *items = [self.queue.items objectsAtIndexes:indexes];
+    [self.queue moveItems:items toIndex:0];
+}
+
+- (IBAction)moveSelectedQueueItemsToBottom:(id)sender
+{
+    NSIndexSet *indexes = self.tableView.targetedRowIndexes;
+    NSArray *items = [self.queue.items objectsAtIndexes:indexes];
+    [self.queue moveItems:items toIndex:self.queue.items.count - 1];
+}
+
 /**
  * Show the finished encode in the finder
  */
@@ -222,7 +236,9 @@
         return indexes.count == 1 && self.queue.items[indexes.firstIndex].hasFileRepresentation;
     }
 
-    if (action == @selector(removeSelectedQueueItem:))
+    if (action == @selector(removeSelectedQueueItem:) ||
+        action == @selector(moveSelectedQueueItemsToBottom:) ||
+        action == @selector(moveSelectedQueueItemsToTop:))
     {
         return self.tableView.targetedRowIndexes.count > 0;
     }
