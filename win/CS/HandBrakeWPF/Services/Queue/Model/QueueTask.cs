@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Queue.Model
     using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
     using EncodeTask = Encode.Model.EncodeTask;
@@ -36,8 +37,9 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.JobProgress = new QueueProgressStatus();
         }
 
-        public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath, Preset currentPreset, bool isPresetModified)
+        public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath, Preset currentPreset, bool isPresetModified, Title selectedTitle)
         {
+            this.SourceTitleInfo = selectedTitle;
             this.Task = task;
             this.Configuration = configuration;
             this.Status = QueueItemStatus.Waiting;
@@ -69,6 +71,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         [JsonIgnore]
         public Guid? TaskToken { get; set; }
 
+        public Title SourceTitleInfo { get; }
+
         public QueueItemStatus Status
         {
             get => this.status;
@@ -96,7 +100,6 @@ namespace HandBrakeWPF.Services.Queue.Model
         [JsonIgnore]
         public bool IsJobStatusVisible => this.Status == QueueItemStatus.InProgress;
         
-
         [JsonIgnore]
         public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
 

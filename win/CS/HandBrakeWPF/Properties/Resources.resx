@@ -1402,7 +1402,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Do nothing</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Encode Time:</value>
+    <value>Encode Duration:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>Edit</value>
@@ -1414,7 +1414,7 @@ VLC and MPC-HC are supported. Other players may also work but are not validated.
     <value>Export Queue</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Filesize: </value>
+    <value>Output Filesize: </value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>Hibernate</value>
@@ -2519,10 +2519,28 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="QueueViewModel_EditJob" xml:space="preserve">
     <value>Edit Job?</value>
   </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Output Length:</value>
+  </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
     <value>Move To Bottom</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
     <value>Move To Top</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Output Bitrate:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Average Encoding Speed:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value> of source file</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Not Available</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Source Length:</value>
   </data>
 </root>

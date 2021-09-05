@@ -80,6 +80,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         public int? TaskCount => this.progressEventArgs?.TaskCount ?? 0;
 
         public TimeSpan? EstimatedTimeLeft => this.progressEventArgs?.EstimatedTimeLeft ?? null;
+
+        public double AverageFrameRate { get; private set; }
         
         public void Update(EncodeProgressEventArgs e)
         {
@@ -126,6 +128,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                             elapsedTimeHrs,
                             null);
                     this.ProgressValue = e.PercentComplete;
+                    this.AverageFrameRate = e.AverageFrameRate;
                 }
             }
         }

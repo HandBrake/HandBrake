@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Encode.EventArgs
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Encode Progress Event Args
@@ -40,5 +41,7 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
         public string ActivityLogPath { get; private set; }
 
         public long FinalFilesizeInBytes { get; private set; }
+
+        public List<string> OutputTracks { get; private set; }
     }
 }

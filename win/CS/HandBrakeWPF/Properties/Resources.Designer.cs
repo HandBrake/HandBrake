@@ -5080,6 +5080,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average Encoding Speed:.
+        /// </summary>
+        public static string QueueView_AverageEncodeSpeed {
+            get {
+                return ResourceManager.GetString("QueueView_AverageEncodeSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear All.
         /// </summary>
         public static string QueueView_ClearAll {
@@ -5152,7 +5161,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encode Time:.
+        ///   Looks up a localized string similar to Encode Duration:.
         /// </summary>
         public static string QueueView_Duration {
             get {
@@ -5197,7 +5206,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filesize: .
+        ///   Looks up a localized string similar to Output Filesize: .
         /// </summary>
         public static string QueueView_FileSize {
             get {
@@ -5310,6 +5319,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_JobStatus_WorkerCrash {
             get {
                 return ResourceManager.GetString("QueueView_JobStatus_WorkerCrash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Length:.
+        /// </summary>
+        public static string QueueView_Length {
+            get {
+                return ResourceManager.GetString("QueueView_Length", resourceCulture);
             }
         }
         
@@ -5467,6 +5485,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source Length:.
+        /// </summary>
+        public static string QueueView_SourceLength {
+            get {
+                return ResourceManager.GetString("QueueView_SourceLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Queue.
         /// </summary>
         public static string QueueView_Start {
@@ -5539,6 +5566,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output Bitrate:.
+        /// </summary>
+        public static string QueueView_VideoOutputBitrate {
+            get {
+                return ResourceManager.GetString("QueueView_VideoOutputBitrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When Done:.
         /// </summary>
         public static string QueueView_WhenDone {
@@ -5562,6 +5598,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_DelSelectedJobConfirmation {
             get {
                 return ResourceManager.GetString("QueueViewModel_DelSelectedJobConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  of source file.
+        /// </summary>
+        public static string QueueViewModel_DifferenceText {
+            get {
+                return ResourceManager.GetString("QueueViewModel_DifferenceText", resourceCulture);
             }
         }
         
@@ -5644,6 +5689,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_NoPendingJobs {
             get {
                 return ResourceManager.GetString("QueueViewModel_NoPendingJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Available.
+        /// </summary>
+        public static string QueueViewModel_NotAvailable {
+            get {
+                return ResourceManager.GetString("QueueViewModel_NotAvailable", resourceCulture);
             }
         }
         
