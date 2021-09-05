@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19158" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19158"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
             <rect key="frame" x="0.0" y="0.0" width="488" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
+                <button toolTip="Open the job in the main window for editing" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
                     <rect key="frame" x="427" y="3" width="58" height="32"/>
                     <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erY-5X-50l">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -33,7 +33,7 @@
                         <binding destination="-2" name="enabled" keyPath="self.canEdit" id="nuW-8z-gyx"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
+                <button toolTip="Reset the job state" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
                     <rect key="frame" x="363" y="3" width="69" height="32"/>
                     <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hgl-N3-x4S">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
