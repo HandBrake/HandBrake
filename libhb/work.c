@@ -1338,6 +1338,29 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
     }
 
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+        // sanitize_qsv looks for subtitle render filter, so must happen after
+        // sanitize_subtitle
+        if (hb_qsv_is_enabled(job))
+        {
+            hb_qsv_sanitize_filter_list(job);
+            // In case of video memory need to set formats after satitize filters 
+            // to ensure that full QSV pipeline supported
+            if (hb_qsv_full_path_is_enabled(job))
+            {
+                // Formats supported in QSV pipeline via video memory
+                if (job->input_pix_fmt == AV_PIX_FMT_YUV420P10)
+                {
+                    job->input_pix_fmt = AV_PIX_FMT_P010LE;
+                }
+                else if (job->input_pix_fmt == AV_PIX_FMT_YUV420P)
+                {
+                    job->input_pix_fmt = AV_PIX_FMT_NV12;
+                }
+            }
+        }
+#endif
+
     if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt) == 0)
     {
         // Some encoders require a specific input pixel format
@@ -1433,20 +1456,6 @@ static void do_job(hb_job_t *job)
 
         sanitize_filter_list(job, title->geometry);
 
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        // sanitize_qsv looks for subtitle render filter, so must happen after
-        // sanitize_subtitle
-        if (hb_qsv_is_enabled(job))
-        {
-            result = hb_qsv_sanitize_filter_list(job);
-            if (result)
-            {
-                *job->done_error = HB_ERROR_WRONG_INPUT;
-                *job->die = 1;
-                goto cleanup;
-            }
-        }
-#endif
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
         init.time_base.den = 90000;
