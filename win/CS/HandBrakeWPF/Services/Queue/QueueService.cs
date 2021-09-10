@@ -527,12 +527,14 @@ namespace HandBrakeWPF.Services.Queue
                 this.IsPaused = false;
 
                 this.StopJobPolling();
+                this.RemoveBreakPoints();
 
                 if (this.activeJobs.Count == 0)
                 {
                     this.InvokeQueueChanged(EventArgs.Empty);
-                    this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
                 }
+
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
             }
             else
             {
@@ -787,6 +789,15 @@ namespace HandBrakeWPF.Services.Queue
 
                 // Setting the flag will allow or prevent the when done actions to be processed. 
                 this.InvokeQueueCompleted(new QueueCompletedEventArgs(false)); 
+            }
+        }
+
+        private void RemoveBreakPoints()
+        {
+            List<QueueTask> tasks = this.queue.Where(t => t.IsBreakpointTask).ToList();
+            foreach (var task in tasks)
+            {
+                this.queue.Remove(task);
             }
         }
 
