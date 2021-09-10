@@ -4236,7 +4236,6 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
             }
         }
     }
-
     return 0;
 }
 
