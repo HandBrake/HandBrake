@@ -1,0 +1,396 @@
+/* Class = "NSButtonCell"; title = "Allow Upscaling"; ObjectID = "0kU-Uy-P4P"; */
+"0kU-Uy-P4P.title" = "Permette a culata in gamma";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "1AB-bM-qTs"; */
+"1AB-bM-qTs.title" = "Dimensione d’affissera :";
+
+/* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
+"1O3-th-4M5.title" = "Fermata";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibExternalAccessibilityDescription" = "Rifilà inghjò";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels"; ObjectID = "1Z0-JT-vst"; */
+"1Z0-JT-vst.ibShadowedToolTip" = "Quantità in pixel di rifilatura di u bordu inferiore";
+
+/* Class = "NSMenuItem"; title = "2160p 4K Ultra HD"; ObjectID = "1Zm-mM-8Tb"; */
+"1Zm-mM-8Tb.title" = "2160p 4K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "1zy-53-Bvd"; */
+"1zy-53-Bvd.title" = "180°";
+
+/* Class = "NSMenuItem"; title = "1440p 2.5K Quad HD"; ObjectID = "2ax-HE-Amt"; */
+"2ax-HE-Amt.title" = "1440p 2.5K Quad HD";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "2fq-yE-LSA"; */
+"2fq-yE-LSA.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "2jg-kg-z9e"; */
+"2jg-kg-z9e.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "2s0-5k-fjU"; */
+"2s0-5k-fjU.ibExternalAccessibilityDescription" = "Altezza di l’allucamentu";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "3HN-8C-yAS"; */
+"3HN-8C-yAS.ibExternalAccessibilityDescription" = "Altezza di l’allucamentu";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "3Ze-5A-gL3"; */
+"3Ze-5A-gL3.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "5Tj-xw-QuU"; */
+"5Tj-xw-QuU.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "5Vi-N9-9kM"; */
+"5Vi-N9-9kM.title" = "Prupurzioni :";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibExternalAccessibilityDescription" = "Imbuttisce insù";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge border amount in pixels"; ObjectID = "6Jp-gt-DbX"; */
+"6Jp-gt-DbX.ibShadowedToolTip" = "Quantità in pixel d’imburrera di u bordu superiore";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "6Qy-ik-hiE"; */
+"6Qy-ik-hiE.title" = "Nisunu";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
+"6W6-RI-fBx.ibExternalAccessibilityDescription" = "Rifilà inghjò";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "7rG-Qv-khx"; */
+"7rG-Qv-khx.title" = "Autumaticu";
+
+/* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
+"8vS-Mw-bny.title" = "Anamorficu :";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad top"; ObjectID = "09f-sT-7la"; */
+"09f-sT-7la.ibExternalAccessibilityDescription" = "Imbuttisce insù";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Scaled Width"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibExternalAccessibilityDescription" = "Larghezza di cambiamentu di scala";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled width. This is the number of pixels wide to be encoded. Scaled width may differ from display width depending on anamorphic settings and fill settings"; ObjectID = "9hH-As-JSa"; */
+"9hH-As-JSa.ibShadowedToolTip" = "Larghezza di cambiamentu di scala di a video. Ghjè a larghezza à cudificà in numeru di pixel. A larghezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à e preferenze anamorfiche è quelle di u riempiimentu";
+
+/* Class = "NSMenuItem"; title = "480p NTSC SD"; ObjectID = "21C-Hg-mk4"; */
+"21C-Hg-mk4.title" = "480p NTSC SD";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibExternalAccessibilityDescription" = "Rifilà insù";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels"; ObjectID = "41c-48-2XJ"; */
+"41c-48-2XJ.ibShadowedToolTip" = "Quantità in pixel di rifilatura di u bordu superiore";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibExternalAccessibilityDescription" = "Culore persunalizatu di u bordu";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom border color"; ObjectID = "aby-WS-tzS"; */
+"aby-WS-tzS.ibShadowedToolTip" = "Culore persunalizatu di u bordu";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "Ag1-Tk-hCm"; */
+"Ag1-Tk-hCm.ibExternalAccessibilityDescription" = "Larghezza d’affissera";
+
+/* Class = "NSTextFieldCell"; title = "Resolution & Scaling"; ObjectID = "aVx-b3-2AK"; */
+"aVx-b3-2AK.title" = "Risuluzione è messa à a scala";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Color of the border added around the video"; ObjectID = "BjH-qa-mJM"; */
+"BjH-qa-mJM.ibShadowedToolTip" = "Culore di u bordu aghjunta à u giru di a video";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "byr-LI-ap5"; */
+"byr-LI-ap5.title" = "0 x 0";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "C6R-PR-3gu"; */
+"C6R-PR-3gu.title" = "x";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "c9F-IW-Rln"; */
+"c9F-IW-Rln.title" = "0 x 0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibExternalAccessibilityDescription" = "Imbuttisce à diritta";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge border amount in pixels"; ObjectID = "ck0-Gu-lGg"; */
+"ck0-Gu-lGg.ibShadowedToolTip" = "Quantità in pixel d’imburrera di u bordu dirittu";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "d0T-QG-WXU"; */
+"d0T-QG-WXU.title" = "Cunfina di risuluzione :";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "Ddg-4D-el9"; */
+"Ddg-4D-el9.ibExternalAccessibilityDescription" = "Rifilà à diritta";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "DN4-KZ-LRc"; */
+"DN4-KZ-LRc.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "dnG-b9-LQR"; */
+"dnG-b9-LQR.title" = "1:1";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "E5O-kn-GYm"; */
+"E5O-kn-GYm.ibExternalAccessibilityDescription" = "ceaa80fca5ba3e8646366fa50fbb4322_tr";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Display height"; ObjectID = "eEF-b3-4o9"; */
+"eEF-b3-4o9.ibExternalAccessibilityDescription" = "Altezza d’affissera";
+
+/* Class = "NSMenuItem"; title = "Black"; ObjectID = "EM5-tR-x3U"; */
+"EM5-tR-x3U.title" = "Neru";
+
+/* Class = "NSButtonCell"; title = "Automatic"; ObjectID = "eOi-50-jLK"; */
+"eOi-50-jLK.title" = "Autumaticu";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "ePc-i4-vPZ"; */
+"ePc-i4-vPZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSButtonCell"; title = "Horizontal"; ObjectID = "EqJ-eR-Fz7"; */
+"EqJ-eR-Fz7.title" = "Orizuntale";
+
+/* Class = "NSTextFieldCell"; title = "Flipping:"; ObjectID = "ewx-pd-ANc"; */
+"ewx-pd-ANc.title" = "Rivultamentu :";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "f12-Dh-fDw"; */
+"f12-Dh-fDw.title" = "Persunalizatu";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "fau-iA-M1E"; */
+"fau-iA-M1E.title" = "Nisunu";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments"; ObjectID = "ffe-SL-kPm"; */
+"ffe-SL-kPm.ibShadowedToolTip" = "Girà a fiura di 90 gradi in u sensu di e sfiere d’arilogiu";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum height"; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibExternalAccessibilityDescription" = "Altezza massima";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum height that the video will be stored at."; ObjectID = "FGm-oJ-FVW"; */
+"FGm-oJ-FVW.ibShadowedToolTip" = "L’altezza massima cù quella a video serà arregistrata.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use highest resolution permitted by above settings"; ObjectID = "fjj-ZH-nqb"; */
+"fjj-ZH-nqb.ibShadowedToolTip" = "Impiegà a risuluzione a più alta permessa da e preferenze insù";
+
+/* Class = "NSMenuItem"; title = "White"; ObjectID = "fQM-vV-sUg"; */
+"fQM-vV-sUg.title" = "Biancu";
+
+/* Class = "NSButtonCell"; title = "Optimal Size"; ObjectID = "FUA-5p-imC"; */
+"FUA-5p-imC.title" = "Dimensione ottimale";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "FwZ-6T-zJe"; */
+"FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Larghezza di l’allucamentu";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "gWL-mx-RIK"; */
+"gWL-mx-RIK.title" = "Nisunu";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Storage Height"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Altezza di l’allucamentu";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Video scaled height. This is the number of pixels tall to be encoded. Scaled height may differ from display height depending on anamorphic settings and fill settings"; ObjectID = "Hkl-7Z-J2e"; */
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Altezza di cambiamentu di scala di a video. Ghjè l’altezza à cudificà in numeru di pixel. L’altezza di cambiamentu di scala pò esse sfarente di quella di l’affissera secondu à e preferenze anamorfiche è quelle di u riempiimentu";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
+"hN1-S9-zl8.title" = "x";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "hTi-U4-PGY"; */
+"hTi-U4-PGY.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "Fill:"; ObjectID = "iqM-GW-fCe"; */
+"iqM-GW-fCe.title" = "Riempiimentu :";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Storage Width"; ObjectID = "iuc-JG-bhU"; */
+"iuc-JG-bhU.ibExternalAccessibilityDescription" = "Larghezza di l’allucamentu";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "iZc-Ks-efB"; */
+"iZc-Ks-efB.ibExternalAccessibilityDescription" = "Imbuttisce à manca";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Display width"; ObjectID = "jru-UG-Rf6"; */
+"jru-UG-Rf6.ibExternalAccessibilityDescription" = "Larghezza d’affissera";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "JyN-AK-Hae"; */
+"JyN-AK-Hae.title" = "Autumaticu";
+
+/* Class = "NSMenuItem"; title = "Gray"; ObjectID = "K6n-ea-Zty"; */
+"K6n-ea-Zty.title" = "Grisgiu";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
+"kOg-k4-0N2.title" = "Dimensione d’allucamentu :";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "krD-da-wuz"; */
+"krD-da-wuz.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad left"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibExternalAccessibilityDescription" = "Imbuttisce à manca";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge border amount in pixels"; ObjectID = "l2V-GK-BgU"; */
+"l2V-GK-BgU.ibShadowedToolTip" = "Quantità in pixel d’imburrera di u bordu mancu";
+
+/* Class = "NSTextFieldCell"; title = "Scaled Size:"; ObjectID = "L7V-2e-qf9"; */
+"L7V-2e-qf9.title" = "Dimensione à a scala :";
+
+/* Class = "NSTextFieldCell"; title = "1:1"; ObjectID = "lIt-eN-Uyd"; */
+"lIt-eN-Uyd.title" = "1:1";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "LQm-LK-6tr"; */
+"LQm-LK-6tr.title" = "Persunalizatu";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibExternalAccessibilityDescription" = "Rifilà à manca";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels"; ObjectID = "LTu-ic-Ty9"; */
+"LTu-ic-Ty9.ibShadowedToolTip" = "Quantità in pixel di rifilatura di u bordu superiore";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Numerator"; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibExternalAccessibilityDescription" = "Numeratore d’aspetu di pixel";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "LWv-Y9-b0S"; */
+"LWv-Y9-b0S.ibShadowedToolTip" = "U furmatu pixel definisce a forma, a larghezza è l’altezza di i punti elementarii d’una fiura (pixel).\n\nUn raportu 1:1 definisce un pixel quadratu. D’altri valori definiscenu forme rettangulare.\nI lettori cambieranu e dimensioni di a fiura per currisponde à l’aspettu specificatu.";
+
+/* Class = "NSTextFieldCell"; title = "Aspect Ratio:"; ObjectID = "Lz1-Cx-d30"; */
+"Lz1-Cx-d30.title" = "Prupurzioni :";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Mke-9L-LvB"; */
+"Mke-9L-LvB.ibExternalAccessibilityDescription" = "Rifilà insù";
+
+/* Class = "NSMenuItem"; title = "Width & Height"; ObjectID = "N5d-nG-TZV"; */
+"N5d-nG-TZV.title" = "Larghezza è altezza";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pixel Aspect Denominator"; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibExternalAccessibilityDescription" = "Dinuminatore d’aspetu di pixel";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Pixel aspect defines the shape of the pixels.\n\nA 1:1 ratio defines a square pixel. Other values define rectangulars shapers.\nPlayers will scale the image in order to achieve the specified aspect."; ObjectID = "nQe-Vq-Og2"; */
+"nQe-Vq-Og2.ibShadowedToolTip" = "U furmatu pixel definisce a forma, a larghezza è l’altezza di i punti elementarii d’una fiura (pixel).\n\nUn raportu 1:1 definisce un pixel quadratu. D’altri valori definiscenu forme rettangulare.\nI lettori cambieranu e dimensioni di a fiura per currisponde à l’aspettu specificatu.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Maximum width"; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibExternalAccessibilityDescription" = "Larghezza massima";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "The maximum width that the video will be stored at."; ObjectID = "NRy-vc-8qX"; */
+"NRy-vc-8qX.ibShadowedToolTip" = "A larghezza massima cù quella a video serà arregistrata.";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "ob5-QF-mOC"; */
+"ob5-QF-mOC.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "OCX-n7-THw"; */
+"OCX-n7-THw.title" = "Culore :";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "owa-gb-koC"; */
+"owa-gb-koC.title" = "Persunalizatu";
+
+/* Class = "NSMenuItem"; title = "Height (Letterbox)"; ObjectID = "p7U-Ee-kt4"; */
+"p7U-Ee-kt4.title" = "Altezza (Letterbox)";
+
+/* Class = "NSMenuItem"; title = "Dark Gray"; ObjectID = "pWs-NL-FVO"; */
+"pWs-NL-FVO.title" = "Grisgiu scuru";
+
+/* Class = "NSMenuItem"; title = "0°"; ObjectID = "qsi-r7-kNQ"; */
+"qsi-r7-kNQ.title" = "0°";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "QSp-61-LWu"; */
+"QSp-61-LWu.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qSV-uB-Iup"; */
+"qSV-uB-Iup.title" = "Altre viste";
+
+/* Class = "NSMenuItem"; title = "1080p HD"; ObjectID = "qzy-K8-2tY"; */
+"qzy-K8-2tY.title" = "1080p HD";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "r9l-cH-pFW"; */
+"r9l-cH-pFW.ibExternalAccessibilityDescription" = "Rifilà à manca";
+
+/* Class = "NSButton"; ibShadowedToolTip = "If not enabled, scaled dimensions will be limited to source dimensions"; ObjectID = "ROS-UT-TiG"; */
+"ROS-UT-TiG.ibShadowedToolTip" = "S’è l’ozzione hè disattivata, e dimensioni à a scala seranu cunfinate à quelle di a fonte";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sg1-tR-fnw"; */
+"sg1-tR-fnw.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "-"; ObjectID = "SGn-b9-JVZ"; */
+"SGn-b9-JVZ.ibShadowedIsNilPlaceholder" = "-";
+
+/* Class = "NSTextFieldCell"; title = "Pixel Aspect:"; ObjectID = "SPg-s0-Oh0"; */
+"SPg-s0-Oh0.title" = "Aspettu di fiura (pixel) :";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "sut-JO-hwX"; */
+"sut-JO-hwX.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Changing the displays size will stretch the video"; ObjectID = "tHu-FW-tzx"; */
+"tHu-FW-tzx.ibShadowedToolTip" = "U cambiamentu di dimensione di l’affissera stinzerà a video";
+
+/* Class = "NSMenuItem"; title = "270°"; ObjectID = "tIU-4H-3Xm"; */
+"tIU-4H-3Xm.title" = "270°";
+
+/* Class = "NSTextFieldCell"; title = "Source Dimensions"; ObjectID = "Trk-C5-Npx"; */
+"Trk-C5-Npx.title" = "Dimensioni di a fonte";
+
+/* Class = "NSTextFieldCell"; title = "Orientation & Cropping"; ObjectID = "u2U-SJ-szy"; */
+"u2U-SJ-szy.title" = "Orientazione è inquadratura";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad right"; ObjectID = "uoH-Hv-lNp"; */
+"uoH-Hv-lNp.ibExternalAccessibilityDescription" = "Imbuttisce à diritta";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
+"uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
+
+/* Class = "NSTextFieldCell"; title = ":"; ObjectID = "uuL-JR-73C"; */
+"uuL-JR-73C.title" = ":";
+
+/* Class = "NSTextFieldCell"; title = "Final Dimensions"; ObjectID = "Ux1-Pc-XSD"; */
+"Ux1-Pc-XSD.title" = "Dimensioni finale";
+
+/* Class = "NSMenuItem"; title = "90°"; ObjectID = "V1G-sQ-eqd"; */
+"V1G-sQ-eqd.title" = "90°";
+
+/* Class = "NSTextFieldCell"; title = "Rotation:"; ObjectID = "vb2-DA-Pgr"; */
+"vb2-DA-Pgr.title" = "Rotazione :";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "How to apply crop settings"; ObjectID = "vfx-ON-9ys"; */
+"vfx-ON-9ys.ibShadowedToolTip" = "Cumu appiecà e preferenze di rifilatura";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Add a border around the video"; ObjectID = "vKr-fn-Ujh"; */
+"vKr-fn-Ujh.ibShadowedToolTip" = "Aghjunghje un bordu à u giru di a video";
+
+/* Class = "NSMenuItem"; title = "4320p 8K Ultra HD"; ObjectID = "Vrx-BH-ry2"; */
+"Vrx-BH-ry2.title" = "4320p 8K Ultra HD";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "vzz-ej-1nx"; */
+"vzz-ej-1nx.title" = "Persunalizatu";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.\n\nAutomatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.\n\nNone disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.\n\nCustom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production."; ObjectID = "w1f-3S-up0"; */
+"w1f-3S-up0.ibShadowedToolTip" = "« Anamorficu » permette dimensioni arbitrarie d’allucamentu tuttu preservendu l’aspettu d’origine durante a ripruduzzione.\n\n- « Automatic » megliureghja a risuluzione d’allucamentu tuttu preservendu e prupurzioni d’affissera d’origine. Ricumandatu.\n\n- « None » disattiveghja « Anamorficu ». E dimensioni d’allucamentu di a video è quelle di l’affissera seranu uguale. Solu ghjuvevule per a cumpatibilità cù certi apparechji anziani.\n\n- « Custom » permette di definisce dapervoi tutte e preferenze. Ghjuvevule per currege un aspettu incurrettu d’affissera di a fonte è per i prufessiunali chì anu bisognu d’un cuntrollu espertu in post-pruduzzione.";
+
+/* Class = "NSMenuItem"; title = "Width (Pillarbox)"; ObjectID = "W5p-nd-4WK"; */
+"W5p-nd-4WK.title" = "Larghezza (Pillarbox)";
+
+/* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "WBD-tH-x3h"; */
+"WBD-tH-x3h.title" = "Dimensione d’affissera :";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibExternalAccessibilityDescription" = "Imbuttisce inghjò";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge border amount in pixels"; ObjectID = "WfM-tx-rC5"; */
+"WfM-tx-rC5.ibShadowedToolTip" = "Quantità in pixel d’imburrera di u bordu inferiore";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibExternalAccessibilityDescription" = "Rifilà à diritta";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels"; ObjectID = "wsq-TS-cC6"; */
+"wsq-TS-cC6.ibShadowedToolTip" = "Quantità in pixel di rifilatura di u bordu dirittu";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "0"; ObjectID = "x0H-9t-WiF"; */
+"x0H-9t-WiF.ibShadowedIsNilPlaceholder" = "0";
+
+/* Class = "NSMenuItem"; title = "720p HD"; ObjectID = "Xao-1P-xPT"; */
+"Xao-1P-xPT.title" = "720p HD";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis"; ObjectID = "xNB-9k-4uD"; */
+"xNB-9k-4uD.ibShadowedToolTip" = "Invertisce a fiura (cum’è un spechju) secondu à l’asse orizuntale";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "Xun-U2-N6F"; */
+"Xun-U2-N6F.title" = "Persunalizatu";
+
+/* Class = "NSMenuItem"; title = "576p PAL SD"; ObjectID = "yue-jq-T1X"; */
+"yue-jq-T1X.title" = "576p PAL SD";
+
+/* Class = "NSTextFieldCell"; title = "Borders"; ObjectID = "ywF-EG-IYr"; */
+"ywF-EG-IYr.title" = "Bordi";
+
+/* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "zsq-Le-41g"; */
+"zsq-Le-41g.title" = "Inquadratura :";
+
+/* Class = "NSTextFieldCell"; title = "0 x 0"; ObjectID = "ZTy-fJ-cDa"; */
+"ZTy-fJ-cDa.title" = "0 x 0";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Pad bottom"; ObjectID = "zVm-0W-Jxg"; */
+"zVm-0W-Jxg.ibExternalAccessibilityDescription" = "Imbuttisce inghjò";
+
+/* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "ZZ9-XW-Uib"; */
+"ZZ9-XW-Uib.title" = "Dimensione d’allucamentu :";
+

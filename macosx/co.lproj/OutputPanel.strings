@@ -1,0 +1,21 @@
+/* Class = "NSWindow"; title = "Activity"; ObjectID = "5"; */
+"5.title" = "Attività";
+
+/* Class = "NSMenu"; title = "Menu"; ObjectID = "11"; */
+"11.title" = "Listinu";
+
+/* Class = "NSMenuItem"; title = "Clear Window Contents"; ObjectID = "12"; */
+"12.title" = "Squassà u cuntenutu di a finestra";
+
+/* Class = "NSMenuItem"; title = "Copy Window Contents"; ObjectID = "24"; */
+"24.title" = "Cupià u cuntenutu di a finestra";
+
+/* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
+"33.title" = "Apre u ghjurnale d¹attività in l’appiecazione predefinita";
+
+/* Class = "NSMenuItem"; title = "Clear Activity Log For This Session"; ObjectID = "35"; */
+"35.title" = "Viutà u ghjurnale d¹attività  per sta sessione";
+
+/* Class = "NSMenuItem"; title = "Open Activity Logs Directory In Finder"; ObjectID = "43"; */
+"43.title" = "Apre u cartulare di i ghjurnali d¹attività in u Finder";
+

@@ -1,0 +1,415 @@
+/* Video description */
+" - fastdecode" = " - discudificazione rapida";
+
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, mez. %2$.2f fps, tras. %3$@)";
+
+/* HBStateFormatter -> search time format
+   HBStateFormatter -> work time format */
+" (ETA %@)" = " (trascorsu %@)";
+
+/* HBJob -> video short description framerate */
+" FPS CFR" = " FPS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = " FPS PFR";
+
+/* Title short description -> audio format */
+", %d audio tracks" = ", %d traccie audio";
+
+/* Title short description -> subtitles format */
+", %d subtitles tracks" = ", %d traccie di sottutituli";
+
+/* Title short description -> audio format */
+", 1 audio track" = ", 1 traccia audio";
+
+/* Title short description -> subtitles format */
+", 1 subtitles track" = ", 1 traccia di sottutituli";
+
+/* Format description */
+", Align A/V Start" = ", Alineà u principiu di l’audio/video";
+
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", Bordu : %1$d/%2$d/%3$d/%4$d";
+
+/* HBJob -> subtitles short description */
+", Burned" = ", Intarsiatu";
+
+/* Format description */
+", Chapter Markers" = ", Marcatori di capitulu";
+
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", Runzicatura : %1$@ %2$d/%3$d/%4$d/%5$d";
+
+/* Format description */
+", iPod 5G Support" = ", Ghjestione di l’iPod 5G";
+
+/* Format description */
+", Web Optimized" = ", Megliuratu per u Web";
+
+/* HBStateFormatter -> work pass type format */
+"(subtitle scan)" = "(esplurazione di i sottutituli)";
+
+/* Title short description -> video format */
+"%.6g FPS" = "%.6g FPS";
+
+/* Audio description */
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Cudificatore : %2$@";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d" = "%1$@Esciuta : %2$dx%3$d";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Esciuta : %2$dx%3$d, Anamorficu : %4$dx%5$d Autumaticu";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Esciuta : %2$dx%3$d, Anamorficu : %4$dx%5$d Persunalizatu";
+
+/* HBPicture -> short info */
+"%dx%d Storage, %dx%d Display" = "%1$dx%2$d Allucamentu, %3$dx%4$d Affissera";
+
+/* HBJob -> audio short description */
+"+ %lu additional audio tracks" = "+ %lu traccie audio addiziunale";
+
+/* HBJob -> subtitles short description */
+"+ %lu additional subtitles tracks" = "+ %lu traccie di sottutituli addiziunale";
+
+/* HBJob -> audio short description */
+"+ 1 additional audio track" = "+ 1 traccia audio addiziunale";
+
+/* HBJob -> subtitles short description */
+"+ 1 additional subtitles track" = "+ 1 traccia di sottutituli addiziunale";
+
+/* Title description */
+"1 Foreign Language Search Pass - " = "1 passu di ricerca di lingua straniera - ";
+
+/* Title description */
+"2 Video Passes" = "2 passi video";
+
+/* Title description */
+"2 Video Passes First Turbo" = "2 passi video, u primu in modu Turbo";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "Canali 5.1";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "Canali 6.1";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "Canali 7.1";
+
+/* Audio description */
+"Audio:" = "Audio :";
+
+/* HBPicture -> summary */
+"Automatic" = "Autumaticu";
+
+/* Video description */
+"Bitrate: %d kbps" = "Ghjettu binariu : %d kbps";
+
+/* Subtitles description */
+"Burned In" = "Intarsiati";
+
+/* Title -> chapter name
+   Title description */
+"Chapter %d" = "Capitulu %d";
+
+/* HBJob -> chapters short description */
+"Chapter Markers" = "Marcatori di capitulu";
+
+/* HBRange -> display name */
+"Chapters" = "Capituli";
+
+/* Title description */
+"Chapters %d through %d" = "Capituli da %1$d fin’à %2$d";
+
+/* Filters description
+   HBJob -> filters short description */
+"Chroma Smooth" = "Allisciata cromatica";
+
+/* Filters description
+   HBJob -> filters short description */
+"Colorspace" = "Spaziu culorimetricu";
+
+/* HBJob -> filters short description */
+"Comb Detect" = "Abbentata di pettinera";
+
+/* Video description */
+"Constant Quality: %.2f %s" = "Qualità custente : %1$.2f %2$s";
+
+/* HBJob -> video short description framerate */
+"CRF" = "CRF";
+
+/* HBFilters -> custom display name
+   HBPicture -> summary */
+"Custom" = "Persunalizatu";
+
+/* Filters description
+   HBJob -> filters short description */
+"Deblock" = "Sblucchime";
+
+/* HBFilters -> filter display name */
+"Decomb" = "Dipettinera";
+
+/* Subtitles description */
+"Default" = "Predefinitu";
+
+/* Video description */
+"default settings" = "preferenze predefinite";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "Predefinizione : ";
+
+/* Filters description */
+"Denoise" = "Riduzzione di trostu";
+
+/* Destination description */
+"Destination:" = "Destinazione :";
+
+/* Dimensions description
+   HBJob -> filters short description */
+"Detelecine" = "Detelesinema";
+
+/* Dimensions description */
+"Dimensions:" = "Dimensioni :";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "DRC : %.2f";
+
+/* Video description */
+"Encoder: %@, " = "Cudificatore : %@, ";
+
+/* HBStateFormatter -> work pass display name */
+"Encoding %@ " = "Cudificazione %@ ";
+
+/* Filters description */
+"Filters:" = "Filtri :";
+
+/* Subtitles description */
+"Forced Only" = "Sfurzatu solu";
+
+/* HBSubtitles -> search pass name */
+"Foreign Audio Search" = "Ricerca di traccia audio straniera";
+
+/* Format description */
+"Format:" = "Furmatu :";
+
+/* Video description */
+"Framerate: " = "Frequenza di fiure : ";
+
+/* HBRange -> display name */
+"Frames" = "Fiure";
+
+/* Title description */
+"Frames %d through %d" = "Fiure da %1$d fin’à %2$d";
+
+/* Audio description */
+"Gain: %.2f" = "Guadagnu : %.2f";
+
+/* Filters description
+   HBJob -> filters short description */
+"Grayscale" = "Scala di grisgiu";
+
+/* HBFilters -> filter display name */
+"HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "Preferenze persunalizate d’allisciata cromatica inaccettevule.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "Preferenze persunalizate di spaziu culorimetricu inaccettevule.";
+
+/* HBFilters -> invalid comb detect custom string description */
+"Invalid custom comb detect settings." = "Preferenze persunalizate di pettinera inaccettevule.";
+
+/* HBFilters -> invalid detelecine custom string description */
+"Invalid custom detelecine settings." = "Preferenze persunalizate di detelesinema inaccettevule.";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom HQDN3D settings" = "Preferenze persunalizate HQDN3D inaccettevule";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom NLMeans settings" = "Preferenze persunalizate NLMeans inaccettevule";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Preferenze persunalizate di sblucchime inaccettevule.";
+
+/* HBFilters -> invalid Decomb custom string description */
+"Invalid Decomb custom settings." = "Preferenze persunalizate di dipettinera inaccettevule.";
+
+/* HBFilters -> invalid lapsharp custom string description */
+"Invalid lapsharp custom settings." = "Preferenze persunalizate lapsharp inaccettevule.";
+
+/* HBJob -> invalid name error description */
+"Invalid name" = "Nome inaccettevule";
+
+/* HBFilters -> invalid unsharp custom string description */
+"Invalid unsharp custom settings." = "Preferenze persunalizate unsharp inaccettevule.";
+
+/* HBFilters -> invalid Yadif custom string description */
+"Invalid Yadif custom settings." = "Preferenze persunalizate Yadif inaccettevule.";
+
+/* HBFilters -> filter display name */
+"Lapsharp" = "Lapsharp";
+
+/* Video description */
+"Level: %@" = "Livellu : %@";
+
+/* Audio description */
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mischiera : %1$@, Frequenza di campiunariu : %2$@, Ghjettu binariu : %3$d kbps";
+
+/* HBAudio -> Mixdown */
+"Mono" = "Mono";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "Mono (Solu à manca)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "Mono (Solu à diritta)";
+
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "Mischiu multiple…";
+
+/* HBFilters -> filter display name */
+"NLMeans" = "NLMeans";
+
+/* HBVideo -> tune */
+"none" = "nisunu";
+
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
+   HBJob -> filters short description
+   HBSubtitles -> none track name */
+"None" = "Nisunu";
+
+/* HBFilters -> filter display name
+   HBFilters -> off display name */
+"Off" = "Fermata";
+
+/* Video description */
+"Options: %@" = "Ozzioni : %@";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d %@ of %d, %.2f %%" = "Passi %1$d %2$@ nant’à %3$d, %4$.2f %%";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d of %d, %.2f %%" = "Passi %1$d nant’à %2$d, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "Passu 1";
+
+/* HBStateFormatter -> pass display name */
+"Paused" = "In pausa";
+
+/* Video description */
+"Peak %@ (constant frame rate)" = "Cresta %@ (frequenza di fiure custente)";
+
+/* Video description */
+"Peak %@ (may be lower)" = "Cresta %@ (pò esse inferiore)";
+
+/* Preset description */
+"Preset:" = "Prerigatura :";
+
+/* Video description */
+"Preset: %@" = "Prerigatura : %@";
+
+/* Video description */
+"Profile: %@" = "Prufilu : %@";
+
+/* Range description */
+"Range:" = "Stesa :";
+
+/* HBVideo -> frame rates display name */
+"Same as source" = "Listessa chì a fonte";
+
+/* Video description */
+"Same as source (constant)" = "Listessa chì a fonte (custente)";
+
+/* Video description */
+"Same as source (variable)" = "Listessa chì a fonte (variabile)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "Esplurazione di u titulu %1$d nant’à %2$d apprezzazione %3$d…";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "Esplurazione di u titulu %1$d nant’à %2$d…";
+
+/* HBStateFormatter -> search pass display name */
+"Searching for start point:  %.2f %%" = "Ricerca di u puntu di principiu : %.2f %%";
+
+/* HBRange -> display name */
+"Seconds" = "Seconde";
+
+/* Title description */
+"Seconds %d through %d" = "Seconde %1$d fin’à %2$d";
+
+/* Filters description */
+"Sharpen" = "Arrutà";
+
+/* Source description */
+"Source:" = "Fonte :";
+
+/* HBPicture -> short info */
+"Source: %dx%d, " = "Fonte : %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "Stereo";
+
+/* Subtitles description */
+"Subtitles:" = "Sottutituli :";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "Sintassa : ";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "U nome di schedariu ùn pò micca esse viotu.";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "U nome di schedariu ùn pò micca cuntene u caratteru « / ».";
+
+/* Preset -> import error description */
+"The preset \"%@\" could not be imported." = "A prerigatura « %@ » ùn pò micca esse impurtata.";
+
+/* Preset -> import error reason */
+"The selected preset is invalid." = "A prerigatura selezziunata ùn hè micca accettevule.";
+
+/* Preset -> import error reason */
+"The selected preset was created with a newer version of HandBrake." = "A prerigatura selezziunata hè stata creata da una versione più recente d’HandBrake.";
+
+/* Title description */
+"Title %d, %@" = "Titulu %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "Titulu %1$d, %2$@, %3$@";
+
+/* Video description */
+"Tune: " = "Rigatura : ";
+
+/* HBJob -> video short description encoder name
+   Video description */
+"Unknown" = "Scunnisciutu";
+
+/* HBFilters -> filter display name */
+"Unsharp" = "Unsharp";
+
+/* HBJob -> video short description framerate */
+"VFR" = "VFR";
+
+/* Video description */
+"Video Options:" = "Ozzioni video :";
+
+/* Video description */
+"Video:" = "Video :";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
+
