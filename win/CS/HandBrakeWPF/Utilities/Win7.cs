@@ -31,17 +31,6 @@ namespace HandBrakeWPF.Utilities
         }
 
         /// <summary>
-        /// Gets a value indicating whether is windows seven.
-        /// </summary>
-        public bool IsWindowsSeven
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
         /// The get task bar.
         /// </summary>
         /// <returns>
@@ -74,7 +63,10 @@ namespace HandBrakeWPF.Utilities
         /// </summary>
         public void SetTaskBarProgressToNoProgress()
         {
-            Caliburn.Micro.Execute.OnUIThread(() => WindowsTaskbar.ProgressState = TaskbarItemProgressState.None);
+            if (WindowsTaskbar.ProgressState != TaskbarItemProgressState.None)
+            {
+                Caliburn.Micro.Execute.OnUIThread(() => WindowsTaskbar.ProgressState = TaskbarItemProgressState.None);
+            }
         }
     }
 }

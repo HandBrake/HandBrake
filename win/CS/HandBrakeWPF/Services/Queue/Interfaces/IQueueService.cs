@@ -229,5 +229,11 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         List<QueueProgressStatus> GetQueueProgressStatus();
 
         List<string> GetActiveJobDestinationDirectories();
+
+
+        /// <summary>
+        /// Queue up a breakpoint task type.
+        /// </summary>
+        void AddBreakPoint();
     }
 }

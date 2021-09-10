@@ -195,86 +195,122 @@
 
                     <ListBox.ItemTemplate>
                         <DataTemplate x:Name="QueueItemTemplate">
-
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                                <!--  Marker  -->
-                                <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True">
-
-                                    <Image.LayoutTransform>
-                                        <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
-                                    </Image.LayoutTransform>
-
-                                    <Image.Style>
-                                        <Style TargetType="{x:Type Image}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                                    <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
-                                                    <Setter Property="Source" Value="Images/Working0.png" />
-                                                    <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <DoubleAnimation Duration="0:0:2" To="180" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)" RepeatBehavior="Forever" />
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                    <DataTrigger.ExitActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)"/>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.ExitActions>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
-                                                    <Setter Property="Source" Value="Images/Complete.png" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
-                                                    <Setter Property="Source" Value="Images/WarningSmall.png" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Paused">
-                                                    <Setter Property="Source" Value="Images/pause_small.png" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Image.Style>
-                                </Image>
-
-                                <!--  Settings  -->
-                                <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-
+                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
+                                    <!--  Marker  -->
+                                    <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True">
+
+                                        <Image.LayoutTransform>
+                                            <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                                        </Image.LayoutTransform>
+
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
+                                                        <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
+                                                        <Setter Property="Source" Value="Images/Working0.png" />
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0:0:2" To="180" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)" RepeatBehavior="Forever" />
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <DataTrigger.ExitActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.ExitActions>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
+                                                        <Setter Property="Source" Value="Images/Complete.png" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
+                                                        <Setter Property="Source" Value="Images/WarningSmall.png" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Paused">
+                                                        <Setter Property="Source" Value="Images/pause_small.png" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+
+                                    <!--  Settings  -->
+                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"
                                                    TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"   />
 
-                                        <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
+                                            <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding JobProgress.ProgressValue}" IsIndeterminate="{Binding JobProgress.IntermediateProgress}"
                                                      Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
-                                    </StackPanel>
+                                        </StackPanel>
 
-                                    <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                        <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
                                             AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
-                                        <Button.Template>
-                                            <ControlTemplate>
-                                                <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid Visibility="{Binding IsBreakpointTask, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--  Marker  -->
+                                    <Image Source="Images/stop.png" Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" />
+
+                                    <!--  Settings  -->
+                                    <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center" MinHeight="27">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="Stop" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" />
+
+                                        <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                            AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+                                    
                                 </Grid>
                             </Grid>
                         </DataTemplate>

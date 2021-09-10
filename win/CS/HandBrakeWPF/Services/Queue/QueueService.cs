@@ -358,11 +358,12 @@ namespace HandBrakeWPF.Services.Queue
             if (this.queue.Count > 0)
             {
                 QueueTask task = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
-                if (task != null)
+                if (task != null && task.TaskType == QueueTaskType.EncodeTask)
                 {
                     task.TaskToken = this.hardwareResourceManager.GetToken(task.Task);
-                    return task;
                 }
+
+                return task;
             }
 
             return null;
@@ -443,7 +444,7 @@ namespace HandBrakeWPF.Services.Queue
                     {
                         foreach (QueueTask item in list)
                         {
-                            if (item.Status != QueueItemStatus.Completed)
+                            if (item.Status != QueueItemStatus.Completed && item.TaskType != QueueTaskType.Breakpoint)
                             {
                                 // Reset InProgress/Error to Waiting so it can be processed
                                 if (item.Status == QueueItemStatus.InProgress || item.Status == QueueItemStatus.Paused)
@@ -521,17 +522,24 @@ namespace HandBrakeWPF.Services.Queue
                         job.Stop();
                     }
                 }
+
+                this.IsProcessing = false;
+                this.IsPaused = false;
+
+                this.StopJobPolling();
+
+                if (this.activeJobs.Count == 0)
+                {
+                    this.InvokeQueueChanged(EventArgs.Empty);
+                    this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
+                }
             }
-
-            this.IsProcessing = false;
-            this.IsPaused = false;
-
-            this.StopJobPolling();
-
-            if (stopExistingJobs || this.activeJobs.Count == 0)
+            else
             {
-                this.InvokeQueueChanged(EventArgs.Empty);
-                this.InvokeQueueCompleted(new QueueCompletedEventArgs(true));
+                if (!this.QueueContainsStop())
+                {
+                    this.AddBreakPoint();
+                }
             }
         }
 
@@ -557,6 +565,27 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             return directories;
+        }
+
+        public void AddBreakPoint()
+        {
+            lock (QueueLock)
+            {
+                int foundIndex = -1;
+
+                QueueTask firstWaitingJob = this.queue.FirstOrDefault(t => t.Status == QueueItemStatus.Waiting);
+                if (firstWaitingJob != null)
+                {
+                    foundIndex = this.queue.IndexOf(firstWaitingJob);
+                }
+
+                if (foundIndex != -1)
+                {
+                    this.queue.Insert(foundIndex, new QueueTask(QueueTaskType.Breakpoint));
+                }
+
+                this.IsProcessing = false;
+            }
         }
 
         private void InvokeJobProcessingStarted(QueueProgressEventArgs e)
@@ -587,10 +616,9 @@ namespace HandBrakeWPF.Services.Queue
             this.StopJobPolling();
             this.CheckAndHandleWork(); // Kick the first job off right away.
 
+            // Reset the timer.
             this.queueTaskPoller = new Timer();
-
-            this.queueTaskPoller.Interval = this.allowedInstances > 1 ? 3500 : 1000;
-
+            this.queueTaskPoller.Interval = this.allowedInstances > 1 ? 2000 : 1000;
             this.queueTaskPoller.Elapsed += (o, e) => { CheckAndHandleWork(); };
             this.queueTaskPoller.Start();
         }
@@ -624,6 +652,12 @@ namespace HandBrakeWPF.Services.Queue
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {
+                if (job.IsBreakpointTask)
+                {
+                    this.HandleBreakPoint(job);
+                    return;
+                }
+                
                 // Hardware encoders can typically only have 1 or two instances running at any given time. As such, we must have a  HardwareResourceToken to continue.
                 if (job.TaskToken == Guid.Empty)
                 {
@@ -643,8 +677,12 @@ namespace HandBrakeWPF.Services.Queue
                 this.activeJobs.Add(activeJob);
                 
                 activeJob.Start();
-                
-                this.IsProcessing = true;
+
+                if (!this.QueueContainsStop())
+                {
+                    this.IsProcessing = true;
+                }
+
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.BackupQueue(string.Empty);
@@ -728,6 +766,33 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             return false;
+        }
+
+        private void HandleBreakPoint(QueueTask task)
+        {
+            lock (QueueLock)
+            {
+                if (this.activeJobs.Count != 0)
+                {
+                    return; // Wait for jobs to finish!
+                }
+
+                this.StopJobPolling();
+
+                // Remove the Breakpoint
+                Execute.OnUIThread(() => this.queue.Remove(task));
+
+                this.IsProcessing = false;
+                this.IsPaused = false;
+
+                // Setting the flag will allow or prevent the when done actions to be processed. 
+                this.InvokeQueueCompleted(new QueueCompletedEventArgs(false)); 
+            }
+        }
+
+        private bool QueueContainsStop()
+        {
+            return this.queue.Any(t => t.TaskType == QueueTaskType.Breakpoint);
         }
     }
 }

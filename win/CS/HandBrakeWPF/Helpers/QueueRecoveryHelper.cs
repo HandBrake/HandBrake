@@ -63,7 +63,6 @@ namespace HandBrakeWPF.Helpers
                 List<string> removeFiles = new List<string>();
                 List<string> acceptedFiles = new List<string>();
 
-
                 foreach (string file in queueFiles)
                 {
                     try

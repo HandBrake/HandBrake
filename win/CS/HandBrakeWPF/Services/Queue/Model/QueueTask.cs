@@ -37,6 +37,14 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.JobProgress = new QueueProgressStatus();
         }
 
+        public QueueTask(QueueTaskType type)
+        {
+            this.TaskType = type;
+            id = id + 1;
+            this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
+            this.NotifyOfPropertyChange(() => this.IsBreakpointTask);
+        }
+
         public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath, Preset currentPreset, bool isPresetModified, Title selectedTitle)
         {
             this.SourceTitleInfo = selectedTitle;
@@ -59,12 +67,21 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.Statistics = new QueueStats();
             this.TaskId = Guid.NewGuid().ToString();
             this.JobProgress = new QueueProgressStatus();
+            this.TaskType = QueueTaskType.EncodeTask;
         }
+        
+        [JsonIgnore]
+        public string Id { get; }
 
         public string TaskId { get; set; }
 
-        [JsonIgnore]
-        public string Id { get; }
+        public QueueTaskType TaskType { get; set; }
+
+        /* Breakpoint Task */
+
+        public bool IsBreakpointTask => TaskType == QueueTaskType.Breakpoint;
+
+        /* Encode Task*/
 
         public string ScannedSourcePath { get; set; }
 
@@ -103,6 +120,9 @@ namespace HandBrakeWPF.Services.Queue.Model
         [JsonIgnore]
         public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
 
+
+        /* Overrides */
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -118,7 +138,7 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public override string ToString()
         {
-            return string.Format("Encode Task.  Title: {0}, Source: {1}, Destination: {2}", this.Task.Title, this.Task.Source, this.Task.Destination);
+            return string.Format("Encode Task.  Title: {0}, Source: {1}, Destination: {2}", this.Task?.Title, this.Task?.Source, this.Task?.Destination);
         }
 
         protected bool Equals(QueueTask other)
