@@ -1,6 +1,6 @@
 /* format.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2021 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,8 +10,8 @@
 #include "handbrake/common.h"
 #include "handbrake/avfilter_priv.h"
 
-static int format_init(hb_filter_object_t * filter,
-                           hb_filter_init_t * init);
+static int format_init(hb_filter_object_t *filter,
+                           hb_filter_init_t *init);
 
 const char format_template[] =
     "format=^"HB_ALL_REG"$";
@@ -29,9 +29,9 @@ hb_filter_object_t hb_filter_format =
     .settings_template = format_template,
 };
 
-static int format_init(hb_filter_object_t * filter, hb_filter_init_t * init)
+static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 {
-    hb_filter_private_t * pv = NULL;
+    hb_filter_private_t *pv = NULL;
 
     pv = calloc(1, sizeof(struct hb_filter_private_s));
     filter->private_data = pv;
@@ -41,24 +41,19 @@ static int format_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     }
     pv->input = *init;
 
-    hb_dict_t        * settings = filter->settings;
-
-    char * format = NULL;
+    hb_dict_t *settings = filter->settings;
+    char *format = NULL;
 
     hb_dict_extract_string(&format, settings, "format");
 
-    if (!format)
+    if (format == NULL)
     {
         return 0;
     }
 
-    hb_value_array_t * avfilters = hb_value_array_init();
-    hb_dict_t * avfilter   = NULL;
-    hb_dict_t * avsettings = NULL;
-
-    // Format
-    avfilter   = hb_dict_init();
-    avsettings = hb_dict_init();
+    hb_value_array_t *avfilters = hb_value_array_init();
+    hb_dict_t *avfilter   = hb_dict_init();
+    hb_dict_t *avsettings = hb_dict_init();
 
     hb_dict_set_string(avsettings, "pix_fmts", format);
     hb_dict_set(avfilter, "format", avsettings);
