@@ -1,0 +1,326 @@
+From ca2bf257cdb0441a805b161d80453d1d3834fcd0 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Wed, 19 Aug 2020 09:43:12 +0800
+Subject: [PATCH 77/82] qsv: don't support OPAQUE memory when MFX_VERSION >=
+ 2.0
+
+OPAQUE memory isn't supported for MFX_VERSION >= 2.0[1][2], this is in
+preparation for oneVPL support
+
+[1]: https://spec.oneapi.com/versions/latest/elements/oneVPL/source/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
+[2]: https://github.com/oneapi-src/oneVPL
+---
+ libavcodec/qsv.c                 |  4 ++
+ libavcodec/qsv.h                 |  2 +
+ libavcodec/qsv_internal.h        |  2 +
+ libavcodec/qsvdec.c              |  9 ++++
+ libavcodec/qsvenc.c              | 21 +++++++++
+ libavcodec/qsvenc.h              |  2 +
+ libavfilter/qsvvpp.c             | 26 ++++++++++-
+ libavfilter/qsvvpp.h             |  4 ++
+ libavfilter/vf_deinterlace_qsv.c | 56 +++++++++++++-----------
+ libavfilter/vf_scale_qsv.c       | 74 ++++++++++++++++++--------------
+ libavutil/hwcontext_qsv.c        | 56 +++++++++++++++++-------
+ 11 files changed, 182 insertions(+), 74 deletions(-)
+
+diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
+index 3fcb21540403..a53b06b5c4df 100644
+--- a/libavcodec/qsv.c
++++ b/libavcodec/qsv.c
+@@ -102,10 +102,14 @@ static const struct {
+ } qsv_iopatterns[] = {
+     {MFX_IOPATTERN_IN_VIDEO_MEMORY,     "input is video memory surface"         },
+     {MFX_IOPATTERN_IN_SYSTEM_MEMORY,    "input is system memory surface"        },
++#if QSV_HAVE_OPAQUE
+     {MFX_IOPATTERN_IN_OPAQUE_MEMORY,    "input is opaque memory surface"        },
++#endif
+     {MFX_IOPATTERN_OUT_VIDEO_MEMORY,    "output is video memory surface"        },
+     {MFX_IOPATTERN_OUT_SYSTEM_MEMORY,   "output is system memory surface"       },
++#if QSV_HAVE_OPAQUE
+     {MFX_IOPATTERN_OUT_OPAQUE_MEMORY,   "output is opaque memory surface"       },
++#endif
+ };
+ 
+ int ff_qsv_print_iopattern(void *log_ctx, int mfx_iopattern,
+diff --git a/libavcodec/qsv.h b/libavcodec/qsv.h
+index 04ae0d6f3426..c156b08d0737 100644
+--- a/libavcodec/qsv.h
++++ b/libavcodec/qsv.h
+@@ -61,6 +61,8 @@ typedef struct AVQSVContext {
+      * required by the encoder and the user-provided value nb_opaque_surfaces.
+      * The array of the opaque surfaces will be exported to the caller through
+      * the opaque_surfaces field.
++     *
++     * The caller must set this field to zero for oneVPL (MFX_VERSION >= 2.0)
+      */
+     int opaque_alloc;
+ 
+diff --git a/libavcodec/qsv_internal.h b/libavcodec/qsv_internal.h
+index dbef6f8bcda5..7b0ee8cf203b 100644
+--- a/libavcodec/qsv_internal.h
++++ b/libavcodec/qsv_internal.h
+@@ -60,6 +60,8 @@
+     ((MFX_VERSION.Major > (MAJOR)) ||                           \
+     (MFX_VERSION.Major == (MAJOR) && MFX_VERSION.Minor >= (MINOR)))
+ 
++#define QSV_HAVE_OPAQUE  !QSV_VERSION_ATLEAST(2, 0)
++
+ typedef struct QSVMid {
+     AVBufferRef *hw_frames_ref;
+     mfxHDLPair *handle_pair;
+diff --git a/libavcodec/qsvdec.c b/libavcodec/qsvdec.c
+index aeab5179711b..93786c0d77cd 100644
+--- a/libavcodec/qsvdec.c
++++ b/libavcodec/qsvdec.c
+@@ -169,7 +169,11 @@ static int qsv_init_session(AVCodecContext *avctx, QSVContext *q, mfxSession ses
+ 
+         ret = ff_qsv_init_session_frames(avctx, &q->internal_qs.session,
+                                          &q->frames_ctx, q->load_plugins,
++#if QSV_HAVE_OPAQUE
+                                          q->iopattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY,
++#else
++                                         0,
++#endif
+                                          q->gpu_copy);
+         if (ret < 0) {
+             av_buffer_unref(&q->frames_ctx.hw_frames_ctx);
+@@ -253,10 +257,15 @@ static int qsv_decode_preinit(AVCodecContext *avctx, QSVContext *q, enum AVPixel
+         AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
+ 
+         if (!iopattern) {
++#if QSV_HAVE_OPAQUE
+             if (frames_hwctx->frame_type & MFX_MEMTYPE_OPAQUE_FRAME)
+                 iopattern = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+             else if (frames_hwctx->frame_type & MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET)
+                 iopattern = MFX_IOPATTERN_OUT_VIDEO_MEMORY;
++#else
++            if (frames_hwctx->frame_type & MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET)
++                iopattern = MFX_IOPATTERN_OUT_VIDEO_MEMORY;
++#endif
+         }
+     }
+ 
+diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
+index 5d0fa129cab1..0cb0e1e5f138 100644
+--- a/libavcodec/qsvenc.c
++++ b/libavcodec/qsvenc.c
+@@ -1062,6 +1062,7 @@ static int qsv_retrieve_enc_params(AVCodecContext *avctx, QSVEncContext *q)
+     return 0;
+ }
+ 
++#if QSV_HAVE_OPAQUE
+ static int qsv_init_opaque_alloc(AVCodecContext *avctx, QSVEncContext *q)
+ {
+     AVQSVContext *qsv = avctx->hwaccel_context;
+@@ -1098,6 +1099,7 @@ static int qsv_init_opaque_alloc(AVCodecContext *avctx, QSVEncContext *q)
+ 
+     return 0;
+ }
++#endif
+ 
+ static int qsvenc_init_session(AVCodecContext *avctx, QSVEncContext *q)
+ {
+@@ -1113,7 +1115,11 @@ static int qsvenc_init_session(AVCodecContext *avctx, QSVEncContext *q)
+ 
+         ret = ff_qsv_init_session_frames(avctx, &q->internal_qs.session,
+                                          &q->frames_ctx, q->load_plugins,
++#if QSV_HAVE_OPAQUE
+                                          q->param.IOPattern == MFX_IOPATTERN_IN_OPAQUE_MEMORY,
++#else
++                                         0,
++#endif
+                                          MFX_GPUCOPY_OFF);
+         if (ret < 0) {
+             av_buffer_unref(&q->frames_ctx.hw_frames_ctx);
+@@ -1175,11 +1181,17 @@ int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q)
+         AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
+ 
+         if (!iopattern) {
++#if QSV_HAVE_OPAQUE
+             if (frames_hwctx->frame_type & MFX_MEMTYPE_OPAQUE_FRAME)
+                 iopattern = MFX_IOPATTERN_IN_OPAQUE_MEMORY;
+             else if (frames_hwctx->frame_type &
+                      (MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET | MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET))
+                 iopattern = MFX_IOPATTERN_IN_VIDEO_MEMORY;
++#else
++            if (frames_hwctx->frame_type &
++                (MFX_MEMTYPE_VIDEO_MEMORY_DECODER_TARGET | MFX_MEMTYPE_VIDEO_MEMORY_PROCESSOR_TARGET))
++                iopattern = MFX_IOPATTERN_IN_VIDEO_MEMORY;
++#endif
+         }
+     }
+ 
+@@ -1253,9 +1265,16 @@ int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q)
+                                   "Error querying (IOSurf) the encoding parameters");
+ 
+     if (opaque_alloc) {
++#if QSV_HAVE_OPAQUE
+         ret = qsv_init_opaque_alloc(avctx, q);
+         if (ret < 0)
+             return ret;
++#else
++        av_log(avctx, AV_LOG_ERROR, "User is requesting to allocate OPAQUE surface, "
++               "however libmfx %d.%d doesn't support OPAQUE memory.\n",
++               q->ver.Major, q->ver.Minor);
++        return AVERROR_UNKNOWN;
++#endif
+     }
+ 
+     ret = MFXVideoENCODE_Init(q->session, &q->param);
+@@ -1778,8 +1797,10 @@ int ff_qsv_enc_close(AVCodecContext *avctx, QSVEncContext *q)
+     av_fifo_free(q->async_fifo);
+     q->async_fifo = NULL;
+ 
++#if QSV_HAVE_OPAQUE
+     av_freep(&q->opaque_surfaces);
+     av_buffer_unref(&q->opaque_alloc_buf);
++#endif
+ 
+     av_freep(&q->extparam);
+ 
+diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
+index c18c043ab869..3c98bd27eeb4 100644
+--- a/libavcodec/qsvenc.h
++++ b/libavcodec/qsvenc.h
+@@ -138,9 +138,11 @@ typedef struct QSVEncContext {
+     mfxExtVP9Param  extvp9param;
+ #endif
+ 
++#if QSV_HAVE_OPAQUE
+     mfxExtOpaqueSurfaceAlloc opaque_alloc;
+     mfxFrameSurface1       **opaque_surfaces;
+     AVBufferRef             *opaque_alloc_buf;
++#endif
+ 
+     mfxExtBuffer  *extparam_internal[2 + QSV_HAVE_CO2 + QSV_HAVE_CO3 + (QSV_HAVE_MF * 2)];
+     int         nb_extparam_internal;
+diff --git a/libavfilter/qsvvpp.h b/libavfilter/qsvvpp.h
+index 8c0cf3ed9525..e04115ca4bb5 100644
+--- a/libavfilter/qsvvpp.h
++++ b/libavfilter/qsvvpp.h
+@@ -39,6 +39,8 @@
+     ((MFX_VERSION.Major > (MAJOR)) ||                           \
+     (MFX_VERSION.Major == (MAJOR) && MFX_VERSION.Minor >= (MINOR)))
+ 
++#define QSV_HAVE_OPAQUE  !QSV_VERSION_ATLEAST(2, 0)
++
+ typedef struct QSVVPPContext QSVVPPContext;
+ 
+ typedef struct QSVVPPCrop {
+diff --git a/libavfilter/vf_scale_qsv.c b/libavfilter/vf_scale_qsv.c
+index 3170d97a41ff..7f957a9f7937 100644
+--- a/libavfilter/vf_scale_qsv.c
++++ b/libavfilter/vf_scale_qsv.c
+@@ -90,7 +90,9 @@ typedef struct QSVScaleContext {
+     mfxFrameSurface1 **surface_ptrs_out;
+     int             nb_surface_ptrs_out;
+ 
++#if QSV_HAVE_OPAQUE
+     mfxExtOpaqueSurfaceAlloc opaque_alloc;
++#endif
+ 
+ #if QSV_HAVE_SCALING_CONFIG
+     mfxExtVPPScaling         scale_conf;
+@@ -285,7 +287,7 @@ static int init_out_session(AVFilterContext *ctx)
+     AVQSVFramesContext *out_frames_hwctx = out_frames_ctx->hwctx;
+     AVQSVDeviceContext     *device_hwctx = in_frames_ctx->device_ctx->hwctx;
+ 
+-    int opaque = !!(in_frames_hwctx->frame_type & MFX_MEMTYPE_OPAQUE_FRAME);
++    int opaque = 0;
+ 
+     mfxHDL handle = NULL;
+     mfxHandleType handle_type;
+@@ -295,6 +297,9 @@ static int init_out_session(AVFilterContext *ctx)
+     mfxStatus err;
+     int ret, i;
+ 
++#if QSV_HAVE_OPAQUE
++    opaque = !!(in_frames_hwctx->frame_type & MFX_MEMTYPE_OPAQUE_FRAME);
++#endif
+     s->num_ext_buf = 0;
+ 
+     /* extract the properties of the "master" session given to us */
+@@ -348,38 +353,7 @@ static int init_out_session(AVFilterContext *ctx)
+ 
+     memset(&par, 0, sizeof(par));
+ 
+-    if (opaque) {
+-        s->surface_ptrs_in = av_mallocz_array(in_frames_hwctx->nb_surfaces,
+-                                              sizeof(*s->surface_ptrs_in));
+-        if (!s->surface_ptrs_in)
+-            return AVERROR(ENOMEM);
+-        for (i = 0; i < in_frames_hwctx->nb_surfaces; i++)
+-            s->surface_ptrs_in[i] = in_frames_hwctx->surfaces + i;
+-        s->nb_surface_ptrs_in = in_frames_hwctx->nb_surfaces;
+-
+-        s->surface_ptrs_out = av_mallocz_array(out_frames_hwctx->nb_surfaces,
+-                                               sizeof(*s->surface_ptrs_out));
+-        if (!s->surface_ptrs_out)
+-            return AVERROR(ENOMEM);
+-        for (i = 0; i < out_frames_hwctx->nb_surfaces; i++)
+-            s->surface_ptrs_out[i] = out_frames_hwctx->surfaces + i;
+-        s->nb_surface_ptrs_out = out_frames_hwctx->nb_surfaces;
+-
+-        s->opaque_alloc.In.Surfaces   = s->surface_ptrs_in;
+-        s->opaque_alloc.In.NumSurface = s->nb_surface_ptrs_in;
+-        s->opaque_alloc.In.Type       = in_frames_hwctx->frame_type;
+-
+-        s->opaque_alloc.Out.Surfaces   = s->surface_ptrs_out;
+-        s->opaque_alloc.Out.NumSurface = s->nb_surface_ptrs_out;
+-        s->opaque_alloc.Out.Type       = out_frames_hwctx->frame_type;
+-
+-        s->opaque_alloc.Header.BufferId = MFX_EXTBUFF_OPAQUE_SURFACE_ALLOCATION;
+-        s->opaque_alloc.Header.BufferSz = sizeof(s->opaque_alloc);
+-
+-        s->ext_buffers[s->num_ext_buf++] = (mfxExtBuffer*)&s->opaque_alloc;
+-
+-        par.IOPattern = MFX_IOPATTERN_IN_OPAQUE_MEMORY | MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+-    } else {
++    if (!opaque) {
+         mfxFrameAllocator frame_allocator = {
+             .pthis  = ctx,
+             .Alloc  = frame_alloc,
+@@ -411,6 +385,40 @@ static int init_out_session(AVFilterContext *ctx)
+ 
+         par.IOPattern = MFX_IOPATTERN_IN_VIDEO_MEMORY | MFX_IOPATTERN_OUT_VIDEO_MEMORY;
+     }
++#if QSV_HAVE_OPAQUE
++    else {
++        s->surface_ptrs_in = av_mallocz_array(in_frames_hwctx->nb_surfaces,
++                                              sizeof(*s->surface_ptrs_in));
++        if (!s->surface_ptrs_in)
++            return AVERROR(ENOMEM);
++        for (i = 0; i < in_frames_hwctx->nb_surfaces; i++)
++            s->surface_ptrs_in[i] = in_frames_hwctx->surfaces + i;
++        s->nb_surface_ptrs_in = in_frames_hwctx->nb_surfaces;
++
++        s->surface_ptrs_out = av_mallocz_array(out_frames_hwctx->nb_surfaces,
++                                               sizeof(*s->surface_ptrs_out));
++        if (!s->surface_ptrs_out)
++            return AVERROR(ENOMEM);
++        for (i = 0; i < out_frames_hwctx->nb_surfaces; i++)
++            s->surface_ptrs_out[i] = out_frames_hwctx->surfaces + i;
++        s->nb_surface_ptrs_out = out_frames_hwctx->nb_surfaces;
++
++        s->opaque_alloc.In.Surfaces   = s->surface_ptrs_in;
++        s->opaque_alloc.In.NumSurface = s->nb_surface_ptrs_in;
++        s->opaque_alloc.In.Type       = in_frames_hwctx->frame_type;
++
++        s->opaque_alloc.Out.Surfaces   = s->surface_ptrs_out;
++        s->opaque_alloc.Out.NumSurface = s->nb_surface_ptrs_out;
++        s->opaque_alloc.Out.Type       = out_frames_hwctx->frame_type;
++
++        s->opaque_alloc.Header.BufferId = MFX_EXTBUFF_OPAQUE_SURFACE_ALLOCATION;
++        s->opaque_alloc.Header.BufferSz = sizeof(s->opaque_alloc);
++
++        s->ext_buffers[s->num_ext_buf++] = (mfxExtBuffer*)&s->opaque_alloc;
++
++        par.IOPattern = MFX_IOPATTERN_IN_OPAQUE_MEMORY | MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
++    }
++#endif
+ 
+ #if QSV_HAVE_SCALING_CONFIG
+     memset(&s->scale_conf, 0, sizeof(mfxExtVPPScaling));
+-- 
+2.25.4
+
