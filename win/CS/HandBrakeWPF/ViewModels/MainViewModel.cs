@@ -74,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly ILog logService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
-        private readonly Win7 windowsSeven = new Win7();
+        private readonly Win7 windowsTaskbar = new Win7();
         private readonly DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
 
         private string windowName;
@@ -2086,11 +2086,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
                     this.WindowTitle = Resources.HandBrake_Title;
                     this.notifyIconService.SetTooltip(this.WindowTitle);
-
-                    if (this.windowsSeven.IsWindowsSeven)
-                    {
-                        this.windowsSeven.SetTaskBarProgressToNoProgress();
-                    }
+                    this.windowsTaskbar.SetTaskBarProgressToNoProgress();
                 });
         }
 
@@ -2143,9 +2139,9 @@ namespace HandBrakeWPF.ViewModels
                         int percent;
                         int.TryParse(Math.Round(status.ProgressValue).ToString(CultureInfo.InvariantCulture), out percent);
 
-                        if (this.lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
+                        if (this.lastEncodePercentage != percent)
                         {
-                            this.windowsSeven.SetTaskBarProgress(percent);
+                            this.windowsTaskbar.SetTaskBarProgress(percent);
                         }
 
                         this.lastEncodePercentage = percent;
@@ -2163,7 +2159,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else if (queueJobStatuses.Count > 1)
                     {
-                        this.windowsSeven.SetTaskBarProgressToNoProgress();
+                        this.windowsTaskbar.SetTaskBarProgressToNoProgress();
                         this.ProgramStatusLabel = string.Format("{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.", this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
@@ -2177,11 +2173,7 @@ namespace HandBrakeWPF.ViewModels
 
                         this.IsMultiProcess = false;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
-
-                        if (this.windowsSeven.IsWindowsSeven)
-                        {
-                            this.windowsSeven.SetTaskBarProgressToNoProgress();
-                        }
+                        this.windowsTaskbar.SetTaskBarProgressToNoProgress();
                     }
                 });
         }
