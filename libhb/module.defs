@@ -45,6 +45,10 @@ LIBHB.out += $(LIBHB.a)
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
+ifeq (1,$(FEATURE.qsv))
+    LIBHB.GCC.I += $(CONTRIB.build/)include/mfx
+endif
+
 ifneq (,$(filter $(HOST.system),freebsd netbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include
     LIBHB.GCC.I += $(LOCALBASE)/include/libxml2

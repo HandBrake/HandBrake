@@ -1,0 +1,603 @@
+From 23ad4fc96178a11c03cb01a6c33cf761277921fe Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Mon, 4 Jan 2021 10:46:14 +0800
+Subject: [PATCH 81/82] qsv: use a new method to create mfx session when using
+ the oneVPL SDK
+
+In oneVPL, MFXLoad() and MFXCreateSession() are required to create a
+workable mfx session[1]
+
+[1] https://spec.oneapi.com/versions/latest/elements/oneVPL/source/programming_guide/VPL_prg_session.html#onevpl-dispatcher
+---
+ libavcodec/qsv.c                 | 191 +++++++++++++++++++---
+ libavcodec/qsv_internal.h        |   1 +
+ libavcodec/qsvdec.c              |   4 +
+ libavcodec/qsvenc.h              |   3 +
+ libavcodec/qsvenc_h264.c         |   1 -
+ libavcodec/qsvenc_hevc.c         |   1 -
+ libavcodec/qsvenc_jpeg.c         |   1 -
+ libavcodec/qsvenc_mpeg2.c        |   1 -
+ libavcodec/qsvenc_vp9.c          |   1 -
+ libavfilter/qsvvpp.c             | 107 +++++++++++--
+ libavfilter/qsvvpp.h             |   5 +
+ libavfilter/vf_deinterlace_qsv.c |  12 +-
+ libavfilter/vf_scale_qsv.c       |  10 +-
+ libavutil/hwcontext_qsv.h        |  16 ++
+ 15 files changed, 532 insertions(+), 87 deletions(-)
+
+diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
+index cb976419d17a..f110ae943bbb 100644
+--- a/libavcodec/qsv.c
++++ b/libavcodec/qsv.c
+@@ -448,6 +448,164 @@ static int ff_qsv_set_display_handle(AVCodecContext *avctx, QSVSession *qs)
+ }
+ #endif //AVCODEC_QSV_LINUX_SESSION_HANDLE
+ 
++#if QSV_ONEVPL
++
++static int qsv_create_mfx_session(AVCodecContext *avctx,
++                                  mfxIMPL implementation,
++                                  mfxVersion *pver,
++                                  int gpu_copy,
++                                  mfxSession *psession,
++                                  mfxLoader *ploader)
++{
++    mfxStatus sts;
++    mfxLoader loader = NULL;
++    mfxSession session = NULL;
++    mfxConfig cfg;
++    mfxVariant impl_value;
++    uint32_t impl_idx = 0;
++
++    *psession = NULL;
++
++    /* Don't create a new MFX loader if the input loader is valid */
++    if (*ploader == NULL) {
++        av_log(avctx, AV_LOG_VERBOSE,
++               "Use the Intel oneVPL SDK to create MFX session, the required "
++               "implementation version is %d.%d\n",
++               pver->Major, pver->Minor);
++
++        loader = MFXLoad();
++
++        if (!loader) {
++            av_log(avctx, AV_LOG_ERROR, "Error creating a MFX loader\n");
++            goto fail;
++        }
++
++        /* Create configurations for implementation */
++        cfg = MFXCreateConfig(loader);
++
++        if (!cfg) {
++            av_log(avctx, AV_LOG_ERROR, "Error creating a MFX configurations\n");
++            goto fail;
++        }
++
++        impl_value.Type = MFX_VARIANT_TYPE_U32;
++        impl_value.Data.U32 = (implementation == MFX_IMPL_SOFTWARE) ?
++            MFX_IMPL_TYPE_SOFTWARE : MFX_IMPL_TYPE_HARDWARE;
++        sts = MFXSetConfigFilterProperty(cfg,
++                                         (const mfxU8 *)"mfxImplDescription.Impl", impl_value);
++
++        if (sts != MFX_ERR_NONE) {
++            av_log(avctx, AV_LOG_ERROR, "Error adding a MFX configuration "
++                   "property: %d\n", sts);
++            goto fail;
++        }
++
++        impl_value.Type = MFX_VARIANT_TYPE_U32;
++        impl_value.Data.U32 = pver->Version;
++        sts = MFXSetConfigFilterProperty(cfg,
++                                         (const mfxU8 *)"mfxImplDescription.ApiVersion.Version",
++                                         impl_value);
++
++        if (sts != MFX_ERR_NONE) {
++            av_log(avctx, AV_LOG_ERROR, "Error adding a MFX configuration "
++                   "property: %d\n", sts);
++            goto fail;
++        }
++    } else {
++        av_log(avctx, AV_LOG_VERBOSE,
++               "Use the Intel oneVPL SDK to create MFX session with the specified MFX loader\n");
++
++        loader = *ploader;
++    }
++
++    while (1) {
++        /* Enumerate all implementations */
++        mfxImplDescription *impl_desc;
++
++        sts = MFXEnumImplementations(loader, impl_idx,
++                                     MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
++                                     (mfxHDL *)&impl_desc);
++
++        /* Failed to find an available implementation */
++        if (sts == MFX_ERR_NOT_FOUND)
++            break;
++        else if (sts < 0) {
++            impl_idx++;
++            continue;
++        }
++
++        sts = MFXCreateSession(loader, impl_idx, &session);
++        MFXDispReleaseImplDescription(loader, impl_desc);
++
++        if (sts == MFX_ERR_NONE)
++            break;
++
++        impl_idx++;
++    }
++
++    if (sts != MFX_ERR_NONE) {
++        av_log(avctx, AV_LOG_ERROR, "Error creating a MFX session: %d.\n", sts);
++        goto fail;
++    }
++
++    *psession = session;
++
++    if (!*ploader)
++        *ploader = loader;
++
++    return 0;
++
++fail:
++    if (!*ploader && loader)
++        MFXUnload(loader);
++
++    return AVERROR_UNKNOWN;
++}
++
++#else
++
++static int qsv_create_mfx_session(AVCodecContext *avctx,
++                                  mfxIMPL implementation,
++                                  mfxVersion *pver,
++                                  int gpu_copy,
++                                  mfxSession *psession,
++                                  mfxLoader *ploader)
++{
++    mfxInitParam init_par = { MFX_IMPL_AUTO_ANY };
++    mfxSession session = NULL;
++    mfxStatus sts;
++
++    av_log(avctx, AV_LOG_VERBOSE,
++           "Use the Intel Media SDK to create MFX session, the required "
++           "implementation version is %d.%d\n",
++           pver->Major, pver->Minor);
++
++    *psession = NULL;
++    *ploader = NULL;
++
++#if QSV_VERSION_ATLEAST(1, 16)
++    init_par.GPUCopy = gpu_copy;
++#endif
++    init_par.Implementation = implementation;
++    init_par.Version = *pver;
++    sts = MFXInitEx(init_par, &session);
++
++    if (sts < 0)
++        return ff_qsv_print_error(avctx, sts,
++                                  "Error initializing a MFX session");
++    else if (sts > 0) {
++        ff_qsv_print_warning(avctx, sts,
++                             "Warning in MFX initialization");
++        return AVERROR_UNKNOWN;
++    }
++
++    *psession = session;
++
++    return 0;
++}
++
++#endif
++
+ int ff_qsv_init_internal_session(AVCodecContext *avctx, QSVSession *qs,
+                                  const char *load_plugins, int gpu_copy)
+ {
+@@ -457,20 +615,13 @@ int ff_qsv_init_internal_session(AVCodecContext *avctx, QSVSession *qs,
+     mfxIMPL          impl = MFX_IMPL_AUTO_ANY;
+ #endif
+     mfxVersion        ver = { { QSV_VERSION_MINOR, QSV_VERSION_MAJOR } };
+-    mfxInitParam init_par = { MFX_IMPL_AUTO_ANY };
+ 
+     const char *desc;
+-    int ret;
++    int ret = qsv_create_mfx_session(avctx, impl, &ver, gpu_copy, &qs->session,
++                                     &qs->loader);
+ 
+-#if QSV_VERSION_ATLEAST(1, 16)
+-    init_par.GPUCopy        = gpu_copy;
+-#endif
+-    init_par.Implementation = impl;
+-    init_par.Version        = ver;
+-    ret = MFXInitEx(init_par, &qs->session);
+-    if (ret < 0)
+-        return ff_qsv_print_error(avctx, ret,
+-                                  "Error initializing an internal MFX session");
++    if (ret)
++        return ret;
+ 
+ #ifdef AVCODEC_QSV_LINUX_SESSION_HANDLE
+     ret = ff_qsv_set_display_handle(avctx, qs);
+@@ -771,7 +922,7 @@ int ff_qsv_init_session_device(AVCodecContext *avctx, mfxSession *psession,
+     AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)device_ref->data;
+     AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;
+     mfxSession        parent_session = device_hwctx->session;
+-    mfxInitParam            init_par = { MFX_IMPL_AUTO_ANY };
++    mfxLoader                 loader = device_hwctx->loader;
+     mfxHDL                    handle = NULL;
+     int          hw_handle_supported = 0;
+ 
+@@ -812,15 +963,11 @@ int ff_qsv_init_session_device(AVCodecContext *avctx, mfxSession *psession,
+                "from the session\n");
+     }
+ 
+-#if QSV_VERSION_ATLEAST(1, 16)
+-    init_par.GPUCopy        = gpu_copy;
+-#endif
+-    init_par.Implementation = impl;
+-    init_par.Version        = ver;
+-    err = MFXInitEx(init_par, &session);
+-    if (err != MFX_ERR_NONE)
+-        return ff_qsv_print_error(avctx, err,
+-                                  "Error initializing a child MFX session");
++    ret = qsv_create_mfx_session(avctx, impl, &ver, gpu_copy, &session,
++                                 &loader);
++
++    if (ret)
++        return ret;
+ 
+     if (handle) {
+         err = MFXVideoCORE_SetHandle(session, handle_type, handle);
+@@ -897,7 +1044,9 @@ int ff_qsv_close_internal_session(QSVSession *qs)
+ {
+     if (qs->session) {
+         MFXClose(qs->session);
++        MFXUnload(qs->loader);
+         qs->session = NULL;
++        qs->loader = NULL;
+     }
+ #ifdef AVCODEC_QSV_LINUX_SESSION_HANDLE
+     av_buffer_unref(&qs->va_device_ref);
+diff --git a/libavcodec/qsv_internal.h b/libavcodec/qsv_internal.h
+index f20769493b79..9d0d76aa4dc3 100644
+--- a/libavcodec/qsv_internal.h
++++ b/libavcodec/qsv_internal.h
+@@ -92,6 +92,7 @@ typedef struct QSVFrame {
+ 
+ typedef struct QSVSession {
+     mfxSession session;
++    mfxLoader loader;
+ #ifdef AVCODEC_QSV_LINUX_SESSION_HANDLE
+     AVBufferRef *va_device_ref;
+     AVHWDeviceContext *va_device_ctx;
+diff --git a/libavcodec/qsvdec.c b/libavcodec/qsvdec.c
+index 93786c0d77cd..1ba719701bb2 100644
+--- a/libavcodec/qsvdec.c
++++ b/libavcodec/qsvdec.c
+@@ -159,7 +159,9 @@ static int qsv_init_session(AVCodecContext *avctx, QSVContext *q, mfxSession ses
+     } else if (hw_frames_ref) {
+         if (q->internal_qs.session) {
+             MFXClose(q->internal_qs.session);
++            MFXUnload(q->internal_qs.loader);
+             q->internal_qs.session = NULL;
++            q->internal_qs.loader = NULL;
+         }
+         av_buffer_unref(&q->frames_ctx.hw_frames_ctx);
+ 
+@@ -184,7 +186,9 @@ static int qsv_init_session(AVCodecContext *avctx, QSVContext *q, mfxSession ses
+     } else if (hw_device_ref) {
+         if (q->internal_qs.session) {
+             MFXClose(q->internal_qs.session);
++            MFXUnload(q->internal_qs.loader);
+             q->internal_qs.session = NULL;
++            q->internal_qs.loader = NULL;
+         }
+ 
+         ret = ff_qsv_init_session_device(avctx, &q->internal_qs.session,
+diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
+index 22e27ce7b4a4..ea906c699af4 100644
+--- a/libavcodec/qsvenc.h
++++ b/libavcodec/qsvenc.h
+@@ -28,6 +28,9 @@
+ 
+ #include <mfxvideo.h>
+ 
++#include "libavutil/common.h"
++#include "libavutil/hwcontext.h"
++#include "libavutil/hwcontext_qsv.h"
+ #include "libavutil/avutil.h"
+ #include "libavutil/fifo.h"
+ 
+diff --git a/libavcodec/qsvenc_h264.c b/libavcodec/qsvenc_h264.c
+index 68555a073591..06abc5fc657a 100644
+--- a/libavcodec/qsvenc_h264.c
++++ b/libavcodec/qsvenc_h264.c
+@@ -32,7 +32,6 @@
+ #include "avcodec.h"
+ #include "internal.h"
+ #include "qsv.h"
+-#include "qsv_internal.h"
+ #include "qsvenc.h"
+ #include "atsc_a53.h"
+ 
+diff --git a/libavcodec/qsvenc_hevc.c b/libavcodec/qsvenc_hevc.c
+index 3bab882996c2..366830958d2c 100644
+--- a/libavcodec/qsvenc_hevc.c
++++ b/libavcodec/qsvenc_hevc.c
+@@ -35,7 +35,6 @@
+ #include "h2645_parse.h"
+ #include "internal.h"
+ #include "qsv.h"
+-#include "qsv_internal.h"
+ #include "qsvenc.h"
+ 
+ enum LoadPlugin {
+diff --git a/libavcodec/qsvenc_jpeg.c b/libavcodec/qsvenc_jpeg.c
+index ad8f09befe49..f473b1ddbc7a 100644
+--- a/libavcodec/qsvenc_jpeg.c
++++ b/libavcodec/qsvenc_jpeg.c
+@@ -30,7 +30,6 @@
+ #include "avcodec.h"
+ #include "internal.h"
+ #include "qsv.h"
+-#include "qsv_internal.h"
+ #include "qsvenc.h"
+ 
+ typedef struct QSVMJPEGEncContext {
+diff --git a/libavcodec/qsvenc_mpeg2.c b/libavcodec/qsvenc_mpeg2.c
+index 610bbf79c197..0e2a51811c0a 100644
+--- a/libavcodec/qsvenc_mpeg2.c
++++ b/libavcodec/qsvenc_mpeg2.c
+@@ -30,7 +30,6 @@
+ #include "avcodec.h"
+ #include "internal.h"
+ #include "qsv.h"
+-#include "qsv_internal.h"
+ #include "qsvenc.h"
+ 
+ typedef struct QSVMpeg2EncContext {
+diff --git a/libavcodec/qsvenc_vp9.c b/libavcodec/qsvenc_vp9.c
+index 0a382eb76d9d..9d88b03bbfa9 100644
+--- a/libavcodec/qsvenc_vp9.c
++++ b/libavcodec/qsvenc_vp9.c
+@@ -30,7 +30,6 @@
+ #include "avcodec.h"
+ #include "internal.h"
+ #include "qsv.h"
+-#include "qsv_internal.h"
+ #include "qsvenc.h"
+ 
+ typedef struct QSVVP9EncContext {
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index 4d05e6aeda59..66df750e9da1 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -23,8 +23,6 @@
+ 
+ #include "libavutil/common.h"
+ #include "libavutil/mathematics.h"
+-#include "libavutil/hwcontext.h"
+-#include "libavutil/hwcontext_qsv.h"
+ #include "libavutil/time.h"
+ #include "libavutil/pixdesc.h"
+ 
+@@ -608,13 +606,11 @@ static int init_vpp_session(AVFilterContext *avctx, QSVVPPContext *s)
+     }
+ 
+     /* create a "slave" session with those same properties, to be used for vpp */
+-    ret = MFXInit(impl, &ver, &s->session);
+-    if (ret < 0)
+-        return ff_qsvvpp_print_error(avctx, ret, "Error initializing a session");
+-    else if (ret > 0) {
+-        ff_qsvvpp_print_warning(avctx, ret, "Warning in session initialization");
+-        return AVERROR_UNKNOWN;
+-    }
++    ret = ff_qsvvpp_create_mfx_session(avctx, device_hwctx->loader, impl, &ver,
++                                       &s->session);
++
++    if (ret)
++        return ret;
+ 
+     if (handle) {
+         ret = MFXVideoCORE_SetHandle(s->session, handle_type, handle);
+@@ -910,3 +906,96 @@ int ff_qsvvpp_filter_frame(QSVVPPContext *s, AVFilterLink *inlink, AVFrame *picr
+ 
+     return ret;
+ }
++
++#if QSV_ONEVPL
++
++int ff_qsvvpp_create_mfx_session(void *ctx,
++                                 mfxLoader loader,
++                                 mfxIMPL implementation,
++                                 mfxVersion *pver,
++                                 mfxSession *psession)
++{
++    mfxStatus sts;
++    mfxSession session = NULL;
++    uint32_t impl_idx = 0;
++
++    av_log(ctx, AV_LOG_VERBOSE,
++           "Use the Intel oneVPL SDK to create MFX session with the specified MFX loader\n");
++
++    if (!loader) {
++        av_log(ctx, AV_LOG_ERROR, "Invalid MFX Loader handle\n");
++        return AVERROR(EINVAL);
++    }
++
++    while (1) {
++        /* Enumerate all implementations */
++        mfxImplDescription *impl_desc;
++
++        sts = MFXEnumImplementations(loader, impl_idx,
++                                     MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
++                                     (mfxHDL *)&impl_desc);
++
++        /* Failed to find an available implementation */
++        if (sts == MFX_ERR_NOT_FOUND)
++            break;
++        else if (sts != MFX_ERR_NONE) {
++            impl_idx++;
++            continue;
++        }
++
++        sts = MFXCreateSession(loader, impl_idx, &session);
++        MFXDispReleaseImplDescription(loader, impl_desc);
++
++        if (sts == MFX_ERR_NONE)
++            break;
++
++        impl_idx++;
++    }
++
++    if (sts < 0)
++        return ff_qsvvpp_print_error(ctx, sts,
++                                     "Error creating a MFX session");
++    else if (sts > 0) {
++        ff_qsvvpp_print_warning(ctx, sts,
++                                "Warning in MFX session creation");
++        return AVERROR_UNKNOWN;
++    }
++
++    *psession = session;
++
++    return 0;
++}
++
++#else
++
++int ff_qsvvpp_create_mfx_session(void *ctx,
++                                 mfxLoader loader,
++                                 mfxIMPL implementation,
++                                 mfxVersion *pver,
++                                 mfxSession *psession)
++{
++    mfxSession session = NULL;
++    mfxStatus sts;
++
++    av_log(ctx, AV_LOG_VERBOSE,
++           "Use the Intel Media SDK to create MFX session, API version is "
++           "%d.%d, the required implementation version is %d.%d\n",
++           MFX_VERSION_MAJOR, MFX_VERSION_MINOR, pver->Major, pver->Minor);
++
++    *psession = NULL;
++    sts = MFXInit(implementation, pver, &session);
++
++    if (sts < 0)
++        return ff_qsvvpp_print_error(ctx, sts,
++                                     "Error initializing an MFX session");
++    else if (sts > 0) {
++        ff_qsvvpp_print_warning(ctx, sts, "Warning in MFX session initialization");
++        return AVERROR_UNKNOWN;
++    }
++
++    *psession = session;
++
++    return 0;
++}
++
++#endif
+diff --git a/libavfilter/qsvvpp.h b/libavfilter/qsvvpp.h
+index 67c351f2977b..d1c12be25b18 100644
+--- a/libavfilter/qsvvpp.h
++++ b/libavfilter/qsvvpp.h
+@@ -28,5 +28,7 @@
+ 
+ #include "avfilter.h"
++#include "libavutil/hwcontext.h"
++#include "libavutil/hwcontext_qsv.h"
+ 
+ #define FF_INLINK_IDX(link)  ((int)((link)->dstpad - (link)->dst->input_pads))
+ #define FF_OUTLINK_IDX(link) ((int)((link)->srcpad - (link)->src->output_pads))
+@@ -122,4 +124,7 @@ int ff_qsvvpp_print_error(void *log_ctx, mfxStatus err,
+ int ff_qsvvpp_print_warning(void *log_ctx, mfxStatus err,
+                             const char *warning_string);
+ 
++int ff_qsvvpp_create_mfx_session(void *ctx, mfxLoader loader, mfxIMPL implementation,
++                                 mfxVersion *pver, mfxSession *psession);
++
+ #endif /* AVFILTER_QSVVPP_H */
+diff --git a/libavfilter/vf_deinterlace_qsv.c b/libavfilter/vf_deinterlace_qsv.c
+index b31a49a0f66a..03e253ab28f3 100644
+--- a/libavfilter/vf_deinterlace_qsv.c
++++ b/libavfilter/vf_deinterlace_qsv.c
+@@ -213,13 +213,11 @@ static int init_out_session(AVFilterContext *ctx)
+ 
+     /* create a "slave" session with those same properties, to be used for
+      * actual deinterlacing */
+-    err = MFXInit(impl, &ver, &s->session);
+-    if (err < 0)
+-        return ff_qsvvpp_print_error(ctx, err, "Error initializing a session for deinterlacing");
+-    else if (err > 0) {
+-        ff_qsvvpp_print_warning(ctx, err, "Warning in session initialization");
+-        return AVERROR_UNKNOWN;
+-    }
++    ret = ff_qsvvpp_create_mfx_session(ctx, device_hwctx->loader, impl, &ver,
++                                       &s->session);
++
++    if (ret)
++        return ret;
+ 
+     if (handle) {
+         err = MFXVideoCORE_SetHandle(s->session, handle_type, handle);
+diff --git a/libavfilter/vf_scale_qsv.c b/libavfilter/vf_scale_qsv.c
+index 7f957a9f7937..b5cfc5cbcf65 100644
+--- a/libavfilter/vf_scale_qsv.c
++++ b/libavfilter/vf_scale_qsv.c
+@@ -333,11 +333,11 @@ static int init_out_session(AVFilterContext *ctx)
+ 
+     /* create a "slave" session with those same properties, to be used for
+      * actual scaling */
+-    err = MFXInit(impl, &ver, &s->session);
+-    if (err != MFX_ERR_NONE) {
+-        av_log(ctx, AV_LOG_ERROR, "Error initializing a session for scaling\n");
+-        return AVERROR_UNKNOWN;
+-    }
++    ret = ff_qsvvpp_create_mfx_session(ctx, device_hwctx->loader, impl, &ver,
++                                       &s->session);
++
++    if (ret)
++        return ret;
+ 
+     if (handle) {
+         err = MFXVideoCORE_SetHandle(s->session, handle_type, handle);
+diff --git a/libavutil/hwcontext_qsv.h b/libavutil/hwcontext_qsv.h
+index 42e34d0dda96..65415d3d8c4c 100644
+--- a/libavutil/hwcontext_qsv.h
++++ b/libavutil/hwcontext_qsv.h
+@@ -19,8 +19,23 @@
+ #ifndef AVUTIL_HWCONTEXT_QSV_H
+ #define AVUTIL_HWCONTEXT_QSV_H
+ 
++#include <mfxdefs.h>
+ #include <mfxvideo.h>
+ 
++#if (MFX_VERSION_MAJOR < 2)
++
++typedef void * mfxLoader;
++
++static av_always_inline void MFXUnload (mfxLoader mfxloader)
++{
++}
++
++#else
++
++#include <mfxdispatcher.h>
++
++#endif
++
+ /**
+  * @file
+  * An API-specific header for AV_HWDEVICE_TYPE_QSV.
+@@ -33,6 +48,7 @@
+  * This struct is allocated as AVHWDeviceContext.hwctx
+  */
+ typedef struct AVQSVDeviceContext {
++    mfxLoader loader;
+     mfxSession session;
+ } AVQSVDeviceContext;
+ 
+-- 
+2.25.4
+

@@ -1,0 +1,113 @@
+From 1c1d9550fd0672992aa3535579055e5a87da7daf Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Mon, 4 Jan 2021 10:45:48 +0800
+Subject: [PATCH 80/82] qsv: add macro QSV_ONEVPL for the oneVPL SDK
+
+---
+ libavcodec/qsv.c          | 4 ++--
+ libavcodec/qsv_internal.h | 3 ++-
+ libavcodec/qsvenc.c       | 2 +-
+ libavcodec/qsvenc.h       | 2 +-
+ libavfilter/qsvvpp.c      | 2 +-
+ libavfilter/qsvvpp.h      | 3 ++-
+ libavutil/hwcontext_qsv.c | 3 ++-
+ 7 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
+index a53b06b5c4df..cb976419d17a 100644
+--- a/libavcodec/qsv.c
++++ b/libavcodec/qsv.c
+@@ -36,8 +36,8 @@
+ #include "qsv_internal.h"
+ 
+ #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+-#define QSV_HAVE_USER_PLUGIN    !QSV_VERSION_ATLEAST(2, 0)
+-#define QSV_HAVE_AUDIO          !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_USER_PLUGIN    !QSV_ONEVPL
++#define QSV_HAVE_AUDIO          !QSV_ONEVPL
+ 
+ #if QSV_VERSION_ATLEAST(1, 12)
+ #include "mfxvp8.h"
+diff --git a/libavcodec/qsv_internal.h b/libavcodec/qsv_internal.h
+index 7b0ee8cf203b..f20769493b79 100644
+--- a/libavcodec/qsv_internal.h
++++ b/libavcodec/qsv_internal.h
+@@ -65,7 +65,8 @@
+     ((MFX_VERSION.Major > (MAJOR)) ||                           \
+     (MFX_VERSION.Major == (MAJOR) && MFX_VERSION.Minor >= (MINOR)))
+ 
+-#define QSV_HAVE_OPAQUE  !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_ONEVPL       QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_OPAQUE  !QSV_ONEVPL
+ 
+ typedef struct QSVMid {
+     AVBufferRef *hw_frames_ref;
+diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
+index 0cb0e1e5f138..356db740b0df 100644
+--- a/libavcodec/qsvenc.c
++++ b/libavcodec/qsvenc.c
+@@ -103,7 +103,7 @@ static const struct {
+ #if QSV_HAVE_VCM
+     { MFX_RATECONTROL_VCM,     "VCM" },
+ #endif
+-#if QSV_VERSION_ATLEAST(1, 10) && !QSV_VERSION_ATLEAST(2, 0)
++#if QSV_VERSION_ATLEAST(1, 10) && !QSV_ONEVPL
+     { MFX_RATECONTROL_LA_EXT,  "LA_EXT" },
+ #endif
+ #if QSV_HAVE_LA_HRD
+diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
+index 3c98bd27eeb4..22e27ce7b4a4 100644
+--- a/libavcodec/qsvenc.h
++++ b/libavcodec/qsvenc.h
+@@ -65,7 +65,7 @@
+ #define QSV_HAVE_ICQ    QSV_VERSION_ATLEAST(1, 28)
+ #define QSV_HAVE_VCM    0
+ #define QSV_HAVE_QVBR   QSV_VERSION_ATLEAST(1, 28)
+-#define QSV_HAVE_MF     QSV_VERSION_ATLEAST(1, 25) && !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_MF     QSV_VERSION_ATLEAST(1, 25) && !QSV_ONEVPL
+ #endif
+ 
+ #if !QSV_HAVE_LA_DS
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index 203181cf4019..4d05e6aeda59 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -39,6 +39,6 @@
+ #endif
+ #define IS_SYSTEM_MEMORY(mode) (mode & MFX_MEMTYPE_SYSTEM_MEMORY)
+ #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+-#define QSV_HAVE_AUDIO          !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_AUDIO          !QSV_ONEVPL
+ 
+ typedef struct QSVFrame {
+diff --git a/libavfilter/qsvvpp.h b/libavfilter/qsvvpp.h
+index e04115ca4bb5..67c351f2977b 100644
+--- a/libavfilter/qsvvpp.h
++++ b/libavfilter/qsvvpp.h
+@@ -39,6 +39,7 @@
+     ((MFX_VERSION.Major > (MAJOR)) ||                           \
+     (MFX_VERSION.Major == (MAJOR) && MFX_VERSION.Minor >= (MINOR)))
+ 
+-#define QSV_HAVE_OPAQUE  !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_ONEVPL       QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_OPAQUE  !QSV_ONEVPL
+ 
+ typedef struct QSVVPPContext QSVVPPContext;
+diff --git a/libavutil/hwcontext_qsv.c b/libavutil/hwcontext_qsv.c
+index bbc56b87cbce..d4fe8c9b23de 100644
+--- a/libavutil/hwcontext_qsv.c
++++ b/libavutil/hwcontext_qsv.c
+@@ -52,8 +52,9 @@
+     (MFX_VERSION_MAJOR > (MAJOR) ||         \
+      MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
+ 
+ #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+-#define QSV_HAVE_OPAQUE  !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_ONEVPL       QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_OPAQUE  !QSV_ONEVPL
+ 
+ typedef struct QSVDevicePriv {
+     AVBufferRef *child_device_ctx;
+-- 
+2.25.4
+

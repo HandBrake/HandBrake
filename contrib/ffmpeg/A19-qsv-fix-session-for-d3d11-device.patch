@@ -1,0 +1,50 @@
+From 236f6ce846060505dffc1d0e75c8d15f92c69520 Mon Sep 17 00:00:00 2001
+From: galinart <artem.galin@intel.com>
+Date: Thu, 3 Jun 2021 02:42:08 +0100
+Subject: [PATCH] qsv: fix session for d3d11 device
+
+---
+ libavutil/hwcontext_qsv.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/libavutil/hwcontext_qsv.c b/libavutil/hwcontext_qsv.c
+index d323678ecd..85a9ae3bb4 100644
+--- a/libavutil/hwcontext_qsv.c
++++ b/libavutil/hwcontext_qsv.c
+@@ -594,6 +594,33 @@ static int qsv_create_mfx_session(void *ctx,
+         goto fail;
+     }
+ 
++    if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(implementation))
++    {
++        impl_value.Type = MFX_VARIANT_TYPE_U32;
++        impl_value.Data.U32 = MFX_ACCEL_MODE_VIA_D3D11;
++        sts = MFXSetConfigFilterProperty(cfg,
++                                        (const mfxU8 *)"mfxImplDescription.AccelerationMode", impl_value);
++
++        if (sts != MFX_ERR_NONE) {
++            av_log(ctx, AV_LOG_ERROR, "Error adding a MFX configuration"
++                "MFX_ACCEL_MODE_VIA_D3D11 property: %d.\n", sts);
++            goto fail;
++        }
++    }
++    else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(implementation))
++    {
++        impl_value.Type = MFX_VARIANT_TYPE_U32;
++        impl_value.Data.U32 = MFX_ACCEL_MODE_VIA_D3D9;
++        sts = MFXSetConfigFilterProperty(cfg,
++                                        (const mfxU8 *)"mfxImplDescription.AccelerationMode", impl_value);
++
++        if (sts != MFX_ERR_NONE) {
++            av_log(ctx, AV_LOG_ERROR, "Error adding a MFX configuration"
++                "MFX_ACCEL_MODE_VIA_D3D9 property: %d.\n", sts);
++            goto fail;
++        }
++    }
++
+     impl_value.Type = MFX_VARIANT_TYPE_U32;
+     impl_value.Data.U32 = pver->Version;
+     sts = MFXSetConfigFilterProperty(cfg,
+-- 
+2.25.1
+

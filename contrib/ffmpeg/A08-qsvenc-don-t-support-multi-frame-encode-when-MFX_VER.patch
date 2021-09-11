@@ -1,0 +1,31 @@
+From 6e1d8cfc738d76b2d6e5c72af9d03795bffa4ec8 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Wed, 19 Aug 2020 12:41:16 +0800
+Subject: [PATCH 75/82] qsvenc: don't support multi-frame encode when
+ MFX_VERSION >= 2.0
+
+Multi-frame encode isn't supported for MFX_VERSION >= 2.0[1][2], this is
+in preparation for oneVPL support
+
+[1]: https://spec.oneapi.com/versions/latest/elements/oneVPL/source/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
+[2]: https://github.com/oneapi-src/oneVPL
+---
+ libavcodec/qsvenc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/qsvenc.h b/libavcodec/qsvenc.h
+index 3fa825eef32a..c18c043ab869 100644
+--- a/libavcodec/qsvenc.h
++++ b/libavcodec/qsvenc.h
+@@ -65,7 +65,7 @@
+ #define QSV_HAVE_ICQ    QSV_VERSION_ATLEAST(1, 28)
+ #define QSV_HAVE_VCM    0
+ #define QSV_HAVE_QVBR   QSV_VERSION_ATLEAST(1, 28)
+-#define QSV_HAVE_MF     QSV_VERSION_ATLEAST(1, 25)
++#define QSV_HAVE_MF     QSV_VERSION_ATLEAST(1, 25) && !QSV_VERSION_ATLEAST(2, 0)
+ #endif
+ 
+ #if !QSV_HAVE_LA_DS
+-- 
+2.25.4
+
