@@ -115,7 +115,7 @@
 {
     NSIndexSet *indexes = self.tableView.targetedRowIndexes;
     NSArray *items = [self.queue.items objectsAtIndexes:indexes];
-    [self.queue moveItems:items toIndex:self.queue.items.count - 1];
+    [self.queue moveItems:items toIndex:self.queue.items.count];
 }
 
 /**
