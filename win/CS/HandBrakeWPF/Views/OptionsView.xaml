@@ -75,13 +75,6 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{x:Static Properties:Resources.Preferences}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
-
-
-            <TextBlock  Margin="11,10,10,10" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">           
-                <Hyperlink x:Name="ResetHandBrake" NavigateUri="/" RequestNavigate="ResetHandBrake_OnRequestNavigate" >
-                    <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_ResetHandBrake}" />
-                </Hyperlink>
-            </TextBlock>
         </Grid>
 
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
@@ -545,6 +538,29 @@
                     <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
 
                     <TextBlock Text="{x:Static Properties:Resources.OptionsViewModel_UpdateNotice}" Margin="20,10,10,0" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" TextWrapping="Wrap" />
+
+                </StackPanel>
+
+                <StackPanel Name="Reset" Orientation="Vertical" Margin="10,5,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Reset}}">
+
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Reset}" FontSize="20" FontFamily="Segoe UI Light"  />
+
+                    <TextBlock Text="{x:Static Properties:Resources.Options_UserSettings}" FontSize="14" Margin="0,10,0,10"/>
+
+                    <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetSettingsToDefaults}" />
+                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetHandBrake]" />
+                    </StackPanel>
+
+                    <TextBlock Text="{x:Static Properties:Resources.Options_BuiltInPresets}" FontSize="14" Margin="0,10,0,10"/>
+
+                    <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresets}" />
+                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetBuiltInPresets]" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresetsNotice}" Margin="10,0,0,0" FontStyle="Italic" />
+
+                    </StackPanel>
 
                 </StackPanel>
 

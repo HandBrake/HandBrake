@@ -150,6 +150,8 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -159,12 +161,12 @@
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
 
                             <!--  Row 1  -->
-                            <ComboBox Grid.Column="1" Height="22" Width="130" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="1" Height="22" Width="160" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
 
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Codec}" />
-                            <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
+                            <ComboBox Grid.Column="3" Width="105" Height="22" Margin="5,0,5,0">
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="Encoder" />
@@ -192,7 +194,6 @@
                                       SelectedItem="{Binding Bitrate}"
                                       Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                            <!--  Row 2  -->
                             <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Mixdown}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
@@ -201,8 +202,22 @@
                                       DisplayMemberPath="DisplayName"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
+                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Samplerate}" Grid.Column="8"
+                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9"
+                                      ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding SampleRateDisplayValue}"
+                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,0,0"
+
+                            <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Gain}" Grid.Column="10"
+                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+
+                            <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" Height="22" VerticalAlignment="Center"
+                                                Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                                Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+
+                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="12" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,0,0"
                                            Padding="3,0" Height="22" HorizontalAlignment="Left" Background="Transparent" >
                                 <ToggleButton.Style>
                                     <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -239,13 +254,6 @@
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsChecked, ElementName=advancedOptionsToggle, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="8,5,0,5" >
 
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Samplerate}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                                <ComboBox Width="70" Height="22" Margin="5,0,5,0"
-                                      ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SampleRateDisplayValue}"
-                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-
                                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_DRC}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
@@ -253,13 +261,7 @@
                                                     Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                                <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Gain}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-
-                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
-                                                    Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
-
+       
                                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
                                 <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="175" Height="22" />
 

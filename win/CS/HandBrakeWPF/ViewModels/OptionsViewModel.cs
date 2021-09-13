@@ -30,6 +30,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -44,6 +45,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUserSettingService userSettingService;
         private readonly IUpdateService updateService;
         private readonly IErrorService errorService;
+        private readonly IPresetService presetService;
 
         private string arguments;
         private string autoNameDefaultPath;
@@ -113,12 +115,13 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
 
-        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
+        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService, IPresetService presetService)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
             this.updateService = updateService;
             this.errorService = errorService;
+            this.presetService = presetService;
             this.AboutViewModel = aboutViewModel;
             this.OnLoad();
 
@@ -1330,6 +1333,22 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.ResetSettingsToDefaults();
                 this.OnLoad();
             }
+        }
+
+        public void ResetBuiltInPresets()
+        {
+            MessageBoxResult result = this.errorService.ShowMessageBox(
+                Resources.OptionsViewModel_ResetHandBrakePresetsQuestion,
+                Resources.OptionsViewModel_ResetHandBrake,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                this.presetService.UpdateBuiltInPresets();
+                this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)

@@ -122,6 +122,11 @@ namespace HandBrakeWPF.Converters
 
         private void GeneratePresets(List<object> groupedMenu, IList<IPresetObject> userPresets, PresetDisplayMode displayMode)
         {
+            if (!userPresets.Any(s => s.Category != PresetService.UserPresetCategoryName))
+            {
+                return;
+            }
+
             if (displayMode == PresetDisplayMode.Partial)
             {
                 groupedMenu.Add(GenerateMenuHeader(Resources.Main_Presets));

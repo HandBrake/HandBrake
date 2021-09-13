@@ -2968,6 +2968,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Built In Presets.
+        /// </summary>
+        public static string Options_BuiltInPresets {
+            get {
+                return ResourceManager.GetString("Options_BuiltInPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for Updates.
         /// </summary>
         public static string Options_CheckForUpdates {
@@ -3355,6 +3364,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Options_Reset {
+            get {
+                return ResourceManager.GetString("Options_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset to &apos;Do nothing&apos; when the app is re-launched..
         /// </summary>
         public static string Options_ResetDoNothing {
@@ -3450,6 +3468,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_UserInterface {
             get {
                 return ResourceManager.GetString("Options_UserInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Settings.
+        /// </summary>
+        public static string Options_UserSettings {
+            get {
+                return ResourceManager.GetString("Options_UserSettings", resourceCulture);
             }
         }
         
@@ -3845,6 +3872,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset all built-in presets to HandBrake defaults:.
+        /// </summary>
+        public static string OptionsView_ResetBuildInPresets {
+            get {
+                return ResourceManager.GetString("OptionsView_ResetBuildInPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (User presets will not be reset).
+        /// </summary>
+        public static string OptionsView_ResetBuildInPresetsNotice {
+            get {
+                return ResourceManager.GetString("OptionsView_ResetBuildInPresetsNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset all HandBrake settings back to defaults:.
+        /// </summary>
+        public static string OptionsView_ResetSettingsToDefaults {
+            get {
+                return ResourceManager.GetString("OptionsView_ResetSettingsToDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning: Please note that this is a &quot;Safe Mode&quot; build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-&quot;Safe Mode&quot; build from the website..
         /// </summary>
         public static string OptionsView_SafeMode {
@@ -3986,6 +4040,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsViewModel_ResetHandBrake {
             get {
                 return ResourceManager.GetString("OptionsViewModel_ResetHandBrake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to reset all built-in presets?.
+        /// </summary>
+        public static string OptionsViewModel_ResetHandBrakePresetsQuestion {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_ResetHandBrakePresetsQuestion", resourceCulture);
             }
         }
         
