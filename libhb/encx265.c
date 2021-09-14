@@ -225,18 +225,18 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             char masteringDisplayColorVolume[256];
             snprintf(masteringDisplayColorVolume, sizeof(masteringDisplayColorVolume),
                      "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
-                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN),
                      (unsigned)rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN),
                      (unsigned)rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN));
 
-            if (param_parse(pv, param, "master-display",   masteringDisplayColorVolume))
+            if (param_parse(pv, param, "master-display", masteringDisplayColorVolume))
             {
                 goto fail;
             }
@@ -312,9 +312,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         uint32_t max_luminance, min_luminance;
 
         if (sscanf(param->masteringDisplayColorVolume, "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
-                      &display_primaries_x[0], &display_primaries_y[0],
                       &display_primaries_x[1], &display_primaries_y[1],
                       &display_primaries_x[2], &display_primaries_y[2],
+                      &display_primaries_x[0], &display_primaries_y[0],
                       &white_point_x, &white_point_y,
                       &max_luminance, &min_luminance) == 10)
         {
