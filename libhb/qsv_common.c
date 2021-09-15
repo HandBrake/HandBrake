@@ -28,7 +28,7 @@
 #include "libavfilter/buffersink.h"
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
-#include "mfx/mfxadapter.h"
+#include "vpl/mfxadapter.h"
 
 typedef struct hb_qsv_adapter_details
 {
@@ -473,11 +473,13 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     /* Reset capabilities before querying */
     info->capabilities = 0;
 
+#if !HB_QSV_ONEVPL
     /* Load required MFX plug-ins */
     if ((mfxPluginList = hb_qsv_load_plugins(index, info, session, version)) == NULL)
     {
         return 0; // the required plugin(s) couldn't be loaded
     }
+#endif
 
     /*
      * First of all, check availability of an encoder for
@@ -488,12 +490,14 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
      */
     if (HB_CHECK_MFX_VERSION(version, HB_QSV_MINVERSION_MAJOR, HB_QSV_MINVERSION_MINOR))
     {
+#if !HB_QSV_ONEVPL
         if (info->implementation & MFX_IMPL_AUDIO)
         {
             /* Not yet supported */
             return 0;
         }
         else
+#endif
         {
             mfxStatus mfxRes;
             init_video_param(&inputParam);
@@ -535,13 +539,14 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         /* Don't check capabilities for unavailable encoders */
         return 0;
     }
-
+#if !HB_QSV_ONEVPL
     if (info->implementation & MFX_IMPL_AUDIO)
     {
         /* We don't have any audio capability checks yet */
         return 0;
     }
     else
+#endif
     {
         /* Implementation-specific features that can't be queried */
         if (info->codec_id == MFX_CODEC_AVC || info->codec_id == MFX_CODEC_HEVC)
@@ -829,10 +834,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
             }
         }
     }
-
+#if !HB_QSV_ONEVPL
     /* Unload MFX plug-ins */
     hb_qsv_unload_plugins(&mfxPluginList, session, version);
-
+#endif
     return 0;
 }
 
@@ -1209,6 +1214,7 @@ hb_qsv_info_t* hb_qsv_encoder_info_get(int adapter_index, int encoder)
     return NULL;
 }
 
+#if !HB_QSV_ONEVPL
 hb_list_t* hb_qsv_load_plugins(int index, hb_qsv_info_t *info, mfxSession session, mfxVersion version)
 {
     hb_list_t *mfxPluginList = hb_list_init();
@@ -1264,6 +1270,7 @@ void hb_qsv_unload_plugins(hb_list_t **_l, mfxSession session, mfxVersion versio
     }
     hb_list_close(_l);
 }
+#endif
 
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 {

@@ -27,7 +27,7 @@
 #include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
-#include "mfx/mfxstructures.h"
+#include "vpl/mfxstructures.h"
 #if defined(SYS_LINUX) || defined(SYS_FREEBSD)
 #include <va/va_drm.h>
 #endif

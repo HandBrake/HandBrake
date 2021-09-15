@@ -62,6 +62,7 @@ struct hb_filter_private_s
     mfxExtVPPFrameRateConversion   frc_config;
 };
 
+#if !HB_QSV_ONEVPL
 static int hb_qsv_filter_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init );
 
@@ -339,6 +340,7 @@ static int filter_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
     }
     return 0;
 }
+#endif
 
 static int hb_qsv_filter_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init )

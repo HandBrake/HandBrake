@@ -41,7 +41,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
-#include <mfx/mfxvideo.h>
+#include "vpl/mfxvideo.h"
 
 /*
  * The frame info struct remembers information about each frame across calls to
@@ -883,6 +883,7 @@ int qsv_enc_init(hb_work_private_t *pv)
         hb_qsv_list_add(qsv_encode->tasks, task);
     }
 
+#if !HB_QSV_ONEVPL
     // plugins should be loaded before querying for surface allocation
     if (pv->loaded_plugins == NULL)
     {
@@ -902,6 +903,7 @@ int qsv_enc_init(hb_work_private_t *pv)
             return -1;
         }
     }
+#endif
 
     // setup surface allocation
     pv->param.videoParam->IOPattern = (pv->is_sys_mem                 ?
@@ -1638,6 +1640,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
+#if !HB_QSV_ONEVPL
     /* Load required MFX plug-ins */
     pv->loaded_plugins = hb_qsv_load_plugins(hb_qsv_get_adapter_index(), pv->qsv_info, session, version);
     if (pv->loaded_plugins == NULL)
@@ -1646,6 +1649,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         MFXClose(session);
         return -1;
     }
+#endif
 
     sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
 // workaround for the early 15.33.x driver, should be removed later
@@ -1668,7 +1672,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             hb_error("encqsvInit: log_encoder_params failed (%d)", err);
         }
+#if !HB_QSV_ONEVPL
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
+#endif
         MFXClose(session);
         return -1;
     }
@@ -1709,7 +1715,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (sts != MFX_ERR_NONE)
     {
         hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", sts);
+#if !HB_QSV_ONEVPL
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
+#endif
         MFXClose(session);
         return -1;
     }
@@ -1730,7 +1738,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         if (qsv_hevc_make_header(w, session) < 0)
         {
             hb_error("encqsvInit: qsv_hevc_make_header failed");
+#if !HB_QSV_ONEVPL
             hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
+#endif
             MFXVideoENCODE_Close(session);
             MFXClose(session);
             return -1;
@@ -1757,7 +1767,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
+#if !HB_QSV_ONEVPL
         hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
+#endif
         MFXClose(session);
     }
 
@@ -1811,12 +1823,13 @@ void encqsvClose(hb_work_object_t *w)
 
         if (qsv_ctx != NULL)
         {
+#if !HB_QSV_ONEVPL
             /* Unload MFX plug-ins */
             if (MFXQueryVersion(qsv_ctx->mfx_session, &version) == MFX_ERR_NONE)
             {
                 hb_qsv_unload_plugins(&pv->loaded_plugins, qsv_ctx->mfx_session, version);
             }
-
+#endif
             hb_qsv_uninit_enc(pv->job);
 
             hb_display_close(&pv->display);
