@@ -1037,6 +1037,7 @@ skip_preview:
         title->color_transfer = vid_info.color_transfer;
         title->color_matrix = vid_info.color_matrix;
         title->color_range = vid_info.color_range;
+        title->chroma_location = vid_info.chroma_location;
 
         title->video_decode_support = vid_info.video_decode_support;
 
@@ -1084,13 +1085,14 @@ skip_preview:
         }
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "
-                "aspect %s, PAR %d:%d, color profile: %d-%d-%d",
+                "aspect %s, PAR %d:%d, color profile: %d-%d-%d, chroma location: %s",
                 npreviews, title->geometry.width, title->geometry.height,
                 (float)title->vrate.num / title->vrate.den,
                 title->crop[0], title->crop[1], title->crop[2], title->crop[3],
                 aspect_to_string(&title->dar),
                 title->geometry.par.num, title->geometry.par.den,
-                title->color_prim, title->color_transfer, title->color_matrix);
+                title->color_prim, title->color_transfer, title->color_matrix,
+                av_chroma_location_name(title->chroma_location));
 
         if (title->mastering.has_primaries || title->mastering.has_luminance)
         {

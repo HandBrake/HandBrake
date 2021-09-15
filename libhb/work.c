@@ -616,6 +616,9 @@ void hb_display_job_info(hb_job_t *job)
 
         hb_log("     + color profile: %d-%d-%d",
                job->color_prim, job->color_transfer, job->color_matrix);
+        hb_log("     + chroma location: %s",
+               av_chroma_location_name(job->chroma_location));
+
 
         if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
         {
@@ -1461,11 +1464,12 @@ static void do_job(hb_job_t *job)
         init.time_base.den = 90000;
         init.job = job;
         init.pix_fmt = job->input_pix_fmt;
-        init.color_range = AVCOL_RANGE_MPEG;
 
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
+        init.color_range = AVCOL_RANGE_MPEG;
+        init.chroma_location = title->chroma_location;
         init.geometry = title->geometry;
         memset(init.crop, 0, sizeof(int[4]));
         init.vrate = job->vrate;
@@ -1491,6 +1495,7 @@ static void do_job(hb_job_t *job)
         job->color_transfer = init.color_transfer;
         job->color_matrix = init.color_matrix;
         job->color_range = init.color_range;
+        job->chroma_location = init.chroma_location;
         job->width = init.geometry.width;
         job->height = init.geometry.height;
         // job->par is supplied by the frontend.

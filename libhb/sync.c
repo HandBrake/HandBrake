@@ -387,6 +387,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
             buf->f.color_transfer = stream->common->job->title->color_transfer;
             buf->f.color_matrix = stream->common->job->title->color_matrix;
             buf->f.color_range = stream->common->job->color_range;
+            buf->f.chroma_location = stream->common->job->chroma_location;
 #if HB_PROJECT_FEATURE_QSV
             if (hb_qsv_full_path_is_enabled(stream->common->job) && !hb_qsv_hw_filters_are_enabled(stream->common->job))
             {

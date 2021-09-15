@@ -125,6 +125,7 @@ struct hb_image_format_s
     int           color_transfer;
     int           color_matrix;
     int           color_range;
+    int           chroma_location;
     int           max_plane;
     int           window_width;
     int           window_height;

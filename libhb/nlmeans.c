@@ -1104,11 +1104,11 @@ static void nlmeans_filter_thread(void *thread_args_v)
         hb_buffer_t *buf;
         buf = hb_frame_buffer_init(pv->output.pix_fmt,
                                    frame->width, frame->height);
-        buf->f.color_prim     = pv->output.color_prim;
-        buf->f.color_transfer = pv->output.color_transfer;
-        buf->f.color_matrix   = pv->output.color_matrix;
-        buf->f.color_range    = pv->output.color_range ;
-
+        buf->f.color_prim      = pv->output.color_prim;
+        buf->f.color_transfer  = pv->output.color_transfer;
+        buf->f.color_matrix    = pv->output.color_matrix;
+        buf->f.color_range     = pv->output.color_range;
+        buf->f.chroma_location = pv->output.chroma_location;
 
         NLMeansFunctions *functions = &pv->functions;
 
@@ -1241,10 +1241,11 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
         hb_buffer_t *buf;
         buf = hb_frame_buffer_init(pv->output.pix_fmt,
                                    frame->width, frame->height);
-        buf->f.color_prim     = pv->output.color_prim;
-        buf->f.color_transfer = pv->output.color_transfer;
-        buf->f.color_matrix   = pv->output.color_matrix;
-        buf->f.color_range    = pv->output.color_range ;
+        buf->f.color_prim      = pv->output.color_prim;
+        buf->f.color_transfer  = pv->output.color_transfer;
+        buf->f.color_matrix    = pv->output.color_matrix;
+        buf->f.color_range     = pv->output.color_range;
+        buf->f.chroma_location = pv->output.chroma_location;
 
         NLMeansFunctions *functions = &pv->functions;
 

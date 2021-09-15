@@ -618,6 +618,7 @@ struct hb_job_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
 
     int             color_prim_override;
     int             color_transfer_override;
@@ -1130,6 +1131,7 @@ struct hb_title_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
     hb_rational_t   vrate;
@@ -1241,6 +1243,7 @@ typedef struct hb_work_info_s
             int           color_transfer;
             int           color_matrix;
             int           color_range;
+            int           chroma_location;
             int           video_decode_support;
         };
         struct
@@ -1342,6 +1345,7 @@ typedef struct hb_filter_init_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
     hb_geometry_t   geometry;
     int             crop[4];
     hb_rational_t   vrate;

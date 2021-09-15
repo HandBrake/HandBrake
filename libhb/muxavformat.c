@@ -488,6 +488,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codecpar->color_trc       = hb_output_color_transfer(job);
     track->st->codecpar->color_space     = hb_output_color_matrix(job);
     track->st->codecpar->color_range     = job->color_range;
+    track->st->codecpar->chroma_location = job->chroma_location;
 
     if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
     {

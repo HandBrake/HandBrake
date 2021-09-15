@@ -881,6 +881,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->color_primaries = hb_output_color_prim(job);
     context->color_trc       = hb_output_color_transfer(job);
     context->colorspace      = hb_output_color_matrix(job);
+    context->chroma_sample_location = job->chroma_location;
 
     if (!job->inline_parameter_sets)
     {

@@ -338,10 +338,11 @@ static int chroma_smooth_work_thread(hb_filter_object_t *filter,
     }
 
     out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
-    out->f.color_prim     = pv->output.color_prim;
-    out->f.color_transfer = pv->output.color_transfer;
-    out->f.color_matrix   = pv->output.color_matrix;
-    out->f.color_range    = pv->output.color_range ;
+    out->f.color_prim      = pv->output.color_prim;
+    out->f.color_transfer  = pv->output.color_transfer;
+    out->f.color_matrix    = pv->output.color_matrix;
+    out->f.color_range     = pv->output.color_range;
+    out->f.chroma_location = pv->output.chroma_location;
 
     int c;
     for (c = 0; c < 3; c++)
