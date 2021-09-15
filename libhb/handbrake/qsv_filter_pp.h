@@ -33,14 +33,19 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if HB_PROJECT_FEATURE_QSV
 
+#include "handbrake/qsv_common.h"
+#if !HB_QSV_ONEVPL
 #include "mfx/mfxplugin.h"
+#endif
 
 struct qsv_filter_task_s;
 
 typedef struct{
         mfxFrameAllocator *alloc;
         mfxStatus             (*process)(struct qsv_filter_task_s*,void*);
+#if !HB_QSV_ONEVPL
         mfxCoreInterface    *core;
+#endif
 }qsv_filter_processor_t;
 
 typedef  struct qsv_filter_task_s{
@@ -54,15 +59,14 @@ typedef  struct qsv_filter_task_s{
 typedef struct qsv_filter_private_s{
 
         int                 is_init_done;
-
-        mfxCoreInterface    *core;
         mfxVideoParam       *videoparam;
-        mfxPluginParam      pluginparam;
-
         hb_filter_private_t *pv;
-
-        mfxPlugin           plug;
         hb_list_t           *tasks;
+#if !HB_QSV_ONEVPL
+        mfxCoreInterface    *core;
+        mfxPluginParam      pluginparam;
+        mfxPlugin           plug;
+#endif
 } qsv_filter_t;
 
 typedef struct hb_qsv_sync_s{
@@ -93,6 +97,7 @@ typedef struct hb_filter_private_s
     struct SwsContext* sws_context_from_nv12;
 } hb_filter_private_t_qsv;
 
+#if !HB_QSV_ONEVPL
 // methods to be called by Media SDK
 mfxStatus MFX_CDECL qsv_PluginInit(mfxHDL pthis, mfxCoreInterface *core);
 mfxStatus MFX_CDECL qsv_PluginClose (mfxHDL pthis);
@@ -104,7 +109,7 @@ mfxStatus MFX_CDECL qsv_FreeResources(mfxHDL pthis, mfxThreadTask task, mfxStatu
 // methods to be called by us
 mfxStatus plugin_init(qsv_filter_t*,mfxVideoParam*);
 mfxStatus plugin_close(qsv_filter_t*);
-
+#endif
 //internal functions
 mfxExtBuffer* get_ext_buffer(mfxExtBuffer**, mfxU32, mfxU32);
 int get_free_task(hb_list_t*);

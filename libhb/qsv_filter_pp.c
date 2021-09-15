@@ -38,6 +38,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "handbrake/qsv_memory.h"
 #include "handbrake/qsv_common.h"
 
+#if !HB_QSV_ONEVPL
 static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init );
 static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
@@ -53,7 +54,6 @@ static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_out );
 static hb_filter_info_t * hb_qsv_filter_post_info(hb_filter_object_t * filter);
 static void hb_qsv_filter_post_close( hb_filter_object_t * filter );
-
 
 hb_filter_object_t hb_filter_qsv_pre =
 {
@@ -78,7 +78,6 @@ hb_filter_object_t hb_filter_qsv_post =
     .close         = hb_qsv_filter_post_close,
     .info          = hb_qsv_filter_post_info,
 };
-
 
 static int filter_pre_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
     mfxStatus sts = MFX_ERR_NONE;
@@ -815,6 +814,7 @@ mfxStatus plugin_close(qsv_filter_t* plugin){
 
     return sts;
 }
+#endif
 
 mfxExtBuffer* get_ext_buffer(mfxExtBuffer** buffers, mfxU32 buffers_num, mfxU32 buffer_id){
     int i = 0;
@@ -878,9 +878,9 @@ int process_filter(qsv_filter_task_t* task, void* params){
         unlock_frame(task->processor.alloc,task->in);
         return sts;
     }
-
+#if !HB_QSV_ONEVPL
     qsv_nv12_to_yuv420(task->pv->sws_context_from_nv12,task->pv->pre.out, task->in, task->processor.core);
-
+#endif
     // signal: input is prepared, converted from pipeline into internal buffer
     hb_lock(task->pv->pre.frame_completed_lock);
     task->pv->pre.frame_go = 1;
