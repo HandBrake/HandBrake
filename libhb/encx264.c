@@ -387,11 +387,14 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_keyint_max = 10 * param.i_keyint_min;
     param.i_log_level  = X264_LOG_INFO;
 
-    /* set up the VUI color model & gamma to match what the COLR atom
-     * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
+    /* set up the VUI color model & gamma */
     param.vui.i_colorprim = hb_output_color_prim(job);
     param.vui.i_transfer  = hb_output_color_transfer(job);
     param.vui.i_colmatrix = hb_output_color_matrix(job);
+    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
+    {
+        param.vui.i_chroma_loc = job->chroma_location - 1;
+    }
 
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * x264_opts = NULL;
@@ -428,6 +431,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     job->color_prim_override     = param.vui.i_colorprim;
     job->color_transfer_override = param.vui.i_transfer;
     job->color_matrix_override   = param.vui.i_colmatrix;
+    job->chroma_location         = param.vui.i_chroma_loc + 1;
 
     /* For 25 fps sources, HandBrake's explicit keyints will match the x264 defaults:
      * min-keyint 25 (same as auto), keyint 250. */

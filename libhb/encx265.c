@@ -259,12 +259,24 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
+    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED) {
+        char chromaLocation[256];
+        snprintf(chromaLocation, sizeof(chromaLocation),
+                 "%d",
+                 job->chroma_location - 1);
+
+        if (param_parse(pv, param, "chromaloc", chromaLocation))
+        {
+            goto fail;
+        }
+    }
+
     /* Bit depth */
     pv->bit_depth = hb_get_bit_depth(job->output_pix_fmt);
 
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
-    int override_mastering = 0, override_coll = 0;
+    int override_mastering = 0, override_coll = 0, override_chroma_location = 0;
     x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
     hb_dict_iter_t iter;
@@ -283,6 +295,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         if (!strcmp(key, "max-cll"))
         {
             override_coll = 1;
+        }
+        if (!strcmp(key, "chromaloc"))
+        {
+            override_chroma_location = 1;
         }
 
         // here's where the strings are passed to libx265 for parsing
@@ -340,6 +356,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         job->coll.max_fall = param->maxFALL;
         job->coll.max_cll  = param->maxCLL;
+    }
+
+    /*
+     * Reload chroma location settings in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_chroma_location)
+    {
+        job->chroma_location = param->vui.chromaSampleLocTypeBottomField + 1;
     }
 
     /*

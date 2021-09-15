@@ -235,8 +235,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "s:{s:o, s:o, s:{s:o, s:o}},"
         // Crop[Top, Bottom, Left, Right]}
         "s:[oooo],"
-        // Color {Format, Range, Primary, Transfer, Matrix}
-        "s:{s:o, s:o, s:o, s:o, s:o},"
+        // Color {Format, Range, Primary, Transfer, Matrix, ChromaLocation}
+        "s:{s:o, s:o, s:o, s:o, s:o, s:o},"
         // FrameRate {Num, Den}
         "s:{s:o, s:o},"
         // InterlaceDetected, VideoCodec
@@ -271,6 +271,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "Primary",          hb_value_int(title->color_prim),
         "Transfer",         hb_value_int(title->color_transfer),
         "Matrix",           hb_value_int(title->color_matrix),
+        "ChromaLocation",   hb_value_int(title->chroma_location),
     "FrameRate",
         "Num",              hb_value_int(title->vrate.num),
         "Den",              hb_value_int(title->vrate.den),
@@ -632,6 +633,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                 hb_value_int(job->color_transfer));
     hb_dict_set(video_dict, "ColorMatrix",
                 hb_value_int(job->color_matrix));
+    hb_dict_set(video_dict, "ChromaLocation",
+                hb_value_int(job->chroma_location));
     if (job->color_prim_override != HB_COLR_PRI_UNDEF)
     {
         hb_dict_set(video_dict, "ColorPrimariesOverride",
@@ -1018,7 +1021,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
     //       TwoPass, Turbo,
     //       ColorInputFormat, ColorOutputFormat, ColorRange,
-    //       ColorPrimaries, ColorTransfer, ColorMatrix,
+    //       ColorPrimaries, ColorTransfer, ColorMatrix, ChromaLocation,
     //       Mastering,
     //       ContentLightLevel,
     //       ColorPrimariesOverride, ColorTransferOverride, ColorMatrixOverride,
@@ -1026,7 +1029,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s:{s:o, s?F, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b,"
     "   s?i, s?i, s?i,"
-    "   s?i, s?i, s?i,"
+    "   s?i, s?i, s?i, s?i,"
     "   s?o,"
     "   s?o,"
     "   s?i, s?i, s?i,"
@@ -1078,6 +1081,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorPrimaries",       unpack_i(&job->color_prim),
             "ColorTransfer",        unpack_i(&job->color_transfer),
             "ColorMatrix",          unpack_i(&job->color_matrix),
+            "ChromaLocation",       unpack_i(&job->chroma_location),
             "Mastering",            unpack_o(&mastering_dict),
             "ContentLightLevel",    unpack_o(&coll_dict),
             "ColorPrimariesOverride", unpack_i(&job->color_prim_override),

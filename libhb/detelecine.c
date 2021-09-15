@@ -1032,10 +1032,11 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     }
 
     out = hb_frame_buffer_init(pv->output.pix_fmt, in->f.width, in->f.height);
-    out->f.color_prim     = pv->output.color_prim;
-    out->f.color_transfer = pv->output.color_transfer;
-    out->f.color_matrix   = pv->output.color_matrix;
-    out->f.color_range    = pv->output.color_range ;
+    out->f.color_prim      = pv->output.color_prim;
+    out->f.color_transfer  = pv->output.color_transfer;
+    out->f.color_matrix    = pv->output.color_matrix;
+    out->f.color_range     = pv->output.color_range;
+    out->f.chroma_location = pv->output.chroma_location;
 
     /* Copy pullup frame buffer into output buffer */
     memcpy( out->plane[0].data, frame->buffer->planes[0], frame->buffer->size[0] );

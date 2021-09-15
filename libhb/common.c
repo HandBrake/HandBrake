@@ -3935,12 +3935,13 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
-    job->input_pix_fmt  = AV_PIX_FMT_YUV420P;
-    job->output_pix_fmt = AV_PIX_FMT_YUV420P;
-    job->color_prim     = title->color_prim;
-    job->color_transfer = title->color_transfer;
-    job->color_matrix   = title->color_matrix;
-    job->color_range    = title->color_range;
+    job->input_pix_fmt   = AV_PIX_FMT_YUV420P;
+    job->output_pix_fmt  = AV_PIX_FMT_YUV420P;
+    job->color_prim      = title->color_prim;
+    job->color_transfer  = title->color_transfer;
+    job->color_matrix    = title->color_matrix;
+    job->color_range     = title->color_range;
+    job->chroma_location = title->chroma_location;
     job->color_prim_override     = HB_COLR_PRI_UNDEF;
     job->color_transfer_override = HB_COLR_TRA_UNDEF;
     job->color_matrix_override   = HB_COLR_MAT_UNDEF;

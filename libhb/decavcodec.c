@@ -2157,7 +2157,8 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->color_transfer = get_color_transfer(pv->context->color_trc);
     info->color_matrix   = get_color_matrix(pv->context->colorspace,
                                             info->geometry);
-    info->color_range    = pv->context->color_range;
+    info->color_range     = pv->context->color_range;
+    info->chroma_location = pv->context->chroma_sample_location;
 
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
 

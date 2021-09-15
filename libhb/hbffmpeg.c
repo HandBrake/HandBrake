@@ -43,6 +43,7 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
     frame->color_trc       = hb_colr_tra_hb_to_ff(buf->f.color_transfer);
     frame->colorspace      = hb_colr_mat_hb_to_ff(buf->f.color_matrix);
     frame->color_range     = buf->f.color_range;
+    frame->chroma_location = buf->f.chroma_location;
 }
 
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
@@ -76,12 +77,13 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     {
         buf->s.flags |= PIC_FLAG_REPEAT_FRAME;
     }
-    buf->s.frametype      = get_frame_type(frame->pict_type);
-    buf->f.fmt            = frame->format;
-    buf->f.color_prim     = hb_colr_pri_ff_to_hb(frame->color_primaries);
-    buf->f.color_transfer = hb_colr_tra_ff_to_hb(frame->color_trc);
-    buf->f.color_matrix   = hb_colr_mat_ff_to_hb(frame->colorspace);
-    buf->f.color_range    = frame->color_range;
+    buf->s.frametype       = get_frame_type(frame->pict_type);
+    buf->f.fmt             = frame->format;
+    buf->f.color_prim      = hb_colr_pri_ff_to_hb(frame->color_primaries);
+    buf->f.color_transfer  = hb_colr_tra_ff_to_hb(frame->color_trc);
+    buf->f.color_matrix    = hb_colr_mat_ff_to_hb(frame->colorspace);
+    buf->f.color_range     = frame->color_range;
+    buf->f.chroma_location = frame->chroma_location;
 }
 
 hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
