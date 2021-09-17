@@ -28,6 +28,9 @@ hb_work_object_t hb_encx264 =
 
 #define DTS_BUFFER_SIZE 32
 
+#define MASTERING_CHROMA_DEN 50000
+#define MASTERING_LUMA_DEN 10000
+
 struct hb_work_private_s
 {
     hb_job_t           * job;
@@ -126,6 +129,11 @@ static void * x264_lib_open_ubuntu_10bit(void)
     return h;
 }
 #endif
+
+static inline int64_t rescale(hb_rational_t q, int b)
+{
+    return av_rescale(q.num, b, q.den);
+}
 
 void hb_x264_global_init(void)
 {
@@ -396,6 +404,36 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_chroma_loc = job->chroma_location - 1;
     }
 
+#if X264_BUILD >= 163
+    /* HDR10 Static metadata */
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    {
+        /* Mastering display metadata */
+        if (job->mastering.has_primaries && job->mastering.has_luminance)
+        {
+            param.mastering_display.b_mastering_display = 1;
+            param.mastering_display.i_red_x   = rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_red_y   = rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_x = rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_green_y = rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_x  = rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_blue_y  = rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_x = rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_white_y = rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN);
+            param.mastering_display.i_display_max = rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN);
+            param.mastering_display.i_display_min = rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN);
+        }
+
+        /*  Content light level */
+        if (job->coll.max_cll && job->coll.max_fall)
+        {
+            param.content_light_level.b_cll = 1;
+            param.content_light_level.i_max_cll  = job->coll.max_cll;
+            param.content_light_level.i_max_fall = job->coll.max_fall;
+        }
+    }
+#endif
+
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * x264_opts = NULL;
     if (job->encoder_options != NULL && *job->encoder_options)
@@ -432,6 +470,34 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     job->color_transfer_override = param.vui.i_transfer;
     job->color_matrix_override   = param.vui.i_colmatrix;
     job->chroma_location         = param.vui.i_chroma_loc + 1;
+
+#if X264_BUILD >= 163
+    /* Reload HDR10 mastering display metadata settings in case custom values were set
+     * in the encoder_options string */
+    if (param.mastering_display.b_mastering_display)
+    {
+        job->mastering.display_primaries[0][0] = hb_make_q(param.mastering_display.i_red_x, MASTERING_CHROMA_DEN);
+        job->mastering.display_primaries[0][1] = hb_make_q(param.mastering_display.i_red_y, MASTERING_CHROMA_DEN);
+        job->mastering.display_primaries[1][0] = hb_make_q(param.mastering_display.i_green_x, MASTERING_CHROMA_DEN);
+        job->mastering.display_primaries[1][1] = hb_make_q(param.mastering_display.i_green_y, MASTERING_CHROMA_DEN);
+        job->mastering.display_primaries[2][0] = hb_make_q(param.mastering_display.i_blue_x, MASTERING_CHROMA_DEN);
+        job->mastering.display_primaries[2][1] = hb_make_q(param.mastering_display.i_blue_y, MASTERING_CHROMA_DEN);
+
+        job->mastering.white_point[0] = hb_make_q(param.mastering_display.i_white_x, MASTERING_CHROMA_DEN);
+        job->mastering.white_point[1] = hb_make_q(param.mastering_display.i_white_y, MASTERING_CHROMA_DEN);
+
+        job->mastering.min_luminance = hb_make_q(param.mastering_display.i_display_min, MASTERING_LUMA_DEN);
+        job->mastering.max_luminance = hb_make_q(param.mastering_display.i_display_max, MASTERING_LUMA_DEN);
+    }
+
+    /* Reload HDR10 content light level metadata settings in case custom values were set
+     * in the encoder_options string */
+    if (param.content_light_level.b_cll)
+    {
+        job->coll.max_cll = param.content_light_level.i_max_cll;
+        job->coll.max_fall = param.content_light_level.i_max_fall;
+    }
+#endif
 
     /* For 25 fps sources, HandBrake's explicit keyints will match the x264 defaults:
      * min-keyint 25 (same as auto), keyint 250. */
