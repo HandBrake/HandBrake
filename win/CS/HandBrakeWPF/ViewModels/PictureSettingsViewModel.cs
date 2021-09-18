@@ -466,9 +466,9 @@ namespace HandBrakeWPF.ViewModels
             // Set the Maintain Aspect ratio.
             this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
-            // Setup the Maximum Width / Height with sane 4K fallback.
-            this.MaxWidth = preset.Task.MaxWidth ?? 3840;
-            this.MaxHeight = preset.Task.MaxHeight ?? 2160;
+            // Setup the Maximum Width / Height
+            this.MaxWidth = preset.Task.MaxWidth;
+            this.MaxHeight = preset.Task.MaxHeight;
             this.SetSelectedPictureSettingsResLimitMode();
 
             // Set the width, then check the height doesn't breach the max height and correct if necessary.
@@ -883,6 +883,12 @@ namespace HandBrakeWPF.ViewModels
 
         private void SetSelectedPictureSettingsResLimitMode()
         {
+            if (this.MaxWidth == null && this.MaxHeight == null)
+            {
+                this.SelectedPictureSettingsResLimitMode = PictureSettingsResLimitModes.None;
+                return;
+            }
+
             // Look for a matching resolution.
             foreach (PictureSettingsResLimitModes limit in EnumHelper<PictureSettingsResLimitModes>.GetEnumList())
             {
