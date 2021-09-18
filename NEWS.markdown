@@ -12,16 +12,14 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 ### All platforms
 
 #### General
-- Fix an issue where incorrect colour information could be written during muxing. 
+- Improvements and fixes around colour bit-depth handling. 
+- Fixed various issues where incorrect colour information could be written during muxing. 
 
 #### Hardware Encoding
+- Fixed corrupted video output when decoding HDR10 content with QuickSync
 
 #### Subtitles
-- Fix a slight subtitle colour shift issue when using libass
-
-#### Command line interface
-
-### Linux
+- Fixed a slight subtitle colour shift issue when using libass
 
 ### Mac
 - Fixed a build system errors that could cause failures linking libbluray 
@@ -29,6 +27,7 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 ### Windows
 - Added "Preset" used to the Queue summary tab.
 - Added "Save New Preset" to the preset menu, and toolbar preset dropdown to make it easier to find. (#3783)
+- Added category headers to the presets menu when using the flat display mode. 
 - Changed the log filename format back to start with the destination filename as it did with 1.3 (#3740)
 - Changed tab selection behaviour on queue when changing jobs. it will no longer reset to the first tab. (#3813)
 - Fixed a minor UI juddering effect on the queue task list when jobs start or finish (#3813)
@@ -36,6 +35,8 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 - Fixed an issue where static preview wasn't live-updating when changes occurred (#3803)
 - Fixed a crash on the Audio Defaults screen whilst trying to add Tracks (#3785)
 - Fixed incorrect taskbar icon state when running multiple encodes (#3791)
+- Fixed an issue where "None" resolution limit was not honoured (#3872)
+- Fixed an issue with preset export. VideoTune was not written correctly (#3829)
 
 
 ## HandBrake 1.4.1
