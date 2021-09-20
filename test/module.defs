@@ -24,7 +24,7 @@ ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
 endif
 
 ifeq (1,$(FEATURE.qsv))
-    TEST.GCC.l += mfx
+    TEST.GCC.l += vpl
 ifneq (,$(filter $(HOST.system),linux freebsd))
     TEST.GCC.l += va va-drm
 endif
