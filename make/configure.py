@@ -1746,11 +1746,8 @@ try:
     #####################################
     ## Additional library and tool checks
     #####################################
-    if options.flatpak or host_tuple.match('*-*-darwin*', '*-*-mingw'):
-        # Requires Jansson which requires CMake 3.1.0 or later
-        Tools.cmake = ToolProbe('CMAKE.exe', 'cmake', 'cmake', abort=True, minversion=[3,1,0])
-    else:
-        Tools.cmake = ToolProbe('CMAKE.exe', 'cmake', 'cmake', abort=True, minversion=[2,8,12])
+    # Requires oneVPL which requires CMake 3.16.3 or later
+    Tools.cmake = ToolProbe('CMAKE.exe', 'cmake', 'cmake', abort=True, minversion=[3,16,3])
     Tools.cmake.__init__( Tools.cmake.var, Tools.cmake.option, Tools.cmake.name, **Tools.cmake.kwargs )
     Tools.cmake.run()
     for action in Action.actions:
