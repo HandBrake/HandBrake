@@ -1,6 +1,6 @@
 __deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
 ifeq (1,$(FEATURE.qsv))
-__deps__ += LIBMFX
+__deps__ += LIBVPL
 endif
 ifeq (1,$(FEATURE.vce))
 __deps__ += AMF
@@ -139,7 +139,7 @@ ifeq (none,$(FFMPEG.GCC.O))
 endif
 
 ifeq (1,$(FEATURE.qsv))
-  FFMPEG.CONFIGURE.extra += --enable-libmfx
+  FFMPEG.CONFIGURE.extra += --enable-libvpl
 endif
 
 ifeq (1,$(FEATURE.vce))

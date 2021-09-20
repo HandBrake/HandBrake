@@ -56,7 +56,7 @@ MODULES += contrib/libbluray
 
 ifeq (1,$(FEATURE.qsv))
 ifeq (,$(filter $(HOST.system),freebsd))
-    MODULES += contrib/libmfx
+    MODULES += contrib/libvpl
 endif
 endif
 
