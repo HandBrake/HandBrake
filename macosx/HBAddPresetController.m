@@ -167,7 +167,7 @@
 - (IBAction)showAudioSettingsSheet:(id)sender
 {
     HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
-    [defaults applyPreset:self.mutablePreset];
+    [defaults applyPreset:self.mutablePreset error:NULL];
 
     self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
 
@@ -183,7 +183,7 @@
 - (IBAction)showSubtitlesSettingsSheet:(id)sender
 {
     HBSubtitlesDefaults *defaults = [[HBSubtitlesDefaults alloc] init];
-    [defaults applyPreset:self.mutablePreset];
+    [defaults applyPreset:self.mutablePreset error:NULL];
 
     self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
 

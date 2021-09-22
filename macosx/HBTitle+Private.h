@@ -9,6 +9,8 @@
 #import "HBPreset.h"
 #include "handbrake/handbrake.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBTitle (Private)
 
 /**
@@ -25,6 +27,8 @@
  */
 @property (nonatomic, readonly) hb_title_t *hb_title;
 
-- (NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset;
+- (nullable NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset;
 
 @end
+
+NS_ASSUME_NONNULL_END

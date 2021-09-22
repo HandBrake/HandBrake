@@ -87,7 +87,7 @@
 
 #pragma mark - HBPresetCoding
 
-- (void)applyPreset:(HBPreset *)preset
+- (BOOL)applyPreset:(HBPreset *)preset error:(NSError * __autoreleasing *)outError
 {
     if ([preset[@"SubtitleTrackSelectionBehavior"] isEqualToString:@"first"])
     {
@@ -127,11 +127,13 @@
 
     self.burnInDVDSubtitles = [preset[@"SubtitleBurnDVDSub"] boolValue];
     self.burnInBluraySubtitles = [preset[@"SubtitleBurnBDSub"] boolValue];
+
+    return YES;
 }
 
 - (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
-    [self applyPreset:preset];
+    [self applyPreset:preset error:NULL];
 }
 
 - (void)writeToPreset:(HBMutablePreset *)preset

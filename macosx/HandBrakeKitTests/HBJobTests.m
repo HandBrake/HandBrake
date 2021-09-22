@@ -49,7 +49,7 @@
 
     self.title = self.core.titles.firstObject;
 
-    self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
+    self.job = [[HBJob alloc] initWithTitle:self.title preset:self.preset];
     self.job.outputURL = [NSURL fileURLWithPath:@"/" isDirectory:YES];
     self.job.outputFileName = @"Dest.mp4";
 }
@@ -72,7 +72,7 @@
 
     XCTAssertNotNil(self.title);
 
-    HBJob *job = [[HBJob alloc] initWithTitle:self.title andPreset:preset];
+    HBJob *job = [[HBJob alloc] initWithTitle:self.title preset:preset];
 
     XCTAssertNotNil(self.job);
 

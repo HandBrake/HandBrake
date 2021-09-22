@@ -48,7 +48,6 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @property(nonatomic, readonly) NSArray<NSString *> *audioEncoderFallbacks;
 
 - (void)validateEncoderFallbackForVideoContainer:(int)container;
-- (void)applyPreset:(HBPreset *)preset;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
