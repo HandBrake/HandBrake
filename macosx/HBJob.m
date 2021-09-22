@@ -45,7 +45,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 @implementation HBJob
 
-- (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
+- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset
 {
     self = [super init];
     if (self) {
@@ -73,7 +73,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _metadataPassthru = YES;
         _presetName = @"";
 
-        [self applyPreset:preset];
+        if ([self applyPreset:preset error:NULL] == NO)
+        {
+            return nil;
+        }
     }
 
     return self;
@@ -81,29 +84,45 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 #pragma mark - HBPresetCoding
 
-- (void)applyPreset:(HBPreset *)preset
+- (BOOL)applyPreset:(HBPreset *)preset error:(NSError * __autoreleasing *)outError
 {
     NSAssert(self.title, @"HBJob: calling applyPreset: without a valid title loaded");
 
-    self.presetName = preset.name;
     NSDictionary *jobSettings = [self.title jobSettingsWithPreset:preset];
 
-    self.container = hb_container_get_from_name([preset[@"FileFormat"] UTF8String]);
+    if (jobSettings)
+    {
+        self.presetName = preset.name;
 
-    // MP4 specifics options.
-    self.mp4HttpOptimize = [preset[@"Mp4HttpOptimize"] boolValue];
-    self.mp4iPodCompatible = [preset[@"Mp4iPodCompatible"] boolValue];
+        self.container = hb_container_get_from_name([preset[@"FileFormat"] UTF8String]);
 
-    self.alignAVStart = [preset[@"AlignAVStart"] boolValue];
+        // MP4 specifics options.
+        self.mp4HttpOptimize = [preset[@"Mp4HttpOptimize"] boolValue];
+        self.mp4iPodCompatible = [preset[@"Mp4iPodCompatible"] boolValue];
 
-    self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
-    self.metadataPassthru = [preset[@"MetadataPassthrough"] boolValue];
+        self.alignAVStart = [preset[@"AlignAVStart"] boolValue];
 
-    [self.audio applyPreset:preset jobSettings:jobSettings];
-    [self.subtitles applyPreset:preset jobSettings:jobSettings];
-    [self.video applyPreset:preset jobSettings:jobSettings];
-    [self.picture applyPreset:preset jobSettings:jobSettings];
-    [self.filters applyPreset:preset jobSettings:jobSettings];
+        self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
+        self.metadataPassthru = [preset[@"MetadataPassthrough"] boolValue];
+
+        [self.audio applyPreset:preset jobSettings:jobSettings];
+        [self.subtitles applyPreset:preset jobSettings:jobSettings];
+        [self.video applyPreset:preset jobSettings:jobSettings];
+        [self.picture applyPreset:preset jobSettings:jobSettings];
+        [self.filters applyPreset:preset jobSettings:jobSettings];
+
+        return YES;
+    }
+    else
+    {
+        if (outError != NULL)
+        {
+            *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid preset", @"HBJob -> invalid preset"),
+                                                                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The preset is not a valid, try to select a different one.", @"Job preset -> invalid preset recovery suggestion")}];
+        }
+
+        return NO;
+    }
 }
 
 - (void)writeToPreset:(HBMutablePreset *)preset

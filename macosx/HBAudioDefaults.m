@@ -183,7 +183,7 @@
 
 #pragma mark - HBPresetCoding
 
-- (void)applyPreset:(HBPreset *)preset
+- (BOOL)applyPreset:(HBPreset *)preset error:(NSError * __autoreleasing *)outError
 {
     // Track selection behavior
     if ([preset[@"AudioTrackSelectionBehavior"] isEqualToString:@"first"])
@@ -300,11 +300,13 @@
         newTrack.gain = [track[@"AudioTrackGainSlider"] doubleValue];
         [self insertObject:newTrack inTracksArrayAtIndex:[self countOfTracksArray]];
     }
+
+    return YES;
 }
 
 - (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
-    [self applyPreset:preset];
+    [self applyPreset:preset error:NULL];
 }
 
 - (void)writeToPreset:(HBMutablePreset *)preset

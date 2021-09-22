@@ -49,7 +49,7 @@
 
     self.title = self.core.titles.firstObject;
 
-    self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
+    self.job = [[HBJob alloc] initWithTitle:self.title preset:self.preset];
     self.job.outputURL = [NSURL fileURLWithPath:@"/" isDirectory:YES];
     self.job.outputFileName = @"Dest.mp4";
 
@@ -65,7 +65,7 @@
         if (obj.isLeaf)
         {
             [undoManager beginUndoGrouping];
-            [self.modifiedJob applyPreset:obj];
+            [self.modifiedJob applyPreset:obj error:NULL];
             [undoManager endUndoGrouping];
         }
     }];

@@ -521,7 +521,7 @@ fail:
     return _chapters;
 }
 
-- (NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset
+- (nullable NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset
 {
     NSDictionary *result = nil;
 
