@@ -6,15 +6,16 @@
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
-             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
              SnapsToDevicePixels="True"
-             UseLayoutRounding="True">
+             UseLayoutRounding="True"
+             x:Name="mainView"
+             PreviewMouseDown="ParentGrid_OnPreviewMouseDown"
+             >
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
@@ -51,7 +52,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid x:Name="parentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -313,7 +314,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
+                <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
@@ -335,7 +336,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" x:Name="mainBodyGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -589,7 +590,15 @@
                 </Grid>
             </StackPanel>
         </Grid>
-     
+
+        <!-- Preset Panel 
+             Note, we have an empty grid here to fill in gaps in the click area such that we can always toggle it off when clicking off the control.
+        -->
+        <Grid Panel.ZIndex="-1" x:Name="clickOffArea" IsHitTestVisible="True" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Grid.Row="1" Background="Transparent" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        </Grid>
+
+        <Controls:PresetPaneControl x:Name="presetPaneControl" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="11"  DataContext="{Binding}"  Grid.Row="1" HorizontalAlignment="Right" Margin="0,2,10,10"  />
+
         <!-- Source Selection-->
         <Controls:SourceSelection x:Name="sourceSelection"
                                   Grid.Row="0" Grid.RowSpan="3"

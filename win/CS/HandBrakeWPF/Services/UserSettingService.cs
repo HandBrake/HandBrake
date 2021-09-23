@@ -280,6 +280,8 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ShowAddAllToQueue, false);
             defaults.Add(UserSettingConstants.ShowAddSelectionToQueue, false);
             defaults.Add(UserSettingConstants.MediaPlayerPath, @"C:\Program Files\VideoLAN\vlc\vlc.exe");
+            defaults.Add(UserSettingConstants.PresetToolbarDisplayOverlayPanel, false);
+            defaults.Add(UserSettingConstants.PresetMenuDisplayMode, 0);
 
             // Output Files
             defaults.Add(UserSettingConstants.AutoNaming, true);
@@ -341,9 +343,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
-
-            // Hidden Settings
-            defaults.Add(UserSettingConstants.PresetDisplayMode, 1);
 
             return defaults;
         }

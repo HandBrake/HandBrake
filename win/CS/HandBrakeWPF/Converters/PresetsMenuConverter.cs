@@ -81,7 +81,7 @@ namespace HandBrakeWPF.Converters
 
             IEnumerable<IPresetObject> presetObjects = presets.ToList();
 
-            PresetDisplayMode mode = userSettingService.GetUserSetting<PresetDisplayMode>(UserSettingConstants.PresetDisplayMode);
+            PresetDisplayMode mode = userSettingService.GetUserSetting<PresetDisplayMode>(UserSettingConstants.PresetMenuDisplayMode);
 
             switch (mode)
             {

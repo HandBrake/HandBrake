@@ -3827,6 +3827,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EXPERIMENTAL UX: Show the preset list as a overlay tree view rather than a traditional menu. (main window toolbar preset button only).
+        /// </summary>
+        public static string OptionsView_PresetFloatingMode {
+            get {
+                return ResourceManager.GetString("OptionsView_PresetFloatingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Process Isolation.
         /// </summary>
         public static string OptionsView_ProcessIsolation {
@@ -4742,6 +4751,15 @@ namespace HandBrakeWPF.Properties {
         public static string PresetDisplayMode_Flat {
             get {
                 return ResourceManager.GetString("PresetDisplayMode_Flat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Floating Treeview.
+        /// </summary>
+        public static string PresetDisplayMode_FloatingPanel {
+            get {
+                return ResourceManager.GetString("PresetDisplayMode_FloatingPanel", resourceCulture);
             }
         }
         

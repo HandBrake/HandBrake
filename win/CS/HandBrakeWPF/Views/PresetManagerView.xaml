@@ -118,7 +118,7 @@
             </Menu>
 
             <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
-                              VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="LightGray" Grid.Row="2" Margin="10,0,0,10"
+                              VerticalAlignment="Stretch" Grid.Row="2" Margin="10,0,0,10"
                               ItemsSource="{Binding PresetsCategories}" Width="300"
                               SelectedItemChanged="PresetListTree_OnSelectedItemChanged"
                               PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">

@@ -2564,4 +2564,10 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="Options_UserSettings" xml:space="preserve">
     <value>User Settings</value>
   </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Floating Treeview</value>
+  </data>
+  <data name="OptionsView_PresetFloatingMode" xml:space="preserve">
+    <value>EXPERIMENTAL UX: Show the preset list as a overlay tree view rather than a traditional menu. (main window toolbar preset button only)</value>
+  </data>
 </root>

@@ -14,7 +14,6 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
-    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -67,7 +66,17 @@ namespace HandBrakeWPF.Views
 
         private void Presets_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            // If we've clicked the dropdown part of the button, display the context menu below the button.
+            // If we've clicked the drop down part of the button, display the context menu below the button.
+            bool isInPresetPaneMode = ((MainViewModel)this.DataContext).IsInFloatingPresetPaneMode;
+            if (isInPresetPaneMode)
+            {
+                // Focus the keyboard navigation onto the floating panel and show it. 
+                KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, ((MainViewModel)this.DataContext).IsPresetPaneDisplayed ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
+                ((MainViewModel)this.DataContext).TogglePresetPane();
+                return;
+            }
+       
+            // Otherwise, handle the standard preset context menu design.
             Button button = (sender as Button);
             if (button != null)
             {
@@ -111,6 +120,23 @@ namespace HandBrakeWPF.Views
                 button.ContextMenu.PlacementTarget = button;
                 button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
                 button.ContextMenu.IsOpen = true;
+            }
+        }
+        
+        private void ParentGrid_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            bool isPresetPaneDisplayed = ((MainViewModel)this.DataContext).IsPresetPaneDisplayed;
+
+            if (isPresetPaneDisplayed)
+            {
+                HitTestResult presetControlPressed = VisualTreeHelper.HitTest(presetPaneControl, e.GetPosition(presetPaneControl));
+                HitTestResult presetButtonPressed = VisualTreeHelper.HitTest(presetbtn, e.GetPosition(presetbtn));
+
+                if (presetButtonPressed == null && presetControlPressed == null)
+                {
+                    KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, KeyboardNavigationMode.Continue);
+                    ((MainViewModel)this.DataContext).TogglePresetPane(); // Clicked off the preset control
+                }
             }
         }
     }

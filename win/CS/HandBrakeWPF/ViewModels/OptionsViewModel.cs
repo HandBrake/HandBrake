@@ -382,6 +382,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool ShowPresetFloatingPanel { get; set; }
+
         /* Output Files */
 
         public string AutoNameDefaultPath
@@ -1153,8 +1155,9 @@ namespace HandBrakeWPF.ViewModels
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
             this.DarkThemeMode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
-            this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetDisplayMode);
-            
+            this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetMenuDisplayMode);
+            this.ShowPresetFloatingPanel = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetToolbarDisplayOverlayPanel);
+
             // #############################
             // When Done
             // #############################
@@ -1348,7 +1351,6 @@ namespace HandBrakeWPF.ViewModels
                 this.presetService.UpdateBuiltInPresets();
                 this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
         }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -1371,7 +1373,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
-            this.userSettingService.SetUserSetting(UserSettingConstants.PresetDisplayMode, this.SelectedPresetDisplayMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PresetMenuDisplayMode, this.SelectedPresetDisplayMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PresetToolbarDisplayOverlayPanel, this.ShowPresetFloatingPanel);
 
             /* When Done */
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);
