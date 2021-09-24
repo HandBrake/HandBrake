@@ -1310,6 +1310,8 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateSettings()
         {
             this.WhenDone = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
+            this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
+            this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
         }
 
         public void GotoTab(OptionsTab tab)
