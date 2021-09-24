@@ -1820,12 +1820,18 @@ namespace HandBrakeWPF.ViewModels
         {
             bool value = !this.ShowAddAllToQueue;
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, value);
+
+            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+            optionsViewModel.UpdateSettings();
         }
 
         public void FlipAddSelectionToQueue()
         {
             bool value = !this.ShowAddSelectionToQueue;
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, value);
+
+            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+            optionsViewModel.UpdateSettings();
         }
 
         /* Private Methods*/
