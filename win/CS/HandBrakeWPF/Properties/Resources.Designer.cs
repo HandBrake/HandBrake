@@ -4109,7 +4109,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake requires a 64bit version of Windows 7 or later to run..
+        ///   Looks up a localized string similar to HandBrake requires a 64bit version of Windows 10 or later to run..
         /// </summary>
         public static string OsBitnessWarning {
             get {
@@ -4118,7 +4118,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions..
+        ///   Looks up a localized string similar to HandBrake requires Windows 10 or later to run. Version 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 and 8.x) were the last versions to support these older operating systems..
         /// </summary>
         public static string OsVersionWarning {
             get {
