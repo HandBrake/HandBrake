@@ -22,12 +22,6 @@ namespace HandBrakeWPF.Utilities
     /// </summary>
     public class SystemInfo
     {
-        private static int cpuCoreCount = -1;
-
-        /// <summary>
-        /// Gets the total physical ram in a system
-        /// </summary>
-        /// <returns>The total memory in the system</returns>
         public static ulong TotalPhysicalMemory
         {
             get
@@ -51,40 +45,17 @@ namespace HandBrakeWPF.Utilities
         }
 
         public static bool IsArmDevice => RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
-        
-        public static int GetCpuCoreCount
+
+        public static int GetCpuLogicalCount
         {
-            get
-            {
-                if (IsArmDevice)
-                {
-                    // TODO find a better way to get logical count. 
-                    // This is for ARM64 code path as System.Management is not available.
-                    return Environment.ProcessorCount;
-                }
-
-                if (cpuCoreCount != -1)
-                {
-                    return cpuCoreCount;
-                }
-
-                int coreCount = 0;
-                var cpuList = new ManagementObjectSearcher("Select NumberOfCores from Win32_Processor").Get();
-
-                foreach (var item in cpuList)
-                {
-                    coreCount += int.Parse(item["NumberOfCores"].ToString());
-                }
-
-                cpuCoreCount = coreCount;
-
-                return cpuCoreCount;
-            }
+            get => Environment.ProcessorCount;
         }
 
-        /// <summary>
-        /// Gets the System screen size information.
-        /// </summary>
+        public static int MaximumSimultaneousInstancesSupported
+        {
+            get => Math.Min((int)Math.Round((decimal)SystemInfo.GetCpuLogicalCount / 2, 0), 8);
+        }
+
         public static string ScreenBounds
         {
             get
@@ -96,9 +67,6 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-      /// <summary>
-        /// Gets the get gpu driver version.
-        /// </summary>
         public static List<string> GetGPUInfo
         {
             get

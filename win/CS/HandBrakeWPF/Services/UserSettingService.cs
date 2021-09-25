@@ -244,7 +244,7 @@ namespace HandBrakeWPF.Services
             // Legacy Settings forced Reset.
             this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
 
-            if (!SystemInfo.IsWindows10() || SystemInfo.GetCpuCoreCount < 4)
+            if (!SystemInfo.IsWindows10() || SystemInfo.MaximumSimultaneousInstancesSupported < 2)
             {
                 this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
                 this.userSettings[UserSettingConstants.SimultaneousEncodes] = 1;

@@ -51,9 +51,9 @@ namespace HandBrakeWPF.Services.Queue
             if (e.Key == UserSettingConstants.SimultaneousEncodes)
             {
                 this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
-                if (this.maxAllowedInstances > Utilities.SystemInfo.GetCpuCoreCount)
+                if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
                 {
-                    this.maxAllowedInstances = Utilities.SystemInfo.GetCpuCoreCount;
+                    this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
                 }
             }
         }
@@ -86,9 +86,9 @@ namespace HandBrakeWPF.Services.Queue
             this.totalMfInstances = 1;
 
             // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
-            if (this.maxAllowedInstances > Utilities.SystemInfo.GetCpuCoreCount)
+            if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
             {
-                this.maxAllowedInstances = Utilities.SystemInfo.GetCpuCoreCount;
+                this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
             }
         }
 

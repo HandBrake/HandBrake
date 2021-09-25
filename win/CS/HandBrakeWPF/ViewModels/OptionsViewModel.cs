@@ -1007,11 +1007,17 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new BindingList<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+                BindingList<int> list = new BindingList<int>();
+                for (int i = 1; i <= SystemInfo.MaximumSimultaneousInstancesSupported; i++)
+                {
+                    list.Add(i);
+                }
+
+                return list;
             }
         }
 
-        public bool IsSimultaneousEncodesSupported => Utilities.SystemInfo.GetCpuCoreCount >= 4;
+        public bool IsSimultaneousEncodesSupported => SystemInfo.MaximumSimultaneousInstancesSupported > 1;
         
         #region Public Methods
 
