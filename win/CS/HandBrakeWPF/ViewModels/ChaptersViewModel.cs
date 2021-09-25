@@ -15,7 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -28,40 +27,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using Microsoft.Win32;
 
-    /// <summary>
-    /// The Chapters View Model
-    /// </summary>
+    using ChapterMarker = Services.Encode.Model.Models.ChapterMarker;
+    using EncodeTask = Services.Encode.Model.EncodeTask;
+    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
-        #region Constants and Fields
-
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The source chapters backing field
-        /// </summary>
         private List<Chapter> sourceChaptersList;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChaptersViewModel"/> class.
-        /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        /// <param name="errorService">
-        /// The Error Service 
-        /// </param>
         public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IErrorService errorService)
         {
             this.Task = new EncodeTask();
@@ -69,8 +45,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
-
-        #endregion
 
         #region Public Properties
 
@@ -131,26 +105,25 @@ namespace HandBrakeWPF.ViewModels
         /// </exception>
         public void Export()
         {
-            string fileName = null;
-            using (var saveFileDialog = new SaveFileDialog()
-                                        {
-                                            Filter = "Csv File|*.csv",
-                                            DefaultExt = "csv",
-                                            CheckPathExists = true,
-                                            OverwritePrompt = true
-                                        })
-            {
-                var dialogResult = saveFileDialog.ShowDialog();
-                fileName = saveFileDialog.FileName;
+            var saveFileDialog = new SaveFileDialog()
+                                 {
+                                     Filter = "Csv File|*.csv",
+                                     DefaultExt = "csv",
+                                     CheckPathExists = true,
+                                     OverwritePrompt = true
+                                 };
 
-                // Exit early if the user cancelled or the filename is invalid
-                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
-                    return;
+            var dialogResult = saveFileDialog.ShowDialog();
+            string filename = saveFileDialog.FileName;
+
+            if (dialogResult == false || string.IsNullOrEmpty(filename))
+            {
+                return;
             }
 
             try
             {
-                using (var csv = new StreamWriter(fileName))
+                using (var csv = new StreamWriter(filename))
                 {
                     foreach (ChapterMarker row in this.Chapters)
                     {
@@ -177,23 +150,29 @@ namespace HandBrakeWPF.ViewModels
         {
             string filename = null;
             string fileExtension = null;
-            using (var dialog = new OpenFileDialog()
-                    {
-                        Filter = string.Join("|", "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
-                        FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
-                        CheckFileExists = true
-                    })
+            var dialog = new OpenFileDialog()
             {
-                var dialogResult = dialog.ShowDialog();
-                filename = dialog.FileName;
+                Filter = string.Join(
+                                 "|",
+                                 "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt",
+                                 ChapterImporterCsv.FileFilter,
+                                 ChapterImporterXml.FileFilter,
+                                 ChapterImporterTxt.FileFilter),
+                FilterIndex = 1, // 1 based, the index value of the first filter entry is 1
+                CheckFileExists = true
+            };
 
-                // Exit if the user didn't press the OK button or the file name is invalid
-                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(filename))
-                    return;
+            var dialogResult = dialog.ShowDialog();
+            filename = dialog.FileName;
 
-                // Retrieve the file extension after we've confirmed that the user selected something to open
-                fileExtension = Path.GetExtension(filename)?.ToLowerInvariant();
+            if (dialogResult == false || string.IsNullOrEmpty(filename))
+            {
+                return;
             }
+
+            // Retrieve the file extension after we've confirmed that the user selected something to open
+            fileExtension = Path.GetExtension(filename)?.ToLowerInvariant();
+
 
             var importedChapters = new Dictionary<int, Tuple<string, TimeSpan>>();
 
@@ -215,7 +194,7 @@ namespace HandBrakeWPF.ViewModels
                         Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
                         string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
             }
-            
+
             // Exit early if no chapter information was extracted
             if (importedChapters == null || importedChapters.Count <= 0)
                 return;

@@ -11,9 +11,9 @@ namespace HandBrakeWPF.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Management;
     using System.Runtime.InteropServices;
-    using System.Windows.Forms;
 
     using Microsoft.Win32;
 
@@ -85,10 +85,15 @@ namespace HandBrakeWPF.Utilities
         /// <summary>
         /// Gets the System screen size information.
         /// </summary>
-        /// <returns>System.Windows.Forms.Scree</returns>
-        public static Screen ScreenBounds
+        public static string ScreenBounds
         {
-            get { return Screen.PrimaryScreen; }
+            get
+            {
+                string screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth.ToString(CultureInfo.InvariantCulture);
+                string screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight.ToString(CultureInfo.InvariantCulture);
+
+                return string.Format("{0}x{1}", screenWidth, screenHeight);
+            }
         }
 
       /// <summary>

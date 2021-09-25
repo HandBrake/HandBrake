@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Services
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Windows.Forms;
     using System.Windows.Media;
 
     using Caliburn.Micro;
@@ -25,8 +24,8 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
+    using ILog = Logging.Interfaces.ILog;
 
     /// <summary>
     /// The when done service.
@@ -161,10 +160,10 @@ namespace HandBrakeWPF.Services
                         Win32.ExitWindowsEx(0, 0);
                         break;
                     case WhenDone.Sleep:
-                        Application.SetSuspendState(PowerState.Suspend, true, true);
+                        Win32.SetSuspendState(false, false, false);
                         break;
                     case WhenDone.Hibernate:
-                        Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        Win32.SetSuspendState(true, false, false);
                         break;
                     case WhenDone.LockSystem:
                         Win32.LockWorkStation();

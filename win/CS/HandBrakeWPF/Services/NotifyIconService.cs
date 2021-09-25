@@ -4,17 +4,23 @@
 
 namespace HandBrakeWPF.Services
 {
+    using System;
+    using System.Drawing;
     using System.Windows.Forms;
 
     using HandBrakeWPF.Services.Interfaces;
 
     public class NotifyIconService : INotifyIconService
     {
+        private Action actionCallback;
         private NotifyIcon notifyIcon;
 
-        public void RegisterNotifyIcon(NotifyIcon ni)
+        public void Setup(Icon icon)
         {
-            this.notifyIcon = ni;
+            this.notifyIcon = new NotifyIcon();
+            this.notifyIcon.Icon = icon;
+
+            this.notifyIcon.Click += this.NotifyIcon_Click;
         }
 
         public void SetTooltip(string text)
@@ -22,6 +28,24 @@ namespace HandBrakeWPF.Services
             if (this.notifyIcon != null)
             {
                 this.notifyIcon.Text = text;
+            }
+        }
+
+        public void SetVisibility(bool isVisible)
+        {
+            this.notifyIcon.Visible = isVisible;
+        }
+
+        public void SetClickCallback(Action callback)
+        {
+            this.actionCallback = callback;
+        }
+
+        private void NotifyIcon_Click(object sender, System.EventArgs e)
+        {
+            if (this.actionCallback != null)
+            {
+                this.actionCallback();
             }
         }
     }

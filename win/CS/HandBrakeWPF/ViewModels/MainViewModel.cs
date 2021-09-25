@@ -74,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly ILog logService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
-        private readonly Win7 windowsTaskbar = new Win7();
+        private readonly WindowsTaskbar windowsTaskbar = new WindowsTaskbar();
         private readonly DelayedActionProcessor delayedPreviewprocessor = new DelayedActionProcessor();
 
         private string windowName;
