@@ -4,7 +4,9 @@
 Before updating, please make sure there are no pending encodes in the Queue.
 Please also make a backup of any custom presets and app preferences you have as they may not be compatible with newer versions.
 
-For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
+For Windows users:
+- Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
+- Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
 
 
 ## HandBrake 1.4.2
@@ -23,6 +25,8 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 
 ### Mac
 - Fixed a build system errors that could cause failures linking libbluray 
+- Fixed incorrect documentation URL
+- Fixed a possible crash that can occur when applying a malformed preset. 
 
 ### Windows
 - Added "Preset" used to the Queue summary tab.
