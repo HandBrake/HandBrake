@@ -66,16 +66,11 @@ namespace HandBrakeWPF.Views
 
         private void Presets_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            // If we've clicked the drop down part of the button, display the context menu below the button.
-            bool isInPresetPaneMode = ((MainViewModel)this.DataContext).IsInFloatingPresetPaneMode;
-            if (isInPresetPaneMode)
-            {
-                // Focus the keyboard navigation onto the floating panel and show it. 
-                KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, ((MainViewModel)this.DataContext).IsPresetPaneDisplayed ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
-                ((MainViewModel)this.DataContext).TogglePresetPane();
-                return;
-            }
-       
+            // Focus the keyboard navigation onto the floating panel and show it. 
+            KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, ((MainViewModel)this.DataContext).IsPresetPaneDisplayed ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
+            ((MainViewModel)this.DataContext).TogglePresetPane();
+            return;
+
             // Otherwise, handle the standard preset context menu design.
             Button button = (sender as Button);
             if (button != null)

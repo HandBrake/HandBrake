@@ -382,8 +382,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool ShowPresetFloatingPanel { get; set; }
-
         /* Output Files */
 
         public string AutoNameDefaultPath
@@ -1162,7 +1160,6 @@ namespace HandBrakeWPF.ViewModels
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
             this.DarkThemeMode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             this.SelectedPresetDisplayMode = (PresetDisplayMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.PresetMenuDisplayMode);
-            this.ShowPresetFloatingPanel = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetToolbarDisplayOverlayPanel);
 
             // #############################
             // When Done
@@ -1382,7 +1379,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.PresetMenuDisplayMode, this.SelectedPresetDisplayMode);
-            this.userSettingService.SetUserSetting(UserSettingConstants.PresetToolbarDisplayOverlayPanel, this.ShowPresetFloatingPanel);
 
             /* When Done */
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);

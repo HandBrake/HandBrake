@@ -830,8 +830,6 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsPresetPaneDisplayed { get; set; }
 
-        public bool IsInFloatingPresetPaneMode { get; set; }
-
         /* Commands */
 
         public ICommand QueueCommand { get; set; }
@@ -886,13 +884,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(7));
                 clearLog.Start();
-            }
-
-            // Preset Display Mode
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetToolbarDisplayOverlayPanel))
-            {
-                this.IsInFloatingPresetPaneMode = true;
-                this.NotifyOfPropertyChange(() => this.IsInFloatingPresetPaneMode);
             }
 
             this.PictureSettingsViewModel.TabStatusChanged += this.TabStatusChanged;
@@ -2233,11 +2224,6 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
                     this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
                     this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
-                    break;
-
-                case UserSettingConstants.PresetToolbarDisplayOverlayPanel:
-                    this.IsInFloatingPresetPaneMode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetToolbarDisplayOverlayPanel);
-                    this.NotifyOfPropertyChange(() => this.IsInFloatingPresetPaneMode);
                     break;
             }
         }

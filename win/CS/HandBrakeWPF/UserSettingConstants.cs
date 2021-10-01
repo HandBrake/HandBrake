@@ -80,6 +80,5 @@ namespace HandBrakeWPF
         public const string RunCounter = "HandBrakeRunCounter";
         public const string ForceSoftwareRendering = "ForceSoftwareRendering";
         public const string PresetMenuDisplayMode = "PresetMenuDisplayMode";
-        public const string PresetToolbarDisplayOverlayPanel = "PresetToolbarDisplayOverlayPanel";
     }
 }
