@@ -1,0 +1,12 @@
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
+"eBw-qE-Hyb.title" = "名称：";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Track name"; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibExternalAccessibilityDescription" = "轨道名称";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibShadowedToolTip" = "播放器可以在音频/字幕选择列表中用到它。";
+
+/* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
+"Vzr-yd-VKe.title" = "完成";
+

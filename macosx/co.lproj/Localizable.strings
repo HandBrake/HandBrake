@@ -191,7 +191,7 @@
 "HandBrake" = "HandBrake";
 
 /* Preview -> live preview alert message */
-"HandBrake can't open the preview." = "HandBrake ùn pò micca apre l’apprezzazione.";
+"HandBrake can't open the preview." = "HandBrake ùn pò micca apre a fighjulata.";
 
 /* Preview -> live preview alert informative text */
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake ùn pò micca leghje sta cumbinazione di furmatu video/audio/cuntenente. Vulete aprelu cù un lettore esternu ?";
@@ -213,7 +213,7 @@
 "Keep Encoding" = "Cuntinuà a cudificazione";
 
 /* Touch bar */
-"Live Preview" = "Apprezzazione istantanea";
+"Live Preview" = "Fighjulata istantanea";
 
 /* Queue undo action name */
 "Move Job in Queue" = "Dispiazzà u travagliu in a fila d’attesa";
@@ -248,7 +248,7 @@
 
 /* Toolbar Open/Cancel Item
    Touch bar */
-"Open Source" = "Apre una fonte";
+"Open Source" = "Fonte aperta";
 
 /* File already exists alert -> second button
    File already exists in queue alert -> second button */
@@ -286,16 +286,16 @@
 "Preferences…" = "Preferenze…";
 
 /* Preview -> progress formatter title */
-"preview" = "apprezzazione";
+"preview" = "fighjulata";
 
 /* Preview -> window title */
-"Preview" = "Apprezzazione";
+"Preview" = "Fighjulata";
 
 /* Preview -> window title format */
-"Preview - %@ %@" = "Apprezzazione - %1$@ %2$@";
+"Preview - %@ %@" = "Fighjulata - %1$@ %2$@";
 
 /* Preview -> accessibility label */
-"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Apprezzazione di a fiura, dimensione : %1$zu x %2$zu, scala : %3$.0f%%";
+"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Fighjulata di a fiura, dimensione : %1$zu x %2$zu, scala : %3$.0f%%";
 
 /* Touch bar */
 "Previews" = "Apprezzazioni";
@@ -305,7 +305,7 @@
 "Put down that cocktail…" = "Punite stu bichjeru…";
 
 /* Preferences -> Output Name Token */
-"Quality/Bitrate" = "Qualità / Ghjettu binariu";
+"Quality/Bitrate" = "Qualità / Flussu binariu";
 
 /* Queue window title */
 "Queue" = "Fila d’attesa";
@@ -367,7 +367,7 @@
 "Show Activity Window" = "Affissà a finestra d’attività";
 
 /* Touch bar */
-"Show Preview Window" = "Affissà a finestra d’apprezzazione";
+"Show Preview Window" = "Affissà a finestra di fighjulata";
 
 /* Job statistics */
 "Size:" = "Dimensione :";

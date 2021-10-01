@@ -1,0 +1,210 @@
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Tune"; ObjectID = "1XQ-md-5cQ"; */
+"1XQ-md-5cQ.ibExternalAccessibilityDescription" = "降噪调优";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nFilm refines settings for use with most live action content.\n\nGrain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.\n\nHigh Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.\n\nAnimation is useful for cel animation such as anime and cartoons.\n\nTape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.\n\nSprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video."; ObjectID = "1XQ-md-5cQ"; */
+"1XQ-md-5cQ.ibShadowedToolTip" = "降噪调优。进一步调整降噪预设以针对特定场景设置优化。\n\n无：使用默认预设设置。\n\n电影：会优化设置，以用于大多数实况转播内容。\n\n颗粒：仅处理彩色通道。 在保留亮度颗粒外观的同时，减少或消除彩色噪点时很有用。\n\n高速画面：通过避免对颜色通道的时间处理，减少了高速场景中的颜色拖影。 适用于体育和动作视频。\n\n动画：对于诸如动漫和卡通很有用。\n\n磁带：适用于低细节的模拟磁带源，例如 VHS，在这种情况下电影不会产生理想的效果。\n\nSprite：可用于 1-/4-/8-/16-bit 2D 游戏。 Sprite 不适用于高清视频。";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "5Vt-0j-92R"; */
+"5Vt-0j-92R.title" = "调优：";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace filter preset.\n\nDefault is well balanced for speed and quality.\n\nSkip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.\n\nEEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.\n\nBob attempts to better preserve motion for a slight penalty to perceived resolution."; ObjectID = "6nG-zk-FMo"; */
+"6nG-zk-FMo.ibShadowedToolTip" = "反交错预设。\n\n默认：是质量和速度之间的良好平衡。\n\nSkip Spatial Check：可以让 Yadif 跳过对某些可避免的伪影的纠正，以获得轻微的速度提升。\n\nEEDI2：使用较慢的、高质量的插值算法来处理 Decomb。对于最困难的源很有用。\n\nBob：试图更好地保护运动，以达到对感知分辨率的轻微降低。";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "8am-ve-1Xl"; */
+"8am-ve-1Xl.title" = "预设：";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "aem-qz-Cqk"; */
+"aem-qz-Cqk.title" = "自定义：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "akB-JW-MPe"; */
+"akB-JW-MPe.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
+"b6A-ax-2Ed.title" = "其他视图";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Sharpen parameters.\n\nUnsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap"; ObjectID = "bBr-vV-iAz"; */
+"bBr-vV-iAz.ibShadowedToolTip" = "自定义锐化参数。\n\nUnsharp 语法：y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp 默认值：y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7\n\nLapsharp 语法：y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp 默认值：y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.\n\nUnsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.\n\nLapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking."; ObjectID = "boo-YC-gWm"; */
+"boo-YC-gWm.ibShadowedToolTip" = "锐化可以增强外观细节，特别是边缘。过强的锐化设置可能会产生环形伪影并增加噪声，从而损害图像质量，从而降低压缩效率。\n\nUnsharp 是一个通用的非锐化掩蔽滤镜。它通过模糊来锐化，然后计算模糊的画面和原始画面之间的差异。\n\nLapsharp 锐化使用近似 Laplacian 边缘滤波器的卷积核进行锐化，有时会产生比 Unsharp Masking 更高质量的结果。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibExternalAccessibilityDescription" = "锐化调优";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios."; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibShadowedToolTip" = "去块效应调优。进一步调整去块效应预设以针对特定场景设置优化。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Deblock Preset"; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibExternalAccessibilityDescription" = "去区块滤镜预设";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock reduces blocky artifacts caused by low quality video compression."; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibShadowedToolTip" = "去块效应会减少由低质量视频压缩造成的块状伪影。";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "CFV-ur-emt"; */
+"CFV-ur-emt.title" = "自定义：";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Preset"; ObjectID = "cG4-79-P9J"; */
+"cG4-79-P9J.ibExternalAccessibilityDescription" = "锐化预设";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen filter preset. Sets the strength of the filter."; ObjectID = "cG4-79-P9J"; */
+"cG4-79-P9J.ibShadowedToolTip" = "锐化滤镜预设。 设置过滤器的强度。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Preset"; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibExternalAccessibilityDescription" = "降噪预设";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise filter preset. Sets the strength of the filter."; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibShadowedToolTip" = "降噪滤镜预设。设置滤镜的强度。";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "D7G-kY-TSj"; */
+"D7G-kY-TSj.title" = "预设：";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "Da7-pY-5vu"; */
+"Da7-pY-5vu.title" = "自定义：";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
+"DER-tS-cLx.ibShadowedToolTip" = "反胶卷过带消除了由胶转磁产生的梳状伪影，胶卷过带是一个将电影帧率转换为电视帧率的过程。";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
+"DI9-Ed-acp.ibShadowedToolTip" = "自定义去块效应参数。\n\nstrength=s:thresh=t:blocksize=b";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "DvX-m9-Q6u"; */
+"DvX-m9-Q6u.title" = "自定义：";
+
+/* Class = "NSTextFieldCell"; title = "Deblock:"; ObjectID = "gKq-xF-AZE"; */
+"gKq-xF-AZE.title" = "去块效应：";
+
+/* Class = "NSButtonCell"; title = "Grayscale"; ObjectID = "h7g-eE-vgv"; */
+"h7g-eE-vgv.title" = "灰度";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "Hcn-5m-N9x"; */
+"Hcn-5m-N9x.ibExternalAccessibilityDescription" = "锐化调优";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nUnsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.\n\nLapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.\n\nLapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.\n\nLapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.\n\nLapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges."; ObjectID = "Hcn-5m-N9x"; */
+"Hcn-5m-N9x.ibShadowedToolTip" = "锐化调优。进一步调整锐化预设以针对特定场景设置优化。\n\n无：使用默认的预设设置。\n\nUnsharp：可以调整为超细、细、中、粗或非常粗的锐化。根据输出画面的分辨率和要增强的细节的精细程度选择一个。\n\nLapsharp 的 Film 调优：细化设置，适用于大多数真人表演内容。电影使用各向同性的 Laplacian 内核对所有边缘进行类似的锐化，并且亮度（亮度）信息的锐化程度高于色度（颜色）信息。\n\nLapsharp 的 Grain 调优：与 Film 类似，但使用高斯内核的各向同性 Laplacian 来减少对噪声和纹理的影响。对于保留颗粒和作为 Film 调优的一般替代方案很有用。\n\nLapsharp 的 Animation 调优：对于动画和漫画等赛璐珞动画很有用。动画与Film 相同，但整体强度降低，以避免产生伪影。\n\nLapsharp 的 Sprite 调优：对 1-/4-/8-/16 位的 2D 游戏很有用。Sprite 使用 4-neighbor 的 Laplacian 内核，它对垂直和水平边缘的增强大于对角线边缘。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Preset"; ObjectID = "hiK-Va-rbJ"; */
+"hiK-Va-rbJ.ibExternalAccessibilityDescription" = "色度平滑预设";
+
+/* Class = "NSTextFieldCell"; title = "Colorspace:"; ObjectID = "HVj-4g-OVv"; */
+"HVj-4g-OVv.title" = "色彩空间：";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "hyH-QP-Zdi"; */
+"hyH-QP-Zdi.title" = "调优：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "IHH-Se-l6d"; */
+"IHH-Se-l6d.title" = "其他视图";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.\n\nNLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.\n\nHQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail."; ObjectID = "ins-7X-kbN"; */
+"ins-7X-kbN.ibShadowedToolTip" = "降噪可以减少或去除噪音和颗粒的外观。这可以提高压缩效率，并以较小的文件大小创建更高质量的视频。过强的降噪设置可能会因为丢弃细节而损害画面质量。\n\nNLMeans：是一个以速度为代价的高质量降噪过滤器。在质量比速度更重要的地方使用。\n\nHQDN3D：是一个自适应低通滤波器，比 NLMeans 更快，但在保留精细细节方面效果较差。";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Custom deleteline settings."; ObjectID = "ipJ-z3-XnJ"; */
+"ipJ-z3-XnJ.ibExternalAccessibilityDescription" = "自定义反胶卷过带设置。";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Detelecine parameters.\n\nSyntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0"; ObjectID = "ipJ-z3-XnJ"; */
+"ipJ-z3-XnJ.ibShadowedToolTip" = "自定义反胶卷过带参数。\n\n语法：skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\n默认值：skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
+"IQG-Nn-HTb.ibShadowedToolTip" = "启用隔行扫描后，允许去隔行过滤器只处理隔行视频帧。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Tune"; ObjectID = "jFk-Eg-o2W"; */
+"jFk-Eg-o2W.ibExternalAccessibilityDescription" = "色度平滑调优";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Chroma Smooth tune. Further adjusts the Chroma Smooth preset to optimize settings for specific scenarios."; ObjectID = "jFk-Eg-o2W"; */
+"jFk-Eg-o2W.ibShadowedToolTip" = "色度平滑调优。进一步调整色度平滑预设以针对特定场景设置优化。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "jQg-bp-pb3"; */
+"jQg-bp-pb3.title" = "其他视图";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "KiY-kz-54k"; */
+"KiY-kz-54k.title" = "自定义：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "lad-BT-Hgz"; */
+"lad-BT-Hgz.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "MJr-ob-Uoe"; */
+"MJr-ob-Uoe.title" = "其他视图";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "n6U-tH-vo0"; */
+"n6U-tH-vo0.title" = "自定义：";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oWz-qF-JYk"; */
+"oWz-qF-JYk.title" = "自定义：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "pIO-dE-81w"; */
+"pIO-dE-81w.title" = "其他视图";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Grayscale removes the color component of the video. Often referred to as Black & White video."; ObjectID = "Psx-nN-XiT"; */
+"Psx-nN-XiT.ibShadowedToolTip" = "灰度消除了视频的颜色分量。通常被称为黑白视频。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "PyP-FP-gGx"; */
+"PyP-FP-gGx.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qey-Yo-9sX"; */
+"qey-Yo-9sX.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Qz4-EY-GFO"; */
+"Qz4-EY-GFO.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
+"r9i-tL-qtD.title" = "其他视图";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nYadif syntax: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
+"r64-vI-ymx.ibShadowedToolTip" = "自定义反交错参数。\n\nYadif 语法：mode=m:parity=p\n\nYadif 默认值：mode=3\n\nDecomb 语法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb 默认值：mode=7";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
+"rfp-ah-CVB.title" = "其他视图";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
+"rPg-F2-gtl.ibShadowedToolTip" = "自定义隔行扫描参数。\n\n语法：mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\n默认值：mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
+
+/* Class = "NSTextFieldCell"; title = "Denoise:"; ObjectID = "Rxe-Xm-vXj"; */
+"Rxe-Xm-vXj.title" = "降噪：";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Colorspace Preset"; ObjectID = "ScE-ad-pHc"; */
+"ScE-ad-pHc.ibExternalAccessibilityDescription" = "色彩空间预设";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
+"tje-4P-jKt.title" = "调优：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tlc-kS-W8X"; */
+"tlc-kS-W8X.title" = "其他视图";
+
+/* Class = "NSTextFieldCell"; title = "Sharpen:"; ObjectID = "TwB-ag-L1L"; */
+"TwB-ag-L1L.title" = "锐化：";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "uDH-ts-vs5"; */
+"uDH-ts-vs5.title" = "颜色：";
+
+/* Class = "NSTextFieldCell"; title = "Deinterlace:"; ObjectID = "VsK-mC-9Pj"; */
+"VsK-mC-9Pj.title" = "反交错：";
+
+/* Class = "NSTextFieldCell"; title = "Detelecine:"; ObjectID = "vTS-MJ-8nt"; */
+"vTS-MJ-8nt.title" = "反胶卷过带：";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nYadif is a popular and fast deinterlacer.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
+"xct-UB-bKm.ibShadowedToolTip" = "反交错可以去除画面中的梳状伪影。\n\nYadif 是一个流行的和快速的反交错器。\n\nDecomb 在多种插值算法之间切换，以保证速度和质量。";
+
+/* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
+"xHD-vC-ePQ.title" = "隔行扫描：";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "xqk-dM-L3o"; */
+"xqk-dM-L3o.title" = "自定义：";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
+"ydN-tP-vpt.title" = "调优：";
+
+/* Class = "NSTextFieldCell"; title = "Chroma Smooth:"; ObjectID = "ZLl-Q6-HpE"; */
+"ZLl-Q6-HpE.title" = "色度平滑：";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
+"ZR9-YG-pfn.ibShadowedToolTip" = "自定义降噪参数。\n\nNLMeans 语法：y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans 默认值：y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D 语法：y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D 默认值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ztV-i0-btG"; */
+"ztV-i0-btG.title" = "其他视图";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "zV7-gM-Qpk"; */
+"zV7-gM-Qpk.title" = "其他视图";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
+"zvZ-ZX-yKE.title" = "预设：";
+
