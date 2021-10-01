@@ -2,74 +2,74 @@
 "6A0-9h-5UY.title" = "00:00:00";
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
-"6BQ-wU-p2C.title" = "Traccie";
+"6BQ-wU-p2C.title" = "轨道";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibExternalAccessibilityDescription" = "Piantà a fighjulata istantanea";
+"84p-08-fGK.ibExternalAccessibilityDescription" = "停止实时预览";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
-"84p-08-fGK.ibShadowedToolTip" = "Esce di u lettore è rivultà à a fighjulata di e fiure.";
+"84p-08-fGK.ibShadowedToolTip" = "退出播放器并回到静止图像预览。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Andà à a fine";
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "转到结尾";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
-"CQ0-pk-SFk.ibShadowedToolTip" = "Andà à a fine";
+"CQ0-pk-SFk.ibShadowedToolTip" = "转到结尾";
 
 /* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
 "dGi-LK-P1E.title" = "00:00:00";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
-"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Ammutulisce";
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "静音";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
-"euL-Tg-dmT.ibShadowedToolTip" = "Ammutulisce";
+"euL-Tg-dmT.ibShadowedToolTip" = "静音";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
-"gzA-no-jdv.ibExternalAccessibilityDescription" = "Cuntrollu di u vulume";
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "音量控制";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
-"gzA-no-jdv.ibShadowedToolTip" = "Trascinà per cambià u vulume.";
+"gzA-no-jdv.ibShadowedToolTip" = "拖动以改变音量大小。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "Vulume massimu";
+"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "音量全开";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
-"Kiv-cL-wYI.ibShadowedToolTip" = "Vulume massimu";
+"Kiv-cL-wYI.ibShadowedToolTip" = "音量全开";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Linea tempurale";
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "时间轴";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
-"lBp-JT-ehn.ibShadowedToolTip" = "Trascinà per cambià a pusizione nant’à a linea tempurale.";
+"lBp-JT-ehn.ibShadowedToolTip" = "拖动以改变时间轴位置";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Lettura / Pausa";
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "播放/暂停";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibShadowedToolTip" = "Cummutazione Lettura/Pausa";
+"mLA-ei-4sK.ibShadowedToolTip" = "切换 播放/暂停";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
-"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Tempu rimanente";
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "剩余时间";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
-"PVD-pq-1ZG.ibShadowedToolTip" = "Tempu rimanente.";
+"PVD-pq-1ZG.ibShadowedToolTip" = "剩余时间。";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibExternalAccessibilityDescription" = "Pusizione attuale nant’à a linea tempurale";
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "当前时间轴位置";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
-"uYx-2C-8et.ibShadowedToolTip" = "Pusizione attuale nant’à a linea tempurale.";
+"uYx-2C-8et.ibShadowedToolTip" = "当前时间轴位置。";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
-"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Selezzione di e traccie";
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "轨道选择";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
-"Vj1-Za-AUV.ibShadowedToolTip" = "Attivà o disattivà traccie.";
+"Vj1-Za-AUV.ibShadowedToolTip" = "启用或禁用轨道。";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Andà à u principiu";
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "转到开头";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
-"WuP-9l-8AN.ibShadowedToolTip" = "Andà à u principiu";
+"WuP-9l-8AN.ibShadowedToolTip" = "转到开头";
 

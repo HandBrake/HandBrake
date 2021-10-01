@@ -1,174 +1,174 @@
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
-"0yM-wE-D2x.ibExternalAccessibilityDescription" = "Traccie di sottutitulu";
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "字幕轨道";
 
 /* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
-"1Qg-We-ltR.headerCell.title" = "Cudificazione";
+"1Qg-We-ltR.headerCell.title" = "编码";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
-"4PX-In-DpF.title" = "Aghjunghje tutte e traccie";
+"4PX-In-DpF.title" = "添加所有轨道";
 
 /* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
-"9ka-9O-WDj.headerCell.title" = "Lingua";
+"9ka-9O-WDj.headerCell.title" = "语言";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
-"ABd-Ec-K2L.title" = "Altre viste";
+"ABd-Ec-K2L.title" = "其他视图";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Staccamentu SRT/SSA";
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA 偏移";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibShadowedToolTip" = "Staccamentu pusitivu o nigativu, in milliseconde (ms), per a traccia di fonte selezziunata à u furmatu SRT/SSA. Ùn s’appieca micca à l’altri furmati.";
+"aJi-zQ-0cg.ibShadowedToolTip" = "所选 SRT/SSA 格式源轨道的正或负偏移，单位为毫秒（ms）。不适用于其他格式。";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
-"cSW-OC-qKA.title" = "Finestra accaduta";
+"cSW-OC-qKA.title" = "弹出";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
-"dap-ee-kor.title" = "Elementu 1";
+"dap-ee-kor.title" = "项目 1";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
-"fAW-To-EeP.title" = "Elementu 3";
+"fAW-To-EeP.title" = "项目 3";
 
 /* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
-"Fgh-pZ-6uu.headerCell.title" = "Staccamentu";
+"Fgh-pZ-6uu.headerCell.title" = "偏移";
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
-"fIe-Fg-ufj.headerCell.title" = "Intarsiati";
+"fIe-Fg-ufj.headerCell.title" = "烧入";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
-"Fr7-eG-NuL.title" = "Altre viste";
+"Fr7-eG-NuL.title" = "其他视图";
 
 /* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
-"fvq-pE-sOC.headerCell.title" = "Predefinitu";
+"fvq-pE-sOC.headerCell.title" = "默认";
 
 /* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
-"fXD-7h-jMl.title" = "Aghjunghje una traccia di sottutitulu esterna…";
+"fXD-7h-jMl.title" = "添加外部字幕轨…";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
-"g4b-FM-qX4.title" = "Elementu 2";
+"g4b-FM-qX4.title" = "项目 2";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
-"gHY-6m-ASb.title" = "Elementu 2";
+"gHY-6m-ASb.title" = "项目 2";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
-"gYk-0C-2tR.title" = "Cellula di testu";
+"gYk-0C-2tR.title" = "文本单元格";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
-"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Solu sottutituli sfurzati";
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "仅强制字幕";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
-"HC5-ql-Vcr.ibShadowedToolTip" = "Sfurzatu solu. Impiega solu i sottutituli marcati cum’è « sfurzatu » per a traccia selezziunata.";
+"HC5-ql-Vcr.ibShadowedToolTip" = "仅强制。在选定的源音轨中仅使用标记为“强制”的字幕。";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
 "hhH-c3-gD0.title" = "0";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
-"HQq-Mp-4sI.title" = "Elementu 2";
+"HQq-Mp-4sI.title" = "项目 2";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
-"HW0-PS-t0U.ibShadowedToolTip" = "Aghjunghje una nova traccia di sottutitulu SRT/SSA à a lista.";
+"HW0-PS-t0U.ibShadowedToolTip" = "添加新的 SRT/SSA 字幕至列表。";
 
 /* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
-"HW0-PS-t0U.title" = "Aghjunghje una traccia di sottutitulu esterna…";
+"HW0-PS-t0U.title" = "添加外部字幕轨道…";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
-"Inz-O5-B8g.ibExternalAccessibilityDescription" = "Lingua SRT/SSA";
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA 语言";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
-"Inz-O5-B8g.ibShadowedToolTip" = "Lingua di a traccia di fonte selezziunata à u furmatu SRT/SSA. Ùn s’appieca micca à l’altri furmati.";
+"Inz-O5-B8g.ibShadowedToolTip" = "所选 SRT/SSA 格式源轨道的语言。不适用于其他格式。";
 
 /* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
-"jcM-HL-QJ6.title" = "Ricaricà";
+"jcM-HL-QJ6.title" = "重新加载";
 
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
-"jG8-uo-1tv.title" = "Ricaricà";
+"jG8-uo-1tv.title" = "重新加载";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
-"JLr-Qi-X0X.title" = "Cuntrollà";
+"JLr-Qi-X0X.title" = "校验";
 
 /* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
-"klV-Gy-igk.headerCell.title" = "Sfurzatu solu";
+"klV-Gy-igk.headerCell.title" = "仅强制";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
-"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Predefinitu";
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "默认";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
-"mdO-Qu-3Pb.ibShadowedToolTip" = "Bandera predefinita. Marca a traccia di sottutituli selezziunata cum’è a traccia predefinita à affissà durante a ripruduzzione.";
+"mdO-Qu-3Pb.ibShadowedToolTip" = "默认标志。将所选字幕轨道标记为播放时的默认显示。";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
-"mVi-zH-KUq.title" = "Caccià tutte e traccie";
+"mVi-zH-KUq.title" = "移除全部轨道";
 
 /* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
-"N3S-st-yGv.headerCell.title" = "Traccia";
+"N3S-st-yGv.headerCell.title" = "音轨";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
-"ooy-Sh-Edm.title" = "Cuntrollà";
+"ooy-Sh-Edm.title" = "检查";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
-"oxg-bs-1si.title" = "Cumpurtamentu di a selezzione…";
+"oxg-bs-1si.title" = "选择行为";
 
 /* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
-"pwm-PV-1x4.title" = "Cumpurtamentu di a selezzione…";
+"pwm-PV-1x4.title" = "选择行为";
 
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
-"QRj-KI-a03.title" = "Testu";
+"QRj-KI-a03.title" = "文本";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
-"QsM-28-Pya.ibShadowedToolTip" = "Cunfigureghja u cumpurtamentu di selezzione di e traccie di sottutitulu. Ste preferenze affettanu a scelta di e traccie chì seranu aghjunte à a lista di e traccie di sottutitulu, ma dinù e preferenze impiegate per ogni traccia.";
+"QsM-28-Pya.ibShadowedToolTip" = "配置字幕轨道的选择行为。这些设置影响哪些轨道将被添加到字幕轨道列表中，以及每个轨道使用的设置。";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
-"QV0-kE-4yR.ibExternalAccessibilityDescription" = "Cudificazione di caratteru SRT/SSA";
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT/SSA 字符编码";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
-"QV0-kE-4yR.ibShadowedToolTip" = "Cudificazione di caratteru di a traccia di fonte selezziunata à u furmatu SRT/SSA. Ùn s’appieca micca à l’altri furmati.";
+"QV0-kE-4yR.ibShadowedToolTip" = "所选 SRT/SSA 格式源轨道的字符编码/字符集。不适用于其他格式。";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
-"R8a-qg-ASg.title" = "Caccià tutte e traccie";
+"R8a-qg-ASg.title" = "移除全部轨道";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
-"R9w-Bn-CCt.title" = "Cuntrollà";
+"R9w-Bn-CCt.title" = "校验";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
-"Rj8-KI-k4L.title" = "Elementu 1";
+"Rj8-KI-k4L.title" = "项目 1";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
-"S2I-Jd-Lyg.title" = "Aghjunghje tutte e traccie";
+"S2I-Jd-Lyg.title" = "添加所有轨道";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
-"Syo-rH-vof.ibShadowedToolTip" = "Lista di e traccie di sottutitulu. U cumpurtamentu è e preferenze di selezzione di e traccie sò caricati da a prerigatura selezziunata è ponu esse cunfigurati via u dialogu di u cumpurtamentu di selezzione di sottutitulu.";
+"Syo-rH-vof.ibShadowedToolTip" = "字幕轨道列表。曲目的选择和设置从所选预设中加载，并且可以使用字幕“选择行为”对话框进行配置。";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
-"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Traccia selezziunata";
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "已选轨道";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
-"Tf3-cP-TGw.ibShadowedToolTip" = "Lingua è furmatu di sottutitulu.";
+"Tf3-cP-TGw.ibShadowedToolTip" = "字幕语言与类型";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
-"ThR-Cn-Vfr.title" = "Elementu 3";
+"ThR-Cn-Vfr.title" = "项目 3";
 
 /* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
-"TJO-RZ-jgb.title" = "Traccie";
+"TJO-RZ-jgb.title" = "轨道";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
-"Umu-1b-U1Z.title" = "Altre viste";
+"Umu-1b-U1Z.title" = "其他视图";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
-"UOP-xa-WpP.title" = "Altre viste";
+"UOP-xa-WpP.title" = "其他视图";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
-"vHW-fn-RSG.title" = "Finestra accaduta";
+"vHW-fn-RSG.title" = "弹出";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
-"Vxx-gk-9kY.ibShadowedToolTip" = "Ricaricheghja a lista di e traccie di sottutitulu impieghendu u cumpurtamentu di selezzione cunfiguratu.";
+"Vxx-gk-9kY.ibShadowedToolTip" = "使用配置的选择重新加载字幕轨道列表。";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
-"yDg-DK-z5D.title" = "Elementu 1";
+"yDg-DK-z5D.title" = "项目 1";
 
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
-"yEC-jb-q8b.title" = "Elementu 3";
+"yEC-jb-q8b.title" = "项目 3";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
-"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Intarsiati";
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "烧入";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
-"zpm-9Z-Hsq.ibShadowedToolTip" = "Intarsiati. Rindite permanente i sottutituli selezziunati incavalchenduli à a traccia video.";
+"zpm-9Z-Hsq.ibShadowedToolTip" = "烧入。将所选字幕通过叠加到视频轨道上而成为永久字幕。";
 
