@@ -60,7 +60,7 @@
         </Grid.RowDefinitions>
 
         <!--  Menu and Taskbar  -->
-        <StackPanel Grid.Row="0"
+        <StackPanel Grid.Row="0" IsEnabled="{Binding IsNavigationEnabled, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Orientation="Vertical">
@@ -635,7 +635,7 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
 
             <StatusBarItem>
                 <ProgressBar Value="{Binding ProgressPercentage}" IsIndeterminate="{Binding IsMultiProcess}"  Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
