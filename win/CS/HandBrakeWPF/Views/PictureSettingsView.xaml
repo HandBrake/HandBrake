@@ -37,13 +37,13 @@
 
         <!-- Source Information -->
         <!-- Row 1-->
-        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_SourceDimensions}" Grid.Row="0" Grid.ColumnSpan="4" FontSize="12" FontWeight="Bold" Margin="10,5,0,0" />
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_SourceDimensions}" Grid.Row="0" Grid.ColumnSpan="4" Style="{StaticResource sectionHeader}" Margin="10,5,0,0" />
         <StackPanel Orientation="Horizontal" Margin="5,0,5,0" Grid.Row="1"  Grid.ColumnSpan="4">
             <Label Content="{Binding SourceInfo}" Name="sourceResolution"/>
         </StackPanel>
 
         <!-- Crop Panel -->
-        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_RotateAndCrop}" FontSize="12" FontWeight="Bold" Grid.Row="2" Grid.Column="0" Margin="10,5,0,5" />
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_RotateAndCrop}" Style="{StaticResource sectionHeader}" Grid.Row="2" Grid.Column="0" Margin="10,5,0,5" />
         <Grid Name="CropPanel" Margin="10,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -124,7 +124,7 @@
         </Grid>
 
         <!-- Size Panel-->
-        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResAndScaling}" FontSize="12" FontWeight="Bold"  Grid.Row="2" Grid.Column="1" Margin="45,5,0,5" />
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_ResAndScaling}" Style="{StaticResource sectionHeader}"  Grid.Row="2" Grid.Column="1" Margin="45,5,0,5" />
         <Grid Name="SizePanel"  Margin="45,0,0,0" Grid.Row="3" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -205,7 +205,7 @@
         </Grid>
 
         <!-- Padding Panel -->
-        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Borders}" FontSize="12" FontWeight="Bold" Grid.Row="2" Grid.Column="2" Margin="45,5,0,5" />
+        <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Borders}" Style="{StaticResource sectionHeader}" Grid.Row="2" Grid.Column="2" Margin="45,5,0,5" />
         <Grid Name="PaddingPanel" Margin="45,0,0,0" Grid.Row="3" Grid.Column="2">
 
             <Grid.ColumnDefinitions>
@@ -279,7 +279,7 @@
 
         <!-- Output Panel -->
         <StackPanel Name="PreviewPanel" Margin="5,5,0,5" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
-            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Output}" FontSize="12" FontWeight="Bold" />
+            <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Output}" Style="{StaticResource sectionHeader}" />
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="{Binding DisplaySize}" HorizontalAlignment="Left" VerticalAlignment="Center"  />

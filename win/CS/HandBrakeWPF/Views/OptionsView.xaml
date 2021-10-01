@@ -5,12 +5,6 @@
               xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
 
     <UserControl.Resources>
-        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Padding" Value="8,2" />
-            <Setter Property="FontSize" Value="11.5" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="MinHeight" Value="22" />
-        </Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="Margin" Value="0,0,5,0" />
@@ -74,7 +68,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.Preferences}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+            <TextBlock Text="{x:Static Properties:Resources.Preferences}" Style="{StaticResource windowTitle}" Margin="10,10,10,10" Grid.Row="0" />
         </Grid>
 
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
@@ -88,7 +82,7 @@
                 <StackPanel Orientation="Vertical" Margin="11,0,-1,0">
 
                     <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
-                            HorizontalAlignment="Left" Padding="12,2" Margin="0,0,0,10" FontWeight="Bold" />
+                            HorizontalAlignment="Left" Padding="12,2" Margin="0,0,0,10" />
 
                     <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
                                  BorderThickness="0" Background="Transparent">
@@ -100,8 +94,6 @@
                     </ListBox>
 
                 </StackPanel>
-
-
             </Grid>
         </Border>
      
@@ -111,11 +103,11 @@
                 <StackPanel Name="General" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.General}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_General}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_General}" Style="{StaticResource pageHeader}"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,0" Visibility="{Binding CheckForUpdatesAllowed, Converter={StaticResource boolToVisConverter}}">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_OnStartup}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_OnStartup}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_CheckForUpdates}" IsChecked="{Binding CheckForUpdates}" />
@@ -125,7 +117,7 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_UserInterface}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_UserInterface}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_Language}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
@@ -154,7 +146,7 @@
                            
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_ApplicationToolbar}" FontSize="14" Margin="0,10,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_ApplicationToolbar}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_ShowToolbarAddAll}" IsChecked="{Binding ShowAddAllToQueue}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_ShowToolbarAddSelection}" IsChecked="{Binding ShowAddSelectionToQueue}" />
@@ -165,7 +157,7 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_PathToMediaPlayer}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_PathToMediaPlayer}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
 
@@ -184,11 +176,11 @@
                 <StackPanel Name="Output" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.OutputFiles}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Output}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Output}" Style="{StaticResource pageHeader}" />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_AutomaticFileNaming}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_AutomaticFileNaming}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_AutoNameOutput}" IsChecked="{Binding AutomaticallyNameFiles}" />
@@ -213,13 +205,13 @@
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" HorizontalAlignment="Left" />
                                 <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" HorizontalAlignment="Left" />
-                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_PathOptions}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontStyle="Italic"  FontSize="11" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_PathOptions}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap" />
                                 <CheckBox IsChecked="{Binding AlwaysUseDefaultPath}" Content="{x:Static Properties:Resources.OptionsView_AlwaysUseDefaultPath}" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_AlwaysUseDefaultPath}" Grid.Row="2" Grid.Column="1" />
 
 
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Format}"  Grid.Column="0" Grid.Row="4" Margin="0,5,0,0" />
                                 <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat, UpdateSourceTrigger=PropertyChanged}" Width="380"  Grid.Column="1" Grid.Row="4"  Margin="0,0,0,0" ToolTip="{x:Static Properties:Resources.Options_AdditionalFormatOptions}" HorizontalAlignment="Left"   />
-                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" FontStyle="Italic"  FontSize="11" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap" />
                             </Grid>
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
@@ -241,7 +233,7 @@
 
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_UIBehaviour}" FontSize="14" Margin="0,20,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_UIBehaviour}" Style="{StaticResource subHeader}" Margin="0,20,0,10"/>
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
 
@@ -256,9 +248,9 @@
                 <StackPanel Name="WhenDone" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.WhenDone}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_WhenDone}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_WhenDone}" Style="{StaticResource pageHeader}"  />
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_QueueCompleted}" FontSize="14" Margin="0,10,0,10" />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_QueueCompleted}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,10">
 
@@ -281,7 +273,7 @@
                                       IsChecked="{Binding WhenDonePerformActionImmediately}" />
                         </Grid>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_EncodeCompleted}" FontSize="14" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_EncodeCompleted}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -299,10 +291,10 @@
                                 <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="{x:Static Properties:Resources.Options_Arguments}" />
                                 <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" />
                             </StackPanel>
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SendFileToArgPlaceholders}" Margin="91,1,0,0" FontStyle="Italic"/>
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_SendFileToArgPlaceholders}" Margin="91,1,0,0" Style="{StaticResource subText}"/>
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Notifications}" FontSize="14" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Notifications}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Vertical" Margin="0,7,0,0">
                                 <CheckBox Content="{x:Static Properties:Resources.OptionsView_PlaySoundWhenDone}"  
@@ -330,7 +322,7 @@
                 <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Video}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Video}" FontSize="20" FontFamily="Segoe UI Light" />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Video}" Style="{StaticResource pageHeader}" />
 
         
                     <Grid Visibility="{Binding IsSafeMode, Converter={StaticResource boolToVisConverter}}" Margin="10,5,10,0">
@@ -340,7 +332,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Image Source="Images/warningsmall.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
-                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_SafeMode}" TextWrapping="Wrap" Grid.Column="1" FontSize="14" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_SafeMode}" TextWrapping="Wrap" Grid.Column="1" Style="{StaticResource subText}" />
                     </Grid>
                     
 
@@ -356,7 +348,7 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20" Visibility="{Binding IsHardwareOptionsVisible, Converter={StaticResource boolToVisConverter}}">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Encoding}" FontSize="14" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Encoding}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,2,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}" />
@@ -364,16 +356,16 @@
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
 
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,15,0,0" FontStyle="Italic" />
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,15,0,0" Style="{StaticResource subText}" />
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Decoding}" FontSize="14" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Decoding}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecode}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncDecoding}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Visibility="{Binding IsUseQsvDecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" FontSize="14" Margin="0,20,0,10" Visibility="Collapsed" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" Style="{StaticResource subHeader}" Margin="0,20,0,10" Visibility="Collapsed" />
 
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                             <TextBlock Text="{x:Static Properties:Resources.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
@@ -390,11 +382,11 @@
                 <StackPanel  Name="Advanced" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Advanced}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Advanced}" Style="{StaticResource pageHeader}"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_AdvancedOptions}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_AdvancedOptions}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_PreventSleep}" IsChecked="{Binding PreventSleep}" />
@@ -436,7 +428,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
-                        <TextBlock Text="{x:Static Properties:Resources.Options_x264}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_x264}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                             <TextBlock Text="{x:Static Properties:Resources.Options_x264Granularity}" VerticalAlignment="Center" Width="250" />
                             <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranularity}" Width="120"/>
@@ -446,13 +438,13 @@
                     <StackPanel Orientation="Vertical"  Visibility="{Binding IsProcessIsolationAllowed, Converter={StaticResource boolToVisConverter}}" IsEnabled="{Binding IsWindows10}">
 
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation}" FontSize="14" Margin="0,10,0,10"/>
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_Win10Only}"  Margin="15,10,0,10"  Visibility="{Binding IsWindows10, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         </StackPanel>
-                        
 
-                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning1}" Margin="10,0,0,0"  TextWrapping="Wrap" FontStyle="Italic" />
-                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning2}" Margin="10,0,0,0"  TextWrapping="Wrap" FontStyle="Italic" />
+
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning1}" Margin="10,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation_Warning2}" Margin="10,0,0,0"  TextWrapping="Wrap" Style="{StaticResource subText}" />
 
                         <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableWorkerProcesses}" IsChecked="{Binding RemoteServiceEnabled}" Margin="10,10,0,0" />
 
@@ -468,7 +460,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_SimultaneousHardwareLimitNotice}" Visibility="{Binding IsSimultaneousEncodesSupported, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
-                                       Margin="10,0,0,0" TextWrapping="Wrap" FontStyle="Italic" />
+                                       Margin="10,0,0,0" TextWrapping="Wrap" Style="{StaticResource subText}" />
 
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotSupported}" Margin="10,0,0,0" Visibility="{Binding IsSimultaneousEncodesSupported, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         </StackPanel>
@@ -478,7 +470,7 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,15,0,10">
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Logging}" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Logging}" Style="{StaticResource subHeader}" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
@@ -509,9 +501,9 @@
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Updates}}">
 
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" FontSize="20" FontFamily="Segoe UI Light" />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" Style="{StaticResource pageHeader}" />
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_CurVersion}" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:Resources.Options_CurVersion}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
 
                     <Grid Margin="20,10,0,20">
                         <Grid.ColumnDefinitions>
@@ -524,7 +516,7 @@
                         <TextBox Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Bottom" Text="{Binding Version, Mode=OneWay}" BorderThickness="0" x:Name="versionTextBox" MouseDoubleClick="VersionTextBox_OnMouseDoubleClick" />
                     </Grid>
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
 
                     <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
                         <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
@@ -546,21 +538,21 @@
                 <StackPanel Name="Reset" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Reset}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_Reset}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_Reset}" Style="{StaticResource pageHeader}"  />
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_UserSettings}" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:Resources.Options_UserSettings}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
 
                     <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetSettingsToDefaults}" />
                         <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetHandBrake]" />
                     </StackPanel>
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_BuiltInPresets}" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:Resources.Options_BuiltInPresets}" Style="{StaticResource subHeader}"  Margin="0,10,0,10"/>
 
                     <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresets}" />
                         <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetBuiltInPresets]" />
-                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresetsNotice}" Margin="10,0,0,0" FontStyle="Italic" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresetsNotice}" Margin="10,0,0,0" Style="{StaticResource subText}" />
 
                     </StackPanel>
 
@@ -569,7 +561,7 @@
                 <StackPanel Name="About" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.About}}">
 
-                    <TextBlock Text="{x:Static Properties:Resources.Options_About}" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:Resources.Options_About}" Style="{StaticResource pageHeader}"  />
 
                     <ContentControl x:Name="AboutViewModel" />
 

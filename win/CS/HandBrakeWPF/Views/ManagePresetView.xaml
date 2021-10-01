@@ -27,7 +27,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.MainView_PresetManage}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,0,10,10" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.MainView_PresetManage}" Style="{StaticResource windowTitle}"  Margin="10,0,10,10" Grid.Row="0" />
 
         <!--  Header  -->
         <Grid Grid.Row="1" Margin="10,0,10,0">

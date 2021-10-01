@@ -52,7 +52,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,0">
-            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_PaneTitle}"  FontSize="20" FontFamily="Segoe UI Light"  />
+            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_PaneTitle}"  Style="{StaticResource windowTitle}"   />
         </StackPanel>
 
         <!-- Behaviour Dropdowns -->
@@ -72,7 +72,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Audio -->
-            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultView_Behaviours}" FontWeight="Bold" Margin="0,10,0,5" />
+            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultView_Behaviours}" Style="{StaticResource subHeader}"  Margin="0,10,0,5" />
 
             <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
             <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
@@ -126,7 +126,7 @@
 
         <!-- Auto Passthru -->
         <StackPanel Orientation="Vertical" Margin="15,0,15,5"  Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Left">
-            <TextBlock Text="{x:Static Properties:Resources.AudioView_AutoPassthruBehaviour}" FontWeight="Bold" Margin="0,10,0,5" />
+            <TextBlock Text="{x:Static Properties:Resources.AudioView_AutoPassthruBehaviour}" Style="{StaticResource subHeader}" Margin="0,10,0,5" />
             <StackPanel Margin="5,10,0,0"
                         Orientation="Vertical">
                 <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:Resources.AudioView_WhenAutoPassthru}" VerticalAlignment="Center" />
@@ -176,7 +176,7 @@
         </StackPanel>
 
         <!-- Tracks -->
-        <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoAddTracks}" FontWeight="Bold" Margin="0,20,0,0" Grid.Row="4" Grid.Column="0" />
+        <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoAddTracks}" Style="{StaticResource subHeader}"  Margin="0,20,0,0" Grid.Row="4" Grid.Column="0" />
 
         <Grid Grid.Row="5" Margin="25,10,0,0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>

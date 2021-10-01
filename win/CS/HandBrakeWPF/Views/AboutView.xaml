@@ -36,8 +36,8 @@
                 <StackPanel Grid.Row="0"
                             Margin="5,10,0,0"
                             Orientation="Horizontal">
-                    <TextBlock Margin="0,0,0,0" FontSize="16" FontFamily="Segoe UI Light" Text="{x:Static Properties:Resources.AboutView_Version}" />
-                    <TextBox Margin="0,0,0,0" BorderThickness="0" FontSize="16" IsReadOnly="True" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" Text="{Binding Version, Mode=OneWay}"
+                    <TextBlock Margin="0,0,0,10" FontSize="16" Text="{x:Static Properties:Resources.AboutView_Version}" />
+                    <TextBox Margin="0,0,0,10" BorderThickness="0" FontSize="16" IsReadOnly="True" VerticalAlignment="Bottom" Text="{Binding Version, Mode=OneWay}"
                              MouseDoubleClick="AboutTextBox_OnMouseDoubleClick" x:Name="versionTextBox" />
                 </StackPanel>
 

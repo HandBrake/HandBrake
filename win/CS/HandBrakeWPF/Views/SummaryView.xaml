@@ -55,7 +55,7 @@
             </Grid.Resources>
 
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" FontSize="12" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Format}" Style="{StaticResource sectionHeader}" Grid.Row="0" />
             <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
@@ -82,22 +82,22 @@
                           Content="{x:Static Properties:Resources.SummaryView_MetadataPassthru}"/>
 
             </StackPanel>
-       
 
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" FontSize="12" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" Style="{StaticResource sectionHeader}" Grid.Row="5" Grid.Column="0" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
             <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" FontSize="12" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Filters}" Style="{StaticResource sectionHeader}" Grid.Row="10" Grid.Column="0"  />
             <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" FontSize="12" FontWeight="Bold" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Size}" Style="{StaticResource sectionHeader}" Grid.Row="12" Grid.Column="0" />
             <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_Aspect}" FontSize="14" Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_Aspect}" Style="{StaticResource sectionHeader}" Grid.Row="13" Grid.Column="0" Visibility="Collapsed" />
             <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="13" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
         </Grid>
 
@@ -126,7 +126,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Static Properties:Resources.SummaryView_SourcePreview}" FontSize="12" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:Resources.SummaryView_SourcePreview}" Style="{StaticResource sectionHeader}" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" />
 
                 <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Grid.Row="1" Panel.ZIndex="0" Grid.ColumnSpan="2"
                        MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" MouseWheel="PreviewImage_OnMouseWheel" />

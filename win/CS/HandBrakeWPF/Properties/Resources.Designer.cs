@@ -311,7 +311,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure Automatic Audio Selections.
+        ///   Looks up a localized string similar to Automatic Audio Selections.
         /// </summary>
         public static string AudioDefaultsView_PaneTitle {
             get {
@@ -1701,8 +1701,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. 
-        ///This could be due to one of the following reasons:
+        ///   Looks up a localized string similar to HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
+        ///
         ///- The duration of each source title is below the &quot;Minimum Title Duration&quot; threshold option in &apos;Preferences &gt; Advanced&apos;. 
         ///- The source file is not a valid video file or is in a format that HandBrake does not support.
         ///- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections [rest of string was truncated]&quot;;.
@@ -6376,7 +6376,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure Automatic Subtitle Selections.
+        ///   Looks up a localized string similar to Automatic Subtitle Selections.
         /// </summary>
         public static string SubtitlesDefaultsView_PaneTitle {
             get {

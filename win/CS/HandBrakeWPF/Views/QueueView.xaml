@@ -61,7 +61,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_ShowQueue}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_ShowQueue}" Style="{StaticResource windowTitle}"  Margin="10,0,0,0" />
             <TextBlock Text="{Binding JobsPending}"  Grid.Column="1" Margin="15,0,0,5 " VerticalAlignment="Bottom" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
         </Grid>
 

@@ -40,7 +40,7 @@
 
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,8,0,0">
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SourceSelection}" FontSize="26" FontFamily="Segoe UI Light" />
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SourceSelection}" Style="{StaticResource pageHeader}" />
             </StackPanel>
 
             <!-- Title Specific Scan -->

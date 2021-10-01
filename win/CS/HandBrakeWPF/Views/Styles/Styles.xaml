@@ -26,6 +26,8 @@
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="MinHeight" Value="22"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8,2" />
     </Style>
 
     <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
@@ -99,5 +101,33 @@
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+
+
+    <Style x:Key="subText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
+    <Style x:Key="sectionHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="subHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style x:Key="pageHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="22" />
+    </Style>
+
+    <Style x:Key="windowTitle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="FontSize" Value="26" />
+    </Style>
+
 
 </ResourceDictionary>

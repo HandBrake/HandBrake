@@ -43,7 +43,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_ManagePreset}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0" Grid.Row="0" />
+            <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_ManagePreset}" Style="{StaticResource windowTitle}"  Margin="10,0,0,0" Grid.Row="0" />
 
             <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,5,5,0" Padding="8,2">
                 <Button.Content>

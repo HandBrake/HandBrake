@@ -10,7 +10,7 @@
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="350"
-             d:DesignWidth="500"
+             d:DesignWidth="550"
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight"
              WindowStartupLocation="CenterScreen"
@@ -44,7 +44,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Margin="10,0,0,0">
-            <TextBlock Text="{x:Static Properties:Resources.SubtitlesDefaultsView_PaneTitle}"  FontSize="20" FontFamily="Segoe UI Light"  />
+            <TextBlock Text="{x:Static Properties:Resources.SubtitlesDefaultsView_PaneTitle}"  Style="{StaticResource windowTitle}"   />
         </StackPanel>
 
         <!-- Row 0 -->
