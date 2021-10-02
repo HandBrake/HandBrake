@@ -1,8 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url     = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2021.6.0.tar.gz
-LIBVPL.FETCH.sha256  = c83590c4b0d12c4a48f4cbf4b6e8d595bf1f6f96bb262d21457793d19f7b2b6a
+LIBVPL.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2021.6.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2021.6.0.tar.gz
+LIBVPL.FETCH.sha256    = c83590c4b0d12c4a48f4cbf4b6e8d595bf1f6f96bb262d21457793d19f7b2b6a
 LIBVPL.FETCH.basename  = oneVPL-2021.6.0.tar.gz
 LIBVPL.EXTRACT.tarbase = oneVPL-2021.6.0
 
