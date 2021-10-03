@@ -8,6 +8,14 @@ For Windows users:
 - Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
 - Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
 
+## HandBrake 1.4.3
+
+### All platforms
+
+### Mac
+
+### Windows
+
 
 ## HandBrake 1.4.2
 
