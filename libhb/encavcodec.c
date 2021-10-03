@@ -89,16 +89,6 @@ static const char * const h265_nvenc_profile_names[] =
     "auto", "main", NULL // "main10", "rext"  We do not currently support 10bit encodes with this encoder.
 };
 
-static const char * const h26x_vt_preset_name[] =
-{
-    "default", NULL
-};
-
-static const char * const h264_vt_profile_name[] =
-{
-    "auto", "baseline", "main", "high", NULL
-};
-
 static const char * const h26x_mf_preset_name[] =
 {
     "default", NULL
@@ -117,16 +107,6 @@ static const char * const h265_mf_profile_name[] =
 static const enum AVPixelFormat pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
-};
-
-static const enum AVPixelFormat h26x_vt_pix_fmts[] =
-{
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
-};
-
-static const enum AVPixelFormat h265_10bit_vt_pix_fmts[] =
-{
-    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat h26x_mf_pix_fmts[] =
@@ -194,10 +174,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     hb_log("encavcodecInit: H.264 (AMD VCE)");
                     codec_name = "h264_amf";
                     break;
-                case HB_VCODEC_FFMPEG_VT_H264:
-                    hb_log("encavcodecInit: H.264 (VideoToolbox)");
-                    codec_name = "h264_videotoolbox";
-                    break;
                 case HB_VCODEC_FFMPEG_MF_H264:
                     hb_log("encavcodecInit: H.264 (MediaFoundation)");
                     codec_name = "h264_mf";
@@ -214,14 +190,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 case HB_VCODEC_FFMPEG_VCE_H265:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
                     codec_name = "hevc_amf";
-                    break;
-                case HB_VCODEC_FFMPEG_VT_H265:
-                    hb_log("encavcodecInit: H.265 (VideoToolbox)");
-                    codec_name = "hevc_videotoolbox";
-                    break;
-                case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-                    hb_log("encavcodecInit: H.265 10 bit (VideoToolbox)");
-                    codec_name = "hevc_videotoolbox";
                     break;
                 case HB_VCODEC_FFMPEG_MF_H265:
                     hb_log("encavcodecInit: H.265 (MediaFoundation)");
@@ -830,14 +798,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 hb_log( "encavcodec: Max AU Size %d", vce_h265_max_au_size/1000 );
             }
         }
-        else if ( job->vcodec == HB_VCODEC_FFMPEG_VT_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
-        {
-            context->flags |= AV_CODEC_FLAG_QSCALE;
-            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
-
-            hb_log( "encavcodec: encoding at constant quality %d",
-                   (int)job->vquality );
-        }
         else if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 ||
                  job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
         {
@@ -890,45 +850,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if( job->grayscale )
     {
         context->flags |= AV_CODEC_FLAG_GRAY;
-    }
-
-    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H264)
-    {
-        // Set profile and level
-        if (job->encoder_profile != NULL && *job->encoder_profile)
-        {
-            if (!strcasecmp(job->encoder_profile, "baseline"))
-                av_dict_set(&av_opts, "profile", "baseline", 0);
-            else if (!strcasecmp(job->encoder_profile, "main"))
-                av_dict_set(&av_opts, "profile", "main", 0);
-            else if (!strcasecmp(job->encoder_profile, "high"))
-                av_dict_set(&av_opts, "profile", "high", 0);
-        }
-
-        if (job->encoder_level != NULL && *job->encoder_level)
-        {
-            int i = 1;
-            while (hb_h264_level_names[i] != NULL)
-            {
-                if (!strcasecmp(job->encoder_level, hb_h264_level_names[i]))
-                    av_dict_set(&av_opts, "level", job->encoder_level, 0);
-                ++i;
-            }
-        }
-
-        context->max_b_frames = 16;
-    }
-
-    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265)
-    {
-        av_dict_set(&av_opts, "profile", "main", 0);
-        context->max_b_frames = 16;
-    }
-
-    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
-    {
-        av_dict_set(&av_opts, "profile", "main10", 0);
-        context->max_b_frames = 16;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
@@ -1146,17 +1067,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     job->areBframes = 0;
     if (context->has_b_frames > 0)
     {
-        if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265 || job->vcodec == HB_VCODEC_FFMPEG_VT_H265_10BIT)
-        {
-            // VT appears to enable b-pyramid by default and there
-            // is no documented way of modifying this behaviour or
-            // querying if it is enabled.
-            job->areBframes = 2;
-        }
-        else
-        {
-            job->areBframes = context->has_b_frames;
-        }
+        job->areBframes = context->has_b_frames;
     }
 
     if (context->extradata != NULL)
@@ -1560,11 +1471,6 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return h26x_nvenc_preset_names;
 
-        case HB_VCODEC_FFMPEG_VT_H264:
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            return h26x_vt_preset_name;
-
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_preset_name;
@@ -1582,8 +1488,6 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h264_nvenc_profile_names;
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return h265_nvenc_profile_names;
-        case HB_VCODEC_FFMPEG_VT_H264:
-            return h264_vt_profile_name;
         case HB_VCODEC_FFMPEG_MF_H264:
             return h264_mf_profile_name;
         case HB_VCODEC_FFMPEG_MF_H265:
@@ -1598,11 +1502,6 @@ const int* hb_av_get_pix_fmts(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_FFMPEG_VT_H264:
-        case HB_VCODEC_FFMPEG_VT_H265:
-            return h26x_vt_pix_fmts;
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            return h265_10bit_vt_pix_fmts;
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_pix_fmts;

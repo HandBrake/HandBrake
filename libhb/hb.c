@@ -2208,6 +2208,7 @@ int hb_global_init()
     hb_register(&hb_encavcodec);
     hb_register(&hb_encavcodeca);
 #ifdef __APPLE__
+    hb_register(&hb_encvt);
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
 #endif
