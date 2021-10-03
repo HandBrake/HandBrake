@@ -294,14 +294,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             break;
 #endif
 #ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H264:
-            w = hb_get_work(h, WORK_ENCAVCODEC);
-            w->codec_param = AV_CODEC_ID_H264;
-            break;
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            w = hb_get_work(h, WORK_ENCAVCODEC);
-            w->codec_param = AV_CODEC_ID_HEVC;
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            w = hb_get_work(h, WORK_ENCVT);
             break;
 #endif
 #if HB_PROJECT_FEATURE_MF
@@ -554,9 +550,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_VT_H264:
-                case HB_VCODEC_FFMPEG_VT_H265:
-                case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+                case HB_VCODEC_VT_H264:
+                case HB_VCODEC_VT_H265:
+                case HB_VCODEC_VT_H265_10BIT:
                 case HB_VCODEC_FFMPEG_MF_H264:
                 case HB_VCODEC_FFMPEG_MF_H265:
                     hb_log("     + profile: %s", job->encoder_profile);
@@ -580,9 +576,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_VT_H264:
+                case HB_VCODEC_VT_H264:
                 // VT h.265 currently only supports auto level
-                // case HB_VCODEC_FFMPEG_VT_H265:
+                // case HB_VCODEC_VT_H265:
                 // MF h.264/h.265 currently only supports auto level
                 // case HB_VCODEC_FFMPEG_MF_H264:
                 // case HB_VCODEC_FFMPEG_MF_H265:

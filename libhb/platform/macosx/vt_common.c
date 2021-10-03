@@ -8,10 +8,13 @@
  */
 
 #include "vt_common.h"
+#include "handbrake/hbffmpeg.h"
 
 #include <VideoToolbox/VideoToolbox.h>
 #include <CoreMedia/CoreMedia.h>
 #include <CoreVideo/CoreVideo.h>
+
+#pragma mark - Availability
 
 static const CFStringRef encoder_id_h264 = CFSTR("com.apple.videotoolbox.videoencoder.h264.gva");
 static const CFStringRef encoder_id_h265 = CFSTR("com.apple.videotoolbox.videoencoder.hevc.gva");
@@ -53,7 +56,7 @@ static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *enco
 static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef level)
 {
 #if defined(__MAC_11_0)
-    if (@available (macOS 11, *))
+    if (__builtin_available (macOS 11, *))
     {
         Boolean found = false;
         CFStringRef encoderIDOut;
@@ -90,7 +93,8 @@ static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef
 #endif
         CFStringRef encoder_id;
 
-        switch (codecType) {
+        switch (codecType)
+        {
             case kCMVideoCodecType_H264:
                 encoder_id = encoder_id_h264;
                 break;
@@ -105,35 +109,6 @@ static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef
 #if defined(__MAC_11_0)
     }
 #endif
-}
-
-static int is_constant_quality_available(CMVideoCodecType codecType)
-{
-#if defined(__MAC_11_0) && defined(__aarch64__)
-    if (@available (macOS 11, *))
-    {
-        CFStringRef encoderIDOut;
-        CFDictionaryRef supportedPropertiesOut;
-
-        OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
-
-        if (err == noErr) {
-            Boolean keyExists;
-            CFBooleanRef value = kCFBooleanFalse;
-            keyExists = CFDictionaryGetValueIfPresent(supportedPropertiesOut,
-                                                      kVTCompressionPropertyKey_Quality,
-                                                      (const void **)&value);
-
-            CFRelease(encoderIDOut);
-            CFRelease(supportedPropertiesOut);
-
-            if (keyExists) {
-                return 1;
-            }
-        }
-    }
-#endif
-    return 0;
 }
 
 static int vt_h264_available;
@@ -164,7 +139,7 @@ int hb_vt_h265_10bit_is_available()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (@available (macOS 11, *))
+        if (__builtin_available (macOS 11, *))
         {
             vt_h265_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, kVTProfileLevel_HEVC_Main10_AutoLevel);
         }
@@ -177,6 +152,39 @@ int hb_vt_h265_10bit_is_available()
 }
 
 static int vt_h264_constant_quality;
+
+#pragma mark - Constant Quality
+
+static int is_constant_quality_available(CMVideoCodecType codecType)
+{
+#if defined(__MAC_11_0) && defined(__aarch64__)
+    if (__builtin_available (macOS 11, *))
+    {
+        CFStringRef encoderIDOut;
+        CFDictionaryRef supportedPropertiesOut;
+
+        OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
+
+        if (err == noErr)
+        {
+            Boolean keyExists;
+            CFBooleanRef value = kCFBooleanFalse;
+            keyExists = CFDictionaryGetValueIfPresent(supportedPropertiesOut,
+                                                      kVTCompressionPropertyKey_Quality,
+                                                      (const void **)&value);
+
+            CFRelease(encoderIDOut);
+            CFRelease(supportedPropertiesOut);
+
+            if (keyExists)
+            {
+                return 1;
+            }
+        }
+    }
+#endif
+    return 0;
+}
 
 int hb_vt_h264_is_constant_quality_available()
 {
@@ -196,4 +204,85 @@ int hb_vt_h265_is_constant_quality_available()
         vt_h265_constant_quality = is_constant_quality_available(kCMVideoCodecType_HEVC);
     });
     return vt_h265_constant_quality;
+}
+
+#pragma mark - Settings
+
+static const char * const vt_h26x_preset_name[] =
+{
+    "fast", "default", NULL
+};
+
+static const char * const vt_h264_profile_name[] =
+{
+    "auto", "baseline", "main", "high", NULL
+};
+
+static const char * const vt_h265_profile_name[] =
+{
+    "auto", NULL
+};
+
+static const char * vt_h264_level_names[] =
+{
+    "auto", "1.3", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", NULL
+};
+
+static const char * const vt_h265_level_names[] =
+{
+    "auto",  NULL,
+};
+
+static const enum AVPixelFormat vt_h26x_pix_fmts[] =
+{
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat vt_h265_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
+};
+
+const int* hb_vt_get_pix_fmts(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+            return vt_h26x_pix_fmts;
+        case HB_VCODEC_VT_H265_10BIT:
+            return vt_h265_10bit_pix_fmts;
+    }
+    return NULL;
+}
+
+const char* const* hb_vt_preset_get_names(int encoder)
+{
+    return vt_h26x_preset_name;
+}
+
+const char* const* hb_vt_profile_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+            return vt_h264_profile_name;
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return vt_h265_profile_name;
+    }
+    return NULL;
+}
+
+const char* const* hb_vt_level_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+            return vt_h264_level_names;
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return vt_h265_level_names;
+    }
+    return NULL;
 }

@@ -89,9 +89,7 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=ipod
 
 ifeq (darwin,$(HOST.system))
-    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage \
-        --enable-encoder=h264_videotoolbox \
-        --enable-encoder=hevc_videotoolbox
+    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage
 
     ifeq (x86_64,$(HOST.arch))
         FFMPEG.CONFIGURE.extra += --arch=x86_64
