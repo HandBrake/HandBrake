@@ -156,14 +156,14 @@
 
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Reorder.png'}" />
 
-                            <ComboBox Grid.Column="1" Height="22" Width="235" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="1" Width="235" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SourceTrack}" />
 
-                            <CheckBox Grid.Column="3" Margin="5,0,5,0" VerticalAlignment="Center"  VerticalContentAlignment="Center"  IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" 
+                            <CheckBox Grid.Column="3" Margin="5,0,5,0" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" 
                                       Content="{x:Static Properties:Resources.SubtitlesView_ForcedOnly}" FontWeight="Bold" />
 
-                            <CheckBox Grid.Column="4" Margin="5,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
+                            <CheckBox Grid.Column="4" Margin="5,0,5,0" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
                                       ToolTip="{x:Static Properties:ResourcesTooltips.SubtitlesView_BurnIn}">
                                 <CheckBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource canBurnSubtitleConverter}">
@@ -181,7 +181,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
+                            <CheckBox Grid.Column="5" Margin="5,0,5,0" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
                                       IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
@@ -226,17 +226,17 @@
                                        Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
 
                             <TextBlock  Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Lang" />
-                            <ComboBox  Grid.Column="3" Height="22" Width="125" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
+                            <ComboBox  Grid.Column="3" Width="125" Margin="5,0,5,0" HorizontalAlignment="Stretch" IsEnabled="{Binding IsSrtSubtitle}"
                                       ItemsSource="{Binding DataContext.Languages, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SrtLang}" />
                             
                             <TextBlock  Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Char Code" />
-                            <ComboBox Grid.Column="5" Width="70" Height="22" Margin="5,0,5,0" IsEnabled="{Binding IsSrtSubtitle}"
+                            <ComboBox Grid.Column="5" Width="70" Margin="5,0,5,0" IsEnabled="{Binding IsSrtSubtitle}"
                                       ItemsSource="{Binding DataContext.CharacterCodes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SrtCharCode}" />
                             
                             <TextBlock Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Offset (ms)" />
-                            <controls:NumberBox Grid.Column="7" Width="58" Height="22" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
+                            <controls:NumberBox Grid.Column="7" Width="58" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
                                                 IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
 
                             <CheckBox Grid.Column="8" Margin="5,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}" Content="Burn In" FontWeight="Bold">

@@ -26,33 +26,15 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
 
-        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Padding" Value="8,2" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="MinHeight" Value="22" />
-        </Style>
-
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
-        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
-            <Style.Resources>
-                <Style TargetType="ContentPresenter">
-                    <Style.Resources>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                            <Setter Property="TextWrapping" Value="Wrap" />
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </Style.Resources>
-            <Setter Property="MaxWidth" Value="500" />
-        </Style>
 
         <Style TargetType="MenuItem">
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid x:Name="parentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -78,6 +60,10 @@
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_StartEncode}" cal:Message.Attach="[Event Click] = [Action StartEncode]" InputGestureText="Ctrl + E"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=true}" />
+
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Pause}" cal:Message.Attach="[Event Click] = [Action PauseEncode]" InputGestureText="Alt + P"
+                              IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
+
                     <MenuItem Header="{x:Static Properties:Resources.MainView_Stop}" cal:Message.Attach="[Event Click] = [Action StopEncode]" InputGestureText="Ctrl + K"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
                     <Separator />
@@ -150,8 +136,7 @@
             </Menu>
 
             <!--  ToolBar  -->
-            <ToolBar Name="mainToolBar"
-                     HorizontalAlignment="Stretch"
+            <ToolBar HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SnapsToDevicePixels="True"
                      ToolBar.OverflowMode="AsNeeded"

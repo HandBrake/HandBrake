@@ -1321,6 +1321,11 @@ namespace HandBrakeWPF.ViewModels
 
         public void PauseEncode()
         {
+            if (!this.queueProcessor.IsEncoding || this.queueProcessor.IsPaused)
+            {
+                return;
+            }
+
             this.queueProcessor.Pause(true);
             this.NotifyOfPropertyChange(() => this.IsEncoding);
         }

@@ -69,17 +69,6 @@ namespace HandBrakeWPF.Views
             // Focus the keyboard navigation onto the floating panel and show it. 
             KeyboardNavigation.SetTabNavigation(this.mainBodyGrid, ((MainViewModel)this.DataContext).IsPresetPaneDisplayed ? KeyboardNavigationMode.Continue : KeyboardNavigationMode.None);
             ((MainViewModel)this.DataContext).TogglePresetPane();
-            return;
-
-            // Otherwise, handle the standard preset context menu design.
-            Button button = (sender as Button);
-            if (button != null)
-            {
-                button.ContextMenu.IsEnabled = true;
-                button.ContextMenu.PlacementTarget = button;
-                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                button.ContextMenu.IsOpen = true;
-            }
         }
 
         private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

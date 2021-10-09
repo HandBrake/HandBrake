@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
 
     <!-- StatusBar -->
     <Style TargetType="StatusBar">

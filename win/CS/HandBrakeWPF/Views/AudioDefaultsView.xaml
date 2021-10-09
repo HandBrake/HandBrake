@@ -158,7 +158,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:Resources.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="110" Height="22" Margin="5,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="AudioEncoderFallback" />
@@ -255,11 +255,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="26" />
+                                    <RowDefinition Height="28" />
                                 </Grid.RowDefinitions>
 
                                 <!--  Row 1  -->
-                                <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
+                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0">
                                     <ComboBox.SelectedItem>
                                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                             <Binding Path="Encoder" />
@@ -273,7 +273,7 @@
                                     </ComboBox.ItemsSource>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch" 
+                                <ComboBox Grid.Column="4" Width="65" HorizontalAlignment="Stretch" 
                                           SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource audioRateTypeForDefaultsConverter}">
@@ -290,7 +290,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
+                                <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
                                       SelectedItem="{Binding Quality}" >
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
@@ -301,7 +301,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
+                                <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
                                       SelectedItem="{Binding Bitrate}" >
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
@@ -312,7 +312,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                <ComboBox Grid.Row="0" Grid.Column="7"  Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding Mixdowns}" SelectedItem="{Binding MixDown}"
                                       DisplayMemberPath="DisplayName" >
                                     <ComboBox.Visibility>
@@ -324,7 +324,7 @@
                                 </ComboBox>
 
 
-                                <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
+                                <ComboBox Width="70" Margin="5,0,5,0" Grid.Column="9" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}" >
                                     <ComboBox.Visibility>
@@ -335,7 +335,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" VerticalAlignment="Center" Height="22"
+                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" VerticalAlignment="Center"
                                                 Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
                                                 ShowIncrementButtons="True" AllowEmpty="False">
                                     <controls:NumberBox.Visibility>
@@ -346,7 +346,7 @@
                                     </controls:NumberBox.Visibility>
                                 </controls:NumberBox>
 
-                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" VerticalAlignment="Center"  Height="22"
+                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" VerticalAlignment="Center" 
                                                 Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
                                                 ShowIncrementButtons="True" AllowEmpty="False" >
                                     <controls:NumberBox.Visibility>

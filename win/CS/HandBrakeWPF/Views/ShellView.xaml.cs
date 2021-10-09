@@ -61,6 +61,7 @@ namespace HandBrakeWPF.Views
             }
 
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.E, ModifierKeys.Control)), new KeyGesture(Key.E, ModifierKeys.Control))); // Start Encode
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.P, ModifierKeys.Alt)), new KeyGesture(Key.P, ModifierKeys.Alt))); // Pause Encode
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.K, ModifierKeys.Control)), new KeyGesture(Key.K, ModifierKeys.Control))); // Stop Encode
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.L, ModifierKeys.Control)), new KeyGesture(Key.L, ModifierKeys.Control))); // Open Log Window
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.Q, ModifierKeys.Control)), new KeyGesture(Key.Q, ModifierKeys.Control))); // Open Queue Window
