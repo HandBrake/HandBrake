@@ -1347,7 +1347,7 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
 
     if (err != noErr)
     {
-        hb_log("Error begining a VTCompressionSession final pass err=%"PRId64"", (int64_t)err);
+        hb_log("Error beginning a VTCompressionSession final pass err=%"PRId64"", (int64_t)err);
         return err;
     }
 
@@ -1355,7 +1355,7 @@ static OSStatus reuse_vtsession(hb_work_object_t *w, hb_job_t * job, hb_work_pri
 
     if (err != noErr)
     {
-        hb_log("Error begining a VTCompressionSession final pass err=%"PRId64"", (int64_t)err);
+        hb_log("Error beginning a VTCompressionSession final pass err=%"PRId64"", (int64_t)err);
         return err;
     }
 
