@@ -874,6 +874,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 handler(NO);
             }
         }];
+        [self showWindow:self];
     }
     else
     {
@@ -1485,6 +1486,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     NSError *error = nil;
     success = [self.job applyPreset:preset error:&error];
 
+    [self addJobObservers];
+
     if (success == NO)
     {
         [self presentError:error];
@@ -1492,14 +1495,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     else
     {
         self.currentPreset = preset;
-
         [self.autoNamer updateFileExtension];
-
         // If Auto Naming is on, update the destination
         [self.autoNamer updateFileName];
     }
-
-    [self addJobObservers];
 
     return success;
 }
