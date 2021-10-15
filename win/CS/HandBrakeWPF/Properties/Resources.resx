@@ -2567,4 +2567,7 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
     <value>Floating Treeview</value>
   </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+  </data>
 </root>

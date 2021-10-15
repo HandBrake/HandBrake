@@ -5774,6 +5774,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player.
+        /// </summary>
+        public static string QueueViewModel_PlayFileErrorSolution {
+            get {
+                return ResourceManager.GetString("QueueViewModel_PlayFileErrorSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queue.
         /// </summary>
         public static string QueueViewModel_Queue {
