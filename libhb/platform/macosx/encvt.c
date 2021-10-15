@@ -238,11 +238,11 @@ static CFStringRef hb_vt_colr_tra_xlat(int color_transfer)
         case HB_COLR_TRA_SMPTE240M:
             return kCMFormatDescriptionTransferFunction_SMPTE_240M_1995;
         case HB_COLR_TRA_SMPTEST2084:
-            if (__builtin_available(macOS 10.13, *)) { return kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ; }
+            return kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
         case HB_COLR_TRA_LINEAR:
             if (__builtin_available(macOS 10.14, *)) { return kCVImageBufferTransferFunction_Linear; }
         case HB_COLR_TRA_ARIB_STD_B67:
-            if (__builtin_available(macOS 10.13, *)) { return kCVImageBufferTransferFunction_ITU_R_2100_HLG; }
+            return kCVImageBufferTransferFunction_ITU_R_2100_HLG;
         case HB_COLR_TRA_GAMMA22:
             return kCVImageBufferTransferFunction_UseGamma;
         case HB_COLR_TRA_GAMMA28:
@@ -791,14 +791,18 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
     }
 
     CFDictionaryRef supportedProps = NULL;
-    if (__builtin_available(macOS 10.13, *))
+    err = VTCopySupportedPropertyDictionaryForEncoder(pv->settings.width,
+                                                      pv->settings.height,
+                                                      pv->settings.codec,
+                                                      encoderSpecifications,
+                                                      NULL,
+                                                      &supportedProps);
+
+    if (err != noErr)
     {
-        err = VTCopySupportedPropertyDictionaryForEncoder(pv->settings.width,
-                                                          pv->settings.height,
-                                                          pv->settings.codec,
-                                                          encoderSpecifications,
-                                                          NULL,
-                                                          &supportedProps);
+        hb_log("Error retrieving the supported property dictionary err=%"PRId64"", (int64_t)err);
+        CFRelease(encoderSpecifications);
+        return err;
     }
 
     CFRelease(encoderSpecifications);
@@ -955,35 +959,34 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         hb_log("VTSessionSetProperty: ChromaLocationBottomField failed");
     }
 
-    if (__builtin_available(macOS 10.13, *))
+    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+        pv->settings.color.masteringDisplay != NULL)
     {
-        if (pv->settings.color.masteringDisplay != NULL)
+        err = VTSessionSetProperty(pv->session,
+                                   kVTCompressionPropertyKey_MasteringDisplayColorVolume,
+                                   pv->settings.color.masteringDisplay);
+        if (err != noErr)
         {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_MasteringDisplayColorVolume,
-                                       pv->settings.color.masteringDisplay);
-            if (err != noErr)
-            {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MasteringDisplayColorVolume failed");
-            }
+            hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_MasteringDisplayColorVolume failed");
         }
+    }
 
-        if (pv->settings.color.contentLightLevel != NULL)
+    if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_MasteringDisplayColorVolume) &&
+        pv->settings.color.contentLightLevel != NULL)
+    {
+        err = VTSessionSetProperty(pv->session,
+                                   kVTCompressionPropertyKey_ContentLightLevelInfo,
+                                   pv->settings.color.contentLightLevel);
+        if (err != noErr)
         {
-            err = VTSessionSetProperty(pv->session,
-                                       kVTCompressionPropertyKey_ContentLightLevelInfo,
-                                       pv->settings.color.contentLightLevel);
-            if (err != noErr)
-            {
-                hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ContentLightLevelInfo failed");
-            }
+            hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_ContentLightLevelInfo failed");
         }
     }
 
     if (__builtin_available(macOS 11.0, *))
     {
-        if (pv->settings.color.masteringDisplay != NULL ||
-            pv->settings.color.contentLightLevel != NULL)
+        if (CFDictionaryContainsKey(supportedProps, kVTCompressionPropertyKey_HDRMetadataInsertionMode) &&
+            (pv->settings.color.masteringDisplay != NULL || pv->settings.color.contentLightLevel != NULL))
         {
             err = VTSessionSetProperty(pv->session,
                                        kVTCompressionPropertyKey_HDRMetadataInsertionMode,

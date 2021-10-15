@@ -186,17 +186,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)windowDidLoad
 {
-    if (@available (macOS 10.12, *))
-    {
-        self.window.tabbingMode = NSWindowTabbingModeDisallowed;
-    }
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
 
-#if defined(__MAC_11_0)
     if (@available (macOS 11, *))
     {
         self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
     }
-#endif
 
     [self enableUI:NO];
 
@@ -206,8 +201,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
-    [self.window registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
-    [self.mainTabView registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
+    [self.window registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    [self.mainTabView registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
 
     _presetView = [[HBPresetsViewController alloc] initWithPresetManager:self.presetManager];
     _presetView.delegate = self;
@@ -278,9 +273,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification
                                                     object:_queue queue:NSOperationQueue.mainQueue
-                                                usingBlock:^(NSNotification * _Nonnull note) {
-        [self updateQueueUI];
-    }];
+                                                usingBlock:^(NSNotification * _Nonnull note) { [self updateQueueUI]; }];
 
     [self updateQueueUI];
 
@@ -346,11 +339,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         HBState state = [change[NSKeyValueChangeNewKey] intValue];
         [self updateToolbarButtonsStateForScanCore:state];
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateButtonsStateForScanCore:state];
-            [self _touchBar_validateUserInterfaceItems];
-        }
+        [self _touchBar_updateButtonsStateForScanCore:state];
+        [self _touchBar_validateUserInterfaceItems];
     }
     else if (context == HBControllerLogLevelContext)
     {
@@ -367,11 +357,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateToolbarButtonsState];
     [self.window.toolbar validateVisibleItems];
 
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updateQueueButtonsState];
-        [self _touchBar_validateUserInterfaceItems];
-    }
+    [self _touchBar_updateQueueButtonsState];
+    [self _touchBar_validateUserInterfaceItems];
 
     NSUInteger count = self.queue.pendingItemsCount;
     self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : @"";
@@ -777,10 +764,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              // and don't want to make it undoable
              [self.window.undoManager removeAllActions];
              [self.window.toolbar validateVisibleItems];
-             if (@available(macOS 10.12.2, *))
-             {
-                 [self _touchBar_validateUserInterfaceItems];
-             }
+             [self _touchBar_validateUserInterfaceItems];
          }];
     }
     else
@@ -1166,14 +1150,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
-
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([_queue itemExistAtURL:job.completeOutputURL])
@@ -1183,14 +1164,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists in queue alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists in queue alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists in queue alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
-
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else
@@ -1350,12 +1328,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", @"File already exists alert -> informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {

@@ -91,18 +91,13 @@
 
 - (void)windowDidLoad
 {
-    if (@available (macOS 10.12, *))
-    {
-        self.window.tabbingMode = NSWindowTabbingModeDisallowed;
-    }
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
 
-#if defined(__MAC_11_0)
     if (@available (macOS 11, *))
     {
         self.window.toolbarStyle = NSWindowToolbarStyleUnified;
         self.window.titlebarSeparatorStyle = NSTitlebarSeparatorStyleLine;
     }
-#endif
 
     // Set up the child view controllers
     _splitViewController = [[NSSplitViewController alloc] init];
@@ -147,11 +142,8 @@
     [self updateToolbarButtonsState];
     [self.window.toolbar validateVisibleItems];
 
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updateButtonsState];
-        [self _touchBar_validateUserInterfaceItems];
-    }
+    [self _touchBar_updateButtonsState];
+    [self _touchBar_validateUserInterfaceItems];
 
     NSString *subtitle;
     if (self.queue.pendingItemsCount == 0)
@@ -170,22 +162,16 @@
             subtitle = [NSString stringWithFormat: NSLocalizedString(@"%lu encodes pending", @"Queue status"), (unsigned long)self.queue.pendingItemsCount];
         }
 
-#if defined(__MAC_11_0)
         if (@available(macOS 11, *)) {} else
         {
-#endif
             self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), subtitle];
-#if defined(__MAC_11_0)
         }
-#endif
     }
 
-#if defined(__MAC_11_0)
     if (@available(macOS 11, *))
     {
         self.window.subtitle = subtitle;
     }
-#endif
 }
 
 #pragma mark Toolbar
@@ -328,12 +314,10 @@
             [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
             [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
             [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
-#if defined(__MAC_11_0)
             if (@available(macOS 11, *))
             {
                 alert.buttons.lastObject.hasDestructiveAction = true;
             }
-#endif
             [alert setAlertStyle:NSAlertStyleCritical];
 
             [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
@@ -396,12 +380,10 @@
         [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
-#if defined(__MAC_11_0)
         if (@available(macOS 11, *))
         {
             alert.buttons.lastObject.hasDestructiveAction = true;
         }
-#endif
         [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
@@ -677,20 +659,16 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     [alert setInformativeText:NSLocalizedString(@"Select Continue Encoding to dismiss this dialog without making changes.", @"Queue Alert -> cancel rip informative text")];
     [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", @"Queue Alert -> cancel rip first button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Skip Current Job", @"Queue Alert -> cancel rip second button")];
-#if defined(__MAC_11_0)
     if (@available(macOS 11, *))
     {
         alert.buttons.lastObject.hasDestructiveAction = true;
     }
-#endif
     [alert addButtonWithTitle:NSLocalizedString(@"Stop After Current Job", @"Queue Alert -> cancel rip third button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Stop All", @"Queue Alert -> cancel rip fourth button")];
-#if defined(__MAC_11_0)
     if (@available(macOS 11, *))
     {
         alert.buttons.lastObject.hasDestructiveAction = true;
     }
-#endif
     [alert setAlertStyle:NSAlertStyleCritical];
 
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {

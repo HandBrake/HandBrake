@@ -1,3 +1,0 @@
-#include "base/os.osx1011.xcconfig"
-#include "base/arch.arm64.xcconfig"
-EXTERNAL_XCCONFIG = osx1011.arm64

@@ -83,21 +83,15 @@
         }
     }
 
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_reloadScrubberData];
-        [self _touchBar_validateUserInterfaceItems];
-    }
+    [self _touchBar_reloadScrubberData];
+    [self _touchBar_validateUserInterfaceItems];
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex
 {
     _selectedIndex = selectedIndex;
     self.slider.integerValue = selectedIndex;
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updateScrubberSelectedIndex:selectedIndex];
-    }
+    [self _touchBar_updateScrubberSelectedIndex:selectedIndex];
     [self.delegate displayPreviewAtIndex:self.selectedIndex];
 }
 
@@ -122,10 +116,7 @@
     {
         self.scaleToScreenButton.title = NSLocalizedString(@"Actual Scale", @"Picture HUD -> scale button");
     }
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updateFitToView:fitToView];
-    }
+    [self _touchBar_updateFitToView:fitToView];
 }
 
 - (BOOL)validateUserIterfaceItemForAction:(SEL)action

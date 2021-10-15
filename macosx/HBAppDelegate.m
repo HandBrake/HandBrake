@@ -85,6 +85,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    NSApplication.sharedApplication.automaticCustomizeTouchBarMenuItemEnabled = YES;
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
     // Reset "When done" action
@@ -93,10 +94,6 @@
         [ud setInteger:HBDoneActionDoNothing forKey:HBAlertWhenDone];
     }
 
-    if (@available (macOS 10.12.2, *))
-    {
-        NSApplication.sharedApplication.automaticCustomizeTouchBarMenuItemEnabled = YES;
-    }
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsMenu
                                                                   action:@selector(selectPresetFromMenu:)
@@ -181,10 +178,10 @@
     [HBCore closeGlobal];
 }
 
-- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
+- (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
-    [self.mainController openURL:[NSURL fileURLWithPath:filenames.firstObject]];
-    [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+    [self.mainController openURL:urls.firstObject];
+    //[NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem

@@ -92,13 +92,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     [super viewDidLoad];
 
-    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && NSAppKitVersionNumber < 1651)
-    {
-        self.view.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
-    }
-
     // drag and drop support
-	[self.outlineView registerForDraggedTypes:@[kHandBrakeInternalPBoardType, (NSString *)kUTTypeFileURL]];
+	[self.outlineView registerForDraggedTypes:@[kHandBrakeInternalPBoardType, NSPasteboardTypeFileURL]];
     [self.outlineView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
     [self.outlineView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
 
@@ -367,12 +362,10 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
             [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
         }
 
-#if defined(__MAC_11_0)
         if (@available(macOS 11, *))
         {
             alert.buttons.lastObject.hasDestructiveAction = true;
         }
-#endif
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
 
         NSInteger status = [alert runModal];
@@ -479,17 +472,11 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 }
 
 - (id<NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView
-               pasteboardWriterForItem:(id)item {
-    if (@available(macOS 10.12, *))
-    {
-        HBFilePromiseProvider *filePromise = [[HBFilePromiseProvider alloc] initWithFileType:@"public.text" delegate:self];
-        filePromise.userInfo = [item representedObject];
-        return filePromise;
-    }
-    else
-    {
-        return [[NSPasteboardItem alloc] initWithPasteboardPropertyList:@1 ofType:kHandBrakeInternalPBoardType];
-    }
+               pasteboardWriterForItem:(id)item
+{
+    HBFilePromiseProvider *filePromise = [[HBFilePromiseProvider alloc] initWithFileType:@"public.text" delegate:self];
+    filePromise.userInfo = [item representedObject];
+    return filePromise;
 }
 
 - (nonnull NSString *)filePromiseProvider:(nonnull NSFilePromiseProvider *)filePromiseProvider fileNameForType:(nonnull NSString *)fileType
@@ -610,7 +597,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 		[self handleInternalDrops:pboard withIndexPath:indexPath];
 		result = YES;
 	}
-    else if ([pboard availableTypeFromArray:@[(NSString *)kUTTypeFileURL]])
+    else if ([pboard availableTypeFromArray:@[NSPasteboardTypeFileURL]])
     {
         [self handleExternalDrops:pboard withIndexPath:indexPath];
         result = YES;

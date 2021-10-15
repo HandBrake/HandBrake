@@ -16,30 +16,7 @@
 
 #pragma mark - Availability
 
-static const CFStringRef encoder_id_h264 = CFSTR("com.apple.videotoolbox.videoencoder.h264.gva");
-static const CFStringRef encoder_id_h265 = CFSTR("com.apple.videotoolbox.videoencoder.hevc.gva");
-
-static int is_encoder_available(CFStringRef encoder)
-{
-    CFArrayRef encoder_list;
-    VTCopyVideoEncoderList(NULL, &encoder_list);
-    CFIndex size = CFArrayGetCount(encoder_list);
-
-    for (CFIndex i = 0; i < size; i++ )
-    {
-        CFDictionaryRef encoder_dict = CFArrayGetValueAtIndex(encoder_list, i);
-        CFStringRef encoder_id = CFDictionaryGetValue(encoder_dict, kVTVideoEncoderSpecification_EncoderID);
-        if (CFEqual(encoder_id, encoder))
-        {
-            CFRelease(encoder_list);
-            return 1;
-        }
-    }
-    CFRelease(encoder_list);
-    return 0;
-}
-
-static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *encoderIDOut, CFDictionaryRef *supportedPropertiesOut) API_AVAILABLE(macosx(10.13), ios(11.0), tvos(11.0))
+static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *encoderIDOut, CFDictionaryRef *supportedPropertiesOut)
 {
     const void *keys[1] = { kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder };
     const void *values[1] = { kCFBooleanTrue };
@@ -55,60 +32,35 @@ static OSStatus encoder_properties(CMVideoCodecType codecType, CFStringRef *enco
 
 static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef level)
 {
-#if defined(__MAC_11_0)
-    if (__builtin_available (macOS 11, *))
+    Boolean found = false;
+    CFStringRef encoderIDOut;
+    CFDictionaryRef supportedPropertiesOut;
+
+    OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
+
+    if (err == noErr)
     {
-        Boolean found = false;
-        CFStringRef encoderIDOut;
-        CFDictionaryRef supportedPropertiesOut;
-
-        OSStatus err = encoder_properties(codecType, &encoderIDOut, &supportedPropertiesOut);
-
-        if (err == noErr)
+        if (level != NULL)
         {
-            if (level != NULL)
+            CFDictionaryRef profiles = CFDictionaryGetValue(supportedPropertiesOut, kVTCompressionPropertyKey_ProfileLevel);
+            if (profiles != NULL)
             {
-                CFDictionaryRef profiles = CFDictionaryGetValue(supportedPropertiesOut, kVTCompressionPropertyKey_ProfileLevel);
-                if (profiles != NULL)
+                CFArrayRef listOfValues = CFDictionaryGetValue(profiles, kVTPropertySupportedValueListKey);
+                if (listOfValues != NULL)
                 {
-                    CFArrayRef listOfValues = CFDictionaryGetValue(profiles, kVTPropertySupportedValueListKey);
-                    if (listOfValues != NULL)
-                    {
-                        found = CFArrayContainsValue(listOfValues, CFRangeMake(0, CFArrayGetCount(listOfValues)), level);
-                    }
+                    found = CFArrayContainsValue(listOfValues, CFRangeMake(0, CFArrayGetCount(listOfValues)), level);
                 }
             }
-            else
-            {
-                found = true;
-            }
-
-            CFRelease(encoderIDOut);
-            CFRelease(supportedPropertiesOut);
         }
-        return found;
-    }
-    else
-    {
-#endif
-        CFStringRef encoder_id;
-
-        switch (codecType)
+        else
         {
-            case kCMVideoCodecType_H264:
-                encoder_id = encoder_id_h264;
-                break;
-            case kCMVideoCodecType_HEVC:
-                encoder_id = encoder_id_h265;
-                break;
-            default:
-                return 0;
+            found = true;
         }
 
-        return is_encoder_available(encoder_id);
-#if defined(__MAC_11_0)
+        CFRelease(encoderIDOut);
+        CFRelease(supportedPropertiesOut);
     }
-#endif
+    return found;
 }
 
 static int vt_h264_available;
