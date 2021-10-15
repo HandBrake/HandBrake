@@ -87,7 +87,7 @@ MACOSX.NOTARIZE = $(strip $(MACOSX.src/)hbnotarize '$(USERNAME)' $(MACOSX.xroot/
 ##
 ###############################################################################
 
-MACOSX.UB.xcconfigs = osx1011.arm64 osx1011.x86_64
+MACOSX.UB.xcconfigs = osx1013.arm64 osx1013.x86_64
 MACOSX.UB.builds    = $(wildcard $(foreach n,$(MACOSX.UB.xcconfigs),$(SRC/)build.$n))
 MACOSX.UB.first     = $(word 1,$(MACOSX.UB.xcconfigs))
 MACOSX.UB.more      = $(wordlist 2,999,$(MACOSX.UB.xcconfigs))
