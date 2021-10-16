@@ -8,13 +8,31 @@ For Windows users:
 - Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
 - Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
 
+## HandBrake 1.5.0
+
+### All platforms
+
+#### Hardware Encoding
+- QuickSync has been updated to use the new OneVPL API.
+
+### Mac
+- macOS 10.13 is now the minimum deployment target
+- The VideoToolbox API is now directly used rather than the libavcodec (ffmpeg) wrapper. Added support for frame multi-pass, mastering display metadata, content light metadata and chroma location. 
+
+### Windows
+- Minor UI / UX layout and typography changes throughout the UI.
+
+
+
 ## HandBrake 1.4.3
 
 ### All platforms
 
 ### Mac
+- Fixed an issue with auto-naming.
 
 ### Windows
+- Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
 
 
 ## HandBrake 1.4.2
