@@ -13,8 +13,11 @@ For Windows users:
 ### All platforms
 
 ### Mac
+- Fixed an issue with auto-naming.
 
 ### Windows
+- Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
+
 
 
 ## HandBrake 1.4.2
