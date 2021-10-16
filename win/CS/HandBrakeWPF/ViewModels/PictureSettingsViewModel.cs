@@ -319,6 +319,8 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.CropTop);
                     this.NotifyOfPropertyChange(() => this.CropBottom);
                 }
+
+                this.RecalculatePictureSettingsProperties(ChangedPictureField.Crop);
             }
         }
 
