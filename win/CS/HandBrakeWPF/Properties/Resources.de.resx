@@ -377,12 +377,13 @@ Beim Fortfahren gehen nicht-eingebrannte Untertitel verloren.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
     <value>HandBrake kann die ausgewählte Quelle nicht kodieren, da es keine gültige Quelle mit zu kodierenden Titeln gefunden hat. 
-Dies kann auf einen der folgenden Gründe zurückzuführen sein: 
+Dies kann auf einen der folgenden Gründe zurückzuführen werden: 
+
 – Die Dauer jedes Titels liegt unterhalb des Schwellenwertes „Minimale Titeldauer“ in „Einstellungen &gt; Erweitert“. 
 – Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
 – Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmaßnahmen nicht unterstützt. 
 
-Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
+Das Aktivitätsprotokoll kann hierzu weitere Informationen enthalten.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Warteschlange {0}</value>
@@ -712,10 +713,10 @@ Soll fortgefahren werden?</value>
     <value>Vorschau ({0} % tatsächliche Größe)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake benötigt eine 64bit-Version von Windows 7 oder neuer.</value>
+    <value>HandBrake benötigt eine 64bit-Version von Windows 10 oder neuer.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake benötigt Windows 7 oder neuer. Version 0.9.9 (XP) und 0.10.5 (Vista) waren die letzten mit einer Unterstützung für diese Version.</value>
+    <value>HandBrake benötigt Windows 10 oder neuer. Version 0.9.9 (XP), 0.10.5 (Vista) und 1.3.3 (7 und 8.x) waren die letzten Versionen mit einer Unterstützung für diese älteren Betriebssysteme.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
     <value>Soll versucht werden, den Rest hinzuzufügen?</value>
@@ -1112,7 +1113,7 @@ Soll sie überschrieben werden?</value>
     <value>Titel:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Ausgewählte Voreinstellung aktualisieren</value>
+    <value>Momentane Voreinstellung aktualisieren</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>Video</value>
@@ -1404,7 +1405,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Nichts tun</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Encodierung:</value>
+    <value>Dauer Encodierung:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>Bearbeiten</value>
@@ -1416,7 +1417,7 @@ Es werden VLC und MPC-HC unterstützt. Andere Media-Player können auch funktion
     <value>Warteschlange exportieren</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Dateigröße:</value>
+    <value>Ausgabe Dateigröße:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>Ruhezustand</value>
@@ -1987,10 +1988,10 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Der verfügbare Speicherplatz auf dem Ausgabelaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatische Tonauswahl konfigurieren</value>
+    <value>Automatische Tonauswahl</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatische Untertitelauswahl konfigurieren</value>
+    <value>Automatische Untertitelauswahl</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>System</value>
@@ -2326,7 +2327,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Stop</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2484,7 +2485,92 @@ Diese Warnung wird nur zweimal angezeigt.</value>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>Der automatische Standardpfad ist nicht gültig. {0} darf nicht vor {1} sein.</value>
   </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Soll HandBrake automatisch nach Updates suchen?
+
+Dies kann jederzeit in den Einstellungen unter General -&gt; Auf Updates prüfen, geändert werden.</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Auf Updates prüfen?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Vor dem Aktualisieren:
+- Sicherstellen, dass keine ausstehenden Encodierungen mehr in der Warteschlange sind.
+- Eine Sicherungskopie von jeder benutzerdefinierten Voreinstellungen machen bzw. notieren, da diese nach dem Update nicht mehr komplett kompatibel sein könnten.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(Standard)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Kategorien</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Reduziert</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Teilweise reduziert</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Wähle wie Voreinstellungen in Menüs dargestellt werden:</value>
+  </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
     <value>Voreinstellung:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Beendet]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Aufgabe bearbeiten?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Ausgabelänge:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Nach unten bewegen</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Nach oben bewegen</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Ausgabe Bitrate:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Durchschnittliche Encodiergeschwindigkeit:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value>der Quelldatei</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Nicht verfügbar</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Quelle Länge:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Sollen alle installierten Voreinstellungen wirklich zurückgesetzt werden?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Alle installierten Voreinstellungen auf den Standard zurücksetzen:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Benutzer-Voreinstellungen werden nicht zurückgesetzt)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Alle HandBrake-Einstellungen auf den Standard zurücksetzen:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Installierte Voreinstellungen</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Benutzer-Voreinstellungen</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Schwebende Baumansicht</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Bitte stellen Sie sicher, dass die entsprechenden Dateiverknüpfungen in Windows eingerichtet sind, damit diese Datei mit einem unterstützten Videoplayer geöffnet werden kann.</value>
   </data>
 </root>

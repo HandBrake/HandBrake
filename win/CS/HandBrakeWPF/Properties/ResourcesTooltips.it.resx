@@ -140,7 +140,7 @@ HQDN3D è un filtro passa-basso adattivo, più veloce di NLMeans ma meno efficac
     <value>Il Detelecine rimuove gli artefatti che sono il risultato del telecine, un processo per convertire la frequenza dei fotogrammi da film nella frequenza dei fotogrammi televisiva.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Scala di grigi rimuove le componenti colore del video. Tipico effetto bianco e nero.</value>
+    <value>Scala di Grigi rimuove le componenti colore del video. È l'effetto bianco e nero.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Il percorso di destinazione, inclusa la cartella ed il nome file. Qui è scritto dove verrà creato il video e quale sarà il suo nome.</value>
@@ -421,11 +421,11 @@ Sintassi Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength
 Predefinito Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>La Nitidezza migliora l'aspetto dei dettagli, in particolare i bordi. Impostazioni di Nitidezza eccessivamente forti possono danneggiare la qualità delle immagini creando artefatti ad anello ed aumentando il rumore, il che può ridurre l'efficienza di compressione.
+    <value>La Nitidezza migliora l'aspetto dei dettagli, in particolare i bordi. Impostazioni di Nitidezza eccessivamente forti possono danneggiare la qualità delle immagini creando artefatti a corona ed aumentando il rumore, il che può ridurre l'efficienza di compressione.
 
 Unsharp è un filtro di mascheramento a sfocatura generico. Aumenta la nitidezza prima sfocando, poi calcolando la differenza tra l'immagine sfocata e l'originale.
 
-Lapsharp aumenta la nitidezza usando i kernel di convoluzione approssimando i filtri di bordo laplaciani, spesso producendo risultati di qualità superiore rispetto al mascheramento a sfocatura. </value>
+Lapsharp aumenta la nitidezza usando matrici di convoluzione, approssimando filtri di bordo laplaciani. Solitamente si ottengono risultati di qualità superiore rispetto al mascheramento a sfocatura.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Preimpostazione filtro nitidezza. Imposta la potenza del filtro.</value>
@@ -476,5 +476,10 @@ Se disabilitato, userà il percorso di destinazione nella casella della finestra
 Attenzione, verrà abilitato automaticamente se il formato della traccia dei sottotitoli nella sorgente non è supportato dal file di uscita.
 
 Ad esempio, i sottotitoli in formato PGS non sono supportati dall'MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Semplice - Le preimpostazioni sono mostrate in una lista semplice.
+Parzialmente Semplice - Le ultime 8 preimpostazioni dell'utente sono mostrate in una lista semplice, seguite da tutte le altre preimpostazioni in una lista divisa per categoria.
+Per Categoria - Tutte le preimpostazioni sono nel sottomenù della rispettiva categoria.</value>
   </data>
 </root>

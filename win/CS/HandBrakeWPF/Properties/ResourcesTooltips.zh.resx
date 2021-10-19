@@ -121,9 +121,9 @@
     <value>去块滤波减少了由低质量视频压缩引起的块效应。</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>选择Decomb滤镜或反交错滤镜选项。
+    <value>选择 Decomb 滤镜或反交错滤镜选项。
 
-Decomb滤镜选择性的对出现交错扫描的单个帧进行去交错处理。
+Decomb 滤镜选择性的对出现交错扫描的单个帧进行去交错处理。
 这将保持非交错帧的质量。
 
 传统的反交错滤镜会对所有帧进行去交错处理。
@@ -133,9 +133,9 @@ Decomb滤镜选择性的对出现交错扫描的单个帧进行去交错处理�
     <value>降噪可以减少或消除图像的噪点。这可以提高压缩效率，以较小的文件创建更高质量的视频。
 过强的降噪设置可能会由于丢弃细节而损坏图像质量。
 
-NLMEans是一种高质量的降噪滤镜，速度快。在质量比速度更重要的地方使用。
+NLMEans 是一种高质量的降噪滤镜，速度快。在质量比速度更重要的地方使用。
 
-HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节方面效果较差。</value>
+HQDN3D 是一种自适应的低通滤镜，比 NLMEans 更快，但在保持细节方面效果较差。</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>反交错消除经过胶卷过带处理产生的梳状横纹，胶卷过带是将胶片帧率转换为电视帧率的过程。</value>
@@ -147,13 +147,13 @@ HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节�
     <value>目标路径，包括目录和文件名。这就是将创建新视频的位置，以及它的名称。</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>添加一个特殊的MP4标记，允许在大约2006年的老式iPod5代设备上播放。其他设置可能会影响兼容性。</value>
+    <value>添加一个特殊的 MP4 标记，允许在大约 2006 年的老式 iPod 5 代设备上播放。其他设置可能会影响兼容性。</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
     <value>容器格式。视频，音频和其他轨道组合成这种类型的单个文件。 影响兼容性。</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>优化MP4以进行渐进式下载。编码之后，数据被重新组织和重写，以允许在网络上即时回放，而不需要下载整个文件。</value>
+    <value>优化 MP4 以进行渐进式下载。编码之后，数据被重新组织和重写，以允许在网络上即时回放，而不需要下载整个文件。</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>源范围选择。 默认情况下，会选择所有章节并对整个源进行编码。</value>
@@ -163,18 +163,18 @@ HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节�
 蓝光和DVD源通常有多个标题，通常时间最长的是正片。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>变形允许任意存储尺寸，同时在回放期间保留原始高宽。
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+None：禁用变形。视频存储尺寸和显示尺寸将相同。仅对与某些传统设备兼容有用。
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+Automatic：最大化存储分辨率，同时保留原始显示宽高比。（推荐）
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+Loose：与Auto类似，但尝试保留存储宽高比。与 Auto 相比，这可能导致轻微的存储分辨率损失。
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+Custom：允许手动设置所有参数。 用于纠正不正确的源显示高宽以及在后期制作中需要高级控制的专业人员。</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
-    <value>自动参见视频周围的黑边。</value>
+    <value>自动裁切视频周围的黑边。</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
     <value>从底部裁剪该视频。</value>
@@ -214,7 +214,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
     <value>从队列中删除该任务。</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>将作业状态重置为等待。</value>
+    <value>将任务状态重置为等待。</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
     <value>把任务发送回主界面以编辑。</value>
@@ -244,9 +244,9 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
 编码器选项列表以冒号分隔。</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>减少解码器对CPU的占用。
+    <value>减少解码器对 CPU 的占用。
 
-当你的设备无法流畅播放输出时选择此选项。（例如： 丢帧）</value>
+当您的设备无法流畅播放输出时选择此选项（例如： 丢帧）。</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>输出帧率。
@@ -279,12 +279,12 @@ Tunes, profiles, levels 和高级选项字符串将应用于此。
 编码器以固定的质量为目标。
 每个视频编码器使用的比例是不同的。
 
-x264的比例是对数的，较低的值对应于较高的质量。
+x264 的比例是对数的，较低的值对应于较高的质量。
 因此，即使值的小幅下降也会导致文件大小逐渐增大。
 值为“0”表示无损，并且将导致文件大小大于原始源，除非源文件也是无损的。
-建议值为：标准清晰度源为18至20，高清源为20至23。
+建议值为：标准清晰度源为 18 至 20，高清源为 20 至 23。
 
-FFMpeg和Theora的比例更加线性。
+FFMpeg 和 Theora 的比例更加线性。
 这些编码器没有无损模式。</value>
   </data>
   <data name="Video_TurboFirstPass" xml:space="preserve">
@@ -318,7 +318,7 @@ FFMpeg和Theora的比例更加线性。
     <value>添加额外的预设选项。</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>预设是针对特定场景定制的一组编码设置。选择最符合你意图的一个。
+    <value>预设是针对特定场景定制的一组编码设置。选择最符合您意图的一个。
 
 覆盖所有编码设置。在选择预置后，可以进一步调整设置。</value>
   </data>
@@ -331,13 +331,13 @@ FFMpeg和Theora的比例更加线性。
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>自定义降噪参数。
  
-NLMeans 语法: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+NLMeans 语法：y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
-NLMeans 默认值: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+NLMeans 默认值：y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
 
-HQDN3D 语法: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+HQDN3D 语法：y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
 
-HQDN3D 默认值: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+HQDN3D 默认值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
     <value>降噪滤镜预设。 设置滤镜的强度。</value>
@@ -345,19 +345,19 @@ HQDN3D 默认值: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>降噪调优。进一步调整降噪预设以优化特定场景的设置。
  
-- None 使用默认预设设置。
+- None：使用默认预设设置。
  
-- Film 优化设置以用于大多数真人类型电影。
+- Film：优化设置以用于大多数真人类型电影。
  
-- Grain 只处理颜色通道。有助于减少或消除颜色噪点。
+- Grain：只处理颜色通道。有助于减少或消除颜色噪点。
 
-- High Motion 通过避免对色彩通道进行时间处理来减少高运动场景中的颜色模糊。适用于体育和动作视频。
+- High Motion：通过避免对色彩通道进行时间处理来减少高运动场景中的颜色模糊。适用于体育和动作视频。
 
-- Animation 适用于CEL动画，如动画和卡通。
+- Animation：适用于CEL动画，如动画和卡通。
 
-- Tape 对于低细节模拟磁带源非常有用，例如VHS。其中Film不会产生理想的结果。
+- Tape：对于低细节模拟磁带源非常有用，例如VHS。其中Film不会产生理想的结果。
 
-- Sprite 适用于1-/4-/8-/16-bit的2D游戏。Sprite 不是为高清视频设计的。</value>
+- Sprite：适用于1-/4-/8-/16-bit的2D游戏。Sprite 不是为高清视频设计的。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>反交错从图像中删除梳状横纹。
@@ -463,12 +463,24 @@ Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4�
 禁用时，如果已填充，它将使用主窗口上“目标”框中的路径，否则将使用默认路径。</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace Filter.</value>
+    <value>色彩空间滤镜：</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>色度平滑滤镜</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>这个字段可以接受 RGB 值，如："0xFF0000" 或颜色名称，如 "red"。关于命名颜色的完整列表，请参见 padding filter 文档。</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>将字幕烧入到视频流中。
+
+注意，如果输出文件类型中不支持源字幕轨道格式，这将被自动选择。
+
+例如，MP4 中不支持 PGS 字幕。</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>扁平 - 预置显示为一个平坦的列表。
+部分扁平 - 最后 8 个用户的预设被显示为扁平的列表，然后所有预设被显示在分类列表中。
+分类 - 所有预设都显示在每个分类的子菜单下。</value>
   </data>
 </root>

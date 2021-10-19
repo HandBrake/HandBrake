@@ -163,15 +163,15 @@ HQDN3Dは適応性ローパスフィルターで、NLMeansよりは高速です�
 Blu-rayやDVDソースはしばしば複数のタイトルを含み、典型的には一番長いものが本編です。</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+    <value>アナモルフィックは再生時に元の縦横比を維持しながら任意の解像度で保存できます。
 
-None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+オフはアナモルフィックを無効にします。表示されるものと保存される映像の解像度は同一になります。古いデバイスとの互換性によっては便利です。
 
-Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+自動は元の表示アスペクト比を維持したまま最大の解像度で保存します。推奨です。
 
-Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+ルーズは自動と似ていますが、保存されるアスペクト比を維持しようとします。これにより自動と比べてわずかに解像度が落ちる場合があります。
 
-Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+カスタムは全てのパラメーターを手動で設定します。ソースの間違った表示解像度の修正や、高度な操作を必要とするプロのポストプロダクション向けです。</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>映像の周りにある黒い線を自動でクロップします。</value>
@@ -464,12 +464,24 @@ LapsharpのSpriteは1-/4-/8-/16-bitの2次元ゲームに向いています。Sp
 無効にすると、メインウインドウの保存先欄のパスが埋められていればそれを使用し、でなければ既定のパスを使用します。</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace Filter.</value>
+    <value>色空間フィルター。</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth Filter</value>
+    <value>クロマスムーズフィルター</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
-    <value>This field can accept RGB values such as: "0xFF0000" or colour names such as "red". For a full list of named colours, see the padding filter documentation. </value>
+    <value>このフィールドは"0xFF0000"のようなRGB値か"red"のような色名のみ使用できます。色名のリストは、フィルターのドキュメントを読んでください。</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>ビデオストリームに字幕を焼きこみます。
+
+字幕トラック形式が出力ファイルタイプでサポートされない時に、これが自動で選択されることに留意してください。
+
+例えば、PGS字幕はMP4ではサポートされません</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>フラット - プリセットは一列で表示されます。
+一部フラット - 8つのユーザープリセットが一列で表示され、続いて全てのプリセットがカテゴリで表示されます。
+カテゴリ - すべてのプリセットがカテゴリごとにサブメニューに表示されます。</value>
   </data>
 </root>
