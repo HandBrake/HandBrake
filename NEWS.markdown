@@ -18,6 +18,8 @@ For Windows users:
 ### Windows
 - Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
 
+### Linux
+- Fix an issue with the filter settings that resulted in incorrect filters being added to jobs. (#3910)
 
 
 ## HandBrake 1.4.2
