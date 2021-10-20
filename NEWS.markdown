@@ -21,8 +21,18 @@ For Windows users:
 
 ### Windows
 - Minor UI / UX layout and typography changes throughout the UI.
-
-
+- Presets
+  - Changed the toolbar preset dropdown to an overlay panel that utilises a treeview which saves state.
+- Queue
+  - Improvements to the queue statistics tab including new statistics: Average encoding speed and content information. 
+  - Added "Move to top" and "Move to bottom" to the queue context menu.
+- Updated Translations
+  - Corsican
+  - German
+  - Italian
+  - Japanese
+  - Chinese  (Including a fix for access keys in menu's)
+- Miscellaneous bug fixes and improvements
 
 ## HandBrake 1.4.3
 
@@ -33,6 +43,9 @@ For Windows users:
 
 ### Windows
 - Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
+
+### Linux
+- Fix an issue with the filter settings that resulted in incorrect filters being added to jobs. (#3910)
 
 
 ## HandBrake 1.4.2
