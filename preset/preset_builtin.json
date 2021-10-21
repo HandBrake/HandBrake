@@ -521,7 +521,7 @@
                     "PicturePadLeft": 0,
                     "PicturePadRight": 0,
                     "PresetDescription": "Deinterlace content and double framerate, useful for getting the smooth look of interlaced sources.",
-                    "PresetName": "480i 30i to 480p 60P",
+                    "PresetName": "Fast 30i to 60P Deinterlace",
                     "Type": 1,
                     "SubtitleAddCC": false,
                     "SubtitleAddForeignAudioSearch": true,
