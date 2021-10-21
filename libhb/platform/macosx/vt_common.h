@@ -9,12 +9,8 @@
 
 #include <stdio.h>
 
-int hb_vt_h264_is_available();
-int hb_vt_h265_is_available();
-int hb_vt_h265_10bit_is_available();
-
-int hb_vt_h264_is_constant_quality_available();
-int hb_vt_h265_is_constant_quality_available();
+int hb_vt_is_encoder_available(int encoder);
+int hb_vt_is_constant_quality_available(int encoder);
 
 const int* hb_vt_get_pix_fmts(int encoder);
 

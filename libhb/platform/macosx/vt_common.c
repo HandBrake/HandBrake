@@ -64,52 +64,53 @@ static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef
 }
 
 static int vt_h264_available;
-
-int hb_vt_h264_is_available()
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        vt_h264_available = is_hardware_encoder_available(kCMVideoCodecType_H264, NULL);
-    });
-    return vt_h264_available;
-}
-
 static int vt_h265_available;
-
-int hb_vt_h265_is_available()
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        vt_h265_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, NULL);
-    });
-    return vt_h265_available;
-}
-
 static int vt_h265_10bit_available;
 
-int hb_vt_h265_10bit_is_available()
+int hb_vt_is_encoder_available(int encoder)
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (__builtin_available (macOS 11, *))
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
         {
-            vt_h265_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, kVTProfileLevel_HEVC_Main10_AutoLevel);
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                vt_h264_available = is_hardware_encoder_available(kCMVideoCodecType_H264, NULL);
+            });
+            return vt_h264_available;
         }
-        else
+        case HB_VCODEC_VT_H265:
         {
-            vt_h265_10bit_available = 0;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                vt_h265_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, NULL);
+            });
+            return vt_h265_available;
         }
-    });
-    return vt_h265_10bit_available;
+        case HB_VCODEC_VT_H265_10BIT:
+        {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                if (__builtin_available (macOS 11, *))
+                {
+                    vt_h265_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, kVTProfileLevel_HEVC_Main10_AutoLevel);
+                }
+                else
+                {
+                    vt_h265_10bit_available = 0;
+                }
+            });
+            return vt_h265_10bit_available;
+        }
+    }
+    return 0;
 }
-
-static int vt_h264_constant_quality;
 
 #pragma mark - Constant Quality
 
 static int is_constant_quality_available(CMVideoCodecType codecType)
 {
-#if defined(__MAC_11_0) && defined(__aarch64__)
+#if defined(__aarch64__)
     if (__builtin_available (macOS 11, *))
     {
         CFStringRef encoderIDOut;
@@ -138,24 +139,33 @@ static int is_constant_quality_available(CMVideoCodecType codecType)
     return 0;
 }
 
-int hb_vt_h264_is_constant_quality_available()
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        vt_h264_constant_quality = is_constant_quality_available(kCMVideoCodecType_H264);
-    });
-    return vt_h264_constant_quality;
-}
-
+static int vt_h264_constant_quality;
 static int vt_h265_constant_quality;
 
-int hb_vt_h265_is_constant_quality_available()
+int hb_vt_is_constant_quality_available(int encoder)
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        vt_h265_constant_quality = is_constant_quality_available(kCMVideoCodecType_HEVC);
-    });
-    return vt_h265_constant_quality;
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+        {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                vt_h264_constant_quality = is_constant_quality_available(kCMVideoCodecType_H264);
+            });
+            return vt_h264_constant_quality;
+
+        }
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+        {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                vt_h265_constant_quality = is_constant_quality_available(kCMVideoCodecType_HEVC);
+            });
+            return vt_h265_constant_quality;
+        }
+    }
+    return 0;
 }
 
 #pragma mark - Settings

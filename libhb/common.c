@@ -315,11 +315,9 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 
 #ifdef __APPLE__
             case HB_VCODEC_VT_H264:
-                return hb_vt_h264_is_available();
             case HB_VCODEC_VT_H265:
-                return hb_vt_h265_is_available();
             case HB_VCODEC_VT_H265_10BIT:
-                return hb_vt_h265_10bit_is_available();
+                return hb_vt_is_encoder_available(encoder);
 #endif
 
 #if HB_PROJECT_FEATURE_MF
@@ -1492,10 +1490,9 @@ int hb_video_quality_is_supported(uint32_t codec)
     {
 #ifdef __APPLE__
         case HB_VCODEC_VT_H264:
-            return hb_vt_h264_is_constant_quality_available();
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
-            return hb_vt_h265_is_constant_quality_available();
+            return hb_vt_is_constant_quality_available(codec);
 #endif
 
         default:
