@@ -1213,13 +1213,46 @@ skip_preview:
         if ( crops->n > 2 )
         {
             sort_crops( crops );
-            // The next line selects median cropping - at least
+
+            // Available crop modes:
+            // - Median: Selects median cropping - at least
             // 50% of the frames will have their borders removed.
-            // Other possible choices are loose cropping (i = 0) where
+            // - Loose cropping (i = 0) where
             // no non-black pixels will be cropped from any frame and a
-            // tight cropping (i = crops->n - (crops->n >> 2)) where at
+            // - Tight cropping (i = crops->n - (crops->n >> 2)) where at
             // least 75% of the frames will have their borders removed.
-            i = crops->n >> 1;
+            
+            i = crops->n >> 1; // Default Median
+                                    
+            // Print the Sorted Crops
+            int total_frames = crops->n;
+            int full_frame_count = 0;
+            int letterbox_frame_count = 0;
+            
+            int full_frame_threshold = 6;
+            
+            // Count the number of full frame aspect previews.
+            for (int x = 0; x < crops->n; x++){
+                 if (crops->t[x] <= full_frame_threshold && 
+                     crops->b[x] <= full_frame_threshold && 
+                     crops->l[x] <= full_frame_threshold && 
+                     crops->r[x] <= full_frame_threshold) {
+                     full_frame_count = full_frame_count +1;
+                 } else {
+                     letterbox_frame_count = letterbox_frame_count +1;
+                 }
+                 
+                 hb_deep_log(2, "crop: [%d] %d/%d/%d/%d", x, crops->t[x], crops->b[x],  crops->l[x], crops->r[x]);
+            }
+            
+            hb_deep_log(2, "crop: full: %d, letterbox: %d", full_frame_count, letterbox_frame_count);
+             
+            // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
+            if (total_frames >= 8 && full_frame_count >= 4 && letterbox_frame_count >= 4) {
+                hb_deep_log(2, "crop: switching to loose crop for this source.");
+                i = 0; // Use Loose Crop if we have multiple full frames. 
+            }
+            
             title->crop[0] = EVEN( crops->t[i] );
             title->crop[1] = EVEN( crops->b[i] );
             title->crop[2] = EVEN( crops->l[i] );
