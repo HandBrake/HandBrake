@@ -310,22 +310,12 @@ int hb_qsv_available()
         return qsv_init_result; 
     }
 
-    static int init_done = 0;
-    if (init_done == 0)
+    int result = hb_qsv_info_init();
+    if (result != 0)
     {
-        int result = hb_qsv_info_init();
-        if (result != 0)
-        {
-            init_done = -1;
-            hb_log("hb_qsv_available: hb_qsv_info_init failed");
-            return -1;
-        }
-        init_done = 1;
-    }
-    else if (init_done == -1)
-    {
-        hb_log("hb_qsv_available: hb_qsv_info_init failed");
-        return -1;
+        hb_log("qsv: not available on this system");
+        qsv_init_result = -1;
+        return qsv_init_result;
     }
 
     qsv_init_result = ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
@@ -2806,7 +2796,6 @@ int hb_qsv_info_init()
     int err = hb_qsv_query_adapters(&g_qsv_adapters_info);
     if (err)
     {
-        hb_error("hb_qsv_info_init: failed to query qsv adapters");
         return -1;
     }
     hb_qsv_make_adapters_list(&g_qsv_adapters_info, &g_qsv_adapters_list);
