@@ -2178,15 +2178,7 @@ int hb_global_init()
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!disable_hardware)
-    {
-        if (hb_qsv_available() < 0)
-        {
-            hb_error("hb_qsv_available failed!");
-            return -1;
-        }
-        hb_param_configure_qsv();
-    }
+    hb_param_configure_qsv();
 #endif
 
     /* libavcodec */
