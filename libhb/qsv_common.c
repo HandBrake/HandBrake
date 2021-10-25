@@ -58,6 +58,7 @@ static hb_list_t *g_qsv_adapters_list         = NULL;
 static hb_list_t *g_qsv_adapters_details_list = NULL;
 static int g_adapter_index = 0;
 static int g_default_adapter_index = 0;
+static int qsv_init_result = -2;
 
 static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 {
@@ -303,6 +304,11 @@ int hb_qsv_available()
     {
         return 0;
     }
+    
+    if (qsv_init_result >= 0){
+        // This method gets called a lot. Don't probe hardware each time.
+        return qsv_init_result; 
+    }
 
     static int init_done = 0;
     if (init_done == 0)
@@ -322,9 +328,11 @@ int hb_qsv_available()
         return -1;
     }
 
-    return ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
-            (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
-            (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265_10BIT) ? HB_VCODEC_QSV_H265_10BIT : 0));
+    qsv_init_result = ((hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
+                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
+                      (hb_qsv_video_encoder_is_enabled(hb_qsv_get_adapter_index(), HB_VCODEC_QSV_H265_10BIT) ? HB_VCODEC_QSV_H265_10BIT : 0));
+  
+    return qsv_init_result;
 }
 
 int hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder)
