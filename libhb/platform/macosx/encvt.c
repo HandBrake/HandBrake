@@ -1554,10 +1554,8 @@ static hb_buffer_t * extract_buf(CMSampleBufferRef sampleBuffer, hb_work_object_
             }
         }
 
-        CMTime presentationTimeStamp = CMTimeConvertScale(CMSampleBufferGetPresentationTimeStamp(sampleBuffer),
-                                                          pv->settings.timescale, kCMTimeRoundingMethod_Default);
-        CMTime duration = CMTimeConvertScale(CMSampleBufferGetDuration(sampleBuffer),
-                                             pv->settings.timescale, kCMTimeRoundingMethod_Default);
+        CMTime presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+        CMTime duration = CMSampleBufferGetDuration(sampleBuffer);
 
         buf->s.start = presentationTimeStamp.value;
         buf->s.stop  = presentationTimeStamp.value + buf->s.duration;
