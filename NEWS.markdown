@@ -12,6 +12,9 @@ For Windows users:
 
 ### All platforms
 
+#### Hardware Encoding
+- Fixed an issue on older Intel CPU's that would cause the CLI to fail to initialise. (#3924)
+
 ### Mac
 - Fixed an issue with auto-naming.
 
