@@ -1224,35 +1224,31 @@ skip_preview:
             // - Smart: A blend between Median and Loose depending on whether 
             // mixed AR content is found.
             
-            i = crops->n >> 1; // Default Median
-                                    
-            // Print the Sorted Crops
-            int total_frames = crops->n;
-            int full_frame_count = 0;
-            int letterbox_frame_count = 0;
-            
-            int full_frame_threshold = 6;
-            
-            // Count the number of full frame aspect previews.
+            i = crops->n >> 1; // Median
+
+            int less_than_switch_threshold = 4;
+            int less_than_median_crop_threshold = 10;
+                        
+            // Count the number of frames "substantially" less than the median.
+            int less_than_median_frame_count = 0;
             for (int x = 0; x < crops->n; x++){
-                 if (crops->t[x] <= full_frame_threshold && 
-                     crops->b[x] <= full_frame_threshold && 
-                     crops->l[x] <= full_frame_threshold && 
-                     crops->r[x] <= full_frame_threshold) {
-                     full_frame_count = full_frame_count +1;
-                 } else {
-                     letterbox_frame_count = letterbox_frame_count +1;
-                 }
-                 
+                
+                if (crops->t[x] < (crops->t[i] - less_than_median_crop_threshold) ||
+                    crops->b[x] < (crops->b[i] - less_than_median_crop_threshold) ||
+                    crops->l[x] < (crops->l[i] - less_than_median_crop_threshold) ||
+                    crops->r[x] < (crops->r[i] - less_than_median_crop_threshold)){
+                    less_than_median_frame_count = less_than_median_frame_count +1;
+                }
+                               
                  hb_deep_log(2, "crop: [%d] %d/%d/%d/%d", x, crops->t[x], crops->b[x],  crops->l[x], crops->r[x]);
             }
             
-            hb_deep_log(2, "crop: full: %d, letterbox: %d", full_frame_count, letterbox_frame_count);
+            hb_deep_log(2, "crop: less_than_median_frame_count: %d,", less_than_median_frame_count);
              
             // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
-            if (total_frames >= 8 && full_frame_count >= 4 && letterbox_frame_count >= 4) {
+            if (less_than_median_frame_count >= less_than_switch_threshold) {
                 hb_deep_log(2, "crop: switching to loose crop for this source.");
-                i = 0; // Use Loose Crop if we have multiple full frames. 
+                i = 0;
             }
             
             // Smart Crop
