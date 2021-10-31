@@ -28,6 +28,9 @@ typedef struct
     int            store_previews;
 
     uint64_t       min_title_duration;
+    
+    int            crop_auto_switch_threshold;
+    int            crop_median_threshold;
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
@@ -185,7 +188,8 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration )
+                            int store_previews, uint64_t min_duration,
+                            int crop_auto_switch_threshold, int crop_median_threshold)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -198,6 +202,9 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
+    
+    data->crop_auto_switch_threshold = crop_auto_switch_threshold;
+    data->crop_median_threshold = crop_median_threshold;
 
     // Initialize scan state
     hb_state_t state;
@@ -1226,9 +1233,17 @@ skip_preview:
             
             i = crops->n >> 1; // Median
 
-            int less_than_switch_threshold = 4;
-            int less_than_median_crop_threshold = 10;
-                        
+            int less_than_switch_threshold = data->crop_auto_switch_threshold;
+            int less_than_median_crop_threshold = data->crop_median_threshold;
+            
+            if (less_than_switch_threshold == NULL) {
+                less_than_switch_threshold = 4;
+            }
+            
+            if (less_than_median_crop_threshold == NULL) {
+                less_than_median_crop_threshold = 20;
+            }
+
             // Count the number of frames "substantially" less than the median.
             int less_than_median_frame_count = 0;
             for (int x = 0; x < crops->n; x++){
