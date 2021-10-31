@@ -1221,6 +1221,8 @@ skip_preview:
             // no non-black pixels will be cropped from any frame and a
             // - Tight cropping (i = crops->n - (crops->n >> 2)) where at
             // least 75% of the frames will have their borders removed.
+            // - Smart: A blend between Median and Loose depending on whether 
+            // mixed AR content is found.
             
             i = crops->n >> 1; // Default Median
                                     
@@ -1253,6 +1255,28 @@ skip_preview:
                 i = 0; // Use Loose Crop if we have multiple full frames. 
             }
             
+            // Smart Crop
+            title->smart_crop[0] = EVEN( crops->t[i] );
+            title->smart_crop[1] = EVEN( crops->b[i] );
+            title->smart_crop[2] = EVEN( crops->l[i] );
+            title->smart_crop[3] = EVEN( crops->r[i] );
+            
+            // Loose  (i = 0)
+            i = 0;
+            title->loose_crop[0] = EVEN( crops->t[i] );
+            title->loose_crop[1] = EVEN( crops->b[i] );
+            title->loose_crop[2] = EVEN( crops->l[i] );
+            title->loose_crop[3] = EVEN( crops->r[i] );
+            
+            // Tight
+            i = crops->n - (crops->n >> 2);
+            title->tight_crop[0] = EVEN( crops->t[i] );
+            title->tight_crop[1] = EVEN( crops->b[i] );
+            title->tight_crop[2] = EVEN( crops->l[i] );
+            title->tight_crop[3] = EVEN( crops->r[i] );
+            
+            // Median
+            i = crops->n >> 1; 
             title->crop[0] = EVEN( crops->t[i] );
             title->crop[1] = EVEN( crops->b[i] );
             title->crop[2] = EVEN( crops->l[i] );

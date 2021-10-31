@@ -33,10 +33,10 @@ namespace HandBrakeWPF.Services.Scan.Factories
                 ParVal = new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den),
                 AutoCropDimensions = new Cropping
                 {
-                    Top = title.Crop[0],
-                    Bottom = title.Crop[1],
-                    Left = title.Crop[2],
-                    Right = title.Crop[3]
+                    Top = title.SmartCrop[0],
+                    Bottom = title.SmartCrop[1],
+                    Left = title.SmartCrop[2],
+                    Right = title.SmartCrop[3]
                 },
                 Fps = ((double)title.FrameRate.Num) / title.FrameRate.Den,
                 SourceName = title.Path,
