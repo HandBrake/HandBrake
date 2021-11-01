@@ -77,8 +77,8 @@ namespace HandBrake.Interop.Interop
         /// Gets the default settings for the filter.
         /// </summary>
         /// <param name="filter">The filter to look up.</param>
-        /// <returns>The default settings for that filter.</returns>
-        public static IDictionary<string, string> GetDefaultCustomSettings(int filter)
+        /// <returns>The default settings for that filter. Values can be strings or numbers.</returns>
+        public static IDictionary<string, object> GetDefaultCustomSettings(int filter)
         {
             string presetName;
 
@@ -93,12 +93,12 @@ namespace HandBrake.Interop.Interop
             }
             else
             {
-                return new Dictionary<string, string>();
+                return new Dictionary<string, object>();
             }
 
             IntPtr ptr = HBFunctions.hb_generate_filter_settings_json(filter, presetName, null, null);
             string result = Marshal.PtrToStringAnsi(ptr);
-            return JsonSerializer.Deserialize<Dictionary<string, string>>(result, JsonSettings.Options);
+            return JsonSerializer.Deserialize<Dictionary<string, object>>(result, JsonSettings.Options);
         }
 
         public static string GenerateFilterSettingJson(int filterId, string preset, string tune, string custom)
