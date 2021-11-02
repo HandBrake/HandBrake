@@ -1236,11 +1236,11 @@ skip_preview:
             int less_than_switch_threshold = data->crop_auto_switch_threshold;
             int less_than_median_crop_threshold = data->crop_median_threshold;
             
-            if (less_than_switch_threshold == NULL) {
+            if (less_than_switch_threshold == 0) {
                 less_than_switch_threshold = 4;
             }
             
-            if (less_than_median_crop_threshold == NULL) {
+            if (less_than_median_crop_threshold == 0) {
                 less_than_median_crop_threshold = 20;
             }
 
@@ -1266,32 +1266,18 @@ skip_preview:
                 i = 0;
             }
             
-            // Smart Crop
-            title->smart_crop[0] = EVEN( crops->t[i] );
-            title->smart_crop[1] = EVEN( crops->b[i] );
-            title->smart_crop[2] = EVEN( crops->l[i] );
-            title->smart_crop[3] = EVEN( crops->r[i] );
+            // Automatic "Smart" Crop.
+            title->crop[0] = EVEN( crops->t[i] );
+            title->crop[1] = EVEN( crops->b[i] );
+            title->crop[2] = EVEN( crops->l[i] );
+            title->crop[3] = EVEN( crops->r[i] );
             
-            // Loose  (i = 0)
+            // Loose / Conservative  (i = 0)
             i = 0;
             title->loose_crop[0] = EVEN( crops->t[i] );
             title->loose_crop[1] = EVEN( crops->b[i] );
             title->loose_crop[2] = EVEN( crops->l[i] );
             title->loose_crop[3] = EVEN( crops->r[i] );
-            
-            // Tight
-            i = crops->n - (crops->n >> 2);
-            title->tight_crop[0] = EVEN( crops->t[i] );
-            title->tight_crop[1] = EVEN( crops->b[i] );
-            title->tight_crop[2] = EVEN( crops->l[i] );
-            title->tight_crop[3] = EVEN( crops->r[i] );
-            
-            // Median
-            i = crops->n >> 1; 
-            title->crop[0] = EVEN( crops->t[i] );
-            title->crop[1] = EVEN( crops->b[i] );
-            title->crop[2] = EVEN( crops->l[i] );
-            title->crop[3] = EVEN( crops->r[i] );
         }
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "

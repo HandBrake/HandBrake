@@ -1147,9 +1147,8 @@ struct hb_title_s
     hb_rational_t   vrate;
     int             crop[4];
     int             loose_crop[4];
-    int             tight_crop[4];
-    int             smart_crop[4];
-        enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
+
+    enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
     int             detected_interlacing;
     int             pcr_pid;                /* PCR PID for TS streams */
     int             video_id;               /* demuxer stream id for video */
