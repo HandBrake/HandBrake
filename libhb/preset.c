@@ -2015,17 +2015,26 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
         int hflip = hb_dict_get_bool(rotate_settings, "hflip");
         hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
     }
-
-    if (!hb_value_get_bool(hb_dict_get(preset, "PictureAutoCrop")))
-    {
-        geo.crop[0] = hb_dict_get_int(preset, "PictureTopCrop");
-        geo.crop[1] = hb_dict_get_int(preset, "PictureBottomCrop");
-        geo.crop[2] = hb_dict_get_int(preset, "PictureLeftCrop");
-        geo.crop[3] = hb_dict_get_int(preset, "PictureRightCrop");
-    }
-    else
-    {
-        memcpy(geo.crop, srcGeo.crop, sizeof(geo.crop));
+    
+    switch(hb_dict_get_int(preset, "PictureCropMode")) {
+        case 0: // Automatic
+          memcpy(geo.crop, srcGeo.crop, sizeof(geo.crop));
+          break;
+        case 1: // Loose
+          memcpy(geo.crop, title->loose_crop, sizeof(geo.crop));
+          break;
+        case 2: // None
+            geo.crop[0] = 0;
+            geo.crop[1] = 0;
+            geo.crop[2] = 0;
+            geo.crop[3] = 0;
+            break;
+        case 3: // Custom
+            geo.crop[0] = hb_dict_get_int(preset, "PictureTopCrop");
+            geo.crop[1] = hb_dict_get_int(preset, "PictureBottomCrop");
+            geo.crop[2] = hb_dict_get_int(preset, "PictureLeftCrop");
+            geo.crop[3] = hb_dict_get_int(preset, "PictureRightCrop");
+            break;
     }
 
     const char * pad_mode;
