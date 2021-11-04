@@ -358,7 +358,7 @@ void hb_remove_previews( hb_handle_t * h )
 void hb_scan( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration )
 {
-    hb_scan2(h, path, title_index, preview_count, store_previews, min_duration, NULL, NULL);
+    hb_scan2(h, path, title_index, preview_count, store_previews, min_duration, 4, 20);
 }
 
 /**
