@@ -159,8 +159,8 @@ static int     ssaburn                   = -1;
 static int      width                    = 0;
 static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
-static int      crop_tune_median_threshold = 0;
-static int      crop_tune_frame_count    = 0;
+static int      crop_threshold_pixels = 0;
+static int      crop_threshold_frames    = 0;
 static int      loose_crop               = -1;
 static char *   vrate                    = NULL;
 static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
@@ -594,7 +594,7 @@ int main( int argc, char ** argv )
         hb_system_sleep_prevent(h);
 
         hb_scan2(h, input, titleindex, preview_count, store_previews,
-                min_title_duration * 90000LL, crop_tune_frame_count, crop_tune_median_threshold);
+                min_title_duration * 90000LL, crop_threshold_frames, crop_threshold_pixels);
 
         EventLoop(h, preset_dict);
         hb_value_free(&preset_dict);
@@ -1649,11 +1649,11 @@ static void ShowHelp()
 "                           (default: automatically remove black bars)\n"
 "       --loose-crop        Automatic Cropping but using conservative algorithm. \n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
-"       --crop-tune-median-threshold <number>\n"
+"       --crop-threshold-pixels <number>\n"
 "                           Number of pixels difference before we consider the frame\n"
 "                           to be a different aspect ratio\n" 
 "                           (default: 12)\n"
-"       --crop-tune-frame-count <number>\n"
+"       --crop-threshold-frames <number>\n"
 "                           Disable preset 'loose-crop'\n"
 "                           (default: 4, 6 or 8 scaling with preview count)\n"
 "   -Y, --maxHeight <number>\n"
@@ -2203,13 +2203,13 @@ static int ParseOptions( int argc, char ** argv )
     #define SSA_LANG             320
     #define SSA_DEFAULT          321
     #define SSA_BURN             322
-    #define FILTER_CHROMA_SMOOTH      323
-    #define FILTER_CHROMA_SMOOTH_TUNE 324
-    #define FILTER_DEBLOCK_TUNE  325
-    #define FILTER_COLORSPACE    326
-    #define FILTER_BWDIF         327
-    #define CROP_TUNE_MEDIAN_THRESHOLD    327
-    #define CROP_TUNE_FRAME_COUNT         328
+
+    #define FILTER_CHROMA_SMOOTH          323
+    #define FILTER_CHROMA_SMOOTH_TUNE     324
+    #define FILTER_DEBLOCK_TUNE           325
+    #define FILTER_COLORSPACE             326
+    #define CROP_THRESHOLD_PIXELS    327
+    #define CROP_THRESHOLD_FRAMES         328
     
     for( ;; )
     {
@@ -2330,8 +2330,8 @@ static int ParseOptions( int argc, char ** argv )
             { "crop",        required_argument, NULL,    'n' },
             { "loose-crop",  optional_argument, &loose_crop, 1 },
             { "no-loose-crop", no_argument,     &loose_crop, 0 },
-            { "crop-tune-median-threshold",  required_argument,  NULL, CROP_TUNE_MEDIAN_THRESHOLD },
-            { "crop-tune-frame-count",       required_argument,  NULL, CROP_TUNE_FRAME_COUNT },
+            { "crop-threshold-pixels",  required_argument,  NULL, CROP_THRESHOLD_PIXELS },
+            { "crop-threshold-frames",  required_argument,  NULL, CROP_THRESHOLD_FRAMES },
             
             { "pad",         required_argument, NULL,            PAD },
             { "no-pad",      no_argument,       &pad_disable,    1 },
@@ -2953,14 +2953,14 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             }
             
-            case CROP_TUNE_MEDIAN_THRESHOLD:
+            case CROP_THRESHOLD_PIXELS:
             {
-                crop_tune_median_threshold  = atoi( optarg );
+                crop_threshold_pixels  = atoi( optarg );
                 break;
             }
-            case CROP_TUNE_FRAME_COUNT:
+            case CROP_THRESHOLD_FRAMES:
             {
-                crop_tune_frame_count = atoi( optarg );
+                crop_threshold_frames = atoi( optarg );
                 break;
             }
             case PAD:

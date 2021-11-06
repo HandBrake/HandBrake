@@ -373,7 +373,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  */
 void hb_scan2( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
-              int crop_tune_frame_count, int crop_tune_median_threshold)
+              int crop_threshold_frames, int crop_threshold_pixels)
 {
     hb_title_t * title;
 
@@ -446,7 +446,7 @@ void hb_scan2( hb_handle_t * h, const char * path, int title_index,
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
-                                   crop_tune_frame_count, crop_tune_median_threshold);
+                                   crop_threshold_frames, crop_threshold_pixels);
 }
 
 void hb_force_rescan( hb_handle_t * h )

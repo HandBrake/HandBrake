@@ -29,8 +29,8 @@ typedef struct
 
     uint64_t       min_title_duration;
     
-    int            crop_tune_frame_count;
-    int            crop_tune_median_threshold;
+    int            crop_threshold_frames;
+    int            crop_threshold_pixels;
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
@@ -189,7 +189,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_tune_frame_count, int crop_tune_median_threshold)
+                            int crop_threshold_frames, int crop_threshold_pixels)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -203,8 +203,8 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
     
-    data->crop_tune_frame_count = crop_tune_frame_count;
-    data->crop_tune_median_threshold = crop_tune_median_threshold;
+    data->crop_threshold_frames = crop_threshold_frames;
+    data->crop_threshold_pixels = crop_threshold_pixels;
     
     // Initialize scan state
     hb_state_t state;
@@ -1233,8 +1233,8 @@ skip_preview:
             
             i = crops->n >> 1; // Median
 
-            int crop_switch_frame_count = data->crop_tune_frame_count;
-            int less_than_median_crop_threshold = data->crop_tune_median_threshold;
+            int crop_switch_frame_count = data->crop_threshold_frames;
+            int less_than_median_crop_threshold = data->crop_threshold_pixels;
             
             if (crop_switch_frame_count == 0) {
                 // Values seem like sensible defaults.
