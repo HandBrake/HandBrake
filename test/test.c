@@ -159,6 +159,8 @@ static int     ssaburn                   = -1;
 static int      width                    = 0;
 static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
+static int      crop_tune_median_threshold = 0;
+static int      crop_tune_frame_count    = 0;
 static int      loose_crop               = -1;
 static char *   vrate                    = NULL;
 static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
@@ -591,8 +593,8 @@ int main( int argc, char ** argv )
 
         hb_system_sleep_prevent(h);
 
-        hb_scan(h, input, titleindex, preview_count, store_previews,
-                min_title_duration * 90000LL);
+        hb_scan2(h, input, titleindex, preview_count, store_previews,
+                min_title_duration * 90000LL, crop_tune_frame_count, crop_tune_median_threshold);
 
         EventLoop(h, preset_dict);
         hb_value_free(&preset_dict);
@@ -1645,8 +1647,15 @@ static void ShowHelp()
 "       --crop   <top:bottom:left:right>\n"
 "                           Set picture cropping in pixels\n"
 "                           (default: automatically remove black bars)\n"
-"       --loose-crop        Always crop to a multiple of the modulus\n"
+"       --loose-crop        Automatic Cropping but using conservative algorithm. \n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
+"       --crop-tune-median-threshold <number>\n"
+"                           Number of pixels difference before we consider the frame\n"
+"                           to be a different aspect ratio\n" 
+"                           (default: 12)\n"
+"       --crop-tune-frame-count <number>\n"
+"                           Disable preset 'loose-crop'\n"
+"                           (default: 4, 6 or 8 scaling with preview count)\n"
 "   -Y, --maxHeight <number>\n"
 "                           Set maximum height in pixels\n"
 "   -X, --maxWidth  <number>\n"
@@ -2156,7 +2165,6 @@ static int ParseOptions( int argc, char ** argv )
     #define AUDIO_GAIN           280
     #define ALLOWED_AUDIO_COPY   281
     #define AUDIO_FALLBACK       282
-    #define LOOSE_CROP           283
     #define ENCODER_PRESET       284
     #define ENCODER_PRESET_LIST  285
     #define ENCODER_TUNE         286
@@ -2200,6 +2208,9 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_DEBLOCK_TUNE  325
     #define FILTER_COLORSPACE    326
     #define FILTER_BWDIF         327
+    #define CROP_TUNE_MEDIAN_THRESHOLD    327
+    #define CROP_TUNE_FRAME_COUNT         328
+    
     for( ;; )
     {
         static struct option long_options[] =
@@ -2317,8 +2328,11 @@ static int ParseOptions( int argc, char ** argv )
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
-            { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
+            { "loose-crop",  optional_argument, &loose_crop, 1 },
             { "no-loose-crop", no_argument,     &loose_crop, 0 },
+            { "crop-tune-median-threshold",  required_argument,  NULL, CROP_TUNE_MEDIAN_THRESHOLD },
+            { "crop-tune-frame-count",       required_argument,  NULL, CROP_TUNE_FRAME_COUNT },
+            
             { "pad",         required_argument, NULL,            PAD },
             { "no-pad",      no_argument,       &pad_disable,    1 },
             { "colorspace",    required_argument, NULL,    FILTER_COLORSPACE},
@@ -2938,12 +2952,17 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
-            case LOOSE_CROP:
-                if (optarg != NULL)
-                    loose_crop = atoi(optarg);
-                else
-                    loose_crop = 1;
+            
+            case CROP_TUNE_MEDIAN_THRESHOLD:
+            {
+                crop_tune_median_threshold  = atoi( optarg );
                 break;
+            }
+            case CROP_TUNE_FRAME_COUNT:
+            {
+                crop_tune_frame_count = atoi( optarg );
+                break;
+            }
             case PAD:
             {
                 free(pad);
@@ -4311,6 +4330,15 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "PictureAllowUpscaling", hb_value_bool(1));
     }
     
+    if (loose_crop == 1) 
+    {
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(1)); // Loose
+    } 
+    else if (loose_crop == 0) 
+    {
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(0)); // Force Automatic
+    }
+
     if (crop[0] >= 0 || crop[1] >= 0 || crop[2] >= 0 || crop[3] >= 0)
     {
         hb_dict_set(preset, "PictureAutoCrop", hb_value_bool(0));
@@ -4332,11 +4360,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "PictureRightCrop", hb_value_int(crop[3]));
     }
-    if (loose_crop != -1)
-    {
-        hb_dict_set(preset, "PictureCropMode",  hb_value_int(1));
-    }
-    
+
     if (display_width > 0)
     {
         keep_display_aspect = 0;

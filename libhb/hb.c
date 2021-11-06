@@ -358,7 +358,7 @@ void hb_remove_previews( hb_handle_t * h )
 void hb_scan( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration )
 {
-    hb_scan2(h, path, title_index, preview_count, store_previews, min_duration, 4, 20);
+    hb_scan2(h, path, title_index, preview_count, store_previews, min_duration, 0, 0);
 }
 
 /**
@@ -368,12 +368,12 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param title_index Desired title to scan.  0 for all titles.
  * @param preview_count Number of preview images to generate.
  * @param store_previews Whether or not to write previews to disk.
- * @param crop_auto_switch_threshold The number of frames to trigger smart crop
+ * @param crop_auto_switch_threshold_factor The number of frames to trigger smart crop
  * @param crop_median_threshold The frame cropping difference threshold
  */
 void hb_scan2( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
-              int crop_auto_switch_threshold, int crop_median_threshold )
+              int crop_tune_frame_count, int crop_tune_median_threshold)
 {
     hb_title_t * title;
 
@@ -446,7 +446,7 @@ void hb_scan2( hb_handle_t * h, const char * path, int title_index,
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
                                    &h->title_set, preview_count,
                                    store_previews, min_duration,
-                                   crop_auto_switch_threshold, crop_median_threshold);
+                                   crop_tune_frame_count, crop_tune_median_threshold);
 }
 
 void hb_force_rescan( hb_handle_t * h )

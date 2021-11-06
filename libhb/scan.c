@@ -29,8 +29,8 @@ typedef struct
 
     uint64_t       min_title_duration;
     
-    int            crop_auto_switch_threshold;
-    int            crop_median_threshold;
+    int            crop_tune_frame_count;
+    int            crop_tune_median_threshold;
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
@@ -189,7 +189,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration,
-                            int crop_auto_switch_threshold, int crop_median_threshold)
+                            int crop_tune_frame_count, int crop_tune_median_threshold)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -203,9 +203,9 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
     
-    data->crop_auto_switch_threshold = crop_auto_switch_threshold;
-    data->crop_median_threshold = crop_median_threshold;
-
+    data->crop_tune_frame_count = crop_tune_frame_count;
+    data->crop_tune_median_threshold = crop_tune_median_threshold;
+    
     // Initialize scan state
     hb_state_t state;
     hb_get_state2(handle, &state);
@@ -1233,15 +1233,28 @@ skip_preview:
             
             i = crops->n >> 1; // Median
 
-            int less_than_switch_threshold = data->crop_auto_switch_threshold;
-            int less_than_median_crop_threshold = data->crop_median_threshold;
+            int crop_switch_frame_count = data->crop_tune_frame_count;
+            int less_than_median_crop_threshold = data->crop_tune_median_threshold;
             
-            if (less_than_switch_threshold == 0) {
-                less_than_switch_threshold = 4;
+            if (crop_switch_frame_count == 0) {
+                // Values seem like sensible defaults.
+                // Have observed that the optimal value does not always linearly increase with preview count.
+                 crop_switch_frame_count = 4;
+                
+                if (data->preview_count >= 30){
+                    crop_switch_frame_count = 6;
+                }
+                
+                if (data->preview_count > 40){
+                    crop_switch_frame_count = 8;
+                }
             }
             
             if (less_than_median_crop_threshold == 0) {
-                less_than_median_crop_threshold = 20;
+                // It's not uncommon to see 2~12 px variance in cropping.
+                // Defaulting to 10 to account for that variance before switching to loose.
+                // This accounts for variance that is unlikely to be caused by mixed AR. 
+                less_than_median_crop_threshold = 12;
             }
 
             // Count the number of frames "substantially" less than the median.
@@ -1261,8 +1274,8 @@ skip_preview:
             hb_deep_log(2, "crop: less_than_median_frame_count: %d,", less_than_median_frame_count);
              
             // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
-            if (less_than_median_frame_count >= less_than_switch_threshold) {
-                hb_deep_log(2, "crop: switching to loose crop for this source.");
+            if (less_than_median_frame_count >= crop_switch_frame_count) {
+                hb_deep_log(2, "crop: switching to loose crop for this source. (%d)", crop_switch_frame_count);
                 i = 0;
             }
             
