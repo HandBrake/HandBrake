@@ -220,6 +220,8 @@ namespace HandBrakeWPF.ViewModels
             if (this.AudioDefaultsViewModel.ShowWindow())
             {
                 this.AudioBehaviours = new AudioBehaviours(this.AudioDefaultsViewModel.AudioBehaviours);
+                this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
+
                 this.OnTabStatusChanged(null);
             }
         }
