@@ -398,6 +398,8 @@ namespace HandBrakeWPF.ViewModels
             get => this.CurrentTask.Destination;
             set
             {
+                value = value?.Replace("\"", string.Empty);
+
                 if (!Equals(this.CurrentTask.Destination, value))
                 {
                     if (!string.IsNullOrEmpty(value))
