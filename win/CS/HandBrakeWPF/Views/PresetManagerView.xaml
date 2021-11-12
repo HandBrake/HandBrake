@@ -99,7 +99,7 @@
                             <Path Height="5"
                                   Margin="2,2,0,0"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" />
                         </StackPanel>
                     </MenuItem.Header>
 

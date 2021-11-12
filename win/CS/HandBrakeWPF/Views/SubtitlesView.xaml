@@ -63,7 +63,7 @@
 
                         <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                               Data="M 0 0 L 4 4 L 8 0 Z"
-                              Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
+                              Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
                     </StackPanel>
                 </Button.Content>
 
@@ -160,10 +160,10 @@
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SourceTrack}" />
 
-                            <CheckBox Grid.Column="3" Margin="5,0,5,0" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" 
+                            <CheckBox Grid.Column="3" Margin="5,1,5,0" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" 
                                       Content="{x:Static Properties:Resources.SubtitlesView_ForcedOnly}" FontWeight="Bold" />
 
-                            <CheckBox Grid.Column="4" Margin="5,0,5,0" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
+                            <CheckBox Grid.Column="4" Margin="5,1,5,0" IsChecked="{Binding Burned}" x:Name="burnInCheckbox" Content="{x:Static Properties:Resources.SubtitlesView_BurnIn}" FontWeight="Bold"
                                       ToolTip="{x:Static Properties:ResourcesTooltips.SubtitlesView_BurnIn}">
                                 <CheckBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource canBurnSubtitleConverter}">
@@ -181,7 +181,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Grid.Column="5" Margin="5,0,5,0" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
+                            <CheckBox Grid.Column="5" Margin="5,1,5,0" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
                                       IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
@@ -239,7 +239,7 @@
                             <controls:NumberBox Grid.Column="7" Width="58" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
                                                 IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
 
-                            <CheckBox Grid.Column="8" Margin="5,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}" Content="Burn In" FontWeight="Bold">
+                            <CheckBox Grid.Column="8" Margin="5,1,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center"  IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}" Content="Burn In" FontWeight="Bold">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">
@@ -249,7 +249,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Grid.Column="9" Margin="0,0,5,0" VerticalAlignment="Center"  IsChecked="{Binding Default}" Content="Default" FontWeight="Bold" VerticalContentAlignment="Center"
+                            <CheckBox Grid.Column="9" Margin="0,1,5,0" VerticalAlignment="Center"  IsChecked="{Binding Default}" Content="Default" FontWeight="Bold" VerticalContentAlignment="Center"
                                       IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">

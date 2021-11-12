@@ -52,7 +52,9 @@
                 Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Content="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" Margin="0,0,0,10" />
+                    <CheckBox IsChecked="{Binding ShowPictureSettingControls}" Margin="0,0,0,10">
+                        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_ShowPictureSettingsAdjustment}" Foreground="White" />
+                    </CheckBox>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
@@ -64,7 +66,9 @@
                       ItemsSource="{Binding AvailableDurations}"
                       SelectedItem="{Binding Duration}" />
 
-                    <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+                    <CheckBox VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}">
+                        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" />
+                    </CheckBox>
 
                 </StackPanel>
 

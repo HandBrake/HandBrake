@@ -4,13 +4,11 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
               xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-              xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture"
-              xmlns:cal="http://www.caliburnproject.org">
+              xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-        <Converters:BooleanToHiddenVisibilityConverter x:Key="boolToVisHiddenConverter" />
         <picture:ResolutionLimitConverter x:Key="resolutionLimitConverter" />
         <Style TargetType="controls:NumberBox">
             <Setter Property="Height" Value="24" />

@@ -49,9 +49,6 @@
                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Margin" Value="0,3,0,3" />
                 </Style>
-                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
-                    <Setter Property="Margin" Value="0,2,0,2" />
-                </Style>
             </Grid.Resources>
 
 

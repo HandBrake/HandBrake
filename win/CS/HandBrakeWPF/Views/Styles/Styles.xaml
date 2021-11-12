@@ -33,8 +33,9 @@
         <Setter Property="Padding" Value="8,2" />
     </Style>
 
-    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MahApps.Styles.RadioButton}">
         <Setter Property="Margin" Value="0,0,0,8" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <Style TargetType="{x:Type controls:NumberBox}" >
@@ -64,12 +65,11 @@
         <Setter Property="MaxWidth" Value="500" />
     </Style>
 
-    <Style TargetType="{x:Type CheckBox}" >
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MahApps.Styles.CheckBox}" >
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,2,0,2" />
     </Style>
-
-    <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
 
     <Style x:Key="DropButtonStyle" TargetType="ToggleButton"  BasedOn="{StaticResource {x:Type ToggleButton}}">
         <Setter Property="Padding" Value="2,2" />
@@ -138,28 +138,28 @@
     </Style>
 
 
-    <Style x:Key="subText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style x:Key="subText" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Regular" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontStyle" Value="Italic" />
     </Style>
 
-    <Style x:Key="sectionHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style x:Key="sectionHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="12" />
     </Style>
 
-    <Style x:Key="subHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style x:Key="subHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="14" />
     </Style>
 
-    <Style x:Key="pageHeader" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style x:Key="pageHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="22" />
     </Style>
 
-    <Style x:Key="windowTitle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style x:Key="windowTitle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="Regular" />
         <Setter Property="FontSize" Value="26" />
     </Style>

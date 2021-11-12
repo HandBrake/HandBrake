@@ -11,6 +11,15 @@
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
     </Style>
 
+    <!-- TextBlock -->
+    <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+
+    <!-- Glyph -->
+    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ToolbarLight.xaml" />
         <ResourceDictionary Source="Controls/ContextMenuLight.xaml" />

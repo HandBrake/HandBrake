@@ -147,7 +147,10 @@ namespace HandBrakeWPF
             // App Theme
             DarkThemeMode useDarkTheme = (DarkThemeMode)userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
             if (SystemInfo.IsWindows10())
-            {
+            { 
+                ResourceDictionary dark = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml") };
+                ResourceDictionary light = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml") };
+
                 ResourceDictionary theme = new ResourceDictionary();
                 switch (useDarkTheme)
                 {
@@ -156,30 +159,33 @@ namespace HandBrakeWPF
                         {
                             theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
                             Application.Current.Resources.MergedDictionaries.Add(theme);
+                            Application.Current.Resources.MergedDictionaries.Add(dark);
                         }
                         else if (!SystemParameters.HighContrast)
                         {
                             theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
                             Application.Current.Resources.MergedDictionaries.Add(theme);
+                            Application.Current.Resources.MergedDictionaries.Add(light);
                         }
                         break;
                     case DarkThemeMode.Dark:
                         theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
                         Application.Current.Resources.MergedDictionaries.Add(theme);
+                        Application.Current.Resources.MergedDictionaries.Add(dark);
                         break;
                     case DarkThemeMode.Light:
                         if (!SystemParameters.HighContrast)
                         {
                             theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
                             Application.Current.Resources.MergedDictionaries.Add(theme);
+                            Application.Current.Resources.MergedDictionaries.Add(light);
                         }
 
                         break;
-
-                    default:
-                        break;
                 }
             }
+
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/Styles.xaml", UriKind.Relative) });
 
             // NO-Hardware Mode
             bool noHardware = e.Args.Any(f => f.Equals("--no-hardware")) || (Portable.IsPortable() && !Portable.IsHardwareEnabled());

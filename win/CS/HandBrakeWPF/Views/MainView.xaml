@@ -28,7 +28,6 @@
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
-
         <Style TargetType="MenuItem">
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
         </Style>
@@ -174,7 +173,7 @@
                         <Grid x:Name="dropdown" Background="Transparent" >
                             <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
                         </Grid>
 
                     </StackPanel>
@@ -309,7 +308,7 @@
                         <Grid x:Name="presetsDropdown" Background="Transparent" >
                             <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="presetsDropdownArrow" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="presetsDropdownArrow" />
                         </Grid>
                     </StackPanel>
 
@@ -462,7 +461,7 @@
 
                                 <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3"
                                       Data="M 0 0 L 4 4 L 0 8 Z"
-                                      Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowSelectPreset" />
+                                      Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowSelectPreset" />
                             </Grid>
                         </Button.Content>
 
@@ -486,7 +485,7 @@
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
                             </StackPanel>
                         </Button.Content>
 
@@ -639,7 +638,7 @@
                                 <Path Height="5"
                                       Margin="2,2,2,0"
                                       Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{DynamicResource GlyphBrush}" />
+                                      Fill="{DynamicResource ButtonGlyphBrush}" />
                             </StackPanel>
                         </MenuItem.Header>
 
