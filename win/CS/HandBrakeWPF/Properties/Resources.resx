@@ -2570,4 +2570,11 @@ You can change your choice at any time by changing the options in Preferences -&
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
     <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
   </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Unable to read the queue file.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>The file may be corrupted or from an earlier version of HandBrake. 
+Only queue files from the current version are supported.</value>
+  </data>
 </root>
