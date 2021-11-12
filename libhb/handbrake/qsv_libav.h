@@ -166,7 +166,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define HB_QSV_SURFACE_NUM              80
 #define HB_QSV_SYNC_NUM                 HB_QSV_SURFACE_NUM*3/4
-#define HB_QSV_BUF_SIZE_DEFAULT         4096*2160*10
 #define HB_QSV_JOB_SIZE_DEFAULT         10
 #define HB_QSV_SYNC_TIME_DEFAULT        10000
 // see hb_qsv_get_free_sync, hb_qsv_get_free_surface , 100 if usleep(10*1000)(10ms) == 1 sec

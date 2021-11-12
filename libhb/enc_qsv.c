@@ -97,6 +97,7 @@ struct hb_work_private_s
 
     int                  async_depth;
     int                  max_async_depth;
+    int                  max_buffer_size;
 
     // if encode-only, system memory used
     int                  is_sys_mem;
@@ -870,7 +871,7 @@ int qsv_enc_init(hb_work_private_t *pv)
     }
 
     // allocate tasks
-    qsv_encode->p_buf_max_size = HB_QSV_BUF_SIZE_DEFAULT;
+    qsv_encode->p_buf_max_size = pv->max_buffer_size * 1000;
     qsv_encode->tasks          = hb_qsv_list_init(HAVE_THREADS);
     for (i = 0; i < pv->max_async_depth; i++)
     {
@@ -1800,6 +1801,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encqsvInit: log_encoder_params failed (%d)", err);
         return -1;
     }
+    pv->max_buffer_size = videoParam.mfx.BufferSizeInKB;
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
     pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
