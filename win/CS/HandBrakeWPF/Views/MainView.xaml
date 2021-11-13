@@ -270,8 +270,12 @@
                                SnapsToDevicePixels="True"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}"/>
                         <Label Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
+                                   VerticalAlignment="Center"
+                                   Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
+
+                        <Border Background="#00579f" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" Visibility="{Binding IsQueueCountVisible, Converter={StaticResource boolToVisConverter}}">
+                            <TextBlock Text="{Binding QueueCount}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="9,2" />
+                        </Border>
                     </StackPanel>
                 </Button>
 

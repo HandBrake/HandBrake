@@ -732,7 +732,11 @@ namespace HandBrakeWPF.ViewModels
 
         public Action AlertWindowClose => this.CloseAlertWindow;
 
-        public string QueueLabel => string.Format(Resources.Main_QueueLabel, this.queueProcessor.Count > 0 ? string.Format(" ({0})", this.queueProcessor.Count) : string.Empty);
+        public int QueueCount => this.queueProcessor.Count;
+
+        public bool IsQueueCountVisible => this.queueProcessor.Count > 0;
+
+        public string QueueLabel => string.Format(Resources.Main_QueueLabel, string.Empty);
 
         public string StartLabel
         {
@@ -2139,7 +2143,8 @@ namespace HandBrakeWPF.ViewModels
                       this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
                   }
 
-                  this.NotifyOfPropertyChange(() => this.QueueLabel);
+                  this.NotifyOfPropertyChange(() => this.IsQueueCountVisible);
+                  this.NotifyOfPropertyChange(() => this.QueueCount);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
                   this.NotifyOfPropertyChange(() => this.IsEncoding);
               });
@@ -2151,7 +2156,8 @@ namespace HandBrakeWPF.ViewModels
                 () =>
                 {
                     this.ProgramStatusLabel = Resources.Main_QueuePaused;
-                    this.NotifyOfPropertyChange(() => this.QueueLabel);
+                    this.NotifyOfPropertyChange(() => this.IsQueueCountVisible);
+                    this.NotifyOfPropertyChange(() => this.QueueCount);
                     this.NotifyOfPropertyChange(() => this.StartLabel);
                     this.NotifyOfPropertyChange(() => this.IsEncoding);
                 });
