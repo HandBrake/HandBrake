@@ -486,4 +486,13 @@ For example, PGS subtitles are not supported in MP4</value>
 Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
 Categories - All presets are shown under a sub menu per category.</value>
   </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Refresh the list below based on the behaviours configured. </value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+  </data>
 </root>

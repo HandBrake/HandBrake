@@ -8,13 +8,11 @@
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="500"
              d:DesignWidth="770"
-             mc:Ignorable="d"
-             x:Name="audioTab">
+             mc:Ignorable="d">
 
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -76,21 +74,20 @@
 
     
                 <Button MinWidth="65" Grid.Column="1"
-                    Margin="10,0,5,0"
+                    Margin="10,0,5,0" FontWeight="Bold"
                     cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
-                    Content="{Binding SwitchDisplayTitle}" />
+                    ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_AudioDefaults}"
+                    Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" />
 
                 <Button MinWidth="65" Grid.Column="2"
-                    cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
-                    Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
+                        cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                        ToolTip="{x:Static Properties:ResourcesTooltips.BehavioursReload}"
+                        Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
 
                 <Button MinWidth="65" Grid.Column="4"
                         Margin="0,0,0,0"
                         cal:Message.Attach="[Event Click] = [Action Clear]"
                         Content="{x:Static Properties:Resources.Generic_Clear}" />
-
-
-
             </Grid>
         </Grid>
 

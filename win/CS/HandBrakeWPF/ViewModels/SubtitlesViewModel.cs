@@ -26,7 +26,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-    using HandBrakeWPF.Views;
 
     using Microsoft.Win32;
 
@@ -116,28 +115,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets Task.
         /// </summary>
         public EncodeTask Task { get; set; }
-
-        /// <summary>
-        /// Gets the panel title.
-        /// </summary>
-        public string PanelTitle
-        {
-            get
-            {
-                return Resources.SubtitlesViewModel_SubTracks;
-            }
-        }
-
-        /// <summary>
-        /// Gets the switch display title.
-        /// </summary>
-        public string SwitchDisplayTitle
-        {
-            get
-            {
-                return Resources.SubtitlesViewModel_ConfigureDefaults;
-            }
-        }
 
         /// <summary>
         /// Gets the default audio behaviours. 

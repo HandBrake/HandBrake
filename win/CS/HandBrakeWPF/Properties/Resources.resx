@@ -424,7 +424,7 @@ The Activity log may have further information.</value>
     <value>Audio Tracks</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior</value>
+    <value>Selection Behavior ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Switch Back To Tracks</value>
@@ -552,7 +552,7 @@ Are you sure you wish to exit HandBrake?</value>
     <value>Switch Back To Tracks</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selection Behavior</value>
+    <value>Selection Behavior ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archived File:</value>

@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ResourcesTooltips {
@@ -57,6 +57,24 @@ namespace HandBrakeWPF.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title..
+        /// </summary>
+        public static string AudioView_AudioDefaults {
+            get {
+                return ResourceManager.GetString("AudioView_AudioDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh the list below based on the behaviours configured. .
+        /// </summary>
+        public static string BehavioursReload {
+            get {
+                return ResourceManager.GetString("BehavioursReload", resourceCulture);
             }
         }
         
@@ -678,6 +696,15 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitlesView_BurnIn {
             get {
                 return ResourceManager.GetString("SubtitlesView_BurnIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title..
+        /// </summary>
+        public static string SubtitleView_SubtitleDefaults {
+            get {
+                return ResourceManager.GetString("SubtitleView_SubtitleDefaults", resourceCulture);
             }
         }
         

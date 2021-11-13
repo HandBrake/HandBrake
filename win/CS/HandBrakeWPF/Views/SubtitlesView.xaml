@@ -8,27 +8,16 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-             xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
-             xmlns:viewModels="clr-namespace:HandBrakeWPF.ViewModels"
              d:DesignHeight="350"
              d:DesignWidth="500"
-             mc:Ignorable="d"
-             x:Name="subTab">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
         <Converters:BooleanConverter x:Key="booleanConverter" />
         <subtitles:CanBurnSubtitleConverter x:Key="canBurnSubtitleConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
-
-        <Style x:Key="LongToolTip" TargetType="TextBlock">
-            <Setter Property="Width" Value="400" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
-            <Setter Property="Margin" Value="0,2,0,2" />
-        </Style>
-
     </UserControl.Resources>
 
     <Grid>
@@ -80,13 +69,16 @@
             </Button>
 
 
-            <Button MinWidth="65" Grid.Column="2"
+            <Button MinWidth="65" Grid.Column="2" FontWeight="Bold"
                     Margin="10,0,5,0"
                     cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
-                    Content="{Binding SwitchDisplayTitle}" />
+                    Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}"
+                    ToolTip="{x:Static Properties:ResourcesTooltips.SubtitleView_SubtitleDefaults}"
+                    />
 
             <Button MinWidth="65" Grid.Column="3"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                    ToolTip="{x:Static Properties:ResourcesTooltips.BehavioursReload}"
                     Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
 
             <Button MinWidth="65" Grid.Column="5"
