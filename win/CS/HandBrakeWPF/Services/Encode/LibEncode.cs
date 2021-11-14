@@ -199,7 +199,7 @@ namespace HandBrakeWPF.Services.Encode
 
         protected void ServiceLogMessage(string message)
         {
-            this.encodeLogService.LogMessage(string.Format("{0}# {1}", Environment.NewLine, message));
+            this.encodeLogService.LogMessage(string.Format("{1} # {0}{1}", message, Environment.NewLine));
         }
 
         protected void TimedLogMessage(string message)

@@ -100,7 +100,7 @@ namespace HandBrakeWPF.Utilities
             logHeader.AppendLine(string.Format("Install Dir: {0}", AppDomain.CurrentDomain.BaseDirectory));
             logHeader.AppendLine(string.Format("Data Dir: {0}\n", DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly())));
 
-            logHeader.AppendLine("-------------------------------------------");
+            logHeader.Append("-------------------------------------------");
 
             return logHeader;
         }

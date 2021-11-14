@@ -169,13 +169,13 @@ namespace HandBrakeWPF.Instance
                     }
 
                     int maxAllowed = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
-                    this.logService.LogMessage(string.Format("Remote Process started with Process ID: {0} using port: {1}. Max Allowed Instances: {2}", this.workerProcess.Id, port, maxAllowed));
+                    this.ServiceLogMessage(string.Format("Remote Process started with Process ID: {0} using port: {1}. Max Allowed Instances: {2}", this.workerProcess.Id, port, maxAllowed));
                 }
             }
             catch (Exception e)
             {
-                this.logService.LogMessage("Unable to start worker process.");
-                this.logService.LogMessage(e.ToString());
+                this.ServiceLogMessage("Unable to start worker process.");
+                this.ServiceLogMessage(e.ToString());
             }
         }
 
@@ -224,7 +224,7 @@ namespace HandBrakeWPF.Instance
 
         private void WorkerProcess_Exited(object sender, EventArgs e)
         {
-            this.logService.LogMessage("Worker process exited!");
+            this.ServiceLogMessage("Worker process exited!");
         }
 
         private void StopServer()
@@ -255,12 +255,12 @@ namespace HandBrakeWPF.Instance
                     int exitcode = -11;
                     if (this.workerProcess != null && this.workerProcess.HasExited)
                     {
-                        this.logService.LogMessage("Worker process exit was not expected.");
+                        this.ServiceLogMessage("Worker process exit was not expected.");
                         exitcode = -12;
                     }
                     else
                     {
-                        this.logService.LogMessage("Worker process appears to be unresponsive. Terminating .... ");
+                        this.ServiceLogMessage("Worker process appears to be unresponsive. Terminating .... ");
                     }
 
                     this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(exitcode));
@@ -396,6 +396,12 @@ namespace HandBrakeWPF.Instance
             }
 
             return true;
+        }
+
+        private void ServiceLogMessage(string text)
+        {
+            string time = DateTime.Now.ToString("HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            logService.LogMessage(string.Format("[{0}] {1}", time, text));
         }
     }
 }

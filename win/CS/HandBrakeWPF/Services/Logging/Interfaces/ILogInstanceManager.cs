@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
 
     public interface ILogInstanceManager
     {
-        event EventHandler<LogFileEventArgs> NewLogInstanceRegistered;
+        event EventHandler<LogFileEventArgs> LogInstancesChanged;
         
         ILog ApplicationLogInstance { get; }
 

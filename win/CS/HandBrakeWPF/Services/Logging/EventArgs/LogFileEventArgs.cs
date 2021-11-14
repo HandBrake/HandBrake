@@ -15,14 +15,17 @@ namespace HandBrakeWPF.Services.Logging.EventArgs
 
     public class LogFileEventArgs : EventArgs
     {
-        public LogFileEventArgs(string fileName, ILog logInstance)
+        public LogFileEventArgs(string fileName, ILog logInstance, bool isNew)
         {
             this.FileName = fileName;
             this.LogInstance = logInstance;
+            this.IsNew = isNew;
         }
 
         public string FileName { get; }
 
         public ILog LogInstance { get; }
+
+        public bool IsNew { get; }
     }
 }

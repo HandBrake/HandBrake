@@ -6,6 +6,8 @@
 
 namespace HandBrakeWPF.Services.Logging.Model
 {
+    using System;
+
     using HandBrakeWPF.Properties;
 
     public class LogFile
@@ -16,9 +18,9 @@ namespace HandBrakeWPF.Services.Logging.Model
             this.IsComplete = isComplete;
         }
 
-        public string LogFileName { get; set; }
+        public string LogFileName { get; private set; }
 
-        public bool IsComplete { get; set; }
+        public bool IsComplete { get; private set; }
 
         public string FileDisplayName
         {
@@ -31,6 +33,36 @@ namespace HandBrakeWPF.Services.Logging.Model
 
                 return this.LogFileName;
             }
+        }
+
+        protected bool Equals(LogFile other)
+        {
+            return this.LogFileName == other.LogFileName && this.IsComplete == other.IsComplete;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((LogFile)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.LogFileName, this.IsComplete);
         }
     }
 }

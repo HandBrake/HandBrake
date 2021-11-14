@@ -44,8 +44,8 @@ namespace HandBrakeWPF.ViewModels
         private ILog logService;
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
-
         private LogFile selectedLogFile;
+        private readonly object lockObject = new object();
 
         public LogViewModel(IErrorService errorService, ILogInstanceManager logInstanceManager, IQueueService queueService)
         {
@@ -57,6 +57,8 @@ namespace HandBrakeWPF.ViewModels
 
         public event EventHandler<LogEventArgs> LogMessageReceived;
 
+        public event EventHandler LogResetEvent;
+
         public string ActivityLog => this.log.ToString();
 
         public BindingList<LogFile> LogFiles { get; private set; }
@@ -66,15 +68,18 @@ namespace HandBrakeWPF.ViewModels
             get => this.selectedLogFile;
             set
             {
-                if (value == this.selectedLogFile)
+                if (Equals(value, this.selectedLogFile))
                 {
                     return;
                 }
-
+                
                 this.selectedLogFile = value;
                 this.NotifyOfPropertyChange(() => this.SelectedLogFile);
 
-                this.ChangeLogFileView();
+                if (value != null)
+                {
+                    this.ChangeLogFileView();
+                }
             }
         }
 
@@ -100,14 +105,13 @@ namespace HandBrakeWPF.ViewModels
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            this.logInstanceManager.NewLogInstanceRegistered += this.LogInstanceManager_NewLogInstanceRegistered;
-            this.queueService.QueueChanged += this.QueueService_QueueChanged;
+            this.logInstanceManager.LogInstancesChanged += this.LogInstanceManager_NewLogInstanceRegistered;
+            this.queueService.EncodeCompleted += this.QueueService_EncodeCompleted;
 
             this.CollectLogFiles(null);
 
             return base.OnActivateAsync(cancellationToken);
         }
-
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             if (this.logService != null)
@@ -117,10 +121,15 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.SelectedLogFile = null;
-            this.logInstanceManager.NewLogInstanceRegistered -= this.LogInstanceManager_NewLogInstanceRegistered;
-            this.queueService.QueueChanged -= this.QueueService_QueueChanged;
+            this.logInstanceManager.LogInstancesChanged -= this.LogInstanceManager_NewLogInstanceRegistered;
+            this.queueService.EncodeCompleted -= this.QueueService_EncodeCompleted;
 
             return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        protected virtual void OnLogResetEvent()
+        {
+            this.LogResetEvent?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void OnLogMessageReceived(LogEventArgs e)
@@ -172,8 +181,7 @@ namespace HandBrakeWPF.ViewModels
                     this.log.AppendLine(exc.ToString());
                 }
 
-                this.OnLogMessageReceived(null);
-                this.NotifyOfPropertyChange(() => this.ActivityLog);
+                this.OnLogResetEvent();
             }
 
             // Active in-progress log, read from the log service.
@@ -195,8 +203,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                this.OnLogMessageReceived(null);
-                this.NotifyOfPropertyChange(() => this.ActivityLog);
+                this.OnLogResetEvent();
             }
         }
 
@@ -216,8 +223,7 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            this.NotifyOfPropertyChange(() => this.ActivityLog);
-            this.OnLogMessageReceived(null);
+            this.OnLogResetEvent();
         }
 
         private void LogService_MessageLogged(object sender, LogEventArgs e)
@@ -229,19 +235,21 @@ namespace HandBrakeWPF.ViewModels
                             this.lastReadIndex = e.Log.MessageIndex;
                             this.log.AppendLine(e.Log.Content);
                             this.OnLogMessageReceived(e);
-                            this.NotifyOfPropertyChange(() => this.ActivityLog);
                         });
             }
         }
 
         private void LogInstanceManager_NewLogInstanceRegistered(object sender, LogFileEventArgs e)
         {
-            this.CollectLogFiles(e.FileName);
+            if (e.IsNew)
+            {
+                this.CollectLogFiles(e.FileName);
+            }
         }
-        
-        private void QueueService_QueueChanged(object sender, EventArgs e)
+
+        private void QueueService_EncodeCompleted(object sender, Services.Encode.EventArgs.EncodeCompletedEventArgs e)
         {
-            this.CollectLogFiles(null);
+            this.CollectLogFiles(Path.GetFileName(e.ActivityLogPath));
         }
 
         private void CollectLogFiles(string filename)
@@ -265,6 +273,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.LogFiles = logfiles;
                 this.NotifyOfPropertyChange(() => this.LogFiles);
+
 
                 if (!string.IsNullOrEmpty(filename))
                 {
