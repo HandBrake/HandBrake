@@ -18,6 +18,9 @@ For Windows users:
 ### Mac
 - macOS 10.13 is now the minimum deployment target
 - The VideoToolbox API is now directly used rather than the libavcodec (ffmpeg) wrapper. Added support for frame multi-pass, mastering display metadata, content light metadata and chroma location. 
+- Miscellaneous bug fixes and improvements
+- Added new translations:
+  - Corsican
 
 ### Windows
 - Minor UI / UX layout and typography changes throughout the UI.
@@ -33,6 +36,12 @@ For Windows users:
   - Japanese
   - Chinese  (Including a fix for access keys in menu's)
 - Miscellaneous bug fixes and improvements
+
+### Linux
+- Miscellaneous bug fixes and improvements
+- Added new translations:
+  - Corsican
+
 
 ## HandBrake 1.4.3
 
