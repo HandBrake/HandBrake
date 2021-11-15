@@ -2577,4 +2577,31 @@ You can change your choice at any time by changing the options in Preferences -&
     <value>The file may be corrupted or from an earlier version of HandBrake. 
 Only queue files from the current version are supported.</value>
   </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Your HandBrake encode is done!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Your HandBrake queue is done!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>This will also disable the show windows taskbar notifications options on the 'When Done' tab. Re-enable these if you want to re-activate this feature.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Remove HandBrake from the Windows notifications control panel.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Uninstalled</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Notification settings have been removed.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Clear &amp; Uninstall</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Send a notification to the Windows Taskbar.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windows Notifications</value>
+  </data>
 </root>

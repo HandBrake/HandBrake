@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Scan.Interfaces;
@@ -33,13 +34,15 @@ namespace HandBrakeWPF.Services
     public class PrePostActionService : IPrePostActionService
     {
         private readonly ILog log;
+        private readonly INotificationService notificationService;
         private readonly IUserSettingService userSettingService;
         private readonly IWindowManager windowManager;
         private readonly IScan scanService;
 
-        public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService, ILog logService)
+        public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService, ILog logService, INotificationService notificationService)
         {
             this.log = logService;
+            this.notificationService = notificationService;
             this.userSettingService = userSettingService;
             this.windowManager = windowManager;
             this.scanService = scanService;
@@ -100,6 +103,12 @@ namespace HandBrakeWPF.Services
             {
                 this.PlayWhenDoneSound();
             }
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnEncodeDone))
+            {
+                string filename = Path.GetFileName(e.FileName);
+                this.notificationService.SendNotification(Resources.Notifications_EncodeDone, filename);
+            }
         }
 
         /// <summary>
@@ -122,6 +131,22 @@ namespace HandBrakeWPF.Services
             {
                 this.PlayWhenDoneSound();
             }
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnQueueDone))
+            {
+                this.notificationService.SendNotification(Resources.Notifications_QueueDone, null);
+            }
+
+            // Allow the system to sleep again.
+            Execute.OnUIThread(() =>
+            {
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+                {
+                    Win32.AllowSleep();
+                }
+            });
+
+            // ---------------------------------------------------------
 
             if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction) == (int)WhenDone.DoNothing)
             {
@@ -173,15 +198,6 @@ namespace HandBrakeWPF.Services
                         break;
                 }
             }
-
-            // Allow the system to sleep again.
-            Execute.OnUIThread(() =>
-            {
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
-                {
-                    Win32.AllowSleep();
-                }
-            });
         }
 
         private void SendToApplication(string source, string destination)

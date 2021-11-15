@@ -5,7 +5,7 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         Title="{Binding Title}"
-        Width="750"
+        Width="740"
         Height="650"
         MinWidth="625"
         MinHeight="600"

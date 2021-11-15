@@ -52,6 +52,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
+    using Microsoft.Toolkit.Uwp.Notifications;
+
     using Ookii.Dialogs.Wpf;
 
     using Action = System.Action;
@@ -72,6 +74,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IWindowManager windowManager;
         private readonly INotifyIconService notifyIconService;
         private readonly ILog logService;
+        private readonly INotificationService notificationService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
         private readonly WindowsTaskbar windowsTaskbar = new WindowsTaskbar();
@@ -120,7 +123,8 @@ namespace HandBrakeWPF.ViewModels
             IPresetManagerViewModel presetManagerViewModel,
             INotifyIconService notifyIconService,
             ISystemService systemService,
-            ILog logService)
+            ILog logService,
+            INotificationService notificationService)
             : base(userSettingService)
         {
             this.scanService = scanService;
@@ -130,6 +134,7 @@ namespace HandBrakeWPF.ViewModels
             this.windowManager = windowManager;
             this.notifyIconService = notifyIconService;
             this.logService = logService;
+            this.notificationService = notificationService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueService>();
@@ -904,6 +909,9 @@ namespace HandBrakeWPF.ViewModels
 
         public void Shutdown()
         {
+            // Notification Service
+            this.notificationService.Shutdown();
+
             // Shutdown Service
             this.queueProcessor.Stop(true);
             this.presetService.SaveCategoryStates();

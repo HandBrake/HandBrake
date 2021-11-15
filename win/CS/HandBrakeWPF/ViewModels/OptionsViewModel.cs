@@ -47,6 +47,8 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
         private readonly IPresetService presetService;
 
+        private readonly INotificationService notificationService;
+
         private string arguments;
         private string autoNameDefaultPath;
         private bool automaticallyNameFiles;
@@ -115,13 +117,14 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
 
-        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService, IPresetService presetService)
+        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService, IPresetService presetService, INotificationService notificationService)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
             this.updateService = updateService;
             this.errorService = errorService;
             this.presetService = presetService;
+            this.notificationService = notificationService;
             this.AboutViewModel = aboutViewModel;
             this.OnLoad();
 
@@ -200,63 +203,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public string Arguments
-        {
-            get => this.arguments;
-
-            set
-            {
-                this.arguments = value;
-                this.NotifyOfPropertyChange(() => this.Arguments);
-            }
-        }
-
-        public bool SendFileAfterEncode
-        {
-            get => this.sendFileAfterEncode;
-
-            set
-            {
-                this.sendFileAfterEncode = value;
-                this.NotifyOfPropertyChange(() => this.SendFileAfterEncode);
-            }
-        }
-
-        public string SendFileTo
-        {
-            get => this.sendFileTo;
-
-            set
-            {
-                this.sendFileTo = value;
-                this.NotifyOfPropertyChange(() => this.SendFileTo);
-            }
-        }
-
-        public string SendFileToPath
-        {
-            get => this.sendFileToPath;
-
-            set
-            {
-                this.sendFileToPath = value;
-                this.NotifyOfPropertyChange(() => this.SendFileToPath);
-            }
-        }
-
-        public WhenDone WhenDone
-        {
-            get => this.whenDone;
-
-            set
-            {
-                this.whenDone = value;
-                this.NotifyOfPropertyChange(() => this.WhenDone);
-            }
-        }
-
-        public BindingList<WhenDone> WhenDoneOptions { get; } = new BindingList<WhenDone>(EnumHelper<WhenDone>.GetEnumList().ToList());
-
         public bool WhenDonePerformActionImmediately
         {
             get => this.whenDonePerformActionImmediately;
@@ -287,50 +233,6 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.showPreviewOnSummaryTab) return;
                 this.showPreviewOnSummaryTab = value;
                 this.NotifyOfPropertyChange(() => this.ShowPreviewOnSummaryTab);
-            }
-        }
-
-        public string WhenDoneAudioFile
-        {
-            get => this.whenDoneAudioFile;
-            set
-            {
-                if (value == this.whenDoneAudioFile) return;
-                this.whenDoneAudioFile = value;
-                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFile);
-            }
-        }
-
-        public string WhenDoneAudioFileFullPath
-        {
-            get => this.whenDoneAudioFileFullPath;
-            set
-            {
-                if (value == this.whenDoneAudioFileFullPath) return;
-                this.whenDoneAudioFileFullPath = value;
-                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFileFullPath);
-            }
-        }
-
-        public bool PlaySoundWhenDone
-        {
-            get => this.playSoundWhenDone;
-            set
-            {
-                if (value == this.playSoundWhenDone) return;
-                this.playSoundWhenDone = value;
-                this.NotifyOfPropertyChange(() => this.PlaySoundWhenDone);
-            }
-        }
-
-        public bool PlaySoundWhenQueueDone
-        {
-            get => this.playSoundWhenQueueDone;
-            set
-            {
-                if (value == this.playSoundWhenQueueDone) return;
-                this.playSoundWhenQueueDone = value;
-                this.NotifyOfPropertyChange(() => this.PlaySoundWhenQueueDone);
             }
         }
 
@@ -381,6 +283,114 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedPresetDisplayMode);
             }
         }
+
+        /* When Done */
+
+        public string SendFileTo
+        {
+            get => this.sendFileTo;
+
+            set
+            {
+                this.sendFileTo = value;
+                this.NotifyOfPropertyChange(() => this.SendFileTo);
+            }
+        }
+
+        public string SendFileToPath
+        {
+            get => this.sendFileToPath;
+
+            set
+            {
+                this.sendFileToPath = value;
+                this.NotifyOfPropertyChange(() => this.SendFileToPath);
+            }
+        }
+
+        public string Arguments
+        {
+            get => this.arguments;
+
+            set
+            {
+                this.arguments = value;
+                this.NotifyOfPropertyChange(() => this.Arguments);
+            }
+        }
+
+        public bool PlaySoundWhenDone
+        {
+            get => this.playSoundWhenDone;
+            set
+            {
+                if (value == this.playSoundWhenDone) return;
+                this.playSoundWhenDone = value;
+                this.NotifyOfPropertyChange(() => this.PlaySoundWhenDone);
+            }
+        }
+
+        public bool PlaySoundWhenQueueDone
+        {
+            get => this.playSoundWhenQueueDone;
+            set
+            {
+                if (value == this.playSoundWhenQueueDone) return;
+                this.playSoundWhenQueueDone = value;
+                this.NotifyOfPropertyChange(() => this.PlaySoundWhenQueueDone);
+            }
+        }
+
+        public string WhenDoneAudioFile
+        {
+            get => this.whenDoneAudioFile;
+            set
+            {
+                if (value == this.whenDoneAudioFile) return;
+                this.whenDoneAudioFile = value;
+                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFile);
+            }
+        }
+
+        public string WhenDoneAudioFileFullPath
+        {
+            get => this.whenDoneAudioFileFullPath;
+            set
+            {
+                if (value == this.whenDoneAudioFileFullPath) return;
+                this.whenDoneAudioFileFullPath = value;
+                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFileFullPath);
+            }
+        }
+
+        public bool SendFileAfterEncode
+        {
+            get => this.sendFileAfterEncode;
+
+            set
+            {
+                this.sendFileAfterEncode = value;
+                this.NotifyOfPropertyChange(() => this.SendFileAfterEncode);
+            }
+        }
+
+
+        public WhenDone WhenDone
+        {
+            get => this.whenDone;
+
+            set
+            {
+                this.whenDone = value;
+                this.NotifyOfPropertyChange(() => this.WhenDone);
+            }
+        }
+
+        public BindingList<WhenDone> WhenDoneOptions { get; } = new BindingList<WhenDone>(EnumHelper<WhenDone>.GetEnumList().ToList());
+
+        public bool SendSystemNotificationOnEncodeDone { get; set; }
+
+        public bool SendSystemNotificationOnQueueDone { get; set; }
 
         /* Output Files */
 
@@ -1181,7 +1191,9 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
-            
+            this.SendSystemNotificationOnEncodeDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnEncodeDone);
+            this.SendSystemNotificationOnQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.NotifyOnQueueDone);
+
             // #############################
             // Output Settings
             // #############################
@@ -1358,6 +1370,19 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void UninstallNotifications()
+        {
+            this.SendSystemNotificationOnQueueDone = false;
+            this.SendSystemNotificationOnEncodeDone = false;
+
+            this.NotifyOfPropertyChange(() => SendSystemNotificationOnQueueDone);
+            this.NotifyOfPropertyChange(() => SendSystemNotificationOnEncodeDone);
+
+            this.notificationService.Uninstall();
+
+            this.errorService.ShowMessageBox(Resources.OptionsView_UninstallMessageBoxText, Resources.OptionsView_UninstallMessageBoxHeader, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             this.OnLoad();
@@ -1387,6 +1412,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnEncodeDone, this.SendSystemNotificationOnEncodeDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.NotifyOnQueueDone, this.SendSystemNotificationOnQueueDone);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

@@ -63,7 +63,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();
             this.container.Singleton<IQueueService, QueueService>();
-            this.container.Singleton<HandBrakeWPF.Services.Logging.Interfaces.ILog, LogService>();
+            this.container.Singleton<Services.Logging.Interfaces.ILog, LogService>();
 
             // Commands
 
@@ -84,6 +84,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ISystemService, SystemService>();
             this.container.Singleton<ILogInstanceManager, LogInstanceManager>();
             this.container.Singleton<IPortService, PortService>();
+            this.container.Singleton<INotificationService, NotificationService>();
             
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();

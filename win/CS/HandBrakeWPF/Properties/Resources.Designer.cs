@@ -2869,6 +2869,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your HandBrake encode is done!.
+        /// </summary>
+        public static string Notifications_EncodeDone {
+            get {
+                return ResourceManager.GetString("Notifications_EncodeDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your HandBrake queue is done!.
+        /// </summary>
+        public static string Notifications_QueueDone {
+            get {
+                return ResourceManager.GetString("Notifications_QueueDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
         ///
         ///While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
@@ -3764,6 +3782,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will also disable the show windows taskbar notifications options on the &apos;When Done&apos; tab. Re-enable these if you want to re-activate this feature..
+        /// </summary>
+        public static string OptionsView_NotificationRemovalSubText {
+            get {
+                return ResourceManager.GetString("OptionsView_NotificationRemovalSubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove HandBrake from the Windows notifications control panel..
+        /// </summary>
+        public static string OptionsView_NotificationRemovalText {
+            get {
+                return ResourceManager.GetString("OptionsView_NotificationRemovalText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Not supported on this system).
         /// </summary>
         public static string OptionsView_NotSupported {
@@ -3971,11 +4007,56 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstalled.
+        /// </summary>
+        public static string OptionsView_UninstallMessageBoxHeader {
+            get {
+                return ResourceManager.GetString("OptionsView_UninstallMessageBoxHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notification settings have been removed..
+        /// </summary>
+        public static string OptionsView_UninstallMessageBoxText {
+            get {
+                return ResourceManager.GetString("OptionsView_UninstallMessageBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear &amp; Uninstall.
+        /// </summary>
+        public static string OptionsView_UninstallToast {
+            get {
+                return ResourceManager.GetString("OptionsView_UninstallToast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ( Windows 10 Only! ).
         /// </summary>
         public static string OptionsView_Win10Only {
             get {
                 return ResourceManager.GetString("OptionsView_Win10Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send a notification to the Windows Taskbar..
+        /// </summary>
+        public static string OptionsView_WindowsNotification {
+            get {
+                return ResourceManager.GetString("OptionsView_WindowsNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Notifications.
+        /// </summary>
+        public static string OptionsView_WindowsNotificationsBanner {
+            get {
+                return ResourceManager.GetString("OptionsView_WindowsNotificationsBanner", resourceCulture);
             }
         }
         
