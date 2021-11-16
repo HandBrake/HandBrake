@@ -1307,6 +1307,7 @@ static OSStatus create_cookie(hb_work_object_t *w, hb_job_t *job, hb_work_privat
     }
 
 fail:
+    CVPixelBufferRelease(pix_buf);
     VTCompressionSessionInvalidate(pv->session);
     CFRelease(pv->session);
     CFRelease(pv->queue);
