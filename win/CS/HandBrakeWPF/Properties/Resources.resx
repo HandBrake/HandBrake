@@ -2150,8 +2150,8 @@ Where supported, any user presets will have been imported.</value>
     <value>Port range must be between 5000 and 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Replacement Placeholders: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>Replacement Placeholders: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>A new version of HandBrake is available!</value>

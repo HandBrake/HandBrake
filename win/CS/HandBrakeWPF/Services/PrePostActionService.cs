@@ -96,7 +96,7 @@ namespace HandBrakeWPF.Services
             // Send the file to the users requested application
             if (e.Successful)
             {
-                this.SendToApplication(e.SourceFileName, e.FileName);
+                this.SendToApplication(e.SourceFileName, e.FileName, e.ErrorCode);
             }
 
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone))
@@ -200,7 +200,7 @@ namespace HandBrakeWPF.Services
             }
         }
 
-        private void SendToApplication(string source, string destination)
+        private void SendToApplication(string source, string destination, int exitCode)
         {
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile) &&
                 !string.IsNullOrEmpty(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)))
@@ -209,8 +209,12 @@ namespace HandBrakeWPF.Services
 
                 arguments = arguments.Replace("{source}", string.Format("\"{0}\"", source));
                 arguments = arguments.Replace("{destination}", string.Format("\"{0}\"", destination));
+                arguments = arguments.Replace("{exit_code}", string.Format("{0}", exitCode));
 
                 var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), arguments);
+                process.EnvironmentVariables.Add("HB_SOURCE", source);
+                process.EnvironmentVariables.Add("HB_DESTINATION", destination);
+                process.EnvironmentVariables.Add("HB_EXIT_CODE", exitCode.ToString());
 
                 this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, arguments));
 

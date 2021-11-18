@@ -3953,7 +3953,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replacement Placeholders: {source} {destination}.
+        ///   Looks up a localized string similar to Replacement Placeholders: {source} {destination} {exit_code}.
         /// </summary>
         public static string OptionsView_SendFileToArgPlaceholders {
             get {

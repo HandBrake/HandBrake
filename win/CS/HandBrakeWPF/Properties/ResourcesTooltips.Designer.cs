@@ -521,6 +521,28 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following environment variables are always set:
+        ///HB_SOURCE
+        ///HB_DESTINATION
+        ///HB_EXIT_CODE
+        ///
+        ///Possible Exit Codes are as follows:
+        ///0 : Successful
+        ///2 : Input Arguments Error
+        ///3 : Failed to Initialise 
+        ///4 : Unknown Error
+        ///5 : Error reading source file.
+        ///
+        ///Please note, errors codes are best effort and may not always be accurate.
+        ///It is recommended the output file is validated before performing actions on it..
+        /// </summary>
+        public static string OptionsView_SendFileToArguments {
+            get {
+                return ResourceManager.GetString("OptionsView_SendFileToArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
         ///
         ///None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
