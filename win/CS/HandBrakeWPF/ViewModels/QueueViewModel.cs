@@ -664,6 +664,11 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.StatsVisible);
             this.NotifyOfPropertyChange(() => this.JobInfoVisible);
             this.HandleLogData();
+
+            if (this.SelectedTask == null)
+            {
+                this.SelectedTask = this.QueueTasks.FirstOrDefault();
+            }
         }
 
         private void QueueProcessor_QueueCompleted(object sender, EventArgs e)
