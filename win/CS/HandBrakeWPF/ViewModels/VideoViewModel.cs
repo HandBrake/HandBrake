@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -358,7 +359,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.RF);
                 this.NotifyOfPropertyChange(() => this.DisplayRF);
                 this.NotifyOfPropertyChange(() => this.IsLossless);
-                this.OnTabStatusChanged(null);
+                this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Quality));
             }
         }
 
@@ -379,7 +380,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.Task.VideoBitrate = value;
                 this.NotifyOfPropertyChange(() => this.VideoBitrate);
-                this.OnTabStatusChanged(null);
+                this.OnTabStatusChanged(new TabStatusEventArgs("filters", ChangedOption.Bitrate));
             }
         }
 

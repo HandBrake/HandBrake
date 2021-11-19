@@ -52,8 +52,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
-    using Microsoft.Toolkit.Uwp.Notifications;
-
     using Ookii.Dialogs.Wpf;
 
     using Action = System.Action;
@@ -1989,6 +1987,26 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.IsModifiedPreset = !matchesPreset;
+
+            if (e != null)
+            {
+                this.TriggerAutonameChange(e.ChangedOption);
+            }
+        }
+
+        private void TriggerAutonameChange(ChangedOption option)
+        {
+            string autonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+
+            if (string.IsNullOrEmpty(autonameFormat))
+            {
+                return;
+            }
+
+            if (autonameFormat.Contains(Constants.QualityBitrate) && (option == ChangedOption.Bitrate || option == ChangedOption.Quality))
+            {
+                this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
+            }
         }
 
         private string DurationCalculation()

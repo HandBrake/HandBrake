@@ -500,6 +500,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings..
+        /// </summary>
+        public static string Options_AdditionalFormatOptions {
+            get {
+                return ResourceManager.GetString("Options_AdditionalFormatOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled the auto name system will always use the default path. 
         ///When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path..
         /// </summary>

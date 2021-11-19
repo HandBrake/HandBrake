@@ -28,12 +28,11 @@ namespace HandBrakeWPF
         /* Auto-name Constants */
         public const string Chapters = "{chapters}";
         public const string Title = "{title}";
-        public const string Quality = "{quality}";
+        public const string QualityBitrate = "{quality_bitrate}";
         public const string Date = "{date}";
         public const string Time = "{time}";
         public const string CreationDate = "{creation-date}";
         public const string CreationTime = "{creation-time}";
-        public const string Bitrate = "{bitrate}";
         public const string Preset = "{preset}";
 
         /* Auto-name Path Constants */

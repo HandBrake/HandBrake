@@ -325,12 +325,6 @@ Do you wish to proceed?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
-
-Live Update Options: {source} {title} {chapters} 
-Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Available additional Options: {source_path} or {source_folder_name} or {source}</value>
   </data>
@@ -1880,11 +1874,10 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
     <value>HandBrake's engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Live Update Options: {source} {title} {chapters} 
-Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+    <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Available Options: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Placeholders: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Ask to overwrite file</value>
@@ -1905,7 +1898,7 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
     <value>Encode Completed</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Notifications</value>
+    <value>Sound Notifications</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Queue Completed</value>

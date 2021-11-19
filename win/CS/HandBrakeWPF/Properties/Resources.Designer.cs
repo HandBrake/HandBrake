@@ -2920,18 +2920,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
-        ///
-        ///Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
-        /// </summary>
-        public static string Options_AdditionalFormatOptions {
-            get {
-                return ResourceManager.GetString("Options_AdditionalFormatOptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         public static string Options_Advanced {
@@ -3238,7 +3226,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notifications.
+        ///   Looks up a localized string similar to Sound Notifications.
         /// </summary>
         public static string Options_Notifications {
             get {
@@ -3716,8 +3704,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
+        ///   Looks up a localized string similar to Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}.
         /// </summary>
         public static string OptionsView_FormatOptions {
             get {
@@ -3809,7 +3796,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name} {source}.
+        ///   Looks up a localized string similar to Replacement Placeholders: {source_path} {source_folder_name} {source}.
         /// </summary>
         public static string OptionsView_PathOptions {
             get {

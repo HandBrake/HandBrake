@@ -146,15 +146,11 @@ namespace HandBrakeWPF.Helpers
 
                 if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                 {
-                    destinationFilename = destinationFilename.Replace(Constants.Quality, task.Quality.ToString());
-                    destinationFilename = destinationFilename.Replace(Constants.Bitrate, string.Empty);
+                    destinationFilename = destinationFilename.Replace(Constants.QualityBitrate, task.Quality.ToString());
                 }
                 else
                 {
-                    destinationFilename = destinationFilename.Replace(
-                        Constants.Bitrate,
-                        task.VideoBitrate.ToString());
-                    destinationFilename = destinationFilename.Replace(Constants.Quality, string.Empty);
+                    destinationFilename = destinationFilename.Replace(Constants.QualityBitrate, task.VideoBitrate.ToString());
                 }
             }
             else
