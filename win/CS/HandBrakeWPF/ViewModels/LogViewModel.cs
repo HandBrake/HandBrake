@@ -106,7 +106,6 @@ namespace HandBrakeWPF.ViewModels
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             this.logInstanceManager.LogInstancesChanged += this.LogInstanceManager_NewLogInstanceRegistered;
-            this.queueService.EncodeCompleted += this.QueueService_EncodeCompleted;
 
             this.CollectLogFiles(null);
 
@@ -122,7 +121,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.SelectedLogFile = null;
             this.logInstanceManager.LogInstancesChanged -= this.LogInstanceManager_NewLogInstanceRegistered;
-            this.queueService.EncodeCompleted -= this.QueueService_EncodeCompleted;
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -241,17 +239,9 @@ namespace HandBrakeWPF.ViewModels
 
         private void LogInstanceManager_NewLogInstanceRegistered(object sender, LogFileEventArgs e)
         {
-            if (e.IsNew)
-            {
-                this.CollectLogFiles(e.FileName);
-            }
+            this.CollectLogFiles(e.FileName);
         }
-
-        private void QueueService_EncodeCompleted(object sender, Services.Encode.EventArgs.EncodeCompletedEventArgs e)
-        {
-            this.CollectLogFiles(Path.GetFileName(e.ActivityLogPath));
-        }
-
+        
         private void CollectLogFiles(string filename)
         {
             lock (readLockObject)
@@ -284,10 +274,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedLogFile = this.LogFiles.LastOrDefault(c => !c.LogFileName.Contains("activity_log_main"));
                 }
 
-                if (this.SelectedLogFile == null)
-                {
-                    this.SelectedLogFile = this.LogFiles.LastOrDefault();
-                }
+                this.SelectedLogFile ??= this.LogFiles.LastOrDefault();
             }
         }
     }
