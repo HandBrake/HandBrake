@@ -218,7 +218,14 @@ namespace HandBrakeWPF.Services
 
                 this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, arguments));
 
-                Process.Start(process);
+                try
+                {
+                    Process.Start(process);
+                }
+                catch (Exception ex)
+                {
+                    this.ServiceLogMessage(string.Format("Send file to failed to execute: {0}", ex));
+                }
             }
         }
 
