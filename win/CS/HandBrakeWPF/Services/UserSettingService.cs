@@ -285,7 +285,7 @@ namespace HandBrakeWPF.Services
             // Output Files
             defaults.Add(UserSettingConstants.AutoNaming, true);
             defaults.Add(UserSettingConstants.AutoNamePath, string.Empty);
-            defaults.Add(UserSettingConstants.AutoNameFormat, "{source}-{title}");
+            defaults.Add(UserSettingConstants.AutoNameFormat, "{source}");
             defaults.Add(UserSettingConstants.AutonameFilePrePostString, "output_");
             defaults.Add(UserSettingConstants.AutoNameTitleCase, true);
             defaults.Add(UserSettingConstants.AutoNameRemoveUnderscore, true);
