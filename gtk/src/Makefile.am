@@ -136,12 +136,13 @@ icon_res.h : icon_res.gresource.xml $(icons_dep)
 icon_res.o: icon_res.c icon_res.h
 icons.o: icon_res.h
 
-data_res.c : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps widget_reverse.deps
-	cp $(srcdir)/internal_defaults.json .
+internal_defaults.json : internal_defaults.json.template
+	cp $(srcdir)/internal_defaults.json.template $@
+
+data_res.c : data_res.gresource.xml internal_defaults.json widget.deps widget_reverse.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps widget_reverse.deps
-	cp $(srcdir)/internal_defaults.json .
+data_res.h : data_res.gresource.xml internal_defaults.json widget.deps widget_reverse.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
 if GHB_GTK_4_00

@@ -14,10 +14,10 @@
 "ABd-Ec-K2L.title" = "Altre viste";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Spiazzamentu SRT/SSA";
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Staccamentu SRT/SSA";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibShadowedToolTip" = "Spiazzamentu pusitivu o nigativu, in milliseconde (ms), per a traccia di fonte selezziunata à u furmatu SRT/SSA. Ùn s’appieca micca à l’altri furmati.";
+"aJi-zQ-0cg.ibShadowedToolTip" = "Staccamentu pusitivu o nigativu, in milliseconde (ms), per a traccia di fonte selezziunata à u furmatu SRT/SSA. Ùn s’appieca micca à l’altri furmati.";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
 "cSW-OC-qKA.title" = "Finestra accaduta";
@@ -29,7 +29,7 @@
 "fAW-To-EeP.title" = "Elementu 3";
 
 /* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
-"Fgh-pZ-6uu.headerCell.title" = "Spiazzamentu";
+"Fgh-pZ-6uu.headerCell.title" = "Staccamentu";
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
 "fIe-Fg-ufj.headerCell.title" = "Intarsiati";

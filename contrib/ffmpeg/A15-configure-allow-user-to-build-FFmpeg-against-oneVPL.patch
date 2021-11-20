@@ -1,0 +1,71 @@
+From fbac4a1ce1777f54c6f488a64b075c0d6544b812 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Wed, 3 Feb 2021 14:49:46 +0800
+Subject: [PATCH 79/82] configure: allow user to build FFmpeg against oneVPL
+
+--enable-libvpl: build Intel oneVPL code via libvpl
+
+The version 2.2 of oneVPL is required, --enable-libvpl will take effect
+when both --enable-libvpl and --enable-libmfx are specified.
+---
+ configure | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/configure b/configure
+index 6dc78c7e7f..a3ab4b6dcf 100755
+--- a/configure
++++ b/configure
+@@ -337,6 +337,7 @@ External library support:
+   --disable-ffnvcodec      disable dynamically linked Nvidia code [autodetect]
+   --enable-libdrm          enable DRM code (Linux) [no]
+   --enable-libmfx          enable Intel MediaSDK (AKA Quick Sync Video) code via libmfx [no]
++  --enable-libvpl          enable Intel oneVPL code via libvpl [no]
+   --enable-libnpp          enable Nvidia Performance Primitives-based code [no]
+   --enable-mmal            enable Broadcom Multi-Media Abstraction Layer (Raspberry Pi) via MMAL [no]
+   --disable-nvdec          disable Nvidia video decoding acceleration (via hwaccel) [autodetect]
+@@ -1893,6 +1894,7 @@ HWACCEL_LIBRARY_NONFREE_LIST="
+ HWACCEL_LIBRARY_LIST="
+     $HWACCEL_LIBRARY_NONFREE_LIST
+     libmfx
++    libvpl
+     mmal
+     omx
+     opencl
+@@ -6413,16 +6415,28 @@ enabled liblensfun        && require_pkg_config liblensfun lensfun lensfun.h lf_
+ # Media SDK or Intel Media Server Studio, these don't come with
+ # pkg-config support.  Instead, users should make sure that the build
+ # can find the libraries and headers through other means.
+-enabled libmfx            && { { { check_pkg_config libmfx "libmfx < 2.0" "mfxvideo.h" MFXInit ||
++
++if enabled libvpl; then
++    if ! enabled libmfx; then
++        enabled libmfx
++    fi
++    check_pkg_config libmfx "vpl >= 2.2" "mfxvideo.h" MFXInit && \
++        warn "Build FFmpeg against oneVPL, OPAQUE memory, multi-frame encode\n"\
++             " and LA_EXT rate control mode in FFmpeg QSV won't be supported." ||
++            die "ERROR: libvpl not found"
++elif enabled libmfx; then
++    { check_pkg_config libmfx "libmfx < 2.0" "mfxvideo.h" MFXInit || \
+ # Some old versions of libmfx have the following settings in libmfx.pc:
+ #   includedir=/usr/include
+ #   Cflags: -I${includedir}
+ # So add -I${includedir}/mfx to the include path
+-                               { check_pkg_config libmfx "libmfx < 2.0" "mfx/mfxvideo.h" MFXInit &&
+-                                 add_cflags -I$($pkg_config --variable=includedir libmfx)/mfx; } } &&
+-                               warn "Build FFmpeg against libmfx 1.x, obsolete features of libmfx such as\n"\
+-                                    "OPAQUE memory, multi-frame encode and LA_EXT rate control mode are enabled"; } ||
+-                               { require libmfx "mfxvideo.h" MFXInit "-llibmfx $advapi32_extralibs" && warn "using libmfx without pkg-config"; } }
++          { check_pkg_config libmfx "libmfx < 2.0" "mfx/mfxvideo.h" MFXInit && \
++                add_cflags -I$($pkg_config --variable=includedir libmfx)/mfx; } } && \
++              warn "Build FFmpeg against libmfx 1.x, obsolete features of libmfx such as\n"\
++                   "OPAQUE memory, multi-frame encode and LA_EXT rate control mode are enabled" || \
++                  { require libmfx "mfxvideo.h" MFXInit "-llibmfx $advapi32_extralibs" && warn "using libmfx without pkg-config"; }
++fi
++
+ if enabled libmfx; then
+    check_cc MFX_CODEC_VP9 "mfxdefs.h mfxstructures.h" "MFX_CODEC_VP9"
+ fi
+-- 
+2.25.1
+

@@ -594,10 +594,11 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview, i
     hb_buffer_t * buf;
     buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
                                title->geometry.width, title->geometry.height);
-    buf->f.color_prim     = title->color_prim;
-    buf->f.color_transfer = title->color_transfer;
-    buf->f.color_matrix   = title->color_matrix;
-    buf->f.color_range    = AVCOL_RANGE_MPEG;
+    buf->f.color_prim      = title->color_prim;
+    buf->f.color_transfer  = title->color_transfer;
+    buf->f.color_matrix    = title->color_matrix;
+    buf->f.color_range     = AVCOL_RANGE_MPEG;
+    buf->f.chroma_location = title->chroma_location;
 
     if (!buf)
     {
@@ -889,6 +890,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
     init.color_prim = title->color_prim;
     init.color_transfer = title->color_transfer;
     init.color_matrix = title->color_matrix;
+    init.chroma_location = title->chroma_location;
     init.geometry = title->geometry;
     memset(init.crop, 0, sizeof(int[4]));
     init.vrate = job->vrate;
@@ -945,7 +947,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
         ii++;
     }
 
-    job->pix_fmt = init.pix_fmt;
+    job->output_pix_fmt = init.pix_fmt;
     job->color_prim = init.color_prim;
     job->color_transfer = init.color_transfer;
     job->color_matrix = init.color_matrix;
@@ -2176,15 +2178,7 @@ int hb_global_init()
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!disable_hardware)
-    {
-        if (hb_qsv_available() < 0)
-        {
-            hb_error("hb_qsv_available failed!");
-            return -1;
-        }
-        hb_param_configure_qsv();
-    }
+    hb_param_configure_qsv();
 #endif
 
     /* libavcodec */
@@ -2206,6 +2200,7 @@ int hb_global_init()
     hb_register(&hb_encavcodec);
     hb_register(&hb_encavcodeca);
 #ifdef __APPLE__
+    hb_register(&hb_encvt);
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
 #endif

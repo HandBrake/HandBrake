@@ -40,7 +40,7 @@
 
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,8,0,0">
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SourceSelection}" FontSize="26" FontFamily="Segoe UI Light" />
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SourceSelection}" Style="{StaticResource pageHeader}" />
             </StackPanel>
 
             <!-- Title Specific Scan -->
@@ -141,12 +141,12 @@
         </Grid>
 
 
-        <Grid Grid.Column="1" Background="Black" Opacity="0.65" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid Grid.Column="1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Border BorderThickness="8" CornerRadius="4"  VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Border.BorderBrush>
                     <SolidColorBrush Color="White" Opacity=".65"/>
                 </Border.BorderBrush>
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" Margin="100,125,100,125"  FontSize="26" FontFamily="Segoe UI Light" />
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" Margin="100,125,100,125"  FontSize="30"  />
             </Border>
         </Grid>
     </Grid>

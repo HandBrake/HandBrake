@@ -4,12 +4,17 @@
 
 namespace HandBrakeWPF.Services.Interfaces
 {
-    using System.Windows.Forms;
+    using System;
+    using System.Drawing;
 
     public interface INotifyIconService
     {
-        void RegisterNotifyIcon(NotifyIcon ni);
+        void Setup(Icon icon);
 
         void SetTooltip(string text);
+
+        void SetVisibility(bool isVisible);
+
+        void SetClickCallback(Action callback);
     }
 }

@@ -225,18 +225,18 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             char masteringDisplayColorVolume[256];
             snprintf(masteringDisplayColorVolume, sizeof(masteringDisplayColorVolume),
                      "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
-                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
-                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[1][0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[1][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[2][0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.display_primaries[2][1], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[0][0], MASTERING_CHROMA_DEN),
+                     (unsigned short)rescale(job->mastering.display_primaries[0][1], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.white_point[0], MASTERING_CHROMA_DEN),
                      (unsigned short)rescale(job->mastering.white_point[1], MASTERING_CHROMA_DEN),
                      (unsigned)rescale(job->mastering.max_luminance, MASTERING_LUMA_DEN),
                      (unsigned)rescale(job->mastering.min_luminance, MASTERING_LUMA_DEN));
 
-            if (param_parse(pv, param, "master-display",   masteringDisplayColorVolume))
+            if (param_parse(pv, param, "master-display", masteringDisplayColorVolume))
             {
                 goto fail;
             }
@@ -259,12 +259,24 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
+    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED) {
+        char chromaLocation[256];
+        snprintf(chromaLocation, sizeof(chromaLocation),
+                 "%d",
+                 job->chroma_location - 1);
+
+        if (param_parse(pv, param, "chromaloc", chromaLocation))
+        {
+            goto fail;
+        }
+    }
+
     /* Bit depth */
-    pv->bit_depth = hb_get_bit_depth(job->pix_fmt);
+    pv->bit_depth = hb_get_bit_depth(job->output_pix_fmt);
 
     /* iterate through x265_opts and parse the options */
     hb_dict_t *x265_opts;
-    int override_mastering = 0, override_coll = 0;
+    int override_mastering = 0, override_coll = 0, override_chroma_location = 0;
     x265_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
 
     hb_dict_iter_t iter;
@@ -283,6 +295,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         if (!strcmp(key, "max-cll"))
         {
             override_coll = 1;
+        }
+        if (!strcmp(key, "chromaloc"))
+        {
+            override_chroma_location = 1;
         }
 
         // here's where the strings are passed to libx265 for parsing
@@ -312,9 +328,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         uint32_t max_luminance, min_luminance;
 
         if (sscanf(param->masteringDisplayColorVolume, "G(%hu,%hu)B(%hu,%hu)R(%hu,%hu)WP(%hu,%hu)L(%u,%u)",
-                      &display_primaries_x[0], &display_primaries_y[0],
                       &display_primaries_x[1], &display_primaries_y[1],
                       &display_primaries_x[2], &display_primaries_y[2],
+                      &display_primaries_x[0], &display_primaries_y[0],
                       &white_point_x, &white_point_y,
                       &max_luminance, &min_luminance) == 10)
         {
@@ -340,6 +356,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         job->coll.max_fall = param->maxFALL;
         job->coll.max_cll  = param->maxCLL;
+    }
+
+    /*
+     * Reload chroma location settings in case custom
+     * values were set in the encoder_options string.
+     */
+    if (override_chroma_location)
+    {
+        job->chroma_location = param->vui.chromaSampleLocTypeBottomField + 1;
     }
 
     /*

@@ -108,7 +108,7 @@
 "Automatic" = "Autumaticu";
 
 /* Video description */
-"Bitrate: %d kbps" = "Ghjettu binariu : %d kbps";
+"Bitrate: %d kbps" = "Flussu binariu : %d kbps";
 
 /* Subtitles description */
 "Burned In" = "Intarsiati";
@@ -265,7 +265,7 @@
 "Level: %@" = "Livellu : %@";
 
 /* Audio description */
-"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mischiera : %1$@, Frequenza di campiunariu : %2$@, Ghjettu binariu : %3$d kbps";
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mischiera : %1$@, Frequenza di campiunariu : %2$@, Flussu binariu : %3$d kbps";
 
 /* HBAudio -> Mixdown */
 "Mono" = "Mono";
@@ -338,7 +338,7 @@
 "Same as source (variable)" = "Listessa chì a fonte (variabile)";
 
 /* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Esplurazione di u titulu %1$d nant’à %2$d apprezzazione %3$d…";
+"Scanning title %d of %d, preview %d…" = "Esplurazione di u titulu %1$d nant’à %2$d fighjulata %3$d…";
 
 /* HBStateFormatter -> scan pass format */
 "Scanning title %d of %d…" = "Esplurazione di u titulu %1$d nant’à %2$d…";

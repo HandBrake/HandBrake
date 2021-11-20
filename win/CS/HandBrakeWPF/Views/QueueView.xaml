@@ -61,7 +61,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:Resources.MainView_ShowQueue}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0" />
+            <TextBlock Text="{x:Static Properties:Resources.MainView_ShowQueue}" Style="{StaticResource windowTitle}"  Margin="10,0,0,0" />
             <TextBlock Text="{Binding JobsPending}"  Grid.Column="1" Margin="15,0,0,5 " VerticalAlignment="Bottom" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
         </Grid>
 
@@ -129,7 +129,7 @@
                                     <Path Height="5"
                                   Margin="2,2,0,0"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" />
                                 </StackPanel>
                             </MenuItem.Header>
                             <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
@@ -332,7 +332,7 @@
                                     <Path Height="5"
                                           Margin="2,2,2,0"
                                           Data="M 0 0 L 4 4 L 8 0 Z"
-                                          Fill="{DynamicResource GlyphBrush}" />
+                                          Fill="{DynamicResource ButtonGlyphBrush}" />
                                 </StackPanel>
                             </MenuItem.Header>
 
@@ -431,7 +431,7 @@
 
                                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
+                                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
                                             </StackPanel>
                                         </Button.Content>
 

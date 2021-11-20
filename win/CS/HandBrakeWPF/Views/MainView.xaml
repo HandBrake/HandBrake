@@ -6,15 +6,16 @@
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
-             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
              SnapsToDevicePixels="True"
-             UseLayoutRounding="True">
+             UseLayoutRounding="True"
+             x:Name="mainView"
+             PreviewMouseDown="ParentGrid_OnPreviewMouseDown"
+             >
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
@@ -25,33 +26,14 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <main:PointToPointConverter x:Key="PointToPointConverter" />
 
-        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Padding" Value="8,2" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="MinHeight" Value="22" />
-        </Style>
-
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-
-        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
-            <Style.Resources>
-                <Style TargetType="ContentPresenter">
-                    <Style.Resources>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                            <Setter Property="TextWrapping" Value="Wrap" />
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </Style.Resources>
-            <Setter Property="MaxWidth" Value="500" />
-        </Style>
 
         <Style TargetType="MenuItem">
             <Setter Property="ToolTipService.InitialShowDelay" Value="1000"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -59,7 +41,7 @@
         </Grid.RowDefinitions>
 
         <!--  Menu and Taskbar  -->
-        <StackPanel Grid.Row="0"
+        <StackPanel Grid.Row="0" IsEnabled="{Binding IsNavigationEnabled, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Orientation="Vertical">
@@ -77,6 +59,10 @@
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_StartEncode}" cal:Message.Attach="[Event Click] = [Action StartEncode]" InputGestureText="Ctrl + E"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=true}" />
+
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Pause}" cal:Message.Attach="[Event Click] = [Action PauseEncode]" InputGestureText="Alt + P"
+                              IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
+
                     <MenuItem Header="{x:Static Properties:Resources.MainView_Stop}" cal:Message.Attach="[Event Click] = [Action StopEncode]" InputGestureText="Ctrl + K"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
                     <Separator />
@@ -149,8 +135,7 @@
             </Menu>
 
             <!--  ToolBar  -->
-            <ToolBar Name="mainToolBar"
-                     HorizontalAlignment="Stretch"
+            <ToolBar HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SnapsToDevicePixels="True"
                      ToolBar.OverflowMode="AsNeeded"
@@ -188,7 +173,7 @@
                         <Grid x:Name="dropdown" Background="Transparent" >
                             <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrow" />
                         </Grid>
 
                     </StackPanel>
@@ -285,8 +270,12 @@
                                SnapsToDevicePixels="True"
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}"/>
                         <Label Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
+                                   VerticalAlignment="Center"
+                                   Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
+
+                        <Border Background="#00579f" CornerRadius="9" BorderThickness="1" VerticalAlignment="Center" Visibility="{Binding IsQueueCountVisible, Converter={StaticResource boolToVisConverter}}">
+                            <TextBlock Text="{Binding QueueCount}" VerticalAlignment="Center" Foreground="White" HorizontalAlignment="Center" Margin="9,2" />
+                        </Border>
                     </StackPanel>
                 </Button>
 
@@ -313,7 +302,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
+                <Button x:Name="presetbtn" PreviewMouseLeftButtonDown="Presets_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Presets}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}" />
@@ -323,7 +312,7 @@
                         <Grid x:Name="presetsDropdown" Background="Transparent" >
                             <Path Height="5" Margin="4,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="presetsDropdownArrow" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="presetsDropdownArrow" />
                         </Grid>
                     </StackPanel>
 
@@ -335,7 +324,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" x:Name="mainBodyGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -357,7 +346,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid HorizontalAlignment="Stretch" Margin="0,0,10,0">
+                <Grid HorizontalAlignment="Stretch" Margin="0,0,10,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
@@ -365,9 +354,9 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="{x:Static Properties:Resources.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
-                    <TextBlock Text="{Binding Path=SourceLabel}" ToolTip="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" MaxWidth="595" Grid.Column="1" Margin="7,0,0,0" />
-                    <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="10,0,0,0" MaxWidth="360" />
+                    <TextBlock Text="{x:Static Properties:Resources.MainView_Source}" Grid.Column="0" Style="{StaticResource sectionHeader}" Margin="5,5,0,0" />
+                    <TextBlock Text="{Binding Path=SourceLabel}" ToolTip="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" MaxWidth="595" Grid.Column="1" Margin="7,5,0,0" />
+                    <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="10,5,0,0" MaxWidth="360" />
                 </Grid>
 
                 <Grid Grid.Row="1" Margin="0,5,5,0">
@@ -377,7 +366,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Title}"  Grid.Column="0"  />
+                    <TextBlock Text="{x:Static Properties:Resources.MainView_Title}"  Grid.Column="0" Style="{StaticResource sectionHeader}" Margin="5,0,0,0" />
                     <ComboBox Name="Titles"  Grid.Column="1" 
                               MinWidth="100" Margin="16,0,0,0"
                               ItemsSource="{Binding ScannedSource.Titles}"
@@ -398,7 +387,7 @@
                         </ComboBox.Style>
                     </ComboBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" >
-                        <Label Margin="5,0,0,0" FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Angle}" />
+                        <TextBlock Margin="10,0,0,0"  Text="{x:Static Properties:Resources.MainView_Angle}" Style="{StaticResource sectionHeader}"  />
 
                         <ComboBox Name="Angles"
                                   MinWidth="60"
@@ -407,7 +396,7 @@
                                   SelectedItem="{Binding SelectedAngle}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" />
 
-                        <Label Margin="2,0,0,0" FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Range}" />
+                        <TextBlock Margin="10,0,0,0" Text="{x:Static Properties:Resources.MainView_Range}" Style="{StaticResource sectionHeader}" />
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="5,0,0,0"
@@ -429,7 +418,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:Resources.MainView_through}" />
+                        <TextBlock Margin="4,0,0,0" Text="{x:Static Properties:Resources.MainView_through}" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
                                   Margin="4,0,0,0"
@@ -446,8 +435,8 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="2,0,0,0" Content="{x:Static Properties:Resources.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
-                        <Label Margin="0,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <TextBlock Margin="10,0,0,0" Text="{x:Static Properties:Resources.MainView_Duration}" Style="{StaticResource sectionHeader}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                     </StackPanel>
                 </Grid>
@@ -455,7 +444,7 @@
 
             <!--  Presets Options  -->
             <StackPanel Grid.Row="1" Orientation="Horizontal"  Margin="10,10,10,5" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                <Label Content="{x:Static Properties:Resources.MainView_SelectedPresets}" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBlock Text="{x:Static Properties:Resources.MainView_SelectedPresets}" Style="{StaticResource sectionHeader}" Margin="5,0,5,0" />
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
 
                     <Button x:Name="SelectPresetsButton"  VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="255">
@@ -476,7 +465,7 @@
 
                                 <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3"
                                       Data="M 0 0 L 4 4 L 0 8 Z"
-                                      Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowSelectPreset" />
+                                      Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowSelectPreset" />
                             </Grid>
                         </Button.Content>
 
@@ -500,7 +489,7 @@
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
+                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
                             </StackPanel>
                         </Button.Content>
 
@@ -589,7 +578,15 @@
                 </Grid>
             </StackPanel>
         </Grid>
-     
+
+        <!-- Preset Panel 
+             Note, we have an empty grid here to fill in gaps in the click area such that we can always toggle it off when clicking off the control.
+        -->
+        <Grid Panel.ZIndex="-1" x:Name="clickOffArea" IsHitTestVisible="True" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Grid.Row="1" Background="Transparent" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        </Grid>
+
+        <Controls:PresetPaneControl x:Name="presetPaneControl" Visibility="{Binding IsPresetPaneDisplayed, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="11"  DataContext="{Binding}"  Grid.Row="1" HorizontalAlignment="Right" Margin="0,2,10,10"  />
+
         <!-- Source Selection-->
         <Controls:SourceSelection x:Name="sourceSelection"
                                   Grid.Row="0" Grid.RowSpan="3"
@@ -612,11 +609,12 @@
                               CancelAction="{Binding CancelAction}" />
 
         <Controls:AlertPanel x:Name="alertPanel"
+                             KeyboardNavigation.DirectionalNavigation="Contained"
                              Grid.Row="0"
                              Grid.RowSpan="3"
                              Visibility="{Binding ShowAlertWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false, TargetNullValue=Collapsed, FallbackValue=Collapsed}"
                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                             Panel.ZIndex="10"
+                             Panel.ZIndex="25"
                              Message="{Binding AlertWindowHeader}"
                              SubMessage="{Binding AlertWindowText}"
                              ActionText="OK"
@@ -625,7 +623,7 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+        <StatusBar Name="statusBar" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
 
             <StatusBarItem>
                 <ProgressBar Value="{Binding ProgressPercentage}" IsIndeterminate="{Binding IsMultiProcess}"  Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
@@ -644,7 +642,7 @@
                                 <Path Height="5"
                                       Margin="2,2,2,0"
                                       Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{DynamicResource GlyphBrush}" />
+                                      Fill="{DynamicResource ButtonGlyphBrush}" />
                             </StackPanel>
                         </MenuItem.Header>
 

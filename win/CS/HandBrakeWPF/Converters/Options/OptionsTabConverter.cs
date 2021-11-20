@@ -55,6 +55,9 @@ namespace HandBrakeWPF.Converters.Options
                     case OptionsTab.Video:
                         if ((OptionsTab)parameter == OptionsTab.Video) return Visibility.Visible;
                         break;
+                    case OptionsTab.Reset:
+                        if ((OptionsTab)parameter == OptionsTab.Reset) return Visibility.Visible;
+                        break;
                 }
             }
 

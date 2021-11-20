@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
-    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
+    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBVPL LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D LIBJPEGTURBO
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
@@ -44,6 +44,10 @@ LIBHB.out += $(LIBHB.a)
 
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
+
+ifeq (1,$(FEATURE.qsv))
+    LIBHB.GCC.I += $(CONTRIB.build/)include/vpl
+endif
 
 ifneq (,$(filter $(HOST.system),freebsd netbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include
@@ -122,7 +126,7 @@ LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
 endif
 
 ifeq (1,$(FEATURE.qsv))
-LIBHB.dll.libs += $(CONTRIB.build/)lib/libmfx.a
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libvpl.a
 endif
 
 ifeq (1,$(FEATURE.x265))

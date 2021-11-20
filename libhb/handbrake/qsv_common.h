@@ -23,8 +23,15 @@ void hb_qsv_force_workarounds(); // for developers only
 #ifdef __LIBHB__
 // Private API
 
-#include "mfx/mfxvideo.h"
-#include "mfx/mfxplugin.h"
+#include "vpl/mfxvideo.h"
+
+#define HB_QSV_VERSION_ATLEAST(MAJOR, MINOR)   \
+    (MFX_VERSION_MAJOR > (MAJOR) ||         \
+     MFX_VERSION_MAJOR == (MAJOR) && MFX_VERSION_MINOR >= (MINOR))
+#define HB_QSV_ONEVPL HB_QSV_VERSION_ATLEAST(2, 0)
+#if !HB_QSV_ONEVPL
+    #include "mfx/mfxplugin.h"
+#endif
 #include "handbrake/hb_dict.h"
 #include "handbrake/qsv_libav.h"
 
@@ -93,9 +100,11 @@ int            hb_qsv_get_platform(int adapter_index);
 int            hb_qsv_get_adapter_index();
 int            hb_qsv_implementation_is_hardware(mfxIMPL implementation);
 
+#if !HB_QSV_ONEVPL
 /* Automatically load and unload any required MFX plug-ins */
 hb_list_t* hb_qsv_load_plugins  (int adapter_index, hb_qsv_info_t *info, mfxSession session, mfxVersion version);
 void       hb_qsv_unload_plugins(hb_list_t     **_l,  mfxSession session, mfxVersion version);
+#endif
 
 /* Intel Quick Sync Video DECODE utilities */
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id);
@@ -186,6 +195,7 @@ static const char* const hb_qsv_preset_names2[] = { "speed", "balanced", "qualit
 const char* const* hb_qsv_preset_get_names();
 const char* const* hb_qsv_profile_get_names(int encoder);
 const char* const* hb_qsv_level_get_names(int encoder);
+const int* hb_qsv_get_pix_fmts(int encoder);
 
 const char* hb_qsv_video_quality_get_name(uint32_t codec);
 void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);

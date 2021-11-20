@@ -54,6 +54,8 @@ namespace HandBrakeWPF.Commands
 
             shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
 
+            optionsViewModel.UpdateSettings();
+
             if (parameter == null && optionsViewModel.SelectedTab == OptionsTab.About)
             {
                 optionsViewModel.GotoTab(OptionsTab.General);

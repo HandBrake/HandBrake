@@ -6521,7 +6521,6 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                 <property name="width-chars">3</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
                                 <property name="valign">GTK_ALIGN_CENTER</property>
                                 <property name="adjustment">ActivityFontSizeAdjustment</property>
                                 <signal name="value-changed" handler="activity_font_changed_cb" swapped="no"/>

@@ -8,13 +8,18 @@ namespace HandBrakeWPF.EventArgs
 {
     using System;
 
+    using HandBrakeWPF.Model;
+
     public class TabStatusEventArgs : EventArgs
     {
-        public TabStatusEventArgs(string tabKey)
+        public TabStatusEventArgs(string tabKey, ChangedOption changedOption = ChangedOption.None)
         {
             this.TabKey = tabKey;
+            this.ChangedOption = changedOption;
         }
 
-        public string TabKey { get; private set; }
+        public string TabKey { get; }
+
+        public ChangedOption ChangedOption { get; }
     }
 }

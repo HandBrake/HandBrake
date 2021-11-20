@@ -17,9 +17,10 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
     /// </summary>
     public class EncodeCompletedEventArgs : EventArgs
     {
-        public EncodeCompletedEventArgs(bool successful, Exception exception, string errorInformation, string sourceFileName, string filename, string logPath, long finalSizeInBytes)
+        public EncodeCompletedEventArgs(bool successful, Exception exception, string errorInformation, string sourceFileName, string filename, string logPath, long finalSizeInBytes, int errorCode)
         {
             this.Successful = successful;
+            this.ErrorCode = errorCode;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
             this.SourceFileName = sourceFileName;
@@ -27,6 +28,8 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
             this.ActivityLogPath = logPath;
             this.FinalFilesizeInBytes = finalSizeInBytes;
         }
+
+        public int ErrorCode { get; private set; }
 
         public string FileName { get; private set; }
 

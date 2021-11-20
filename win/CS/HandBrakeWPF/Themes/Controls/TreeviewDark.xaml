@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:HandBrakeWPF.Converters">
 
-    <Color x:Key="SelectedBackgroundColor">#606060</Color>
-    <Color x:Key="SelectedUnfocusedColor">#606060</Color>
+    <Color x:Key="SelectedBackgroundColor">#363636</Color>
+    <Color x:Key="SelectedUnfocusedColor">#363636</Color>
     <Color x:Key="GlyphColor">WhiteSmoke</Color>
 
     <Style x:Key="{x:Type TreeView}" TargetType="TreeView">
@@ -13,14 +13,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeView">
-                    <Border Name="Border" CornerRadius="1" BorderThickness="1">
+                    <Border Name="Border" CornerRadius="0" BorderThickness="1">
                         <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                            <SolidColorBrush Color="#606060" />
                         </Border.BorderBrush>
                         <Border.Background>
-                            <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
+                            <SolidColorBrush Color="#606060" />
                         </Border.Background>
-                        <ScrollViewer Focusable="False" CanContentScroll="False" Padding="4">
+                        <ScrollViewer Focusable="False" CanContentScroll="False" Padding="0">
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>

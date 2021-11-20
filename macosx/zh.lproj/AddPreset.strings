@@ -1,0 +1,75 @@
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "5Xb-gz-QEa"; */
+"5Xb-gz-QEa.title" = "取消";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
+"8kl-Sh-Gh7.ibShadowedToolTip" = "为新的预设输入描述。将光标悬停在预设列表中的预置上时，将显示该描述。";
+
+/* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
+"75B-xq-Qbe.title" = "分辨率限制：";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
+"a0j-nw-n23.title" = "选择行为";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
+"aez-2b-JXx.ibShadowedToolTip" = "选择行为决定了选择预设时使用的音轨和设置。";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
+"aKg-n4-OUS.ibShadowedToolTip" = "为新的预设输入一个名称。此名称将显示在预设列表中。";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
+"bma-pS-phM.ibShadowedToolTip" = "画面大小控制选择预设时如何应用视频尺寸。\n\n无：使用当前设置的尺寸。\n\n自定义：允许您设置最大宽度和/或高度。\n\n最大源：使用每个源的完整尺寸。";
+
+/* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
+"dbZ-Wo-9nG.title" = "新的预设";
+
+/* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
+"Deg-rS-mRc.title" = "添加";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Width"; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibExternalAccessibilityDescription" = "画面宽度";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
+"gOg-oO-8ar.ibShadowedToolTip" = "预设允许的最大视频存储宽度，以像素为单位。设置为 0 为无限宽度。";
+
+/* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
+"hc8-1h-Jye.title" = "描述：";
+
+/* Class = "NSTextFieldCell"; title = "Audio:"; ObjectID = "HKp-K9-MF4"; */
+"HKp-K9-MF4.title" = "音频：";
+
+/* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
+"IyE-Lz-32s.title" = "类别：";
+
+/* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
+"jhj-Et-ncF.title" = "预设名称：";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
+"LPX-Rc-KLa.title" = "选择行为";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "画面高度";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibShadowedToolTip" = "预设允许的最大视频存储高度，以像素为单位。设置为 0 为无限高度。";
+
+/* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
+"Nfk-ix-xIv.title" = "x";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "nWJ-0b-fUA"; */
+"nWJ-0b-fUA.ibShadowedToolTip" = "选择行为决定了选择预置时使用的轨道和设置。";
+
+/* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
+"OYE-GG-Vo3.title" = "字幕：";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
+"qsA-gt-zdK.title" = "其他视图";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
+"Sf8-HP-mhE.title" = "新分类...";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
+"tQ1-PN-kvh.title" = "其他视图";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Resolution Limit allows you to set a maximum width and/or height."; ObjectID = "z6B-ig-ouq"; */
+"z6B-ig-ouq.ibShadowedToolTip" = "分辨率限制允许您设置一个最大宽度和/或高度。";
+

@@ -89,10 +89,10 @@
 "GZP-q7-SYy.title" = "Tutte e lingue selezziunate chì currispondenu";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
-"hHP-dw-nba.ibExternalAccessibilityDescription" = "Ghjettu binariu";
+"hHP-dw-nba.ibExternalAccessibilityDescription" = "Flussu binariu";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "hHP-dw-nba"; */
-"hHP-dw-nba.ibShadowedToolTip" = "Ghjettu binariu audio in kilobit à a seconda (kbps). I chjuchi valori riducenu a qualità di l’audio. I valori maiò impieganu più di dati è ponu esse menu cumpatibile.";
+"hHP-dw-nba.ibShadowedToolTip" = "Flussu binariu audio in kilobit à a seconda (kbps). I chjuchi valori riducenu a qualità di l’audio. I valori maiò impieganu più di dati è ponu esse menu cumpatibile.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "igm-hS-rrD"; */
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Mischiera";
@@ -188,7 +188,7 @@
 "UJy-A2-Bb1.title" = "Elementu";
 
 /* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "vhn-7C-4aZ"; */
-"vhn-7C-4aZ.headerCell.title" = "Ghjettu binariu";
+"vhn-7C-4aZ.headerCell.title" = "Flussu binariu";
 
 /* Class = "NSButtonCell"; title = "AC3"; ObjectID = "VnE-3R-bUf"; */
 "VnE-3R-bUf.title" = "AC3";

@@ -10,6 +10,7 @@ xclean: test.xclean
 test.build: $(TEST.exe)
 ifeq (1,$(FEATURE.flatpak))
 test.build: $(TEST.metainfo)
+test.install: $(TEST.metainfo)
 endif
 
 ########################################
@@ -20,6 +21,7 @@ test.install-strip: | $(dir $(TEST.install.exe))
 	$(STRIP.exe) $(TEST.install.exe)
 
 ifeq (1,$(FEATURE.flatpak))
+$(TEST.metainfo): | $(dir $(TEST.metainfo))
 $(TEST.metainfo): $(TEST.metainfo.template)
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
 

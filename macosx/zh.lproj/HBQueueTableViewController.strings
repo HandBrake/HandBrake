@@ -1,0 +1,42 @@
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "5AR-we-iHC"; */
+"5AR-we-iHC.title" = "移除所有任务";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
+"5Rl-P0-bhc.title" = "表视图单元格";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
+"c1Z-ZC-b8b.title" = "在访达打开目标位置";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
+"DTF-om-j0l.title" = "编辑";
+
+/* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
+"eEU-Dr-Qh8.title" = "编码状态";
+
+/* Class = "NSMenuItem"; title = "Remove"; ObjectID = "egD-8R-PTJ"; */
+"egD-8R-PTJ.title" = "移除";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
+"gNj-D1-wa7.title" = "移除已完成的任务";
+
+/* Class = "NSMenuItem"; title = "Move to Bottom"; ObjectID = "HwR-LP-IK8"; */
+"HwR-LP-IK8.title" = "移到底部";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
+"K6c-HW-um8.title" = "文本单元格";
+
+/* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
+"NN5-Yq-Cth.title" = "移到顶部";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
+"Pps-jm-zcd.title" = "在访达打开来源";
+
+/* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
+"xMs-43-lL0.title" = "重置";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
+"xSd-Hl-5Qk.title" = "表视图单元格";
+
+/* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
+"zA7-r8-i4L.title" = "在访达打开活动日志";
+

@@ -145,7 +145,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.IsEncoding = false;
 
                 this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
-                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", this.currentTask.Source, this.currentTask.Destination, null, 0));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", this.currentTask.Source, this.currentTask.Destination, null, 0, 3));
             }
         }
 
@@ -199,7 +199,7 @@ namespace HandBrakeWPF.Services.Encode
 
         protected void ServiceLogMessage(string message)
         {
-            this.encodeLogService.LogMessage(string.Format("{0}# {1}", Environment.NewLine, message));
+            this.encodeLogService.LogMessage(string.Format("{1} # {0}{1}", message, Environment.NewLine));
         }
 
         protected void TimedLogMessage(string message)
@@ -280,13 +280,13 @@ namespace HandBrakeWPF.Services.Encode
             string hbLog = this.ProcessLogs(this.currentTask.Destination);
             long filesize = this.GetFilesize(this.currentTask.Destination);
 
-            this.logInstanceManager.Deregister(Path.GetFileName(hbLog));
-
             // Raise the Encode Completed Event.
             this.InvokeEncodeCompleted(
                 e.Error != 0
-                    ? new EventArgs.EncodeCompletedEventArgs(false, null, e.Error.ToString(), this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
-                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, e.Error.ToString(), this.currentTask.Source, this.currentTask.Destination, hbLog, filesize, e.Error)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize, e.Error));
+
+            this.logInstanceManager.Deregister(Path.GetFileName(hbLog));
         }
 
         private long GetFilesize(string destination)

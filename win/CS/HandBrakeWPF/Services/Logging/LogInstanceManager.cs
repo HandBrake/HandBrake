@@ -21,7 +21,7 @@ namespace HandBrakeWPF.Services.Logging
         private readonly object instanceLock = new object();
         private Dictionary<string, ILog> logInstances = new Dictionary<string, ILog>();
         
-        public event EventHandler<LogFileEventArgs> NewLogInstanceRegistered;
+        public event EventHandler<LogFileEventArgs> LogInstancesChanged;
 
         public ILog ApplicationLogInstance { get; private set; }
 
@@ -37,7 +37,7 @@ namespace HandBrakeWPF.Services.Logging
                 }
             }
 
-            this.OnNewLogInstanceRegistered(new LogFileEventArgs(filename, log));
+            this.OnLogInstancesChanged(new LogFileEventArgs(filename, log, true));
         }
 
         public void Deregister(string filename)
@@ -53,13 +53,13 @@ namespace HandBrakeWPF.Services.Logging
                 }
             }
 
-            this.OnNewLogInstanceRegistered(new LogFileEventArgs(filename, null));
+            this.OnLogInstancesChanged(new LogFileEventArgs(filename, null, false));
         }
 
         public void ResetApplicationLog()
         {
             this.ApplicationLogInstance.Reset();
-            this.OnNewLogInstanceRegistered(new LogFileEventArgs(this.ApplicationLogInstance.FileName, this.ApplicationLogInstance));
+            this.OnLogInstancesChanged(new LogFileEventArgs(this.ApplicationLogInstance.FileName, this.ApplicationLogInstance, true));
         }
 
         public List<string> GetLogFiles()
@@ -99,9 +99,9 @@ namespace HandBrakeWPF.Services.Logging
             return null;
         }
 
-        protected virtual void OnNewLogInstanceRegistered(LogFileEventArgs e)
+        protected virtual void OnLogInstancesChanged(LogFileEventArgs e)
         {
-            this.NewLogInstanceRegistered?.Invoke(this, e);
+            this.LogInstancesChanged?.Invoke(this, e);
         }
     }
 }

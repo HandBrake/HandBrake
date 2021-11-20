@@ -74,10 +74,7 @@
         [self.slider setMaxValue:duration];
         [self.slider setDoubleValue:0.0];
 
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateMaxDuration:duration];
-        }
+        [self _touchBar_updateMaxDuration:duration];
 
         self.player.volume = self.volumeSlider.floatValue;
 
@@ -204,10 +201,7 @@
         self.currentTimeLabel.attributedStringValue = [self _timeToTimecode:currentTime].HB_smallMonospacedString;
         self.remainingTimeLabel.attributedStringValue = [self _timeToTimecode:duration - currentTime].HB_smallMonospacedString;
 
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateTime:currentTime duration:duration];
-        }
+        [self _touchBar_updateTime:currentTime duration:duration];
     }
 }
 
@@ -223,10 +217,7 @@
         self.playButton.image = [NSImage imageNamed:@"PlayTemplate"];
     }
 
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updatePlayState:playing];
-    }
+    [self _touchBar_updatePlayState:playing];
 }
 
 - (IBAction)playPauseToggle:(id)sender

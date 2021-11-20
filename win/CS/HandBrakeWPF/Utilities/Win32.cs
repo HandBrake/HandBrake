@@ -197,6 +197,9 @@ namespace HandBrakeWPF.Utilities
             NoSystemBattery = 128,
             Unknown = 255
         }
+
+        [DllImport("Powrprof.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern bool SetSuspendState(bool hiberate, bool forceCritical, bool disableWakeEvent);
     }
 }
 

@@ -1,0 +1,83 @@
+From f3be579974bf7492b222d4733869d5b5966898e1 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Tue, 18 Aug 2020 15:30:32 +0800
+Subject: [PATCH 74/82] qsv: build audio related code when MFX_VERSION < 2.0
+
+Audio isn't supported for MFX_VERSION >= 2.0[1][2], this is in
+preparation for oneVPL support
+
+[1]: https://spec.oneapi.com/versions/latest/elements/oneVPL/source/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
+[2]: https://github.com/oneapi-src/oneVPL
+---
+ libavcodec/qsv.c     | 5 +++++
+ libavfilter/qsvvpp.c | 5 +++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
+index acf152e7d90a..3fcb21540403 100644
+--- a/libavcodec/qsv.c
++++ b/libavcodec/qsv.c
+@@ -37,6 +37,7 @@
+ 
+ #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
+ #define QSV_HAVE_USER_PLUGIN    !QSV_VERSION_ATLEAST(2, 0)
++#define QSV_HAVE_AUDIO          !QSV_VERSION_ATLEAST(2, 0)
+ 
+ #if QSV_VERSION_ATLEAST(1, 12)
+ #include "mfxvp8.h"
+@@ -150,8 +151,10 @@ static const struct {
+     { MFX_ERR_INVALID_VIDEO_PARAM,      AVERROR(EINVAL), "invalid video parameters"             },
+     { MFX_ERR_UNDEFINED_BEHAVIOR,       AVERROR_BUG,     "undefined behavior"                   },
+     { MFX_ERR_DEVICE_FAILED,            AVERROR(EIO),    "device failed"                        },
++#if QSV_HAVE_AUDIO
+     { MFX_ERR_INCOMPATIBLE_AUDIO_PARAM, AVERROR(EINVAL), "incompatible audio parameters"        },
+     { MFX_ERR_INVALID_AUDIO_PARAM,      AVERROR(EINVAL), "invalid audio parameters"             },
++#endif
+ 
+     { MFX_WRN_IN_EXECUTION,             0,               "operation in execution"               },
+     { MFX_WRN_DEVICE_BUSY,              0,               "device busy"                          },
+@@ -161,7 +164,9 @@ static const struct {
+     { MFX_WRN_VALUE_NOT_CHANGED,        0,               "value is saturated"                   },
+     { MFX_WRN_OUT_OF_RANGE,             0,               "value out of range"                   },
+     { MFX_WRN_FILTER_SKIPPED,           0,               "filter skipped"                       },
++#if QSV_HAVE_AUDIO
+     { MFX_WRN_INCOMPATIBLE_AUDIO_PARAM, 0,               "incompatible audio parameters"        },
++#endif
+ };
+ 
+ int ff_qsv_map_error(mfxStatus mfx_err, const char **desc)
+diff --git a/libavfilter/qsvvpp.c b/libavfilter/qsvvpp.c
+index deef9c29b52f..3241eaf0d99d 100644
+--- a/libavfilter/qsvvpp.c
++++ b/libavfilter/qsvvpp.c
+@@ -37,5 +37,6 @@
+ #define IS_OPAQUE_MEMORY(mode) (mode & MFX_MEMTYPE_OPAQUE_FRAME)
+ #define IS_SYSTEM_MEMORY(mode) (mode & MFX_MEMTYPE_SYSTEM_MEMORY)
+ #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
++#define QSV_HAVE_AUDIO          !QSV_VERSION_ATLEAST(2, 0)
+
+ typedef struct QSVFrame {
+@@ -126,8 +126,10 @@ static const struct {
+     { MFX_ERR_INVALID_VIDEO_PARAM,      AVERROR(EINVAL), "invalid video parameters"             },
+     { MFX_ERR_UNDEFINED_BEHAVIOR,       AVERROR_BUG,     "undefined behavior"                   },
+     { MFX_ERR_DEVICE_FAILED,            AVERROR(EIO),    "device failed"                        },
++#if QSV_HAVE_AUDIO
+     { MFX_ERR_INCOMPATIBLE_AUDIO_PARAM, AVERROR(EINVAL), "incompatible audio parameters"        },
+     { MFX_ERR_INVALID_AUDIO_PARAM,      AVERROR(EINVAL), "invalid audio parameters"             },
++#endif
+ 
+     { MFX_WRN_IN_EXECUTION,             0,               "operation in execution"               },
+     { MFX_WRN_DEVICE_BUSY,              0,               "device busy"                          },
+@@ -137,7 +137,9 @@ static const struct {
+     { MFX_WRN_VALUE_NOT_CHANGED,        0,               "value is saturated"                   },
+     { MFX_WRN_OUT_OF_RANGE,             0,               "value out of range"                   },
+     { MFX_WRN_FILTER_SKIPPED,           0,               "filter skipped"                       },
++#if QSV_HAVE_AUDIO
+     { MFX_WRN_INCOMPATIBLE_AUDIO_PARAM, 0,               "incompatible audio parameters"        },
++#endif
+ };
+ 
+ static int qsv_map_error(mfxStatus mfx_err, const char **desc)
+-- 
+2.25.4
+

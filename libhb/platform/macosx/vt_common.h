@@ -7,16 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include <stddef.h>
+#include <stdio.h>
 
-int  hb_vt_h264_is_available();
-int  hb_vt_h265_is_available();
-int  hb_vt_h265_10bit_is_available();
+int hb_vt_is_encoder_available(int encoder);
+int hb_vt_is_constant_quality_available(int encoder);
 
-int hb_vt_h264_is_constant_quality_available();
-int hb_vt_h265_is_constant_quality_available();
+const int* hb_vt_get_pix_fmts(int encoder);
 
-static const char * const hb_vt_h265_level_names[] =
-{
-    "auto",  NULL,
-};
+const char* const* hb_vt_preset_get_names(int encoder);
+const char* const* hb_vt_profile_get_names(int encoder);
+const char* const* hb_vt_level_get_names(int encoder);

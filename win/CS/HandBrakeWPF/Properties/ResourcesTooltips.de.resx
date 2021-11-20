@@ -479,4 +479,9 @@ Hinweis: Dies wird automatisch ausgewählt, wenn das Format der Quelluntertitels
 
 Zum Beispiel werden PGS-Untertitel in MP4 nicht unterstützt.</value>
   </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Reduziert - Voreinstellungen werden als reduzierte Liste angezeigt.
+Teilweise reduziert - Die letzten 8 Voreinstellungen des Benutzers werden als reduzierte Liste angezeigt, gefolgt von einer Auflistung aller Voreinstellungen in Kategorien.
+Kategorien - Alle Voreinstellungen werden in einem Untermenü pro Kategorie angezeigt.</value>
+  </data>
 </root>

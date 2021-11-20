@@ -22,6 +22,6 @@ namespace HandBrakeWPF.Model.Options
         Partial = 1,
 
         [DisplayName(typeof(Resources), "PresetDisplayMode_Category")]
-        Category = 2,
+        Category = 2
     }
 }

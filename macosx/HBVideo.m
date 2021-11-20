@@ -291,9 +291,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         self.qualityType = 0;
     }
 
-    if ((self.encoder & HB_VCODEC_FFMPEG_VT_H264) ||
-        (self.encoder & HB_VCODEC_FFMPEG_VT_H265) ||
-        (self.encoder & HB_VCODEC_FFMPEG_VT_H265_10BIT))
+    if ((self.encoder & HB_VCODEC_VT_H265) ||
+        (self.encoder & HB_VCODEC_VT_H265_10BIT))
     {
         self.twoPass = NO;
     }

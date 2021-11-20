@@ -4,11 +4,21 @@
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
 
     <!-- StatusBar -->
     <Style TargetType="StatusBar">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
     </Style>
+
+    <!-- TextBlock -->
+    <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+
+    <!-- Glyph -->
+    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ToolbarLight.xaml" />

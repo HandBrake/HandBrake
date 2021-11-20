@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -19,8 +20,11 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Media.Imaging;
 
+    using Caliburn.Micro;
+
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
+    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -36,6 +40,7 @@ namespace HandBrakeWPF.ViewModels
     using EncodeProgressEventArgs = Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using IEncode = Services.Encode.Interfaces.IEncode;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
     using LibEncode = Services.Encode.LibEncode;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = Services.Encode.Model.Models.PointToPointMode;
@@ -492,7 +497,19 @@ namespace HandBrakeWPF.ViewModels
                     if (this.UseSystemDefaultPlayer)
                     {
                         this.logService.LogMessage(string.Format("# VideoPreview: Using system media player. ({0})", args));
-                        Process.Start(args);
+
+                        try
+                        {
+                            Process.Start(args);
+                        }
+                        catch (Win32Exception exc)
+                        {
+                            Execute.OnUIThread(
+                                () => this.errorService.ShowError(
+                                    exc.Message,
+                                    Resources.QueueViewModel_PlayFileErrorSolution,
+                                    exc));
+                        }
                     }
                     else
                     {

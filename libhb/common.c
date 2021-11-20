@@ -267,7 +267,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "H.264 (AMD VCE)",     "vce_h264",   "H.264 (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H264,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VCE,   },
     { { "H.264 (NVEnc)",       "nvenc_h264", "H.264 (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H264, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_NVENC, },
     { { "H.264 (MediaFoundation)","mf_h264", "H.264 (MediaFoundation)", HB_VCODEC_FFMPEG_MF_H264,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_MF,    },
-    { { "H.264 (VideoToolbox)","vt_h264",    "H.264 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H264,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VT,    },
+    { { "H.264 (VideoToolbox)","vt_h264",    "H.264 (VideoToolbox)",    HB_VCODEC_VT_H264,           HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H264_VT,    },
     { { "H.265 (x265)",        "x265",       "H.265 (libx265)",         HB_VCODEC_X265_8BIT,         HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
     { { "H.265 10-bit (x265)", "x265_10bit", "H.265 10-bit (libx265)",  HB_VCODEC_X265_10BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
     { { "H.265 12-bit (x265)", "x265_12bit", "H.265 12-bit (libx265)",  HB_VCODEC_X265_12BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
@@ -277,8 +277,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "H.265 (AMD VCE)",     "vce_h265",   "H.265 (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H265,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VCE,   },
     { { "H.265 (NVEnc)",       "nvenc_h265", "H.265 (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H265, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_NVENC, },
     { { "H.265 (MediaFoundation)","mf_h265", "H.265 (MediaFoundation)", HB_VCODEC_FFMPEG_MF_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_MF,    },
-    { { "H.265 (VideoToolbox)","vt_h265",    "H.265 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VT,    },
-    { { "H.265 10-bit (VideoToolbox)","vt_h265_10bit", "H.265 (libavcodec)", HB_VCODEC_FFMPEG_VT_H265_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VT,    },
+    { { "H.265 (VideoToolbox)","vt_h265",    "H.265 (VideoToolbox)",    HB_VCODEC_VT_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VT,    },
+    { { "H.265 10-bit (VideoToolbox)","vt_h265_10bit", "H.265 10-bit (VideoToolbox)", HB_VCODEC_VT_H265_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VT,    },
     { { "MPEG-4",              "mpeg4",      "MPEG-4 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2",              "mpeg2",      "MPEG-2 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_MPEG2,  },
     { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,        HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_VP8,    },
@@ -314,12 +314,10 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 #endif
 
 #ifdef __APPLE__
-            case HB_VCODEC_FFMPEG_VT_H264:
-                return hb_vt_h264_is_available();
-            case HB_VCODEC_FFMPEG_VT_H265:
-                return hb_vt_h265_is_available();
-            case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-                return hb_vt_h265_10bit_is_available();
+            case HB_VCODEC_VT_H264:
+            case HB_VCODEC_VT_H265:
+            case HB_VCODEC_VT_H265_10BIT:
+                return hb_vt_is_encoder_available(encoder);
 #endif
 
 #if HB_PROJECT_FEATURE_MF
@@ -1419,9 +1417,9 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             *high        = 63.;
             break;
 
-        case HB_VCODEC_FFMPEG_VT_H264:
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
             *direction   = 0;
             *granularity = 1.;
             *low         = 0.;
@@ -1472,9 +1470,9 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
-        case HB_VCODEC_FFMPEG_VT_H264:
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
             return "CQ";
 
         case HB_VCODEC_FFMPEG_MF_H264:
@@ -1491,11 +1489,10 @@ int hb_video_quality_is_supported(uint32_t codec)
     switch (codec)
     {
 #ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H264:
-            return hb_vt_h264_is_constant_quality_available();
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            return hb_vt_h265_is_constant_quality_available();
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_is_constant_quality_available(codec);
 #endif
 
         default:
@@ -1516,6 +1513,20 @@ int hb_video_encoder_is_supported(int encoder)
     return 0;
 }
 
+int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt)
+{
+    const int *pix_fmts = hb_video_encoder_get_pix_fmts(encoder);
+    while (*pix_fmts != AV_PIX_FMT_NONE)
+    {
+        if (pix_fmt == *pix_fmts)
+        {
+            return 1;
+        }
+        pix_fmts++;
+    }
+    return 0;
+}
+
 int hb_video_encoder_get_depth(int encoder)
 {
     switch (encoder)
@@ -1524,7 +1535,7 @@ int hb_video_encoder_get_depth(int encoder)
         case HB_VCODEC_QSV_H265_10BIT:
 #endif
 #ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+        case HB_VCODEC_VT_H265_10BIT:
 #endif
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_10BIT:
@@ -1564,6 +1575,12 @@ const char* const* hb_video_encoder_get_presets(int encoder)
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
             return x265_preset_names;
+#endif
+#ifdef __APPLE__
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_preset_get_names(encoder);
 #endif
         default:
             return NULL;
@@ -1621,12 +1638,14 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_VCE_H265:
             return hb_vce_h265_profile_names;
 #endif
-
+#if __APPLE__
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_profile_get_names(encoder);
+#endif
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
-        case HB_VCODEC_FFMPEG_VT_H264:
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
             return hb_av_profile_get_names(encoder);
@@ -1649,7 +1668,6 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_VT_H264:
         case HB_VCODEC_FFMPEG_MF_H264:
             return hb_h264_level_names;
 
@@ -1668,13 +1686,64 @@ const char* const* hb_video_encoder_get_levels(int encoder)
             return hb_h265_level_names;
 
 #ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            return hb_vt_h265_level_names;
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_level_get_names(encoder);
 #endif
 
         default:
             return NULL;
+    }
+}
+
+static const enum AVPixelFormat standard_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_12bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+const int* hb_video_encoder_get_pix_fmts(int encoder)
+{
+#if HB_PROJECT_FEATURE_QSV
+    if (encoder & HB_VCODEC_QSV_MASK)
+    {
+        return hb_qsv_get_pix_fmts(encoder);
+    }
+#endif
+
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_get_pix_fmts(encoder);
+    }
+
+    switch (encoder)
+    {
+        case HB_VCODEC_X264_10BIT:
+            return standard_10bit_pix_fmts;
+#if HB_PROJECT_FEATURE_X265
+        case HB_VCODEC_X265_10BIT:
+            return standard_10bit_pix_fmts;
+        case HB_VCODEC_X265_12BIT:
+            return standard_12bit_pix_fmts;
+#endif
+#if __APPLE__
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_get_pix_fmts(encoder);
+#endif
+        default:
+            return standard_pix_fmts;
     }
 }
 
@@ -3877,11 +3946,13 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
-    job->pix_fmt        = AV_PIX_FMT_YUV420P;
-    job->color_prim     = title->color_prim;
-    job->color_transfer = title->color_transfer;
-    job->color_matrix   = title->color_matrix;
-    job->color_range    = title->color_range;
+    job->input_pix_fmt   = AV_PIX_FMT_YUV420P;
+    job->output_pix_fmt  = AV_PIX_FMT_YUV420P;
+    job->color_prim      = title->color_prim;
+    job->color_transfer  = title->color_transfer;
+    job->color_matrix    = title->color_matrix;
+    job->color_range     = title->color_range;
+    job->chroma_location = title->chroma_location;
     job->color_prim_override     = HB_COLR_PRI_UNDEF;
     job->color_transfer_override = HB_COLR_TRA_UNDEF;
     job->color_matrix_override   = HB_COLR_MAT_UNDEF;
@@ -4288,7 +4359,12 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_grayscale;
             break;
 
+        case HB_FILTER_FORMAT:
+            filter = &hb_filter_format;
+            break;
+
 #if HB_PROJECT_FEATURE_QSV
+#if !HB_QSV_ONEVPL
         case HB_FILTER_QSV:
             filter = &hb_filter_qsv;
             break;
@@ -4300,6 +4376,7 @@ hb_filter_object_t * hb_filter_get( int filter_id )
         case HB_FILTER_QSV_POST:
             filter = &hb_filter_qsv_post;
             break;
+#endif
 #endif
 
         case HB_FILTER_MT_FRAME:
@@ -5847,7 +5924,7 @@ int hb_get_bit_depth(int format)
     int i, min, max;
 
     if (!desc || !desc->nb_components) {
-        min = max = 0;
+        return -1;
     }
 
     min = INT_MAX, max = -INT_MAX;
@@ -5859,36 +5936,37 @@ int hb_get_bit_depth(int format)
     return max;
 }
 
-static int bit_depth_is_supported(hb_job_t * job, int bit_depth)
+static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
 {
-    for (int i = 0; i < hb_list_count(job->list_filter); i++)
-    {
-        hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
+    int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
+    int pix_fmt_bit_depth = hb_get_bit_depth(pix_fmt);
 
-        switch (filter->id) {
-            case HB_FILTER_DETELECINE:
-            case HB_FILTER_COMB_DETECT:
-            case HB_FILTER_DECOMB:
-            case HB_FILTER_DENOISE:
-            case HB_FILTER_NLMEANS:
-            case HB_FILTER_CHROMA_SMOOTH:
-            case HB_FILTER_LAPSHARP:
-            case HB_FILTER_UNSHARP:
-            case HB_FILTER_GRAYSCALE:
-                return 0;
-        }
-    }
-
-    if (hb_video_encoder_get_depth(job->vcodec) < bit_depth)
+    if (pix_fmt_bit_depth > title_bit_depth)
     {
         return 0;
     }
 
-    return 1;
-}
+    if (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)
+    {
+        // Allow formats supported by QSV pipeline via system memory
+        // at that stage only, video memory formats will be reassigned later if allowed
+        if (pix_fmt != AV_PIX_FMT_YUV420P10 &&
+            pix_fmt != AV_PIX_FMT_YUV420P)
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        // Allow biplanar formats only if
+        // hardware decoding is enabled.
+        if (pix_fmt == AV_PIX_FMT_P010LE ||
+            pix_fmt == AV_PIX_FMT_NV12)
+        {
+            return 0;
+        }
+    }
 
-static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
-{
     for (int i = 0; i < hb_list_count(job->list_filter); i++)
     {
         hb_filter_object_t *filter = hb_list_item(job->list_filter, i);
@@ -5908,50 +5986,36 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
                 {
                     return 0;
                 }
+            case HB_FILTER_RENDER_SUB:
+               if (pix_fmt != AV_PIX_FMT_YUV420P   &&
+                   pix_fmt != AV_PIX_FMT_YUV420P10 &&
+                   pix_fmt != AV_PIX_FMT_YUV420P12)
+               {
+                   return 0;
+               }
         }
     }
 
     return 1;
 }
 
+static const enum AVPixelFormat pipeline_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010LE, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
 int hb_get_best_pix_fmt(hb_job_t * job)
 {
-    int bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-    if (hb_qsv_encoder_info_get(hb_qsv_get_adapter_index(), job->vcodec))
+    const int *pix_fmts = pipeline_pix_fmts;
+
+    while (*pix_fmts != AV_PIX_FMT_NONE)
     {
-        if (hb_qsv_full_path_is_enabled(job))
+        if (pix_fmt_is_supported(job, *pix_fmts))
         {
-            if (job->title->pix_fmt == AV_PIX_FMT_YUV420P10 && job->vcodec == HB_VCODEC_QSV_H265_10BIT)
-            {
-                return AV_PIX_FMT_P010LE;
-            }
-            else
-            {
-                return AV_PIX_FMT_NV12;
-            }
+            return *pix_fmts;
         }
-        else
-        {
-            // system memory usage: QSV encoder only or QSV decoder + SW filters + QSV encoder
-            return AV_PIX_FMT_YUV420P;
-        }
+        pix_fmts++;
     }
-#endif
-    if (job->vcodec == HB_VCODEC_FFMPEG_MF_H264 || job->vcodec == HB_VCODEC_FFMPEG_MF_H265)
-    {
-        if (pix_fmt_is_supported(job, AV_PIX_FMT_NV12))
-        {
-            return AV_PIX_FMT_NV12;
-        }
-    }
-    if (bit_depth >= 12 && bit_depth_is_supported(job, 12))
-    {
-        return AV_PIX_FMT_YUV420P12;
-    }
-    if (bit_depth >= 10 && bit_depth_is_supported(job, 10))
-    {
-        return AV_PIX_FMT_YUV420P10;
-    }
+
     return AV_PIX_FMT_YUV420P;
 }

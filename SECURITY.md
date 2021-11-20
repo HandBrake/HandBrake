@@ -6,7 +6,7 @@ If you believe you’ve found a security vulnerability in HandBrake or our websi
 
 security /at/ handbrake /dot/ fr
 
-Contributors to this project are also available in [#handbrake on Freenode IRC](https://webchat.freenode.net/?channels=handbrake) (irc://irc.freenode.net/#handbrake).
+Contributors to this project are also available in [#handbrake on Libera.chat IRC](https://libera.chat/) (irc://irc.libera.chat:6697/#handbrake).
 Please note, #handbrake and #handbrake-dev are public so details should only be send to contributors via private message.
 
 
@@ -24,5 +24,5 @@ We accept bug reports (including security reports) for the following versions:
 
 | Version            | Supported          |
 | ------------------ | ------------------ |
-| 1.3.0              | :white_check_mark: |
+| 1.4.2              | :white_check_mark: |
 | Earlier Releases   | :x:                |

@@ -1,14 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:HandBrakeWPF.Controls">
 
     <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement" >
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-        <Setter Property="MinHeight" Value="22"/>
+        <Setter Property="MinHeight" Value="23"/>
         <Setter Property="Margin" Value="0,2,0,2" />
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
@@ -21,18 +24,52 @@
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="MinHeight" Value="23"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="MinHeight" Value="22"/>
+        <Setter Property="MinHeight" Value="23"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8,2" />
     </Style>
 
-    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
+    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MahApps.Styles.RadioButton}">
         <Setter Property="Margin" Value="0,0,0,8" />
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
-    <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
+    <Style TargetType="{x:Type controls:NumberBox}" >
+        <Setter Property="MinHeight" Value="23"/>
+        <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="{x:Type ToggleButton}" >
+        <Setter Property="MinHeight" Value="23"/>
+        <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+        <Style.Resources>
+            <Style TargetType="ContentPresenter">
+                <Style.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+        </Style.Resources>
+        <Setter Property="MaxWidth" Value="500" />
+    </Style>
+
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MahApps.Styles.CheckBox}" >
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,2,0,2" />
+    </Style>
 
     <Style x:Key="DropButtonStyle" TargetType="ToggleButton"  BasedOn="{StaticResource {x:Type ToggleButton}}">
         <Setter Property="Padding" Value="2,2" />
@@ -99,5 +136,33 @@
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+
+
+    <Style x:Key="subText" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
+    <Style x:Key="sectionHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="subHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style x:Key="pageHeader" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="22" />
+    </Style>
+
+    <Style x:Key="windowTitle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="FontSize" Value="26" />
+    </Style>
+
 
 </ResourceDictionary>

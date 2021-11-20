@@ -12,11 +12,8 @@ namespace HandBrakeWPF.Views
     using System;
     using System.ComponentModel;
     using System.Drawing;
-    using System.Globalization;
     using System.IO;
-    using System.Threading;
     using System.Windows;
-    using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Resources;
 
@@ -29,7 +26,6 @@ namespace HandBrakeWPF.Views
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
-    using Execute = Caliburn.Micro.Execute;
     using FlowDirection = System.Windows.FlowDirection;
 
     /// <summary>
@@ -37,10 +33,7 @@ namespace HandBrakeWPF.Views
     /// </summary>
     public partial class ShellView
     {
-        /// <summary>
-        /// The my notify icon.
-        /// </summary>
-        private readonly NotifyIcon notifyIcon;
+        private INotifyIconService notifyIconService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView"/> class.
@@ -54,22 +47,21 @@ namespace HandBrakeWPF.Views
 
             if (minimiseToTray)
             {
-                INotifyIconService notifyIconService = IoC.Get<INotifyIconService>();
-                this.notifyIcon = new NotifyIcon();
-                notifyIconService.RegisterNotifyIcon(this.notifyIcon);
-
                 StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));
                 if (streamResourceInfo != null)
                 {
                     Stream iconStream = streamResourceInfo.Stream;
-                    this.notifyIcon.Icon = new Icon(iconStream);
+
+                    notifyIconService = IoC.Get<INotifyIconService>();
+                    notifyIconService.Setup(new Icon(iconStream));
+                    this.notifyIconService.SetClickCallback(() => this.NotifyIconClick());
                 }
 
-                this.notifyIcon.Click += this.NotifyIconClick;
                 this.StateChanged += this.ShellViewStateChanged;
             }
 
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.E, ModifierKeys.Control)), new KeyGesture(Key.E, ModifierKeys.Control))); // Start Encode
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.P, ModifierKeys.Alt)), new KeyGesture(Key.P, ModifierKeys.Alt))); // Pause Encode
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.K, ModifierKeys.Control)), new KeyGesture(Key.K, ModifierKeys.Control))); // Stop Encode
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.L, ModifierKeys.Control)), new KeyGesture(Key.L, ModifierKeys.Control))); // Open Log Window
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.Q, ModifierKeys.Control)), new KeyGesture(Key.Q, ModifierKeys.Control))); // Open Queue Window
@@ -96,7 +88,7 @@ namespace HandBrakeWPF.Views
             // Enable Windows 7 Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
             {
-                this.TaskbarItemInfo = Win7.WindowsTaskbar;
+                this.TaskbarItemInfo = WindowsTaskbar.GetTaskBar();
             }
 
             // Setup the UI Language
@@ -136,24 +128,12 @@ namespace HandBrakeWPF.Views
                 }
             }
 
-            if (this.notifyIcon != null)
-            {
-                this.notifyIcon.Visible = false;
-            }
+            this.notifyIconService?.SetVisibility(false);
 
             base.OnClosing(e);
         }
 
-        /// <summary>
-        /// The notify icon_ click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void NotifyIconClick(object sender, EventArgs e)
+        private void NotifyIconClick()
         {
             this.WindowState = WindowState.Normal;
 
@@ -162,29 +142,17 @@ namespace HandBrakeWPF.Views
             this.Topmost = false;
         }
 
-        /// <summary>
-        /// The shell view state changed.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void ShellViewStateChanged(object sender, EventArgs e)
         {
-            if (this.notifyIcon != null)
+            if (this.WindowState == WindowState.Minimized)
             {
-                if (this.WindowState == WindowState.Minimized)
-                {
-                    this.ShowInTaskbar = false;
-                    notifyIcon.Visible = true;      
-                }
-                else if (this.WindowState == WindowState.Normal)
-                {
-                    notifyIcon.Visible = false;
-                    this.ShowInTaskbar = true;
-                }
+                this.ShowInTaskbar = false;
+                this.notifyIconService?.SetVisibility(true);
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                this.notifyIconService?.SetVisibility(false);
+                this.ShowInTaskbar = true;
             }
         }
     }

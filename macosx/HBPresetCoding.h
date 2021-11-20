@@ -11,7 +11,7 @@
 
 @protocol HBPresetCoding <NSObject>
 
-- (void)applyPreset:(HBPreset *)preset;
+- (BOOL)applyPreset:(HBPreset *)preset error:(NSError * __autoreleasing *)outError;
 - (void)writeToPreset:(HBMutablePreset *)preset;
 
 @end

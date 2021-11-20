@@ -639,7 +639,7 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private void UpButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.refireControl.Stop();
+            this.refireControl?.Stop();
         }
 
         /// <summary>

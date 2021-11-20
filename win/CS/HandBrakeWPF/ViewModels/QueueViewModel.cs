@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Versioning;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
@@ -23,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -401,7 +403,14 @@ namespace HandBrakeWPF.ViewModels
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
-                this.queueProcessor.ImportJson(dialog.FileName);
+                try
+                {
+                    this.queueProcessor.ImportJson(dialog.FileName);
+                }
+                catch (Exception exc)
+                {
+                    this.errorService.ShowError(Resources.QueueViewModel_ImportFail, Resources.QueueViewModel_ImportFailSolution, exc);
+                }
             }
         }
 
@@ -489,7 +498,16 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedTask != null && this.SelectedTask.Task != null && File.Exists(this.SelectedTask.Task.Destination))
             {
-                Process.Start(this.SelectedTask.Task.Destination);
+                try
+                {
+                    Process.Start(this.SelectedTask.Task.Destination);
+                }
+                catch (Win32Exception exc)
+                {
+                    throw new GeneralApplicationException(
+                        exc.Message,
+                        Resources.QueueViewModel_PlayFileErrorSolution, exc);
+                }
             }
         }
 
@@ -646,6 +664,11 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.StatsVisible);
             this.NotifyOfPropertyChange(() => this.JobInfoVisible);
             this.HandleLogData();
+
+            if (this.SelectedTask == null)
+            {
+                this.SelectedTask = this.QueueTasks.FirstOrDefault();
+            }
         }
 
         private void QueueProcessor_QueueCompleted(object sender, EventArgs e)

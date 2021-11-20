@@ -15,30 +15,16 @@ namespace HandBrakeWPF.Utilities
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Windows.Forms;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
 
     /// <summary>
     /// A Set of Static Utilities
     /// </summary>
     public class GeneralUtilities
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The Default Log Directory
-        /// </summary>
         private static readonly string LogDir = DirectoryUtilities.GetLogDirectory();
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the number of HandBrake instances running.
-        /// </summary>
         public static int ProcessId
         {
             get
@@ -46,10 +32,6 @@ namespace HandBrakeWPF.Utilities
                 return Process.GetCurrentProcess().Id;
             }
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Clear all the log files older than 30 Days
@@ -113,12 +95,12 @@ namespace HandBrakeWPF.Utilities
             logHeader.AppendLine(string.Format("CPU: {0}", SystemInfo.GetCpu));
             logHeader.AppendLine(string.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
             logHeader.AppendLine(string.Format("GPU Information:{0}{1}", Environment.NewLine, gpuBuilder.ToString().TrimEnd()));
-            logHeader.AppendLine(string.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+            logHeader.AppendLine(string.Format("Screen: {0}", SystemInfo.ScreenBounds));
             logHeader.AppendLine(string.Format("Temp Dir: {0}", Path.GetTempPath()));
-            logHeader.AppendLine(string.Format("Install Dir: {0}", Application.StartupPath));
+            logHeader.AppendLine(string.Format("Install Dir: {0}", AppDomain.CurrentDomain.BaseDirectory));
             logHeader.AppendLine(string.Format("Data Dir: {0}\n", DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly())));
 
-            logHeader.AppendLine("-------------------------------------------");
+            logHeader.Append("-------------------------------------------");
 
             return logHeader;
         }
@@ -151,7 +133,5 @@ namespace HandBrakeWPF.Utilities
             List<int> ids = Process.GetProcessesByName("HandBrake").Select(process => process.Id).ToList();
             return ids.Contains(id);
         }
-
-        #endregion
     }
 }

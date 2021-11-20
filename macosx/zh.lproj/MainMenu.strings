@@ -1,0 +1,270 @@
+/* Class = "NSMenu"; title = "Services"; ObjectID = "0te-ai-fgD"; */
+"0te-ai-fgD.title" = "服务";
+
+/* Class = "NSMenuItem"; title = "Rename…"; ObjectID = "1GQ-n3-jfY"; */
+"1GQ-n3-jfY.title" = "重命名…";
+
+/* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
+"6rE-SM-AGi.title" = "滤镜";
+
+/* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
+"9ie-b7-RaS.title" = "摘要";
+
+/* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
+"29.title" = "主菜单";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "56"; */
+"56.title" = "HandBrake";
+
+/* Class = "NSMenu"; title = "HandBrake"; ObjectID = "57"; */
+"57.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "About HandBrake"; ObjectID = "58"; */
+"58.title" = "关于 HandBrake";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "136"; */
+"136.title" = "退出 HandBrake";
+
+/* Class = "NSMenuItem"; title = "Hide HandBrake"; ObjectID = "971"; */
+"971.title" = "隐藏 HandBrake";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "973"; */
+"973.title" = "隐藏其他";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "1189"; */
+"1189.title" = "窗口";
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "1190"; */
+"1190.title" = "前置所有";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "1191"; */
+"1191.title" = "最小化";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "1192"; */
+"1192.title" = "窗口";
+
+/* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
+"1198.title" = "打开源…";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
+"1200.title" = "文件";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "1209"; */
+"1209.title" = "文件";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "1429"; */
+"1429.title" = "帮助";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "1431"; */
+"1431.title" = "帮助";
+
+/* Class = "NSMenuItem"; title = "HandBrake Website"; ObjectID = "1432"; */
+"1432.title" = "HandBrake 网站";
+
+/* Class = "NSMenuItem"; title = "Online Community Forums"; ObjectID = "1433"; */
+"1433.title" = "在线社区论坛";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
+"1445.title" = "偏好设置…";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "1795"; */
+"1795.title" = "编辑";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "1796"; */
+"1796.title" = "编辑";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "1797"; */
+"1797.title" = "删除";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "1798"; */
+"1798.title" = "全选";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "1799"; */
+"1799.title" = "撤消";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "1801"; */
+"1801.title" = "重做";
+
+/* Class = "NSMenuItem"; title = "Find"; ObjectID = "1802"; */
+"1802.title" = "查找";
+
+/* Class = "NSMenu"; title = "Find"; ObjectID = "1803"; */
+"1803.title" = "查找";
+
+/* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "1804"; */
+"1804.title" = "跳至所选";
+
+/* Class = "NSMenuItem"; title = "Find…"; ObjectID = "1805"; */
+"1805.title" = "查找...";
+
+/* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "1806"; */
+"1806.title" = "查找下一个";
+
+/* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "1807"; */
+"1807.title" = "查找上一个";
+
+/* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "1808"; */
+"1808.title" = "选择查找到的结果";
+
+/* Class = "NSMenuItem"; title = "Spelling"; ObjectID = "1810"; */
+"1810.title" = "拼写";
+
+/* Class = "NSMenu"; title = "Spelling"; ObjectID = "1811"; */
+"1811.title" = "拼写";
+
+/* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
+"1812.title" = "拼写...";
+
+/* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
+"1813.title" = "拼写检查";
+
+/* Class = "NSMenuItem"; title = "Check Spelling as You Type"; ObjectID = "1814"; */
+"1814.title" = "键入时检查拼写";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "1815"; */
+"1815.title" = "剪切";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "1816"; */
+"1816.title" = "复制";
+
+/* Class = "NSMenuItem"; title = "Speech"; ObjectID = "1817"; */
+"1817.title" = "听写";
+
+/* Class = "NSMenu"; title = "Speech"; ObjectID = "1818"; */
+"1818.title" = "听写";
+
+/* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "1819"; */
+"1819.title" = "停止讲话";
+
+/* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "1820"; */
+"1820.title" = "开始讲话";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "1821"; */
+"1821.title" = "粘贴";
+
+/* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "1822"; */
+"1822.title" = "粘贴并匹配样式";
+
+/* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
+"1884.title" = "预设视图";
+
+/* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
+"1948.title" = "预设";
+
+/* Class = "NSMenu"; title = "Presets"; ObjectID = "1949"; */
+"1949.title" = "预设";
+
+/* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
+"1950.title" = "重设官方预设";
+
+/* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
+"1955.title" = "新的预设...";
+
+/* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
+"1985.title" = "在线文档";
+
+/* Class = "NSMenuItem"; title = "Activity Window"; ObjectID = "2295"; */
+"2295.title" = "活动窗口";
+
+/* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
+"2368.title" = "HandBrake";
+
+/* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
+"2421.title" = "选择默认的";
+
+/* Class = "NSMenuItem"; title = "Add To Queue"; ObjectID = "2443"; */
+"2443.title" = "添加到队列";
+
+/* Class = "NSMenuItem"; title = "Start Encoding"; ObjectID = "2444"; */
+"2444.title" = "开始编码";
+
+/* Class = "NSMenuItem"; title = "Queue"; ObjectID = "2445"; */
+"2445.title" = "队列";
+
+/* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
+"2494.title" = "暂停编码";
+
+/* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
+"2508.title" = "关闭窗口";
+
+/* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
+"4964.title" = "检测更新...";
+
+/* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
+"5157.title" = "预览窗口";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
+"5188.title" = "导出...";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "5192"; */
+"5192.title" = "导入...";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
+"5280.title" = "全部显示";
+
+/* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
+"5897.title" = "添加标题到队列...";
+
+/* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
+"brQ-mu-8JM.title" = "音频";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "CN3-Rh-gVf"; */
+"CN3-Rh-gVf.title" = "删除";
+
+/* Class = "NSMenuItem"; title = "Subtitles"; ObjectID = "Csx-2S-iUe"; */
+"Csx-2S-iUe.title" = "字幕";
+
+/* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "fNa-z2-K1i"; */
+"fNa-z2-K1i.title" = "最近打开";
+
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "frQ-v5-pRa"; */
+"frQ-v5-pRa.title" = "设为默认";
+
+/* Class = "NSMenuItem"; title = "View"; ObjectID = "Hzp-jb-hme"; */
+"Hzp-jb-hme.title" = "视图";
+
+/* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "IsV-5A-bqx"; */
+"IsV-5A-bqx.title" = "显示工具栏";
+
+/* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
+"Jef-U4-eQT.title" = "视频";
+
+/* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
+"KKV-n0-Fmr.title" = "自定义工具栏...";
+
+/* Class = "NSMenuItem"; title = "Save"; ObjectID = "lab-Ly-3p3"; */
+"lab-Ly-3p3.title" = "保存";
+
+/* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
+"lCU-PH-gal.title" = "章节";
+
+/* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "mGX-7Z-siB"; */
+"mGX-7Z-siB.title" = "进入全屏模式";
+
+/* Class = "NSMenu"; title = "View"; ObjectID = "ndG-Ig-Yol"; */
+"ndG-Ig-Yol.title" = "视图";
+
+/* Class = "NSMenuItem"; title = "Add All Titles To Queue"; ObjectID = "oYh-V7-kbx"; */
+"oYh-V7-kbx.title" = "添加所有标题到队列";
+
+/* Class = "NSMenuItem"; title = "Dimension"; ObjectID = "shS-hb-XSI"; */
+"shS-hb-XSI.title" = "尺寸";
+
+/* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
+"ukX-HN-SXk.title" = "最近打开";
+
+/* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
+"viv-aA-SoB.title" = "切换到下一个标题";
+
+/* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
+"wPw-Uj-Gxi.title" = "清空菜单";
+
+/* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "wvb-60-cWL"; */
+"wvb-60-cWL.title" = "新分类...";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
+"XcG-Aw-Gdb.title" = "服务";
+
+/* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
+"zgj-Iv-4xJ.title" = "切换到上一个标题";
+

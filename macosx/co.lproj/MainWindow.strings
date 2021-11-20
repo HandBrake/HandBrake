@@ -161,7 +161,7 @@
 "AhR-pK-Oz4.ibShadowedToolTip" = "Ricaricà e preferenze per a prerigatura attualmente selezziunata. I cambiamenti seranu persi.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
-"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "aaeffbdebc703c50e2574782f0579842_tr";
+"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
 "BA0-eg-2Ka.label" = "Riassuntu";
@@ -185,13 +185,13 @@
 "d0E-xw-bxh.title" = "Scatula";
 
 /* Class = "NSToolbarItem"; label = "Preview"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.label" = "Apprezzazione";
+"dK4-jt-v4K.label" = "Fighjulata";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.paletteLabel" = "Affissà a finestra d’apprezzazione";
+"dK4-jt-v4K.paletteLabel" = "Affissà a finestra di fighjulata";
 
 /* Class = "NSToolbarItem"; toolTip = "Show Preview Window"; ObjectID = "dK4-jt-v4K"; */
-"dK4-jt-v4K.toolTip" = "Affissà a finestra d’apprezzazione";
+"dK4-jt-v4K.toolTip" = "Affissà a finestra di fighjulata";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
 "DN4-48-aOI.ibShadowedToolTip" = "Analizà solu u titulu specificatu invece di tutti i tituli.";
@@ -212,7 +212,7 @@
 "HCx-ku-nF7.toolTip" = "Affissà a finestra di a fila d’attesa";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
-"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "3bb4134d1db8d768bda54fd480079421_tr";
+"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Arregistrà a nova prerigatura…";

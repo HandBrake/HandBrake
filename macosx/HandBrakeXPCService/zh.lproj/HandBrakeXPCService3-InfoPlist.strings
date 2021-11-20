@@ -1,0 +1,6 @@
+/* Bundle display name */
+"CFBundleDisplayName" = "HandBrake XPC Service";
+
+/* Bundle name */
+"CFBundleName" = "HandBrakeXPCService3";
+

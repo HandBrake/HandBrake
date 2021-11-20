@@ -22,7 +22,6 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -108,28 +107,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the EncodeTask.
         /// </summary>
         public EncodeTask Task { get; set; }
-
-        /// <summary>
-        /// Gets the panel title.
-        /// </summary>
-        public string PanelTitle
-        {
-            get
-            {
-                return Resources.AudioViewModel_AudioTracks;
-            }
-        }
-
-        /// <summary>
-        /// Gets the switch display title.
-        /// </summary>
-        public string SwitchDisplayTitle
-        {
-            get
-            {
-                return Resources.AudioViewModel_ConfigureDefaults;
-            }
-        }
 
         /// <summary>
         /// Gets the default audio behaviours. 
@@ -220,6 +197,8 @@ namespace HandBrakeWPF.ViewModels
             if (this.AudioDefaultsViewModel.ShowWindow())
             {
                 this.AudioBehaviours = new AudioBehaviours(this.AudioDefaultsViewModel.AudioBehaviours);
+                this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
+
                 this.OnTabStatusChanged(null);
             }
         }

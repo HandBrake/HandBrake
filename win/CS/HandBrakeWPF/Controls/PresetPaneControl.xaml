@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="HandBrakeWPF.Controls.PresetPaneControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <converters:ThemeImageConverter x:Key="themeConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+    </UserControl.Resources>
+
+    <Border CornerRadius="4" BorderBrush="{StaticResource Ui.ContrastLight}" Background="{DynamicResource Ui.Light}" BorderThickness="1">
+        <Grid Margin="5" ZIndex="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+
+                <HierarchicalDataTemplate DataType="{x:Type loc:Preset}">
+                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True" >
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="False" >
+                                        <Setter Property="FontStyle" Value="Normal" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{x:Static Properties:Resources.Preset_Default}" Margin="10,0,0,0" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}"  />
+                        <TextBlock Text="{x:Static Properties:Resources.Preset_NotAvailable}" Margin="10,0,0,0" Visibility="{Binding IsPresetDisabled, Converter={StaticResource boolToVisConverter}}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+
+                <HierarchicalDataTemplate DataType="{x:Type loc:PresetDisplayCategory}" ItemsSource="{Binding Presets}">
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Text="{Binding Category}" FontSize="14" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </Grid.Resources>
+
+            <Grid Grid.Row="1" Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Background="Transparent" cm:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" Height="29" BorderThickness="0"  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="18" Height="18" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Add.png'}" />
+                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" Text="{x:Static Properties:Resources.MainView_SaveNewPreset}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Background="Transparent" cm:Message.Attach="[Event Click] = [Action OpenPresetWindow]" AutomationProperties.Name="Add Preset" Height="29" BorderThickness="0" Grid.Column="2" >
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="18" Height="18" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" />
+                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" Text="{x:Static Properties:Resources.PresetManger_Title}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
+                              VerticalAlignment="Stretch" Grid.Row="2" 
+                              ItemsSource="{Binding PresetsCategories}" Width="285"
+                              SelectedItemChanged="PresetListTree_OnSelectedItemChanged"
+                              PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
+
+                <TreeView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0,3,3,3" />
+                        <Setter Property="ToolTip" Value="{Binding Description}" />
+                        <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollapsed" />
+                        <Style.Triggers>
+                            <Trigger Property="HasItems" Value="True">
+                                <Setter Property="Focusable" Value="false" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+
+                <TreeView.ContextMenu>
+                    <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cm:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                        <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cm:Message.Attach="[Event Click] = [Action PresetImport]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cm:Message.Attach="[Event Click] = [Action PresetExport]" />
+                        <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cm:Message.Attach="[Event Click] = [Action PresetReset]" />
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+
+                <b:Interaction.Triggers>
+                    <commands:InputBindingTrigger>
+                        <commands:InputBindingTrigger.InputBinding>
+                            <KeyBinding Key="Delete"/>
+                        </commands:InputBindingTrigger.InputBinding>
+                        <cm:ActionMessage MethodName="PresetRemove" />
+                    </commands:InputBindingTrigger>
+                </b:Interaction.Triggers>
+
+            </TreeView>
+        </Grid>
+
+    </Border>
+</UserControl>

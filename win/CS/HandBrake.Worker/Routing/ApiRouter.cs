@@ -156,7 +156,7 @@ namespace HandBrake.Worker.Routing
 
             if (!command.AllowDisconnectedWorker)
             {
-                Console.WriteLine("Worker: Disconnected worker monitoring enabled!");
+                ConsoleOutput.WriteLine("Worker: Disconnected worker monitoring enabled!", ConsoleColor.White, true);
                 this.instanceWatcher = new InstanceWatcher(this);
                 this.instanceWatcher.Start(5000);
             }

@@ -1254,10 +1254,11 @@ static void process_frame( hb_filter_private_t * pv )
             buf = hb_frame_buffer_init(pv->ref[1]->f.fmt,
                                        pv->ref[1]->f.width,
                                        pv->ref[1]->f.height);
-            buf->f.color_prim     = pv->output.color_prim;
-            buf->f.color_transfer = pv->output.color_transfer;
-            buf->f.color_matrix   = pv->output.color_matrix;
-            buf->f.color_range    = pv->output.color_range ;
+            buf->f.color_prim      = pv->output.color_prim;
+            buf->f.color_transfer  = pv->output.color_transfer;
+            buf->f.color_matrix    = pv->output.color_matrix;
+            buf->f.color_range     = pv->output.color_range;
+            buf->f.chroma_location = pv->output.chroma_location;
             yadif_filter(pv, buf, parity, tff);
 
             /* Copy buffered settings to output buffer settings */

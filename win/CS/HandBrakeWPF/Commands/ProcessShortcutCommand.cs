@@ -54,6 +54,11 @@ namespace HandBrakeWPF.Commands
                     mainViewModel.StartEncode();
                 }
 
+                if (gesture.Modifiers == ModifierKeys.Alt && gesture.Key == Key.P)
+                {
+                    mainViewModel.PauseEncode();
+                }
+
                 // Stop Encode (Ctrl+K)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.K)
                 {

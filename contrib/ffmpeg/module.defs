@@ -1,6 +1,6 @@
 __deps__ := BZIP2 ZLIB FDKAAC LIBDAV1D LIBVPX LAME LIBOPUS LIBSPEEX XZ ZIMG
 ifeq (1,$(FEATURE.qsv))
-__deps__ += LIBMFX
+__deps__ += LIBVPL
 endif
 ifeq (1,$(FEATURE.vce))
 __deps__ += AMF
@@ -89,9 +89,7 @@ FFMPEG.CONFIGURE.extra += \
     --enable-muxer=ipod
 
 ifeq (darwin,$(HOST.system))
-    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage \
-        --enable-encoder=h264_videotoolbox \
-        --enable-encoder=hevc_videotoolbox
+    FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage
 
     ifeq (x86_64,$(HOST.arch))
         FFMPEG.CONFIGURE.extra += --arch=x86_64
@@ -139,7 +137,7 @@ ifeq (none,$(FFMPEG.GCC.O))
 endif
 
 ifeq (1,$(FEATURE.qsv))
-  FFMPEG.CONFIGURE.extra += --enable-libmfx
+  FFMPEG.CONFIGURE.extra += --enable-libvpl
 endif
 
 ifeq (1,$(FEATURE.vce))

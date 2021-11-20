@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.CountdownAlterView_WhenDoneAction}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.CountdownAlterView_WhenDoneAction}" Style="{StaticResource windowTitle}"  Margin="10,10,10,10" Grid.Row="0" />
         
         <TextBlock Text="{Binding NoticeMessage}" Grid.Row="1" Margin="40,0,10,0"/>
 

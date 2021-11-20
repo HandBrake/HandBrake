@@ -37,7 +37,7 @@
 
             <StackPanel Orientation="Vertical" Grid.Column="0" >
 
-                <TextBlock Text="{x:Static Properties:Resources.VideoView_Video}" FontSize="12" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Static Properties:Resources.VideoView_Video}" Style="{StaticResource sectionHeader}" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_Codec}" Width="100" />
@@ -78,7 +78,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1">
-                <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" FontSize="12" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" Style="{StaticResource sectionHeader}" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <RadioButton Content="{x:Static Properties:Resources.VideoView_ConstantQuality}" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"
@@ -128,7 +128,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{x:Static Properties:Resources.VideoView_OptimiseVideo}" Margin="0,0,0,0" Grid.Row="0"  Grid.ColumnSpan="2" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:Resources.VideoView_OptimiseVideo}" Margin="0,0,0,0" Grid.Row="0"  Grid.ColumnSpan="2" Style="{StaticResource sectionHeader}" />
 
                 <Grid Grid.Row="1" Margin="0,8,0,0">
                     <Grid.RowDefinitions>
@@ -157,7 +157,7 @@
 
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_EncodeTune}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,0"
                                Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"/>
-                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0" Height="22" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_EncodeTune}"
+                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_EncodeTune}"
                               ItemsSource="{Binding VideoTunes}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoTune}" HorizontalAlignment="Left"
                               ToolTip="{x:Static Properties:ResourcesTooltips.Video_EncoderTune}"  Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}" />
                     <CheckBox IsChecked="{Binding FastDecode}" Content="{x:Static Properties:Resources.VideoView_FastDecode}" Grid.Row="2" Grid.Column="2" Margin="10,5,10,0" VerticalAlignment="Center" VerticalContentAlignment="Center"
@@ -166,12 +166,12 @@
           
                     <!-- Row 2-->
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_EncoderProfile}" Grid.Row="3" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"/>
-                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,5,5,0" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"
                           ItemsSource="{Binding VideoProfiles}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoProfile}" HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Profile}"
                               AutomationProperties.Name="{x:Static Properties:Resources.VideoView_EncoderProfile}" />
 
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_EncoderLevel}" Grid.Row="3" Grid.Column="2" Margin="10,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}" />
-                    <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}"
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,5,5,0" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}"
                           ItemsSource="{Binding VideoLevels}"  DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoLevel}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Level}"
                               AutomationProperties.Name="{x:Static Properties:Resources.VideoView_EncoderLevel}" />
 

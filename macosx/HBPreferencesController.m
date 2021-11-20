@@ -144,13 +144,11 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
  */
 - (void)windowDidLoad
 {
-#if defined(__MAC_11_0)
     if (@available (macOS 11, *))
     {
         self.window.toolbarStyle = NSWindowToolbarStylePreference;
     }
-#endif
-    
+
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
     toolbar.delegate = self;
     toolbar.allowsUserCustomization = NO;
@@ -177,12 +175,10 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     if ([ident isEqualToString:TOOLBAR_GENERAL])
     {
         NSImage *image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
-#if defined(__MAC_11_0)
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:@"General preferences"];
         }
-#endif
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
                                          image:image];
@@ -190,12 +186,10 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
     else if ([ident isEqualToString:TOOLBAR_ADVANCED])
     {
         NSImage *image = [NSImage imageNamed:NSImageNameAdvanced];
-#if defined(__MAC_11_0)
         if (@available (macOS 11, *))
         {
             image = [NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:@"General preferences"];
         }
-#endif
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
                                          image:image];

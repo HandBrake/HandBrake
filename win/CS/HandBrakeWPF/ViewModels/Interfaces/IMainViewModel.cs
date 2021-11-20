@@ -86,6 +86,11 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void StopEncode();
 
         /// <summary>
+        /// Pause any active encodes.
+        /// </summary>
+        void PauseEncode();
+
+        /// <summary>
         /// Start an Encode
         /// </summary>
         void StartEncode();

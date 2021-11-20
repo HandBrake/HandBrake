@@ -36,7 +36,10 @@ namespace HandBrakeWPF.Model
         [DisplayName(typeof(Resources), "Options_Updates")]
         Updates,
 
-        [DisplayName(typeof(Resources), "Options_About")]
+        [DisplayName(typeof(Resources), "Options_Reset")]
+        Reset,
+
+        [DisplayName(typeof(Resources), "Options_About")] 
         About,
     }
 }

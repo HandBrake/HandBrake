@@ -3,7 +3,7 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.gnome.Sdk//40",
+    "sdk": "org.gnome.Sdk//41",
     "build-extension": true,
     "separate-locales": false,
     "appstream-compose": false,
@@ -13,8 +13,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-20.1.1.tar.gz",
-                    "sha256": "821755657cf51f59d8f3f443c99e3ec9f28d897ff65c219c6a119e4acb5a2ac7"
+                    "url": "https://github.com/intel/gmmlib/archive/refs/tags/intel-gmmlib-21.3.1.tar.gz",
+                    "sha256": "d26a6512a1b3ca604dabe035ddaf47b4b445bd503eac69a59e4acb2d1f54634b"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -37,8 +37,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/releases/download/2.7.1/libva-2.7.1.tar.bz2",
-                    "sha256": "a00ff19d9f969259b9784172adad7788dbf3de827d985c5d27c230efd5d98a04"
+                    "url": "https://github.com/intel/libva/releases/download/2.13.0/libva-2.13.0.tar.bz2",
+                    "sha256": "fad383f39f36115814bd0eda1496a4cc01761643bd962635400df2d4470ad460"
                 }
             ],
             "no-autogen": true,
@@ -52,8 +52,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/releases/download/2.7.1/libva-utils-2.7.1.tar.bz2",
-                    "sha256": "ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a"
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.12.0/libva-utils-2.12.0.tar.bz2",
+                    "sha256": "bbe49e68fbdf379acc769e4c1680a76be3e2b48020ca320edafaf7235b62cc44"
                 }
             ],
             "no-autogen": true,
@@ -67,8 +67,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/intel-media-20.1.1.tar.gz",
-                    "sha256": "dbca37ba8383cd4d1f3e15fa906f03457ebdb5a118d2459d8f9cd477e0f3d4d4"
+                    "url": "https://github.com/intel/media-driver/archive/refs/tags/intel-media-21.3.4.tar.gz",
+                    "sha256": "4a8233c6a39d7ef7ccd22e43d3d3b890df71501844705783a6c364167a69cae2"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -105,8 +105,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-20.1.1.tar.gz",
-                    "sha256": "44300c0f068f6d018d182455dd9c2f48db1e85fe0b38fcd60d0353bd145923dc"
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/refs/tags/intel-mediasdk-21.3.5.tar.gz",
+                    "sha256": "3f13869298d3946d7d91e58846e274ef62cd5af2473f59f36b57b2c27ebfd87c"
                 },
                 {
                     "type": "file",

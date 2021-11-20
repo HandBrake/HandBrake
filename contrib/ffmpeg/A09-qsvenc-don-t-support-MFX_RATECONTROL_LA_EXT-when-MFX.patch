@@ -1,0 +1,31 @@
+From de4a952c6dd2b8ff713bbd60343826958418e996 Mon Sep 17 00:00:00 2001
+From: Haihao Xiang <haihao.xiang@intel.com>
+Date: Wed, 19 Aug 2020 12:49:14 +0800
+Subject: [PATCH 76/82] qsvenc: don't support MFX_RATECONTROL_LA_EXT when
+ MFX_VERSION >= 2.0
+
+MFX_RATECONTROL_LA_EXT isn't supported for MFX_VERSION >= 2.0[1][2],
+this is in preparation for oneVPL support
+
+[1]: https://spec.oneapi.com/versions/latest/elements/oneVPL/source/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
+[2]: https://github.com/oneapi-src/oneVPL
+---
+ libavcodec/qsvenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/qsvenc.c b/libavcodec/qsvenc.c
+index 069dd7c61963..5d0fa129cab1 100644
+--- a/libavcodec/qsvenc.c
++++ b/libavcodec/qsvenc.c
+@@ -103,7 +103,7 @@ static const struct {
+ #if QSV_HAVE_VCM
+     { MFX_RATECONTROL_VCM,     "VCM" },
+ #endif
+-#if QSV_VERSION_ATLEAST(1, 10)
++#if QSV_VERSION_ATLEAST(1, 10) && !QSV_VERSION_ATLEAST(2, 0)
+     { MFX_RATECONTROL_LA_EXT,  "LA_EXT" },
+ #endif
+ #if QSV_HAVE_LA_HRD
+-- 
+2.25.4
+

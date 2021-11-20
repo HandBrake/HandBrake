@@ -244,7 +244,7 @@ namespace HandBrakeWPF.Services
             // Legacy Settings forced Reset.
             this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
 
-            if (!SystemInfo.IsWindows10() || SystemInfo.GetCpuCoreCount < 4)
+            if (!SystemInfo.IsWindows10() || SystemInfo.MaximumSimultaneousInstancesSupported < 2)
             {
                 this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
                 this.userSettings[UserSettingConstants.SimultaneousEncodes] = 1;
@@ -280,11 +280,12 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.ShowAddAllToQueue, false);
             defaults.Add(UserSettingConstants.ShowAddSelectionToQueue, false);
             defaults.Add(UserSettingConstants.MediaPlayerPath, @"C:\Program Files\VideoLAN\vlc\vlc.exe");
+            defaults.Add(UserSettingConstants.PresetMenuDisplayMode, 0);
 
             // Output Files
             defaults.Add(UserSettingConstants.AutoNaming, true);
             defaults.Add(UserSettingConstants.AutoNamePath, string.Empty);
-            defaults.Add(UserSettingConstants.AutoNameFormat, "{source}-{title}");
+            defaults.Add(UserSettingConstants.AutoNameFormat, "{source}");
             defaults.Add(UserSettingConstants.AutonameFilePrePostString, "output_");
             defaults.Add(UserSettingConstants.AutoNameTitleCase, true);
             defaults.Add(UserSettingConstants.AutoNameRemoveUnderscore, true);
@@ -320,7 +321,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, 2000000000L);
             defaults.Add(UserSettingConstants.PreviewScanCount, 10);
             defaults.Add(UserSettingConstants.MinScanDuration, 10);
-            defaults.Add(UserSettingConstants.ProcessPriorityInt, 3);
+            defaults.Add(UserSettingConstants.ProcessPriorityInt, 2);
             defaults.Add(UserSettingConstants.X264Step, 0.5);
             defaults.Add(UserSettingConstants.SaveLogToCopyDirectory, false);
             defaults.Add(UserSettingConstants.SaveLogWithVideo, false);
@@ -341,9 +342,6 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
-
-            // Hidden Settings
-            defaults.Add(UserSettingConstants.PresetDisplayMode, 1);
 
             return defaults;
         }

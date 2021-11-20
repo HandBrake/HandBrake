@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Crop Panel -->
-        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_FineTuning}" FontSize="12" FontWeight="Bold" Margin="0,5,0,10" Foreground="White" />
+        <TextBlock Text="{x:Static Properties:Resources.StaticPreviewView_FineTuning}" Style="{StaticResource sectionHeader}" Margin="0,5,0,10" Foreground="White" />
         <Grid Name="CropPanel" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -50,7 +50,7 @@
 
             <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" >
                 <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}" Margin="0,0,0,0" Foreground="White"  />
+                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}" Margin="0,0,0,0" Foreground="White" />
                 <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,0,0,0"
                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_ManualCrop}"  Foreground="White"  />
             </StackPanel>

@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.HandBrakeCLI",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "19.08",
+    "runtime-version": "21.08",
     "sdk": "org.freedesktop.Sdk",
     "command": "HandBrakeCLI",
     "finish-args": [
@@ -9,7 +9,7 @@
     ],
     "modules": [
         {
-            "name": "numactl",
+            "name": "numactl-cli",
             "sources": [
                 {
                     "type": "archive",
@@ -19,7 +19,7 @@
             ]
         },
         {
-            "name": "libass",
+            "name": "libass-cli",
             "config-opts": ["--enable-asm", "--enable-harfbuzz",
                             "--enable-fontconfig"],
             "sources": [
@@ -31,7 +31,7 @@
             ]
         },
         {
-            "name": "handbrake",
+            "name": "handbrake-cli",
             "no-autogen": true,
             "config-opts": ["--flatpak", "--disable-gtk"],
             "builddir": true,

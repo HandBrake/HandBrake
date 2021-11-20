@@ -41,7 +41,7 @@ namespace HandBrakeWPF.Converters
             string image = parameter as string;
             if (!string.IsNullOrEmpty(image))
             {
-                string directory = "Images/";
+                string directory = "pack://application:,,,/Views/Images/";
                 if (image.Contains("/"))
                 {
                     string[] components = image.Split('/');

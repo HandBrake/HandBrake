@@ -61,6 +61,11 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
     <!-- Tab Control -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="{DynamicResource Ui.Mid}"/>
@@ -105,7 +110,7 @@
     </Style>
 
     <!-- Glyph -->
-    <SolidColorBrush x:Key="GlyphBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="ButtonGlyphBrush" Color="WhiteSmoke"/>
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ComboBoxDark.xaml" />

@@ -44,7 +44,7 @@
                             </Style>
                         </Border.Style>
                         <Grid Visibility="{Binding ElementName=Border, Path=IsEnabled, Converter={StaticResource darkThemeVisConverter}, ConverterParameter=false}">
-                            <Path x:Name="Arrow" Fill="White" VerticalAlignment="Bottom" Margin="2,3" Data="M -0.5 3 L 5.5 3 L 2.5 6 Z" HorizontalAlignment="Center" />
+                            <Path x:Name="Arrow" Fill="{DynamicResource Ui.Arrow}" VerticalAlignment="Bottom" Margin="2,3" Data="M -0.5 3 L 5.5 3 L 2.5 6 Z" HorizontalAlignment="Center" />
                             <ContentPresenter />
                         </Grid>
                     </Border>

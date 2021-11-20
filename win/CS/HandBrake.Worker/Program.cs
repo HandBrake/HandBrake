@@ -72,24 +72,24 @@ namespace HandBrake.Worker
                 ConsoleOutput.WriteLine("*** Please note, this application should not be run standalone. To run the GUI, please use 'HandBrake.exe' *** ", ConsoleColor.Red);
                 Console.WriteLine();
             }
-            
-            Console.WriteLine("Worker: Starting HandBrake Engine ...");
+
+            ConsoleOutput.WriteLine("Worker: Starting HandBrake Engine ...", ConsoleColor.White, true);
             router = new ApiRouter();
             router.TerminationEvent += Router_TerminationEvent;
-            
-            Console.WriteLine("Worker: Starting Web Server on port {0} ...", port);
+
+            ConsoleOutput.WriteLine(string.Format("Worker: Starting Web Server on port {0} ...", port), ConsoleColor.White, true);
 
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers = RegisterApiHandlers();
             HttpServer webServer = new HttpServer(apiHandlers, port, TokenService);
             if (webServer.Run().Result)
             {
-                Console.WriteLine("Worker: Server Started");
+                ConsoleOutput.WriteLine("Worker: Server Started", ConsoleColor.White, true);
                 manualResetEvent.WaitOne();
                 webServer.Stop();
             }
             else
             {
-                Console.WriteLine("Worker is exiting ...");
+                ConsoleOutput.WriteLine("Worker is exiting ...");
             }
         }
 

@@ -1,0 +1,51 @@
+$(eval $(call import.MODULE.defs,LIBVPL,libvpl))
+$(eval $(call import.CONTRIB.defs,LIBVPL))
+
+LIBVPL.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2021.6.0.tar.gz
+LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2021.6.0.tar.gz
+LIBVPL.FETCH.sha256    = c83590c4b0d12c4a48f4cbf4b6e8d595bf1f6f96bb262d21457793d19f7b2b6a
+LIBVPL.FETCH.basename  = oneVPL-2021.6.0.tar.gz
+LIBVPL.EXTRACT.tarbase = oneVPL-2021.6.0
+
+LIBVPL.build_dir             = build
+LIBVPL.CONFIGURE.exe         = cmake
+LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.deps        =
+LIBVPL.CONFIGURE.static      =
+LIBVPL.CONFIGURE.shared      =
+LIBVPL.CONFIGURE.extra       =
+
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
+else
+    ifneq (none,$(LIBVPL.GCC.g))
+        LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        LIBVPL.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
+endif
+
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
+        LIBVPL.CONFIGURE.extra += -DWIN32=ON
+        LIBVPL.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
+        LIBVPL.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(LIBVPL.GCC.gcc)
+        LIBVPL.CONFIGURE.extra += -DCMAKE_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(LIBVPL.GCC.gxx)
+        LIBVPL.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBVPL.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
+        LIBVPL.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
+    else ifeq ($(HOST.system),darwin)
+        LIBVPL.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
+    else
+        LIBVPL.CONFIGURE.args.host = -DCMAKE_SYSTEM_NAME="$(LIBVPL.CONFIGURE.host)"
+    endif
+    LIBVPL.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.build)"
+    LIBVPL.CONFIGURE.extra     += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+else
+    LIBVPL.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBVPL.CONFIGURE.host)"
+endif
+
+## find CMakeLists.txt
+LIBVPL.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(LIBVPL.EXTRACT.dir/))"

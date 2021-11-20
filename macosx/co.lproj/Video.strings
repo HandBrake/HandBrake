@@ -14,13 +14,13 @@
 "9tc-EO-QMd.ibShadowedToolTip" = "Frequenza di fiure (Fiure à a Seconda). Numeru di fiure affissate durante ogni seconda di video.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "« Ghjettu medianu » fà svarià a qualità per assicurassi chì u ghjettu di dati stà guasi custente a video sana.";
+"A3o-Zx-OfM.ibShadowedToolTip" = "« Flussu medianu » fà svarià a qualità per assicurassi chì u flussu di dati stà guasi custente a video sana.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "Altre viste";
 
 /* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "A cudificazione à 2 passi analisa a fonte video sana nanzu di cudificà. L’infurmazioni raccolti permettenu à u cudificatore d’accumudà di manera più precisa a qualità è u ghjettu di dati in u modu « Ghjettu medianu ».";
+"bnV-aE-FVh.ibShadowedToolTip" = "A cudificazione à 2 passi analisa a fonte video sana nanzu di cudificà. L’infurmazioni raccolti permettenu à u cudificatore d’accumudà di manera più precisa a qualità è u flussu di dati in u modu « Flussu medianu ».";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -59,7 +59,7 @@
 "gIJ-Xs-uVF.title" = "Altre viste";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "« Qualità custente » fà svarià u ghjettu binariu per assicurassi chì a qualità visuale stà guasi custente a video sana.\n\nAccumudà u cursore di qualità à manu diritta per aummentà a qualità o à manu manca per diminuiscela, in chjuchi passi di più o menu 1-2.\n\nI valori ricumandati per i cudificatori x264 è x265 sò RF 18-28. E preferenze di qualità più alte ponu pruduce schedarii assai vuluminosi.\n\nDefinita à RF 0, a cudificazione x264 hè senza perdita.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "« Qualità custente » fà svarià u flussu binariu per assicurassi chì a qualità visuale stà guasi custente a video sana.\n\nAccumudà u cursore di qualità à manu diritta per aummentà a qualità o à manu manca per diminuiscela, in chjuchi passi di più o menu 1-2.\n\nI valori ricumandati per i cudificatori x264 è x265 sò RF 18-28. E preferenze di qualità più alte ponu pruduce schedarii assai vuluminosi.\n\nDefinita à RF 0, a cudificazione x264 hè senza perdita.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Prufilu :";
@@ -107,7 +107,7 @@
 "stU-Fo-Avu.ibShadowedToolTip" = "A discudificazione rapida impiega preferenze chì riducenu l’adopru di a CPU durante a ripruduzzione di a video cudificata. Què hè ghjuvevule per l’apparechji chì strazianu per leghje video senza barbagliulà.";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
-"VQe-CK-YDR.title" = "Ghjettu medianu (kbps) :";
+"VQe-CK-YDR.title" = "Flussu medianu (kbps) :";
 
 /* Class = "NSButtonCell"; title = "Turbo first pass"; ObjectID = "vSc-VB-NEv"; */
 "vSc-VB-NEv.title" = "Primu passu in modu Turbo";

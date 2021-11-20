@@ -7,6 +7,7 @@
              xmlns:filters="clr-namespace:HandBrakeWPF.Converters.Filters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              mc:Ignorable="d" >
+
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
@@ -44,7 +45,7 @@
                           SelectedItem="{Binding DetelecineFilter.SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Detelecine}"
                           HorizontalAlignment="Left" AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Detelecine}" />
-        <TextBox Width="450" MinHeight="22"  Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" 
+        <TextBox Width="450" Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" 
                  Text="{Binding DetelecineFilter.CustomDetelecine, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center"
                  Visibility="{Binding DetelecineFilter.ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}" />
 
@@ -53,7 +54,7 @@
         <ComboBox Width="120" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DeinterlaceFilter.CombDetectPresets, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
                           SelectedItem="{Binding DeinterlaceFilter.SelectedCombDetectPreset, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetection}"
                           VerticalContentAlignment="Center" AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_InterlaceDetection}"/>
-        <TextBox Width="450" MinHeight="22"  Grid.Row="1" Grid.Column="2" Margin="10,0,0,0" 
+        <TextBox Width="450" Grid.Row="1" Grid.Column="2" Margin="10,0,0,0" 
                  Text="{Binding DeinterlaceFilter.CustomCombDetect, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" 
                  Visibility="{Binding DeinterlaceFilter.ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}"  ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetectionCustom}"  />
 
@@ -71,7 +72,7 @@
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DeinterlacePresetAuto}" />
 
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" VerticalAlignment="Center" Margin="5,0,5,0"  Visibility="{Binding DeinterlaceFilter.ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" />
-            <TextBox Text="{Binding DeinterlaceFilter.CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Stretch" MinWidth="240" MinHeight="22" 
+            <TextBox Text="{Binding DeinterlaceFilter.CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Stretch" MinWidth="240"
                      Visibility="{Binding DeinterlaceFilter.ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DeinterlaceCustom}" />
         </StackPanel>
 
@@ -106,7 +107,7 @@
 
             <StackPanel Orientation="Horizontal" Visibility="{Binding DenoiseFilter.ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" />
-                <TextBox Width="240" MinHeight="22" Text="{Binding DenoiseFilter.CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
+                <TextBox Width="240" Text="{Binding DenoiseFilter.CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
                                  ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_CustomDenoiseParams}" />
             </StackPanel>
         </StackPanel>
@@ -126,7 +127,7 @@
                               MinWidth="120" VerticalAlignment="Center"  Margin="5,0,0,0"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Tune}"  />
         </StackPanel>
-        <TextBox Width="450" Text="{Binding ChromaSmoothFilter.CustomSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" HorizontalAlignment="Left"
+        <TextBox Width="450" Text="{Binding ChromaSmoothFilter.CustomSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
                  Visibility="{Binding ChromaSmoothFilter.ShowCustom, Converter={StaticResource boolToVisConverter}}" Grid.Row="4"  Grid.Column="2"  Margin="10,0,0,0" />
 
         <!-- Sharpen -->
@@ -166,7 +167,7 @@
 
             <StackPanel Orientation="Horizontal" Visibility="{Binding SharpenFilter.ShowSharpenCustom, Converter={StaticResource boolToVisConverter}}">
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" />
-                <TextBox Width="240" Text="{Binding SharpenFilter.CustomSharpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
+                <TextBox Width="240" Text="{Binding SharpenFilter.CustomSharpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
                                  ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_CustomSharpenParams}" />
             </StackPanel>
 
@@ -187,7 +188,7 @@
                               MinWidth="120" VerticalAlignment="Center"  
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersViewAuto_DeblockTune}"  />
         </StackPanel>
-        <TextBox Width="450" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinHeight="22" Grid.Row="6"  Grid.Column="2" 
+        <TextBox Width="450" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="6"  Grid.Column="2" 
                  Text="{Binding DeblockFilter.CustomDeblock, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding DeblockFilter.ShowDeblockCustom, Converter={StaticResource boolToVisConverter}}"  />
 
 
@@ -200,7 +201,7 @@
                   AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_ColourSpace}"
                   HorizontalAlignment="Left" VerticalAlignment="Center"
                   ToolTip="{x:Static Properties:ResourcesTooltips.FiltersView_ColourSpace}" />
-        <TextBox Width="450" Text="{Binding ColourSpaceFilter.CustomColourspace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" HorizontalAlignment="Left" 
+        <TextBox Width="450" Text="{Binding ColourSpaceFilter.CustomColourspace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" 
                  Visibility="{Binding ColourSpaceFilter.ShowColourspaceCustom, Converter={StaticResource boolToVisConverter}}" Grid.Row="7"  Grid.Column="2" Margin="10,0,0,0" />
 
 
@@ -208,10 +209,6 @@
         <!-- Grayscale -->
         <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="8" Grid.Column="1"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}"  HorizontalAlignment="Left" VerticalContentAlignment="Center"  />
-
     </Grid>
-
-
-
 
 </UserControl>

@@ -270,8 +270,7 @@
                             @"VersionMicro": @(micro) };
 
 
-    NSUInteger sortKeys = (1UL << 1); // NSJSONWritingSortedKeys in 10.13 sdk;
-    NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted | sortKeys error:NULL];
+    NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted | NSJSONWritingSortedKeys error:NULL];
     success = [jsonPreset writeToURL:url options:NSDataWritingAtomic error:outError];
 
     return success;

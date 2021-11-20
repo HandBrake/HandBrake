@@ -409,11 +409,13 @@ const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
+int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
+const int*         hb_video_encoder_get_pix_fmts(int encoder);
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
@@ -561,12 +563,12 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_VCE_H265 0x00080000
 #define HB_VCODEC_FFMPEG_NVENC_H264 0x00100000
 #define HB_VCODEC_FFMPEG_NVENC_H265 0x00200000
-#define HB_VCODEC_FFMPEG_VT_H264 0x00400000
-#define HB_VCODEC_FFMPEG_VT_H265 0x00800000
-#define HB_VCODEC_FFMPEG_VT_H265_10BIT 0x01000000
+#define HB_VCODEC_VT_H264 0x00400000
+#define HB_VCODEC_VT_H265 0x00800000
+#define HB_VCODEC_VT_H265_10BIT 0x01000000
 #define HB_VCODEC_FFMPEG_MF_H264 0x02000000
 #define HB_VCODEC_FFMPEG_MF_H265 0x04000000
-#define HB_VCODEC_FFMPEG_MASK  (0x00000F0|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_VT_H264|HB_VCODEC_FFMPEG_VT_H265|HB_VCODEC_FFMPEG_VT_H265_10BIT|HB_VCODEC_FFMPEG_MF_H264|HB_VCODEC_FFMPEG_MF_H265)
+#define HB_VCODEC_FFMPEG_MASK  (0x00000F0|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_MF_H264|HB_VCODEC_FFMPEG_MF_H265)
 #define HB_VCODEC_QSV_H264     0x0000100
 #define HB_VCODEC_QSV_H265_8BIT     0x0000200
 #define HB_VCODEC_QSV_H265_10BIT    0x0000400
@@ -577,7 +579,7 @@ struct hb_job_s
 #define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
 #define HB_VCODEC_X264_10BIT   0x0020000
 #define HB_VCODEC_X264_MASK    0x0030000
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_VT_H264|HB_VCODEC_FFMPEG_MF_H264)
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_VT_H264|HB_VCODEC_FFMPEG_MF_H264)
 #define HB_VCODEC_X265_8BIT    0x0001000
 #define HB_VCODEC_X265         HB_VCODEC_X265_8BIT
 #define HB_VCODEC_X265_10BIT   0x0002000
@@ -608,11 +610,15 @@ struct hb_job_s
     char           *encoder_level;
     int             areBframes;
 
-    int             pix_fmt;
+    // Pixel format from decoder to the end of the filters chain
+    int             input_pix_fmt;
+    // Pixel format from the end of filters chain to the encoder
+    int             output_pix_fmt;
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
 
     int             color_prim_override;
     int             color_transfer_override;
@@ -1125,6 +1131,7 @@ struct hb_title_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
     hb_mastering_display_metadata_t mastering;
     hb_content_light_metadata_t     coll;
     hb_rational_t   vrate;
@@ -1236,6 +1243,7 @@ typedef struct hb_work_info_s
             int           color_transfer;
             int           color_matrix;
             int           color_range;
+            int           chroma_location;
             int           video_decode_support;
         };
         struct
@@ -1310,6 +1318,7 @@ extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_decavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
+extern hb_work_object_t hb_encvt;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_encx265;
@@ -1337,6 +1346,7 @@ typedef struct hb_filter_init_s
     int             color_transfer;
     int             color_matrix;
     int             color_range;
+    int             chroma_location;
     hb_geometry_t   geometry;
     int             crop[4];
     hb_rational_t   vrate;
@@ -1421,6 +1431,7 @@ enum
     HB_FILTER_GRAYSCALE,
     HB_FILTER_PAD,
     HB_FILTER_COLORSPACE,
+    HB_FILTER_FORMAT,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters

@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Views
 {
     using System;
     using System.Diagnostics;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -21,80 +20,56 @@ namespace HandBrakeWPF.Views
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
 
-    /// <summary>
-    /// Interaction logic for LogView.xaml
-    /// </summary>
     public partial class LogView : Window
     {
         private DelayedActionProcessor delayProcessor = new DelayedActionProcessor();
+        private LogViewModel viewModel;
         
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogView"/> class.
-        /// </summary>
         public LogView()
         {
             this.InitializeComponent();
             this.DataContextChanged += this.LogView_DataContextChanged;
+            this.Closed += this.LogView_Closed;
         }
 
-        /// <summary>
-        /// The log view_ data context changed.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
+        private void LogView_Closed(object sender, EventArgs e)
+        {
+            ((LogViewModel)this.DataContext).LogMessageReceived -= this.Vm_LogMessageReceived;
+            ((LogViewModel)this.DataContext).LogResetEvent -= this.Vm_LogResetEvent;
+        }
+
         private void LogView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             LogViewModel vm = e.NewValue as LogViewModel;
             if (vm != null)
             {
+                viewModel = vm;
                 this.logText.AppendText(vm.ActivityLog);
                 vm.LogMessageReceived += this.Vm_LogMessageReceived;
+                vm.LogResetEvent += this.Vm_LogResetEvent;
             }
         }
 
-        /// <summary>
-        /// The vm_ log message received.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
+        private void Vm_LogResetEvent(object sender, EventArgs e)
+        {
+            Execute.OnUIThread(
+                () =>
+                {
+                    this.logText.Clear();
+                    this.logText.AppendText(this.viewModel.ActivityLog.TrimStart());
+                });
+        }
+
         private void Vm_LogMessageReceived(object sender, LogEventArgs e)
         {
             try
-            {
-                if (e == null)
-                {
-                    Caliburn.Micro.Execute.OnUIThread(
-                        () =>
-                            {
-                                LogViewModel vm = this.DataContext as LogViewModel;
-                                if (vm != null)
-                                {
-                                    this.logText.Clear();
-                                    this.logText.AppendText(vm.ActivityLog);
-                                }
-                                else
-                                {
-                                    Debug.WriteLine("Failed to Reset Log correctly.");
-                                }
-                            });   
-                }
-                else
-                {
-                    // This works better than Data Binding because of the scroll.
-                    this.logText.AppendText(Environment.NewLine + e.Log.Content);
+            { 
+                // This works better than Data Binding because of the scroll.
+                this.logText.AppendText(e.Log.Content + Environment.NewLine);
 
-                    if (this.AutoScroll.IsChecked)
-                    {
-                        delayProcessor.PerformTask(() => Execute.BeginOnUIThread(() => this.logText.ScrollToEnd()), 100);
-                    }
+                if (this.AutoScroll.IsChecked)
+                {
+                    delayProcessor.PerformTask(() => Execute.BeginOnUIThread(() => this.logText.ScrollToEnd()), 100);
                 }
             }
             catch (Exception exc)
@@ -103,15 +78,6 @@ namespace HandBrakeWPF.Views
             }
         }
 
-        /// <summary>
-        /// Hide the Toolbar Endplate.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
         private void ToolBarLoaded(object sender, RoutedEventArgs e)
         {
             ToolBar toolBar = sender as ToolBar;

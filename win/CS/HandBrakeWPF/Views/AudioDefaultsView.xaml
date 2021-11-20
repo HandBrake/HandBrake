@@ -52,7 +52,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,0">
-            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_PaneTitle}"  FontSize="20" FontFamily="Segoe UI Light"  />
+            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_PaneTitle}"  Style="{StaticResource windowTitle}"   />
         </StackPanel>
 
         <!-- Behaviour Dropdowns -->
@@ -72,7 +72,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Audio -->
-            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultView_Behaviours}" FontWeight="Bold" Margin="0,10,0,5" />
+            <TextBlock Text="{x:Static Properties:Resources.AudioDefaultView_Behaviours}" Style="{StaticResource subHeader}"  Margin="0,10,0,5" />
 
             <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
             <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
@@ -126,7 +126,7 @@
 
         <!-- Auto Passthru -->
         <StackPanel Orientation="Vertical" Margin="15,0,15,5"  Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Left">
-            <TextBlock Text="{x:Static Properties:Resources.AudioView_AutoPassthruBehaviour}" FontWeight="Bold" Margin="0,10,0,5" />
+            <TextBlock Text="{x:Static Properties:Resources.AudioView_AutoPassthruBehaviour}" Style="{StaticResource subHeader}" Margin="0,10,0,5" />
             <StackPanel Margin="5,10,0,0"
                         Orientation="Vertical">
                 <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:Resources.AudioView_WhenAutoPassthru}" VerticalAlignment="Center" />
@@ -140,25 +140,25 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="10,10,0,0" Orientation="Vertical" Grid.Column="0">
-                    <CheckBox Margin="0,0,5,0" Content="MP2" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP2Pass}" />
-                    <CheckBox Margin="0,0,5,0" Content="MP3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP3Pass}" />
-                    <CheckBox Margin="0,0,5,0" Content="AAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAACPass}" />
-                    <CheckBox Margin="0,0,5,0" Content="AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAC3Pass}" />
-                    <CheckBox Margin="0,0,5,0" Content="E-AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowEAC3Pass}" />
+                    <CheckBox Margin="0,2,5,0" Content="MP2" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP2Pass}" />
+                    <CheckBox Margin="0,2,5,0" Content="MP3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP3Pass}" />
+                    <CheckBox Margin="0,2,5,0" Content="AAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAACPass}" />
+                    <CheckBox Margin="0,2,5,0" Content="AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAC3Pass}" />
+                    <CheckBox Margin="0,2,5,0" Content="E-AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowEAC3Pass}" />
                 </StackPanel>
 
                 <StackPanel Margin="10,10,0,0" Orientation="Vertical"  Grid.Column="1">
-                    <CheckBox Margin="0,0,5,0" Content="FLAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowFlacPass}" />
-                    <CheckBox Margin="0,0,5,0" Content="DTS" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSPass}" />
-                    <CheckBox Margin="0,0,5,0" Content="DTSHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSHDPass}" />
-                    <CheckBox Margin="0,0,5,0" Content="TrueHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowTrueHDPass}" />
+                    <CheckBox Margin="0,2,5,0" Content="FLAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowFlacPass}" />
+                    <CheckBox Margin="0,2,5,0" Content="DTS" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSPass}" />
+                    <CheckBox Margin="0,2,5,0" Content="DTSHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSHDPass}" />
+                    <CheckBox Margin="0,2,5,0" Content="TrueHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowTrueHDPass}" />
                 </StackPanel>
             </Grid>
 
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:Resources.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="110" Height="22" Margin="5,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="AudioEncoderFallback" />
@@ -176,7 +176,7 @@
         </StackPanel>
 
         <!-- Tracks -->
-        <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoAddTracks}" FontWeight="Bold" Margin="0,20,0,0" Grid.Row="4" Grid.Column="0" />
+        <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoAddTracks}" Style="{StaticResource subHeader}"  Margin="0,20,0,0" Grid.Row="4" Grid.Column="0" />
 
         <Grid Grid.Row="5" Margin="25,10,0,0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
@@ -255,11 +255,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="26" />
+                                    <RowDefinition Height="28" />
                                 </Grid.RowDefinitions>
 
                                 <!--  Row 1  -->
-                                <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
+                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0">
                                     <ComboBox.SelectedItem>
                                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                             <Binding Path="Encoder" />
@@ -273,7 +273,7 @@
                                     </ComboBox.ItemsSource>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch" 
+                                <ComboBox Grid.Column="4" Width="65" HorizontalAlignment="Stretch" 
                                           SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}">
                                     <ComboBox.ItemsSource>
                                         <MultiBinding Converter="{StaticResource audioRateTypeForDefaultsConverter}">
@@ -290,7 +290,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
+                                <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
                                       SelectedItem="{Binding Quality}" >
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
@@ -301,7 +301,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
+                                <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
                                       SelectedItem="{Binding Bitrate}" >
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
@@ -312,7 +312,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                                <ComboBox Grid.Row="0" Grid.Column="7"  Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding Mixdowns}" SelectedItem="{Binding MixDown}"
                                       DisplayMemberPath="DisplayName" >
                                     <ComboBox.Visibility>
@@ -324,7 +324,7 @@
                                 </ComboBox>
 
 
-                                <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
+                                <ComboBox Width="70" Margin="5,0,5,0" Grid.Column="9" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}" >
                                     <ComboBox.Visibility>
@@ -335,7 +335,7 @@
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
-                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" VerticalAlignment="Center" Height="22"
+                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" VerticalAlignment="Center"
                                                 Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
                                                 ShowIncrementButtons="True" AllowEmpty="False">
                                     <controls:NumberBox.Visibility>
@@ -346,7 +346,7 @@
                                     </controls:NumberBox.Visibility>
                                 </controls:NumberBox>
 
-                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" VerticalAlignment="Center"  Height="22"
+                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" VerticalAlignment="Center" 
                                                 Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
                                                 ShowIncrementButtons="True" AllowEmpty="False" >
                                     <controls:NumberBox.Visibility>

@@ -186,17 +186,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)windowDidLoad
 {
-    if (@available (macOS 10.12, *))
-    {
-        self.window.tabbingMode = NSWindowTabbingModeDisallowed;
-    }
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
 
-#if defined(__MAC_11_0)
     if (@available (macOS 11, *))
     {
         self.window.toolbarStyle = NSWindowToolbarStyleExpanded;
     }
-#endif
 
     [self enableUI:NO];
 
@@ -206,8 +201,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
-    [self.window registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
-    [self.mainTabView registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
+    [self.window registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    [self.mainTabView registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
 
     _presetView = [[HBPresetsViewController alloc] initWithPresetManager:self.presetManager];
     _presetView.delegate = self;
@@ -278,9 +273,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification
                                                     object:_queue queue:NSOperationQueue.mainQueue
-                                                usingBlock:^(NSNotification * _Nonnull note) {
-        [self updateQueueUI];
-    }];
+                                                usingBlock:^(NSNotification * _Nonnull note) { [self updateQueueUI]; }];
 
     [self updateQueueUI];
 
@@ -346,11 +339,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         HBState state = [change[NSKeyValueChangeNewKey] intValue];
         [self updateToolbarButtonsStateForScanCore:state];
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateButtonsStateForScanCore:state];
-            [self _touchBar_validateUserInterfaceItems];
-        }
+        [self _touchBar_updateButtonsStateForScanCore:state];
+        [self _touchBar_validateUserInterfaceItems];
     }
     else if (context == HBControllerLogLevelContext)
     {
@@ -367,11 +357,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateToolbarButtonsState];
     [self.window.toolbar validateVisibleItems];
 
-    if (@available(macOS 10.12.2, *))
-    {
-        [self _touchBar_updateQueueButtonsState];
-        [self _touchBar_validateUserInterfaceItems];
-    }
+    [self _touchBar_updateQueueButtonsState];
+    [self _touchBar_validateUserInterfaceItems];
 
     NSUInteger count = self.queue.pendingItemsCount;
     self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : @"";
@@ -777,10 +764,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              // and don't want to make it undoable
              [self.window.undoManager removeAllActions];
              [self.window.toolbar validateVisibleItems];
-             if (@available(macOS 10.12.2, *))
-             {
-                 [self _touchBar_validateUserInterfaceItems];
-             }
+             [self _touchBar_validateUserInterfaceItems];
          }];
     }
     else
@@ -797,7 +781,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         if (titles.count)
         {
-            [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
+            [NSDocumentController.sharedDocumentController noteNewRecentDocumentURL:fileURL];
 
             HBTitle *featuredTitle = titles.firstObject;
             for (HBTitle *title in titles)
@@ -809,7 +793,16 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
             }
 
             HBJob *job = [self jobFromTitle:featuredTitle];
-            self.job = job;
+            if (job)
+            {
+                self.job = job;
+            }
+            else
+            {
+                self.job = nil;
+                [self.titlePopUp removeAllItems];
+                self.sourceLabel.stringValue = NSLocalizedString(@"No Valid Preset", @"Main Window -> Info text");
+            }
         }
     }];
 }
@@ -865,6 +858,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 handler(NO);
             }
         }];
+        [self showWindow:self];
     }
     else
     {
@@ -878,21 +872,24 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // Save the current settings
     [self updateCurrentPreset];
 
-    HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
-    job.outputURL = self.destinationURL;
-
-    // If the source is not a stream, and autonaming is disabled,
-    // keep the existing file name.
-    if (self.job.outputFileName.length == 0 || title.isStream || [NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
+    HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset];
+    if (job)
     {
-        job.outputFileName = job.defaultName;
-    }
-    else
-    {
-        job.outputFileName = self.job.outputFileName;
-    }
+        job.outputURL = self.destinationURL;
 
-    job.undo = self.window.undoManager;
+        // If the source is not a stream, and autonaming is disabled,
+        // keep the existing file name.
+        if (self.job.outputFileName.length == 0 || title.isStream || [NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
+        {
+            job.outputFileName = job.defaultName;
+        }
+        else
+        {
+            job.outputFileName = self.job.outputFileName;
+        }
+
+        job.undo = self.window.undoManager;
+    }
 
     return job;
 }
@@ -1153,14 +1150,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
-
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([_queue itemExistAtURL:job.completeOutputURL])
@@ -1170,14 +1164,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists in queue alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists in queue alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists in queue alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
-
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else
@@ -1284,11 +1275,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     for (HBTitle *title in titles)
     {
-        HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
+        HBJob *job = [[HBJob alloc] initWithTitle:title preset:preset];
         job.outputURL = self.destinationURL;
         job.outputFileName = job.defaultName;
         job.title = nil;
-        [jobs addObject:job];
+        if (job)
+        {
+            [jobs addObject:job];
+        }
     }
 
     NSMutableSet<NSURL *> *destinations = [[NSMutableSet alloc] init];
@@ -1334,12 +1328,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", @"File already exists alert -> informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-#if defined(__MAC_11_0)
-    if (@available(macOS 11, *))
-    {
-        alert.buttons.lastObject.hasDestructiveAction = true;
-    }
-#endif
+        if (@available(macOS 11, *))
+        {
+            alert.buttons.lastObject.hasDestructiveAction = true;
+        }
         [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
@@ -1377,8 +1369,20 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)selectionDidChange
 {
-    self.selectedPreset = self.presetView.selectedPreset;
-    [self applyPreset:self.presetView.selectedPreset];
+    if (self.job)
+    {
+        BOOL success = [self doApplyPreset:self.presetView.selectedPreset];
+        if (success == YES)
+        {
+            self.selectedPreset = self.presetView.selectedPreset;
+        }
+    }
+    else
+    {
+        self.currentPreset = self.presetView.selectedPreset;
+        self.selectedPreset = self.presetView.selectedPreset;
+        [self.window.undoManager removeAllActions];
+    }
 }
 
 #pragma mark -  Presets
@@ -1433,32 +1437,46 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     HBPreset *preset = self.selectedPreset ? self.selectedPreset : self.currentPreset;
     if (preset)
     {
-        [self applyPreset:preset];
+        [self doApplyPreset:preset];
     }
 }
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    NSParameterAssert(preset);
+    BOOL success = [self doApplyPreset:preset];
+    if (success == YES)
+    {
+        self.selectedPreset = preset;
+        self.presetView.selectedPreset = preset;
+    }
+}
 
-    if (self.job)
+- (BOOL)doApplyPreset:(HBPreset *)preset
+{
+    BOOL success = NO;
+
+    // Remove the job observer so we don't update the file name
+    // too many times while the preset is being applied
+    [self removeJobObservers];
+
+    NSError *error = nil;
+    success = [self.job applyPreset:preset error:&error];
+
+    [self addJobObservers];
+
+    if (success == NO)
+    {
+        [self presentError:error];
+    }
+    else
     {
         self.currentPreset = preset;
-
-        // Remove the job observer so we don't update the file name
-        // too many times while the preset is being applied
-        [self removeJobObservers];
-
-        // Apply the preset to the current job
-        [self.job applyPreset:self.currentPreset];
-
-        [self addJobObservers];
-
         [self.autoNamer updateFileExtension];
-
         // If Auto Naming is on, update the destination
         [self.autoNamer updateFileName];
     }
+
+    return success;
 }
 
 - (IBAction)showAddPresetPanel:(id)sender
@@ -1475,9 +1493,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window beginSheet:addPresetController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
-            self.selectedPreset = addPresetController.preset;
             [self applyPreset:addPresetController.preset];
-            self.presetView.selectedPreset = addPresetController.preset;
         }
     }];
 }
@@ -1539,9 +1555,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
-    self.selectedPreset = self.presetManager.defaultPreset;
     [self applyPreset:self.presetManager.defaultPreset];
-    self.presetView.selectedPreset = self.presetManager.defaultPreset;
 }
 
 - (IBAction)setDefaultPreset:(id)sender
@@ -1586,10 +1600,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     // Retrieve the preset stored in the NSMenuItem
     HBPreset *preset = [sender representedObject];
-
-    self.selectedPreset = preset;
     [self applyPreset:preset];
-    self.presetView.selectedPreset = preset;
 }
 
 @end

@@ -4,7 +4,60 @@
 Before updating, please make sure there are no pending encodes in the Queue.
 Please also make a backup of any custom presets and app preferences you have as they may not be compatible with newer versions.
 
-For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
+For Windows users:
+- Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
+- Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
+
+## HandBrake 1.5.0
+
+### All platforms
+
+#### Hardware Encoding
+- QuickSync has been updated to use the new OneVPL API.
+
+### Mac
+- macOS 10.13 is now the minimum deployment target
+- The VideoToolbox API is now directly used rather than the libavcodec (ffmpeg) wrapper. Added support for frame multi-pass, mastering display metadata, content light metadata and chroma location. 
+- Miscellaneous bug fixes and improvements
+- Added new translations:
+  - Corsican
+
+### Windows
+- Minor UI / UX layout and typography changes throughout the UI.
+- Presets
+  - Changed the toolbar preset dropdown to an overlay panel that utilises a treeview which saves state.
+- Queue
+  - Improvements to the queue statistics tab including new statistics: Average encoding speed and content information. 
+  - Added "Move to top" and "Move to bottom" to the queue context menu.
+- Updated Translations
+  - Corsican
+  - German
+  - Italian
+  - Japanese
+  - Chinese  (Including a fix for access keys in menu's)
+- Miscellaneous bug fixes and improvements
+
+### Linux
+- Miscellaneous bug fixes and improvements
+- Added new translations:
+  - Corsican
+
+
+## HandBrake 1.4.3
+
+### All platforms
+
+#### Hardware Encoding
+- Fixed an issue on older Intel CPU's that would cause the CLI to fail to initialise. (#3924)
+
+### Mac
+- Fixed an issue with auto-naming.
+
+### Windows
+- Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
+
+### Linux
+- Fix an issue with the filter settings that resulted in incorrect filters being added to jobs. (#3910)
 
 
 ## HandBrake 1.4.2
@@ -12,23 +65,24 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 ### All platforms
 
 #### General
-- Fix an issue where incorrect colour information could be written during muxing. 
+- Improvements and fixes around colour bit-depth handling.
+- Fixed various issues where incorrect colour information could be written during muxing.
 
 #### Hardware Encoding
+- Fixed corrupted video output when decoding HDR10 content with QuickSync
 
 #### Subtitles
-- Fix a slight subtitle colour shift issue when using libass
-
-#### Command line interface
-
-### Linux
+- Fixed a slight subtitle colour shift issue when using libass
 
 ### Mac
 - Fixed a build system errors that could cause failures linking libbluray 
+- Fixed incorrect documentation URL
+- Fixed a possible crash that can occur when applying a malformed preset.
 
 ### Windows
 - Added "Preset" used to the Queue summary tab.
 - Added "Save New Preset" to the preset menu, and toolbar preset dropdown to make it easier to find. (#3783)
+- Added category headers to the presets menu when using the flat display mode.
 - Changed the log filename format back to start with the destination filename as it did with 1.3 (#3740)
 - Changed tab selection behaviour on queue when changing jobs. it will no longer reset to the first tab. (#3813)
 - Fixed a minor UI juddering effect on the queue task list when jobs start or finish (#3813)
@@ -36,6 +90,8 @@ For Windows users, please make sure you have Microsoft **DESKTOP** runtime 5.x i
 - Fixed an issue where static preview wasn't live-updating when changes occurred (#3803)
 - Fixed a crash on the Audio Defaults screen whilst trying to add Tracks (#3785)
 - Fixed incorrect taskbar icon state when running multiple encodes (#3791)
+- Fixed an issue where "None" resolution limit was not honoured (#3872)
+- Fixed an issue with preset export. VideoTune was not written correctly (#3829)
 
 
 ## HandBrake 1.4.1

@@ -294,14 +294,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             break;
 #endif
 #ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H264:
-            w = hb_get_work(h, WORK_ENCAVCODEC);
-            w->codec_param = AV_CODEC_ID_H264;
-            break;
-        case HB_VCODEC_FFMPEG_VT_H265:
-        case HB_VCODEC_FFMPEG_VT_H265_10BIT:
-            w = hb_get_work(h, WORK_ENCAVCODEC);
-            w->codec_param = AV_CODEC_ID_HEVC;
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            w = hb_get_work(h, WORK_ENCVT);
             break;
 #endif
 #if HB_PROJECT_FEATURE_MF
@@ -444,13 +440,13 @@ void hb_display_job_info(hb_job_t *job)
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
-        hb_log("   + decoder: %s %d-bit",
-               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->pix_fmt));
+        hb_log("   + decoder: %s %d-bit (%s)",
+               hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     }
     else
 #endif
     {
-        hb_log("   + decoder: %s %d-bit", title->video_codec_name, hb_get_bit_depth(job->pix_fmt));
+        hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
     }
 
     if( title->video_bitrate )
@@ -554,9 +550,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_VT_H264:
-                case HB_VCODEC_FFMPEG_VT_H265:
-                case HB_VCODEC_FFMPEG_VT_H265_10BIT:
+                case HB_VCODEC_VT_H264:
+                case HB_VCODEC_VT_H265:
+                case HB_VCODEC_VT_H265_10BIT:
                 case HB_VCODEC_FFMPEG_MF_H264:
                 case HB_VCODEC_FFMPEG_MF_H265:
                     hb_log("     + profile: %s", job->encoder_profile);
@@ -580,9 +576,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
-                case HB_VCODEC_FFMPEG_VT_H264:
+                case HB_VCODEC_VT_H264:
                 // VT h.265 currently only supports auto level
-                // case HB_VCODEC_FFMPEG_VT_H265:
+                // case HB_VCODEC_VT_H265:
                 // MF h.264/h.265 currently only supports auto level
                 // case HB_VCODEC_FFMPEG_MF_H264:
                 // case HB_VCODEC_FFMPEG_MF_H265:
@@ -616,6 +612,9 @@ void hb_display_job_info(hb_job_t *job)
 
         hb_log("     + color profile: %d-%d-%d",
                job->color_prim, job->color_transfer, job->color_matrix);
+        hb_log("     + chroma location: %s",
+               av_chroma_location_name(job->chroma_location));
+
 
         if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
         {
@@ -1271,8 +1270,10 @@ static int sanitize_audio(hb_job_t *job)
     return 0;
 }
 
-static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
+static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
 {
+    hb_list_t *list = job->list_filter;
+
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
     {
@@ -1334,6 +1335,54 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
                 hb_log("Skipping crop/scale filter");
             }
         }
+    }
+
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+        // sanitize_qsv looks for subtitle render filter, so must happen after
+        // sanitize_subtitle
+        if (hb_qsv_is_enabled(job))
+        {
+            hb_qsv_sanitize_filter_list(job);
+            // In case of video memory need to set formats after satitize filters 
+            // to ensure that full QSV pipeline supported
+            if (hb_qsv_full_path_is_enabled(job))
+            {
+                // Formats supported in QSV pipeline via video memory
+                if (job->input_pix_fmt == AV_PIX_FMT_YUV420P10)
+                {
+                    job->input_pix_fmt = AV_PIX_FMT_P010LE;
+                }
+                else if (job->input_pix_fmt == AV_PIX_FMT_YUV420P)
+                {
+                    job->input_pix_fmt = AV_PIX_FMT_NV12;
+                }
+            }
+        }
+#endif
+
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt) == 0)
+    {
+        // Some encoders require a specific input pixel format
+        // that could be different from the current pipeline format.
+        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+        int encoder_pix_fmt = *encoder_pix_fmts;
+
+#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
+        if (!hb_qsv_full_path_is_enabled(job))
+        {
+            // Formats supported by QSV pipeline via system memory
+            if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
+                encoder_pix_fmt != AV_PIX_FMT_YUV420P)
+            {
+                // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
+                encoder_pix_fmts++;
+                encoder_pix_fmt = *encoder_pix_fmts;
+            }
+        }
+#endif
+
+        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+        hb_add_filter(job, filter, hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt)));
     }
 }
 
@@ -1400,32 +1449,23 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
-        sanitize_filter_list(job->list_filter, title->geometry);
+        // Select the optimal pixel format
+        // for the pipeline
+        job->input_pix_fmt = hb_get_best_pix_fmt(job);
 
-#if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        // sanitize_qsv looks for subtitle render filter, so must happen after
-        // sanitize_subtitle
-        if (hb_qsv_is_enabled(job))
-        {
-            result = hb_qsv_sanitize_filter_list(job);
-            if (result)
-            {
-                *job->done_error = HB_ERROR_WRONG_INPUT;
-                *job->die = 1;
-                goto cleanup;
-            }
-        }
-#endif
+        sanitize_filter_list(job, title->geometry);
+
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
         init.time_base.den = 90000;
         init.job = job;
-        init.pix_fmt = hb_get_best_pix_fmt(job);
-        init.color_range = AVCOL_RANGE_MPEG;
+        init.pix_fmt = job->input_pix_fmt;
 
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
+        init.color_range = AVCOL_RANGE_MPEG;
+        init.chroma_location = title->chroma_location;
         init.geometry = title->geometry;
         memset(init.crop, 0, sizeof(int[4]));
         init.vrate = job->vrate;
@@ -1446,11 +1486,12 @@ static void do_job(hb_job_t *job)
             }
             i++;
         }
-        job->pix_fmt = init.pix_fmt;
+        job->output_pix_fmt = init.pix_fmt;
         job->color_prim = init.color_prim;
         job->color_transfer = init.color_transfer;
         job->color_matrix = init.color_matrix;
         job->color_range = init.color_range;
+        job->chroma_location = init.chroma_location;
         job->width = init.geometry.width;
         job->height = init.geometry.height;
         // job->par is supplied by the frontend.
