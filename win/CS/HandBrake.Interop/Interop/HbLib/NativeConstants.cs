@@ -22,10 +22,10 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_ACODEC_FFEAC3 = 0x01000000;
         public const uint HB_ACODEC_FFTRUEHD = 0x02000000;
         public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
-        public const uint HB_ACODEC_MP2 = 0x06000000;
+        public const uint HB_ACODEC_MP2 = 0x08000000;
         public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD);
 
-        public const uint HB_ACODEC_MASK = 0x07FFFF01;
+        public const uint HB_ACODEC_MASK = 0x0FFFFF01;
         public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_PASS_MASK);
         public const uint HB_ACODEC_ANY = (HB_ACODEC_PASS_FLAG | HB_ACODEC_MASK);
         public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFAAC);
