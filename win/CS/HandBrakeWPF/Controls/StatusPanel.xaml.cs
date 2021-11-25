@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Controls
 {
     using System;
+    using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -25,10 +26,21 @@ namespace HandBrakeWPF.Controls
         {
             InitializeComponent();
             this.Message = "Message";
+            this.progressRing.IsActive = false;
         }
 
         public static readonly DependencyProperty IsLoadingProperty =
-          DependencyProperty.Register("IsLoading", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(false));
+          DependencyProperty.Register("IsLoading", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(false, PropertyChangedCallback));
+
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            StatusPanel p = d as StatusPanel;
+            if (p != null)
+            {
+                bool isLoadingState = (bool)e.NewValue;
+                p.progressRing.IsActive = isLoadingState;
+            }
+        }
 
         public static readonly DependencyProperty MessageProperty =
             DependencyProperty.Register("Message", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Loading..."));

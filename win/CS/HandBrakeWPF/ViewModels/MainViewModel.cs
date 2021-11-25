@@ -2173,6 +2173,12 @@ namespace HandBrakeWPF.ViewModels
                   this.NotifyOfPropertyChange(() => this.QueueCount);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
                   this.NotifyOfPropertyChange(() => this.IsEncoding);
+
+                  if (!this.queueProcessor.IsEncoding && this.IsMultiProcess)
+                  {
+                      this.IsMultiProcess = false;
+                      this.NotifyOfPropertyChange(() => this.IsMultiProcess);
+                  }
               });
         }
 
