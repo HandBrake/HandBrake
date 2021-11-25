@@ -79,6 +79,11 @@ namespace HandBrakeWPF.Services.Scan
         /// </param>
         public void Scan(string sourcePath, int title, Action<bool, Source> postAction)
         {
+            if (this.IsScanning)
+            {
+                return;
+            }
+
             // Try to cleanup any previous scan instances.
             if (this.instance != null)
             {
@@ -290,6 +295,7 @@ namespace HandBrakeWPF.Services.Scan
             }
             finally
             {
+                this.IsScanning = false;
                 var handBrakeInstance = this.instance;
                 if (handBrakeInstance != null)
                 {
