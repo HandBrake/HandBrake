@@ -2173,6 +2173,12 @@ namespace HandBrakeWPF.ViewModels
                   this.NotifyOfPropertyChange(() => this.QueueCount);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
                   this.NotifyOfPropertyChange(() => this.IsEncoding);
+
+                  if (!this.queueProcessor.IsEncoding && this.IsMultiProcess)
+                  {
+                      this.IsMultiProcess = false;
+                      this.NotifyOfPropertyChange(() => this.IsMultiProcess);
+                  }
               });
         }
 
@@ -2192,7 +2198,7 @@ namespace HandBrakeWPF.ViewModels
         private void QueueProcessor_QueueJobStatusChanged(object sender, EventArgs e)
         {
             List<QueueProgressStatus> queueJobStatuses = this.queueProcessor.GetQueueProgressStatus();
-            string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+            string jobsPending = "   " + string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
 
             if (this.queueProcessor.IsPaused)
             {
@@ -2231,7 +2237,7 @@ namespace HandBrakeWPF.ViewModels
                     else if (queueJobStatuses.Count > 1)
                     {
                         this.windowsTaskbar.SetTaskBarProgressToNoProgress();
-                        this.ProgramStatusLabel = string.Format("{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.", this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
+                        this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
                     }

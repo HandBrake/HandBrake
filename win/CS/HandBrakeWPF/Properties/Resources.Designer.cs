@@ -1405,7 +1405,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {0}.
+        ///   Looks up a localized string similar to Pending Jobs {0}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -1606,6 +1606,15 @@ namespace HandBrakeWPF.Properties {
         public static string Main_QueueLabel {
             get {
                 return ResourceManager.GetString("Main_QueueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed..
+        /// </summary>
+        public static string Main_QueueMultiJobStatus {
+            get {
+                return ResourceManager.GetString("Main_QueueMultiJobStatus", resourceCulture);
             }
         }
         

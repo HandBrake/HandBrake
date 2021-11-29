@@ -43,6 +43,40 @@
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         </Style>
 
+        <Style x:Key="RotatingImageStyle" TargetType="{x:Type Image}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
+                    <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
+                    <Setter Property="Source" Value="Images/Working0.png" />
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard Timeline.DesiredFrameRate="10">
+                                <DoubleAnimation Duration="0:0:2" To="180" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)" RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard Timeline.DesiredFrameRate="10">
+                                <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
+                    <Setter Property="Source" Value="Images/Complete.png" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
+                    <Setter Property="Source" Value="Images/WarningSmall.png" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Paused">
+                    <Setter Property="Source" Value="Images/pause_small.png" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -208,47 +242,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!--  Marker  -->
-                                    <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True">
-
+                                    <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True" Style="{StaticResource RotatingImageStyle}">
                                         <Image.LayoutTransform>
                                             <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
                                         </Image.LayoutTransform>
-
-                                        <Image.Style>
-                                            <Style TargetType="{x:Type Image}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                                        <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
-                                                        <Setter Property="Source" Value="Images/Working0.png" />
-                                                        <DataTrigger.EnterActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Duration="0:0:2" To="180" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)" RepeatBehavior="Forever" />
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.EnterActions>
-                                                        <DataTrigger.ExitActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)"/>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.ExitActions>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
-                                                        <Setter Property="Source" Value="Images/Complete.png" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
-                                                        <Setter Property="Source" Value="Images/WarningSmall.png" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Paused">
-                                                        <Setter Property="Source" Value="Images/pause_small.png" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Style>
                                     </Image>
 
                                     <!--  Settings  -->

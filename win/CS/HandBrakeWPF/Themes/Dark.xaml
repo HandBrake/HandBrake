@@ -119,6 +119,7 @@
         <ResourceDictionary Source="Controls/ToolbarDark.xaml" />
         <ResourceDictionary Source="Controls/GroupBoxDark.xaml" />
         <ResourceDictionary Source="Controls/TreeviewDark.xaml" />
+        <ResourceDictionary Source="Controls/ProgressBarBoth.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
