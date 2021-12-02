@@ -65,6 +65,9 @@ typedef void (^HBCoreCleanupHandler)(void);
 /// Progress
 @property (nonatomic, readwrite) NSProgress *progress;
 
+/// Activity
+@property (nonatomic, readwrite) id activity;
+
 @end
 
 HB_OBJC_DIRECT_MEMBERS
@@ -408,6 +411,9 @@ HB_OBJC_DIRECT_MEMBERS
     NSAssert(self.state == HBStateIdle, @"[HBCore encodeJob:] called while another scan or encode already in progress");
     NSAssert(job, @"[HBCore encodeJob:] called with nil job");
 
+    self.activity = [NSProcessInfo.processInfo beginActivityWithOptions:NSActivityUserInitiated
+                                                                 reason:@"Encoding file"];
+
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
@@ -471,6 +477,7 @@ HB_OBJC_DIRECT_MEMBERS
             [HBUtilities writeToActivityLog:"%s work failed", self.name.UTF8String];
             break;
     }
+    [NSProcessInfo.processInfo endActivity:self.activity];
     return result;
 }
 
