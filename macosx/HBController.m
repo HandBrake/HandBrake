@@ -1455,25 +1455,28 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     BOOL success = NO;
 
-    // Remove the job observer so we don't update the file name
-    // too many times while the preset is being applied
-    [self removeJobObservers];
-
-    NSError *error = nil;
-    success = [self.job applyPreset:preset error:&error];
-
-    [self addJobObservers];
-
-    if (success == NO)
+    if (self.job)
     {
-        [self presentError:error];
-    }
-    else
-    {
-        self.currentPreset = preset;
-        [self.autoNamer updateFileExtension];
-        // If Auto Naming is on, update the destination
-        [self.autoNamer updateFileName];
+        // Remove the job observer so we don't update the file name
+        // too many times while the preset is being applied
+        [self removeJobObservers];
+
+        NSError *error = nil;
+        success = [self.job applyPreset:preset error:&error];
+
+        [self addJobObservers];
+
+        if (success == NO)
+        {
+            [self presentError:error];
+        }
+        else
+        {
+            self.currentPreset = preset;
+            [self.autoNamer updateFileExtension];
+            // If Auto Naming is on, update the destination
+            [self.autoNamer updateFileName];
+        }
     }
 
     return success;
