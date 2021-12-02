@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # mac-toolchain-build - download and build common macOS toolchain components
 #
-# Copyright 2020 Bradley Sepos
+# Copyright 2021 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mac-toolchain-build
 
@@ -104,6 +104,7 @@ function download_url {  # download_url $VERBOSE $FILE $URLS
                 return 1
             fi
         fi
+        return 0
     done
 }
 
@@ -202,7 +203,7 @@ function mac_toolchain_build {
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="2.6.0"
+    VERSION="2.7.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
