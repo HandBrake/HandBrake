@@ -23,12 +23,17 @@ For Windows users:
   - Corsican
 
 ### Windows
-- Minor UI / UX layout and typography changes throughout the UI.
+- Added support for Windows 10/11 Notifications. This can be enabled in Preferences -> When Done
 - Presets
   - Changed the toolbar preset dropdown to an overlay panel that utilises a treeview which saves state.
 - Queue
   - Improvements to the queue statistics tab including new statistics: Average encoding speed and content information. 
   - Added "Move to top" and "Move to bottom" to the queue context menu.
+- Preferences
+  - Autoname file format placeholders are now all live options.
+  - Send File To: Added a new parameter that can be passed to the process. "{exit_code}"
+  - Send File To: now sets 3 environment variables which can be used instead of arguments. HB_SOURCE, HB_DESTINATION and HB_EXIT_CODE
+- Minor UI / UX layout, typography and cosmetic changes throughout the UI.
 - Updated Translations
   - Corsican
   - German
@@ -39,6 +44,10 @@ For Windows users:
 
 ### Linux
 - Miscellaneous bug fixes and improvements
+- Flatpak
+  - Update plugin: Intel MediaSDK to 21.3.5
+  - Update dependency: Freedesktop Platofrm to 21.08
+  - Update dependency: Gnome to 41
 - Added new translations:
   - Corsican
 
