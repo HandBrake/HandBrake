@@ -1,15 +1,17 @@
-diff -ur fribidi-1.0.10.orig/lib/fribidi-common.h fribidi-1.0.10/lib/fribidi-common.h
---- fribidi-1.0.10.orig/lib/fribidi-common.h	2020-07-05 15:22:23.000000000 -0400
-+++ fribidi-1.0.10/lib/fribidi-common.h	2020-11-09 19:43:30.000000000 -0500
-@@ -45,9 +45,9 @@
- #ifndef FRIBIDI_LIB_STATIC
- # ifdef _WIN32
- #  ifdef FRIBIDI_BUILD
--#    define FRIBIDI_ENTRY __declspec(dllexport)
-+#    define FRIBIDI_ENTRY
- #  else
--#    define FRIBIDI_ENTRY __declspec(dllimport)
-+#    define FRIBIDI_ENTRY
- #  endif
- # elif (defined(__SUNPRO_C)  || defined(__SUNPRO_CC))
- #  define FRIBIDI_ENTRY __global
+diff --git a/lib/fribidi-common.h b/lib/fribidi-common.h
+index d874d8b..9388a6f 100644
+--- a/lib/fribidi-common.h
++++ b/lib/fribidi-common.h
+@@ -46,9 +46,9 @@
+ # ifndef FRIBIDI_ENTRY
+ #  ifdef _WIN32
+ #   ifdef FRIBIDI_BUILD
+-#     define FRIBIDI_ENTRY __declspec(dllexport)
++#     define FRIBIDI_ENTRY
+ #   else
+-#     define FRIBIDI_ENTRY __declspec(dllimport)
++#     define FRIBIDI_ENTRY
+ #   endif
+ #  elif (defined(__SUNPRO_C)  || defined(__SUNPRO_CC))
+ #   define FRIBIDI_ENTRY __global
+ 
