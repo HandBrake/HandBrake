@@ -17,6 +17,7 @@ namespace HandBrake.Interop.Interop
 
     public class HandBrakePictureHelpers
     {
+        [Flags]
         public enum KeepSetting
         {
             // From common.h
@@ -27,6 +28,7 @@ namespace HandBrake.Interop.Interop
             HB_KEEP_PAD = 0x10,
         }
         
+        [Flags]
         public enum FlagsSetting
         {
             HB_GEO_SCALE_UP = 0x01,

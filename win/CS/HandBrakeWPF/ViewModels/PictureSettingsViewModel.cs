@@ -756,17 +756,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 case ChangedPictureField.Width:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_WIDTH;
-                    if (SelectedAnamorphicMode == Anamorphic.None)
-                    {
-                        setting |= HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_ASPECT;
-                    }
                     break;
                 case ChangedPictureField.Height:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
-                    if (SelectedAnamorphicMode == Anamorphic.None)
-                    {
-                        setting |= HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_ASPECT;
-                    }
                     break;
                 case ChangedPictureField.DisplayWidth:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_WIDTH;
@@ -774,6 +766,12 @@ namespace HandBrakeWPF.ViewModels
                 case ChangedPictureField.ParW:
                 case ChangedPictureField.ParH:
                     setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_HEIGHT;
+                    break;
+                case ChangedPictureField.MaintainAspectRatio:
+                case ChangedPictureField.Anamorphic:
+                case ChangedPictureField.AllowUpscale:
+                case ChangedPictureField.OptimalSize:
+                    setting = HandBrakePictureHelpers.KeepSetting.HB_KEEP_DISPLAY_WIDTH;
                     break;
             }
 
