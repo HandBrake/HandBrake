@@ -57,19 +57,13 @@ jobs:
 
   build_gui:
     name: Windows UI
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: build_mingw
     env:
       SigningCertificate: ${{ secrets.HandBrakeTeam_SignFile }}
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: NuGet Restore
-      run: |
-         choco install nuget.commandline
-         cd win/CS/
-         nuget restore HandBrake.sln
 
     - name: Download LibHandBrake
       uses: actions/download-artifact@v2
