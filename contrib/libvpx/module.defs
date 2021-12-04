@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVPX,libvpx))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
-LIBVPX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvpx-1.10.0.tar.gz
-LIBVPX.FETCH.url    += https://github.com/webmproject/libvpx/archive/v1.10.0.tar.gz
-LIBVPX.FETCH.sha256  = 85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a
+LIBVPX.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libvpx-1.11.0.tar.gz
+LIBVPX.FETCH.url    += https://github.com/webmproject/libvpx/archive/refs/tags/v1.11.0.tar.gz
+LIBVPX.FETCH.sha256  = 965e51c91ad9851e2337aebcc0f517440c637c506f3a03948062e3d5ea129a83
 
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
