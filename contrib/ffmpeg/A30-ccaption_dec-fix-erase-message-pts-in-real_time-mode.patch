@@ -1,0 +1,46 @@
+From fba49578f92f7c5e76cc1c90f052e49b0ca70170 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Sat, 4 Dec 2021 21:22:17 +0100
+Subject: [PATCH] [PATCH] ccaption_dec: fix erase message pts in real_time mode
+
+The erase message had the same timestamp as the last subtitle, thus
+erasing it as soon as it was rendered.
+Original patch by John Stebbins.
+---
+ libavcodec/ccaption_dec.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/ccaption_dec.c b/libavcodec/ccaption_dec.c
+index a208e19..4c8e2f2 100644
+--- a/libavcodec/ccaption_dec.c
++++ b/libavcodec/ccaption_dec.c
+@@ -742,7 +742,7 @@ static void handle_char(CCaptionSubContext *ctx, char hi, char lo)
+        ff_dlog(ctx, "(%c)\n", hi);
+ }
+ 
+-static int process_cc608(CCaptionSubContext *ctx, uint8_t hi, uint8_t lo)
++static int process_cc608(CCaptionSubContext *ctx, int64_t in_time, uint8_t hi, uint8_t lo)
+ {
+     int ret = 0;
+ 
+@@ -787,6 +787,8 @@ static int process_cc608(CCaptionSubContext *ctx, uint8_t hi, uint8_t lo)
+             break;
+         case 0x2c:
+             /* erase display memory */
++            if (ctx->real_time)
++                update_time(ctx, in_time);
+             handle_edm(ctx);
+             break;
+         case 0x2d:
+@@ -861,7 +863,7 @@ static int decode(AVCodecContext *avctx, void *data, int *got_sub, AVPacket *avp
+         if (cc_type != ctx->data_field)
+             continue;
+ 
+-        ret = process_cc608(ctx, hi & 0x7f, bptr[i + 2] & 0x7f);
++        ret = process_cc608(ctx, in_time, hi & 0x7f, bptr[i + 2] & 0x7f);
+         if (ret < 0)
+             return ret;
+ 
+-- 
+2.30.1 (Apple Git-130)
+
