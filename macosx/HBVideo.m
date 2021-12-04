@@ -301,8 +301,13 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 - (void)validatePresetsSettings
 {
     NSArray *presets = self.presets;
-    if (presets.count && ![presets containsObject:self.preset]) {
-        if (presets.count > self.mediumPresetIndex)
+    if (presets.count && ![presets containsObject:self.preset])
+    {
+        if (self.encoder & HB_VCODEC_VT_MASK)
+        {
+            self.preset = self.presets.lastObject;
+        }
+        else if (presets.count > self.mediumPresetIndex)
         {
             self.preset = presets[self.mediumPresetIndex];
         }
@@ -356,7 +361,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (NSArray *)presets
+- (NSArray<NSString *> *)presets
 {
     NSMutableArray *temp = [NSMutableArray array];
 
