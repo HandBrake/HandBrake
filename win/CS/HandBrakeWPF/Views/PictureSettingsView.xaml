@@ -288,9 +288,11 @@
                                     AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWidth}"/>
 
-                <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
+                <CheckBox  IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
                           ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}" 
-                          VerticalAlignment="Center" VerticalContentAlignment="Bottom" HorizontalAlignment="Left"  />
+                          VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" VerticalAlignment="Center" Margin="0,1,0,0" />
+                </CheckBox>
 
                 <TextBlock Text="{Binding OutputAspect}" Margin="20,0,0,0" />
 

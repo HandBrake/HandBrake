@@ -63,7 +63,8 @@ namespace HandBrake.Interop.Interop
                 mode = (int)job.AnamorphicMode,
                 modulus = 2,
                 geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar },
-                displayWidth = job.DarWidth
+                displayWidth = job.DarWidth,
+                displayHeight = job.DarHeight
             };
 
             // If we are rotated, the source title geometry must also be rotated. 
