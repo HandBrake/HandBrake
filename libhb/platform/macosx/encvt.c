@@ -809,6 +809,15 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
 
     CFNumberRef cfValue = NULL;
 
+    // Offline encoders (such as Handbrake) should set RealTime property to False, as it disconnects the relationship
+    // between encoder speed and target video frame rate, explicitly setting RealTime to false encourages VideoToolbox
+    // to use the fastest mode, while adhering to the required output quality/bitrate and favorQualityOverSpeed settings
+    err = VTSessionSetProperty(pv->session, kVTCompressionPropertyKey_RealTime , kCFBooleanFalse);
+    if (err != noErr)
+    {
+        hb_log("VTSessionSetProperty: kVTCompressionPropertyKey_RealTime failed");
+    }
+
     err = VTSessionSetProperty(pv->session,
                                kVTCompressionPropertyKey_AllowFrameReordering,
                                pv->settings.allowFrameReordering);
