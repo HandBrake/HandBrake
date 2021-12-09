@@ -1,0 +1,38 @@
+From 3109a1264a7c9656fdc89eef07013cf85c1f8f46 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Thu, 9 Dec 2021 08:38:29 +0100
+Subject: [PATCH] avcodec/videotoolboxenc: always
+ kVTCompressionPropertyKey_RealTime key to overwrite default value.
+
+---
+ libavcodec/videotoolboxenc.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/libavcodec/videotoolboxenc.c b/libavcodec/videotoolboxenc.c
+index 9b7ee67..ad4b508 100644
+--- a/libavcodec/videotoolboxenc.c
++++ b/libavcodec/videotoolboxenc.c
+@@ -1353,14 +1353,13 @@ static int vtenc_create_encoder(AVCodecContext   *avctx,
+         }
+     }
+ 
+-    if (vtctx->realtime) {
+-        status = VTSessionSetProperty(vtctx->session,
+-                                      compat_keys.kVTCompressionPropertyKey_RealTime,
+-                                      kCFBooleanTrue);
++    CFBooleanRef realtime_cfbool = vtctx->realtime ? kCFBooleanTrue : kCFBooleanFalse;
++    status = VTSessionSetProperty(vtctx->session,
++                                  compat_keys.kVTCompressionPropertyKey_RealTime,
++                                  realtime_cfbool);
+ 
+-        if (status) {
+-            av_log(avctx, AV_LOG_ERROR, "Error setting realtime property: %d\n", status);
+-        }
++    if (status) {
++        av_log(avctx, AV_LOG_ERROR, "Error setting realtime property: %d\n", status);
+     }
+ 
+     status = VTCompressionSessionPrepareToEncodeFrames(vtctx->session);
+-- 
+2.30.1 (Apple Git-130)
+
