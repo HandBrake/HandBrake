@@ -20,10 +20,3 @@ LIBTHEORA.CONFIGURE.extra = \
 ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
     LIBTHEORA.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
 endif
-
-ifeq (darwin,$(HOST.system))
-    ifneq ($(HOST.machine),$(BUILD.machine))
-        LIBTHEORA.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
-        LIBTHEORA.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
-    endif
-endif

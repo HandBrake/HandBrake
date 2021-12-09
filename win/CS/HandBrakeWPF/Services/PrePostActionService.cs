@@ -216,7 +216,7 @@ namespace HandBrakeWPF.Services
                 process.EnvironmentVariables.Add("HB_DESTINATION", destination);
                 process.EnvironmentVariables.Add("HB_EXIT_CODE", exitCode.ToString());
 
-                this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, arguments));
+                this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", process.FileName, arguments));
 
                 try
                 {

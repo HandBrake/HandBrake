@@ -174,11 +174,11 @@
             <!-- Pixel Aspect -->
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PAR}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
-                <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
+                <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False" UpdateBindingOnTextChange="False"
                                     IsEnabled="{Binding IsPixelAspectSettable}"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
                 <TextBlock Text=":" Width="10" HorizontalAlignment="Center" Margin="10,0,10,0" VerticalAlignment="Center" />
-                <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}"  HorizontalAlignment="Left" AllowEmpty="False"
+                <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}"  HorizontalAlignment="Left" AllowEmpty="False" UpdateBindingOnTextChange="False"
                                     IsEnabled="{Binding IsPixelAspectSettable}"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
             </StackPanel>
@@ -187,12 +187,12 @@
             <!-- Width and Height -->
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Width}" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,0" />
             <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1" Margin="0,5,0,0" >
-                <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
+                <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="False" IsEnabled="{Binding WidthControlEnabled}" 
                                     Modulus="2" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Width}" />
 
                 <TextBlock Text="X" Width="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" />
-                <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True"
+                <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="False"
                                     Modulus="2"
                                     ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Height}" />
@@ -284,13 +284,15 @@
 
                 <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_DisplayWidth}" VerticalAlignment="Center" Margin="15,0,0,0" />
 
-                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5,0,0,0" Modulus="2"
+                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5,0,0,0" Modulus="2" UpdateBindingOnTextChange="False"
                                     AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                                     AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_DisplayWidth}"/>
 
-                <CheckBox Content="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
-                          ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
-                          VerticalAlignment="Center" VerticalContentAlignment="Bottom" HorizontalAlignment="Left"  />
+                <CheckBox  IsChecked="{Binding MaintainAspectRatio}" Margin="10,0,0,0" 
+                          ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}" 
+                          VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_KeepAR}" VerticalAlignment="Center" Margin="0,1,0,0" />
+                </CheckBox>
 
                 <TextBlock Text="{Binding OutputAspect}" Margin="20,0,0,0" />
 
