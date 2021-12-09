@@ -12,11 +12,4 @@ LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 # optimizations are turned off.
 LIBOPUS.GCC.args.extra += -DOPUS_WILL_BE_SLOW
 
-ifeq (darwin,$(HOST.system))
-    ifneq ($(HOST.machine),$(BUILD.machine))
-        LIBOPUS.CONFIGURE.extra += --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
-        LIBOPUS.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
-    endif
-endif
-
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;

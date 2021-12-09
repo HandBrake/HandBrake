@@ -1,15 +1,8 @@
 $(eval $(call import.MODULE.defs,JANSSON,jansson))
 $(eval $(call import.CONTRIB.defs,JANSSON))
 
-JANSSON.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/jansson-2.13.1.tar.bz2
-JANSSON.FETCH.url    += https://www.digip.org/jansson/releases/jansson-2.13.1.tar.bz2
-JANSSON.FETCH.sha256  = ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd
+JANSSON.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/jansson-2.14.tar.bz2
+JANSSON.FETCH.url    += https://github.com/akheron/jansson/releases/download/v2.14/jansson-2.14.tar.bz2
+JANSSON.FETCH.sha256  = fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9
 
 JANSSON.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; mkdir m4; autoreconf -fiv;
-
-ifeq (darwin,$(HOST.system))
-    ifneq ($(HOST.machine),$(BUILD.machine))
-        JANSSON.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
-        JANSSON.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
-    endif
-endif

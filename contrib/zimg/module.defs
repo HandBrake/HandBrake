@@ -1,18 +1,11 @@
 $(eval $(call import.MODULE.defs,ZIMG,zimg))
 $(eval $(call import.CONTRIB.defs,ZIMG))
 
-ZIMG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/zimg-3.0.1.tar.gz
-ZIMG.FETCH.url    += https://github.com/sekrit-twc/zimg/archive/release-3.0.1.tar.gz
-ZIMG.FETCH.sha256  = c50a0922f4adac4efad77427d13520ed89b8366eef0ef2fa379572951afcc73f
-ZIMG.EXTRACT.tarbase = zimg-release-3.0.1
+ZIMG.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/zimg-3.0.3.tar.gz
+ZIMG.FETCH.url    += https://github.com/sekrit-twc/zimg/archive/refs/tags/release-3.0.3.tar.gz
+ZIMG.FETCH.sha256  = 5e002992bfe8b9d2867fdc9266dc84faca46f0bfd931acc2ae0124972b6170a7
+ZIMG.EXTRACT.tarbase = zimg-release-3.0.3
 
 ZIMG.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
 
 ZIMG.CONFIGURE.extra += --enable-static --disable-shared
-
-ifeq (darwin,$(HOST.system))
-    ifneq ($(HOST.machine),$(BUILD.machine))
-        ZIMG.CONFIGURE.args.host = --host=$(HOST.machine:arm64=aarch64)-$(HOST.vendor)-$(HOST.system)
-        ZIMG.CONFIGURE.args.build = --build=$(BUILD.machine:arm64=aarch64)-$(BUILD.vendor)-$(BUILD.system)
-    endif
-endif

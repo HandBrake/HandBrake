@@ -17,6 +17,7 @@ namespace HandBrake.Interop.Interop
 
     public class HandBrakePictureHelpers
     {
+        [Flags]
         public enum KeepSetting
         {
             // From common.h
@@ -27,6 +28,7 @@ namespace HandBrake.Interop.Interop
             HB_KEEP_PAD = 0x10,
         }
         
+        [Flags]
         public enum FlagsSetting
         {
             HB_GEO_SCALE_UP = 0x01,
@@ -61,7 +63,8 @@ namespace HandBrake.Interop.Interop
                 mode = (int)job.AnamorphicMode,
                 modulus = 2,
                 geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = computedPar },
-                displayWidth = job.DarWidth
+                displayWidth = job.DarWidth,
+                displayHeight = job.DarHeight
             };
 
             // If we are rotated, the source title geometry must also be rotated. 

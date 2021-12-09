@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <FileVersion>1.4.0.0</FileVersion>
     <Version>1.4.0</Version>
     <Authors>HandBrake Team</Authors>

@@ -172,7 +172,7 @@ int hb_vt_is_constant_quality_available(int encoder)
 
 static const char * const vt_h26x_preset_name[] =
 {
-    "fast", "default", NULL
+    "speed", "quality", NULL
 };
 
 static const char * const vt_h264_profile_name[] =
