@@ -73,7 +73,7 @@ int hb_nvenc_h265_available()
     #endif
 }
 
-char * hb_map_nvenc_preset_name (char * preset){
+char * hb_map_nvenc_preset_name (const char * preset){
 
     if (preset == NULL)
     {

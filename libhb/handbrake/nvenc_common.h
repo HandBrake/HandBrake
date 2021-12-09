@@ -12,6 +12,6 @@
 
 int            hb_nvenc_h264_available();
 int            hb_nvenc_h265_available();
-char *         hb_map_nvenc_preset_name (char * preset);
+char *         hb_map_nvenc_preset_name (const char * preset);
 
 #endif // HANDBRAKE_NVENC_COMMON_H

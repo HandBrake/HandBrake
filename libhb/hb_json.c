@@ -479,7 +479,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     json_error_t error;
     int subtitle_search_burn;
     int ii;
-    int adapter_index;
+    int adapter_index = 0;
 
 #if HB_PROJECT_FEATURE_QSV
     if (job->qsv.ctx){
