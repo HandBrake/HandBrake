@@ -34,6 +34,7 @@
         _state = HBStateIdle;
         _stdoutRedirect = HBRedirect.stdoutRedirect;
         _stderrRedirect = HBRedirect.stderrRedirect;
+        _automaticallyPreventSleep = NO;
         _level = 1;
         _name = @"HandBrakeXPC";
         _serviceName = @"fr.handbrake.HandBrakeXPCService";

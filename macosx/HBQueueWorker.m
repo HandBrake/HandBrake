@@ -44,7 +44,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     {
         NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
         _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:serviceName serviceName:serviceName];
-        _core.automaticallyPreventSleep = NO;
 
         // Set up observers
         [self.core addObserver:self forKeyPath:@"state"
@@ -100,7 +99,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 {
     [self.item pausedAtDate:[NSDate date]];
     [self.core pause];
-    [self.core allowSleep];
 }
 
 - (BOOL)canResume
@@ -112,7 +110,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 {
     [self.item resumedAtDate:[NSDate date]];
     [self.core resume];
-    [self.core preventSleep];
 }
 
 - (void)completedItem:(HBQueueJobItem *)item result:(HBCoreResult)result

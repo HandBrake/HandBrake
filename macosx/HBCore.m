@@ -104,7 +104,7 @@ HB_OBJC_DIRECT_MEMBERS
     if (self)
     {
         _name = @"HBCore";
-        _automaticallyPreventSleep = YES;
+        _automaticallyPreventSleep = NO;
         _state = HBStateIdle;
         _updateTimerQueue = queue;
         _titles = @[];
