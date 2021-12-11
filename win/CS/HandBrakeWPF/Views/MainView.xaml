@@ -104,6 +104,7 @@
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ResetPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                    <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" cal:Message.Attach="[Event Click] = [Action PresetDeleteBuildIn]" />
                 </MenuItem>
 
                 <MenuItem Header="{x:Static Properties:Resources.MainView_QueueMenu}" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
@@ -477,37 +478,6 @@
 
                     <Button Content="{x:Static Properties:Resources.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
-
-                    <Button x:Name="MorePresetOptionsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="MorePresetOptionsButton_OnClick" Visibility="Collapsed">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="0,0,5,0" Padding="0"
-                                       VerticalAlignment="Center"
-                                       Text="{x:Static Properties:Resources.MainView_Options}"
-                                       AutomationProperties.Name="{x:Static Properties:Resources.MainView_PresetOptionsContextMenu}"
-                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/>
-
-                                <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                  Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource ButtonGlyphBrush}" x:Name="dropdownArrowPreset" />
-                            </StackPanel>
-                        </Button.Content>
-
-                        <Button.ContextMenu>
-                            <ContextMenu x:Name="MainContextMenu">
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
                 </StackPanel>
             </StackPanel>
 
@@ -564,7 +534,12 @@
                         </i:Interaction.Behaviors>
                         <TextBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Open this Directory" cal:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_OpenDirectory}" cal:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_AutonameRegenerate}" cal:Message.Attach="[Event Click] = [Action ReGenerateAutoName]" />
+                                <Separator />
+                                <MenuItem Command="ApplicationCommands.Cut" />
+                                <MenuItem Command="ApplicationCommands.Copy" />
+                                <MenuItem Command="ApplicationCommands.Paste" />
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>

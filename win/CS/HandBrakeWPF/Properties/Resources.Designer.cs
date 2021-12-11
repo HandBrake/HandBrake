@@ -1939,6 +1939,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regenerate (Autoname).
+        /// </summary>
+        public static string MainView_AutonameRegenerate {
+            get {
+                return ResourceManager.GetString("MainView_AutonameRegenerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string MainView_Browser {
@@ -2133,6 +2142,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_Muxing {
             get {
                 return ResourceManager.GetString("MainView_Muxing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open this Directory.
+        /// </summary>
+        public static string MainView_OpenDirectory {
+            get {
+                return ResourceManager.GetString("MainView_OpenDirectory", resourceCulture);
             }
         }
         
@@ -6032,11 +6050,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collapse All.
+        /// </summary>
+        public static string Shared_CollapseAll {
+            get {
+                return ResourceManager.GetString("Shared_CollapseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Default Behaviours.
         /// </summary>
         public static string Shared_ConfigureDefaultBehaviours {
             get {
                 return ResourceManager.GetString("Shared_ConfigureDefaultBehaviours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expand All.
+        /// </summary>
+        public static string Shared_ExpandAll {
+            get {
+                return ResourceManager.GetString("Shared_ExpandAll", resourceCulture);
             }
         }
         
