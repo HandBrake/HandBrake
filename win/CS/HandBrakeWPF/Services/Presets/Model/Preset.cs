@@ -59,6 +59,7 @@ namespace HandBrakeWPF.Services.Presets.Model
             get => this.isSelected;
             set
             {
+                if (value == this.isSelected) return;
                 this.isSelected = value;
                 this.NotifyOfPropertyChange(() => this.IsSelected);
             }

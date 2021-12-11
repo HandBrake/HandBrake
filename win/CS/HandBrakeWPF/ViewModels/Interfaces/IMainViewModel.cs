@@ -30,7 +30,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="tag">
         /// The tag.
         /// </param>
-        void PresetSelect(object tag);
+        bool PresetSelect(object tag);
 
         /// <summary>
         /// Shutdown the Application

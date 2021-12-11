@@ -10,7 +10,8 @@
 namespace HandBrakeWPF.Services.Presets.Interfaces
 {
     public interface IPresetObject
-    {      
+    {
+        bool IsExpanded { get; set; }
         bool IsSelected { get; set; }
         string Category { get; }
     }

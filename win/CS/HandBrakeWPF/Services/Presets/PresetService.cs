@@ -483,6 +483,12 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             selectedPreset.IsSelected = true;
+
+            IPresetObject category = this.Presets.FirstOrDefault(p => p.Category == selectedPreset.Category);
+            if (category != null)
+            {
+                category.IsExpanded = true;
+            }
         }
 
         public void ChangePresetCategory(Preset preset, string categoryName)
