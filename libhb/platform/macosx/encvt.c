@@ -790,6 +790,32 @@ static OSStatus init_vtsession(hb_work_object_t *w, hb_job_t *job, hb_work_priva
         return err;
     }
 
+    // Print the actual encoderID
+    if (cookieOnly == 0)
+    {
+        CFStringRef encoderID;
+        err = VTSessionCopyProperty(pv->session,
+                                    kVTCompressionPropertyKey_EncoderID,
+                                    kCFAllocatorDefault,
+                                    &encoderID);
+
+        if (err == noErr)
+        {
+            static const int VAL_BUF_LEN = 256;
+            char valBuf[VAL_BUF_LEN];
+
+            Boolean haveStr = CFStringGetCString(encoderID,
+                                                 valBuf,
+                                                 VAL_BUF_LEN,
+                                                 kCFStringEncodingUTF8);
+            if (haveStr)
+            {
+                hb_log("encvt_Init: %s", valBuf);
+            }
+            CFRelease(encoderID);
+        }
+    }
+
     CFDictionaryRef supportedProps = NULL;
     err = VTCopySupportedPropertyDictionaryForEncoder(pv->settings.width,
                                                       pv->settings.height,
