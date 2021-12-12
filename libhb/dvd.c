@@ -517,6 +517,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
         }
         if( !audio->id )
         {
+            free(audio);
             continue;
         }
 
