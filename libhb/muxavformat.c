@@ -160,7 +160,6 @@ static int avformatInit( hb_mux_object_t * m )
     m->pkt = av_packet_alloc();
     m->empty_pkt = av_packet_alloc();
 
-    m->pkt = av_packet_alloc();
     if (m->pkt == NULL || m->empty_pkt == NULL)
     {
         hb_error("muxavformat: av_packet_alloc failed");
