@@ -238,15 +238,16 @@ namespace HandBrakeWPF.Services.Presets
         {
             this.Remove(existing);
             this.Add(replacement, false);
+            this.OnPresetCollectionChanged();
         }
 
         public bool Remove(Preset preset)
         {
-            if (preset == null || preset.IsDefault)
+            if (preset == null)
             {
                 return false;
             }
-
+            
             PresetDisplayCategory category = this.presets.FirstOrDefault(p => p.Category == preset.Category) as PresetDisplayCategory;
             if (category != null)
             {

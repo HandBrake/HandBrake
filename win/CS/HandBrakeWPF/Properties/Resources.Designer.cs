@@ -2200,7 +2200,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename Preset.
+        ///   Looks up a localized string similar to Edit Preset.
         /// </summary>
         public static string MainView_PresetManage {
             get {

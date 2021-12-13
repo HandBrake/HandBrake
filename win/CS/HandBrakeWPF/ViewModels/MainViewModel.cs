@@ -1640,13 +1640,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (this.selectedPreset.IsBuildIn)
-            {
-                this.errorService.ShowMessageBox(
-                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
             presetViewModel.Setup(this.selectedPreset);
             this.windowManager.ShowDialogAsync(presetViewModel);

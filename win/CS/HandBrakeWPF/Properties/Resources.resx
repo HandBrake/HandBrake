@@ -1020,7 +1020,7 @@ Would you like to overwrite it?</value>
     <value>Dimensions</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Rename Preset</value>
+    <value>Edit Preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Preset Options Context Menu</value>
