@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
@@ -329,7 +329,9 @@ VFR is not compatible with some players.</value>
     <value>Remove the selected preset.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Scan only the specified title instead of all titles.</value>
+    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+
+If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Custom Denoise parameters.

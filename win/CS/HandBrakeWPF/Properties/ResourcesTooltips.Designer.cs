@@ -709,7 +709,9 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scan only the specified title instead of all titles..
+        ///   Looks up a localized string similar to Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+        ///
+        ///If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank..
         /// </summary>
         public static string SourceSelection_TitleSpecific {
             get {
