@@ -27,7 +27,6 @@ namespace HandBrakeWPF.Services.Presets
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
@@ -236,14 +235,24 @@ namespace HandBrakeWPF.Services.Presets
 
         public void Replace(Preset existing, Preset replacement)
         {
-            this.Remove(existing);
+            this.Remove(existing, true, true);
             this.Add(replacement, false);
             this.OnPresetCollectionChanged();
         }
 
         public bool Remove(Preset preset)
         {
+            return this.Remove(preset, false, false);
+        }
+
+        public bool Remove(Preset preset, bool overrideDefaultCheck, bool skipCategoryRemoval)
+        {
             if (preset == null)
+            {
+                return false;
+            }
+
+            if (preset.IsDefault && !overrideDefaultCheck)
             {
                 return false;
             }
@@ -255,7 +264,7 @@ namespace HandBrakeWPF.Services.Presets
                 category.Presets.Remove(preset);
                 this.flatPresetList.Remove(preset);
                 this.flatPresetDict.Remove(preset.Name);
-                if (category.Presets.Count == 0)
+                if (category.Presets.Count == 0 && !skipCategoryRemoval)
                 {
                     this.presets.Remove(category);
                 }
@@ -670,6 +679,8 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     this.UpdateBuiltInPresets();
                 }
+
+                CheckAndSetDefault(); // Make a preset default if one we have none.
             }
             catch (Exception ex)
             {
@@ -888,6 +899,17 @@ namespace HandBrakeWPF.Services.Presets
         private void OnPresetCollectionChanged()
         {
             this.PresetCollectionChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void CheckAndSetDefault()
+        {
+            if (this.DefaultPreset == null)
+            {
+                Preset p = this.flatPresetList.FirstOrDefault();
+                p.IsDefault = true;
+
+                this.Save();
+            }
         }
 
         protected void ServiceLogMessage(string message)

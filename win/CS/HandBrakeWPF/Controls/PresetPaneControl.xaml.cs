@@ -117,5 +117,11 @@ namespace HandBrakeWPF.Controls
                 ((MainViewModel)this.DataContext).PresetRemove(preset);
             }
         }
+
+        private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            Preset preset = this.presetListTree.SelectedItem as Preset;
+            this.editPresetMenuItem.IsEnabled = preset == null || !preset.IsPresetDisabled;
+        }
     }
 }

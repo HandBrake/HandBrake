@@ -109,9 +109,10 @@
                 </TreeView.ItemContainerStyle>
 
                 <TreeView.ContextMenu>
-                    <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                    <ContextMenu AutomationProperties.Name="Presets List Context Menu" Opened="ContextMenu_OnOpened">
                         <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cm:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                         <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" x:Name="editPresetMenuItem" cm:Message.Attach="[Event Click] = [Action PresetManage]" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetManagerView_Delete}" Click="Delete_OnClick" InputGestureText="Del" />
                         <Separator />
                         <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cm:Message.Attach="[Event Click] = [Action PresetImport]" />

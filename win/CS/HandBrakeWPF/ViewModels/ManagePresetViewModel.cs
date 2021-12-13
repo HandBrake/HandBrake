@@ -151,7 +151,7 @@ namespace HandBrakeWPF.ViewModels
         public void Setup(Preset presetToEdit)
         {
             this.existingPreset = presetToEdit;
-            this.originalPresetName = this.Preset.Name;
+            this.originalPresetName = presetToEdit.Name;
 
             this.Preset = new Preset(presetToEdit); // Clone. We will not touch the existing object.
             
