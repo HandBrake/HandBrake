@@ -252,6 +252,9 @@
 /* HBJob -> invalid name error description */
 "Invalid name" = "Nome non valido";
 
+/* HBJob -> invalid preset */
+"Invalid preset" = "Preset non valido";
+
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "Impostazioni personalizzate unsharp non valide.";
 
@@ -378,6 +381,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "Il preset \"%@\" non può essere importato.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "Il preset non è valido, prova a selezionarne un altro.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "Il preset selezionato non è valido.";
