@@ -923,10 +923,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </customView>
         <menu id="my5-n7-OFP">
             <items>
-                <menuItem title="Show in Finder" id="rK6-EB-N9Z">
+                <menuItem title="Reveal in Finder" id="rK6-EB-N9Z">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="showPathItemInFinder:" target="-2" id="s9a-4Z-uoj"/>
+                        <action selector="revealPathItemInFinder:" target="-2" id="f0R-px-ugx"/>
                     </connections>
                 </menuItem>
             </items>

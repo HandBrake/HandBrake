@@ -733,7 +733,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
              self.scanIndicator.indeterminate = NO;
              self.scanIndicator.doubleValue = 0.0;
 
-             if (result == HBCoreResultDone)
+             if (result.code == HBCoreResultCodeDone)
              {
                  for (HBTitle *title in self.core.titles)
                  {
@@ -1093,7 +1093,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     return NO;
 }
 
-- (IBAction)showPathItemInFinder:(id)sender
+- (IBAction)revealPathItemInFinder:(id)sender
 {
     [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[self.destinationPathControl.clickedPathItem.URL]];
 }
