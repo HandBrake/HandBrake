@@ -113,7 +113,9 @@
 
     if (handler)
     {
-        handler(HBCoreResultFailed);
+        HBCoreResult result = {0, HBCoreResultCodeUnknown};
+        result.code = HBCoreResultCodeUnknown;
+        handler(result);
     }
 
     [self forwardError:@"XPC: Service did crash\n"];

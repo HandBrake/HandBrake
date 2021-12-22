@@ -37,11 +37,20 @@ typedef NS_ENUM(NSUInteger, HBState) {
 };
 
 // These constants specify the result of a scan or encode.
-typedef NS_ENUM(NSUInteger, HBCoreResult) {
-    HBCoreResultDone,
-    HBCoreResultCanceled,
-    HBCoreResultFailed,
+typedef NS_ENUM(NSUInteger, HBCoreResultCode) {
+    HBCoreResultCodeDone       = 0,
+    HBCoreResultCodeCanceled   = 1,
+    HBCoreResultCodeWrongInput = 2,
+    HBCoreResultCodeInit       = 3,
+    HBCoreResultCodeUnknown    = 4,
+    HBCoreResultCodeRead       = 5
 };
+
+struct HBCoreResult {
+    float            avgFps;
+    HBCoreResultCode code;
+};
+typedef struct HBCoreResult HBCoreResult;
 
 typedef void (^HBCoreProgressHandler)(HBState state, HBProgress progress, NSString *info);
 typedef void (^HBCoreCompletionHandler)(HBCoreResult result);

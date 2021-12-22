@@ -126,18 +126,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     self.currentLog = nil;
 
     // Mark the encode just finished
-    switch (result) {
-        case HBCoreResultDone:
-            item.state = HBQueueItemStateCompleted;
-            break;
-        case HBCoreResultCanceled:
-            item.state = HBQueueItemStateCanceled;
-            break;
-        default:
-            item.state = HBQueueItemStateFailed;
-            break;
-    }
-
+    [self.item setDoneWithResult:result];
     self.item = nil;
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
@@ -190,7 +179,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        if (result == HBCoreResultDone)
+        if (result.code == HBCoreResultCodeDone)
         {
             [self realEncodeItem:item];
         }

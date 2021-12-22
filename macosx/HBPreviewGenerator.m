@@ -280,7 +280,7 @@
          }
        completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle
-           if (result == HBCoreResultDone)
+           if (result.code == HBCoreResultCodeDone)
            {
                [self.delegate didCreateMovieAtURL:destURL];
            }
