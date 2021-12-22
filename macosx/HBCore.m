@@ -337,7 +337,7 @@ HB_OBJC_DIRECT_MEMBERS
 {
     CGImageRef img = NULL;
 
-    hb_job_t *hb_job = [job hb_job];
+    hb_job_t *hb_job = job.hb_job;
     hb_dict_t *job_dict = hb_job_to_dict(hb_job);
     hb_job_close(&hb_job);
     hb_image_t *image = hb_get_preview3(_hb_handle, (int)index, job_dict);
