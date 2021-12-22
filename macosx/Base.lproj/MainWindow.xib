@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,6 +11,7 @@
                 <outlet property="audioTab" destination="1475" id="KFs-lZ-jXC"/>
                 <outlet property="bottomConstrain" destination="Unb-Sk-dKC" id="f1i-gz-VIc"/>
                 <outlet property="chaptersTab" destination="1989" id="Qic-V7-Bqk"/>
+                <outlet property="destinationPathControl" destination="PJi-21-hie" id="AwZ-Ws-K0u"/>
                 <outlet property="filtersTab" destination="0UB-bG-kwS" id="8wc-MY-h6a"/>
                 <outlet property="mainTabView" destination="1474" id="LnD-zT-6M5"/>
                 <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
@@ -492,6 +493,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <accessibility description="Destination folder path"/>
                         <connections>
                             <binding destination="-2" name="value" keyPath="self.job.outputURL" id="FQU-UV-RCI"/>
+                            <outlet property="delegate" destination="-2" id="jfV-bp-JaV"/>
+                            <outlet property="menu" destination="my5-n7-OFP" id="CXO-BG-nnJ"/>
                         </connections>
                     </pathControl>
                     <button toolTip="Browse to select a new destination path for your encode." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1562">
@@ -918,6 +921,17 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             </constraints>
             <point key="canvasLocation" x="458.5" y="-571"/>
         </customView>
+        <menu id="my5-n7-OFP">
+            <items>
+                <menuItem title="Show in Finder" id="rK6-EB-N9Z">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="showPathItemInFinder:" target="-2" id="s9a-4Z-uoj"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="2190" y="-1537"/>
+        </menu>
     </objects>
     <resources>
         <image name="activity" width="32" height="32"/>

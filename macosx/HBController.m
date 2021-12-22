@@ -41,13 +41,14 @@
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSMenuItemValidation, NSDraggingDestination, NSPopoverDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSMenuItemValidation, NSDraggingDestination, NSPopoverDelegate, NSPathControlDelegate>
 
 @property (nonatomic, readonly, strong) HBCore *core;
 @property (nonatomic, readonly, strong) HBAppDelegate *delegate;
 
 @property (nonatomic, weak) IBOutlet NSTextField *sourceLabel;
 @property (nonatomic, weak) IBOutlet NSPopUpButton *titlePopUp;
+@property (nonatomic, weak) IBOutlet NSPathControl *destinationPathControl;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstrain;
 @property (nonatomic, readwrite) NSColor *labelColor;
@@ -1022,6 +1023,20 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 #pragma mark - GUI Controls Changed Methods
 
+- (void)setDestinationURL:(NSURL *)destinationURL
+{
+    self.job.outputURL = destinationURL;
+    _destinationURL = destinationURL;
+
+    // Save this path to the prefs so that on next browse destination window it opens there
+    [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:destinationURL]
+                                              forKey:HBLastDestinationDirectoryBookmark];
+    [NSUserDefaults.standardUserDefaults setURL:destinationURL
+                                         forKey:HBLastDestinationDirectoryURL];
+
+
+}
+
 - (IBAction)browseDestination:(id)sender
 {
     // Open a panel to let the user choose and update the text field
@@ -1040,17 +1055,47 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
      {
          if (result == NSModalResponseOK)
          {
-             self.job.outputURL = panel.URL;
              self.destinationURL = panel.URL;
-
-             // Save this path to the prefs so that on next browse destination window it opens there
-             [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:panel.URL]
-                                                       forKey:HBLastDestinationDirectoryBookmark];
-             [NSUserDefaults.standardUserDefaults setURL:panel.URL
-                                                  forKey:HBLastDestinationDirectoryURL];
-
          }
      }];
+}
+
+- (NSDragOperation)pathControl:(NSPathControl *)pathControl validateDrop:(id <NSDraggingInfo>)info
+{
+    NSPasteboard *pboard = info.draggingPasteboard;
+
+    if ([pboard availableTypeFromArray:@[NSPasteboardTypeFileURL]])
+    {
+        NSURL *destinationURL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
+        if (destinationURL.hasDirectoryPath)
+        {
+            return NSDragOperationGeneric;
+        }
+    }
+
+    return NSDragOperationNone;
+}
+
+- (BOOL)pathControl:(NSPathControl *)pathControl acceptDrop:(id <NSDraggingInfo>)info
+{
+    NSPasteboard *pboard = info.draggingPasteboard;
+
+    if ([pboard availableTypeFromArray:@[NSPasteboardTypeFileURL]])
+    {
+        NSURL *destinationURL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
+        if (destinationURL.hasDirectoryPath)
+        {
+            self.destinationURL = destinationURL;
+        }
+        return YES;
+    }
+
+    return NO;
+}
+
+- (IBAction)showPathItemInFinder:(id)sender
+{
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[self.destinationPathControl.clickedPathItem.URL]];
 }
 
 - (IBAction)titlePopUpChanged:(NSPopUpButton *)sender
