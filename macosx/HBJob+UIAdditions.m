@@ -107,10 +107,10 @@ static HBMixdownTransformer    *mixdownTransformer;
     {
         // Attributes
         NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
-        ps.headIndent = 88.0;
+        ps.headIndent = 100;
         ps.paragraphSpacing = 1.0;
-        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:88],
-                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
+        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:98],
+                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:100]];
 
         detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
                        NSParagraphStyleAttributeName: ps,

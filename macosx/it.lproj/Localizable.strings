@@ -382,7 +382,7 @@
 "Show Preview Window" = "Mostra finestra di anteprima";
 
 /* Job statistics */
-"Size:" = "Dim.:";
+"Size:" = "Dimensione:";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "Salta lavoro attuale";
