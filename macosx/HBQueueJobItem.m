@@ -48,12 +48,20 @@ static NSDictionary     *shortHeightAttr;
 
         _byteFormatter = [[NSByteCountFormatter alloc] init];
 
+        CGFloat indent = 100;
+        NSBundle *bundle = [NSBundle bundleForClass:[HBQueueJobItem class]];
+        NSString *currentLocalization = bundle.preferredLocalizations.firstObject;
+        if ([currentLocalization hasPrefix:@"de"])
+        {
+            indent = 120;
+        }
+
         // Attributes
         NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
-        ps.headIndent = 100;
+        ps.headIndent = indent;
         ps.paragraphSpacing = 1.0;
-        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:98],
-                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:100]];
+        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:indent - 2],
+                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:indent]];
 
         detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
                        NSParagraphStyleAttributeName: ps,
