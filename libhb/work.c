@@ -1885,7 +1885,9 @@ cleanup:
     }
     hb_buffer_pool_free();
 #if HB_PROJECT_FEATURE_QSV
-    if (!job->indepth_scan && hb_qsv_is_enabled(job))
+    if (!job->indepth_scan &&
+        (job->pass_id != HB_PASS_ENCODE_1ST) &&
+        hb_qsv_is_enabled(job))
     {
         hb_qsv_context_uninit(job);
     }
