@@ -122,7 +122,7 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-        public static bool IsWindows10()
+        public static bool IsWindows10OrLater()
         {
             OperatingSystem os = Environment.OSVersion;
             if (os.Version.Major >= 10)

@@ -127,7 +127,7 @@
                         <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_DarkThemeMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
                             <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding DarkThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
-                                      IsEnabled="{Binding IsWindows10}" Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />
+                                      Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_RequiresRestart}" Margin="5,0,0,0" />
                         </StackPanel>
 
@@ -450,11 +450,11 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Orientation="Vertical"  Visibility="{Binding IsProcessIsolationAllowed, Converter={StaticResource boolToVisConverter}}" IsEnabled="{Binding IsWindows10}">
+                    <StackPanel Orientation="Vertical"  Visibility="{Binding IsProcessIsolationAllowed, Converter={StaticResource boolToVisConverter}}" >
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_Win10Only}"  Margin="15,10,0,10"  Visibility="{Binding IsWindows10, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_Win10Only}"  Margin="15,10,0,10" />
                         </StackPanel>
 
 

@@ -147,8 +147,6 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsNightly { get; } = HandBrakeVersionHelper.IsNightly();
 
-        public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();
-
         public bool HasSystemBattery => PowerService.HasBattery();
 
         /* General */
