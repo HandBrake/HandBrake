@@ -1500,6 +1500,33 @@ int hb_video_quality_is_supported(uint32_t codec)
     }
 }
 
+int hb_video_twopass_is_supported(uint32_t codec)
+{
+    switch (codec)
+    {
+#ifdef __APPLE__
+        case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+            return hb_vt_is_two_pass_available(codec);
+#endif
+
+        case HB_VCODEC_FFMPEG_MF_H264:
+        case HB_VCODEC_FFMPEG_MF_H265:
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_QSV_H264:
+        case HB_VCODEC_QSV_H265:
+        case HB_VCODEC_QSV_H265_10BIT:
+            return 0;
+
+        default:
+            return 1;
+    }
+}
+
 int hb_video_encoder_is_supported(int encoder)
 {
     const hb_encoder_t *video_encoder = NULL;
