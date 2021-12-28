@@ -628,7 +628,7 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
         }
         else if (!strcmp(key, "vbv-bufsize"))
         {
-            int bufsize = hb_value_get_bool(value);
+            int bufsize = hb_value_get_int(value);
             if (bufsize > 0)
             {
                 pv->settings.vbv.bufsize = bufsize;
@@ -636,7 +636,7 @@ static int hb_vt_parse_options(hb_work_private_t *pv, hb_job_t *job)
         }
         else if (!strcmp(key, "vbv-maxrate"))
         {
-            int maxrate = hb_value_get_bool(value);
+            int maxrate = hb_value_get_int(value);
             if (maxrate > 0)
             {
                 pv->settings.vbv.maxrate = maxrate;
