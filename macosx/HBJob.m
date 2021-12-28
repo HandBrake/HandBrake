@@ -54,6 +54,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         _title = title;
         _titleIdx = title.index;
+        _stream = title.isStream;
 
         _name = [title.name copy];
         _fileURL = title.url;
@@ -381,6 +382,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_name = [_name copy];
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
+        copy->_stream = _stream;
 
         copy->_fileURLBookmark = [_fileURLBookmark copy];
         copy->_outputURLFolderBookmark = [_outputURLFolderBookmark copy];
@@ -430,6 +432,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     encodeObject(_name);
     encodeObject(_presetName);
     encodeInt(_titleIdx);
+    encodeBool(_stream);
 
 #ifdef __SANDBOX_ENABLED__
     if (!_fileURLBookmark)
@@ -485,6 +488,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);
         decodeInt(_titleIdx); if (_titleIdx < 0) { goto fail; }
+        decodeBool(_stream);
 
 #ifdef __SANDBOX_ENABLED__
         decodeObject(_fileURLBookmark, NSData)

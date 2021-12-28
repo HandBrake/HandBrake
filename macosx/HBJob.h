@@ -34,6 +34,9 @@ extern NSString *HBChaptersChangedNotification;
 @property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
 
+// Whether the source is a single file or a DVD-Video/Blu-ray
+@property (nonatomic, readonly, getter=isStream) BOOL stream;
+
 @property (nonatomic, readwrite, copy) NSString *presetName;
 
 /// The file URL of the source.

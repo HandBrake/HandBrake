@@ -181,12 +181,14 @@ static NSDictionary     *shortHeightAttr;
             uint64_t pauseDuration = (uint64_t)self.pauseDuration;
             [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
 
-            [attrString appendString:@"\n\t" withAttributes:detailAttr];
-            [attrString appendString:NSLocalizedString(@"Average speed:", @"Job statistics") withAttributes:detailBoldAttr];
-            [attrString appendString:@" \t" withAttributes:detailAttr];
-            NSString *formattedAvgFps = [_numberFormatter stringFromNumber:@(self.avgFps)];
-            [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@"%@ fps", @"Job statistics"), formattedAvgFps] withAttributes:detailAttr];
-
+            if (self.avgFps > 0)
+            {
+                [attrString appendString:@"\n\t" withAttributes:detailAttr];
+                [attrString appendString:NSLocalizedString(@"Average speed:", @"Job statistics") withAttributes:detailBoldAttr];
+                [attrString appendString:@" \t" withAttributes:detailAttr];
+                NSString *formattedAvgFps = [_numberFormatter stringFromNumber:@(self.avgFps)];
+                [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@"%@ fps", @"Job statistics"), formattedAvgFps] withAttributes:detailAttr];
+            }
 
             [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
             [attrString appendString:@"\t" withAttributes:detailAttr];
@@ -195,9 +197,12 @@ static NSDictionary     *shortHeightAttr;
             [attrString appendString:@" \t" withAttributes:detailAttr];
             [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
 
-            double difference = 100.f / self.sourceFileSize * self.fileSize;
-            NSString *formattedDifference = [_numberFormatter stringFromNumber:@(difference)];
-            [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@" (%@ %% of the source file)", @"Job statistics"), formattedDifference] withAttributes:detailAttr];
+            if (self.job.isStream)
+            {
+                double difference = 100.f / self.sourceFileSize * self.fileSize;
+                NSString *formattedDifference = [_numberFormatter stringFromNumber:@(difference)];
+                [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@" (%@ %% of the source file)", @"Job statistics"), formattedDifference] withAttributes:detailAttr];
+            }
         }
 
         _attributedStatistics = attrString;
