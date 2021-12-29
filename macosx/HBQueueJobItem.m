@@ -55,6 +55,10 @@ static NSDictionary     *shortHeightAttr;
         {
             indent = 120;
         }
+        else if ([currentLocalization hasPrefix:@"fr"] || [currentLocalization hasPrefix:@"pt"])
+        {
+            indent = 114;
+        }
 
         // Attributes
         NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];

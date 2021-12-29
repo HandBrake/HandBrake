@@ -29,6 +29,9 @@
 /* Format description */
 ", Align A/V Start" = ", Aligner. le début A/V";
 
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", Bordure : %1$d/%2$d/%3$d/%4$d";
+
 /* HBJob -> subtitles short description */
 ", Burned" = ", Incrusté";
 
@@ -55,6 +58,9 @@
 
 /* HBPicture -> short info */
 "%@Output: %dx%d" = "%1$@Sortie : %2$dx%3$d";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Automatique";
 
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Personnalisé";
@@ -122,6 +128,10 @@
 
 /* Filters description
    HBJob -> filters short description */
+"Chroma Smooth" = "Lissage de la saturation";
+
+/* Filters description
+   HBJob -> filters short description */
 "Colorspace" = "Espace colorimétrique";
 
 /* HBJob -> filters short description */
@@ -149,6 +159,9 @@
 
 /* Video description */
 "default settings" = "réglages par défaut";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "Par défaut : ";
 
 /* Filters description */
 "Denoise" = "Réduction du bruit";
@@ -209,6 +222,12 @@
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
 
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "Réglage personnalisé de lissage de la saturation non valide.";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "Réglage personnalisé d'espace de couleur non valide.";
+
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Réglage personnalisé de détection du peigne invalide.";
 
@@ -232,6 +251,9 @@
 
 /* HBJob -> invalid name error description */
 "Invalid name" = "Nom invalide";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "Préréglage non valide";
 
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "Réglage personnalisé du flou invalide.";
@@ -359,6 +381,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "Le préréglage \"%@\" n'a pas pu être importé.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "Le préréglage n'est pas valide, essayez-en un autre.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "Le préréglage sélectionné est invalide.";

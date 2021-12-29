@@ -1,3 +1,6 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% der Quelldatei)";
+
 /* Preview -> size info label */
 " Scaled To Screen" = " An Bildschirm anpassen";
 
@@ -15,6 +18,9 @@
 
 /* Main Window -> preset modified */
 "(Modified)" = "(Modifiziert)";
+
+/* Job statistics */
+"%@ fps" = "%@ BpS";
 
 /* Queue status */
 "%lu encode pending" = "%lu Encodierung anstehend";
@@ -88,6 +94,9 @@
 
 /* Player HUD -> audio menu */
 "Audio" = "Audio";
+
+/* Job statistics */
+"Average speed:" = "Durchschn. Geschw.:";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -229,6 +238,9 @@
 
 /* No comment provided by engineer. */
 "No job selected" = "Keine Aufgabe ausgewählt";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Keine gültige Voreinstellung";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Keine gültige Quelle gefunden";

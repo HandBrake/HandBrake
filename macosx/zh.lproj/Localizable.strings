@@ -1,3 +1,6 @@
+/* Job statistics */
+" (%@ %% of the source file)" = "（源文件的 %@ %%）";
+
 /* Preview -> size info label */
 " Scaled To Screen" = "缩放到屏幕";
 
@@ -15,6 +18,9 @@
 
 /* Main Window -> preset modified */
 "(Modified)" = "(已修改)";
+
+/* Job statistics */
+"%@ fps" = "%@ fps";
 
 /* Queue status */
 "%lu encode pending" = "%lu 个编码待处理";
@@ -88,6 +94,9 @@
 
 /* Player HUD -> audio menu */
 "Audio" = "音频";
+
+/* Job statistics */
+"Average speed:" = "平均速度：";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -229,6 +238,9 @@
 
 /* No comment provided by engineer. */
 "No job selected" = "没有选中的任务";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "没有有效的预设";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "没有找到有效源";

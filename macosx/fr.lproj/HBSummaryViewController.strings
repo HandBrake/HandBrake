@@ -7,8 +7,14 @@
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
 "BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Résumé des filtres";
 
+/* Class = "NSButtonCell"; title = "Passthru Common Metadata"; ObjectID = "CZZ-bW-jZc"; */
+"CZZ-bW-jZc.title" = "Métadonnées communes passthru";
+
 /* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
 "De0-Je-MAm.title" = "Aligner le début Audio/Vidéo";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Copy metadata from source to output"; ObjectID = "eJx-BO-rhL"; */
+"eJx-BO-rhL.ibShadowedToolTip" = "Copier les métadonnées de la source vers la sortie";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
 "fPv-Vw-I89.ibShadowedToolTip" = "Aligne les horodateurs de tous les flux audio et vidéo en insérant des images vides ou en supprimant des images. Peut améliorer la synchronisation audio/vidéo pour les lecteurs cassés qui ne respectent pas les listes de montage MP4.";

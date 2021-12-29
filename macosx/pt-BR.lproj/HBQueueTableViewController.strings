@@ -19,8 +19,14 @@
 /* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
 "gNj-D1-wa7.title" = "Remover trabalhos concluídos";
 
+/* Class = "NSMenuItem"; title = "Move to Bottom"; ObjectID = "HwR-LP-IK8"; */
+"HwR-LP-IK8.title" = "Mover para baixo";
+
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
 "K6c-HW-um8.title" = "Célula de Texto";
+
+/* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
+"NN5-Yq-Cth.title" = "Mover para cima";
 
 /* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
 "Pps-jm-zcd.title" = "Mostrar Fonte no Localizador";
