@@ -15,7 +15,8 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 
 - Fixed an issue on older Intel CPUs causing the CLI to fail to initialize (#3924)
-- Intel Quick Sync now uses the Intel oneAPI Video Processing Library (oneVPL)
+- Updated video engine to preserve chroma sample location information
+- Updated Intel Quick Sync to use the Intel oneAPI Video Processing Library (oneVPL)
 
 #### Audio
 
