@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -141,7 +141,7 @@ HQDN3D est un filtre passe-bas adaptatif, plus rapide que NLMeans mais moins eff
     <value>Détélécinéma supprime les artefacts résultant du télécinéma, un processus de conversion des fréquences d'images du film en fréquences d'images de télévision.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Niveaux de gris supprime la composante couleur de la vidéo. Communément appelé vidéo noir et blanc.</value>
+    <value>La nuances de gris supprime les composantes couleurs de la vidéo. Réfère souvent à une vidéo noir et blanc.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Chemin de destination, comprenant le répertoire et le nom de fichier.  C'est ici que votre nouvelle vidéo sera créée et comment elle sera nommée.</value>
@@ -330,7 +330,9 @@ Remplace tous les paramètres d'encodage. Les paramètres peuvent être ajustés
     <value>Retirer le préréglage sélectionné.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Scanner seulement le titre spécifié au lieu de tous les titres.</value>
+    <value>Certaines sources peuvent contenir plus d'un clip vidéo, ou une collection de titres. Les sources Blu-ray et DVD ont souvent plusieurs titres.
+
+Si vous connaissez le titre spécifique que vous souhaitez encoder, vous pouvez le saisir ici et HandBrake analysera uniquement ce titre plutôt que tous les titres du fichier source. Sinon, laissez le champ vide.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Paramètres de débruitage personnalisés.
@@ -482,5 +484,38 @@ Lorsqu'elle est désactivée, elle utilisera, s'il est renseigné, le chemin de 
 Remarque : cette option sera automatiquement sélectionnée si le format de la piste de sous-titres source n'est pas pris en charge par le type de fichier de sortie.
 
 Par exemple, les sous-titres PGS ne sont pas pris en charge par le format MP4.</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Plat - Les préréglages sont affichés sous forme de liste plate.
+Partiellement Plat - Les 8 derniers préréglages utilisateur sont affichés sous forme de liste plate, puis tous les préréglages sont affichés dans la liste des catégories.
+Catégories - Tous les préréglages sont affichés dans un sous-menu par catégorie.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Configurer les comportements qui dictent la façon dont cet onglet ajoute automatiquement les pistes audio lors de la sélection d'une nouvelle source ou d'un nouveau titre.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Actualiser la liste ci-dessous en fonction des comportements configurés.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Configurer les comportements qui dictent la façon dont cet onglet ajoute automatiquement les pistes de sous-titres lors de la sélection d'une nouvelle source ou d'un nouveau titre.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Les variables d’environnement suivant sont toujours définies :
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Les codes de sortie possible sont les suivants :
+0 : Succès
+2 : Erreur d'argument d'entrée
+3 : Échec de l'initialisation
+4 : Erreur inconnue
+5 : Erreur de la lecture du fichier source
+
+Veuillez noter que les codes d'erreur sont indicatifs et peuvent et non représentatifs.
+Il est recommandé que le fichier de sortie soit validé avant d'effectuer des actions sur celui-ci.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Format du fichier de sortie. En plus de tout caractère de système de fichiers pris en charge, vous pouvez utiliser l'un des caractères de substitution qui seront remplacés lorsque vous changerez de titre ou que vous analyserez une source ou mettrez à jour certains paramètres.</value>
   </data>
 </root>
