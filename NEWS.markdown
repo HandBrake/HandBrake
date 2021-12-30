@@ -1,72 +1,93 @@
 # HandBrake News
 
-## Upgrade Notice
-Before updating, please make sure there are no pending encodes in the Queue.
-Please also make a backup of any custom presets and app preferences you have as they may not be compatible with newer versions.
 
-For Windows users:
-- Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
-- Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
+## Upgrade Notice
+
+Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
+
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
+
 
 ## HandBrake 1.5.0
 
 ### All platforms
 
-#### Hardware Encoding
-- QuickSync has been updated to use the new OneVPL API.
+#### Video
+
+- Fixed an issue on older Intel CPUs causing the CLI to fail to initialize (#3924)
+- Intel Quick Sync now uses the Intel oneAPI Video Processing Library (oneVPL)
+
+#### Audio
+
+- Fixed MP2 audio sources not utilizing the fallback encoder when pass through is disabled (#3863)
+
+#### Subtitles
+
+- Fixed an issue with captions pass through durations (#3764)
+
+#### Build system
+
+- Fixed multiple potential race conditions in Flatpak build process
+- Updated mac-toolchain-build script with newer tool versions
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 4.4.1 (decoding and filters)
+  - FreeType 2.11.1 (subtitles)
+  - Fribidi 1.0.11 (subtitles)
+  - HarfBuzz 3.1.2 (subtitles)
+  - Jansson 2.14 (JSON architecture)
+  - libass 0.15.2 (subtitles)
+  - libdav1d 0.9.2 (AV1 decoding)
+  - libjpeg-turbo 2.1.2 (preview image compression)
+  - libogg 1.3.5 (Xiph codecs support)
+  - libvpx 1.11.0 (VP8/VP9 video encoding)
+  - zimg 3.0.3 (color conversion)
+
+### Linux
+
+- Fixed a filter settings issue that resulted in incorrect filters being added to jobs (#3910)
+- Updated Intel QSV Flatpak plugin to use Intel MediaSDK 21.3.5
+- Updated Flatpak dependencies
+  - Freedesktop Platform 21.08
+  - GNOME 41
+- Added Corsican translation
+- Miscellaneous bug fixes and improvements
 
 ### Mac
-- macOS 10.13 is now the minimum deployment target
-- The VideoToolbox API is now directly used rather than the libavcodec (ffmpeg) wrapper. Added support for frame multi-pass, mastering display metadata, content light metadata and chroma location. 
+
+- Requires macOS 10.13 High Sierra or later
+- Fixed potential issues where encoding process could get stuck on efficiency cores in some cases
+- Fixed an issue with automatic naming not applying correctly
+- Fixed main window not being shown upon editing a job in the queue
+- Updated queue statistics tab to include average encoding speed and percent of original file size
+- Added native support for the VideoToolbox API, enabling advanced features such as frame multi-pass, mastering display and content light metadata, and chroma location; the previous implementation via FFmpeg's libavcodec has been removed
+- Added Corsican translation
+- Updated Italian translation
 - Miscellaneous bug fixes and improvements
-- Added new translations:
-  - Corsican
 
 ### Windows
-- Added support for Windows 10/11 Notifications. This can be enabled in Preferences -> When Done
-- Presets
-  - Changed the toolbar preset dropdown to an overlay panel that utilises a treeview which saves state.
-- Queue
-  - Improvements to the queue statistics tab including new statistics: Average encoding speed and content information. 
-  - Added "Move to top" and "Move to bottom" to the queue context menu.
-- Preferences
-  - Autoname file format placeholders are now all live options.
-  - Send File To: Added a new parameter that can be passed to the process. "{exit_code}"
-  - Send File To: now sets 3 environment variables which can be used instead of arguments. HB_SOURCE, HB_DESTINATION and HB_EXIT_CODE
-- Minor UI / UX layout, typography and cosmetic changes throughout the UI.
-- Updated Translations
+
+- Requires Windows 10 or later and Microsoft .NET Desktop Runtime 6.0.0 or later
+- Fixed a potential crash when encoding using Intel QSV in 2-pass mode (#4026)
+- Fixed potential issues where encoding process could get stuck on efficiency cores in some cases
+- Fixed an issue with static preview not updating when switching between automatic and custom cropping modes (#3911)
+- Updated the toolbar preset dropdown to an overlay panel that utilizes a tree view which saves state
+- Updated UI with various improvements to layout, typography, and cosmetics
+- Updated queue statistics tab to include average encoding speed and content information
+- Updated automatic naming file format placeholders to be live options
+- Updated Send File To preference to set HB_SOURCE, HB_DESTINATION, and HB_EXIT_CODE environment variables, which can be used instead of arguments
+- Added new exit_code parameter to Send File To preference
+- Added "Move to top" and "Move to bottom" to the queue context menu
+- Added support for Windows 10/11 notifications, enable in Preferences > When Done
+- Updated translations
+  - Chinese (includes fix for access keys in menus)
   - Corsican
   - German
   - Italian
   - Japanese
-  - Chinese  (Including a fix for access keys in menu's)
 - Miscellaneous bug fixes and improvements
-
-### Linux
-- Miscellaneous bug fixes and improvements
-- Flatpak
-  - Update plugin: Intel MediaSDK to 21.3.5
-  - Update dependency: Freedesktop Platofrm to 21.08
-  - Update dependency: Gnome to 41
-- Added new translations:
-  - Corsican
-
-
-## HandBrake 1.4.3
-
-### All platforms
-
-#### Hardware Encoding
-- Fixed an issue on older Intel CPU's that would cause the CLI to fail to initialise. (#3924)
-
-### Mac
-- Fixed an issue with auto-naming.
-
-### Windows
-- Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
-
-### Linux
-- Fix an issue with the filter settings that resulted in incorrect filters being added to jobs. (#3910)
 
 
 ## HandBrake 1.4.2
