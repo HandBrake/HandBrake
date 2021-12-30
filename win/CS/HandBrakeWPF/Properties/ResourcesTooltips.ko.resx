@@ -130,7 +130,7 @@ decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이
 인터레이스 되지 않은 프레임은 품질 저하가 일어날 것입니다.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Denoise는 잡음과 잡티가 나타나는 것을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
+    <value>노이즈 제거는 잡음과 잡티가 나타나는 것을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
 지나치게 강한 잡음 제거 설정은 디테일을 제거함으로써 그림 화질을 손상시킬 수 있습니다.
 
 NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니다. 실행 속도보다 품질이 중요한 경우 사용됩니다.
@@ -141,7 +141,7 @@ HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항�
     <value>텔레시네 해제는 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 텔레시네의 결과물인 comb 아티팩트를 제거합니다. </value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>그레이스케일은 비디오의 색상 구성 요소를 제거합니다. 보통 흑백 동영상이라고 불립니다.</value>
+    <value>그레이스케일은 비디오의 색상 구성 요소를 제거합니다. 흔히 흑백 동영상이라고 합니다.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>디렉토리 및 파일 이름을 포함한 대상 경로. 이곳에서 새로운 비디오가 생성되고 이름이 지정됩니다.</value>
@@ -177,23 +177,23 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
     <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_CropBottom" xml:space="preserve">
-    <value>아래에서부터 비디오 자르기</value>
+    <value>아래에서부터 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_CropLeft" xml:space="preserve">
-    <value>왼쪽에서부터 비디오 자르기</value>
+    <value>왼쪽에서부터 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_CropRight" xml:space="preserve">
-    <value>오른쪽에서부터 비디오 자르기</value>
+    <value>오른쪽에서부터 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_CropTop" xml:space="preserve">
-    <value>위에서부터 비디오 자르기</value>
+    <value>위에서부터 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>이 높이가 비디오를 저장할 높이입니다.
 픽셀 종횡비가 1:1이 아닌 경우 실제 화면 치수가 다릅니다.</value>
   </data>
   <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
-    <value>수동으로 비디오 자르기</value>
+    <value>수동으로 비디오를 자릅니다.</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>스토리지 차원을 이 값의 배수로 정렬하십시오. 
@@ -236,7 +236,7 @@ Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그
     <value>일반적인 시나리오에 최적화되도록 설정하십시오.
 
 이는 특정 소스 특성의 효율성을 향상시커거나 출력 파일의 특성을 
-설정할 수 있습니다. 변경 사항은 사전설정 후 다른 모든 파라미터보다 
+설정할 수 있습니다. 변경 사항은 프리셋 후 다른 모든 파라미터보다 
 먼저 적용됩니다.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
@@ -298,7 +298,7 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
 통계가 수집됩니다. 그러면 두 번째 pass 동안, 전송 속도 할당이 결정되는 데 수집한 통계가 사용됩니다.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 플레이어와 호환되지 않습니다.</value>
+    <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 재생기와 호환되지 않습니다.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
     <value>HandBrake가 현재 대기열이나 인코딩을 완료하면 해당 작업을 수행합니다.</value>
@@ -310,24 +310,26 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
     <value>인코딩할 비디오 각도. 다양한 각도의 DVD와 Blu-rau만 적용 가능합니다.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>새로운 사전설정을 추가하십시오.</value>
+    <value>새로운 프리셋을 추가하십시오.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>추가적인 사전설정 옵션.</value>
+    <value>추가적인 프리셋 옵션.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>사전설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 설정을 선택하십시오.
+    <value>프리셋은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 설정을 선택하십시오.
 
-모든 인코딩 설정을 재정의합니다. 사전 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
+모든 인코딩 설정을 재정의합니다. 프리셋을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>선택된 사전설정을 제거하십시오.</value>
+    <value>선택된 프리셋을 제거하십시오.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>모든 제목 대신 특정 제목만 스캔하십시오.</value>
+    <value>일부 소스에는 둘 이상의 비디오 클립 또는 제목 모음이 포함될 수 있습니다. Blu-ray 및 DVD 소스에는 종종 여러 개의 타이틀이 있습니다.
+
+인코딩하려는 특정 제목을 알고 있는 경우 여기에 입력하면 HandBrake가 소스 파일의 모든 제목이 아닌 해당 제목만 스캔합니다. 그렇지 않으면 필드를 비워 둡니다.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
-    <value>사용자 설정 Denoise 파라미터.
+    <value>사용자 설정 노이즈 제거 매개변수.
 
 NLMeans 구문: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
@@ -338,12 +340,12 @@ HQDN3D 구문: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Denoise 필터 사전설정. 필터의 강도를 설정합니다.</value>
+    <value>노이즈 제거 필터 프리셋. 필터의 강도를 설정합니다.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise 설정. Denoise 사전설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>노이즈 제거 조정. 노이즈 제거 프리셋을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-- 없음은 기본 사전설정을 사용합니다.
+- 없음은 기본 프리셋을 사용합니다.
 
 - Film은 대부분 라이브 액션 콘텐츠와 함께 사용하기 위한 설정을 개선합니다.
 
@@ -376,7 +378,7 @@ Decomb 구문: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:di
 Decomb 기본값: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>인터레이스 해제 필터 사전설정.
+    <value>디인터레이스 필터 프리셋.
 
 기본값은 속도와 품질의 균형을 맞춥니다.
 
@@ -387,7 +389,7 @@ EEDI2는 Decomb에 대해 더 느린 고품질 보관법 알고리즘을 사용�
 Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 보존하도록 합니다.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>가로축에서 그림을 뒤집습니다.</value>
+    <value>가로축으로 영상을 뒤집습니다(미러).</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>인터레이스 감지가 활성화된 경우 인터레이스 해제 필터가 인터레이스된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
@@ -427,12 +429,12 @@ Unsharp은 일반적인 용도의 unsharp masking 필터입니다. 화질을 흐
 Lapsharp은 Laplacian edge 필터를 근사하게 하는 콘벌루션 커널을 사용하여 선명하게 하며, 때때로 unsharp masking보다 더욱 높은 품질의 결과물을 생산하기도 합니다.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>선명도 필터 사전설정. 필터의 강도를 설정합니다. </value>
+    <value>선명도 필터 프리셋. 필터의 강도를 설정합니다. </value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>선명도 설정. 선명도 사전설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>선명도 설정. 선명도 프리셋을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-없음은 기본 사전설정을 사용합니다.
+없음은 기본 프리셋을 사용합니다.
 
 Unsharp은 Ultrafine, Fine, Medium, Coarse, Very Coarse 선명화를 설정할 수 있습니다. 출력 화면 해상도 및 세부 정보에 기반해서 하나를 선택하십시오.
 
@@ -445,10 +447,10 @@ Lapsharp's Animation 설정은 애니메이션이나 만화와 같은 셀 애니
 Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 대각선 모서리보다 수평과 수직 모서리를 향상시키는 4개의 주변 Laplacian 커널을 사용합니다. </value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>
+    <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 재생기의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>사전설정을 제어하는 옵션.</value>
+    <value>프리셋을 제어하는 옵션.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
     <value>이 범위의 종점.</value>
@@ -475,5 +477,38 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
 출력 파일 형식에서 원본 자막 트랙 형식이 지원되지 않을 경우, 이 옵션이 자동으로 선택됩니다.
 
 예를 들어, PGS 자막은 MP4에서 지원되지 않습니다.</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>플랫 - 프리셋이 플랫 목록으로 표시됩니다.
+부분적으로 플랫 - 마지막 8개의 사용자 프리셋이 일반 목록으로 표시되고 모든 프리셋이 범주 목록에 표시됩니다.
+범주 - 모든 프리셋은 범주별 하위 메뉴 아래에 표시됩니다.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>새 소스 또는 제목을 선택할 때 이 탭이 자동으로 오디오 트랙을 추가하는 방법을 지시하는 동작을 설정합니다.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>구성된 동작을 기반으로 아래 목록을 새로 고칩니다.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>새 소스 또는 제목을 선택할 때 이 탭에서 자막 트랙을 자동으로 추가하는 방법을 지정하는 동작을 설정합니다.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>다음 환경 변수는 항상 지정됩니다:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+가능한 종료 코드는 다음과 같습니다:
+0 : 성공
+2 : 인수 입력 오류
+3 : 초기화 실패
+4 : 알 수 없는 오류
+5 : 소스 파일을 읽는 중 오류.
+
+오류 코드는 최선의 노력이며 항상 정확하지 않을 수 있습니다.
+작업을 수행하기 전에 출력 파일의 유효성을 검사하는 것이 좋습니다.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>출력 파일의 형식입니다. 지원되는 파일 시스템 문자 외에도 제목을 변경하거나 소스를 스캔하거나 특정 설정을 업데이트할 때 대체될 자리 표시자를 사용할 수 있습니다.</value>
   </data>
 </root>

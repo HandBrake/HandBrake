@@ -138,9 +138,9 @@ x264와 x265의 규모는 대수이며 더 낮은 값은 더 높은 품질에 �
 그래서 작은 값의 증가들은 결과 파일 크기를 점진적으로 더 크게 증가하도록 초래할 것입니다.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>사전설정된 사진 설정 값들로 마음대로 저장할 수 있습니다. 3가지 모드들이 있습니다:
+    <value>프리셋된 사진 설정 값들로 마음대로 저장할 수 있습니다. 3가지 모드들이 있습니다:
 
-없음: 사진 설정 값들이 사전설정에 저장되어 있지 않습니다. 원본을 불러올 때, 사진 설정들은 원본 해상도의 범위 안에 그대로 남아있을 것입니다. 이것은 또한 Anamorphic, 계수, 자르기 등에 영향을 미칩니다.
+없음: 사진 설정 값들이 프리셋에 저장되어 있지 않습니다. 원본을 불러올 때, 사진 설정들은 원본 해상도의 범위 안에 그대로 남아있을 것입니다. 이것은 또한 Anamorphic, 계수, 자르기 등에 영향을 미칩니다.
 
 사용자 설정: 사용자가 마음껏 최대 너비와 높이를 설정할 수 있습니다. 이 작업을 수행할 때 인코딩은 이러한 값들보다 작거나 같을 것입니다. Keep Aspect Ratio가 자동적으로 켜질 것입니다.
 
@@ -167,7 +167,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>경고: 현재 자동 오디오 및 자막 트랙 선택 설정이 없습니다. 옵션에서 기본 트랙 선택 방식을 설정할 수 있습니다.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>내장된 사전설정들이 재설정되었습니다.</value>
+    <value>내장된 프리셋들이 재설정되었습니다.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>재설정 완료</value>
@@ -185,7 +185,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>에러</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하려면 우선적으로 자동 파일 이름 설정을 켜고 기본 경로를 설정해야만 합니다.</value>
+    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본 설정에서 기본 경로를 설정해야 합니다.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>경고</value>
@@ -203,19 +203,19 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>동일한 대상 경로를 가진 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>보류 중인 작업들{0}</value>
+    <value>보류된 작업 {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>새로운 기본 사전설정 세트: {0}</value>
+    <value>새로운 기본 프리셋 세트: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
     <value>새로운 업데이트가 가능합니다. Tools Menu &gt; Options to Install로 이동하십시오</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>사전설정이 설정되지 않았습니다.</value>
+    <value>프리셋이 설정되지 않았습니다.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>내장된 사전설정을 변경할 수 없습니다. 자신만의 사전설정 중 하나를 선택하십시오.</value>
+    <value>내장된 프리셋을 변경할 수 없습니다. 자신만의 프리셋 중 하나를 선택하십시오.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
     <value>폴더를 선택하십시오.</value>
@@ -224,23 +224,23 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>인코딩을 준비 중입니다 ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>내장된 사전설정과 같은 이름을 가진 사전설정을 추가할 수 없습니다.</value>
+    <value>내장된 프리셋과 같은 이름을 가진 프리셋을 추가할 수 없습니다.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>사전설정 "{0}" 이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>프리셋 "{0}" 이 이미 존재합니다. 덮어쓰시겠습니까?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>사전설정</value>
+    <value>프리셋</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>선택한 사전설정을 업데이트하시겠습니까?</value>
+    <value>선택한 프리셋을 업데이트하시겠습니까?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>해당 사전설정이 현재 설정들에 업데이트되었습니다.</value>
+    <value>해당 프리셋이 현재 설정들에 업데이트되었습니다.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>사용자의 내장 사전설정이 오래되었습니다. 이러한 사전설정들은 지금 업데이트되어야 합니다.
-사용자의 내장 사전설정이 오래되었습니다. 이러한 사전설정들은 지금 업데이트되어야 합니다.사용자 지정 사전설정들은 업데이트되지 않았으므로 사용자가 사전설정을 삭제하고 다시 추가하여 사전설정을 다시 만들어야 합니다.
+    <value>사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.
+사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.사용자 지정 프리셋들은 업데이트되지 않았으므로 사용자가 프리셋을 삭제하고 다시 추가하여 프리셋을 다시 만들어야 합니다.
 이전 user_presets.xml 파일은 백업됩니다.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
@@ -268,16 +268,16 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>인코딩을 시작하기 전에, 먼저 파일을 스캔하고 작업을 설정하십시오. 계속하기 위해서 도구모음에 있는 '파일' 버튼을 클릭하십시오.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>자신의 사전설정 중 하나를 선택했는지 확인하십시오. 내장된 사전설정을 내보낼 수 없다는 것에 유의하십시오.</value>
+    <value>자신의 프리셋 중 하나를 선택했는지 확인하십시오. 내장된 프리셋을 내보낼 수 없다는 것에 유의하십시오.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>업데이트를 위해 사전설정을 선택하십시오.</value>
+    <value>업데이트를 위해 프리셋을 선택하십시오.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>계속하기 위해서 '파일'을 선택하십시오.</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} 작업 보류 중</value>
+    <value>{0}보류된 작업</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>알림</value>
@@ -295,19 +295,19 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>업데이트가 완료되었습니다.</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>사전설정 버전</value>
+    <value>프리셋 버전</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>가지고 오려고 하는 사전설정은 현재 HandBrake와는 다른 버전입니다.
-해당 사전설정에서 모든 값들을 가지고 오는 것은 불가능할 것입니다.
+    <value>가지고 오려고 하는 프리셋은 현재 HandBrake와는 다른 버전입니다.
+해당 프리셋에서 모든 값들을 가지고 오는 것은 불가능할 것입니다.
 
 계속 진행하시겠습니까?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>사전설정을 가지고 올 수 없습니다!</value>
+    <value>프리셋을 가지고 올 수 없습니다!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>사전설정에 문제가 있거나 HandBrake와 상이한 버전이기 떄문에 해당 사전설정을 가지고 올 수 없습니다.</value>
+    <value>프리셋에 문제가 있거나 HandBrake와 상이한 버전이기 떄문에 해당 프리셋을 가지고 올 수 없습니다.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>대기열에 추가하기 전에 출력 결과 파일에 대한 저장 경로를 설정하십시오.</value>
@@ -324,12 +324,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>출력 결과: {0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>출력 결과 파일의 형식. 지원되는 파일 시스템 형식 이외에, 제목을 수정하거나 파일을 스캔할 때는 기존의 형식을 대체할 수 있는 아래의 자리 표시자를 사용할 수 있습니다.
-
-Live 업데이트 옵션: {source} {title} {chapters}
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>이용 가능한 추가 옵션: {source_path} 또는 {source_folder_name} 또는 {source}</value>
   </data>
@@ -343,11 +337,11 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>여전히 웹사이트 https://handbrake.fr 에 직접 방문하여 도움말 페이지에 접속할 수 있습니다.</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>선택된 사전설정으로 설정할 수 없습니다.</value>
+    <value>선택된 프리셋으로 설정할 수 없습니다.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>사전설정이 잘못되었거나 HandBrake가 지원하지 않는 오래된 버전입니다.
-오래된 사전설정은 반드시 현재 버전으로 다시 만들어져야 합니다.</value>
+    <value>프리셋이 잘못되었거나 HandBrake가 지원하지 않는 오래된 버전입니다.
+오래된 프리셋은 반드시 현재 버전으로 다시 만들어져야 합니다.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>비디오 인코더에 전달될 수 있는 추가적인 고급 인자.</value>
@@ -369,16 +363,16 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
 변경하지 않을 경우, 굽지 않은 자막들은 없어질 것입니다.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>유효한 파일 또는 타이틀을 찾을 수 없습니다.</value>
+    <value>올바른 원본 또는 제목을 찾을 수 없습니다.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake는 인코딩할 제목의 유효한 파일을 찾지 못하였으므로 선택된 파일을 인코딩할 수 없습니다.
-아래와 같은 이유들 중 하나로 인코딩할 수 없습니다.
-- 각 파일 제목의 지속 시간이 '설정 &gt; 고급'의 "최소 제목 지속 시간" 임계값  조건보다 낮습니다.
-- 원본 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하는 파일 형식이 아닙니다.
-- 원본 파일은 복사 방지가 되거나 DRM을 포함해야 합니다. HandBrake가 복사 방지 제거를 지원하지 않다는 것에 유의하십시오.
+    <value>HandBrake는 인코딩할 제목이 있는 유효한 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나로 인해 발생할 수 있습니다.
 
-Activity log에 추가 정보가 있습니다.</value>
+- 각 소스 제목의 재생 시간은 '기본 설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
+- 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
+- 소스는 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
+
+활동 로그에 추가 정보가 있을 수 있습니다.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>대기열{0}</value>
@@ -390,19 +384,19 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>대기열 시작</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>기본 사전설정을 삭제할 수 없습니다. 먼저 다른 사전설정을 기본 값으로 설정하십시오.</value>
+    <value>기본 프리셋을 삭제할 수 없습니다. 먼저 다른 프리셋을 기본 값으로 설정하십시오.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>사전설정을 삭제하시겠습니까:</value>
+    <value>프리셋을 삭제하시겠습니까:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6}{7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>사전설정은 이름이 필요합니다. 사전설정 이름 칸을 채워주십시오.</value>
+    <value>프리셋은 이름이 필요합니다. 프리셋 이름 칸을 채워주십시오.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>같은 이름의 사전설정이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>같은 이름의 프리셋이 이미 존재합니다. 덮어쓰시겠습니까?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
     <value>'파일 최댓값' 옵션을 이용하려면 먼저 원본 파일을 스캔해야 합니다.</value>
@@ -411,7 +405,7 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>사용자 정의 너비 또는 높이는 '사용자 정의' 옵션에 입력해야 합니다.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>사전설정을 추가할 수 없습니다.</value>
+    <value>프리셋을 추가할 수 없습니다.</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
     <value>알 수 없는 오류</value>
@@ -423,7 +417,7 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>오디오 트랙</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>선택 동작</value>
+    <value>동작 선택 ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>트랙으로 되돌아가기</value>
@@ -481,13 +475,13 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>대기열</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
-    <value>대기열을 비우시겠습니까?</value>
+    <value>대기열을 지우시겠습니까?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>확인</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} 보류중인 작업</value>
+    <value>{0}보류된 작업</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
     <value>대기열 일시중지됨</value>
@@ -499,7 +493,7 @@ Activity log에 추가 정보가 있습니다.</value>
     <value>해당 인코딩은 현재 진행 중입니다. 만약 삭제할 경우, 인코딩은 중단될 것입니다. 계속하시겠습니까?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>보류 중인 작업이 없습니다.</value>
+    <value>보류된 작업이 없습니다.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
     <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
@@ -551,18 +545,18 @@ HandBrake를 종료하시겠습니까?</value>
     <value>트랙으로 되돌아가기</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택</value>
+    <value>동작 선택 ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>보관 파일:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>사전설정을 불러올 수 없습니다.</value>
+    <value>프리셋을 불러올 수 없습니다.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake는 사전설정 파일을 불러올 수 없습니다. 해당 파일이 HandBrake가 지원하지 않는 오래된 버전의 파일이거나 손상되었을 가능성이 높습니다.
+    <value>HandBrake는 프리셋 파일을 불러올 수 없습니다. 해당 파일이 HandBrake가 지원하지 않는 오래된 버전의 파일이거나 손상되었을 가능성이 높습니다.
 
-해당 사전설정 파일은 다음 경로에 보관되어 있습니다:</value>
+해당 프리셋 파일은 다음 경로에 보관되어 있습니다:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value>{0} 오류 또는 취소가 감지된 경우</value>
@@ -574,7 +568,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>경고, 디스크 공간이 부족합니다. 디스크 공간 부족한 경우, HandBrake는 인코딩을 완료할 수 없습니다.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>라인 {0}은 유효하지 않습니다. 아무 것도 불러올 수 없습니다.</value>
+    <value> {0} 라인이 잘못되었습니다. 가져올 항목이 없습니다.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
     <value>챕터 파일을 가지고 올 수 없습니다</value>
@@ -624,8 +618,8 @@ HandBrake를 종료하시겠습니까?</value>
     <value>스캔을 중지하여 오류가 발생하였습니다. HandBrake를 다시 시작하십시오.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake는 새로운 버전 형식으로 사용자 사전설정 파일을 업그레이드 할 수 없습니다.
-사전설정 파일은 보관될 것이며 새 파일이 생성될 것입니다.  사용자만의 사전설정 파일을 다시 생성해야 합니다.</value>
+    <value>HandBrake는 새로운 버전 형식으로 사용자 프리셋 파일을 업그레이드 할 수 없습니다.
+프리셋 파일은 보관될 것이며 새 파일이 생성될 것입니다.  사용자만의 프리셋 파일을 다시 생성해야 합니다.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
     <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
@@ -659,7 +653,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>대상 디렉토리를 시작할 수 없습니다.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>유효한 대상 디렉토리인지 확인하십시오.</value>
+    <value>올바른 대상 디렉토리가 있는지 확인하십시오.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
     <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
@@ -686,7 +680,7 @@ HandBrake를 종료하시겠습니까?</value>
   <data name="Main_LowDiskspace" xml:space="preserve">
     <value>경로 디렉토리의 디스크 공간이 부족합니다.
 
-이 경고가 설정에 표시되는 수준을 설정할 수 있습니다.
+이 경고가 기본설정에 표시되는 수준을 구성할 수 있습니다.
 
 계속하시겠습니까?</value>
   </data>
@@ -709,13 +703,13 @@ HandBrake를 종료하시겠습니까?</value>
     <value>미리보기 (실제 사이즈 {0}%)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake를 실행시키기 위해서는 Windows 7 이상 64 비트 버전이 필요합니다.</value>
+    <value>HandBrake를 실행하려면 64비트 버전의 Windows 10 이상이 필요합니다.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake를 실행시키기 위해서는 Windows 7 이상 버전이 필요합니다. 0.9.9 버전 (XP)와 0.10.5 (Vista) 버전은 이러한 버전을 지원하는 마지막 버전입니다.</value>
+    <value>HandBrake를 실행하려면 Windows 10 이상이 필요합니다. 버전 0.9.9(XP), 0.10.5(Vista), 1.3.3(7 및 8.x)은 이러한 이전 운영 체제를 지원하는 마지막 버전입니다.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>나머지를 추가하시겠습니까?</value>
+    <value>나머지를 추가하려고 계속하시겠습니까?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>'{0}' 파일은 이미 존재합니다!
@@ -734,13 +728,13 @@ HandBrake를 종료하시겠습니까?</value>
     <value>버전:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 새 카테고리 추가 --</value>
+    <value>-- 새 범주 추가 --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>사전설정 추가</value>
+    <value>프리셋 추가</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>카테고리:</value>
+    <value>범주:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
     <value>설명:</value>
@@ -758,7 +752,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>다음 경로 경유 허용:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>새로운 타이틀이나 원본 파일 비디오를 선택할 시에 오디오 트랙을 자동으로 선택하고 설정하는 방법을 설정하십시오.</value>
+    <value>새 제목 또는 원본 비디오를 선택할 때 오디오 트랙을 자동으로 선택하고 구성하는 방법을 설정합니다.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
     <value>'자동 경유' 동작:</value>
@@ -827,10 +821,10 @@ HandBrake를 종료하시겠습니까?</value>
     <value>가져오기</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>내보낼 파일명</value>
+    <value>이름 내보내기</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>가져올 파일명</value>
+    <value>이름 가져오기</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
     <value>챕터 이름 재설정</value>
@@ -860,19 +854,19 @@ HandBrake를 종료하시겠습니까?</value>
     <value>인터레이스 해제</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>사전설정:</value>
+    <value>프리셋:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>인터레이스 해제 사전설정</value>
+    <value>인터레이스 해제 프리셋</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>잡음 제거:</value>
+    <value>노이즈 제거:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>잡음 제거 사전설정</value>
+    <value>노이즈 제거 프리셋</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>잡음 제거</value>
+    <value>노이즈 제거</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
     <value>텔레시네 해제:</value>
@@ -890,7 +884,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>Interlace 감지:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>사전설정:</value>
+    <value>프리셋:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
     <value>회전:</value>
@@ -899,7 +893,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>선명도:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>선명도 사전설정</value>
+    <value>선명도 프리셋</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
     <value>선명도 조정</value>
@@ -1025,16 +1019,16 @@ HandBrake를 종료하시겠습니까?</value>
     <value>면적</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>사전설정 이름 바꾸기</value>
+    <value>사전 설정 편집</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>사전설정 옵션 컨텍스트 메뉴</value>
+    <value>프리셋 옵션 컨텍스트 메뉴</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>사전설정 삭제</value>
+    <value>프리셋 삭제</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>사전설정</value>
+    <value>프리셋</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>미리보기</value>
@@ -1049,13 +1043,13 @@ HandBrake를 종료하시겠습니까?</value>
     <value>다시 불러오기</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>삭제</value>
+    <value>제거</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>내장된 사전설정 재설정</value>
+    <value>내장된 프리셋 재설정</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>새로운 사전설정 저장</value>
+    <value>새로운 프리셋 저장</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>시작 시간 검색</value>
@@ -1109,7 +1103,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>제목:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>선택한 사전설정으로 변경</value>
+    <value>현재 프리셋 업데이트</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
     <value>비디오</value>
@@ -1118,7 +1112,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>웹 최적화</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>사전설정 관리</value>
+    <value>프리셋 관리</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
     <value>메타데이터</value>
@@ -1133,7 +1127,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>AMD VCE 인코더 사용 가능</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>입력된 파일 형식은 유효하지 못한 문자를 포함하고 있습니다. 이를 삭제하십시오.</value>
+    <value>입력한 파일 형식에 잘못된 문자가 포함되어 있습니다. 제거되었습니다.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
     <value>인코딩을 완료할 때마다 소리 내기</value>
@@ -1175,7 +1169,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>인코딩이 완료된 후 완료된 대기열 항목 항상 지우기</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>로그 히스트리 지우기</value>
+    <value>로그 기록 지우기</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
     <value>특정 위치에 각각의 인코딩 로그 복사본 배치:</value>
@@ -1371,7 +1365,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>대기열에 추가</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>"{0}" 사전설정을 이용해서 선택된 제목을 추가합니다.</value>
+    <value>"{0}" 프리셋을 이용해서 선택된 제목을 추가합니다.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
     <value>비디오 옵션:</value>
@@ -1380,16 +1374,16 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>오디오:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>모두 제거</value>
+    <value>모두 지우기</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>제거 완료</value>
+    <value>지우기 완료됨</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
     <value>대기열 지우기</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>선택 항목 제거</value>
+    <value>선택 항목 지우기</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
     <value>삭제</value>
@@ -1401,7 +1395,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>아무것도 안 함</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>인코딩 시간:</value>
+    <value>인코딩 지속시간:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>수정</value>
@@ -1413,7 +1407,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>대기열로 내보내기</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>파일 사이즈:</value>
+    <value>출력 파일크기:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>최대 절전 모드</value>
@@ -1515,7 +1509,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>선택한 언어</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>기본 동작 설정</value>
+    <value>기본 동작 구성하기</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
     <value>다시 불러오기</value>
@@ -1590,7 +1584,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>모든 남아있는 내장 자막 추가</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 시에 자막 트랙이 자동으로 선택되고 구성되는 방법을 설정하십시오.</value>
+    <value>새 제목 또는 원본 비디오를 선택할 때 자막 트랙이 자동으로 선택 및 구성되는 방법을 설정합니다.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
     <value>추가 오디오 트랙</value>
@@ -1662,7 +1656,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>인코더 수준:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>인코더 사전설정:</value>
+    <value>인코더 프리셋:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
     <value>인코더 프로필:</value>
@@ -1713,7 +1707,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>도움말</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>환경 설정</value>
+    <value>기본 설정</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>트랙 추가</value>
@@ -1722,7 +1716,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>선택된 트랙에 대한 오디오 인코더 설정:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>완료</value>
+    <value>지우기</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
     <value>굽기</value>
@@ -1764,19 +1758,19 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>기본 설정(_P)</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>사전설정(_P)</value>
+    <value>프리셋(_P)</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
     <value>대기열(_Q)</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>기본 제공된 사전설정 초기화(_R)</value>
+    <value>기본 제공된 프리셋 초기화(_R)</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
     <value>현재값을 기본값으로 설정(_S)</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>사전설정 패널 표시(_H)</value>
+    <value>프리셋 패널 표시(_H)</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
     <value>대기열 표시(_S)</value>
@@ -1788,16 +1782,16 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>업데이트 확인 ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>로그 파일 디렉터리를 제거하시겠습니까?</value>
+    <value>로그 파일 디렉토리를 지우시겠습니까?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>로그 제거</value>
+    <value>로그 지우기</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
     <value>다운로드 중...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake의 로그 파일 디렉터리가 제거되었습니다!</value>
+    <value>HandBrake의 로그 파일 디렉터리가 지워졌습니다!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
     <value>알림</value>
@@ -1879,11 +1873,10 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>HandBrake 엔진이 초기화하는데 실패하였습니다. GPU 드라이버들이 오래되었을 경우 종종 발생하는 문제입니다.\n 시스템에 탑재된 개별 그래픽에 대한 GPU 드라이버들을 업데이트하십시오.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Live 업데이트 옵션: {source} {title} {chapters} 
-Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+    <value>대체 자리표시자: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>사용 가능한 옵션: {source_path} {source_folder_name} {source}</value>
+    <value>대체 자리표시자: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>파일 덮어쓰기 요청</value>
@@ -1904,7 +1897,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>인코딩 완료</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>공지</value>
+    <value>소리 알림</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>대기열 완료됨</value>
@@ -1943,9 +1936,9 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>대기열 복구 가능</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>사용자 사전설정 파일은 내장된 사전설정을 포함합니다. 가져오기 기능은 사전설정 가져오기를 지원하고 있지 않습니다. '사전설정 메뉴 -&gt; 내장된 사전설정 재설정' 을 이용해서 기본 사전설정을 복원하십시오.
+    <value>사용자 프리셋 파일은 내장된 프리셋을 포함합니다. 가져오기 기능은 프리셋 가져오기를 지원하고 있지 않습니다. '프리셋 메뉴 -&gt; 내장된 프리셋 재설정' 을 이용해서 기본 프리셋을 복원하십시오.
 
-지원되는 경우, 모든 사용자 환경 사전 설정을 가져옵니다.</value>
+지원되는 경우, 모든 사용자 환경 프리셋을 가져옵니다.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
     <value>작업을 즉시 수행합니다. (이 경우 60초 확인 다이얼로그가 비활성화됩니다.)</value>
@@ -1984,10 +1977,10 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>대상 드라이브의 남은 디스크 크기가 {0} GB로 떨어졌습니다. 인코딩 중단 중...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 오디오 선택 설정</value>
+    <value>자동 오디오 선택</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 자막 선택 설정</value>
+    <value>자동 자막 선택</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>시스템</value>
@@ -2149,8 +2142,8 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>대체 표시자: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>대체 자리표시자: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
@@ -2187,11 +2180,11 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>작업자를 위한 기본 네트워크 포트:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>선택한 사전설정은 이 시스템에서 사용할 수 없습니다.
+    <value>선택한 프리셋은 이 시스템에서 사용할 수 없습니다.
 
 이것은 일반적으로 시스템이 이 하드웨어를 사용하는 데 필요한 하드웨어를 지원하지 않음을 나타냅니다.
 
-다른 사전설정을 선택하십시오.</value>
+다른 프리셋을 선택하십시오.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
     <value>프로세스 격리</value>
@@ -2209,7 +2202,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>취소</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>사전설정:</value>
+    <value>프리셋:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
     <value>원본과 동일</value>
@@ -2293,28 +2286,28 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>없음</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>사전설정 관리</value>
+    <value>프리셋 관리</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>기본 제공된 사전설정 삭제</value>
+    <value>기본 제공된 프리셋 삭제</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>선택한 사전설정 내보내기</value>
+    <value>선택한 프리셋 내보내기</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>파일에서 사전설정 가져오기</value>
+    <value>파일에서 프리셋 가져오기</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>사전설정 정보:</value>
+    <value>프리셋 정보:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>기본 제공된 사전설정은 수정할 수 없습니다.</value>
+    <value>기본 제공된 프리셋은 수정할 수 없습니다.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>선택한 사전설정을 기본값으로 지정</value>
+    <value>선택한 프리셋을 기본값으로 지정</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>사전설정 삭제</value>
+    <value>프리셋 삭제</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
     <value>(이 시스템에서는 지원되지 않음)</value>
@@ -2323,22 +2316,22 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>멈춤</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>입력한 카테고리 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
+    <value>입력한 범주 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>카테고리 이름이 비어 있습니다. 이름을 입력하십시오.</value>
+    <value>범주 이름이 비어 있습니다. 이름을 입력하십시오.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
     <value>이름 입력:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>사전설정이 선택되지 않았습니다.</value>
+    <value>프리셋이 선택되지 않았습니다.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>모든 사용자 사전설정 내보내기</value>
+    <value>모든 사용자 프리셋 내보내기</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
     <value>디스크 공간 부족 경고가 표시하는 수준:</value>
@@ -2371,7 +2364,7 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
     <value>밝게 사용</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>Match System</value>
+    <value>시스템 일치</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
     <value>테마:</value>
@@ -2427,15 +2420,6 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>경고: 이 모드는 하드웨어 인코더에 대한 지원이 포함되지 않은 HandBrake의 "안전 모드" 빌드입니다. 하드웨어 인코더 지원을 사용하려면 웹 사이트에서 "안전 모드"가 아닌 빌드를 다운로드하십시오.</value>
   </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>HandBrake는 Windows 7 또는 Windows 8 버전에서는 더 이상 지원되지 않습니다.
-
-위험을 감수하고 응용 프로그램을 계속 사용할 수 있지만 특정 기능이 작동하지 않으며 다른 알 수 없는 문제가 있을 수 있다는 점에 유의하십시오. 이러한 문제가 발생할 경우 사용할 수 있는 지원이 없습니다.
-
-Windows 7 및 8에 대한 지원은 1.3 시리즈에서 더 이상 사용되지 않습니다. 따라서 이러한 플랫폼의 문제를 해결하기 위한 추가 업데이트는 없습니다.
-
-이 경고는 두 번만 표시됩니다.</value>
-  </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>검은색</value>
   </data>
@@ -2481,7 +2465,141 @@ Windows 7 및 8에 대한 지원은 1.3 시리즈에서 더 이상 사용되지 
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
     <value>기본 자동 이름 경로가 잘못되었습니다. {0}은(는) {1} 앞에 있으면 안됩니다</value>
   </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>HandBrake가 업데이트를 자동으로 확인하도록 하시겠습니까?
+
+기본 설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>업데이트를 확인하시겠습니까?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>업데이트 전:
+- 대기열에 보류 중인 인코딩이 없는지 확인하십시오.
+- 최신 버전과 완전히 호환되지 않을 수 있으므로 생성한 사용자 지정 프리셋을 백업하거나 기록해 두십시오.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(기본값)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>범주</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>플랫</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>부분적으로 플랫</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>메뉴에 프리셋이 표시되는 방식을 선택합니다:</value>
+  </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
-    <value>사전설정:</value>
+    <value>프리셋:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[완료됨]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>작업을 편집하시겠습니까?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>출력 길이:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>맨 아래로 이동</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>맨 위로 이동</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>출력 비트레이트:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>평균 인코딩 속도:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value>(소스 파일)</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>이용 불가</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>원본 길이:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>재설정</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>모든 기본 제공 프리셋을 재설정하시겠습니까?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>모든 기본 제공 프리셋을 HandBrake 기본값으로 재설정:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(사용자 프리셋은 재설정되지 않습니다)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>모든 HandBrake 설정을 기본값으로 재설정:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>기본 제공 프리셋</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>사용자 설정</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>플로팅 트리보기</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>지원되는 비디오 재생기로 이 파일을 열 수 있도록 Windows에 적절한 파일 연결 설정이 있는지 확인하십시오.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>대기열 파일을 읽을 수 없습니다.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>파일이 손상되었거나 이전 버전의 HandBrake에서 가져온 것일 수 있습니다.
+현재 버전의 대기열 파일만 지원됩니다.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>HandBrake 인코딩이 완료되었습니다!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>HandBrake 작업 대기열이 완료되었습니다! </value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>이렇게 하면 '완료 시' 탭에서 창 표시 작업 표시줄 알림 옵션도 비활성화됩니다. 이 기능을 다시 활성화하려면 다시 활성화하십시오.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Windows 알림 제어 창에서 HandBrake 제거하기</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>미설치</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>알림 설정이 제거되었습니다.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>삭제 &amp; 제거</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Windows 작업 표시줄에 알림을 보냅니다.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>윈도우 알림</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} 작업이 완료되었습니다. {1}처리 대기 중인 {3}로 {2} 작업에 대해 작업 중입니다.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>다시 만들기 (자동 이름 생성)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>해당 디렉토리 열기</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>모두 닫기</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>모두 펼치기</value>
   </data>
 </root>
