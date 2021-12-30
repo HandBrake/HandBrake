@@ -8,22 +8,6 @@ For Windows users:
 - Please make sure you have Microsoft **DESKTOP** runtime 5.x installed.
 - Users of 1.4.0 may have to run HandBrake as admin for the built-in update check to work correctly. This should not impact users of 1.4.1 or 1.3.x releases
 
-## HandBrake 1.4.3
-
-### All platforms
-
-#### Hardware Encoding
-- Fixed an issue on older Intel CPU's that would cause the CLI to fail to initialise. (#3924)
-
-### Mac
-- Fixed an issue with auto-naming.
-
-### Windows
-- Fixed an issue where the static preview would not update when switching from automatic <-> custom cropping. (#3911)
-
-### Linux
-- Fix an issue with the filter settings that resulted in incorrect filters being added to jobs. (#3910)
-
 
 ## HandBrake 1.4.2
 
