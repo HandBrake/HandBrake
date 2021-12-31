@@ -3934,6 +3934,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Right to Left display mode:.
+        /// </summary>
+        public static string OptionsView_RightToleftMode {
+            get {
+                return ResourceManager.GetString("OptionsView_RightToleftMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning: Please note that this is a &quot;Safe Mode&quot; build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-&quot;Safe Mode&quot; build from the website..
         /// </summary>
         public static string OptionsView_SafeMode {
@@ -5950,6 +5959,33 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_QueueStatusDisplay {
             get {
                 return ResourceManager.GetString("QueueViewModel_QueueStatusDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string RightToLeft_Off {
+            get {
+                return ResourceManager.GetString("RightToLeft_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Only.
+        /// </summary>
+        public static string RightToLeft_TextOnly {
+            get {
+                return ResourceManager.GetString("RightToLeft_TextOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entire User Interface.
+        /// </summary>
+        public static string RightToLeft_WholeInterface {
+            get {
+                return ResourceManager.GetString("RightToLeft_WholeInterface", resourceCulture);
             }
         }
         

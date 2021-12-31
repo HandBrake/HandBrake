@@ -530,6 +530,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For languages that are right to left, you can enable one of two modes.   &quot;Text Only&quot; will only render the text in right to left style.  &quot;Entire User Interface&quot; will render all controls in right to left.
+        ///
+        ///Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit..
+        /// </summary>
+        public static string OptionsView_RightToleftMode {
+            get {
+                return ResourceManager.GetString("OptionsView_RightToleftMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The following environment variables are always set:
         ///HB_SOURCE
         ///HB_DESTINATION

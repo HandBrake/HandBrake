@@ -164,6 +164,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<RightToLeftMode> RightToLeftModes { get; } = new BindingList<RightToLeftMode>(EnumHelper<RightToLeftMode>.GetEnumList().ToList());
+
+        public RightToLeftMode SelectedRightToLeftMode { get;set; }
+
         public bool CheckForUpdates
         {
             get => this.checkForUpdates;
@@ -1152,6 +1156,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             string culture = this.userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
             this.SelectedLanguage = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
+            this.SelectedRightToLeftMode = (RightToLeftMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.RightToLeftUi);
 
             this.CheckForUpdatesAllowed = true;
             this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
@@ -1399,6 +1404,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
             this.userSettingService.SetUserSetting(UserSettingConstants.DarkThemeMode, this.DarkThemeMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
+            this.userSettingService.SetUserSetting(UserSettingConstants.RightToLeftUi, this.SelectedRightToLeftMode);
+
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.PresetMenuDisplayMode, this.SelectedPresetDisplayMode);
