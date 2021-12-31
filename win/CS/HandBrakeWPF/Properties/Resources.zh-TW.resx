@@ -118,2142 +118,2133 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>인코더 파라미터의 전체 목록: 
+    <value>編碼器參數的完整清單：
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>디코더  CPU 사용량을 줄이십시오.
+    <value>減少解碼器的 CPU 使用率。
 
-만약 사용자의 device가 결과를 출력하는데 문제가 있다면 이와 같이 설정하십시오. (예를 들어, 손실된 프레임들)</value>
+若您的裝置在播放輸出檔時遇到困難（如：丟失影格）請選此選項。</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>경고: RF 0은 무손실입니다!</value>
+    <value>警告：RF 0 值是非破壞性壓縮！</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>원본 파일이 또한 손실되지 않는 한, 0의 값은 무손실을 의미하고 
-이 값은 원본보다 큰 파일 사이즈가 될 수 있습니다.
+    <value>數值 0 表示非破壞性壓縮，且可能導致最終檔案大小大於原始檔，
+除非來源檔亦為非破壞性壓縮品質。
 
-x264와 x265의 규모는 대수이며 더 낮은 값은 더 높은 품질에 해당합니다.
+x264 及 x265 的尺度是對數級的，且數值越低表示更佳品質。
 
-그래서 작은 값의 증가들은 결과 파일 크기를 점진적으로 더 크게 증가하도록 초래할 것입니다.</value>
+因此，即使數值微幅增加，檔案大小也會逐步增大。</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>프리셋된 사진 설정 값들로 마음대로 저장할 수 있습니다. 3가지 모드들이 있습니다:
+    <value>可儲存影像設定於設定檔，有三種模式：
 
-없음: 사진 설정 값들이 프리셋에 저장되어 있지 않습니다. 원본을 불러올 때, 사진 설정들은 원본 해상도의 범위 안에 그대로 남아있을 것입니다. 이것은 또한 Anamorphic, 계수, 자르기 등에 영향을 미칩니다.
+無：不儲存影像設定至預設檔。當載入來源檔時，遵照其解析度。此模式亦影響鏡頭形變（anamorphic）、modulus、裁切……等設定。
 
-사용자 설정: 사용자가 마음껏 최대 너비와 높이를 설정할 수 있습니다. 이 작업을 수행할 때 인코딩은 이러한 값들보다 작거나 같을 것입니다. Keep Aspect Ratio가 자동적으로 켜질 것입니다.
+自訂：您可以選填最大寬度及高度。該編碼作業將不大於這些數值，自動保持原始長寬比。
 
-Source Maximum: 가능한 경우 항상 원본 해상도로 인코딩하십시오.</value>
+來源最大值：總是盡可能按原始解析度處理。</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>이 프로그램은 자유 소프트웨어입니다; FSF에 의해 출시된
-GNU GPL, GPLv2, 그 이후의 버전(사용자 옵션에 따라)에
-따라서 재배포와 변경이 가능합니다.
-
-이 프로그램은 사용자의 유용성을 위해 배포되었지만,
-어떠한 보증 또는 묵시적인 보증 없이 특정한 목적에 대한
-프로그램 사용 적합성에 대해서 재배포할 수 없습니다.
-GNU GPL을 자세히 살펴보십시오.
-
-이 프로그램과 함께 GNU GPL의 복사본을 받게 될 것입니다;
-그러지 않았다면, Free Software Foundation,
-Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으십시오.</value>
+    <value>本程式是自由軟體，您可以遵照自由軟體基金會 (Free Software Foundation) 出版的 GNU 通用公共許可證條款 (GNU General Public License) 第二版來修改和重新發佈這一程式，或者自由選擇使用任何更新的版本。
+發佈這一程式的目的是希望它有用，但沒有任何擔保。甚至沒有適合特定目的而隱含的擔保。更詳細的情況請參閱 GNU 通用公共許可證。
+您應該已經和程式一起收到一份 GNU 通用公共許可證的副本。如果還沒有，寫信給：
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>경고: 자동 파일 이름 설정이 켜져있지 않습니다. 옵션에서 해당 설정을 가능하게 해주십시오.</value>
+    <value>警告：您未開啟檔案自動命名功能。請在選項中打開它。</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>경고: 현재 자동 오디오 및 자막 트랙 선택 설정이 없습니다. 옵션에서 기본 트랙 선택 방식을 설정할 수 있습니다.</value>
+    <value>警告：尚未配置自動選擇音軌、字幕軌設定。您可在選項中設定選擇行為。</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>내장된 프리셋들이 재설정되었습니다.</value>
+    <value>已重設內建的設定檔。</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>재설정 완료</value>
+    <value>重設完畢</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>더 높은 화질 |</value>
+    <value>較高品質 |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| 더 낮은 화질</value>
+    <value>| 較低品質</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>플라시보 화질 |</value>
+    <value>破壞較少 |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>에러</value>
+    <value>錯誤</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본 설정에서 기본 경로를 설정해야 합니다.</value>
+    <value>您必須開啟檔案自動命名功能，且在偏好設定中指定預設路徑，才能加入佇列。</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>경고</value>
+    <value>警告</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>확실합니까?</value>
+    <value>您確定嗎？</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 인코딩 중 입니다.</value>
+    <value>HandBrake 已經在編碼。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>동일한 대상 경로를 가진 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.</value>
+    <value>佇列中已有相同目的地路徑的工作，請為該工作選擇不同的路徑。</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>보류된 작업 {0}</value>
+    <value>待處理工作 {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>새로운 기본 프리셋 세트: {0}</value>
+    <value>HandBrake 設定檔已改為：{0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>새로운 업데이트가 가능합니다. Tools Menu &gt; Options to Install로 이동하십시오</value>
+    <value>已有可用更新。 前往 工具 &gt; 選項 來安裝</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>프리셋이 설정되지 않았습니다.</value>
+    <value>未選擇設定檔。</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>내장된 프리셋을 변경할 수 없습니다. 자신만의 프리셋 중 하나를 선택하십시오.</value>
+    <value>不可修改內建設定檔。請選擇自訂的設定檔。</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>폴더를 선택하십시오.</value>
+    <value>請選擇一個資料夾。</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>인코딩을 준비 중입니다 ...</value>
+    <value>準備編碼...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>내장된 프리셋과 같은 이름을 가진 프리셋을 추가할 수 없습니다.</value>
+    <value>不可匯入與內建同名的設定檔。</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>프리셋 "{0}" 이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>已存在設定檔「{0} 」。要覆寫它嗎？</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>프리셋</value>
+    <value>設定檔</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>선택한 프리셋을 업데이트하시겠습니까?</value>
+    <value>確定要更新選取的設定檔嗎？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>해당 프리셋이 현재 설정들에 업데이트되었습니다.</value>
+    <value>此設定檔已更新為您目前的設定。</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.
-사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.사용자 지정 프리셋들은 업데이트되지 않았으므로 사용자가 프리셋을 삭제하고 다시 추가하여 프리셋을 다시 만들어야 합니다.
-이전 user_presets.xml 파일은 백업됩니다.</value>
+    <value>HandBrake 認為您的內建設定檔已經過時... 將更新這些設定檔。
+您的自訂設定檔不會被更新，因此您需要刪除並再次新增的以重新建立它們。
+已備份先前的 user_presets.xml 檔案。</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>대기열 종료됨</value>
+    <value>已完成佇列</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>스캔이 취소되었습니다.</value>
+    <value>已取消掃描。</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>스캔 완료</value>
+    <value>已完成掃描</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>스캔 실패:</value>
+    <value>掃描失敗：</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>스캔에 실패하였습니다... 자세한 내용은 Activity Log를 참고하십시오.</value>
+    <value>掃描失敗... 請查閱紀錄檔以了解詳情。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>파일을 스캔하고 있습니다. 잠시만 기다리십시오...</value>
+    <value>掃描來源中，請稍候...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>{1}개 중 {0}개 스캔 중 ({2}%)</value>
+    <value>正在掃描標題 {0}，共 {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>인코딩을 시작하기 전에, 먼저 파일을 스캔하고 작업을 설정하십시오. 계속하기 위해서 도구모음에 있는 '파일' 버튼을 클릭하십시오.</value>
+    <value>在開始編碼前，必須先掃描來源並設定編碼方式。按一下工具列上的 [開啟來源檔] 按鈕以繼續。</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>자신의 프리셋 중 하나를 선택했는지 확인하십시오. 내장된 프리셋을 내보낼 수 없다는 것에 유의하십시오.</value>
+    <value>請選擇自訂的設定檔。內建的設定檔不可匯出。</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>업데이트를 위해 프리셋을 선택하십시오.</value>
+    <value>請選擇要更新的設定檔</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>계속하기 위해서 '파일'을 선택하십시오.</value>
+    <value>選擇「來源」以繼續</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0}보류된 작업</value>
+    <value>{0}個等待中的工作</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>通知</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>덮어쓰기?</value>
+    <value>覆寫？</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>질문</value>
+    <value>問題</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>준비</value>
+    <value>準備</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>업데이트가 완료되었습니다.</value>
+    <value>更新</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>프리셋 버전</value>
+    <value>設定檔版本</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>가지고 오려고 하는 프리셋은 현재 HandBrake와는 다른 버전입니다.
-해당 프리셋에서 모든 값들을 가지고 오는 것은 불가능할 것입니다.
+    <value>您正試著要匯入的設定檔是來自其他版本的 HandBrake。
+因此可能不會匯入該設定檔中的所有設定值。
 
-계속 진행하시겠습니까?</value>
+確定要繼續嗎？</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>프리셋을 가지고 올 수 없습니다!</value>
+    <value>無法匯入設定檔！</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>프리셋에 문제가 있거나 HandBrake와 상이한 버전이기 떄문에 해당 프리셋을 가지고 올 수 없습니다.</value>
+    <value>因為您的設定檔似乎已毀損或來自較舊的 HandBrake，所以無法匯入。</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>대기열에 추가하기 전에 출력 결과 파일에 대한 저장 경로를 설정하십시오.</value>
+    <value>在加入佇列前，您必須先指定輸出檔案的目的地路徑。</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>입력된 저장 경로가 적합하지 않은 문자를 포함하고 있고 저장 경로가 변경될 수 없습니다.</value>
+    <value>您輸入的目的地路徑含有非法字元，因此不會被採用。</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>미리보기 {0}</value>
+    <value>預覽 {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>미리보기(화면에 맞춰서)</value>
+    <value>預覽（縮放）</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>출력 결과: {0}</value>
+    <value>輸出：{0}</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>이용 가능한 추가 옵션: {source_path} 또는 {source_folder_name} 또는 {source}</value>
+    <value>可用的額外選項：{來源路徑}、 {來源資料夾名稱} 或 {來源檔}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>원본 파일과 경로 및 파일 이름이 같은 파일에는 인코딩할 수 없습니다. 원본 파일과 일치하지 않도록 대상 파일 이름을 업데이트하십시오.</value>
+    <value>您不可編碼一個與來源檔案相同路徑及名稱的檔案。請調整目的地及檔名以免覆寫來源檔案。</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>시스템이 HandBrake의 웹 브라우저 실행을 막고 있습니다.</value>
+    <value>您的系統阻止 HandBrake 打開網頁瀏覽器。</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>여전히 웹사이트 https://handbrake.fr 에 직접 방문하여 도움말 페이지에 접속할 수 있습니다.</value>
+    <value>您仍然可以直接到 https://handbrake.fr 檢視協助頁面</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>선택된 프리셋으로 설정할 수 없습니다.</value>
+    <value>無法匯入選取的設定檔。</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>프리셋이 잘못되었거나 HandBrake가 지원하지 않는 오래된 버전입니다.
-오래된 프리셋은 반드시 현재 버전으로 다시 만들어져야 합니다.</value>
+    <value>該設定檔可能已毀損或來自較舊、停止支援的 HandBrake。
+
+您必須在目前的版本中重建原本的設定檔。</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>비디오 인코더에 전달될 수 있는 추가적인 고급 인자.</value>
+    <value>可對影片編碼器輸入額外的進階參數。</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>없음 - 컨테이너가 해당 형식을 지원하지 않는 트랙만 굽습니다.
-외부 오디오 트랙 - 사용할 수 있다면 외부 오디오 트랙을 굽습니다.
-첫 번째 트랙 - 첫 번째 트랙을 굽습니다.
-외부 오디오 우선, 외부 오디오가 없을 경우 첫 번째 트랙 - 외부 오디오 트랙이 존재할 경우, 외부 오디오 트랙이 구워질 것이고, 그렇지 않은 경우 첫 번째 트랙이 선택될 것입니다.</value>
+    <value>無——僅壓印其容器不支援的軌道。
+外語音軌——當可用時，壓印外語音軌。
+首軌——壓印第一軌。
+首選外語音軌，首軌其次——當存在外語音軌時將其壓印，否則選用第一軌。</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM 자막 호환성</value>
+    <value>WebM 字幕相容性</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake의 WebM은 구워진 자막만을 지원합니다.
+    <value>HandBrake 中的 WebM 格式僅支援壓印字幕。
 
-자막 선택을 변경해야 합니다.
+您需要更改字幕選擇。
 
-변경하지 않을 경우, 굽지 않은 자막들은 없어질 것입니다.</value>
+若繼續，未壓印的字幕將會遺失。</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>올바른 원본 또는 제목을 찾을 수 없습니다.</value>
+    <value>未發現有效的來源或標題。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake는 인코딩할 제목이 있는 유효한 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나로 인해 발생할 수 있습니다.
+    <value>HandBrake 無法對選取的來源檔進行編碼，因為無法找到可編碼的有效來源。這可能歸因於：
+- 來源檔的長度低於「最低標題長度」，此設定位於「偏好設定 -&gt; 進階」。
+- 來源檔不是有效的視訊檔案，或是 HandBrake 不支援的格式。
+- 來源檔可能包含 DRM 或具有防拷機制。HandBrake 不支援移除此類機制。
 
-- 각 소스 제목의 재생 시간은 '기본 설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
-- 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
-- 소스는 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
-
-활동 로그에 추가 정보가 있을 수 있습니다.</value>
+檢閱活動紀錄以了解詳情。</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>대기열{0}</value>
+    <value>佇列{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>인코딩 시작</value>
+    <value>開始編碼</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>開始佇列</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>기본 프리셋을 삭제할 수 없습니다. 먼저 다른 프리셋을 기본 값으로 설정하십시오.</value>
+    <value>您無法刪除預設的設定檔。請先將其他設定檔指定為預設值。</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>프리셋을 삭제하시겠습니까:</value>
+    <value>確定刪除設定檔：</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>正在編碼: Pass {0}/{1}, {2:00.00}%, FPS: {3:000.0}, 平均 FPS: {4:000.0}, 剩餘時間: {5}, 已經過: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>프리셋은 이름이 필요합니다. 프리셋 이름 칸을 채워주십시오.</value>
+    <value>必須為設定檔取名。請填寫其名稱欄位。</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>같은 이름의 프리셋이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>已存在同名的設定檔，確定要覆寫它嗎？</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>'파일 최댓값' 옵션을 이용하려면 먼저 원본 파일을 스캔해야 합니다.</value>
+    <value>必須先掃描來源，才能使用「來源最大值」選項。</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>사용자 정의 너비 또는 높이는 '사용자 정의' 옵션에 입력해야 합니다.</value>
+    <value>使用「自訂」選項時，須填寫自訂寬度或高度欄位。</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>프리셋을 추가할 수 없습니다.</value>
+    <value>無法新增設定檔</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류</value>
+    <value>未知的錯誤</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>기본 오디오</value>
+    <value>音訊預設值</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>오디오 트랙</value>
+    <value>音軌</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택 ...</value>
+    <value>選擇行為…</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>切換回軌道</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>챕터 표시 파일을 저장할 수 없습니다!</value>
+    <value>無法儲存章節紀錄點檔案！</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>챕터 표시 이름이 인코드에 저장되지 않을 것입니다.</value>
+    <value>無法將章節標記名稱儲存於本次編碼。</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>{0}을 수행할 시에, {1}가 실행됩니다.</value>
+    <value> {1} 秒後將執行「{0}」。</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>문제가 지속되면 HandBrake를 다시 시작해 보십시오.</value>
+    <value>若此問題持續發生，請嘗試重開 HandBrake。</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>해당 오류에 대한 추가 정보가 없습니다.</value>
+    <value>目前未有更多關於此錯誤的資訊。</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류가 발생했습니다.</value>
+    <value>發生了未知的錯誤。</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>새 업데이트가 가능합니다! 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>已有可用更新！欲查閱發行公告，請至網站。</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>사용자의 시스템이 HandBrake 64비트 버전을 지원합니다! 이것은 32비트 버전을 넘어서는 성능과 안정성을 제공합니다.
- 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>您的系統支援 64 位元版本的 HandBrake！相比目前的 32 位元版本，64 位元版的性能及穩定性更好。
+請到網站查詢發行公告。</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>현재 새로운 업데이트가 없습니다.</value>
+    <value>目前尚無更新。</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>업데이트 다운로드 완료</value>
+    <value>已下載更新</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>업데이트 서비스가 이용 불가합니다. https://handbrake.fr 에서 업데이트를 다운로드 받을 수 있습니다.</value>
+    <value>無法使用更新服務。您可試著至 https://handbrake.fr 下載更新。</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>업데이트에 실패하였습니다. https://handbrake.fr 에서 업데이트를 다운로드 할 수 있습니다.</value>
+    <value>更新失敗。您可試著至 https://handbrake.fr 下載更新。</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>저장 크기: {0}x{1}</value>
+    <value>儲存尺寸：{0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>新增至佇列</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>보류된 인코드 없음</value>
+    <value>無等待中的編碼</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>현재 인코딩 작업이 없습니다.</value>
+    <value>無編碼中的工作</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>대기열</value>
+    <value>佇列</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
-    <value>대기열을 지우시겠습니까?</value>
+    <value>您確定要清除佇列嗎？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>확인</value>
+    <value>確認</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0}보류된 작업</value>
+    <value>{0}個等待中的工作</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>已暫停佇列</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>선택된 작업을 삭제하시겠습니까?</value>
+    <value>您確定要刪除已選的工作嗎？</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>해당 인코딩은 현재 진행 중입니다. 만약 삭제할 경우, 인코딩은 중단될 것입니다. 계속하시겠습니까?</value>
+    <value>此編碼工作正在進行中。若您刪除它，編碼也將停止。您確定要進行嗎？</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>보류된 작업이 없습니다.</value>
+    <value>尚無等待中的工作。</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
+    <value>您確定要編輯此工作嗎？這將會從佇列中移除並傳送至主視窗。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>대기열 준비됨</value>
+    <value>佇列已待命</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>대기열 실행 안 함</value>
+    <value>佇列未在執行中</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료</value>
+    <value>已完成佇列</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>마지막으로 대기 중인 작업 완료</value>
+    <value>已完成佇列的最後工作</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>已開始佇列</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%. FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6:d\:hh\:mm\:ss} </value>
+    <value>正在編碼: Pass{0}/{1},  {2:00.00}%, FPS: {3:000.0},  平均 FPS: {4:000.0},  剩餘時間:{5},  已經過: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>인코딩이 현재 진행 중입니다. HandBrake를 종료할 경우 인코딩이 중단됩니다.
-HandBrake를 종료하시겠습니까?</value>
+    <value>有執行中的編碼工作。退出 HandBrake 亦將停止此編碼工作。
+您確定要離開 HandBrake 嗎？</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>사진 미리보기</value>
+    <value>圖像預覽</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>이전 미리보기 파일을 삭제할 수 없습니다. 미디어 플레이어에서 여전히 미리보기가 열려 있을 수 있습니다. 닫아주세요.</value>
+    <value>無法刪除先前的預覽檔案。影片播放器可能正在使用它，請將其關閉。</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>미리보기를 만들기 전에 먼저 파일을 스캔하고 인코딩을 설정하십시오.</value>
+    <value>建立預覽之前，須先掃描來源並設定編碼方式。</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>미리보기 파일을 찾을 수 없습니다. 파일이 삭제되었거나 인코딩에 실패하였습니다. 자세한 내용은 액티비티 로그를 확인하십시오.</value>
+    <value>無法找到預覽檔案。該檔案可能已被刪除，或編碼失敗。檢閱活動紀錄以了解詳情。</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 비디오를 인코딩하고 있습니다! 한 번에 하나의 파일만 인코딩할 수 있습니다.</value>
+    <value>HandBrake 正在進行編碼作業！同時僅能編碼單個檔案。</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>기본 자막</value>
+    <value>字幕預設選項</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>字幕軌</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>切換回軌道</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택 ...</value>
+    <value>選擇行為…</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>보관 파일:</value>
+    <value>被封存的檔案：</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>프리셋을 불러올 수 없습니다.</value>
+    <value>無法載入設定檔。</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake는 프리셋 파일을 불러올 수 없습니다. 해당 파일이 HandBrake가 지원하지 않는 오래된 버전의 파일이거나 손상되었을 가능성이 높습니다.
+    <value>HandBrake 無法載入您的設定檔。這可能是因為它已損毀，或來自舊版的 HandBrake。
 
-해당 프리셋 파일은 다음 경로에 보관되어 있습니다:</value>
+舊的預設檔已被封存在：</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0} 오류 또는 취소가 감지된 경우</value>
+    <value>偵測到 {0} 個錯誤或取消</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>디스크 공간 부족</value>
+    <value>磁碟容量不足</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>경고, 디스크 공간이 부족합니다. 디스크 공간 부족한 경우, HandBrake는 인코딩을 완료할 수 없습니다.</value>
+    <value>警告，您的磁碟空間不足。若耗盡空間，HandBrake 將無法完成此次編碼。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value> {0} 라인이 잘못되었습니다. 가져올 항목이 없습니다.</value>
+    <value>第{0}行是無效的，因此不會匯入任何東西。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>챕터 파일을 가지고 올 수 없습니다</value>
+    <value>無法匯入章節檔案</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>챕터 파일의 모든 라인에는 적어도 2개의 데이터 열이 있어야 합니다.</value>
+    <value>章節檔案中每列須包含至少兩欄資料</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>챕터 파일의 첫 번째 열에는 영(0)보다 큰 정수 값만 포함해야 합니다.</value>
+    <value>章節檔案的首欄須為大於零之正整數</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>'{0}' 형식의 챕터 파일은 현재 지원되지 않습니다.</value>
+    <value>尚未支援「{0}」格式的章節檔。</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>지원되지 않는 챕터 파일 형식</value>
+    <value>不支援的章節檔案格式</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>원본 미디어에 대한 유효하지 않은 챕터 정보</value>
+    <value>來源媒體的章節資訊無效</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>원본 미디어의 챕터 수와
-입력 파일의 챕터 수가 일치하지 않습니다. ({0} vs {1})
+    <value>來源媒體與輸入檔案的章節數目不一致（{0}, {1}）。
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+仍然要匯入章節名稱嗎？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>원본 미디어의 챕터 수와
-입력 파일의 챕터 수가 일치하지 않습니다. ({0} vs {1})
+    <value>來源媒體與輸入檔案的章節數目不一致（{0}, {1}）。
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+仍然要匯入章節名稱嗎？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간에 챕터 수가 맞지 않습니다.</value>
+    <value>來源檔及輸入檔的章節數不吻合</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>원본 미디어에 대한 챕터의 보고된 지속 시간
-과 입력 파일에 대한 챕터의 지속 시간이 차이가 매우 많습니다.
+    <value>來源媒體回報的章節長度
+與匯入的檔案所提供的存在明顯差異。
 
-이 챕터 파일은 다른 파일 매체에서 만들어졌을 가능성이 매우 높습니다.
+這很可能是因為此章節檔是由其他來源媒體製作的。
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+您確定要匯入章節名稱嗎？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간 챕터 지속 시간이 맞지 않습니다.</value>
+    <value>來源檔及輸入檔的章節長度不吻合</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>스캔을 중지하여 오류가 발생하였습니다. HandBrake를 다시 시작하십시오.</value>
+    <value>在嘗試停止掃描時發生錯誤。請重開 HandBrake。</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake는 새로운 버전 형식으로 사용자 프리셋 파일을 업그레이드 할 수 없습니다.
-프리셋 파일은 보관될 것이며 새 파일이 생성될 것입니다.  사용자만의 프리셋 파일을 다시 생성해야 합니다.</value>
+    <value>HandBrake 無法將您的設定檔更新為新版格式。
+原有的預設檔已被封存，您需要重新建立自訂的設定檔。</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
+    <value>您更動過的任何設定可能需要在下次 HandBrake 啟動後重設。</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>설정을 저장하려고 할 때 문제가 발생하였습니다.</value>
+    <value>在嘗試儲存您的偏好設定時，發生了錯誤</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>경고, 설정이 재설정되었습니다!</value>
+    <value>警告，您的設定將被重置！</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>사용자 설정 파일이 손상되었거나 접근할 수 없습니다. 설정이 기본 설정으로 재설정되었습니다.</value>
+    <value>您的使用者設定檔已毀損或無法存取。設定值已被重置為預設值。</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>사용자 설정 파일을 가져올 수 없습니다: {0}</value>
+    <value>未能載入使用者設定檔：{0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>사용자 설정 파일이 접근할 수 없거나 손상된 것 같습니다. 파일을 삭제하거나 HandBrake에서 새로운 파일을 생성할 수 있습니다.</value>
+    <value>您的使用者設定檔似乎已毀損或無法存取。您可能需要刪除該檔案，並讓 HandBrake 產生一個新的。</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>사용자가 고른 출력 디렉토리는 존재하지 않거나, 해당 디렉토리에 파일을 쓸 수 있는 권한이 없습니다.</value>
+    <value>您選擇的輸出目錄不存在，或您不具有寫入它的權限。</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>폴더를 생성하시겠습니까?</value>
+    <value>要建立資料夾嗎？</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>해당 폴더가 존재하지 않습니다. HandBrake에서 다음 폴더를 생성하시겠습니까?
+    <value>您試圖寫入的資料夾並不存在。您想要 HandBrake 建立以下資料夾嗎？
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>대상 디렉토리를 시작할 수 없습니다.</value>
+    <value>無法打開目的地目錄。</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>올바른 대상 디렉토리가 있는지 확인하십시오.</value>
+    <value>請檢查您使用的是有效的目的地目錄。</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
+    <value>正在處理 Pass {0}/{1}, (字幕掃描)  {2:00.00}%, 剩餘掃描時間：{3},  已持續了：{4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>추가적인 정보 없음</value>
+    <value>沒有額外的資訊</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, {3}의 {2} 통과)</value>
+    <value>{0} - ({1}%, Pass {2} / {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1} %, {3}의 {2} 통과 
-남은 시간: {4}</value>
+    <value>{1}%, Pass {2} / {3}
+剩餘時間： {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 기본 설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
+    <value>已暫停佇列。警告！您要存放的磁碟空間不足。請清出更多空間後再按下開始以繼續。您亦可在偏好設定中調整最低空間水準。</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>已暫停佇列</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>已暫停佇列</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>경로 디렉토리의 디스크 공간이 부족합니다.
+    <value>您的目的地目錄磁碟空間不足。
 
-이 경고가 기본설정에 표시되는 수준을 구성할 수 있습니다.
+您可在偏好設定中調整何時應跳出此警示。
 
-계속하시겠습니까?</value>
+您確定要繼續嗎？</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>오류나 완료 상태가 아니므로 작업 상태를 재설정할 수 없습니다</value>
+    <value>無法重設工作狀態，因為其並不處於「錯誤」或「已完成」狀態</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>대기열 파일을 복원할 수 없습니다.</value>
+    <value>無法還原佇列檔案。</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>파일이 손상되었거나 HandBrake의 호환되지 않는 이전 버전입니다.</value>
+    <value>檔案可能已毀損或來自較舊的 HandBrake。</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 파일을 인코딩 중 입니다.</value>
+    <value>HandBrake 已在編碼檔案。</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>현재 진행 중인 인코딩을 멈추십시오. 문제가 계속되는 경우, HandBrake를 다시 시작하십시오.</value>
+    <value>請停止目前的編碼工作。若此問題持續發生，請重開 HandBrake。</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>미리보기 (실제 사이즈 {0}%)</value>
+    <value>預覽（實際大小的{0}）</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake를 실행하려면 64비트 버전의 Windows 10 이상이 필요합니다.</value>
+    <value>HandBrake 需要在 64 位元的 Windows 10 或更新的作業系統上執行。</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake를 실행하려면 Windows 10 이상이 필요합니다. 버전 0.9.9(XP), 0.10.5(Vista), 1.3.3(7 및 8.x)은 이러한 이전 운영 체제를 지원하는 마지막 버전입니다.</value>
+    <value>HandBrake 需要在 Windows 10 或更新的作業系統上執行。0.9.9 版（XP）、0.10.5 版（Vista）、1.3.3 版（7 及 8.x）是這些較舊的作業系統最後支援的版本。</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>나머지를 추가하려고 계속하시겠습니까?</value>
+    <value>您確定要繼續嘗試新增剩餘項目嗎？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>'{0}' 파일은 이미 존재합니다!
-덮어쓰시겠습니까?</value>
+    <value>檔案「{0}」已經存在！
+您確定要覆寫它嗎？</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>시스템 클립보드는 현재 사용할 수 없습니다.</value>
+    <value>目前無法使用系統的剪貼簿。</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>다른 응용 프로그램을 모니터링하거나 클립 보드를 자체적으로 잠그기 때문일 수 있습니다. 잠금을 해제하기 전까지는 클립보드를 사용할 수 없습니다.</value>
+    <value>這可能是由於其他程式正在監控或鎖定剪貼簿。剪貼簿解鎖後，您才能繼續使用它。
+</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>라이선스:</value>
+    <value>授權：</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>버전:</value>
+    <value>版本：</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 새 범주 추가 --</value>
+    <value>— 新增類別 —</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>프리셋 추가</value>
+    <value>新增設定檔</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>범주:</value>
+    <value>類別：</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>敘述：</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>이름:</value>
+    <value>名稱：</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>면적:</value>
+    <value>尺寸：</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>원본 파일 트랙 선택</value>
+    <value>選擇來源軌道</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>다음 경로 경유 허용:</value>
+    <value>允許傳遞：</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 때 오디오 트랙을 자동으로 선택하고 구성하는 방법을 설정합니다.</value>
+    <value>設定選擇新標題或來源視訊時，自動選擇音軌的方式。</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'자동 경유' 동작:</value>
+    <value>自動傳遞行為：</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>비트 전송속도</value>
+    <value>位元速率</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>코덱</value>
+    <value>編解碼器</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>게인</value>
+    <value>增益</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>隱藏</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>믹스다운</value>
+    <value>Mixdown</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>대체 인코더:</value>
+    <value>備選編碼器：</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>重新載入</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>견본 비율</value>
+    <value>取樣率</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>표시</value>
+    <value>顯示</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>트랙 이름</value>
+    <value>軌道名稱</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 동작</value>
+    <value>軌道選擇行為：</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>추가적인 트랙에 대해:</value>
+    <value>對於其他音軌：</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>오디오 코덱으로 '자동 경유' 를 선택한 경우</value>
+    <value>當選擇「自動傳遞」為音訊編碼器。</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>章節標記點</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>챕터 이름</value>
+    <value>章節名稱</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>챕터 수</value>
+    <value>章節序</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>챕터 표시 생성</value>
+    <value>建立章節標記點</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>지속 시간</value>
+    <value>長度：</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>내보내기</value>
+    <value>匯出</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>가져오기</value>
+    <value>匯入</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>이름 내보내기</value>
+    <value>匯出名稱</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>이름 가져오기</value>
+    <value>匯入名稱</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>챕터 이름 재설정</value>
+    <value>重設章節名稱</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>취소 작업</value>
+    <value>取消動作</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>진행</value>
+    <value>進行</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>작업 완료 시</value>
+    <value>完成時的動作</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>오류 세부 정보:</value>
+    <value>錯誤細節：</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>사용자 설정:</value>
+    <value>自訂：</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>블록 제거</value>
+    <value>Deblock：</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
-    <value>Decomb</value>
+    <value>Decomb：</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>인터레이스 해제</value>
+    <value>去交錯：</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>設定檔：</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>인터레이스 해제 프리셋</value>
+    <value>去交錯設定檔</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>노이즈 제거:</value>
+    <value>降噪：</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>노이즈 제거 프리셋</value>
+    <value>降噪設定檔</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>노이즈 제거</value>
+    <value>調整降噪</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>텔레시네 해제:</value>
+    <value>Detelecine：</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>필터</value>
+    <value>濾鏡</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>가로 방향</value>
+    <value>水平</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>그레이스케일</value>
+    <value>灰階</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace 감지:</value>
+    <value>偵測交錯：</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>設定檔：</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>회전:</value>
+    <value>旋轉：</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>선명도:</value>
+    <value>銳利化：</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>선명도 프리셋</value>
+    <value>銳利化設定檔</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>선명도 조정</value>
+    <value>調整銳利化</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>조정:</value>
+    <value>調整：</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>추가</value>
+    <value>新增</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>취소</value>
+    <value>取消</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>파일 내용 지우기</value>
+    <value>清除</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>종료</value>
+    <value>關閉</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>複製到剪貼簿</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>왼쪽으로 이동</value>
+    <value>移到左邊</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>오른쪽으로 이동</value>
+    <value>移到右邊</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>저장</value>
+    <value>儲存</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>複製到剪貼簿</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>인코딩 로그</value>
+    <value>編碼紀錄檔</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>활동 로그 디렉토리 열기</value>
+    <value>打開紀錄檔目錄</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>스캔 로그</value>
+    <value>掃描紀錄</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>활동 로그</value>
+    <value>活動紀錄</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>전부 추가</value>
+    <value>新增全部</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>현재 추가</value>
+    <value>新增目前的</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>선택 추가</value>
+    <value>新增選取的</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>新增至佇列</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>고급</value>
+    <value>進階</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>A/V 정렬 시작</value>
+    <value>對齊 A/V 開頭</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>각도:</value>
+    <value>角度：</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>오디오</value>
+    <value>音訊</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>오디오 트랙들</value>
+    <value>音軌</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>瀏覽</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>챕터</value>
+    <value>章節</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>컨테이너</value>
+    <value>容器</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>대상</value>
+    <value>目的地</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>長度：</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>다른 이름으로 저장:</value>
+    <value>另存為：</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>필터</value>
+    <value>濾鏡</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>형식:</value>
+    <value>格式：</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>協助</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G 지원</value>
+    <value>iPod 5G 支援</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>中繼資料</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(수정됨)</value>
+    <value>（已修改）</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>다중화: 시간이 다소 소요될 수 있습니다...</value>
+    <value>合成中：需要一些時間…</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>選項</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>출력 설정</value>
+    <value>輸出設定</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>暫停</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>면적</value>
+    <value>外觀尺寸</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>사전 설정 편집</value>
+    <value>編輯設定檔</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>프리셋 옵션 컨텍스트 메뉴</value>
+    <value>Preset Options Context Menu</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>프리셋 삭제</value>
+    <value>刪除設定檔</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>프리셋</value>
+    <value>設定檔</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>預覽</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>인코딩: {0}, {1:00.00}%, 남은 시간: {2}, {3}</value>
+    <value>編碼中：{0}, {1:00.00}%，剩餘時間：{2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>범위:</value>
+    <value>範圍：</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>重新載入</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>제거</value>
+    <value>移除</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>내장된 프리셋 재설정</value>
+    <value>重設內建的設定檔</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>새로운 프리셋 저장</value>
+    <value>儲存新設定檔</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>시작 시간 검색</value>
+    <value>搜尋開始時間中</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>기본값 설정</value>
+    <value>設為預設</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>預覽</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>대기열</value>
+    <value>佇列</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>來源：</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>파일 열기</value>
+    <value>開啟來源檔</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>인코딩을 시작합니다.</value>
+    <value>開始編碼</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>開始佇列</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>停止</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>인코딩 멈춤</value>
+    <value>停止編碼</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>작업 중인 인코딩을 멈추시겠습니까?</value>
+    <value>確定要停止本編碼工作嗎？</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>자막 파일을 가져 오기 전에 인코딩할 원본 파일을 선택하십시오.</value>
+    <value>在匯入字幕檔前，請選擇要編碼的來源。</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>자막</value>
+    <value>字幕</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>字幕軌</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>개요</value>
+    <value>摘要</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
-    <value> - </value>
+    <value>-</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>제목:</value>
+    <value>標題：</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>현재 프리셋 업데이트</value>
+    <value>更新目前的設定檔</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>비디오</value>
+    <value>影片</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>웹 최적화</value>
+    <value>針對網頁最佳化</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>프리셋 관리</value>
+    <value>管理設定檔</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>中繼資料</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Nvidia NVENC 인코더 사용 가능</value>
+    <value>允許使用 Nvidia NVENC 編碼器</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Intel QuickSync 인코더 사용 가능</value>
+    <value>允許使用 Intel QuickSync 編碼器</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE 인코더 사용 가능</value>
+    <value>允許使用 AMD VCE 編碼器</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>입력한 파일 형식에 잘못된 문자가 포함되어 있습니다. 제거되었습니다.</value>
+    <value>輸入的檔案格式包含無效字元。這些字元已被移除。</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>인코딩을 완료할 때마다 소리 내기</value>
+    <value>在每次編碼完成時發出提示音效</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>대기열이 완료되면 소리 재생</value>
+    <value>在佇列完成時發出提示音效</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>개요 탭에 미리보기를 표시합니다.</value>
+    <value>在「摘要」分頁顯示預覽</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>응용프로그램 제목 표시줄에 인코딩 상태를 표시합니다.</value>
+    <value>在應用程式標題列中顯示編碼狀態</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>7일보다 오래된 로그 파일 지우기</value>
+    <value>清除久於 7 天前的紀錄檔</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>關於 HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>고급</value>
+    <value>進階</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>고급 옵션</value>
+    <value>進階選項</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>인수:</value>
+    <value>參數：</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>파일 이름 자동 설정</value>
+    <value>自動命名檔案</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>출력 파일 자동 이름 지정</value>
+    <value>自動命名輸出檔案</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>檢查更新</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>인코딩이 완료된 후 완료된 대기열 항목 항상 지우기</value>
+    <value>總是在編碼完畢後清除佇列項目</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>로그 기록 지우기</value>
+    <value>清除紀錄檔的紀錄</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>특정 위치에 각각의 인코딩 로그 복사본 배치:</value>
+    <value>在指定位置儲存編碼紀錄檔副本：</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>인코딩된 비디오와 같은 위치에 각각의 인코딩 로그 복사본 배치</value>
+    <value>在輸出視訊的相同位置附上編碼紀錄檔副本</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>현재 버전</value>
+    <value>目前版本</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>디코딩</value>
+    <value>解碼</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>기본 경로:</value>
+    <value>預設路徑：</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>업데이트 다운로드</value>
+    <value>下載更新</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD 읽기</value>
+    <value>讀取 DVD</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav을 사용 안 함. (대신 libdvdread가 사용 됨)</value>
+    <value>停用 LibDVDNav。（將以 libdvdread 替代）</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>인코딩</value>
+    <value>編碼</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>파일 형식:</value>
+    <value>檔案格式：</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>일반</value>
+    <value>一般</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Logging</value>
+    <value>記錄</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>로그 상세 수준:</value>
+    <value>紀錄檔詳盡度：</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>로그 경로: </value>
+    <value>紀錄檔路徑：</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>디스크 공간이 부족한 경우 대기열 일시중지</value>
+    <value>若磁碟空間不足，暫停佇列</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>시스템 트레이 최소화 (재시작 필요)</value>
+    <value>縮小至系統匣（需要重開程式）</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>최소 DVD 와 Blu-ray 제목 초 단위 지속 시간. 짧은 제목 건너뛰기:</value>
+    <value>DVD 及藍光標題的最短長度（秒）。將跳過較短的標題：</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 파일 확장자:</value>
+    <value>MP4 副檔名：</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>시작할 때</value>
+    <value>在電腦啟動時</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>輸出檔案</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>경로: </value>
+    <value>路徑：</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>미디어 플레이어 경로</value>
+    <value>媒體播放器路徑</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>인코딩 중 시스템 절전 방지</value>
+    <value>在編碼時防止系統睡眠</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>스캔할 사진 미리보기 개수:</value>
+    <value>欲掃描的預覽圖片數：</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>우선순위 수준:</value>
+    <value>優先權：</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>사용 가능한 경우 비디오를 디코딩에 있어서 Intel QuickSync 사용을 선호합니다.</value>
+    <value>可以時，優先使用 Intel QuickSync 解碼影片。</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>또한 QuickSync 인코더 사용 불가한 경우 QSV 디코딩을 사용합니다. (i.e. x265)</value>
+    <value>在不使用 QuickSync 編碼器時改用 QSV 解碼器。（如：x265）</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>공통 구두점 제거</value>
+    <value>移除常見的標點符號</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>밑줄을 공백으로 교체</value>
+    <value>以空格替換底線</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>프로그램이 재시작되면 '아무것도 하지 않음'으로 재설정합니다.</value>
+    <value>當本程式重新啟動時，重設為「無動作」。</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>스케일러 선택:</value>
+    <value>選擇定標器：</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>크기 조정</value>
+    <value>縮放</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>다음 경로로 파일 전송:</value>
+    <value>將檔案寄送給：</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>케이스를 제목 케이스로 변경</value>
+    <value>變更為首字母大寫</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>업데이트</value>
+    <value>更新</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>사용자 인터페이스</value>
+    <value>使用者介面</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>버전: </value>
+    <value>版本：</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>비디오</value>
+    <value>影片</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>이 경로는 비디오 미리보기 기능에만 사용됩니다.
-VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있지만 검증되지 않았습니다.</value>
+    <value>此路徑僅用於視訊預覽功能。
+支援 VLC 及 MPC-HC。其他播放器或許也可運作，但未經驗證。</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>로그 디렉토리 보기</value>
+    <value>檢視記錄檔目錄</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>완료 시</value>
+    <value>在完成時</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 설정</value>
+    <value>x264/5 設定</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>일정 품질 부분 제어:</value>
+    <value>恆定品質模式的最小級距：</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽:</value>
+    <value>寬螢幕變形：</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>자동</value>
+    <value>自動</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>맨 아래</value>
+    <value>底部</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>자르기:</value>
+    <value>裁切：</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>自訂</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>화면 크기:</value>
+    <value>顯示尺寸：</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>높이:</value>
+    <value>高度：</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>자동</value>
+    <value>自動</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>왼쪽</value>
+    <value>左側</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>최종 치수:</value>
+    <value>成品尺寸：</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>가로세로 픽셀:</value>
+    <value>長寬比：</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>오른쪽</value>
+    <value>右側</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>크기</value>
+    <value>尺寸</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>위</value>
+    <value>頂部</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>스케일링된 크기:</value>
+    <value>縮放大小：</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>自訂</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>파일로 내보내기</value>
+    <value>匯出為檔案</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>파일에서 가져오기</value>
+    <value>自檔案匯入</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>공식</value>
+    <value>官方的</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>제목 선택:</value>
+    <value>選擇標題：</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>新增至佇列</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>"{0}" 프리셋을 이용해서 선택된 제목을 추가합니다.</value>
+    <value>將以設定檔「{0}」新增選取的標題。</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>비디오 옵션:</value>
+    <value>視訊選項：</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>오디오:</value>
+    <value>音訊：</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>모두 지우기</value>
+    <value>清除全部</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>지우기 완료됨</value>
+    <value>清除已完成的</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>대기열 지우기</value>
+    <value>清除佇列</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>선택 항목 지우기</value>
+    <value>清除已選的</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>삭제</value>
+    <value>刪除</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>대상:</value>
+    <value>目的地：</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>아무것도 안 함</value>
+    <value>不動作</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>인코딩 지속시간:</value>
+    <value>編碼歷時：</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>수정</value>
+    <value>編輯</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>종료 시간:</value>
+    <value>結束時間：</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>대기열로 내보내기</value>
+    <value>匯出佇列</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>출력 파일크기:</value>
+    <value>輸出檔案大小：</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>최대 절전 모드</value>
+    <value>休眠</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>시스템 잠금</value>
+    <value>鎖定系統</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료되면 로그가 제공될 것입니다.</value>
+    <value>紀錄檔將在編碼完成後提供使用。</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>로그 오프</value>
+    <value>登出</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>대상 디렉토리 열기</value>
+    <value>打開目的地目錄</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>원본 파일 디렉토리 열기</value>
+    <value>開啟來源目錄</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>選項</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>暫停</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>중단 지속 시간:</value>
+    <value>暫停時間：</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>사진 설정:</value>
+    <value>影像設定：</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake 종료</value>
+    <value>離開 HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>모든 작업 재시도</value>
+    <value>重試所有工作</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>실패 항목 재시도</value>
+    <value>重試失敗</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>선택 작업 재설정</value>
+    <value>重試選取的工作</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>재설정</value>
+    <value>重設</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>컴퓨터 종료</value>
+    <value>關機</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>來源：</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>開始佇列</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>시작 시간:</value>
+    <value>開始時間：</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>통계</value>
+    <value>統計資訊</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료된 후 통계가 제공될 것입니다.</value>
+    <value>統計資訊在作業完成後才能使用。</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>자막:</value>
+    <value>字幕：</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>개요</value>
+    <value>摘要</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>절전</value>
+    <value>睡眠</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>비디오:</value>
+    <value>視訊：</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>當完成後：</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>남아있는 선택된 모든 언어 추가</value>
+    <value>新增所有剩餘已選的語言</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>남아있는 모든 트랙 추가</value>
+    <value>新增所有剩餘的軌道</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>새로운 트랙 추가</value>
+    <value>新增軌道</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>트랙</value>
+    <value>軌道：</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>이용가능한 언어</value>
+    <value>可用的語言：</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>언어 선택</value>
+    <value>選擇語言：</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>선택한 언어</value>
+    <value>已選的語言：</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>기본 동작 구성하기</value>
+    <value>配置預設行為</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>重新載入</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>스캔할 디스크를 선택하십시오</value>
+    <value>選擇要掃描的碟片</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>스캔할 파일을 선택하십시오</value>
+    <value>選擇要掃描的檔案</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>스캔할 폴더를 선택하십시오</value>
+    <value>選擇要掃描的資料夾</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>마음대로 특정 제목 선택:</value>
+    <value>指定標題（選填）：</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>인코딩하고자 하는 비디오(들)를 고르시오:</value>
+    <value>接著選擇要編碼的視訊：</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>파일</value>
+    <value>檔案</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>폴더 (묶음 스캔)</value>
+    <value>資料夾（批次掃描）</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>이 DVD 또는 Bluray Drive를 여십시오</value>
+    <value>開啟此 DVD 或藍光光碟機</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>하나 이상의 파일이 있는 폴더를 여십시오.</value>
+    <value>打開有一或多個檔案的資料夾</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>대기열에 있는 파일들 복구</value>
+    <value>復原佇列檔案</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>이전 대기열 보관 파일을 사용할 수 있습니다.</value>
+    <value>先前的佇列封存可供使用。</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>단일 비디오 파일을 엽니다.</value>
+    <value>打開單個影片檔。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>원본 파일 선택</value>
+    <value>來源選擇</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>時間：</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>실시간 미리보기</value>
+    <value>即時預覽</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>미리보기 이미지 선택</value>
+    <value>選擇一張預覽影像</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>시스템 기본 비디오 재생기 사용</value>
+    <value>優先使用系統預設的影片播放器</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>사용 가능할 경우 내장 자막 추가</value>
+    <value>當可用時，增加 CC 字幕</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>'외부 오디오 스캔' 추가</value>
+    <value>新增「外語音訊掃描」</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>굽기 작업:</value>
+    <value>壓印行為：</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>자막 가져오기</value>
+    <value>匯入字幕</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 작업:</value>
+    <value>軌道選擇行為：</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>新增所有剩餘的 CC 字幕</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 때 자막 트랙이 자동으로 선택 및 구성되는 방법을 설정합니다.</value>
+    <value>設定選擇新標題或來源視訊時，自動選擇字幕軌的方式。</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>추가 오디오 트랙</value>
+    <value>額外音軌</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>추가 자막 트랙</value>
+    <value>額外字幕軌</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>복제 완료됨</value>
+    <value>壓印字幕</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>章節標記點</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>블록 분리</value>
+    <value>Deblock</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>텔레시네 해제</value>
+    <value>Detelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>디스플레이</value>
+    <value>顯示</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>그레이스케일</value>
+    <value>灰階</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>오디오 트랙 없음</value>
+    <value>無音軌</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>챕터 표시 없음</value>
+    <value>無章節標記點</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>필터 없음</value>
+    <value>無濾鏡</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>원본 파일 없음</value>
+    <value>無來源</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>자막 트랙 없음</value>
+    <value>無字幕軌</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>트랙 없음</value>
+    <value>無軌道</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>{1}개 중 {0}개 미리보기</value>
+    <value>預覽 {0}/{1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>회전</value>
+    <value>旋轉</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>저장소</value>
+    <value>儲存空間</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Pass 인코딩</value>
+    <value>2-Pass 編碼</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>평균 비트 전송 속도 (kbps):</value>
+    <value>平均位元速率 (kbps)：</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>비디오 인코더:</value>
+    <value>視訊編碼器：</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>일정한 프레임률</value>
+    <value>恆定影格率</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>일정한 품질:</value>
+    <value>恆定品質：</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>인코더 수준:</value>
+    <value>編碼器等級：</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>인코더 프리셋:</value>
+    <value>編碼器設定檔：</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>인코더 프로필:</value>
+    <value>編碼器預設檔：</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>인코더 조정:</value>
+    <value>調整編碼器：</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>고급 옵션:</value>
+    <value>進階選項：</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>빠른 디코딩</value>
+    <value>快速解碼</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>프레임률 (FPS):</value>
+    <value>影格率 (FPS)：</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>인코더 옵션:</value>
+    <value>編碼器選項：</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>최고 프레임률</value>
+    <value>峰值影格率</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>화질: </value>
+    <value>品質：</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>터보 우선 통과</value>
+    <value>加速首次編碼</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>변화하는 프레임률</value>
+    <value>動態影格率</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>비디오: </value>
+    <value>視訊：</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>언어:</value>
+    <value>語言：</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>시스템 언어 사용</value>
+    <value>使用系統語言</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>關於 HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>파일이나 폴더를 여기에 드롭하십시오...</value>
+    <value>或者拖動一個檔案、資料夾到這裡...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>協助</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>기본 설정</value>
+    <value>偏好設定</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>트랙 추가</value>
+    <value>新增軌道</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>선택된 트랙에 대한 오디오 인코더 설정:</value>
+    <value>設定各音軌的編碼器：</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>지우기</value>
+    <value>清除</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>굽기</value>
+    <value>壓印</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>預設</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>강제로</value>
+    <value>僅限強制的</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>소개(_A)...</value>
+    <value>關於...（_A）</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>작업 로그(_A)</value>
+    <value>動作紀錄（_A）</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>업데이트 확인(_C)</value>
+    <value>檢查更新（_C）</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>종료(_E)</value>
+    <value>離開（_E）</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>파일로 내보내기(_E)</value>
+    <value>匯出為檔案（_E）</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>파일(_F)</value>
+    <value>檔案（_F）</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake 문서 (HTTPS)</value>
+    <value>HandBrake 文件 (HTTPS)（_H）</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>도움말(_H)</value>
+    <value>說明（_H）</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>파일에서 가져오기(_I)</value>
+    <value>自檔案匯入（_U）</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>기본 설정(_P)</value>
+    <value>偏好設定（_P）</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>프리셋(_P)</value>
+    <value>設定檔（_P）</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>대기열(_Q)</value>
+    <value>佇列（_Q）</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>기본 제공된 프리셋 초기화(_R)</value>
+    <value>重設內建的設定檔（_R）</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>현재값을 기본값으로 설정(_S)</value>
+    <value>將目前的設為預設（_S）</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>프리셋 패널 표시(_H)</value>
+    <value>顯示設定檔面板（_H）</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>대기열 표시(_S)</value>
+    <value>顯示佇列（_S）</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>도구(_T)</value>
+    <value>工具（_T）</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>업데이트 확인 ...</value>
+    <value>檢查更新中...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>로그 파일 디렉토리를 지우시겠습니까?</value>
+    <value>您確定要清除紀錄檔的目錄嗎？</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>로그 지우기</value>
+    <value>清除紀錄檔</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>다운로드 중...</value>
+    <value>下載中...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake의 로그 파일 디렉터리가 지워졌습니다!</value>
+    <value>已清除 HandBrake 的紀錄檔目錄！</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>通知</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>업데이트 준비 ...</value>
+    <value>準備更新中...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>폴더를 선택하세요.</value>
+    <value>請選擇一個資料夾。</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>기본 위치 설정을 위해 '찾아보기'를 클릭하세요</value>
+    <value>按一下「瀏覽」來設定預設位置</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>隱藏</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>표시</value>
+    <value>顯示</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>대기열에 '모두 추가'</value>
+    <value>「新增所有項目」至佇列</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>대기열에 '선택 추가'</value>
+    <value>「新增已選的項目」至佇列</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>파일 재생</value>
+    <value>播放檔案</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>응용프로그램 도구모음</value>
+    <value>應用程式工具列</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>도구모음에 '대기열에 모두 추가' 표시</value>
+    <value>在工具列顯示「新增所有項目至佇列」</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>도구모음에 '대기열에 선택 추가' 표시</value>
+    <value>在工具列顯示「新增已選的項目」至佇列</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>하드웨어 인코딩 지원이 현재 비활성화되어 있습니다. "--no-hardware" 옵션을 사용하여 HandBrake를 시작하지 않은 경우 이 시스템의 모든 그래픽 어댑터에 대해 최신 드라이버를 실행하고 있는지 확인하십시오.
+    <value>已停用硬體編碼支援。若您沒有以 "--no-hardware" 選項開啟 HandBrake，請確保系統中所有的顯示卡都使用最新的驅動程式。
 
-이 문제는 소프트웨어 인코더에 영향을 미치지 않습니다.</value>
+這不會影響軟體編碼器。</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>계속하기 전에 자막 설정을 수정하십시오.</value>
+    <value>在繼續前，請更正您的字幕設定。</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>적용</value>
+    <value>套用</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>인코딩 다시 시작하기</value>
+    <value>繼續編碼</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>동작</value>
+    <value>動作</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>대기열 가져오기</value>
+    <value>匯入佇列</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}
-남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>編碼中：Pass {0}/{1}，{2:00.00}%，FPS: {3:000.0}，平均 FPS: {4:000.0}
+剩餘時間：{5}，已持續了：{6}{7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>선택한 항목 삭제</value>
+    <value>刪除已選項目</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>휴대용 모드: TMP 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오. 
+    <value>免安裝模式：無法建立 TMP 目錄。請確認該路徑是正確且可寫入的。
 
     {0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>휴대용 모드: Storage 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.
+    <value>免安裝模式：無法建立儲存目錄。請確認該路徑是正確且可寫入的。
 
     {0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>휴대용 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
+    <value>免安裝模式：無法讀取 portable.ini，該檔案可能有錯誤。請使用 portable.ini.template 作為範本重試。</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 엔진이 초기화하는데 실패하였습니다. GPU 드라이버들이 오래되었을 경우 종종 발생하는 문제입니다.\n 시스템에 탑재된 개별 그래픽에 대한 GPU 드라이버들을 업데이트하십시오.</value>
+    <value>HandBrake 無法初始化引擎。這常因為 GPU 驅動程式太舊。\n 請更新您電腦中所有內顯、獨顯的驅動程式。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>대체 자리표시자: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
+    <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>대체 자리표시자: {source_path} {source_folder_name} {source}</value>
+    <value>Replacement Placeholders: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>파일 덮어쓰기 요청</value>
+    <value>詢問是否覆寫檔案</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>자동 파일 이름 바꾸기를 시도하십시오</value>
+    <value>嘗試自動重新命名檔案</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>파일 덮어쓰기</value>
+    <value>覆寫檔案</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>사용자 인터페이스 동작</value>
+    <value>使用者介面行為</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>파일 덮어쓰기 동작:</value>
+    <value>檔案覆寫行為：</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>인코딩 완료</value>
+    <value>編碼完成</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>소리 알림</value>
+    <value>音效通知</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료됨</value>
+    <value>已完成佇列</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>當完成後：</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>파일 이름 충돌 시 동작:</value>
+    <value>檔名衝突行為：</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>접두사</value>
+    <value>後置詞</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>접미사</value>
+    <value>前置詞</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>숫자 첨부</value>
+    <value>加上編號</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
     <value>FiltersView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock  조정</value>
+    <value>調整去區塊濾波器</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>인코더 선택은 '비디오' 탭에서 이용 가능합니다.</value>
+    <value>將可在「視訊」索引標籤內選擇編碼器。</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake가 여러 개의 미완료 대기열 파일을 발견하였습니다. 이는 HandBrake가 실행 중인 여러 인스턴스에서 발생하였습니다. 모든 미완료 작업들을 복구하시겠습니까?</value>
+    <value>HandBrake 偵測到多個未完成的佇列檔。復原它們會需要執行多個 HandBrake 個體。要復原所有未完成的工作嗎？</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake가 대기열에서 마지막으로 프로그램이 실행된 시점부터 미완료된 항목을 발견하였습니다. 해당 항목들을 복구하시겠습니까?</value>
+    <value>HandBrake 偵測到自上次本應用程式啟動的未完成佇列。您想要復原它們嗎？</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>대기열 복구 가능</value>
+    <value>有可復原的佇列</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>사용자 프리셋 파일은 내장된 프리셋을 포함합니다. 가져오기 기능은 프리셋 가져오기를 지원하고 있지 않습니다. '프리셋 메뉴 -&gt; 내장된 프리셋 재설정' 을 이용해서 기본 프리셋을 복원하십시오.
+    <value>檔案包含內建的設定檔，因此無法匯入。請使用「設定檔功能表 -&gt; 重設內建設定檔」來還原標準的設定檔。
 
-지원되는 경우, 모든 사용자 환경 프리셋을 가져옵니다.</value>
+已匯入其他支援的使用者設定檔。</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>작업을 즉시 수행합니다. (이 경우 60초 확인 다이얼로그가 비활성화됩니다.)</value>
+    <value>立即執行動作。（這將停用 60 秒的確認對話窗）</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>瀏覽</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>설정된 오디오 파일이 없습니다.  '찾아보기'를 클릭하여 재생 하고자 하는 wav나 mp3 파일을 선택하십시오. </value>
+    <value>未設定音訊檔案。請點擊「瀏覽」來選擇一個播放用的 wav 或 mp3 檔。</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>재생하기</value>
+    <value>播放</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>대기열 내보내기 (CLI  전용)</value>
+    <value>匯出佇列（僅限命令列介面）</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>다크 테마를 사용하십시오. (Windows 10일 경우 재시작하십시오)</value>
+    <value>使用深色佈景主題。（需要重開程式，僅支援 Windows 10）</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>이용 불가</value>
+    <value>尚不可用</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>AC Mains 파워가 감지되었습니다. 인코더를 다시 시작하는 중... ({0} %)</value>
+    <value>已偵測 AC 電源，繼續編碼... ({0}%)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %)</value>
+    <value>系統電池即將耗盡！({0}%)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %). 인코딩이 중단됩니다.</value>
+    <value>系統低電量！（{0} %）已暫停編碼工作。</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>대상 드라이브의 남은 디스크 크기가 {0} GB로 떨어졌습니다. 인코딩 중단 중...</value>
+    <value>目的地磁碟的容量已低於 {0} GB。正在暫停編碼...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 오디오 선택</value>
+    <value>自動選擇音訊</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 자막 선택</value>
+    <value>自動選擇字幕</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>시스템</value>
+    <value>系統</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>배우:</value>
+    <value>演員：</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>코멘트:</value>
+    <value>評註：</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>敘述：</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>감독:</value>
+    <value>導演：</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>장르:</value>
+    <value>類型：</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>줄거리:</value>
+    <value>劇本：</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>출시일:</value>
+    <value>釋出日期：</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>제목: </value>
+    <value>標題：</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>로그 뷰어</value>
+    <value>紀錄檔檢視器</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>양상:</value>
+    <value>長寬比：</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>필터:</value>
+    <value>濾鏡：</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>크기: </value>
+    <value>大小：</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>트랙:</value>
+    <value>軌道：</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>일반</value>
+    <value>一般</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>새 업데이트 버전을 확인하기 위해 '업데이트 확인'을 클릭하십시오.</value>
+    <value>點擊「檢查更新」來檢查是否有新版</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; 뒤로</value>
+    <value>&lt; 返回</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>현재 일시 중지됨</value>
+    <value>目前暫停</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>輸出檔案</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>챕터</value>
+    <value>章節</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>프레임</value>
+    <value>影格</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>預覽</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>초</value>
+    <value>秒</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>일치하는 모든 선택된 언어</value>
+    <value>所有符合的已選語言</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>일치하는 첫 번째 선택된 언어</value>
+    <value>首個符合的已選語言</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>無</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>첫 번째 트랙</value>
+    <value>首軌</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>외부 오디오 선호, 없을 경우 첫 번째 오디오 선택</value>
+    <value>首選外語音軌，首軌其次</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>외부 오디오 트랙</value>
+    <value>外語音軌</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>無</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>외부 오디오 검색</value>
+    <value>搜尋外語音軌</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>외부 오디오 스캔</value>
+    <value>外語音訊掃描</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>일치하는 모든 선택된 언어</value>
+    <value>所有符合的已選語言</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>모든 트랙을 템플릿으로 사용</value>
+    <value>使用所有軌道為樣板</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>일치하는 첫 번째 선택된 언어</value>
+    <value>首個符合的已選語言</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>템플릿으로 첫 번째 트랙 사용</value>
+    <value>以第一軌為樣板</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>오디오 없음</value>
+    <value>無音訊</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>챕터 {0}</value>
+    <value>章節 {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>자동</value>
+    <value>自動</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>항상 M4V를 사용</value>
+    <value>總是使用 M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>항상 MP4를 사용</value>
+    <value>總是使用 MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>自訂</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>無</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>항상 원본 해상도 사용하기</value>
+    <value>總是使用來源解析度</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>보통 이상</value>
+    <value>高於正常值</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>보통 이하</value>
+    <value>低於正常值</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>높음</value>
+    <value>高</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>낮음</value>
+    <value>低</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>보통</value>
+    <value>正常</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>매 월</value>
+    <value>每月</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>매 주</value>
+    <value>每週</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>각 생성된 새로운 이름에 항상 기본 경로를 사용합니다.</value>
+    <value>總是為產生的新名稱使用預設路徑。</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
+    <value>通訊埠號必須介於 5000 及 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>대체 자리표시자: {source} {destination} {exit_code}</value>
+    <value>替代預留位置：{source} {destination} {exit_code}</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
+    <value>新版的 HandBrake 已供使用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2021 HandBrake 팀</value>
+    <value>版權所有 ©️ 2003-2021 HandBrake 團隊</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>저전력 단계:</value>
+    <value>低電量：</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>배터리가 부족할 경우 진행 중인 작업을 중지하시오.</value>
+    <value>當低電量時，暫停任何進行中的工作。</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>新增全部的剩餘 CC 字幕</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>가져오려고 하는 대기열 파일에서 중복된 작업이 있습니다. 기존 작업 기록을 덮어쓰기 하시겠습니까?
-이는 또한 기존의 모든 실행 중인 작업을 중단시키게 됩니다.</value>
+    <value>在您試著匯入的佇列檔案中偵測到重複的工作。您確定要覆寫目前已有的紀錄嗎？
+此動作亦將停止目前執行中的工作。</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>중복 감지</value>
+    <value>偵測到複本</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>저전력 QuickSync 하드웨어를 활성화합니다(지원되는 경우).</value>
+    <value>如果支援，啟用 Low Power QuickSync。</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>개요 정보를 보려면 단일 작업을 선택하십시오.</value>
+    <value>請選擇單個工作來檢視總結報告。</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>대기 중인 각 작업을 별도의 작업자 프로세스에서 실행합니다.</value>
+    <value>在分開的背景工作處理序中進行佇列工作。</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>작업자를 위한 기본 네트워크 포트:</value>
+    <value>背景工作程式的預設連接埠：</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>선택한 프리셋은 이 시스템에서 사용할 수 없습니다.
+    <value>您選擇的設定檔無法在此系統使用。
 
-이것은 일반적으로 시스템이 이 하드웨어를 사용하는 데 필요한 하드웨어를 지원하지 않음을 나타냅니다.
+這通常表示系統不支援必須的硬體。
 
-다른 프리셋을 선택하십시오.</value>
+請選擇其他預設檔。</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>프로세스 격리</value>
+    <value>隔離處理序</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>이 기능을 사용하면 명시된 포트에서 127.0.0.1로 바인딩된 HTTP 서버가 시작됩니다.</value>
+    <value>使用此功能會啟動一個在 127.0.0.1 指定通訊埠上的伺服器。</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>설정된 포트가 사용 중이면 정의된 포트에서 +100 이내의 첫 번째 빈 포트를 찾습니다.</value>
+    <value>若設定的通訊埠已被使用，它會自動使用在其數值 +100 範圍內的首個可用連接埠。</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>최대 동시 인코딩 수:</value>
+    <value>同時作業的最大數量：</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>취소</value>
+    <value>取消</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>設定檔：</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>원본과 동일</value>
+    <value>和來源一樣</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>설정 초기화</value>
+    <value>重置設定</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>HandBrake를 기본 설정으로 초기화하시겠습니까?</value>
+    <value>您確定要重設 HandBrake 至預設設定值嗎？</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>사용자 지정 (제한되지 않음)</value>
+    <value>自訂（不限制）</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>채우기 (서라운드)</value>
+    <value>填充（環繞）</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>높이 (필러박스)</value>
+    <value>按高度（左右黑邊）</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>無</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>너비 (레터박스)</value>
+    <value>按寬度（上下黑邊）</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>채우기:</value>
+    <value>填充：</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>색상:</value>
+    <value>顏色：</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>테두리:</value>
+    <value>邊框：</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>해상도 및 크기 조정:</value>
+    <value>解析度及縮放比例：</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>방향 및 자르기:</value>
+    <value>方向及裁剪：</value>
   </data>
   <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>(Windows 10 전용!)</value>
+    <value>（僅限 Windows 10！）</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>필터:</value>
+    <value>濾鏡：</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>預設</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>강제 표시</value>
+    <value>強制的</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2274,332 +2265,332 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>4320p 8K Ultra HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>自訂</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>최대 크기:</value>
+    <value>最大尺寸：</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>해상도 제한:</value>
+    <value>解析度限制：</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>없음</value>
+    <value>無</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>프리셋 관리</value>
+    <value>管理設定檔</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>기본 제공된 프리셋 삭제</value>
+    <value>刪除內建的設定檔</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>선택한 프리셋 내보내기</value>
+    <value>匯出選取的設定檔</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>파일에서 프리셋 가져오기</value>
+    <value>從檔案匯入設定檔</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>프리셋 정보:</value>
+    <value>預設檔資訊：</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>기본 제공된 프리셋은 수정할 수 없습니다.</value>
+    <value>內建設定檔不可修改。</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>선택한 프리셋을 기본값으로 지정</value>
+    <value>以選取的設定檔為預設值</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>프리셋 삭제</value>
+    <value>刪除設定檔</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(이 시스템에서는 지원되지 않음)</value>
+    <value>（不支援此系統）</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>입력한 범주 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
+    <value>您輸入的分類名稱已存在，請換個名稱。</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>범주 이름이 비어 있습니다. 이름을 입력하십시오.</value>
+    <value>分類名稱空白，請輸入名稱。</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>이름 입력:</value>
+    <value>輸入名稱：</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>프리셋이 선택되지 않았습니다.</value>
+    <value>未選取設定檔。</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>모든 사용자 프리셋 내보내기</value>
+    <value>匯出所有的使用者設定檔</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>디스크 공간 부족 경고가 표시하는 수준:</value>
+    <value>顯示磁碟空間不足警示的程度：</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>참고: 이것은 동시 작업의 상한입니다. 하드웨어 제한이 적용되어 인코딩 중에 실제 동시 작업 수가 감소할 수 있습니다.</value>
+    <value>此為可同時進行的工作數量上限。實際進行編碼時，仍以硬體條件而定。</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(사용할 수 없음)</value>
+    <value>（不可用）</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>기본값:</value>
+    <value>為預設值：</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>아니오</value>
+    <value>否</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>예</value>
+    <value>是</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>미세 조정 사진 설정</value>
+    <value>影像細調設定</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>자르기 조정 컨트롤을 표시합니다.</value>
+    <value>顯示裁切控制細項。</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>어둡게 사용</value>
+    <value>深色</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>밝게 사용</value>
+    <value>淺色</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>시스템 일치</value>
+    <value>符合系統設定</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
-    <value>테마:</value>
+    <value>佈景主題：</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(다시 시작 필요)</value>
+    <value>（需要重開程式）</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth:</value>
+    <value>彩度平滑：</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace:</value>
+    <value>色彩空間：</value>
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
-    <value>Colourspace</value>
+    <value>色彩空間：</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>미리보기 열기</value>
+    <value>開啟預覽：</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>원본 미리보기:</value>
+    <value>來源預覽：</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>작업 상태:</value>
+    <value>作業狀態：</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
-    <value>취소됨</value>
+    <value>已取消</value>
   </data>
   <data name="QueueView_JobStatus_Complete" xml:space="preserve">
-    <value>완료</value>
+    <value>已完成</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>잘못된 설정입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>無效的設定值。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>잘못된 입력입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>無效的輸入。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>상태를 알 수 없습니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>未知的狀態。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>원본을 읽는 동안 오류가 발생했습니다.</value>
+    <value>嘗試讀取來源時偵測到錯誤。</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>알 수 없는 오류입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>未知的故障。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>작업자가 충돌했습니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>背景工作程式當機了。檢閱紀錄檔以了解詳情。</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>"hb.dll" 파일이 없습니다. 다시 설치하십시오.</value>
+    <value>缺少檔案 hb.dll，請重新安裝。</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>경고: 이 모드는 하드웨어 인코더에 대한 지원이 포함되지 않은 HandBrake의 "안전 모드" 빌드입니다. 하드웨어 인코더 지원을 사용하려면 웹 사이트에서 "안전 모드"가 아닌 빌드를 다운로드하십시오.</value>
+    <value>警告：此為「安全模式」的 HandBrake 組建，不包括對於硬體編碼器的支援。若您想使用該功能，請從網站上下載非安全模式的組建。</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>검은색</value>
+    <value>黑色</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>自訂</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>흰색</value>
+    <value>白色</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB 값:</value>
+    <value>RGB 數值：</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(채워짐)</value>
+    <value>（含邊距）</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>뒤집기:</value>
+    <value>翻轉：</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>원본 치수:</value>
+    <value>來源尺寸：</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>저장 크기: {0}x{1}        화면 크기: {2}x{3}         종횡비: {4}</value>
+    <value>儲存尺寸：{0}x{1}     顯示尺寸：{2}x{3}      長寬比：{4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>파일 검색기 대화 상자에서 오류가 감지되었습니다.
+    <value>在檔案選擇器偵測到錯誤。
 
-- 긴 파일 경로는 완전히 지원되지 않습니다. 파일 경로를 255자 미만으로 유지하십시오.
-- 다음에 파일을 검색하려고 할 때 오류가 발생하지 않도록 이 창에 마지막으로 사용된 디렉토리가 재설정되었습니다.</value>
+- 長檔案路徑的支援尚未完善。請保持檔案路徑少於 255 字元。
+- 已重設此視窗最後使用的目錄，以防止下次掃描檔案時發生錯誤。</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>최대 높이:</value>
+    <value>最大高度：</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>최대 너비:</value>
+    <value>最大寬度：</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>종횡비: {0}</value>
+    <value>長寬比：{0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru 공통 메타데이터</value>
+    <value>保留常見中繼資料</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>기본 자동 이름 경로가 잘못되었습니다. {0}은(는) {1} 앞에 있으면 안됩니다</value>
+    <value>預設的自動名稱路徑無效。{0} 不可於 {1} 之前</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
-    <value>HandBrake가 업데이트를 자동으로 확인하도록 하시겠습니까?
+    <value>是否允許 HandBrake 自動檢查更新？
 
-기본 설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
+您可以在 [偏好設定] -&gt; [一般] -&gt; [檢查更新] 更改此設定。</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
-    <value>업데이트를 확인하시겠습니까?</value>
+    <value>自動檢查更新？</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>업데이트 전:
-- 대기열에 보류 중인 인코딩이 없는지 확인하십시오.
-- 최신 버전과 완전히 호환되지 않을 수 있으므로 생성한 사용자 지정 프리셋을 백업하거나 기록해 두십시오.</value>
+    <value>在更新之前：
+- 確認佇列中無待處理的編碼作業。
+- 備份或記錄自訂設定檔，因為它們可能無法與新版完全相容。</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
-    <value>(기본값)</value>
+    <value>（預設）</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>범주</value>
+    <value>類別</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
-    <value>플랫</value>
+    <value>完全展開</value>
   </data>
   <data name="PresetDisplayMode_Partial" xml:space="preserve">
-    <value>부분적으로 플랫</value>
+    <value>部分展開</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>메뉴에 프리셋이 표시되는 방식을 선택합니다:</value>
+    <value>選擇設定檔在功能表的呈現方式：</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>設定檔：</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
-    <value>[완료됨]</value>
+    <value>[已完成]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
-    <value>작업을 편집하시겠습니까?</value>
+    <value>編輯工作？</value>
   </data>
   <data name="QueueView_Length" xml:space="preserve">
-    <value>출력 길이:</value>
+    <value>輸出長度：</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
-    <value>맨 아래로 이동</value>
+    <value>移到底部</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
-    <value>맨 위로 이동</value>
+    <value>移到頂部</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>출력 비트레이트:</value>
+    <value>輸出位元率：</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
-    <value>평균 인코딩 속도:</value>
+    <value>平均編碼速度：</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
-    <value>(소스 파일)</value>
+    <value>來源檔案的</value>
   </data>
   <data name="QueueViewModel_NotAvailable" xml:space="preserve">
-    <value>이용 불가</value>
+    <value>尚不可用</value>
   </data>
   <data name="QueueView_SourceLength" xml:space="preserve">
-    <value>원본 길이:</value>
+    <value>來源長度：</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
-    <value>재설정</value>
+    <value>重設</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>모든 기본 제공 프리셋을 재설정하시겠습니까?</value>
+    <value>確定要重設所有內建設定檔？</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>모든 기본 제공 프리셋을 HandBrake 기본값으로 재설정:</value>
+    <value>將所有內建設定檔重設為 HandBrake 預設值：</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>(사용자 프리셋은 재설정되지 않습니다)</value>
+    <value>（不會重設使用者的設定檔）</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>모든 HandBrake 설정을 기본값으로 재설정:</value>
+    <value>將所有 HandBrake 設定重設為預設值：</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
-    <value>기본 제공 프리셋</value>
+    <value>內建設定檔</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>使用者預設檔</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
-    <value>플로팅 트리보기</value>
+    <value>懸浮樹狀顯示</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>지원되는 비디오 재생기로 이 파일을 열 수 있도록 Windows에 적절한 파일 연결 설정이 있는지 확인하십시오.</value>
+    <value>請確保 Windows 設定中選擇了適當的預設應用程式，以便使用支援的影片播放器開啟此檔案。</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
-    <value>대기열 파일을 읽을 수 없습니다.</value>
+    <value>無法讀取佇列檔案。</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>파일이 손상되었거나 이전 버전의 HandBrake에서 가져온 것일 수 있습니다.
-현재 버전의 대기열 파일만 지원됩니다.</value>
+    <value>該檔案可能已毀損，或來自較舊版的 HandBrake。
+僅支援目前版本的佇列檔案。</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>HandBrake 인코딩이 완료되었습니다!</value>
+    <value>HandBrake 編碼已完成！</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>HandBrake 작업 대기열이 완료되었습니다! </value>
+    <value>HandBrake 佇列作業已完成！</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>이렇게 하면 '완료 시' 탭에서 창 표시 작업 표시줄 알림 옵션도 비활성화됩니다. 이 기능을 다시 활성화하려면 다시 활성화하십시오.</value>
+    <value>這也會隱藏「當完成時」分頁的 Windows 工作列通知選項。若要使用，須再啟動此功能。</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
-    <value>Windows 알림 제어 창에서 HandBrake 제거하기</value>
+    <value>從 Windows 通知控制中心移除 HandBrake。</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
-    <value>미설치</value>
+    <value>已解除安裝</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
-    <value>알림 설정이 제거되었습니다.</value>
+    <value>已移除通知設定。</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>삭제 &amp; 제거</value>
+    <value>清除並解除安裝</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Windows 작업 표시줄에 알림을 보냅니다.</value>
+    <value>在 Windows 工作列發送通知</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
-    <value>윈도우 알림</value>
+    <value>Windows 通知</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} 작업이 완료되었습니다. {1}처리 대기 중인 {3}로 {2} 작업에 대해 작업 중입니다.</value>
+    <value>完成 {0} 項工作。{1} 處理了 {2} 項工作，仍有 {3} 待處理。</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>다시 만들기 (자동 이름 생성)</value>
+    <value>重新產生（自動命名）</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
-    <value>해당 디렉토리 열기</value>
+    <value>開啟此目錄</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>모두 닫기</value>
+    <value>收合全部</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
-    <value>모두 펼치기</value>
+    <value>展開全部</value>
   </data>
 </root>

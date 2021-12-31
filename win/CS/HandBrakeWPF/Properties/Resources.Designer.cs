@@ -1939,6 +1939,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regenerate (Autoname).
+        /// </summary>
+        public static string MainView_AutonameRegenerate {
+            get {
+                return ResourceManager.GetString("MainView_AutonameRegenerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string MainView_Browser {
@@ -2137,6 +2146,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open this Directory.
+        /// </summary>
+        public static string MainView_OpenDirectory {
+            get {
+                return ResourceManager.GetString("MainView_OpenDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {
@@ -2182,7 +2200,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename Preset.
+        ///   Looks up a localized string similar to Edit Preset.
         /// </summary>
         public static string MainView_PresetManage {
             get {
@@ -2892,21 +2910,6 @@ namespace HandBrakeWPF.Properties {
         public static string Notifications_QueueDone {
             get {
                 return ResourceManager.GetString("Notifications_QueueDone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
-        ///
-        ///While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
-        ///
-        ///Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
-        ///
-        ///This warning will display only twice..
-        /// </summary>
-        public static string OldOperatingSystem {
-            get {
-                return ResourceManager.GetString("OldOperatingSystem", resourceCulture);
             }
         }
         
@@ -6032,11 +6035,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collapse All.
+        /// </summary>
+        public static string Shared_CollapseAll {
+            get {
+                return ResourceManager.GetString("Shared_CollapseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Default Behaviours.
         /// </summary>
         public static string Shared_ConfigureDefaultBehaviours {
             get {
                 return ResourceManager.GetString("Shared_ConfigureDefaultBehaviours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expand All.
+        /// </summary>
+        public static string Shared_ExpandAll {
+            get {
+                return ResourceManager.GetString("Shared_ExpandAll", resourceCulture);
             }
         }
         

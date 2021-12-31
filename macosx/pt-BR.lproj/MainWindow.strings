@@ -259,6 +259,9 @@
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "Para:";
 
+/* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
+"rK6-EB-N9Z.title" = "Exiba no finder";
+
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "Pausa";
 

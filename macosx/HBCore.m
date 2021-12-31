@@ -104,7 +104,7 @@ HB_OBJC_DIRECT_MEMBERS
     if (self)
     {
         _name = @"HBCore";
-        _automaticallyPreventSleep = YES;
+        _automaticallyPreventSleep = NO;
         _state = HBStateIdle;
         _updateTimerQueue = queue;
         _titles = @[];
@@ -322,7 +322,9 @@ HB_OBJC_DIRECT_MEMBERS
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 
-    return (self.titles.count > 0) ? HBCoreResultDone : HBCoreResultFailed;
+    HBCoreResult result = {0};
+    result.code = (self.titles.count > 0) ? HBCoreResultCodeDone : HBCoreResultCodeUnknown;
+    return result;
 }
 
 - (void)cancelScan
@@ -337,7 +339,7 @@ HB_OBJC_DIRECT_MEMBERS
 {
     CGImageRef img = NULL;
 
-    hb_job_t *hb_job = [job hb_job];
+    hb_job_t *hb_job = job.hb_job;
     hb_dict_t *job_dict = hb_job_to_dict(hb_job);
     hb_job_close(&hb_job);
     hb_image_t *image = hb_get_preview3(_hb_handle, (int)index, job_dict);
@@ -455,19 +457,17 @@ HB_OBJC_DIRECT_MEMBERS
         hb_rem(_hb_handle, job);
     }
 
-    HBCoreResult result = HBCoreResultDone;
-    switch (_hb_state->param.working.error)
+    HBCoreResult result = {_hb_state->param.working.rate_avg, (HBCoreResultCode)_hb_state->param.working.error};
+
+    switch (result.code)
     {
-        case HB_ERROR_NONE:
-            result = HBCoreResultDone;
+        case HBCoreResultCodeDone:
             [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
             break;
-        case HB_ERROR_CANCELED:
-            result = HBCoreResultCanceled;
+        case HBCoreResultCodeCanceled:
             [HBUtilities writeToActivityLog:"%s work canceled", self.name.UTF8String];
             break;
         default:
-            result = HBCoreResultFailed;
             [HBUtilities writeToActivityLog:"%s work failed", self.name.UTF8String];
             break;
     }

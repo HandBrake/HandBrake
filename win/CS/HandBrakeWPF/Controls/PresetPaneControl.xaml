@@ -6,8 +6,6 @@
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:cm="http://caliburnmicro.com"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="400">
@@ -37,6 +35,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="False" >
                                         <Setter Property="FontStyle" Value="Normal" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPresetDisabled}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource Ui.ContrastLight}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -86,6 +87,10 @@
                               SelectedItemChanged="PresetListTree_OnSelectedItemChanged"
                               PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
 
+                <TreeView.CommandBindings>
+                    <CommandBinding Command="Delete" Executed="Delete_Execute" />
+                </TreeView.CommandBindings>
+
                 <TreeView.ItemContainerStyle>
                     <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -93,6 +98,7 @@
                         <Setter Property="ToolTip" Value="{Binding Description}" />
                         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollapsed" />
                         <Style.Triggers>
                             <Trigger Property="HasItems" Value="True">
@@ -103,25 +109,19 @@
                 </TreeView.ItemContainerStyle>
 
                 <TreeView.ContextMenu>
-                    <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                    <ContextMenu AutomationProperties.Name="Presets List Context Menu" Opened="ContextMenu_OnOpened">
                         <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cm:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                        <Separator />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" x:Name="editPresetMenuItem" cm:Message.Attach="[Event Click] = [Action PresetManage]" />
+                        <MenuItem Header="{x:Static Properties:Resources.PresetManagerView_Delete}" Click="Delete_OnClick" InputGestureText="Del" />
                         <Separator />
                         <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cm:Message.Attach="[Event Click] = [Action PresetImport]" />
                         <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cm:Message.Attach="[Event Click] = [Action PresetExport]" />
                         <Separator />
                         <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cm:Message.Attach="[Event Click] = [Action PresetReset]" />
+                        <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" cm:Message.Attach="[Event Click] = [Action PresetDeleteBuildIn]" />
                     </ContextMenu>
                 </TreeView.ContextMenu>
-
-                <b:Interaction.Triggers>
-                    <commands:InputBindingTrigger>
-                        <commands:InputBindingTrigger.InputBinding>
-                            <KeyBinding Key="Delete"/>
-                        </commands:InputBindingTrigger.InputBinding>
-                        <cm:ActionMessage MethodName="PresetRemove" />
-                    </commands:InputBindingTrigger>
-                </b:Interaction.Triggers>
-
             </TreeView>
         </Grid>
 

@@ -84,18 +84,7 @@ namespace HandBrakeWPF.Views
                 this.tabControl.Focus();
             }
         }
-
-        private void MorePresetOptionsButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var button = sender as FrameworkElement;
-            if (button != null && button.ContextMenu != null)
-            {
-                button.ContextMenu.PlacementTarget = button;
-                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                button.ContextMenu.IsOpen = true;
-            }
-        }
-
+        
         private void SelectPreset_OnClick(object sender, RoutedEventArgs e)
         {
             var button = sender as FrameworkElement;

@@ -44,7 +44,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     {
         NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
         _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:serviceName serviceName:serviceName];
-        _core.automaticallyPreventSleep = NO;
 
         // Set up observers
         [self.core addObserver:self forKeyPath:@"state"
@@ -100,7 +99,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 {
     [self.item pausedAtDate:[NSDate date]];
     [self.core pause];
-    [self.core allowSleep];
 }
 
 - (BOOL)canResume
@@ -112,7 +110,6 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
 {
     [self.item resumedAtDate:[NSDate date]];
     [self.core resume];
-    [self.core preventSleep];
 }
 
 - (void)completedItem:(HBQueueJobItem *)item result:(HBCoreResult)result
@@ -129,18 +126,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     self.currentLog = nil;
 
     // Mark the encode just finished
-    switch (result) {
-        case HBCoreResultDone:
-            item.state = HBQueueItemStateCompleted;
-            break;
-        case HBCoreResultCanceled:
-            item.state = HBQueueItemStateCanceled;
-            break;
-        default:
-            item.state = HBQueueItemStateFailed;
-            break;
-    }
-
+    [self.item setDoneWithResult:result];
     self.item = nil;
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueWorkerProgressNotification
@@ -193,7 +179,7 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        if (result == HBCoreResultDone)
+        if (result.code == HBCoreResultCodeDone)
         {
             [self realEncodeItem:item];
         }

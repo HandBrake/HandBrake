@@ -259,6 +259,9 @@
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "至：";
 
+/* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
+"rK6-EB-N9Z.title" = "在访达中显示";
+
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "暂停";
 

@@ -137,9 +137,7 @@
                     <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate"> <TextBlock Text="{x:Static Properties:Resources.SourceSelection_AboutHandBrake}" /></Hyperlink>
                 </TextBlock>
             </StackPanel>
-
         </Grid>
-
 
         <Grid Grid.Column="1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Border BorderThickness="8" CornerRadius="4"  VerticalAlignment="Center" HorizontalAlignment="Center">

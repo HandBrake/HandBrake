@@ -1110,8 +1110,9 @@ class VersionProbe( Action ):
             self.rexprs.insert(0,rexpr)
 
     def _action( self ):
-        ## pipe and redirect stderr to stdout; effects communicate result
-        pipe = subprocess.Popen( self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+        with open(os.devnull, 'w') as devnull:
+            ## pipe and redirect stderr to dev/null; effects communicate result
+            pipe = subprocess.Popen( self.command, stdout=subprocess.PIPE, stderr=devnull )
 
         ## read data into memory buffers
         data = pipe.communicate()

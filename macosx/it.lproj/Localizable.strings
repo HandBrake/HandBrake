@@ -1,3 +1,6 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% del file originale)";
+
 /* Preview -> size info label */
 " Scaled To Screen" = " Adattata allo schermo";
 
@@ -15,6 +18,9 @@
 
 /* Main Window -> preset modified */
 "(Modified)" = "(Modificato)";
+
+/* Job statistics */
+"%@ fps" = "%@ fps";
 
 /* Queue status */
 "%lu encode pending" = "%lu conversione in sospeso";
@@ -88,6 +94,9 @@
 
 /* Player HUD -> audio menu */
 "Audio" = "Audio";
+
+/* Job statistics */
+"Average speed:" = "Velocità media:";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -173,7 +182,7 @@
 "Encoding Job: %@" = "Converto lavoro: %@";
 
 /* Job statistics */
-"Ended at:" = "Completato alle:";
+"Ended at:" = "Completato il:";
 
 /* Export presets save panel title */
 "Export preset" = "Esporta";
@@ -229,6 +238,9 @@
 
 /* No comment provided by engineer. */
 "No job selected" = "Nessun lavoro selezionato";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Nessun preset valido";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Nessuna sorgente valida trovata";
@@ -342,7 +354,7 @@
 "Reveal destination in Finder" = "Mostra destinazione nel Finder";
 
 /* Job statistics */
-"Run time:" = "Tempo di conversione:";
+"Run time:" = "Tempo:";
 
 /* Export presets panel prompt */
 "Save" = "Salva";
@@ -370,7 +382,7 @@
 "Show Preview Window" = "Mostra finestra di anteprima";
 
 /* Job statistics */
-"Size:" = "Dim.:";
+"Size:" = "Dimensione:";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "Salta lavoro attuale";
@@ -396,7 +408,7 @@
 "Start/Stop Encoding" = "Avvia/Interrompi conversione";
 
 /* Job statistics */
-"Started at:" = "Avviato alle:";
+"Started at:" = "Avviato il:";
 
 /* Queue -> Stop action
    Toolbar Start/Stop Item */

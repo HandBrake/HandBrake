@@ -183,6 +183,10 @@
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Copy Full Query" cal:Message.Attach="[Event Click] = [Action CopyQuery]"  />
+                                <Separator />
+                                <MenuItem Command="ApplicationCommands.Cut" />
+                                <MenuItem Command="ApplicationCommands.Copy" />
+                                <MenuItem Command="ApplicationCommands.Paste" />
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>

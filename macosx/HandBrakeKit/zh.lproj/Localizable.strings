@@ -252,6 +252,9 @@
 /* HBJob -> invalid name error description */
 "Invalid name" = "无效的名称";
 
+/* HBJob -> invalid preset */
+"Invalid preset" = "无效的预设";
+
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "无效的 Unsharp 自定义设置。";
 
@@ -378,6 +381,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "无法导入预设 “%@”。";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "该预设不是有效的，尝试选择一个不同的预设。";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "所选预设是无效的。";

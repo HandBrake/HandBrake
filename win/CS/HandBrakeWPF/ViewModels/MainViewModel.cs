@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -287,11 +288,13 @@ namespace HandBrakeWPF.ViewModels
 
                     if (value != null)
                     {
-                        this.PresetSelect(value);
+                        bool result = this.PresetSelect(value);
+                        if (result)
+                        {
+                            this.selectedPreset = value;
+                            this.NotifyOfPropertyChange(() => this.SelectedPreset);
+                        }
                     }
-
-                    this.selectedPreset = value;
-                    this.NotifyOfPropertyChange(() => this.SelectedPreset);
                 }
             }
         }
@@ -1637,13 +1640,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (this.selectedPreset.IsBuildIn)
-            {
-                this.errorService.ShowMessageBox(
-                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
             presetViewModel.Setup(this.selectedPreset);
             this.windowManager.ShowDialogAsync(presetViewModel);
@@ -1656,9 +1652,15 @@ namespace HandBrakeWPF.ViewModels
 
         public void PresetRemove()
         {
-            if (this.selectedPreset != null)
+            this.PresetRemove(this.SelectedPreset);
+        }
+
+        public void PresetRemove(object presetObj)
+        {
+            Preset preset = presetObj as Preset;
+            if (preset != null)
             {
-                if (this.selectedPreset.IsDefault)
+                if (preset.IsDefault)
                 {
                     this.errorService.ShowMessageBox(
                       Resources.MainViewModel_CanNotDeleteDefaultPreset, 
@@ -1671,7 +1673,7 @@ namespace HandBrakeWPF.ViewModels
 
                 MessageBoxResult result =
                 this.errorService.ShowMessageBox(
-                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?", 
+                   Resources.MainViewModel_PresetRemove_AreYouSure + preset.Name + " ?", 
                    Resources.Question, 
                    MessageBoxButton.YesNo, 
                    MessageBoxImage.Question);
@@ -1681,7 +1683,7 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
 
-                this.presetService.Remove(this.selectedPreset);
+                this.presetService.Remove(preset);
                 this.NotifyOfPropertyChange(() => this.PresetsCategories);
                 this.SelectedPreset = this.presetService.DefaultPreset;
             }
@@ -1754,24 +1756,49 @@ namespace HandBrakeWPF.ViewModels
             this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        public void PresetDeleteBuildIn()
+        {
+            List<Preset> allPresets = this.presetService.FlatPresetList;
+            bool foundDefault = false;
+            foreach (Preset preset in allPresets)
+            {
+                if (preset.IsBuildIn)
+                {
+                    if (preset.IsDefault)
+                    {
+                        foundDefault = true;
+                    }
+
+                    this.presetService.Remove(preset);
+                }
+            }
+
+            if (foundDefault)
+            {
+                Preset preset = this.presetService.FlatPresetList.FirstOrDefault();
+                if (preset != null)
+                {
+                    this.presetService.SetDefault(preset);
+                    this.SelectedPreset = preset;
+                }
+            }
+
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+        }
+
         public void PresetSelect()
         {
             this.PresetSelect(this.SelectedPreset);
         }
 
-        public void PresetSelect(object tag)
+        public bool PresetSelect(object tag)
         {
             Preset preset = tag as Preset;
             if (preset != null)
             {
                 if (preset.IsPresetDisabled)
                 {
-                    this.errorService.ShowMessageBox(
-                        Resources.Presets_NotAvailableForUse,
-                        Resources.Warning,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-                    return;
+                    return false;
                 }
 
                 this.selectedPreset = preset;
@@ -1795,8 +1822,11 @@ namespace HandBrakeWPF.ViewModels
                     this.SummaryViewModel.UpdateDisplayedInfo();
 
                     this.isSettingPreset = false;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public void StartScan(string filename, int title)
@@ -1858,6 +1888,14 @@ namespace HandBrakeWPF.ViewModels
 
             var optionsViewModel = IoC.Get<IOptionsViewModel>();
             optionsViewModel.UpdateSettings();
+        }
+
+        public void ReGenerateAutoName()
+        {
+            if (this.ScannedSource != null)
+            {
+                this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SelectedTitle?.DisplaySourceName, this.ScannedSource?.SourceName, this.selectedPreset);
+            }
         }
 
         /* Private Methods*/

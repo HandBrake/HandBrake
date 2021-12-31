@@ -328,12 +328,6 @@ Trotzdem fortfahren?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Ausgabe: {0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Das Format der Ausgabedatei. Zusätzlich zu allen unterstützten Dateisystemzeichen können die folgenden Platzhalter verwendet werden, die ersetzt werden, wenn der Titel geändert oder eine Quelle überprüft wird.
-
-Live-Update-Optionen: {source} {title} {chapters}  
-Nicht-Live-Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} oder {source}</value>
   </data>
@@ -428,7 +422,7 @@ Das Aktivitätsprotokoll kann hierzu weitere Informationen enthalten.</value>
     <value>Tonspuren</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten</value>
+    <value>Auswahlverhalten ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Zu den Spuren zurückkehren</value>
@@ -556,7 +550,7 @@ Soll HandBrake wirklich beendet werden?</value>
     <value>Zu den Spuren zurückkehren</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten</value>
+    <value>Auswahlverhalten ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archivierte Datei:</value>
@@ -1029,7 +1023,7 @@ Soll sie überschrieben werden?</value>
     <value>Bildgröße</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Voreinstellung umbenennen</value>
+    <value>Voreinstellungen editieren</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Voreinstellung-Kontextmenü</value>
@@ -1883,11 +1877,10 @@ Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
     <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte die GPU-Treiber für alle Onboard- und diskreten Grafikkarten aktualisieren, die dieses System besitzt.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Echtzeit-Update Optionen: {source} {title} {chapters} 
-Nicht-Echtzeit Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese werden nur geändert, wenn eine neue Quelle gescannt, Titel oder Kapitel geändert werden)</value>
+    <value>Austausch-Platzhalter: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Verfügbare Optionen: {source_path} {source_folder_name} {source}</value>
+    <value>Austausch-Platzhalter: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Fragen um Datei zu überschreiben</value>
@@ -1908,7 +1901,7 @@ Nicht-Echtzeit Optionen: {date} {time} {creation-date} {creation-time} {quality}
     <value>Encodierung abgeschlossen</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Benachrichtigungen</value>
+    <value>Akustische Benachrichtigungen</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Warteschlange ausgeführt</value>
@@ -2153,8 +2146,8 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Der Bereich der Ports muss zwischen 5000 und 32767 liegen.</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Austausch-Platzhalter: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>Austausch-Platzhalter: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Eine neue Version von HandBrake ist verfügbar!</value>
@@ -2431,15 +2424,6 @@ Bitte eine andere Voreinstellung auswählen.</value>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Warnung: Bitte beachten Sie, dass dies ein "Safe Mode"-Build von HandBrake ist, das keine Unterstützung für Hardware-Encoder enthält. Wenn Sie die Hardware-Encoder-Unterstützung nutzen möchten, laden Sie bitte einen nicht-"Safe Mode"-Build von der Website herunter.</value>
   </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Bitte beachten Sie, dass HandBrake nicht mehr unter Windows 7 oder Windows 8 unterstützt wird.
-
-Sie können die Anwendung zwar auf eigenes Risiko weiter verwenden, aber bitte beachten Sie, dass bestimmte Funktionen nicht funktionieren und es andere unbekannte Probleme geben kann. Es gibt keinen Support, wenn diese Probleme auftreten. 
-
-Die Unterstützung für Windows 7 und 8 wurde ab Version 1.3 entfernt. Das bedeutet, dass es keine weiteren Updates zur Behebung von Problemen auf diesen Plattformen geben wird. 
-
-Diese Warnung wird nur zweimal angezeigt.</value>
-  </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Schwarz</value>
   </data>
@@ -2572,5 +2556,54 @@ Dies kann jederzeit in den Einstellungen unter General -&gt; Auf Updates prüfen
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
     <value>Bitte stellen Sie sicher, dass die entsprechenden Dateiverknüpfungen in Windows eingerichtet sind, damit diese Datei mit einem unterstützten Videoplayer geöffnet werden kann.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Lesen der Warteschlangen-Datei fehlgeschlagen.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Die Datei ist möglicherweise beschädigt oder stammt von einer früheren Version von HandBrake. 
+Es werden nur Warteschlangen-Dateien der aktuellen Version unterstützt.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Die HandBrake-Encodierung ist fertig!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Die HandBrake-Warteschlange ist fertig!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Dadurch werden auch die Optionen zum Anzeigen von Benachrichtigungen in der Windows-Taskleiste auf der Registerkarte 'Wenn fertig' deaktiviert. Aktivieren Sie diese wieder, wenn Sie diese Funktion wieder aktivieren möchten.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Entferne HandBrake aus der Systemsteuerung für Windows-Benachrichtigungen.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Deinstalliert</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Die Benachrichtigungseinstellungen wurden entfernt.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Löschen &amp; Deinstallieren</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Sende eine Benachrichtigung an die Windows-Taskleiste.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Windows Mitteilung</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} Aufgaben abgeschlossen. {1}Arbeite an {2} Aufgaben mit {3} Pausen zu bearbeiten.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Wiederherstellen (Autoname)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Dieses Verzeichnis öffnen</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Alle minimieren</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Alle maximieren</value>
   </data>
 </root>

@@ -168,6 +168,30 @@ int hb_vt_is_constant_quality_available(int encoder)
     return 0;
 }
 
+int hb_vt_is_two_pass_available(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_VT_H264:
+        {
+            return 1;
+        }
+        case HB_VCODEC_VT_H265:
+        case HB_VCODEC_VT_H265_10BIT:
+        {
+#if defined(__aarch64__)
+            if (__builtin_available (macOS 12, *))
+            {
+                return 1;
+            }
+#endif
+            return 0;
+        }
+    }
+    return 0;
+
+}
+
 #pragma mark - Settings
 
 static const char * const vt_h26x_preset_name[] =

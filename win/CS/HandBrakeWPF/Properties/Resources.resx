@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>The full list of encoder parameters: 
@@ -1020,7 +1020,7 @@ Would you like to overwrite it?</value>
     <value>Dimensions</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Rename Preset</value>
+    <value>Edit Preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Preset Options Context Menu</value>
@@ -2421,15 +2421,6 @@ Please choose a different preset.</value>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Warning: Please note that this is a "Safe Mode" build of HandBrake that does not include support for hardware encoders. If you wish to use hardware encoder support, please download a non-"Safe Mode" build from the website.</value>
   </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Please be aware that HandBrake is no longer supported on any version of Windows 7 or Windows 8.
-
-While you can continue using the application at your own risk, please be aware that certain features are non-functional and there may be other unknown issues. There is no support available when these issues occur. 
-
-Support for Windows 7 and 8 was deprecated in the 1.3 series. This means there will be no further updates to correct issues on these platforms. 
-
-This warning will display only twice.</value>
-  </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Black</value>
   </data>
@@ -2599,5 +2590,17 @@ Only queue files from the current version are supported.</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
     <value>{0} jobs completed. {1}Working on {2} jobs with {3} waiting to be processed.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Regenerate (Autoname)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Open this Directory</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Collapse All</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Expand All</value>
   </data>
 </root>

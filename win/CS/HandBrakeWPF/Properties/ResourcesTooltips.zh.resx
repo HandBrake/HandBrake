@@ -326,7 +326,9 @@ FFMpeg 和 Theora 的比例更加线性。
     <value>移除选中的预设。</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>只扫描指定的标题。</value>
+    <value>一些源可能包含一个以上的视频剪辑，或一个标题的集合。蓝光和 DVD 资源通常有多个 Titles。
+
+如果你知道你想编码的具体标题，你可以在这里输入，HandBrake 将只扫描该标题，而不是源文件中的每个标题。否则，请将该字段留空。</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>自定义降噪参数。
@@ -482,5 +484,33 @@ Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4�
     <value>扁平 - 预置显示为一个平坦的列表。
 部分扁平 - 最后 8 个用户的预设被显示为扁平的列表，然后所有预设被显示在分类列表中。
 分类 - 所有预设都显示在每个分类的子菜单下。</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>设置行为，决定此标签在选择新的音源或标题时如何自动添加音轨。</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>根据配置的行为刷新下面的列表。</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>设置行为，决定此标签在选择新来源或标题时如何自动添加字幕轨道。</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>以下环境变量总是被设置：
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+可能的退出代码如下：
+0 : 成功
+2 : 输入参数错误
+3 : 初始化失败 
+4 : 未知错误
+5 : 读取源文件错误。
+
+请注意，错误代码是尽力而为，不一定准确。
+建议在对输出文件进行操作之前对其进行验证。</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>输出文件的格式。除了任何支持的文件系统字符外，你还可以使用任何一个占位符，当你改变标题或扫描一个源或更新某些设置时，这些占位符将被替换。</value>
   </data>
 </root>

@@ -325,7 +325,9 @@ Sovrascrivono tutte le opzioni di codifica. Le opzioni possono comunque essere m
     <value>Rimuove la preimpostazione selezionata.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Scansiona solamente il titolo specificato invece di tutti i titoli.</value>
+    <value>Alcune Sorgenti potrebbero contenere più di una clip video, oppure una collana di Titoli. Fonti da DVD o Blu-Ray spesso sono composte da vari Titoli.
+
+Se desideri codificare un Titolo specifico puoi inserirlo qui: HandBrake scansionerà solo quel Titolo invece di tutto il file sorgente. Altrimenti, lasciare lo spazio vuoto.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Parametri Personalizzati di Riduzione del Rumore.
@@ -481,5 +483,33 @@ Ad esempio, i sottotitoli in formato PGS non sono supportati dall'MP4</value>
     <value>Semplice - Le preimpostazioni sono mostrate in una lista semplice.
 Parzialmente Semplice - Le ultime 8 preimpostazioni dell'utente sono mostrate in una lista semplice, seguite da tutte le altre preimpostazioni in una lista divisa per categoria.
 Per Categoria - Tutte le preimpostazioni sono nel sottomenù della rispettiva categoria.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Comportamento preparativo che decide come questa scheda debba aggiungere tracce audio quando si seleziona una nuova sorgente od un nuovo Titolo.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Ricarica la lista sottostante secondo comportamento configurato.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Comportamento preparativo che decide come questa scheda debba aggiungere tracce dei sottotitoli quando si seleziona una nuova sorgente od un nuovo Titolo.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Le seguenti variabili d'ambiente sono sempre impostate:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Possibili codici di errore possono essere:
+0 : Terminato con Successo
+2 : Errore Argomenti Ingresso
+3 : Inizializzazione Impossibile 
+4 : Errore Sconosciuto
+5 : Errore lettura file sorgente.
+
+Nota Bene: i codici di errore sono supposizioni e potrebbero quindi non essere corretti.
+È raccomandabile di validare i file di uscita prima di compiere azioni su di essi.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Il formato del nome del file di uscita. Oltre a tutti i caratteri supportati dal file system, è possibile usare un qualsiasi segnaposto che verrà poi sostituito al cambio di Titolo, alla scansione di una sorgente od al cambio di determinate impostazioni.</value>
   </data>
 </root>

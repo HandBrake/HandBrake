@@ -11,14 +11,51 @@ namespace HandBrakeWPF.Controls
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using Caliburn.Micro;
+
+    using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels;
 
     public partial class PresetPaneControl : UserControl
     {
+        private static readonly IPresetService presetService;
+
+        static PresetPaneControl()
+        {
+            presetService = IoC.Get<IPresetService>();
+        }
+
         public PresetPaneControl()
         {
             InitializeComponent();
+        }
+
+        public static readonly DependencyProperty SelectedPresetProperty = DependencyProperty.Register("SelectedPreset", typeof(Preset), typeof(PresetPaneControl), new PropertyMetadata(null, OnSelectedPresetChanged));
+
+        public Preset SelectedPreset
+        {
+            get
+            {
+                return (Preset)this.GetValue(SelectedPresetProperty);
+            }
+            set
+            {
+                this.SetValue(SelectedPresetProperty, value);
+            }
+        }
+
+        private static void OnSelectedPresetChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            PresetPaneControl presetPane = dependencyObject as PresetPaneControl;
+            Preset preset = e.NewValue as Preset;
+            if (presetPane != null)
+            {
+                if (preset != null)
+                {
+                    presetService.SetSelected(preset);
+                }
+            }
         }
 
         private void PresetTreeviewItemCollapsed(object sender, RoutedEventArgs e)
@@ -61,6 +98,30 @@ namespace HandBrakeWPF.Controls
                 source = VisualTreeHelper.GetParent(source);
 
             return source as TreeViewItem;
+        }
+
+        private void Delete_OnClick(object sender, RoutedEventArgs e)
+        {
+            Preset preset = this.presetListTree.SelectedItem as Preset;
+            if (preset != null)
+            {
+                ((MainViewModel)this.DataContext).PresetRemove(preset);
+            }
+        }
+
+        private void Delete_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Preset preset = this.presetListTree.SelectedItem as Preset;
+            if (preset != null)
+            {
+                ((MainViewModel)this.DataContext).PresetRemove(preset);
+            }
+        }
+
+        private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            Preset preset = this.presetListTree.SelectedItem as Preset;
+            this.editPresetMenuItem.IsEnabled = preset == null || !preset.IsPresetDisabled;
         }
     }
 }

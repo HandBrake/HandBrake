@@ -1,3 +1,6 @@
+/* Job statistics */
+" (%@ %% of the source file)" = " (%@ %% du fichier source)";
+
 /* Preview -> size info label */
 " Scaled To Screen" = " À l'échelle de l'écran";
 
@@ -15,6 +18,9 @@
 
 /* Main Window -> preset modified */
 "(Modified)" = "(Modifié)";
+
+/* Job statistics */
+"%@ fps" = "%@ ips";
 
 /* Queue status */
 "%lu encode pending" = "%lu encodage en attente";
@@ -54,10 +60,10 @@
 "Actual Scale" = "Échelle réelle";
 
 /* Queue undo action name */
-"Add Job To Queue" = "Ajouter un fichier à la file d'attente";
+"Add Job To Queue" = "Ajouter une tâche à la file d'attente";
 
 /* Queue undo action name */
-"Add Jobs To Queue" = "Ajouter des fichiers à la file d'attente";
+"Add Jobs To Queue" = "Ajouter des tâches à la file d'attente";
 
 /* Touch bar */
 "Add Preset" = "Ajouter un préréglage";
@@ -88,6 +94,9 @@
 
 /* Player HUD -> audio menu */
 "Audio" = "Audio";
+
+/* Job statistics */
+"Average speed:" = "Vitesse moyenne :";
 
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
@@ -229,6 +238,9 @@
 
 /* No comment provided by engineer. */
 "No job selected" = "Aucune tâche sélectionnée";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Pas de préréglage valide";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Aucune source valide trouvée";
@@ -373,7 +385,7 @@
 "Size:" = "Taille :";
 
 /* Queue Alert -> cancel rip second button */
-"Skip Current Job" = "Ignorer le travail en cours";
+"Skip Current Job" = "Ignorer la tâche en cours";
 
 /* Touch bar */
 "Slider" = "Curseur";
@@ -406,7 +418,7 @@
 "Stop action." = "Arrêter l'action en cours.";
 
 /* Queue Alert -> cancel rip third button */
-"Stop After Current Job" = "Arrêter après l'encodage actuel";
+"Stop After Current Job" = "Arrêter après la tâche actuelle";
 
 /* Queue Alert -> cancel rip fourth button */
 "Stop All" = "Tout arrêter";

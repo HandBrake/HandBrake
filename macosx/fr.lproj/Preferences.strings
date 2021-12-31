@@ -206,7 +206,7 @@
 "ggR-Zs-P8G.title" = "Changer la casse pour la casse de titre";
 
 /* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
-"GQJ-go-PoN.title" = "Résumé :";
+"GQJ-go-PoN.title" = "Résumé :";
 
 /* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
 "iGS-b5-ip7.title" = "Nombre d'encodages simultanés :";
@@ -217,11 +217,17 @@
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "secondes";
 
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "L3N-te-KLg"; */
+"L3N-te-KLg.title" = "Conserver les préréglages personnalisés lors de la sélection d'un nouveau titre";
+
 /* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
 "l8v-ns-6UR.title" = "1";
 
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
 "lgn-RF-k0d.title" = "Nettoyer les anciens journaux du journal d'activité principal après 30 jours";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
+"MLd-Te-AbW.ibShadowedToolTip" = "Des valeurs plus élevées pourraient aider à tirer pleinement parti du processeur si une seule tâche ne permet pas d'utiliser tous les cœurs du processeur. ";
 
 /* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
 "nTJ-DB-eOd.title" = "4";
@@ -240,6 +246,9 @@
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
 "Uxv-oN-c1r.title" = "Rétablir à \"Ne rien faire\" au démarrage";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
+"wiP-Ia-DfB.title" = "Préréglage :";
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Retirer la ponctuation";

@@ -327,7 +327,9 @@ VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
     <value>Die ausgewählte Voreinstellung entfernen.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Nur den spezifizierten Titel, statt aller Titel, überprüfen.</value>
+    <value>Einige Quellen können mehr als einen Videoclip oder eine Sammlung von Titeln enthalten. Blu-ray- und DVD-Quellen haben oft mehrere Titel.
+
+Wenn Sie den spezifischen Titel kennen, den Sie encodieren möchten, können Sie ihn hier eingeben und HandBrake wird nur diesen Titel und nicht alle Titel in der Quelldatei scannen. Andernfalls lassen Sie das Feld leer.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Eigene Entrauschparameter.
@@ -483,5 +485,33 @@ Zum Beispiel werden PGS-Untertitel in MP4 nicht unterstützt.</value>
     <value>Reduziert - Voreinstellungen werden als reduzierte Liste angezeigt.
 Teilweise reduziert - Die letzten 8 Voreinstellungen des Benutzers werden als reduzierte Liste angezeigt, gefolgt von einer Auflistung aller Voreinstellungen in Kategorien.
 Kategorien - Alle Voreinstellungen werden in einem Untermenü pro Kategorie angezeigt.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Legen Sie Verhaltensweisen fest, die bestimmen, wie dieser Tab automatisch Audiospuren hinzufügt, wenn eine neue Quelle oder ein neuer Titel ausgewählt wird.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Aktualisieren Sie die Liste unten anhand der konfigurierten Verhaltensweisen. </value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Legen Sie Verhaltensweisen fest, die bestimmen, wie dieser Tab automatisch Untertitelspuren hinzufügt, wenn eine neue Quelle oder ein neuer Titel ausgewählt wird.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Die folgenden Umgebungsvariablen sind immer gesetzt:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Mögliche Exit-Codes sind wie folgt:
+0 : Erfolgreich
+2 : Fehler bei der Eingabe von Argumenten
+3 : Initialisierung fehlgeschlagen 
+4 : Unbekannter Fehler
+5 : Fehler beim Lesen der Quelldatei.
+
+Bitte beachten Sie, dass die Fehlercodes nach bestem Wissen und Gewissen ermittelt wurden und möglicherweise nicht immer korrekt sind.
+Es wird empfohlen, die Ausgabedatei vor der Durchführung von Aktionen zu validieren.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle scannen oder bestimmte Einstellungen aktualisieren.</value>
   </data>
 </root>

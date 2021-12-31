@@ -408,6 +408,8 @@ void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 const char* hb_video_quality_get_name(uint32_t codec);
 int         hb_video_quality_is_supported(uint32_t codec);
 
+int         hb_video_twopass_is_supported(uint32_t codec);
+
 int                hb_video_encoder_is_supported(int encoder);
 int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
 int                hb_video_encoder_get_depth   (int encoder);

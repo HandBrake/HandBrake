@@ -252,6 +252,9 @@
 /* HBJob -> invalid name error description */
 "Invalid name" = "Nome inválido";
 
+/* HBJob -> invalid preset */
+"Invalid preset" = "Predefinição inválida";
+
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "Configurações personalizadas inválidas desharp.";
 
@@ -378,6 +381,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "A pré-definição \"%@\" não pôde ser importada.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "A predefinição não é válida, tente escolher uma outra.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "A predefinição selecionada é inválida.";

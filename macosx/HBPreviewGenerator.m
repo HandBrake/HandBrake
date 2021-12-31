@@ -263,6 +263,7 @@
     // Init the libhb core
     NSInteger level = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
     self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];
+    self.core.automaticallyPreventSleep = YES;
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.twoLines = NO;
@@ -279,7 +280,7 @@
          }
        completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle
-           if (result == HBCoreResultDone)
+           if (result.code == HBCoreResultCodeDone)
            {
                [self.delegate didCreateMovieAtURL:destURL];
            }

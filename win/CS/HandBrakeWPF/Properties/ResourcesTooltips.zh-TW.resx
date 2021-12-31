@@ -1,0 +1,514 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Choose decomb or deinterlace filter options.
+
+The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.
+
+The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>降噪可以減少或移除噪訊或顆粒，並有效提升壓縮效率並在更小的檔案中建立更高品質的影片。
+過強的降噪設定可能因丟棄細節而損害畫面品質。
+
+NLMeans 是個以速度為代價的高品質降噪濾鏡。僅在畫面品質比速度更重要時再使用它。
+
+HQDN3D 是個適應性的低通濾鏡，速度較 NLMeans 快，但保留精細畫質效果較差。</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>灰階會移除視訊的色彩部分，通常稱作黑白影片。</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>目的地路徑，包含目錄及檔案名稱。這是您新的影片將被建立的位置及賦予的名稱。</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>加入特殊的 MP4 標記，以便相容於 2006 年左右的舊式 iPod 5 上播放。其他設定可能會影響相容性。</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>容器格式。可裝載視訊、音訊及其他軌道於單一檔案。此設定會影響相容性。</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>將 MP4 為漸進下載最佳化。編碼後，資料會被重新編排，以允許透過網路播放，而無須先下載完整檔案。</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Source range selection. By default, all chapters are selected and the entire source is encoded.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Title, or video clip, to encode.
+Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+
+None disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+
+Automatic maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>自動裁切影片周圍的黑邊。</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>自底部裁切影片。</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>自左側裁切影片。</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>自右側裁切影片。</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>自頂部裁切影片。</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>此為視訊將被儲存的高度。
+若像素並非正方形，則實際顯示尺寸會有差異。</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>手動裁切影片。</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Align storage dimensions to multiples of this value.
+
+This setting is only necessary for compatibility with some devices.
+You should use 2 unless you experience compatibility issues.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>定義像素形狀長寬比。
+1:1 表示像素為正方形，其他數值為長方形。
+播放器將縮放影像，以達到指定的長寬比。</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>此為視訊將被儲存的寬度。
+若像素並非正方形，則實際顯示尺寸會有差異。</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>自佇列中刪除工作。</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>將工作狀態重設為等待中。</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>回到主畫面編輯該作業。</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>設定位元速率平均值。
+
+瞬時位元速率可能遠低於或高於此數值。
+然而長時間的平均值可由此處決定。
+若需要限制瞬時位元速率，可使用 x264 的 vbv-bufsize 及 vbv-maxrate 設定。</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>啟用恆定影格率輸出。</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>可用的影片編碼器。</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Tune settings to optimize for common scenarios.
+
+This can improve efficiency for particular source characteristics or set
+characteristics of the output file.  Changes will be applied after the
+preset but before all other parameters.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>額外的編碼器設定。
+
+以半形冒號區隔編碼器選項。</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>減少解碼器的 CPU 使用率。
+
+若您的裝置在播放輸出檔時有困難（如：丟失影格）請選此項。</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>輸出的影格率。
+
+推薦「和來源相同」。若來源影片具有可變影格率，「和來源相同」將保留它。</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Sets and ensures compliance with the specified level.
+
+Overrides all other settings.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>啟用可變影格率輸出，其峰值影格率由影格率設定決定。</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>調整編碼器設定以權衡壓縮效率與編碼速度。
+
+以此建立預設編碼器設定。
+Tunes、profiles、levels 及其他進階選項字串亦套用於此。
+一般而言，在可允許的程度內愈慢愈好，
+因為較慢的設定會產出較高品質或較小的檔案。</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Sets and ensures compliance with the specified profile.
+
+Overrides all other settings.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>設定品質因數。
+編碼器將依此為目標品質，每種編碼器的尺度不同。
+
+x264 的尺度是對數級的，且數值越低表示更佳品質。
+因此，即使數值微幅增加，檔案大小也會逐步增大。
+數值 0 表示非破壞性壓縮，且可能導致最終檔案大小大於原始檔，
+除非來源檔亦為非破壞性壓縮品質。
+建議數值：標準畫質 18～20；高畫質 20～23。
+
+FFMpeg 及 Theora 的尺度較線性，且沒有非破壞性壓縮模式。</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>在 2 Pass 編碼的首輪，使用處理速度更快的設定值。</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>進行 2 Pass 編碼。
+
+需使用「位元速率」選項。
+此方式將進行 2 輪編碼。
+將於首輪收集分析資料，並作為第二輪分配位元速率時的參考資料。</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>啟用可變影格率輸出。
+
+某些播放器可能無法支援。</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>當 HandBrake 完成目前的佇列或編碼，將執行此動作。</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>瀏覽並選取輸出檔案的路徑及檔名。</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>欲編碼的影片視角。僅適用多視角 DVD 及藍光。</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>新增一個設定檔。</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>額外的設定檔選項。</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
+ 
+ Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>移除選取的設定檔。</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
+
+If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>自訂的降噪參數。
+NLMeans 語法：y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans 預設值：y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D 語法：y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D 預設值：y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>降噪濾鏡設定檔。設定濾鏡的強度。</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+ 
+- None uses the default preset settings.
+ 
+- Film refines settings for use with most live action content.
+ 
+- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+
+- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+
+- Animation is useful for cel animation such as anime and cartoons.
+
+- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+
+- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace removes comb artifacts from the picture.
+
+Yadif is a popular and fast deinterlacer.
+
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>自訂去交錯參數。
+ 
+ Yadif 語法：mode=m:parity=p
+ 
+ Yadif 預設值：mode=3
+ 
+ Decomb 語法：mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb 預設值：mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Deinterlace filter preset.
+
+Default is well balanced for speed and quality.
+
+Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+
+EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+
+Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>水平翻轉影像（鏡像）。</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>當啟用交錯偵測時，去交錯濾鏡僅作用於發生畫面交錯的影格。</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>自訂交錯偵測參數。
+
+語法：mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+預設值：mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>對影像順時針旋轉90度。</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>來源選取範圍的時間長度（時：分：秒）</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>維持長寬比與來源檔相同。關閉此功能可能導致影像被拉伸或壓扁。</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>自訂銳利化參數。
+
+Unsharp 語法：y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp 預設值：y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp 語法：y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp 預設值：y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+
+Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+
+Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>銳利化濾鏡設定檔。設定濾鏡的強度。</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+
+Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+
+Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+
+Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>控制設定檔的選項。</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>此範圍的終點。</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>此範圍的起始點。</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>When enabled the auto name system will always use the default path. 
+When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>色彩空間濾鏡。</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Chroma Smooth Filter</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>此欄位可允許 RGB 數值如「0xFF0000」或色彩名稱如「red」。關於色彩名稱的完整清單，請參見填充濾鏡的說明文件。</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>壓印字幕至視訊。
+
+注意，若輸出檔格式不支援來源字幕軌格式，此項會被自動勾選。
+例如 MP4 就無法支援 PGS 字幕。</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Flat - Presets are displayed as a flat list.
+Partially Flat - The last 8 user presets are displayed as a flat list followed by all presets being shown in category listing.
+Categories - All presets are shown under a sub menu per category.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds audio tracks when selecting a new source or title.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Refresh the list below based on the behaviours configured. </value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Setup behaviours that dictate how this tab automatically adds subtitle tracks when selecting a new source or title.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>總是設定下列的環境變數：
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+可能的傳回值如下所示：
+0：正常退出
+2：輸入引數錯誤
+3：初始化失敗
+4：未知的錯誤
+5：讀取來源檔時發生錯誤
+
+注意，錯誤代碼可能不完全正確。
+建議校驗輸出檔案是否完好後再對其操作。</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>輸出的檔案格式。除了檔案系統支援的字元外，亦可使用預留文字，將在變更標題、掃描來源或更新某些設定時自動將其替換。</value>
+  </data>
+</root>

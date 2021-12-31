@@ -203,6 +203,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ExpandAllTracks()
+        {
+            foreach (var track in this.Task.AudioTracks)
+            {
+                track.IsExpandedTrackView = true;
+            }
+        }
+
+        public void CollapseAllTracks()
+        {
+            foreach (var track in this.Task.AudioTracks)
+            {
+                track.IsExpandedTrackView = false;
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces

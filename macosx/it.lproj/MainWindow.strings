@@ -211,6 +211,9 @@
 /* Class = "NSToolbarItem"; toolTip = "Show Queue Window"; ObjectID = "HCx-ku-nF7"; */
 "HCx-ku-nF7.toolTip" = "Mostra finestra della coda";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "Iat-pL-ttI"; */
+"Iat-pL-ttI.ibShadowedIsNilPlaceholder" = "";
+
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
 "IOU-3L-nvB.title" = "Salva nuovo preset…";
 
@@ -255,6 +258,9 @@
 
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "In:";
+
+/* Class = "NSMenuItem"; title = "Reveal in Finder"; ObjectID = "rK6-EB-N9Z"; */
+"rK6-EB-N9Z.title" = "Mostra nel Finder";
 
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "Pausa";

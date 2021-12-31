@@ -10,6 +10,7 @@
 #import "HBAttributedStringAdditions.h"
 
 static NSDateFormatter *_dateFormatter = nil;
+static NSNumberFormatter *_numberFormatter = nil;
 static NSByteCountFormatter *_byteFormatter = nil;
 
 static NSDictionary     *detailAttr;
@@ -18,10 +19,15 @@ static NSDictionary     *shortHeightAttr;
 
 @interface HBQueueJobItem ()
 
+@property (nonatomic) NSTimeInterval encodeDuration;
+@property (nonatomic) NSTimeInterval pauseDuration;
+
 @property (nonatomic, nullable) NSDate *pausedDate;
 @property (nonatomic, nullable) NSDate *resumedDate;
 
+@property (nonatomic) double avgFps;
 @property (nonatomic) NSUInteger fileSize;
+@property (nonatomic) NSUInteger sourceFileSize;
 
 @property (nonatomic, readwrite, nullable) NSAttributedString *attributedStatistics;
 
@@ -33,17 +39,33 @@ static NSDictionary     *shortHeightAttr;
 {
     if (self == [HBQueueJobItem class]) {
         _dateFormatter = [[NSDateFormatter alloc] init];
-        [_dateFormatter setDateStyle:NSDateFormatterLongStyle];
-        [_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
+        _dateFormatter.dateStyle = NSDateFormatterLongStyle;
+        _dateFormatter.timeStyle = NSDateFormatterLongStyle;
+
+        _numberFormatter = [[NSNumberFormatter alloc] init];
+        _numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        _numberFormatter.maximumFractionDigits = 2;
 
         _byteFormatter = [[NSByteCountFormatter alloc] init];
 
+        CGFloat indent = 100;
+        NSBundle *bundle = [NSBundle bundleForClass:[HBQueueJobItem class]];
+        NSString *currentLocalization = bundle.preferredLocalizations.firstObject;
+        if ([currentLocalization hasPrefix:@"de"])
+        {
+            indent = 120;
+        }
+        else if ([currentLocalization hasPrefix:@"fr"] || [currentLocalization hasPrefix:@"pt"])
+        {
+            indent = 114;
+        }
+
         // Attributes
         NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
-        ps.headIndent = 88.0;
+        ps.headIndent = indent;
         ps.paragraphSpacing = 1.0;
-        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:88],
-                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
+        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:indent - 2],
+                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:indent]];
 
         detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
                        NSParagraphStyleAttributeName: ps,
@@ -163,12 +185,28 @@ static NSDictionary     *shortHeightAttr;
             uint64_t pauseDuration = (uint64_t)self.pauseDuration;
             [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
 
+            if (self.avgFps > 0)
+            {
+                [attrString appendString:@"\n\t" withAttributes:detailAttr];
+                [attrString appendString:NSLocalizedString(@"Average speed:", @"Job statistics") withAttributes:detailBoldAttr];
+                [attrString appendString:@" \t" withAttributes:detailAttr];
+                NSString *formattedAvgFps = [_numberFormatter stringFromNumber:@(self.avgFps)];
+                [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@"%@ fps", @"Job statistics"), formattedAvgFps] withAttributes:detailAttr];
+            }
+
             [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
             [attrString appendString:@"\t" withAttributes:detailAttr];
 
             [attrString appendString:NSLocalizedString(@"Size:", @"Job statistics") withAttributes:detailBoldAttr];
             [attrString appendString:@" \t" withAttributes:detailAttr];
             [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
+
+            if (self.job.isStream)
+            {
+                double difference = 100.f / self.sourceFileSize * self.fileSize;
+                NSString *formattedDifference = [_numberFormatter stringFromNumber:@(difference)];
+                [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@" (%@ %% of the source file)", @"Job statistics"), formattedDifference] withAttributes:detailAttr];
+            }
         }
 
         _attributedStatistics = attrString;
@@ -187,6 +225,7 @@ static NSDictionary     *shortHeightAttr;
     self.endedDate = nil;
     self.encodeDuration = 0;
     self.pauseDuration = 0;
+    self.avgFps = 0;
     self.fileSize = 0;
     self.attributedStatistics = nil;
 }
@@ -222,12 +261,34 @@ static NSDictionary     *shortHeightAttr;
         self.encodeDuration -= self.pauseDuration;
     }
 
-    [self.completeOutputURL removeCachedResourceValueForKey:NSURLFileSizeKey];
-    NSDictionary<NSURLResourceKey, id> *values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
+    NSDictionary<NSURLResourceKey, id> *values;
 
+    [self.completeOutputURL removeCachedResourceValueForKey:NSURLFileSizeKey];
+    values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
     self.fileSize = [values[NSURLFileSizeKey] integerValue];
 
+    [self.fileURL removeCachedResourceValueForKey:NSURLFileSizeKey];
+    values = [self.fileURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
+    self.sourceFileSize = [values[NSURLFileSizeKey] integerValue];
+
     self.attributedStatistics = nil;
+}
+
+- (void)setDoneWithResult:(HBCoreResult)result
+{
+    self.avgFps = result.avgFps;
+
+    switch (result.code) {
+        case HBCoreResultCodeDone:
+            self.state = HBQueueItemStateCompleted;
+            break;
+        case HBCoreResultCodeCanceled:
+            self.state = HBQueueItemStateCanceled;
+            break;
+        default:
+            self.state = HBQueueItemStateFailed;
+            break;
+    }
 }
 
 #pragma mark - NSSecureCoding
@@ -249,11 +310,13 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
     encodeDouble(_encodeDuration);
     encodeDouble(_pauseDuration);
+    encodeDouble(_avgFps);
 
     encodeObject(_startedDate);
     encodeObject(_endedDate);
 
     encodeInteger(_fileSize);
+    encodeInteger(_sourceFileSize);
 }
 
 - (nullable instancetype)initWithCoder:(nonnull NSCoder *)decoder
@@ -269,11 +332,13 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
         decodeDouble(_encodeDuration);
         decodeDouble(_pauseDuration);
+        decodeDouble(_avgFps);
 
         decodeObject(_startedDate, NSDate);
         decodeObject(_endedDate, NSDate);
 
         decodeInteger(_fileSize);
+        decodeInteger(_sourceFileSize);
 
         return self;
     }

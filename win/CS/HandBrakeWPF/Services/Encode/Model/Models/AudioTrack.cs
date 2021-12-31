@@ -42,7 +42,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private AudioEncoderRateType encoderRateType;
         private double? quality;
         private string trackName;
-        
+
+        private bool isExpandedTrackView;
+
         public AudioTrack()
         {
             // Default Values
@@ -525,7 +527,19 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             get { return this; }
         }
 
-        /* Helper Methods */ 
+        [JsonIgnore]
+        public bool IsExpandedTrackView
+        {
+            get => this.isExpandedTrackView;
+            set
+            {
+                if (value == this.isExpandedTrackView) return;
+                this.isExpandedTrackView = value;
+                this.NotifyOfPropertyChange(() => this.IsExpandedTrackView);
+            }
+        }
+
+        /* Helper Methods */
 
         private void SetupLimits()
         {

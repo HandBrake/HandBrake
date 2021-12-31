@@ -479,15 +479,12 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     json_error_t error;
     int subtitle_search_burn;
     int ii;
-    int adapter_index;
+    int adapter_index = 0;
 
 #if HB_PROJECT_FEATURE_QSV
     if (job->qsv.ctx){
         adapter_index = job->qsv.ctx->dx_index;
     }
-    
-#else
-    adapter_index = 0;
 #endif
 
     if (job == NULL || job->title == NULL)
@@ -1113,6 +1110,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     }
     if (meta_dict != NULL)
     {
+        hb_value_free(&job->metadata->dict);
         job->metadata->dict = hb_value_dup(meta_dict);
     }
     // Lookup mux id
@@ -1468,7 +1466,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             }
             if (name != NULL)
             {
-                audio.out.name = strdup(name);
+                audio.out.name = name;
             }
             if (audio.in.track >= 0)
             {
@@ -1538,7 +1536,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     sub_config = subtitle->config;
                     if (name != NULL)
                     {
-                        sub_config.name = strdup(name);
+                        sub_config.name = name;
                     }
                     result = json_unpack_ex(subtitle_dict, &error, 0,
                         "{s?b, s?b, s?b, s?I}",
@@ -1589,7 +1587,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 }
                 if (name != NULL)
                 {
-                    sub_config.name = strdup(name);
+                    sub_config.name = name;
                 }
                 sub_config.offset = offset;
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;

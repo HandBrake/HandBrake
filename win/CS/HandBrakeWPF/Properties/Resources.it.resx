@@ -325,12 +325,6 @@ Vuoi procedere?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Output: {0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Il formato del file di output. Oltre a qualsiasi carattere del file system supportato, è possibile utilizzare i seguenti segnaposti che verranno sostituiti quando si modifica il titolo o si scansiona una sorgente.
-
-Opzioni live: {source} {title} {chapter}
-Opzioni non live: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Questi cambiano solo se si scansiona una nuova sorgente, si cambiano titolo o capitoli)</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Opzioni aggiuntive disponibili: {source_path} o {source_folder_name} o {source}</value>
   </data>
@@ -424,7 +418,7 @@ Il Registro delle Attività potrebbe fornire ulteriori informazioni.</value>
     <value>Tracce audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Comportamento selezione</value>
+    <value>Comportamento selezione ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Torna alle tracce</value>
@@ -552,7 +546,7 @@ Sei sicuro di voler chiudere HandBrake?</value>
     <value>Torna alle tracce</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Comportamento selezione</value>
+    <value>Comportamento selezione ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>File archiviato:</value>
@@ -843,7 +837,7 @@ Vuoi sovrascriverlo?</value>
     <value>Procedi</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>Azione Quando Finisce</value>
+    <value>Azione Al Completamento</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
     <value>Dettagli errore:</value>
@@ -1026,7 +1020,7 @@ Vuoi sovrascriverlo?</value>
     <value>Dimensioni</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Rinomina preimpostazione</value>
+    <value>Modifica Preimpostazione</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Menù Contestuale Opzioni delle Preimpostazioni</value>
@@ -1300,7 +1294,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Apri Cartella del Registro</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>Alla fine</value>
+    <value>Al completamento</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
     <value>Impostazioni x264/5</value>
@@ -1492,7 +1486,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Video:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>Quando finisce:</value>
+    <value>Al Completamento:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
     <value>Aggiungi Tutte le Lingue Selezionate Restanti</value>
@@ -1570,7 +1564,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Seleziona un'immagine di anteprima</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Preferisci il lettore video predefinito del sistema</value>
+    <value>Preferisci il riproduttore video predefinito del sistema</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Aggiungi Sottotitoli se disponibili</value>
@@ -1880,11 +1874,10 @@ Tempo rimanente: {5}, Trascorso: {6} {7}</value>
     <value>Inizializzazione motore di HandBrake fallita. Ciò è spesso causato da driver GPU obsoleti.\n Si prega di aggiornare i driver di ogni GPU integrata o dedicata del sistema</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Opzioni live: {source} {title} {chapter}
-Opzioni non live: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Queste cambiano solo se si scansiona una nuova sorgente, si cambiano titolo o capitoli)</value>
+    <value>Segnaposto da Sostituire: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Opzioni disponibili: {source_path} {source_folder_name} {source}</value>
+    <value>Segnaposto da Sostituire: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Chiedi prima di sovrascrivere</value>
@@ -1905,13 +1898,13 @@ Opzioni non live: {date} {time} {creation-date} {creation-time} {quality} {bitra
     <value>Codifica completata</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Notifiche</value>
+    <value>Suono per le Notifiche</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Coda completata</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>Quando finisce:</value>
+    <value>Al Completamento:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
     <value>Comportamento per file omonimi:</value>
@@ -2150,8 +2143,8 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <value>L'intervallo di porte deve essere tra 5000 e 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Sostituzione segnaposto: {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>Segnaposto da Sostituire: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>È disponibile una nuova versione di HandBrake!</value>
@@ -2324,7 +2317,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Ferma</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Il nome della categoria è gia esistente. Inserirne uno diverso.</value>
@@ -2427,15 +2420,6 @@ Scegliere una preimpostazione differente.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Attenzione: questa è una build in "Modalità Sicura" di HandBrake che non include supporto ai codificatori hardware. Se si desidera utilizzare un codificatore hardware, si prega di scaricare una build non in "Modalità Sicura" dal sito.</value>
-  </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Si comunica che HandBrake non è più supportato da nessuna versione di Windows 7 o Windows 8.
-
-Nonostante il programma possa comunque essere utilizzato a proprio rischio e pericolo, alcune funzionalità potrebbero non funzionare od esserci problemi non noti. Non verrà offerto supporto in caso si manifestino questi problemi.
-
-Il supporto per Windows 7 e 8 è stato rimosso a partire dalla 1.3. Ciò significa che non ci saranno aggiornamenti in futuro per questi sistemi.
-
-Questo avviso verrà mostrato solo due volte.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Nero</value>
@@ -2568,6 +2552,55 @@ Puoi cambiare la tua scelta in qualsiasi momento andando in Preferenze -&gt; Gen
     <value>Vista ad Albero Flottante</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+    <value>Assicurati di aver impostato la corretta associazione file su Windows, cosicché possa aprire questo file con un riproduttore video compatibile</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Impossibile leggere il file della coda.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Il file potrebbe essere corrotto o provenire da una versione precedente di HandBrake.
+Sono supportati solo file della coda della versione corrente.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>HandBrake ha completato la codifica!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>HandBrake ha completato la coda!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Ciò disabiliterà anche le opzioni per mostrare le notifiche nella barra di Windows all'interno della scheda 'Al Completamento'. Riabilitalo se vuoi che vengano riattivate tali funzionalità.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Rimuovi HandBrake dal pannello delle notifiche di Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Disinstallato</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Le impostazioni delle notifiche sono state rimosse.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Disinstallazione pulita</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Mostra una notifica nella barra di Windows.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Notifiche di Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} processi completati. {1} Completando {2} processi con {3} in attesa. </value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Rigenera (Nome Automatico)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Apri questo Percorso</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Riduci Tutto</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Espandi Tutto</value>
   </data>
 </root>

@@ -253,6 +253,9 @@
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "ukX-HN-SXk"; */
 "ukX-HN-SXk.title" = "Ouvrir un élément récent";
 
+/* Class = "NSMenuItem"; title = "Switch to Next Title"; ObjectID = "viv-aA-SoB"; */
+"viv-aA-SoB.title" = "Passer au titre suivant";
+
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "wPw-Uj-Gxi"; */
 "wPw-Uj-Gxi.title" = "Effacer le menu";
 
@@ -261,4 +264,7 @@
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "XcG-Aw-Gdb"; */
 "XcG-Aw-Gdb.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Switch to Previous Title"; ObjectID = "zgj-Iv-4xJ"; */
+"zgj-Iv-4xJ.title" = "Passer au titre précédent";
 

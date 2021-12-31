@@ -118,7 +118,7 @@ namespace HandBrakeWPF.Services.Queue.Model
         public bool IsJobStatusVisible => this.Status == QueueItemStatus.InProgress;
         
         [JsonIgnore]
-        public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
+        public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress;
 
 
         /* Overrides */
