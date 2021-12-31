@@ -262,6 +262,20 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
+        /// Returns true if the given video encoder supports two-pass mode.
+        /// </summary>
+        /// <param name="encoderId">
+        /// The encoder ID.
+        /// </param>
+        /// <returns>
+        /// True if the given video encoder supports two-pass mode.
+        /// </returns>
+        public static bool VideoEncoderSupportsTwoPass(int encoderId)
+		{
+            return HBFunctions.hb_video_twopass_is_supported((uint)encoderId) > 0;
+		}
+
+        /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
         /// </summary>
         /// <param name="source">
