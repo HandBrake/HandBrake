@@ -82,6 +82,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added new exit_code parameter to Send File To preference
 - Added "Move to top" and "Move to bottom" to the queue context menu
 - Added support for Windows 10/11 notifications, enable in Preferences > When Done
+- Added support for Right to Left UI rendering for languages that require it. This can be set in preferences
+- New Translations
+  - Traditional Chinese (Taiwan)
 - Updated translations
   - Chinese (includes fix for access keys in menus)
   - Corsican
