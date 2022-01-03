@@ -42,7 +42,7 @@ static BOOL hb_resolveBookmarks = YES;
 
 + (NSURL *)documentationURL
 {
-    return [NSURL URLWithString:@"https://handbrake.fr/docs/en/latest/"];
+    return [NSURL URLWithString:@"https://handbrake.fr/docs/"];
 }
 
 + (void)writeToActivityLog:(const char *)format, ...
