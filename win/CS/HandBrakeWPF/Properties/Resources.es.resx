@@ -2158,7 +2158,7 @@ Cuando se admita, se habrán importado los preajustes de usuario.</value>
     <value>¡Una nueva versión de HandBrake está disponible!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2021 El equipo de HandBrake</value>
+    <value>Copyright (C) 2003-2022 El equipo de HandBrake</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Nivel de batería bajo:</value>

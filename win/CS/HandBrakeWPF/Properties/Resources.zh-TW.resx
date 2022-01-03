@@ -2140,7 +2140,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>新版的 HandBrake 已供使用！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>版權所有 ©️ 2003-2021 HandBrake 團隊</value>
+    <value>版權所有 ©️ 2003-2022 HandBrake 團隊</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>低電量：</value>

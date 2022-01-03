@@ -2157,7 +2157,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>HandBrake'in yeni bir sürümü var!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Telif Hakkı (C) 2003-2021 HandBrake Ekibi</value>
+    <value>Telif Hakkı (C) 2003-2022 HandBrake Ekibi</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Düşük pil seviyesi:</value>
