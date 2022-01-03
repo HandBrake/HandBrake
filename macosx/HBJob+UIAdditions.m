@@ -221,7 +221,27 @@ static HBMixdownTransformer    *mixdownTransformer;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
     NSMutableString *options = [NSMutableString string];
 
-    [options appendString:@(hb_container_get_name(self.container))];
+    NSString *containerName;
+
+    if (self.container & HB_MUX_MASK_MP4)
+    {
+        containerName = @"MP4";
+    }
+    else if (self.container & HB_MUX_MASK_MKV)
+    {
+        containerName = @"MKV";
+    }
+    else if (self.container & HB_MUX_MASK_WEBM)
+    {
+        containerName = @"WebM";
+    }
+    else
+    {
+        containerName = @(hb_container_get_name(self.container));
+    }
+
+    [options appendString:containerName];
+
 
     if (self.chaptersEnabled)
     {
