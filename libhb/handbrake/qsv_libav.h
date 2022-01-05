@@ -117,6 +117,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdint.h>
 #include <string.h>
 #include "vpl/mfxvideo.h"
+#include "vpl/mfxdispatcher.h"
 #include "libavutil/mem.h"
 #include "libavutil/time.h"
 #include "libavcodec/avcodec.h"
