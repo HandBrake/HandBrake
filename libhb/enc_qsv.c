@@ -1646,6 +1646,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     int err;
     mfxStatus sts;
     mfxVersion version;
+    mfxLoader loader;
     mfxVideoParam videoParam;
     mfxExtBuffer *extParamArray[3];
     mfxSession session = (mfxSession)0;
@@ -1654,7 +1655,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
-    sts = MFXInit(pv->qsv_info->implementation, &version, &session);
+    sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, job->qsv.ctx->dx_index, &version, &session, &loader);
     if (sts != MFX_ERR_NONE)
     {
         hb_error("encqsvInit: MFXInit failed (%d) with implementation %d", sts, pv->qsv_info->implementation);

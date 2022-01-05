@@ -973,6 +973,158 @@ mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
 }
 #endif
 
+// Adopted implementation of qsv_create_mfx_session() function for HandBrake
+int hb_qsv_create_mfx_session(mfxIMPL implementation,
+                              int adapter_index,
+                              mfxVersion *pver,
+                              mfxSession *psession,
+                              mfxLoader *ploader)
+{
+    mfxStatus sts;
+    mfxLoader loader = NULL;
+    mfxSession session = NULL;
+    mfxConfig cfg;
+    mfxVersion ver;
+    mfxVariant impl_value;
+    uint32_t adapter_idx = 0;
+    uint32_t impl_idx = 0;
+
+    // Get adapter from MediaSDK implementation value
+    adapter_idx = hb_qsv_impl_get_num(implementation);
+
+    *psession = NULL;
+    *ploader = NULL;
+    loader = MFXLoad();
+
+    if (!loader) {
+        hb_error("hb_qsv_create_mfx_session: Error creating a MFX loader");
+        goto fail;
+    }
+
+    /* Create configurations for implementation */
+    cfg = MFXCreateConfig(loader);
+
+    if (!cfg) {
+        hb_error("hb_qsv_create_mfx_session: Error creating a MFX configuration");
+        goto fail;
+    }
+
+    impl_value.Type = MFX_VARIANT_TYPE_U32;
+    impl_value.Data.U32 = (implementation == MFX_IMPL_SOFTWARE) ?
+        MFX_IMPL_TYPE_SOFTWARE : MFX_IMPL_TYPE_HARDWARE;
+    sts = MFXSetConfigFilterProperty(cfg,
+                                     (const mfxU8 *)"mfxImplDescription.Impl", impl_value);
+
+    if (sts != MFX_ERR_NONE) {
+        hb_error("hb_qsv_create_mfx_session: Error adding a MFX configuration "
+               "property: %d.", sts);
+        goto fail;
+    }
+
+    if (MFX_IMPL_VIA_D3D11 == MFX_IMPL_VIA_MASK(implementation))
+    {
+        impl_value.Type = MFX_VARIANT_TYPE_U32;
+        impl_value.Data.U32 = MFX_ACCEL_MODE_VIA_D3D11;
+        sts = MFXSetConfigFilterProperty(cfg,
+                                        (const mfxU8 *)"mfxImplDescription.AccelerationMode", impl_value);
+
+        if (sts != MFX_ERR_NONE) {
+            hb_error("hb_qsv_create_mfx_session: Error adding a MFX configuration"
+                "MFX_ACCEL_MODE_VIA_D3D11 property: %d.", sts);
+            goto fail;
+        }
+
+        if (adapter_idx != -1) {
+            impl_value.Type = MFX_VARIANT_TYPE_U32;
+            impl_value.Data.U32 = adapter_idx;
+
+            sts = MFXSetConfigFilterProperty(cfg,
+                                            (const mfxU8 *)"mfxImplDescription.VendorImplID", impl_value);
+
+            if (sts != MFX_ERR_NONE) {
+                hb_error("Error adding a MFX configuration"
+                    "VendorImplID property: %d.", sts);
+                goto fail;
+            }
+        }
+    }
+    else if (MFX_IMPL_VIA_D3D9 == MFX_IMPL_VIA_MASK(implementation))
+    {
+        impl_value.Type = MFX_VARIANT_TYPE_U32;
+        impl_value.Data.U32 = MFX_ACCEL_MODE_VIA_D3D9;
+        sts = MFXSetConfigFilterProperty(cfg,
+                                        (const mfxU8 *)"mfxImplDescription.AccelerationMode", impl_value);
+
+        if (sts != MFX_ERR_NONE) {
+            hb_error("hb_qsv_create_mfx_session: Error adding a MFX configuration"
+                "MFX_ACCEL_MODE_VIA_D3D9 property: %d.", sts);
+            goto fail;
+        }
+    }
+
+    impl_value.Type = MFX_VARIANT_TYPE_U32;
+    impl_value.Data.U32 = pver->Version;
+    sts = MFXSetConfigFilterProperty(cfg,
+                                     (const mfxU8 *)"mfxImplDescription.ApiVersion.Version",
+                                     impl_value);
+
+    if (sts != MFX_ERR_NONE) {
+        hb_error("hb_qsv_create_mfx_session: Error adding a MFX configuration "
+               "property: %d.", sts);
+        goto fail;
+    }
+
+    while (1) {
+        /* Enumerate all implementations */
+        mfxImplDescription *impl_desc;
+
+        sts = MFXEnumImplementations(loader, impl_idx,
+                                     MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
+                                     (mfxHDL *)&impl_desc);
+
+        /* Failed to find an available implementation */
+        if (sts == MFX_ERR_NOT_FOUND)
+            break;
+        else if (sts != MFX_ERR_NONE) {
+            impl_idx++;
+            continue;
+        }
+
+        sts = MFXCreateSession(loader, impl_idx, &session);
+        MFXDispReleaseImplDescription(loader, impl_desc);
+
+        if (sts == MFX_ERR_NONE)
+            break;
+
+        impl_idx++;
+    }
+
+    if (sts != MFX_ERR_NONE) {
+        hb_error("hb_qsv_create_mfx_session: Error creating a MFX session: %d.", sts);
+        goto fail;
+    }
+
+    sts = MFXQueryVersion(session, &ver);
+
+    if (sts != MFX_ERR_NONE) {
+        hb_error("hb_qsv_create_mfx_session: Error querying a MFX session: %d.", sts);
+        goto fail;
+    }
+
+    *psession = session;
+    *ploader = loader;
+
+    return 0;
+
+fail:
+    if (session)
+        MFXClose(session);
+
+    MFXUnload(loader);
+
+    return AVERROR_UNKNOWN;
+}
+
 static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list_t *hb_qsv_adapter_details_list)
 {
     for (int i = 0; i < hb_list_count(hb_qsv_adapter_details_list); i++)
@@ -989,6 +1141,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
         */
         mfxSession session;
         mfxVersion version = { .Major = 1, .Minor = 0, };
+        mfxLoader loader;
 #if defined(_WIN32) || defined(__MINGW32__)
         mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
 #else
@@ -1018,7 +1171,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
 #else
             mfxIMPL hw_impl = MFX_IMPL_HARDWARE_ANY;
 #endif
-            if (MFXInit(hw_impl | hw_preference, &version, &session) == MFX_ERR_NONE)
+            if (hb_qsv_create_mfx_session(hw_impl | hw_preference, details->index, &version, &session, &loader) == MFX_ERR_NONE)
             {
                 // On linux, the handle to the VA display must be set.
                 // This code is essentially a NOP other platforms.
@@ -2870,6 +3023,27 @@ const char* hb_qsv_impl_get_name(int impl)
 
         default:
             return NULL;
+    }
+}
+
+int hb_qsv_impl_get_num(int impl)
+{
+    switch (MFX_IMPL_BASETYPE(impl))
+    {
+        case MFX_IMPL_HARDWARE:
+            return 0;
+        case MFX_IMPL_HARDWARE2:
+            return 1;
+        case MFX_IMPL_HARDWARE3:
+            return 2;
+        case MFX_IMPL_HARDWARE4:
+            return 3;
+        case MFX_IMPL_SOFTWARE:
+        case MFX_IMPL_AUTO:
+        case MFX_IMPL_AUTO_ANY:
+        case MFX_IMPL_HARDWARE_ANY:
+        default:
+            return -1;
     }
 }
 
