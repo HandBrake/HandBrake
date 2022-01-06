@@ -21,6 +21,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Audio
 
 - Fixed MP2 audio sources not utilizing the fallback encoder when pass through is disabled (#3863)
+- Fixed FFmpeg AAC audio encoder quality mode scale range (#1295)
 
 #### Subtitles
 
