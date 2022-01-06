@@ -1,6 +1,6 @@
 /*
  * icons.h
- * Copyright (C) John Stebbins 2008-2021 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
  *
  * icons.h is free software.
  *

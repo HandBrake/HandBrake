@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * appcast.c
- * Copyright (C) John Stebbins 2008-2021 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
  *
  * appcast.c is free software.
  *

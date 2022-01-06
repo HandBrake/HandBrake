@@ -1,6 +1,6 @@
 /*
  * render_button.c
- * Copyright (C) John Stebbins 2008-2021 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2022 <stebbins@stebbins>
  *
  * render_button.c is free software.
  *
