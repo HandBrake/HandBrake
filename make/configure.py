@@ -1650,7 +1650,7 @@ try:
         else:
             gmake  = ToolProbe( 'GMAKE.exe',      'make',       'gmake', 'make', abort=True )
 
-        autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True, minversion=[2,69,0] )
+        autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True, minversion=([2,71,0] if build_tuple.match('*-*-darwin*') else [2,69,0]) )
         automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True, minversion=[1,13,0] )
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
