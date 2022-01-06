@@ -963,7 +963,7 @@ msgstr ""
 
 #: src/ghb3.ui:4090
 msgid "Deblock Filter:"
-msgstr ""
+msgstr "Deblock-filter:"
 
 #: src/ghb3.ui:4106 src/ghb3.ui:4138
 msgid ""
@@ -975,7 +975,7 @@ msgstr ""
 
 #: src/ghb3.ui:4122
 msgid "Deblock Tune:"
-msgstr ""
+msgstr "Deblock-justering:"
 
 #: src/ghb3.ui:4152
 msgid ""
@@ -983,6 +983,9 @@ msgid ""
 "\n"
 "strength=weak|strong:thresh=0-100:blocksize=4-512"
 msgstr ""
+"Anpassat deblock-filter strängformat\n"
+"\n"
+"strength=weak|strong:thresh=0-100:blocksize=4-512"
 
 #: src/ghb3.ui:4180
 msgid "Denoise Filter:"
@@ -1208,6 +1211,12 @@ msgid ""
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
+"Justera kodningsinställningar för att väga av komprimeringseffektivitet mot kodningshastighet.\n"
+"\n"
+"Detta fastställer dina standardinställningar för kodare.\n"
+"Justeringar, profiler, nivåer och avancerade alternativ tillämpas här.\n"
+"Generellt bör du sätta detta alternativ så långsamt som du står ut med, eftersom\n"
+"långsammare inställningar resulterar i bättre kvalitet eller mindre filer."
 
 #: src/ghb3.ui:4865
 msgid "Tune:"
@@ -1370,6 +1379,8 @@ msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
+"Endast det primära ljudspåret kommer att kodas med hela kodarlistan.\n"
+"Alla andra sekundära ljudspår kommer endast att kodas med första kodaren."
 
 #: src/ghb3.ui:5441
 msgid "Auto Passthru:"
@@ -1384,6 +1395,8 @@ msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer MP3.\n"
+"Detta tillåter att MP3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5473
 msgid "AAC"
@@ -1394,6 +1407,8 @@ msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer AAC.\n"
+"Detta tillåter att AAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5494
 msgid "AC-3"
@@ -1404,6 +1419,8 @@ msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer AC-3.\n"
+"Detta tillåter att AC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5515
 msgid "DTS"
@@ -1414,6 +1431,8 @@ msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer DTS.\n"
+"Detta tillåter att DTS-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5536
 msgid "DTS-HD"
@@ -1424,6 +1443,8 @@ msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer DTS-HD.\n"
+"Detta tillåter att DTS-HD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5557
 msgid "EAC-3"
@@ -1434,6 +1455,8 @@ msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer EAC-3.\n"
+"Detta tillåter att EAC-3-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5578
 msgid "TrueHD"
@@ -1444,6 +1467,8 @@ msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer ThrueHD.\n"
+"Detta tillåter att ThrueHD-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5599
 msgid "FLAC"
@@ -1454,6 +1479,8 @@ msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"Aktivera detta om din uppspelningsenhet stödjer FLAC.\n"
+"Detta tillåter att FLAC-genomströmning väljs när automatisk genomströmning är aktiverat."
 
 #: src/ghb3.ui:5637
 msgid "Passthru Fallback:"
@@ -1526,6 +1553,9 @@ msgid ""
 "for subtitle candidates that provide subtitles for\n"
 "segments of the audio that are in a foreign language."
 msgstr ""
+"Lägger till ett extra pass till omkodningen, som söker\n"
+"efter undertextkandidater med undertext till segment\n"
+"av det ljud som är på främmande språk."
 
 #: src/ghb3.ui:5915
 msgid "Reload all subtitle settings from defaults"
@@ -1564,6 +1594,10 @@ msgid ""
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
+"Lägg till \"Främmande ljudsökning\" när standardljudspåret är ditt föredragna språk.\n"
+"Detta sökpass hittar korta sekvenser på främmande språk och tillhandahåller undertexter för dem.\n"
+"\n"
+"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
 
 #: src/ghb3.ui:6202
 msgid "Add subtitle track if default audio is foreign"
@@ -1575,6 +1609,9 @@ msgid ""
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
+"Lägg till ett undertextspår, när standardljudspåret inte är ditt föredragna språk.\n"
+"\n"
+"Detta alternativ kräver att ett språk har valts från listan med \"Tillgängliga språk\"."
 
 #: src/ghb3.ui:6221
 msgid "Add Closed Captions when available"
@@ -1599,6 +1636,10 @@ msgid ""
 "Burned-In subtitles are part of the video and can not be disabled during playback.\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"Ange inbränningsbeteende för undertext.\n"
+"\n"
+"Inbrända undertexter är en del av videon och kan inte inaktiveras vid uppspelning.\n"
+"Endast en undertext kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ghb3.ui:6286
 msgid "Burn-In for deficient players*:"
@@ -1615,6 +1656,10 @@ msgid ""
 "\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"Bränn den först valda DVD-undertexten. Alla andra DVD-undertexter kommer att tas bort.\n"
+"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer DVD-undertexter.\n"
+"\n"
+"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ghb3.ui:6314
 msgid "Blu-ray Subtitles"
@@ -1627,6 +1672,10 @@ msgid ""
 "\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"Bränn den först valda Blu-ray-undertexten. Alla andra Blu-ray-undertexter kommer att tas bort.\n"
+"Använd detta alternativ om ditt spelarprogram eller enhet inte stödjer Blu-ray-undertexter.\n"
+"\n"
+"Endast ett undertextspår kan brännas! Eftersom konflikter kan uppstå, vinner det först valda."
 
 #: src/ghb3.ui:6341
 msgid ""
@@ -1778,7 +1827,7 @@ msgstr "Använd automatisk namngivning (använder modifierade källnamn)"
 
 #: src/ghb3.ui:7275
 msgid "Create destination filename from source filename or volume label"
-msgstr ""
+msgstr "Skapa målfilsnamn från källfilsnamn eller volymetikett"
 
 #: src/ghb3.ui:7299
 msgid "Auto-Name Template"
@@ -1789,6 +1838,8 @@ msgid ""
 "Available Options: {source-path} {source} {title} {preset} {chapters} {date}"
 " {time} {creation-date} {creation-time} {quality} {bitrate}"
 msgstr ""
+"Tillgängliga alternativ: {source-path} {source} {title} {preset} {chapters} "
+"{date} {time} {creation-date} {creation-time} {quality} {bitrate}"
 
 #: src/ghb3.ui:7330
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -1800,11 +1851,11 @@ msgstr "Antal förhandsvisningar"
 
 #: src/ghb3.ui:7411
 msgid "Filter short DVD and Blu-ray titles (seconds)"
-msgstr ""
+msgstr "Filtrera korta DVD- och Blu-ray-titlar (sekunder)"
 
 #: src/ghb3.ui:7425
 msgid "Clear completed queue items after an encode completes"
-msgstr ""
+msgstr "Ta bort slutförda köobjekt när en kodning har slutförts"
 
 #: src/ghb3.ui:7429
 msgid ""
@@ -1932,7 +1983,7 @@ msgstr "Gör det här till standardmall när HandBrake startas"
 
 #: src/ghb3.ui:8208
 msgid "<b>Dimensions</b>"
-msgstr ""
+msgstr "<b>Dimensioner</b>"
 
 #: src/ghb3.ui:8234
 msgid "Maximum Width:"
@@ -1976,7 +2027,7 @@ msgstr ""
 
 #: src/ghb3.ui:8368
 msgid "HandBrake Preview"
-msgstr ""
+msgstr "Handbrake förhandsvisning"
 
 #: src/ghb3.ui:8427
 msgid "Select preview frames."
@@ -2040,11 +2091,11 @@ msgstr "Aktivera inställningar för import av SRT undertextfil"
 
 #: src/ghb3.ui:8807
 msgid "Import SSA"
-msgstr ""
+msgstr "Importera SSA"
 
 #: src/ghb3.ui:8812
 msgid "Enable settings to import an SSA subtitle file"
-msgstr ""
+msgstr "Aktivera inställningar för import av SSA undertextfil"
 
 #: src/ghb3.ui:8824
 msgid "Embedded Subtitle List"
@@ -2072,6 +2123,9 @@ msgid ""
 "\n"
 "Players may use this in the subtitle selection list."
 msgstr ""
+"Ange undertextnamn.\n"
+"\n"
+"Spelare kan använda detta i undertextlistan."
 
 #: src/ghb3.ui:8934
 msgid "Language"
@@ -2117,7 +2171,7 @@ msgstr "Välj SRT-fil för import."
 
 #: src/ghb3.ui:9037
 msgid "Import File"
-msgstr ""
+msgstr "Importera fil"
 
 #: src/ghb3.ui:9055
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
@@ -2399,12 +2453,12 @@ msgstr "Fortsätt koda"
 #: src/callbacks.c:3890
 #, c-format
 msgid "%d encode pending"
-msgstr ""
+msgstr "%d kodning väntar"
 
 #: src/callbacks.c:3894
 #, c-format
 msgid "%d encodes pending"
-msgstr ""
+msgstr "%d kodningar väntar"
 
 #: src/callbacks.c:3951 src/callbacks.c:4019
 #, c-format
@@ -2934,6 +2988,10 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
+"Endast VP8 eller VP9 stöds i WebM-behållaren.\n"
+"\n"
+"Du bör välja en annan videokodek eller behållare.\n"
+"Om du fortsätter, kommer en att väljas åt dig."
 
 #: src/hb-backend.c:4358 src/hb-backend.c:4415 src/hb-backend.c:4435
 #: src/hb-backend.c:4455 src/hb-backend.c:4516 src/hb-backend.c:4571
@@ -2964,6 +3022,10 @@ msgid ""
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
 msgstr ""
+"WebM i HandBrake, stödjer endast inbrända undertexter.\n"
+"\n"
+"Du bör ändra dina undertextinställningar.\n"
+"Om du fortsätter kommer vissa undertexter att förloras."
 
 #: src/hb-backend.c:4451
 msgid ""
@@ -3120,15 +3182,15 @@ msgstr ""
 #: src/queuehandler.c:196
 #, c-format
 msgid "%s (Modified)"
-msgstr ""
+msgstr "%s (Ändrad)"
 
 #: src/queuehandler.c:285
 msgid "Align A/V"
-msgstr ""
+msgstr "Justera A/V"
 
 #: src/queuehandler.c:295
 msgid "iPod 5G"
-msgstr ""
+msgstr "iPod 5G"
 
 #: src/queuehandler.c:327
 #, c-format
@@ -3138,41 +3200,45 @@ msgid ""
 "%d:%d Pixel Aspect Ratio\n"
 "%s Display Aspect Ratio"
 msgstr ""
+"%d:%d:%d:%d Beskär\n"
+"%dx%d lagring, %dx%d visning\n"
+"%d:%d Pixel-bildförhållande\n"
+"%s Visningsbildförhållande"
 
 #: src/queuehandler.c:358
 #, c-format
 msgid "%s, Bitrate %dkbps"
-msgstr ""
+msgstr "%s, Bithastighet: %dkbps"
 
 #: src/queuehandler.c:363
 #, c-format
 msgid "%s, Bitrate %dkbps (2 Pass)"
-msgstr ""
+msgstr "%s, Bithastighet: %dkbps (2 pass)"
 
 #: src/queuehandler.c:370
 #, c-format
 msgid "%s, Constant Quality %.4g(%s)"
-msgstr ""
+msgstr "%s, Konstant kvalitet %.4g(%s)"
 
 #: src/queuehandler.c:403
 #, c-format
 msgid "%sPreset %s"
-msgstr ""
+msgstr "%sFörinställning %s"
 
 #: src/queuehandler.c:408
 #, c-format
 msgid "%sTune %s"
-msgstr ""
+msgstr "%sJustering %s"
 
 #: src/queuehandler.c:413
 #, c-format
 msgid "%sProfile %s"
-msgstr ""
+msgstr "%sProfil %s"
 
 #: src/queuehandler.c:418
 #, c-format
 msgid "%sLevel %s"
-msgstr ""
+msgstr "%sNivå %s"
 
 #: src/queuehandler.c:435
 #, c-format
@@ -3180,6 +3246,8 @@ msgid ""
 "\n"
 "Constant Framerate %s fps"
 msgstr ""
+"\n"
+"Konstant bildfrekvens %s fps"
 
 #: src/queuehandler.c:439
 #, c-format
@@ -3187,6 +3255,8 @@ msgid ""
 "\n"
 "Peak Framerate %s fps (may be lower)"
 msgstr ""
+"\n"
+"Peak-bildfrekvens %s fps (kan vara lägre)"
 
 #: src/queuehandler.c:444
 #, c-format
@@ -3194,82 +3264,84 @@ msgid ""
 "\n"
 "Variable Framerate %s fps"
 msgstr ""
+"\n"
+"Variabel bildfrekvens %s fps"
 
 #: src/queuehandler.c:610 src/queuehandler.c:641
 msgid ", Forced Only"
-msgstr ""
+msgstr ", Endast tvingad"
 
 #: src/queuehandler.c:614 src/queuehandler.c:645
 msgid ", Burned"
-msgstr ""
+msgstr ", Bränd"
 
 #: src/queuehandler.c:618 src/queuehandler.c:649
 msgid ", Default"
-msgstr ""
+msgstr ", Standard"
 
 #: src/queuehandler.c:705 src/queuehandler.c:1204
 msgid "Completed"
-msgstr ""
+msgstr "Slutförd"
 
 #: src/queuehandler.c:709 src/queuehandler.c:1208
 msgid "Canceled"
-msgstr ""
+msgstr "Avbruten"
 
 #: src/queuehandler.c:713 src/queuehandler.c:1212
 msgid "Failed"
-msgstr ""
+msgstr "Misslyckad"
 
 #: src/queuehandler.c:718
 msgid "Pending"
-msgstr ""
+msgstr "Väntar"
 
 #: src/queuehandler.c:754 src/queuehandler.c:782 src/queuehandler.c:1252
 #: src/queuehandler.c:1280
 #, c-format
 msgid "%d Day %02d:%02d:%02d"
-msgstr ""
+msgstr "%d Dag %02d:%02d:%02d"
 
 #: src/queuehandler.c:757 src/queuehandler.c:785 src/queuehandler.c:1255
 #: src/queuehandler.c:1283
 #, c-format
 msgid "%d Days %02d:%02d:%02d"
-msgstr ""
+msgstr "%d Dagar %02d:%02d:%02d"
 
 #: src/queuehandler.c:798 src/queuehandler.c:1296
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: src/queuehandler.c:802 src/queuehandler.c:1300
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #: src/queuehandler.c:807 src/queuehandler.c:1305
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: src/queuehandler.c:812 src/queuehandler.c:1310
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: src/queuehandler.c:823 src/queuehandler.c:1321
 msgid "Not Available"
-msgstr ""
+msgstr "Ej tillgänglig"
 
 #: src/queuehandler.c:1156
 msgid "Foreign Audio Search"
-msgstr ""
+msgstr "Främmande ljudsökning"
 
 #: src/queuehandler.c:1160
 msgid "Encode"
-msgstr ""
+msgstr "Koda"
 
 #: src/queuehandler.c:1164
 msgid "Encode First Pass (Analysis)"
-msgstr ""
+msgstr "Koda första passet (Analys)"
 
 #: src/queuehandler.c:1168
 msgid "Encode Second Pass (Final)"
-msgstr ""
+msgstr "Koda andra passet (Slutför)"
 
 #. Should never happen
 #: src/queuehandler.c:1173
@@ -3282,23 +3354,25 @@ msgid ""
 "pass %d of %d\n"
 "%s"
 msgstr ""
+"pass %d av %d\n"
+"%s"
 
 #: src/queuehandler.c:1189
 msgid "Scanning Title"
-msgstr ""
+msgstr "Söker titel"
 
 #: src/queuehandler.c:1193
 msgid "Encoding Paused"
-msgstr ""
+msgstr "Kodning pausad"
 
 #: src/queuehandler.c:1197
 msgid "Encoding In Progress"
-msgstr ""
+msgstr "Kodning pågår"
 
 #. Should never happen
 #: src/queuehandler.c:1217
 msgid "Unknown"
-msgstr ""
+msgstr "Okänd"
 
 #: src/queuehandler.c:1770
 #, c-format
@@ -3307,6 +3381,9 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed.\n"
 msgstr ""
+"%sMålets filsystem är nästan fullt: %<PRId64>MB ledigt.\n"
+"Mål: %s\n"
+"Kodningen kanske blir ofullständig om du fortsätter.\n"
 
 #: src/queuehandler.c:1775
 msgid "Resume, I've fixed the problem"

@@ -172,11 +172,11 @@ msgstr "대기열 내보내기"
 
 #: src/ghb3.ui:135
 msgid "HandBrake Presets"
-msgstr "HandBrake 사전설정"
+msgstr "HandBrake 프리셋"
 
 #: src/ghb3.ui:163 src/ghb3.ui:2128
 msgid "_Presets"
-msgstr "사전설정(_P)"
+msgstr "프리셋(_P)"
 
 #: src/ghb3.ui:171 src/ghb3.ui:2136
 msgid "Set De_fault"
@@ -208,11 +208,11 @@ msgstr "내보내기(_E)"
 
 #: src/ghb3.ui:249 src/ghb3.ui:2214
 msgid "Reset _Built-in Presets"
-msgstr "기본 제공된 사전설정 초기화(_B)"
+msgstr "기본 제공된 프리셋 초기화(_B)"
 
 #: src/ghb3.ui:304
 msgid "<b>Presets List</b>"
-msgstr "<b>사전설정 목록</b>"
+msgstr "<b>프리셋 목록</b>"
 
 #: src/ghb3.ui:318
 msgid "HandBrake Queue"
@@ -276,7 +276,7 @@ msgstr "동작"
 
 #: src/ghb3.ui:741 src/ghb3.ui:4825
 msgid "Preset:"
-msgstr "사전설정:"
+msgstr "프리셋:"
 
 #: src/ghb3.ui:777
 msgid "Source:"
@@ -451,7 +451,7 @@ msgstr "초보자를 위한 HandBrake(_D)"
 
 #: src/ghb3.ui:2086
 msgid "Presets _List"
-msgstr "사전설정 목록(_L)"
+msgstr "프리셋 목록(_L)"
 
 #: src/ghb3.ui:2104
 msgid "_Preview"
@@ -495,7 +495,7 @@ msgstr "설정 화면 표시"
 
 #: src/ghb3.ui:2368
 msgid "Presets"
-msgstr "사전설정"
+msgstr "프리셋"
 
 #: src/ghb3.ui:2381
 msgid "Show Preview Window"
@@ -583,11 +583,11 @@ msgstr "인코딩할 마지막 챕터를 지정합니다."
 
 #: src/ghb3.ui:2720
 msgid "<b>Preset:</b>"
-msgstr "<b>사전설정:</b>"
+msgstr "<b>프리셋:</b>"
 
 #: src/ghb3.ui:2756
 msgid "Choose Preset"
-msgstr "사전설정 선택"
+msgstr "프리셋 선택"
 
 #: src/ghb3.ui:2787
 msgid "<u><i>Modified</i></u>"
@@ -602,16 +602,16 @@ msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
 msgstr ""
-"현재 선택된 사전설정으로 설정을 다시 로드합니다.\n"
+"현재 선택된 프리셋으로 설정을 다시 불러옵니다.\n"
 "수정사항은 폐기됩니다."
 
 #: src/ghb3.ui:2811
 msgid "Save New Preset"
-msgstr "새 사전설정 저장"
+msgstr "새 프리셋 저장"
 
 #: src/ghb3.ui:2814
 msgid "Save the current settings to a new Preset."
-msgstr "현재 설정을 새 사전설정에 저장합니다."
+msgstr "현재 설정을 새 프리셋에 저장합니다."
 
 #: src/ghb3.ui:2896
 msgid "Format:"
@@ -996,7 +996,7 @@ msgstr ""
 
 #: src/ghb3.ui:4213
 msgid "Denoise Preset:"
-msgstr "노이즈 제거 사전설정:"
+msgstr "노이즈 제거 프리셋:"
 
 #: src/ghb3.ui:4246
 msgid "Denoise Tune:"
@@ -1026,7 +1026,7 @@ msgstr ""
 
 #: src/ghb3.ui:4337
 msgid "Sharpen Preset:"
-msgstr "선명도 사전설정:"
+msgstr "선명도 프리셋:"
 
 #: src/ghb3.ui:4369
 msgid "Sharpen Tune:"
@@ -1222,7 +1222,7 @@ msgstr ""
 "일반적인 시나리오에 맞도록 설정을 조정합니다.\n"
 "\n"
 "특정한 파일의 특성에 대한 효율성을 증가시킬 수 있거나 출력 파일의\n"
-"특성을 설정할 수 있습니다.  변경사항은 사전설정 후 다른 모든 \n"
+"특성을 설정할 수 있습니다.  변경사항은 프리셋 후 다른 모든 \n"
 "파라미터보다 먼저 적용됩니다."
 
 #: src/ghb3.ui:4898
@@ -1925,7 +1925,7 @@ msgstr "고급"
 
 #: src/ghb3.ui:7921
 msgid "<span size=\"x-large\">Rename Preset</span>"
-msgstr "<span size=\"x-large\">사전설정 이름 변경 </span>"
+msgstr "<span size=\"x-large\">프리셋 이름 변경 </span>"
 
 #: src/ghb3.ui:7941
 msgid "Name:"
@@ -1937,27 +1937,27 @@ msgstr "<b>설명</b>"
 
 #: src/ghb3.ui:8079
 msgid "Category:"
-msgstr "카테고리:"
+msgstr "범주:"
 
 #: src/ghb3.ui:8094
 msgid "Set the category that this preset will be shown under."
-msgstr "해당 사전설정을 표시할 카테고리를 지정합니다."
+msgstr "해당 프리셋을 표시할 범주를 지정합니다."
 
 #: src/ghb3.ui:8110
 msgid "Category Name:"
-msgstr "카테고리 이름:"
+msgstr "범주 이름:"
 
 #: src/ghb3.ui:8143
 msgid "Preset Name:"
-msgstr "사전설정 이름:"
+msgstr "프리셋 이름:"
 
 #: src/ghb3.ui:8177
 msgid "Default Preset"
-msgstr "기본 사전설정"
+msgstr "기본 프리셋"
 
 #: src/ghb3.ui:8182
 msgid "Make this the default Preset when HandBrake starts"
-msgstr "HandBrake 실행 시, 이를 기본 사전설정으로 지정합니다"
+msgstr "HandBrake 실행 시, 이를 기본 프리셋으로 지정합니다"
 
 #: src/ghb3.ui:8208
 msgid "<b>Dimensions</b>"
@@ -2840,7 +2840,7 @@ msgid ""
 msgstr ""
 "잘못된 텔레시네 해제 설정:\n"
 "\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 "사용자 지정:\t%s\n"
 
 #: src/hb-backend.c:4177
@@ -2852,7 +2852,7 @@ msgid ""
 msgstr ""
 "잘못된 텔레시네 해제 설정:\n"
 "\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 
 #: src/hb-backend.c:4203
 #, c-format
@@ -2864,7 +2864,7 @@ msgid ""
 msgstr ""
 "잘못된 Comb Detect 설정:\n"
 "\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 "사용자 지정:\t%s\n"
 
 #: src/hb-backend.c:4210
@@ -2876,7 +2876,7 @@ msgid ""
 msgstr ""
 "잘못된 Comb Detect 설정:\n"
 "\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 
 #: src/hb-backend.c:4239
 #, c-format
@@ -2890,7 +2890,7 @@ msgstr ""
 "잘못된 인터레이스 해제 설정:\n"
 "\n"
 "필터:\t%s\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 "사용자 지정\t%s\n"
 
 #: src/hb-backend.c:4248
@@ -2904,7 +2904,7 @@ msgstr ""
 "잘못된 인터레이스 해제 설정:\n"
 "\n"
 "필터:\t%s\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 
 #: src/hb-backend.c:4277
 #, c-format
@@ -2919,7 +2919,7 @@ msgstr ""
 "잘못된 노이즈 제거 설정:\n"
 "\n"
 "필터:\t%s\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 "조정:\t%s\n"
 "사용자 지정:\t%s\n"
 
@@ -2936,7 +2936,7 @@ msgstr ""
 "잘못된 선명도 설정:\n"
 "\n"
 "필터: \t%s\n"
-"사전설정:\t%s\n"
+"프리셋:\t%s\n"
 "조정:\t%s\n"
 "사용자 지정:\t%s\n"
 
@@ -3054,7 +3054,7 @@ msgstr "트랙 정보"
 
 #: src/main.c:362
 msgid "Preset Name"
-msgstr "사전설정 이름"
+msgstr "프리셋 이름"
 
 #: src/main.c:580
 msgid "The device or file to encode"
@@ -3062,7 +3062,7 @@ msgstr "인코딩할 장치 또는 파일"
 
 #: src/main.c:581
 msgid "The preset values to use for encoding"
-msgstr "인코딩에 사용할 사전설정 값"
+msgstr "인코딩에 사용할 프리셋 값"
 
 #: src/main.c:582
 msgid "Spam a lot"
@@ -3078,7 +3078,7 @@ msgstr "디버그 출력을 위한 콘솔 열기"
 
 #: src/presets.c:1232
 msgid "ghb_presets_menu_init: Failed to find presets folder."
-msgstr "ghb_presets_menu_init: 사전설정 폴더를 찾지 못하였습니다."
+msgstr "ghb_presets_menu_init: 프리셋 폴더를 찾지 못하였습니다."
 
 #: src/presets.c:1388
 msgid "Failed to find parent folder when adding child."
@@ -3090,7 +3090,7 @@ msgid ""
 "\n"
 "Would you like to continue?"
 msgstr ""
-"발견된 사전설정이 현재 버전의 HandBrake에서 지원되는 설정보다 최신 버전입니다.\n"
+"발견된 프리셋이 현재 버전의 HandBrake에서 지원되는 설정보다 최신 버전입니다.\n"
 "\n"
 "계속하시겠습니까?"
 
@@ -3100,7 +3100,7 @@ msgstr "여기서 꺼내줘요!"
 
 #: src/presets.c:1851
 msgid "Load backup presets"
-msgstr "백업 사전설정 불러오기"
+msgstr "백업 프리셋 불러오기"
 
 #: src/presets.c:1997
 msgid "All (*)"
@@ -3108,15 +3108,15 @@ msgstr "모두 (*)"
 
 #: src/presets.c:2002
 msgid "Presets (*.json)"
-msgstr "사전설정 (*.json)"
+msgstr "프리셋 (*.json)"
 
 #: src/presets.c:2008
 msgid "Legacy Presets (*.plist)"
-msgstr "기존 사전설정 (*.plist)"
+msgstr "기존 프리셋 (*.plist)"
 
 #: src/presets.c:2104
 msgid "Export Preset"
-msgstr "사전설정 내보내기"
+msgstr "프리셋 내보내기"
 
 #: src/presets.c:2445
 #, c-format
@@ -3135,7 +3135,7 @@ msgstr "폴더"
 
 #: src/presets.c:2446
 msgid "preset"
-msgstr "사전설정"
+msgstr "프리셋"
 
 #: src/preview.c:487
 #, c-format
@@ -3194,7 +3194,7 @@ msgstr "%s, 고정 화질 %.4g(%s)"
 #: src/queuehandler.c:403
 #, c-format
 msgid "%sPreset %s"
-msgstr "%s사전설정%s"
+msgstr "%s프리셋%s"
 
 #: src/queuehandler.c:408
 #, c-format
