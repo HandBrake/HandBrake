@@ -21,6 +21,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Audio
 
 - Fixed MP2 audio sources not utilizing the fallback encoder when pass through is disabled (#3863)
+- Fixed FFmpeg AAC audio encoder quality mode scale range (#1295)
 
 #### Subtitles
 
@@ -63,6 +64,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed an issue with automatic naming not applying correctly
 - Fixed main window not being shown upon editing a job in the queue
 - Updated queue statistics tab to include average encoding speed and percent of original file size
+- Added a stop breakpoint to the queue, set when stop after job is selected and may be reordered (#2572)
 - Added native support for the VideoToolbox API, enabling advanced features such as frame multi-pass, mastering display and content light metadata, and chroma location; the previous implementation via FFmpeg's libavcodec has been removed
 - Added Corsican translation
 - Updated Italian translation
@@ -81,9 +83,12 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Updated Send File To preference to set HB_SOURCE, HB_DESTINATION, and HB_EXIT_CODE environment variables, which can be used instead of arguments
 - Added new exit_code parameter to Send File To preference
 - Added "Move to top" and "Move to bottom" to the queue context menu
+- Added a stop breakpoint to the queue, set when stop after job is selected and may be reordered (#2572)
 - Added support for Windows 10/11 notifications, enable in Preferences > When Done
+- Added support for Right to Left UI rendering for languages that require it. This can be set in preferences
+- Added Chinese (Traditional, Taiwan) translation
 - Updated translations
-  - Chinese (includes fix for access keys in menus)
+  - Chinese (Simplified, China) - includes fix for access keys in menus
   - Corsican
   - German
   - Italian

@@ -57,7 +57,10 @@
 
 - (void)windowDidLoad
 {
-    [self.window.contentView setWantsLayer:YES];
+    self.window.tabbingMode = NSWindowTabbingModeDisallowed;
+    self.window.excludedFromWindowsMenu = YES;
+    self.window.acceptsMouseMovedEvents = YES;
+    self.window.contentView.wantsLayer = YES;
 
     // Read the window center position
     // We need the center and we can't use the
@@ -74,9 +77,6 @@
     {
         self.windowCenterPoint = [self.window HB_centerPoint];
     }
-
-    self.window.excludedFromWindowsMenu = YES;
-    self.window.acceptsMouseMovedEvents = YES;
 
     _pictureHUD = [[HBPictureHUDController alloc] init];
     self.pictureHUD.delegate = self;

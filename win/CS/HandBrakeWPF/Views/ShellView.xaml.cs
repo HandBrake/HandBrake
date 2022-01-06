@@ -12,8 +12,10 @@ namespace HandBrakeWPF.Views
     using System;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Resources;
 
@@ -21,6 +23,7 @@ namespace HandBrakeWPF.Views
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -85,27 +88,26 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D6, ModifierKeys.Control)), new KeyGesture(Key.D6, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D7, ModifierKeys.Control)), new KeyGesture(Key.D7, ModifierKeys.Control)));
 
-            // Enable Windows 7 Taskbar progress indication.
+            // Enable Windows Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
             {
                 this.TaskbarItemInfo = WindowsTaskbar.GetTaskBar();
             }
 
-            // Setup the UI Language
-            string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
-            if (!string.IsNullOrEmpty(culture))
+            // Setup the Right To Left Mode
+            RightToLeftMode rightToLeft = (RightToLeftMode)userSettingService.GetUserSetting<int>(UserSettingConstants.RightToLeftUi);
+            switch (rightToLeft)
             {
-                InterfaceLanguage language = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
-                if (language != null)
-                {
-                    if (language.RightToLeft)
+                case RightToLeftMode.EntireInterface:
+                    if (Application.Current.MainWindow != null)
                     {
-                        if (Application.Current.MainWindow != null)
-                        {
-                            Application.Current.MainWindow.FlowDirection = FlowDirection.RightToLeft;
-                        }
+                        Application.Current.MainWindow.FlowDirection = FlowDirection.RightToLeft;
                     }
-                }
+                    break;
+                case RightToLeftMode.TextOnly:
+                    FrameworkElement.FlowDirectionProperty.OverrideMetadata(typeof(TextBlock), new FrameworkPropertyMetadata(FlowDirection.RightToLeft));
+                    FrameworkElement.FlowDirectionProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(FlowDirection.RightToLeft));
+                    break;
             }
         }
 

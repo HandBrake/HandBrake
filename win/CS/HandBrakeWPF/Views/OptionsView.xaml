@@ -37,6 +37,7 @@
         <Options:UpdateCheckConverter x:Key="UpdateCheckConverter" />
         <Options:ThemeSettingConverter x:Key="ThemeSettingConverter" />
         <Options:PresetDisplayModeConverter x:Key="PresetDisplayModeConverter" />
+        <Options:RightToLeftConverter x:Key="RightToLeftConverter" />
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
@@ -125,6 +126,12 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal"  Margin="20,0,0,5">
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_RightToleftMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding RightToLeftModes, Converter={StaticResource RightToLeftConverter}}" SelectedItem="{Binding SelectedRightToLeftMode, Converter={StaticResource RightToLeftConverter}}" 
+                                      Margin="5,0,0,0" HorizontalAlignment="Left" MinWidth="158" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"  Margin="20,15,0,5">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_DarkThemeMode}"  Margin="0,0,0,0" VerticalAlignment="Center"/>
                             <ComboBox ItemsSource="{Binding DarkThemeModes, Converter={StaticResource ThemeSettingConverter}}" SelectedItem="{Binding DarkThemeMode, Converter={StaticResource ThemeSettingConverter}}" 
                                       Margin="5,0,0,0" HorizontalAlignment="Left" Width="150" />

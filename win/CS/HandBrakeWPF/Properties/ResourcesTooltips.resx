@@ -516,4 +516,9 @@ It is recommended the output file is validated before performing actions on it.<
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
     <value>The format of the output file. In addition to any supported file system character, you can use the any of the placeholders that will be replaced when you change title or scan a source or update certain settings.</value>
   </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+
+Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+  </data>
 </root>

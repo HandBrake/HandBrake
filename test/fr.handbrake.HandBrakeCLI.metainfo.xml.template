@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018-2021 John Stebbins <your@email.com> -->
+<!-- Copyright 2018-2022 John Stebbins <your@email.com> -->
 <component type="console-application">
   <id>fr.handbrake.HandBrakeCLI</id>
   <metadata_license>CC0</metadata_license>

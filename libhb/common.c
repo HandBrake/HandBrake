@@ -1,6 +1,6 @@
 /* common.c
 
-   Copyright (c) 2003-2021 HandBrake Team
+   Copyright (c) 2003-2022 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1790,7 +1790,7 @@ void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
             *direction   = 0;
             *granularity = 1.;
             *low         = 1.;
-            *high        = 10.;
+            *high        = 5.;
             break;
 
         case HB_ACODEC_FDK_HAAC:
@@ -1847,7 +1847,7 @@ float hb_audio_quality_get_default(uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_FFAAC:
-            return 5.;
+            return 3.;
 
         case HB_ACODEC_FDK_HAAC:
         case HB_ACODEC_FDK_AAC:

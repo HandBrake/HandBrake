@@ -82,5 +82,6 @@ namespace HandBrakeWPF
         public const string PresetMenuDisplayMode = "PresetMenuDisplayMode";
         public const string NotifyOnEncodeDone = "NotifyOnEncodeDone";
         public const string NotifyOnQueueDone = "NotifyOnQueueDone";
+        public const string RightToLeftUi = "RightToLeftUi";
     }
 }

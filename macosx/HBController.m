@@ -1095,7 +1095,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)revealPathItemInFinder:(id)sender
 {
-    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[self.destinationPathControl.clickedPathItem.URL]];
+    NSURL *URL = self.destinationPathControl.clickedPathItem.URL;
+    if (URL == nil)
+    {
+        URL = self.destinationURL;
+    }
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[URL]];
 }
 
 - (IBAction)titlePopUpChanged:(NSPopUpButton *)sender
