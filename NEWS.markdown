@@ -83,10 +83,9 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added "Move to top" and "Move to bottom" to the queue context menu
 - Added support for Windows 10/11 notifications, enable in Preferences > When Done
 - Added support for Right to Left UI rendering for languages that require it. This can be set in preferences
-- New Translations
-  - Traditional Chinese (Taiwan)
+- Added Chinese (Traditional, Taiwan) translation
 - Updated translations
-  - Chinese (includes fix for access keys in menus)
+  - Chinese (Simplified, China) - includes fix for access keys in menus
   - Corsican
   - German
   - Italian
