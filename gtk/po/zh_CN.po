@@ -5,6 +5,7 @@
 # 
 # Translators:
 # 玉堂白鹤 <yjwork@qq.com>, 2021
+# pluwen <pluwen@gmail.com>, 2021
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-17 08:17-0600\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: 玉堂白鹤 <yjwork@qq.com>, 2021\n"
+"Last-Translator: pluwen <pluwen@gmail.com>, 2021\n"
 "Language-Team: Chinese (https://www.transifex.com/HandBrakeProject/teams/92423/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -305,7 +306,7 @@ msgstr "摘要"
 
 #: src/ghb3.ui:1084
 msgid "Pass:"
-msgstr ""
+msgstr "Pass："
 
 #: src/ghb3.ui:1120
 msgid "Start Time:"
@@ -358,7 +359,7 @@ msgstr ""
 #: src/ghb3.ui:1718
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
-msgstr "HandBrake 是一个遵循GPL许可，多平台，多线程的视频编码器。"
+msgstr "HandBrake 是一个遵循 GPL 许可，多平台，多线程的视频编码器。"
 
 #: src/ghb3.ui:1720
 msgid "https://handbrake.fr"
@@ -607,7 +608,7 @@ msgstr "保存当前设置为新的预设。"
 
 #: src/ghb3.ui:2896
 msgid "Format:"
-msgstr "格式:"
+msgstr "格式："
 
 #: src/ghb3.ui:2914
 msgid "Format to mux encoded tracks to."
@@ -644,7 +645,7 @@ msgstr "iPod 5G 支持"
 
 #: src/ghb3.ui:2974
 msgid "Add iPod Atom needed by some older iPods."
-msgstr "添加老旧 iPod 所需的iPod Atom。"
+msgstr "添加老旧 iPod 所需的 iPod Atom。"
 
 #: src/ghb3.ui:2996
 msgid "Duration:"
@@ -656,11 +657,11 @@ msgstr "hh:mm:ss"
 
 #: src/ghb3.ui:3029
 msgid "Tracks:"
-msgstr "轨信息："
+msgstr "轨道："
 
 #: src/ghb3.ui:3069
 msgid "Filters:"
-msgstr "过滤："
+msgstr "滤镜："
 
 #: src/ghb3.ui:3109
 msgid "Size:"
@@ -672,7 +673,7 @@ msgstr "--"
 
 #: src/ghb3.ui:3227
 msgid "Auto Crop"
-msgstr "自动剪裁"
+msgstr "自动裁剪"
 
 #: src/ghb3.ui:3232
 msgid "Automatically crop black borders around edges of the video."
@@ -696,7 +697,7 @@ msgstr ""
 
 #: src/ghb3.ui:3272
 msgid "Left Crop"
-msgstr "左剪裁"
+msgstr "左侧裁剪"
 
 #: src/ghb3.ui:3289
 msgid "Top Crop"
@@ -708,7 +709,7 @@ msgstr "底部裁剪"
 
 #: src/ghb3.ui:3323
 msgid "Right Crop"
-msgstr "右剪裁"
+msgstr "右侧裁剪"
 
 #: src/ghb3.ui:3340
 msgid "Crop Dimensions:"
@@ -744,7 +745,7 @@ msgstr ""
 
 #: src/ghb3.ui:3466 src/ghb3.ui:3680
 msgid "Height:"
-msgstr "高："
+msgstr "高度："
 
 #: src/ghb3.ui:3481
 msgid ""
@@ -781,7 +782,7 @@ msgstr ""
 
 #: src/ghb3.ui:3550
 msgid "Alignment:"
-msgstr "对齐方式："
+msgstr "对齐："
 
 #: src/ghb3.ui:3565
 msgid ""
@@ -957,7 +958,7 @@ msgstr ""
 
 #: src/ghb3.ui:4122
 msgid "Deblock Tune:"
-msgstr "去区块优化："
+msgstr "去块效应调优："
 
 #: src/ghb3.ui:4152
 msgid ""
@@ -989,7 +990,7 @@ msgstr "降噪预设："
 
 #: src/ghb3.ui:4246
 msgid "Denoise Tune:"
-msgstr "降噪优化："
+msgstr "降噪调优："
 
 #: src/ghb3.ui:4277 src/ghb3.ui:4399
 msgid ""
@@ -1017,7 +1018,7 @@ msgstr "锐化预设："
 
 #: src/ghb3.ui:4369
 msgid "Sharpen Tune:"
-msgstr "锐化优化："
+msgstr "锐化调优："
 
 #: src/ghb3.ui:4427
 msgid "Rotate Filter:"
@@ -1025,7 +1026,7 @@ msgstr "旋转滤镜："
 
 #: src/ghb3.ui:4443
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "以90度为增量顺时针旋转视频。"
+msgstr "以 90 度为增量顺时针旋转视频。"
 
 #: src/ghb3.ui:4457
 msgid "Grayscale"
@@ -1186,13 +1187,13 @@ msgstr ""
 "调整编码器设置以在压缩效率与编码速度之间折衷。\n"
 "\n"
 "这将建立您的默认编码设置。\n"
-"优化、规格，级别以及扩展设置选项字符串都将应用到该设置。\n"
+"调优、规格，级别以及扩展设置选项字符串都将应用到该设置。\n"
 "您应该选择您所能接受的最慢的设置选项，因为较慢的设置可以\n"
 "得到更好的输出质量或者更小的输出文件。"
 
 #: src/ghb3.ui:4865
 msgid "Tune:"
-msgstr "优化："
+msgstr "调优："
 
 #: src/ghb3.ui:4882
 msgid ""
@@ -2901,7 +2902,7 @@ msgstr ""
 "\n"
 "滤镜：\t%s\n"
 "预设：\t%s\n"
-"优化：\t%s\n"
+"调优：\t%s\n"
 "自定义：\t%s\n"
 
 #: src/hb-backend.c:4305
@@ -2918,7 +2919,7 @@ msgstr ""
 "\n"
 "滤镜：\t%s\n"
 "预设：\t%s\n"
-"优化：\t%s\n"
+"调优：\t%s\n"
 "自定义：\t%s\n"
 
 #: src/hb-backend.c:4339
@@ -3180,7 +3181,7 @@ msgstr "%s预设 %s"
 #: src/queuehandler.c:408
 #, c-format
 msgid "%sTune %s"
-msgstr "%s优化 %s"
+msgstr "%s调优 %s"
 
 #: src/queuehandler.c:413
 #, c-format
