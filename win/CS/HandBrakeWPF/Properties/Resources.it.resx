@@ -2603,4 +2603,16 @@ Sono supportati solo file della coda della versione corrente.</value>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>Espandi Tutto</value>
   </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Scrittura da Destra a Sinistra:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Solo Testo</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Interfaccia Utente Completa</value>
+  </data>
 </root>

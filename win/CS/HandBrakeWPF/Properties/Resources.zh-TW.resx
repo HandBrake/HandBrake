@@ -1013,7 +1013,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>編輯設定檔</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Preset Options Context Menu</value>
+    <value>設定檔選項內容選單</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
     <value>刪除設定檔</value>
@@ -2473,7 +2473,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>（預設）</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>類別</value>
+    <value>分類</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
     <value>完全展開</value>
@@ -2592,5 +2592,17 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>展開全部</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>由右至左顯示模式：</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>僅有文字</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>整體使用者介面</value>
   </data>
 </root>
