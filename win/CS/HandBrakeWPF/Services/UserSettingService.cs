@@ -249,6 +249,17 @@ namespace HandBrakeWPF.Services
                 this.userSettings[UserSettingConstants.ProcessIsolationEnabled] = false;
                 this.userSettings[UserSettingConstants.SimultaneousEncodes] = 1;
             }
+
+            // Handle change of language code zh to zh-CN
+            object language;
+            if (this.userSettings.TryGetValue(UserSettingConstants.UiLanguage, out language))
+            {
+                if (language is string and "zh")
+                {
+                    // Reset to use system language if we have the old zh stored in settings.
+                    this.userSettings[UserSettingConstants.UiLanguage] = InterfaceLanguageUtilities.UseSystemLanguage;
+                }
+            }
         }
         
         /// <summary>
@@ -277,7 +288,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.MediaPlayerPath, @"C:\Program Files\VideoLAN\vlc\vlc.exe");
             defaults.Add(UserSettingConstants.PresetMenuDisplayMode, 0);
             defaults.Add(UserSettingConstants.RightToLeftUi, 0); 
-
+            
             // Output Files
             defaults.Add(UserSettingConstants.AutoNaming, true);
             defaults.Add(UserSettingConstants.AutoNamePath, string.Empty);
