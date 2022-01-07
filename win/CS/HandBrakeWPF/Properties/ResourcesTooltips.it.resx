@@ -512,4 +512,9 @@ Nota Bene: i codici di errore sono supposizioni e potrebbero quindi non essere c
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
     <value>Il formato del nome del file di uscita. Oltre a tutti i caratteri supportati dal file system, è possibile usare un qualsiasi segnaposto che verrà poi sostituito al cambio di Titolo, alla scansione di una sorgente od al cambio di determinate impostazioni.</value>
   </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Per le lingue che si leggono da destra a sinistra, è possibile abilitare una di queste due modalità:  "Solo Testo" scriverà esclusivamente i testi da destra a sinistra,  "Interfaccia Utente Completa" mostrerà così anche gli altri elementi grafici.
+
+Usando una di queste modalità, potrebbero esserci dei problemi nella visualizzazione dell'interfaccia. A secoda della lingua, potrebbe essere necessario provare quale delle due funziona meglio.</value>
+  </data>
 </root>
