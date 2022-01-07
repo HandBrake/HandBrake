@@ -123,7 +123,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.PixelAspectX = task.PixelAspectX;
             this.PixelAspectY = task.PixelAspectY;
             this.Cropping = new Cropping(task.Cropping);
-            this.Padding = task.Padding;
+            this.Padding = new PaddingFilter(task.Padding);
             this.FlipVideo = task.FlipVideo;
             this.Rotation = task.Rotation;
             this.Anamorphic = task.Anamorphic;
