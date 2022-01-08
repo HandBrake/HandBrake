@@ -27,8 +27,8 @@ namespace HandBrakeWPF.Utilities
                    {
                        UseSystemLanguage,
                        new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
-                       new InterfaceLanguage("zh-cn", "Simplified Chinese (简体中文)"),
-                       new InterfaceLanguage("zh-tw", "Traditional Chinese (正體中文)"),
+                       new InterfaceLanguage("zh-CN", "Simplified Chinese (简体中文)"),
+                       new InterfaceLanguage("zh-TW", "Traditional Chinese (正體中文)"),
                        new InterfaceLanguage("co", "Corsican (Corsu)"),
                        DefaultEnglishLanguage,
                        new InterfaceLanguage("fr", "French (Français)"),
