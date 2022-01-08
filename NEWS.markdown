@@ -80,7 +80,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
   - French (Français)
   - German (Deutsch)
   - Italian (Italiano)
-  - Japanese (日本語)
   - Portoguese (Português)
 - Miscellaneous bug fixes and improvements
 
