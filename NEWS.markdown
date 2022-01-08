@@ -71,10 +71,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Fixed an issue with automatic naming not applying correctly
 - Fixed main window not being shown upon editing a job in the queue
 - Updated queue statistics tab to include average encoding speed and percent of original file size
+- Added "Move to top" and "Move to bottom" to the queue context menu
 - Added a stop breakpoint to the queue, set when stop after job is selected and may be reordered (#2572)
 - Added native support for the VideoToolbox API, enabling advanced features such as frame multi-pass, mastering display and content light metadata, and chroma location; the previous implementation via FFmpeg's libavcodec has been removed
 - Added Corsican (Corsu) translation
-- Updated Italian (Italiano) translation
+- Updated translations
+  - Simplified Chinese (简体中文)
+  - French (Français)
+  - German (Deutsch)
+  - Italian (Italiano)
+  - Japanese (日本語)
+  - Portoguese (Português)
 - Miscellaneous bug fixes and improvements
 
 ### Windows
