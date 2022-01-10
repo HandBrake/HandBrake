@@ -8,6 +8,17 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
 
 
+## HandBrake 1.5.1
+
+This is a rebuild of 1.5.0 with no functional changes.
+
+#### Build system
+- Fixed an issue with the source tarball that broke Flathub Builds. 
+
+### Windows 
+- The Windows UI is now .NET 6.0 only. (.NET 5.0 is no longer additionally required)
+
+
 ## HandBrake 1.5.0
 
 ### All platforms
