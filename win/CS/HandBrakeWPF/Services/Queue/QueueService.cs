@@ -164,7 +164,7 @@ namespace HandBrakeWPF.Services.Queue
                 // Make a copy of the file before we replace it. This way, if we crash we can recover.
                 if (File.Exists(tempPath))
                 {
-                    File.Copy(tempPath, tempPath + ".last");
+                    File.Copy(tempPath, tempPath + ".last", true);
                 }
 
                 using (StreamWriter writer = new StreamWriter(tempPath))
