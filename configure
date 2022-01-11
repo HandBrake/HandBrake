@@ -22,7 +22,7 @@ if ( inpath bash ); then
             break
         fi
     done
-    if [ pp != "" ]; then
+    if [ "$pp" != "" ]; then
         exec $pp `dirname $0`/make/configure.py "$@"
         exit 0
     else
