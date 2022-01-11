@@ -248,8 +248,8 @@
 
     HBJob *job = [self.job copy];
     job.title = self.job.title;
-    job.outputFileName = destURL.lastPathComponent;
-    job.outputURL = destURL.URLByDeletingLastPathComponent;
+    job.destinationFileName = destURL.lastPathComponent;
+    job.destinationFolderURL = destURL.URLByDeletingLastPathComponent;
 
     job.range.type = HBRangePreviewIndex;
     job.range.previewIndex = (int)index + 1;;

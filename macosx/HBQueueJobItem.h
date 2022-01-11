@@ -25,13 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSURL *fileURL;
 
 /// The directory URL at which the new file will be created.
-@property (nonatomic, readonly, copy) NSURL *outputURL;
+@property (nonatomic, readonly, copy) NSURL *destinationFolderURL;
 
 /// The name of the new file that will be created.
-@property (nonatomic, readonly, copy) NSString *outputFileName;
+@property (nonatomic, readonly, copy) NSString *destinationFileName;
 
 /// The file URL at which the new file will be created.
-@property (nonatomic, readonly, copy) NSURL *completeOutputURL;
+@property (nonatomic, readonly, copy) NSURL *destinationURL;
 
 /// The file URL at which the new file will be created.
 @property (nonatomic, copy, nullable) NSURL *activityLogURL;

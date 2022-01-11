@@ -108,9 +108,9 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     if (self.job && !(undo.isUndoing || undo.isRedoing))
     {
         NSString *extension = self.job.automaticExt;
-        if (![extension isEqualTo:self.job.outputFileName.pathExtension])
+        if (![extension isEqualTo:self.job.destinationFileName.pathExtension])
         {
-            self.job.outputFileName = [[self.job.outputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
+            self.job.destinationFileName = [[self.job.destinationFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
         }
     }
 }
@@ -168,7 +168,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
         NSString *fileName = self.job.automaticName;
 
         // Swap the old one with the new one
-        self.job.outputFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.outputFileName.pathExtension];
+        self.job.destinationFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.destinationFileName.pathExtension];
     }
 }
 

@@ -216,7 +216,7 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="SgW-Bn-bwW">
+                            <binding destination="-2" name="value" keyPath="self.job.destinationFileName" id="0aV-K7-r7w">
                                 <dictionary key="options">
                                     <bool key="NSValidatesImmediately" value="YES"/>
                                 </dictionary>
@@ -492,7 +492,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </pathCell>
                         <accessibility description="Destination folder path"/>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.job.outputURL" id="FQU-UV-RCI"/>
+                            <binding destination="-2" name="value" keyPath="self.job.destinationFolderURL" id="fjI-2f-31v"/>
                             <outlet property="delegate" destination="-2" id="jfV-bp-JaV"/>
                             <outlet property="menu" destination="my5-n7-OFP" id="CXO-BG-nnJ"/>
                         </connections>

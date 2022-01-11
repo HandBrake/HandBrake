@@ -131,7 +131,7 @@
         id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
         if ([item isKindOfClass:[HBQueueJobItem class]])
         {
-            NSURL *url = [(HBQueueJobItem *)item completeOutputURL];
+            NSURL *url = [(HBQueueJobItem *)item destinationURL];
             [urls addObject:url];
         }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
@@ -346,7 +346,7 @@
 {
     if ([item isKindOfClass:[HBQueueJobItem class]])
     {
-        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[[(HBQueueJobItem *)item completeOutputURL]]];
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[[(HBQueueJobItem *)item destinationURL]]];
     }
 }
 

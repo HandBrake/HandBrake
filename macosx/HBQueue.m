@@ -221,7 +221,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     {
         if ([item isKindOfClass:[HBQueueJobItem class]] && 
             (item.state == HBQueueItemStateReady || item.state == HBQueueItemStateWorking)
-            && [item.completeOutputURL isEqualTo:url])
+            && [item.destinationURL isEqualTo:url])
         {
             return YES;
         }
@@ -760,7 +760,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         HBQueueJobItem *nextJobItem = self.nextPendingQueueItem;
         HBQueueWorker *worker = self.firstAvailableWorker;
 
-        if (nextJobItem && [self isDiskSpaceLowAtURL:nextJobItem.outputURL])
+        if (nextJobItem && [self isDiskSpaceLowAtURL:nextJobItem.destinationFolderURL])
         {
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
             [self allowSleep];
