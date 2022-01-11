@@ -328,7 +328,18 @@ namespace HandBrakeWPF.ViewModels
 
         public int DisplayWidth
         {
-            get => this.Task.DisplayWidth.HasValue ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture)) : 0;
+            get
+            {
+                if (this.Task.DisplayWidth.HasValue && !double.IsInfinity(this.Task.DisplayWidth.Value))
+                {
+                   if (int.TryParse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture), out int value))
+                   {
+                       return value;
+                   }
+                }
+
+                return 0;
+            } 
 
             set
             {
