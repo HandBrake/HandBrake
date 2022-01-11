@@ -81,7 +81,7 @@ NSString * const HBKeepPresetEdits               = @"HBKeepPresetEdits";
  */
 + (void)registerUserDefaults
 {
-    NSURL *moviesURL = HBUtilities.defaultDestinationURL;
+    NSURL *moviesURL = HBUtilities.defaultDestinationFolderURL;
 
     [NSUserDefaults.standardUserDefaults registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,

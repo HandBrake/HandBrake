@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Returns the default destination URL
  */
-+ (nullable NSURL *)defaultDestinationURL;
++ (nullable NSURL *)defaultDestinationFolderURL;
 
 
 /**

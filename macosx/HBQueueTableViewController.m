@@ -133,7 +133,7 @@
         id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
         if ([item isKindOfClass:[HBQueueJobItem class]])
         {
-            NSURL *url = [(HBQueueJobItem *)item destinationURL];
+            NSURL *url = item.destinationURL;
             [urls addObject:url];
         }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];

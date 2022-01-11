@@ -105,7 +105,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 #pragma mark - Job
 
-@property (nonatomic, strong) NSURL *destinationURL;
+@property (nonatomic, strong) NSURL *destinationFolderURL;
 
 @property (nonatomic, nullable) HBJob *job;
 @property (nonatomic, nullable) HBAutoNamer *autoNamer;
@@ -167,18 +167,18 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         NSData *bookmark = [NSUserDefaults.standardUserDefaults objectForKey:HBLastDestinationDirectoryBookmark];
         if (bookmark)
         {
-            _destinationURL = [HBUtilities URLFromBookmark:bookmark];
+            _destinationFolderURL = [HBUtilities URLFromBookmark:bookmark];
         }
 #else
-        _destinationURL = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
+        _destinationFolderURL = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
-        if (!_destinationURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationURL.path isDirectory:nil] == NO)
+        if (!_destinationFolderURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationFolderURL.path isDirectory:nil] == NO)
         {
-            _destinationURL = HBUtilities.defaultDestinationURL;
+            _destinationFolderURL = HBUtilities.defaultDestinationFolderURL;
         }
 
 #ifdef __SANDBOX_ENABLED__
-        [_destinationURL startAccessingSecurityScopedResource];
+        [_destinationFolderURL startAccessingSecurityScopedResource];
 #endif
     }
 
@@ -876,7 +876,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset];
     if (job)
     {
-        job.destinationFolderURL = self.destinationURL;
+        job.destinationFolderURL = self.destinationFolderURL;
 
         // If the source is not a stream, and autonaming is disabled,
         // keep the existing file name.
@@ -1023,15 +1023,15 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 #pragma mark - GUI Controls Changed Methods
 
-- (void)setDestinationURL:(NSURL *)destinationURL
+- (void)setDestinationFolderURL:(NSURL *)destinationFolderURL
 {
-    self.job.destinationFolderURL = destinationURL;
-    _destinationURL = destinationURL;
+    self.job.destinationFolderURL = destinationFolderURL;
+    _destinationFolderURL = destinationFolderURL;
 
     // Save this path to the prefs so that on next browse destination window it opens there
-    [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:destinationURL]
+    [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:destinationFolderURL]
                                               forKey:HBLastDestinationDirectoryBookmark];
-    [NSUserDefaults.standardUserDefaults setURL:destinationURL
+    [NSUserDefaults.standardUserDefaults setURL:destinationFolderURL
                                          forKey:HBLastDestinationDirectoryURL];
 
 
@@ -1055,7 +1055,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
      {
          if (result == NSModalResponseOK)
          {
-             self.destinationURL = panel.URL;
+             self.destinationFolderURL = panel.URL;
          }
      }];
 }
@@ -1066,8 +1066,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if ([pboard availableTypeFromArray:@[NSPasteboardTypeFileURL]])
     {
-        NSURL *destinationURL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
-        if (destinationURL.hasDirectoryPath)
+        NSURL *URL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
+        if (URL.hasDirectoryPath)
         {
             return NSDragOperationGeneric;
         }
@@ -1082,10 +1082,10 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if ([pboard availableTypeFromArray:@[NSPasteboardTypeFileURL]])
     {
-        NSURL *destinationURL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
-        if (destinationURL.hasDirectoryPath)
+        NSURL *URL = [[pboard readObjectsForClasses:@[[NSURL class]] options:nil] firstObject];
+        if (URL.hasDirectoryPath)
         {
-            self.destinationURL = destinationURL;
+            self.destinationFolderURL = URL;
         }
         return YES;
     }
@@ -1098,7 +1098,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     NSURL *URL = self.destinationPathControl.clickedPathItem.URL;
     if (URL == nil)
     {
-        URL = self.destinationURL;
+        URL = self.destinationFolderURL;
     }
     [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[URL]];
 }
@@ -1326,7 +1326,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     for (HBTitle *title in titles)
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title preset:preset];
-        job.destinationFolderURL = self.destinationURL;
+        job.destinationFolderURL = self.destinationFolderURL;
         job.destinationFileName = job.defaultName;
         job.title = nil;
         if (job)

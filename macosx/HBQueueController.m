@@ -445,7 +445,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBSendToAppEnabled] == YES)
     {
         NSURL *destinationFolderURL = item.destinationFolderURL;
-        NSString *completeOutputPath = item.destinationURL.path;
+        NSString *destinationPath = item.destinationURL.path;
 
         dispatch_async(_sendQueue, ^{
 #ifdef __SANDBOX_ENABLED__
@@ -457,7 +457,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 
             if (app)
             {
-                if (![workspace openFile:completeOutputPath withApplication:app])
+                if (![workspace openFile:destinationPath withApplication:app])
                 {
                     [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
                 }
