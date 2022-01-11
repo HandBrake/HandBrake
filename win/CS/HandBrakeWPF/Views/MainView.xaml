@@ -125,6 +125,7 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_NightlyBuildsUpdate}" cal:Message.Attach="[Event Click] = [Action NightlyUpdate]" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_About}" cal:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>

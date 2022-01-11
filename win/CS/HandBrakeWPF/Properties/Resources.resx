@@ -2615,4 +2615,13 @@ Only queue files from the current version are supported.</value>
   <data name="RightToLeft_WholeInterface" xml:space="preserve">
     <value>Entire User Interface</value>
   </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>The current development build you are running is getting old. You may wish to update!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Download via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Download Development Builds (HTTPS)</value>
+  </data>
 </root>

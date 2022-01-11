@@ -10,7 +10,10 @@
 namespace HandBrake.Interop.Interop
 {
     using System;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     using HandBrake.Interop.Interop.HbLib;
 
@@ -53,6 +56,28 @@ namespace HandBrake.Interop.Interop
         {
             // 01 = Unofficial Builds.  00 = Official Tagged Releases.
             return Build.ToString().EndsWith("01");
+        }
+
+        public static int? NightlyBuildAge()
+        {
+            // We consider any build older than 1 month, to be old.
+            try
+            {
+                string build = Build.ToString().Substring(0, 8);
+                DateTime buildDate;
+
+                if (DateTime.TryParseExact(build, "yyyyMMdd", null, DateTimeStyles.None, out buildDate))
+                {
+                    TimeSpan days = DateTime.Now.Date - buildDate;
+                    return days.Days;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            return null;
         }
     }
 }

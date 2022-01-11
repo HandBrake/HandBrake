@@ -836,6 +836,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool IsOldNightly { get; set; }
+
         public bool IsMultiProcess { get; set; }
 
         public bool IsNightly => HandBrakeVersionHelper.IsNightly();
@@ -1034,6 +1036,18 @@ namespace HandBrakeWPF.ViewModels
         {
             OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
             command.Execute(OptionsTab.Updates);
+        }
+        
+        public void NightlyUpdate()
+        {
+            try
+            {
+                Process.Start("explorer.exe", "https://github.com/HandBrake/HandBrake-snapshots");
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.Main_UnableToLoadHelpMessage, Resources.Main_UnableToLoadHelpSolution, exc);
+            }
         }
 
         public AddQueueError AddToQueue(bool batch)
@@ -2080,6 +2094,17 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.UpdateAvailable = true;
                 this.ProgramStatusLabel = Resources.Main_NewUpdate;
+            }
+            else if (HandBrakeVersionHelper.IsNightly())
+            { 
+                int ageLimit = this.userSettingService.GetUserSetting<int>(UserSettingConstants.NightlyAgeLimit);
+                if (HandBrakeVersionHelper.NightlyBuildAge() > ageLimit)
+                {
+                    // Any nightly build older than 30 days is considered old. Encourage users to update.
+                    this.UpdateAvailable = false;
+                    this.IsOldNightly = true;
+                    this.NotifyOfPropertyChange(() => this.IsOldNightly);
+                }
             }
         }
 

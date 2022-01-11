@@ -119,6 +119,26 @@
                 </TextBlock>
             </StackPanel>
 
+
+            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="../Views/Images/information.png" Width="24" Grid.Column="0" VerticalAlignment="Top"  />
+                <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <TextBlock Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,0,0" />
+
+                    <TextBlock Margin="10,0,0,0">           
+                        <Hyperlink NavigateUri="/" RequestNavigate="NightlyAvailable_OnRequestNavigate">
+                            <TextBlock Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" TextWrapping="Wrap" />
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+               
+            </Grid>
+       
+
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="{x:Static Properties:Resources.Generic_Cancel}" IsCancel="True"  Padding="8,2" />
