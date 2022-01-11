@@ -100,19 +100,10 @@ MACOSX.UB.xpcServices/ = $(MACOSX.UB.app/)XPCServices/
 
 MACOSX.UB.contents = $(MACOSX.UB.app/)MacOS/HandBrake \
               $(MACOSX.UB.frameworks/)HandBrakeKit.framework/Versions/A/HandBrakeKit \
-              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Sparkle \
-              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Autoupdate \
-              $(MACOSX.UB.frameworks/)Sparkle.framework/Versions/A/Updater.app/Contents/MacOS/Updater \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService.xpc/Contents/MacOS/HandBrakeXPCService \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService2.xpc/Contents/MacOS/HandBrakeXPCService2 \
               $(MACOSX.UB.xpcServices/)HandBrakeXPCService3.xpc/Contents/MacOS/HandBrakeXPCService3 \
-              $(MACOSX.UB.xpcServices/)HandBrakeXPCService4.xpc/Contents/MacOS/HandBrakeXPCService4 \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.Downloader.xpc/Contents/MacOS/org.sparkle-project.Downloader \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerConnection.xpc/Contents/MacOS/org.sparkle-project.InstallerConnection \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/org.sparkle-project.InstallerLauncher \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app/Contents/MacOS/Updater \
-              $(MACOSX.UB.xpcServices/)org.sparkle-project.InstallerStatus.xpc/Contents/MacOS/org.sparkle-project.InstallerStatus
+              $(MACOSX.UB.xpcServices/)HandBrakeXPCService4.xpc/Contents/MacOS/HandBrakeXPCService4
 
 MACOSX.UB.BUILD = $(SRC/)configure --force --build=$(BUILD/)ub.$(1) --xcode-config=$(1) $(CONF.args) --launch
 

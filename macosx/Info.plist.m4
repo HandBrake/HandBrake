@@ -70,6 +70,10 @@ GPLv2 license.</string>
 	<string>dsa_pub.pem</string>
 	<key>SUAllowsAutomaticUpdates</key>
 	<false/>
+	<key>SUEnableDownloaderService</key>
+	<true />
+	<key>SUEnableInstallerLauncherService</key>
+	<true />
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
 	<key>NSAppleEventsUsageDescription</key>

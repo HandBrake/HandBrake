@@ -95,6 +95,7 @@ if [[ "${RUNTIME}" == true ]]; then
 fi
 ENTITLEMENTS_MAIN_FLAGS=""
 ENTITLEMENTS_XPC_FLAGS=""
+ENTITLEMENTS_SPARKLE_XPC_FLAGS="--entitlements $SCRIPTDIR/org.sparkle-project.Downloader.entitlements"
 ENTITLEMENTS_CLI_FLAGS=""
 if [[ "${SANDBOX}" == true ]]; then
     ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake.entitlements"
@@ -119,6 +120,8 @@ function sign {  # sign target flags
         FLAGS="${ENTITLEMENTS_MAIN_FLAGS}"
     elif [[ "${2:-}" == "xpc" ]]; then
         FLAGS="${ENTITLEMENTS_XPC_FLAGS}"
+    elif [[ "${2:-}" == "sparkle-xpc" ]]; then
+        FLAGS="${ENTITLEMENTS_SPARKLE_XPC_FLAGS}"
     elif [[ "${2:-}" == "cli" ]]; then
         FLAGS="${ENTITLEMENTS_CLI_FLAGS}"
     else
@@ -158,30 +161,31 @@ for TARGET in "${@}"; do
         find "${TARGET}"/Contents/Frameworks -type f -name ".DS_Store" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.textile" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \; >/dev/null 2>&1
-        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A/Updater.app
-        rm -rf "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A/Autoupdate
 
-        echo "  Signing Frameworks"
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A
-        sign "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A
-
-        echo "  Signing Updater App"
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate
-
-        echo "  Signing XPC Services"
 
         OIFS="${IFS}"
         IFS=$'\n'
         XPC=($(find -s "${TARGET}"/Contents/XPCServices -type d -regex ".*/HandBrakeXPCService[0-9]*\.xpc" 2>/dev/null))
-        XPC_EXT=($(find -s "${TARGET}"/Contents/XPCServices -type d -regex ".*/org\.sparkle-project.*\.xpc" 2>/dev/null))
+        XPC_EXT=($(find -s "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices -type d -regex ".*/org\.sparkle-project.*\.xpc" 2>/dev/null))
         IFS="${OIFS}"
+
+        echo "  Signing XPC Services"
+
         for FILE in "${XPC[@]}"; do
             sign "${FILE}" xpc
         done
-        for FILE in "${XPC_EXT[@]}"; do
-            sign "${FILE}"
-        done
+
+        echo "  Signing Sparkle XPC Services"
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.Downloader.xpc sparkle-xpc
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.InstallerLauncher.xpc
+
+        echo "  Signing Updater App"
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate
+
+        echo "  Signing Frameworks"
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B
+        sign "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A
 
         echo "  Signing App Bundle"
         sign "${TARGET}" main
@@ -191,7 +195,8 @@ for TARGET in "${@}"; do
         verify "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework
 
         echo "  Validating Updater App"
-        verify "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app
+        verify "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app
+        verify "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate
 
         echo "  Validating XPC Services"
         for FILE in "${XPC[@]}" "${XPC_EXT[@]}"; do
