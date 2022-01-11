@@ -30,6 +30,11 @@
     return NO;
 }
 
+- (NSURL *)destinationURL
+{
+    return nil;
+}
+
 - (NSAttributedString *)attributedDescription
 {
     return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Stop action.", @"Queue -> Stop action")

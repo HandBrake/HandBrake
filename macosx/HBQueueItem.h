@@ -27,6 +27,8 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
 /// Whether the item has a file representation on disk or not.
 @property (nonatomic, readonly) BOOL hasFileRepresentation;
 
+@property (nonatomic, readonly, copy, nullable) NSURL *destinationURL;
+
 /// The title of the item.
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;

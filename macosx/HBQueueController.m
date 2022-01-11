@@ -19,6 +19,7 @@
 #import "NSArray+HBAdditions.h"
 
 @import HandBrakeKit;
+@import QuickLookUI;
 
 @interface HBQueueController () <NSToolbarItemValidation, NSMenuItemValidation, NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
@@ -706,6 +707,18 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSSplitViewItem *detailsItem = self.splitViewController.splitViewItems[1];
     detailsItem.animator.collapsed = !detailsItem.isCollapsed;
+}
+
+- (IBAction)toggleQuickLook:(id)sender
+{
+    if (QLPreviewPanel.sharedPreviewPanelExists && QLPreviewPanel.sharedPreviewPanel.isVisible)
+    {
+        [QLPreviewPanel.sharedPreviewPanel orderOut:sender];
+    }
+    else
+    {
+        [QLPreviewPanel.sharedPreviewPanel makeKeyAndOrderFront:sender];
+    }
 }
 
 #pragma mark - table view controller delegate
