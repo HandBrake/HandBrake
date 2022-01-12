@@ -65,7 +65,7 @@
     [self buildCategoriesMenu];
     if ([self.categories selectItemWithTag:2] == NO)
     {
-        HBPreset *category = [[HBPreset alloc] initWithCategoryName:@"My Presets" builtIn:NO];
+        HBPreset *category = [[HBPreset alloc] initWithCategoryName:NSLocalizedString(@"My Presets", @"Add preset window -> My Presets") builtIn:NO];
         [self.manager addPreset:category];
         NSMenuItem *item = [self buildMenuItemWithCategory:category];
         [self.categories.menu insertItem:item atIndex:2];
