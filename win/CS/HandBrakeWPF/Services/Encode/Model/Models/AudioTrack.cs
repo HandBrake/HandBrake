@@ -16,6 +16,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.Linq;
     using System.Text.Json.Serialization;
 
+    using Windows.Media.Core;
+
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
@@ -55,11 +57,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.DRC = 0;
             this.ScannedTrack = new Audio();
             this.TrackName = string.Empty;
-
-            if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
-            {
-                this.TrackName = this.scannedTrack.Name;
-            }
 
             // Setup Backing Properties
             this.EncoderRateType = AudioEncoderRateType.Bitrate;
@@ -399,8 +396,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.ScannedTrack);
                 this.NotifyOfPropertyChange(() => this.TrackReference);
 
-                this.TrackName = !string.IsNullOrEmpty(this.scannedTrack?.Name) ? this.scannedTrack.Name : null;
-
+                if (string.IsNullOrEmpty(this.TrackName))
+                {
+                    this.TrackName = !string.IsNullOrEmpty(this.scannedTrack?.Name) ? this.scannedTrack.Name : null;
+                }
+                
                 this.GetDefaultMixdownIfNull();
             }
         }
