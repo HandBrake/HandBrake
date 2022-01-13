@@ -8125,7 +8125,66 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="row-spacing">2</property>
+                        <property name="row-spacing">12</property>
+                        <child>
+                          <object class="GtkBox" id="CustomTmpBox">
+                            <property name="orientation">vertical</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">2</property>
+                            <child>
+                              <object class="GtkCheckButton" id="CustomTmpEnable">
+                                <property name="label" translatable="yes">Set a custom directory for Handbrake temporary files</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Temporary files that HandBrake creates will be placed under this directory.
+
+Changing this setting will require restarting HandBrake.
+
+This setting overrides the TEMP environment variable that is normally used to define this directory.
+
+Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file.</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="tmp_dir_enable_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkFileChooserButton" id="CustomTmpDir">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Temporary files that HandBrake creates will be placed under this directory.
+
+Changing this setting will require restarting HandBrake.
+
+This setting overrides the TEMP environment variable that is normally used to define this directory.
+
+Flatpak users may need to set this for certain workflows to work properly. The default size of the TEMP directory in a flatpak sandbox is 1/2 physical memory size and may be too small for things like the 2-pass stats file.</property>
+                                <property name="action">select-folder</property>
+                                <property name="local_only">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="title" translatable="yes">Temp Directory</property>
+                                <signal name="selection-changed" handler="temp_dir_changed_cb" swapped="no"/>
+                                <property name="margin-start">21</property>
+                                <property name="margin-end">21</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="GtkBox" id="hbox6">
                             <property name="orientation">horizontal</property>
@@ -8158,7 +8217,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             </child>
                           </object>
                           <packing>
-                            <property name="top_attach">0</property>
+                            <property name="top_attach">1</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8175,7 +8234,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">1</property>
+                            <property name="top_attach">2</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8244,7 +8303,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             </child>
                           </object>
                           <packing>
-                            <property name="top_attach">2</property>
+                            <property name="top_attach">3</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8342,7 +8401,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             </child>
                           </object>
                           <packing>
-                            <property name="top_attach">3</property>
+                            <property name="top_attach">4</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8359,7 +8418,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8377,7 +8436,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">5</property>
+                            <property name="top_attach">6</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8418,7 +8477,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             </child>
                           </object>
                           <packing>
-                            <property name="top_attach">6</property>
+                            <property name="top_attach">7</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8439,7 +8498,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">7</property>
+                            <property name="top_attach">8</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>

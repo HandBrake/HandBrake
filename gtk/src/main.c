@@ -1058,8 +1058,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)plot_changed_cb, ud);
 
-    // Initialize HB global settings and tables.
-    ghb_backend_init(0);
+    // Initialize HB internal tables etc.
+    hb_global_init();
+
     // Set up UI combo boxes.  Some of these rely on HB global settings.
     ghb_combo_init(ud);
 
@@ -1090,8 +1091,25 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Store user preferences into ud->prefs
     ghb_prefs_to_settings(ud->prefs);
 
+    if (ghb_dict_get_bool(ud->prefs, "CustomTmpEnable"))
+    {
+        const char * tmp_dir;
+
+        tmp_dir = ghb_dict_get_string(ud->prefs, "CustomTmpDir");
+        if (tmp_dir != NULL && tmp_dir[0] != 0)
+        {
+#if defined(_WIN32)
+    // Tell gdk pixbuf where it's loader config file is.
+            _putenv_s("TEMP", tmp_dir);
+#else
+            setenv("TEMP", tmp_dir, 1);
+#endif
+        }
+    }
     int logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
-    ghb_log_level_set(logLevel);
+
+    // Initialize HB work threads
+    ghb_backend_init(logLevel);
 
     // Load the presets files
     ghb_presets_load(ud);

@@ -70,6 +70,8 @@
     },
     "Preferences": {
         "ActivityFontSize": 8,
+        "CustomTmpEnable": false,
+        "CustomTmpDir": "",
         "DiskFreeCheck": true,
         "DiskFreeLimit": 2000,
         "RemoveFinishedJobs": false,
