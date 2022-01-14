@@ -10,7 +10,6 @@
 #include "libavcodec/avcodec.h"
 
 #include "handbrake/handbrake.h"
-#include "handbrake/hbffmpeg.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_libav.h"
 #include "handbrake/qsv_common.h"
@@ -301,8 +300,6 @@ void hb_buffer_pool_free( void )
                 freed += b->alloc;
                 av_free(b->data);
             }
-            wipe_video_buffer_side_data(b);
-            av_freep(&b->side_data);
             free( b );
             count++;
         }
@@ -762,9 +759,6 @@ void hb_buffer_close( hb_buffer_t ** _b )
         hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
         b->next = NULL;
-
-        wipe_video_buffer_side_data(b);
-        av_freep(&b->side_data);
 
 #if defined(HB_BUFFER_DEBUG)
         hb_lock(buffers.lock);

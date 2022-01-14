@@ -13,7 +13,6 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
-#include "handbrake/dynamic_hdr_metadata.h"
 #include "handbrake/h265_common.h"
 #include "x265.h"
 
@@ -65,9 +64,6 @@ struct hb_work_private_s
     // Multiple bit-depth
     const x265_api     * api;
     int                  bit_depth;
-
-    void               * sei_data;
-    unsigned int         sei_data_size;
 };
 
 static inline int64_t rescale(hb_rational_t q, int b)
@@ -507,7 +503,6 @@ void encx265Close(hb_work_object_t *w)
     pv->api->param_free(pv->param);
     pv->api->encoder_close(pv->x265);
     free(pv->csvfn);
-    av_freep(&pv->sei_data);
     free(pv);
     w->private_data = NULL;
 }
@@ -616,7 +611,6 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     x265_picture pic_in, pic_out;
     x265_nal *nal;
     uint32_t nnal;
-    int ret;
 
     pv->api->picture_init(pv->param, &pic_in);
 
@@ -629,43 +623,6 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pic_in.poc       = pv->frames_in++;
     pic_in.pts       = in->s.start;
     pic_in.bitDepth  = pv->bit_depth;
-
-    x265_sei *sei = &pic_in.userSEI;
-    sei->numPayloads = 0;
-
-    for (int i = 0; i < in->nb_side_data; i++)
-    {
-        const AVFrameSideData *side_data = in->side_data[i];
-        if (side_data->type == AV_FRAME_DATA_DYNAMIC_HDR_PLUS && job->color_transfer == HB_COLR_TRA_SMPTEST2084)
-        {
-            uint8_t *payload = NULL;
-            uint32_t playload_size = 0;
-            void *tmp;
-            x265_sei_payload *sei_payload;
-
-            hb_hdr_10_sidedata_to_sei(side_data, &payload, &playload_size);
-            if (!playload_size)
-            {
-                continue;
-            }
-
-            tmp = av_fast_realloc(pv->sei_data, &pv->sei_data_size,
-                                  (sei->numPayloads + 1) * sizeof(*sei_payload));
-
-            if (!tmp)
-            {
-                continue;
-            }
-
-            pv->sei_data = tmp;
-            sei->payloads = pv->sei_data;
-            sei_payload = &sei->payloads[sei->numPayloads];
-            sei_payload->payload = payload;
-            sei_payload->payloadSize = playload_size;
-            sei_payload->payloadType = USER_DATA_REGISTERED_ITU_T_T35;
-            sei->numPayloads++;
-        }
-    }
 
     if (in->s.new_chap && job->chapter_markers)
     {
@@ -692,19 +649,10 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pv->last_stop = in->s.stop;
     save_frame_info(pv, in);
 
-    ret = pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out);
-
-    for (int i = 0; i < sei->numPayloads; i++)
-    {
-        x265_sei_payload *sei_payload = &sei->payloads[i];
-        av_freep(&sei_payload->payload);
-    }
-
-    if (ret > 0)
+    if (pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out) > 0)
     {
         return nal_encode(w, &pic_out, nal, nnal);
     }
-
     return NULL;
 }
 

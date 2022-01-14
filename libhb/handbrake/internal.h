@@ -166,9 +166,6 @@ struct hb_buffer_s
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;
 
-    void **side_data;
-    int    nb_side_data;
-
     // Packets in a list:
     //   the next packet in the list
     hb_buffer_t * next;
