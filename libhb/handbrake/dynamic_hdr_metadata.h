@@ -5,6 +5,6 @@
 #include <stdint.h>
 #include "libavutil/hdr_dynamic_metadata.h"
 
-void hb_hdr_10_sidedata_to_sei(const AVFrameSideData *side_data, uint8_t **buf_p, uint32_t *numBytes);
+void hb_hdr_10_sidedata_to_sei(const AVFrameSideData *side_data, uint8_t **buf_p, u_int32_t *numBytes);
 
 #endif
