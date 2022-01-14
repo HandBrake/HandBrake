@@ -690,7 +690,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>請停止目前的編碼工作。若此問題持續發生，請重開 HandBrake。</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>預覽（實際大小的{0}）</value>
+    <value>預覽（實際大小的{0}%）</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
     <value>HandBrake 需要在 64 位元的 Windows 10 或更新的作業系統上執行。</value>
@@ -1013,7 +1013,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>編輯設定檔</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Preset Options Context Menu</value>
+    <value>設定檔選項內容選單</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
     <value>刪除設定檔</value>
@@ -1097,7 +1097,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>更新目前的設定檔</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>影片</value>
+    <value>視訊</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
     <value>針對網頁最佳化</value>
@@ -1274,7 +1274,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>版本：</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>影片</value>
+    <value>視訊</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
     <value>此路徑僅用於視訊預覽功能。
@@ -1719,55 +1719,55 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>僅限強制的</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>關於...（_A）</value>
+    <value>關於... (_A)</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>動作紀錄（_A）</value>
+    <value>動作紀錄 (_A)</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>檢查更新（_C）</value>
+    <value>檢查更新 (_C)</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>離開（_E）</value>
+    <value>離開 (_E)</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>匯出為檔案（_E）</value>
+    <value>匯出為檔案 (_E)</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>檔案（_F）</value>
+    <value>檔案 (_F)</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>HandBrake 文件 (HTTPS)（_H）</value>
+    <value>HandBrake 文件 (HTTPS) (_H)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>說明（_H）</value>
+    <value>說明 (_H)</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>自檔案匯入（_U）</value>
+    <value>自檔案匯入 (_U)</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>偏好設定（_P）</value>
+    <value>偏好設定 (_P)</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>設定檔（_P）</value>
+    <value>設定檔 (_P)</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>佇列（_Q）</value>
+    <value>佇列 (_Q)</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>重設內建的設定檔（_R）</value>
+    <value>重設內建的設定檔 (_R)</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>將目前的設為預設（_S）</value>
+    <value>將目前的設為預設 (_S)</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>顯示設定檔面板（_H）</value>
+    <value>顯示設定檔面板 (_H)</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>顯示佇列（_S）</value>
+    <value>顯示佇列 (_S)</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>工具（_T）</value>
+    <value>工具 (_T)</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
     <value>檢查更新中...</value>
@@ -2473,7 +2473,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
     <value>（預設）</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>類別</value>
+    <value>分類</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
     <value>完全展開</value>
@@ -2592,5 +2592,17 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>展開全部</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>由右至左顯示模式：</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>僅有文字</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>整體使用者介面</value>
   </data>
 </root>

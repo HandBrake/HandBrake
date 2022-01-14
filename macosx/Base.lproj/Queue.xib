@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -43,7 +43,7 @@
                     <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Action" paletteLabel="Action" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="Wfu-Hw-JBC">
-                            <rect key="frame" x="0.0" y="14" width="54" height="25"/>
+                            <rect key="frame" x="0.0" y="14" width="50" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Zxj-rr-UnA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -83,7 +83,7 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." sizingBehavior="auto" id="a3c-kV-98E">
                         <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
-                            <rect key="frame" x="0.0" y="14" width="177" height="25"/>
+                            <rect key="frame" x="0.0" y="14" width="173" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pch-jl-VXA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -118,6 +118,20 @@
                             <action selector="toggleDetails:" target="-2" id="EcM-0b-BRV"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="5C78EBF4-3788-4E56-8AFF-F458898F6A84" label="Quick Look" paletteLabel="Quick Look" image="NSQuickLookTemplate" bordered="YES" sizingBehavior="auto" id="nCq-Nc-EbB">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="VlJ-Hc-dCl">
+                            <rect key="frame" x="17" y="14" width="33" height="23"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSQuickLookTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CfE-wU-25D">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="toggleQuickLook:" target="-2" id="6da-8Y-VUg"/>
+                        </connections>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="SX6-mq-Hck"/>
@@ -137,6 +151,7 @@
     </objects>
     <resources>
         <image name="NSActionTemplate" width="15" height="15"/>
+        <image name="NSQuickLookTemplate" width="21" height="13"/>
         <image name="details" width="15" height="12"/>
         <image name="encode" width="32" height="32"/>
         <image name="pauseencode" width="32" height="32"/>

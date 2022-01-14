@@ -11,6 +11,20 @@ namespace HandBrakeWPF.Model.Filters
 {
     public class PaddingFilter
     {
+        public PaddingFilter()
+        {
+        }
+
+        public PaddingFilter(PaddingFilter filter)
+        {
+            this.Enabled = filter.Enabled;
+            this.Color = filter.Color;
+            this.X = filter.X;
+            this.Y = filter.Y;
+            this.W = filter.W;
+            this.H = filter.H;
+        }
+
         public bool Enabled { get; set; }
 
         public string Color { get; set; }

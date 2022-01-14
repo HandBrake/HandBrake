@@ -31,13 +31,13 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
  regenerate it each time
  */
 @property (nonatomic, readonly) NSData *fileURLBookmark;
-@property (nonatomic, readwrite) NSData *outputURLFolderBookmark;
+@property (nonatomic, readwrite) NSData *destinationFolderURLBookmark;
 
 /**
  Keep track of security scoped resources status.
  */
 @property (nonatomic, readwrite) HBSecurityAccessToken *fileURLToken;
-@property (nonatomic, readwrite) HBSecurityAccessToken *outputURLToken;
+@property (nonatomic, readwrite) HBSecurityAccessToken *destinationFolderURLToken;
 @property (nonatomic, readwrite) HBSecurityAccessToken *subtitlesToken;
 @property (nonatomic, readwrite) NSInteger accessCount;
 
@@ -161,30 +161,30 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     _presetName = [presetName copy];
 }
 
-- (void)setOutputURL:(NSURL *)outputURL
+- (void)setDestinationFolderURL:(NSURL *)destinationFolderURL
 {
-    if (![outputURL isEqualTo:_outputURL])
+    if (![destinationFolderURL isEqualTo:_destinationFolderURL])
     {
-        [[self.undo prepareWithInvocationTarget:self] setOutputURL:_outputURL];
+        [[self.undo prepareWithInvocationTarget:self] setDestinationFolderURL:_destinationFolderURL];
     }
-    _outputURL = [outputURL copy];
+    _destinationFolderURL = [destinationFolderURL copy];
 
 #ifdef __SANDBOX_ENABLED__
     // Clear the bookmark to regenerate it later
-    self.outputURLFolderBookmark = nil;
+    self.destinationFolderURLBookmark = nil;
 #endif
 }
 
-- (void)setOutputFileName:(NSString *)outputFileName
+- (void)setDestinationFileName:(NSString *)destinationFileName
 {
-    if (![outputFileName isEqualTo:_outputFileName])
+    if (![destinationFileName isEqualTo:_destinationFileName])
     {
-        [[self.undo prepareWithInvocationTarget:self] setOutputFileName:_outputFileName];
+        [[self.undo prepareWithInvocationTarget:self] setDestinationFileName:_destinationFileName];
     }
-    _outputFileName = [outputFileName copy];
+    _destinationFileName = [destinationFileName copy];
 }
 
-- (BOOL)validateOutputFileName:(id *)ioValue error:(NSError * __autoreleasing *)outError
+- (BOOL)validateDestinationFileName:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 
@@ -225,9 +225,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return retval;
 }
 
-- (NSURL *)completeOutputURL
+- (NSURL *)destinationURL
 {
-    return [self.outputURL URLByAppendingPathComponent:self.outputFileName];
+    return [self.destinationFolderURL URLByAppendingPathComponent:self.destinationFileName];
 }
 
 - (void)setContainer:(int)container
@@ -330,12 +330,12 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
             _fileURL = resolvedURL;
         }
     }
-    if (_outputURLFolderBookmark)
+    if (_destinationFolderURLBookmark)
     {
-        NSURL *resolvedURL = [HBUtilities URLFromBookmark:_outputURLFolderBookmark];
+        NSURL *resolvedURL = [HBUtilities URLFromBookmark:_destinationFolderURLBookmark];
         if (resolvedURL)
         {
-            _outputURL = resolvedURL;
+            _destinationFolderURL = resolvedURL;
         }
     }
     [self.subtitles refreshSecurityScopedResources];
@@ -347,7 +347,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     if (self.accessCount == 0)
     {
         self.fileURLToken = [HBSecurityAccessToken tokenWithObject:self.fileURL];
-        self.outputURLToken = [HBSecurityAccessToken tokenWithObject:self.outputURL];
+        self.destinationFolderURLToken = [HBSecurityAccessToken tokenWithObject:self.destinationFolderURL];
         self.subtitlesToken = [HBSecurityAccessToken tokenWithObject:self.subtitles];
     }
     self.accessCount += 1;
@@ -365,7 +365,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     if (self.accessCount == 0)
     {
         self.fileURLToken = nil;
-        self.outputURLToken = nil;
+        self.destinationFolderURLToken = nil;
         self.subtitlesToken = nil;
     }
 #endif
@@ -385,11 +385,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_stream = _stream;
 
         copy->_fileURLBookmark = [_fileURLBookmark copy];
-        copy->_outputURLFolderBookmark = [_outputURLFolderBookmark copy];
+        copy->_destinationFolderURLBookmark = [_destinationFolderURLBookmark copy];
 
         copy->_fileURL = [_fileURL copy];
-        copy->_outputURL = [_outputURL copy];
-        copy->_outputFileName = [_outputFileName copy];
+        copy->_destinationFolderURL = [_destinationFolderURL copy];
+        copy->_destinationFileName = [_destinationFileName copy];
 
         copy->_container = _container;
         copy->_angle = _angle;
@@ -427,7 +427,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:5 forKey:@"HBJobVersion"];
+    [coder encodeInt:6 forKey:@"HBJobVersion"];
 
     encodeObject(_name);
     encodeObject(_presetName);
@@ -444,20 +444,20 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     encodeObject(_fileURLBookmark);
 
-    if (!_outputURLFolderBookmark)
+    if (!_destinationFolderURLBookmark)
     {
-        __attribute__((unused)) HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:_outputURL];
-        _outputURLFolderBookmark = [HBUtilities bookmarkFromURL:_outputURL];
+        __attribute__((unused)) HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:_destinationFolderURL];
+        _destinationFolderURLBookmark = [HBUtilities bookmarkFromURL:_destinationFolderURL];
         token = nil;
     }
 
-    encodeObject(_outputURLFolderBookmark);
+    encodeObject(_destinationFolderURLBookmark);
 
 #endif
 
     encodeObject(_fileURL);
-    encodeObject(_outputURL);
-    encodeObject(_outputFileName);
+    encodeObject(_destinationFolderURL);
+    encodeObject(_destinationFileName);
 
     encodeInt(_container);
     encodeInt(_angle);
@@ -483,7 +483,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
-    if (version == 5 && (self = [super init]))
+    if (version == 6 && (self = [super init]))
     {
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);
@@ -492,11 +492,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 #ifdef __SANDBOX_ENABLED__
         decodeObject(_fileURLBookmark, NSData)
-        decodeObject(_outputURLFolderBookmark, NSData)
+        decodeObject(_destinationFolderURLBookmark, NSData)
 #endif
         decodeObjectOrFail(_fileURL, NSURL);
-        decodeObject(_outputURL, NSURL);
-        decodeObject(_outputFileName, NSString);
+        decodeObject(_destinationFolderURL, NSURL);
+        decodeObject(_destinationFileName, NSString);
 
         decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
         decodeInt(_angle); if (_angle < 0) { goto fail; }

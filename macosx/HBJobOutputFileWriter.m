@@ -30,18 +30,18 @@
 
     // Assemble the new log file name as YY-MM-DD HH-MM-SS mymoviename.txt
     NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",
-                                    job.outputFileName.stringByDeletingPathExtension,
+                                    job.destinationFileName.stringByDeletingPathExtension,
                                     dateForLogTitle];
 
-    NSURL *outputURL = nil;
+    NSURL *destinationURL = nil;
 
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBEncodeLogLocation])
     {
         // if we are putting it in the same directory with the movie
-        outputURL = [job.outputURL URLByAppendingPathComponent:outputDateFileName];
+        destinationURL = [job.destinationFolderURL URLByAppendingPathComponent:outputDateFileName];
 
 #ifdef __SANDBOX_ENABLED__
-        _outputFolderURL = job.outputURL;
+        _outputFolderURL = job.destinationFolderURL;
         _accessingSecurityScopedFile = [_outputFolderURL startAccessingSecurityScopedResource];
 #endif
 
@@ -50,14 +50,14 @@
     {
         // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
         NSURL *encodeLogDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
-        outputURL = [encodeLogDirectory URLByAppendingPathComponent:outputDateFileName];
+        destinationURL = [encodeLogDirectory URLByAppendingPathComponent:outputDateFileName];
     }
 
-    self = [super initWithFileURL:outputURL];
+    self = [super initWithFileURL:destinationURL];
     if (self)
     {
         // Additional header info.
-        [self write:job.outputFileName];
+        [self write:job.destinationFileName];
         [self write:@"\nPreset: "];
         [self write:job.presetName];
         [self write:@"\n"];

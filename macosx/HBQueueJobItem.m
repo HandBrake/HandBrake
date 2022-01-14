@@ -106,7 +106,7 @@ static NSDictionary     *shortHeightAttr;
 
 - (NSString *)title
 {
-    return _job.outputFileName;
+    return _job.destinationFileName;
 }
 
 - (BOOL)hasFileRepresentation
@@ -124,19 +124,19 @@ static NSDictionary     *shortHeightAttr;
     return _job.fileURL;
 }
 
-- (NSString *)outputFileName
+- (NSString *)destinationFileName
 {
-    return _job.outputFileName;
+    return _job.destinationFileName;
 }
 
-- (NSURL *)outputURL
+- (NSURL *)destinationFolderURL
 {
-    return _job.outputURL;
+    return _job.destinationFolderURL;
 }
 
-- (NSURL *)completeOutputURL
+- (NSURL *)destinationURL
 {
-    return _job.completeOutputURL;
+    return _job.destinationURL;
 }
 
 - (NSAttributedString *)attributedDescription
@@ -263,8 +263,8 @@ static NSDictionary     *shortHeightAttr;
 
     NSDictionary<NSURLResourceKey, id> *values;
 
-    [self.completeOutputURL removeCachedResourceValueForKey:NSURLFileSizeKey];
-    values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
+    [self.destinationURL removeCachedResourceValueForKey:NSURLFileSizeKey];
+    values = [self.destinationURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
     self.fileSize = [values[NSURLFileSizeKey] integerValue];
 
     [self.fileURL removeCachedResourceValueForKey:NSURLFileSizeKey];

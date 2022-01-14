@@ -156,28 +156,36 @@ namespace HandBrakeWPF.Services.Queue
         {
             lock (this.queueFileLock)
             {
-                string appDataPath = DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly());
-                string tempPath = !string.IsNullOrEmpty(exportPath)
-                                      ? exportPath
-                                      : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
-
-                // Make a copy of the file before we replace it. This way, if we crash we can recover.
-                if (File.Exists(tempPath))
+                try
                 {
-                    File.Copy(tempPath, tempPath + ".last");
+                    string appDataPath = DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly());
+                    string tempPath = !string.IsNullOrEmpty(exportPath)
+                        ? exportPath
+                        : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
+
+                    // Make a copy of the file before we replace it. This way, if we crash we can recover.
+                    if (File.Exists(tempPath))
+                    {
+                        File.Copy(tempPath, tempPath + ".last", true);
+                    }
+
+                    using (StreamWriter writer = new StreamWriter(tempPath))
+                    {
+                        List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed)
+                            .ToList();
+
+                        string queueJson = JsonSerializer.Serialize(tasks, JsonSettings.Options);
+                        writer.Write(queueJson);
+                    }
+
+                    if (File.Exists(tempPath + ".last"))
+                    {
+                        File.Delete(tempPath + ".last");
+                    }
                 }
-
-                using (StreamWriter writer = new StreamWriter(tempPath))
+                catch (Exception exc)
                 {
-                    List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
-
-                    string queueJson = JsonSerializer.Serialize(tasks, JsonSettings.Options);
-                    writer.Write(queueJson);
-                }
-
-                if (File.Exists(tempPath + ".last"))
-                {
-                    File.Delete(tempPath + ".last");
+                    this.logService.LogMessage(string.Format("{1} # {0}{1} {2}{1}", "Queue Backup Failed!", Environment.NewLine, exc));
                 }
             }
         }

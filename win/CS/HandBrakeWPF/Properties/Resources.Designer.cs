@@ -2146,6 +2146,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Development Builds (HTTPS).
+        /// </summary>
+        public static string MainView_NightlyBuildsUpdate {
+            get {
+                return ResourceManager.GetString("MainView_NightlyBuildsUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open this Directory.
         /// </summary>
         public static string MainView_OpenDirectory {
@@ -6203,6 +6212,24 @@ namespace HandBrakeWPF.Properties {
         public static string SourceSelection_Help {
             get {
                 return ResourceManager.GetString("SourceSelection_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current development build you are running is getting old. You may wish to update!.
+        /// </summary>
+        public static string SourceSelection_NightlyUpdate {
+            get {
+                return ResourceManager.GetString("SourceSelection_NightlyUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download via Github.
+        /// </summary>
+        public static string SourceSelection_NightlyUpdateUrl {
+            get {
+                return ResourceManager.GetString("SourceSelection_NightlyUpdateUrl", resourceCulture);
             }
         }
         

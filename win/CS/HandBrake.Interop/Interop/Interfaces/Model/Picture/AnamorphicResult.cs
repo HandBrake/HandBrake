@@ -12,8 +12,8 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
 
         public int OutputHeight { get; set; }
 
-        public double OutputParWidth { get; set; }
+        public int OutputParWidth { get; set; }
 
-        public double OutputParHeight { get; set; }
+        public int OutputParHeight { get; set; }
     }
 }

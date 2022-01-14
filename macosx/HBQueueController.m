@@ -19,6 +19,7 @@
 #import "NSArray+HBAdditions.h"
 
 @import HandBrakeKit;
+@import QuickLookUI;
 
 @interface HBQueueController () <NSToolbarItemValidation, NSMenuItemValidation, NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
@@ -443,12 +444,12 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     // This end of encode action is called as each encode rolls off of the queue
     if ([NSUserDefaults.standardUserDefaults boolForKey:HBSendToAppEnabled] == YES)
     {
-        NSURL *outputURL = item.outputURL;
-        NSString *completeOutputPath = item.completeOutputURL.path;
+        NSURL *destinationFolderURL = item.destinationFolderURL;
+        NSString *destinationPath = item.destinationURL.path;
 
         dispatch_async(_sendQueue, ^{
 #ifdef __SANDBOX_ENABLED__
-            BOOL accessingSecurityScopedResource = [outputURL startAccessingSecurityScopedResource];
+            BOOL accessingSecurityScopedResource = [destinationFolderURL startAccessingSecurityScopedResource];
 #endif
 
             NSWorkspace *workspace = NSWorkspace.sharedWorkspace;
@@ -456,7 +457,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 
             if (app)
             {
-                if (![workspace openFile:completeOutputPath withApplication:app])
+                if (![workspace openFile:destinationPath withApplication:app])
                 {
                     [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
                 }
@@ -469,7 +470,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 #ifdef __SANDBOX_ENABLED__
             if (accessingSecurityScopedResource)
             {
-                [outputURL stopAccessingSecurityScopedResource];
+                [destinationFolderURL stopAccessingSecurityScopedResource];
             }
 #endif
         });
@@ -496,19 +497,19 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
         {
             title = NSLocalizedString(@"Put down that cocktail…", @"Queue notification alert message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", @"Queue done notification message"),
-                                     item.outputFileName];
+                                     item.destinationFileName];
 
         }
         else
         {
             title = NSLocalizedString(@"Encode failed", @"Queue done notification failed message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", @"Queue done notification message"),
-                           item.outputFileName];
+                           item.destinationFileName];
         }
 
         [self showNotificationWithTitle:title
                             description:description
-                                    url:item.completeOutputURL
+                                    url:item.destinationURL
                               playSound:playSound];
     }
 }
@@ -706,6 +707,18 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSSplitViewItem *detailsItem = self.splitViewController.splitViewItems[1];
     detailsItem.animator.collapsed = !detailsItem.isCollapsed;
+}
+
+- (IBAction)toggleQuickLook:(id)sender
+{
+    if (QLPreviewPanel.sharedPreviewPanelExists && QLPreviewPanel.sharedPreviewPanel.isVisible)
+    {
+        [QLPreviewPanel.sharedPreviewPanel orderOut:sender];
+    }
+    else
+    {
+        [QLPreviewPanel.sharedPreviewPanel makeKeyAndOrderFront:sender];
+    }
 }
 
 #pragma mark - table view controller delegate

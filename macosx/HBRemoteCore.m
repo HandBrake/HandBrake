@@ -210,7 +210,7 @@
         }
     }
 
-    NSData *bookmark = [job.outputURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+    NSData *bookmark = [job.destinationFolderURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
     if (bookmark)
     {
         [bookmarks addObject:bookmark];

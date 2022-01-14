@@ -328,7 +328,18 @@ namespace HandBrakeWPF.ViewModels
 
         public int DisplayWidth
         {
-            get => this.Task.DisplayWidth.HasValue ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture)) : 0;
+            get
+            {
+                if (this.Task.DisplayWidth.HasValue && !double.IsInfinity(this.Task.DisplayWidth.Value))
+                {
+                   if (int.TryParse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture), out int value))
+                   {
+                       return value;
+                   }
+                }
+
+                return 0;
+            } 
 
             set
             {
@@ -497,8 +508,8 @@ namespace HandBrakeWPF.ViewModels
             if (preset.Task.Anamorphic == Anamorphic.Custom)
             {
                 this.DisplayWidth = preset.Task.DisplayWidth != null ? int.Parse(preset.Task.DisplayWidth.ToString()) : 0;
-                this.ParWidth = preset.Task.PixelAspectX;
-                this.ParHeight = preset.Task.PixelAspectY;
+                this.ParWidth = preset.Task.PixelAspectX == 0 ? 1 : preset.Task.PixelAspectX;
+                this.ParHeight = preset.Task.PixelAspectY == 0 ? 1 : preset.Task.PixelAspectY;
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -798,11 +809,21 @@ namespace HandBrakeWPF.ViewModels
             
             this.Task.Width = result.OutputWidth;
             this.Task.Height = result.OutputHeight;
-            this.Task.PixelAspectX = (int)Math.Round(result.OutputParWidth, 0);
-            this.Task.PixelAspectY = (int)Math.Round(result.OutputParHeight, 0);
+            this.Task.PixelAspectX = result.OutputParWidth;
+            this.Task.PixelAspectY = result.OutputParHeight;
 
+            if (this.Task.PixelAspectX == 0)
+            {
+                this.Task.PixelAspectX = 1;
+            }
+
+            if (this.Task.PixelAspectY == 0)
+            {
+                this.Task.PixelAspectY = 1;
+            }
+            
             this.ApplyPad(this.PaddingFilter.Mode, result); // Update for display purposes. 
-            double dispWidth = Math.Round(result.OutputWidth * result.OutputParWidth / result.OutputParHeight, 0);
+            double dispWidth = Math.Round((double)result.OutputWidth * result.OutputParWidth / result.OutputParHeight, 0);
             this.Task.DisplayWidth = dispWidth;
             this.DisplayHeight = result.OutputHeight;
             

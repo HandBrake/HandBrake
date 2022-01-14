@@ -17,16 +17,20 @@ namespace HandBrakeWPF.Utilities
 
     public class InterfaceLanguageUtilities
     {
+        public static InterfaceLanguage DefaultEnglishLanguage = new InterfaceLanguage("en", "English");
+
+        public static InterfaceLanguage UseSystemLanguage = new InterfaceLanguage(null, Resources.Language_UseSystem);
+
         public static List<InterfaceLanguage> GetUserInterfaceLanguages()
         {
             return new List<InterfaceLanguage>
                    {
-                       new InterfaceLanguage(null, Resources.Language_UseSystem),
+                       UseSystemLanguage,
                        new InterfaceLanguage("pt-BR", "Brazilian Portuguese (Português do Brasil)"),
-                       new InterfaceLanguage("zh", "Chinese (中文)"),
-                       new InterfaceLanguage("zh-TW", "Chinese (Taiwan) 中文（台湾）"),
+                       new InterfaceLanguage("zh-CN", "Simplified Chinese (简体中文)"),
+                       new InterfaceLanguage("zh-TW", "Traditional Chinese (正體中文)"),
                        new InterfaceLanguage("co", "Corsican (Corsu)"),
-                       new InterfaceLanguage("en", "English"),
+                       DefaultEnglishLanguage,
                        new InterfaceLanguage("fr", "French (Français)"),
                        new InterfaceLanguage("de", "German (Deutsch)"),
                        new InterfaceLanguage("it", "Italian (Italiano)"),

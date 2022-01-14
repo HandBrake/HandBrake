@@ -55,6 +55,7 @@ dep_map = (
     DepEntry("VideoEncoder", "VideoOptionExtraWindow", "x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9", False, True),
     DepEntry("VideoEncoder", "VideoOptionExtraLabel", "x264|x264_10bit|x265|x265_10bit|x265_12bit|x265_16bit|mpeg4|mpeg2|VP8|VP9", False, True),
     DepEntry("auto_name", "autoname_box", "1", False, False),
+    DepEntry("CustomTmpEnable", "CustomTmpDir", "1", False, False),
     DepEntry("PresetCategory", "PresetCategoryName", "new", False, True),
     DepEntry("PresetCategory", "PresetCategoryEntryLabel", "new", False, True),
     )

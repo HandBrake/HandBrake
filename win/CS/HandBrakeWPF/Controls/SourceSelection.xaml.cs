@@ -77,5 +77,11 @@ namespace HandBrakeWPF.Controls
             MainViewModel vm = this.DataContext as MainViewModel;
             vm.CheckForUpdates();
         }
+
+        private void NightlyAvailable_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MainViewModel vm = this.DataContext as MainViewModel;
+            vm.NightlyUpdate();
+        }
     }
 }

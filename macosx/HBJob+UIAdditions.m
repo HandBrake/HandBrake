@@ -297,7 +297,7 @@ static HBMixdownTransformer    *mixdownTransformer;
     [attrString appendString:@"\t"                          withAttributes:detailAttr];
     [attrString appendString:HBKitLocalizedString(@"Destination:", @"Destination description") withAttributes:detailBoldAttr];
     [attrString appendString:@" \t"                         withAttributes:detailAttr];
-    [attrString appendString:self.completeOutputURL.path    withAttributes:detailAttr];
+    [attrString appendString:self.destinationURL.path    withAttributes:detailAttr];
     [attrString appendString:@"\n"                          withAttributes:detailAttr];
 
     return attrString;

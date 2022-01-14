@@ -13,7 +13,9 @@
 #import "NSArray+HBAdditions.h"
 #import "HBPasteboardItem.h"
 
-@interface HBQueueTableViewController () <NSMenuItemValidation, NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate>
+@import QuickLookUI;
+
+@interface HBQueueTableViewController () <NSMenuItemValidation, NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate, QLPreviewPanelDataSource, QLPreviewPanelDelegate>
 
 @property (nonatomic, weak, readonly) HBQueue *queue;
 @property (nonatomic, strong) id<HBQueueTableViewControllerDelegate> delegate;
@@ -131,7 +133,7 @@
         id<HBQueueItem> item = [self.queue.items objectAtIndex:currentIndex];
         if ([item isKindOfClass:[HBQueueJobItem class]])
         {
-            NSURL *url = [(HBQueueJobItem *)item completeOutputURL];
+            NSURL *url = item.destinationURL;
             [urls addObject:url];
         }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
@@ -346,7 +348,7 @@
 {
     if ([item isKindOfClass:[HBQueueJobItem class]])
     {
-        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[[(HBQueueJobItem *)item completeOutputURL]]];
+        [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:@[[(HBQueueJobItem *)item destinationURL]]];
     }
 }
 
@@ -397,6 +399,77 @@
     [self.queue moveItems:items toIndex:row];
 
     return YES;
+}
+
+#pragma mark - QuickLook
+
+- (BOOL)acceptsPreviewPanelControl:(QLPreviewPanel *)panel
+{
+    return YES;
+}
+
+- (void)beginPreviewPanelControl:(QLPreviewPanel *)panel
+{
+    QLPreviewPanel.sharedPreviewPanel.delegate = self;
+    QLPreviewPanel.sharedPreviewPanel.dataSource = self;
+}
+
+- (void)endPreviewPanelControl:(QLPreviewPanel *)panel
+{
+    QLPreviewPanel.sharedPreviewPanel.delegate = nil;
+    QLPreviewPanel.sharedPreviewPanel.dataSource = nil;
+}
+
+- (NSInteger)numberOfPreviewItemsInPreviewPanel:(QLPreviewPanel *)panel
+{
+    return self.tableView.selectedRowIndexes.count;
+}
+
+- (id<QLPreviewItem>)previewPanel:(QLPreviewPanel *)panel previewItemAtIndex:(NSInteger)index
+{
+    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:self.tableView.selectedRowIndexes];
+    if (items.count > index)
+    {
+        return items[index].destinationURL;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (BOOL)previewPanel:(QLPreviewPanel *)panel handleEvent:(NSEvent *)event
+{
+    if (event.type == NSEventTypeKeyDown)
+    {
+        [self.tableView keyDown:event];
+        [QLPreviewPanel.sharedPreviewPanel reloadData];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)keyDown:(NSEvent *)event
+{
+    NSString *characters = event.charactersIgnoringModifiers;
+    if (characters.length)
+    {
+        unichar key = [characters characterAtIndex:0];
+        if (key == ' ')
+        {
+            if (QLPreviewPanel.sharedPreviewPanel.isVisible)
+            {
+                [QLPreviewPanel.sharedPreviewPanel orderOut:self];
+            }
+            else
+            {
+                [QLPreviewPanel.sharedPreviewPanel makeKeyAndOrderFront:self];
+            }
+            return;
+        }
+    }
+
+    [super keyDown:event];
 }
 
 @end
