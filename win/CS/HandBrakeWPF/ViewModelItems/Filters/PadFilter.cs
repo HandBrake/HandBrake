@@ -58,10 +58,12 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                         break;
                     case PaddingMode.None:
                     default:
+                        this.Reset();
                         this.currentTask.Padding.Enabled = false;
                         break;
                 }
 
+                this.NotifyOfPropertyChange(() => this.Mode);
                 this.NotifyOfPropertyChange(() => this.IsCustomPaddingEnabled);
                 this.NotifyOfPropertyChange(() => this.IsCustomColourVisible);
             }
@@ -183,6 +185,32 @@ namespace HandBrakeWPF.ViewModelItems.Filters
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
+
+            if (this.CurrentTask.Padding == null)
+            {
+                this.Reset();
+                return;
+            }
+
+            this.Mode = task.Padding.Enabled ? PaddingMode.Custom : PaddingMode.None;
+
+            int padTop = task.Padding.Y;
+            int padLeft = task.Padding.X;
+            int padBottom = task.Padding.H - padTop;
+            int padRight = task.Padding.W - padLeft;
+
+            this.SetRotationValues(padTop, padBottom, padLeft, padRight);
+
+            PadColour padColour = EnumHelper<PadColour>.GetValue(task.Padding.Color);
+            if (padColour == PadColour.Black && task.Padding.Color != EnumHelper<PadColour>.GetShortName(PadColour.Black))
+            {
+                this.Colour = PadColour.Custom;
+                this.CustomColour = task.Padding.Color;
+            }
+            else
+            {
+                this.Colour = PadColour.Black;
+            }
         }
 
         public bool MatchesPreset(Preset preset)
@@ -202,21 +230,26 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
         private void SetColour()
         {
-            switch (this.Colour)
+            if (!string.IsNullOrEmpty(this.customColour?.Trim()))
             {
-                case PadColour.Black:
-                    this.CurrentTask.Padding.Color = "black";
-                    break;
-                case PadColour.White:
-                    this.CurrentTask.Padding.Color = "white";
-                    break;
-                case PadColour.Custom:
-                    this.CurrentTask.Padding.Color = CustomColour?.Trim().ToLower();
-                    break;
-                default:
-                    this.CurrentTask.Padding.Color = "black";
-                    break;
+                this.CurrentTask.Padding.Color = CustomColour?.Trim().ToLower();
             }
+            else
+            {
+                this.CurrentTask.Padding.Color = EnumHelper<PadColour>.GetShortName(this.Colour);
+            }
+        }
+
+        private void Reset()
+        {
+            this.mode = PaddingMode.None;
+            this.Top = 0;
+            this.Bottom = 0;
+            this.Left = 0;
+            this.Right = 0;
+            this.Colour = PadColour.Black;
+
+            this.NotifyOfPropertyChange(() => this.Mode);
         }
 
         public void SetPreset(Preset preset, EncodeTask task)
