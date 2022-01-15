@@ -8,6 +8,23 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
 
 
+## HandBrake 1.5.2
+
+### All platforms
+- Fixed an issue on ARM cpu's that could cause an infinite loop during scan. (#4097)
+
+### Mac
+
+### Linux
+- Added a preference to define the location of the TEMP dir. This is needed for flatpak users where the /tmp directory may be size limited. 
+
+### Windows
+- Fixed an issue on the queue window where the activity log would sometimes fail to load.
+- Fixed a crash if adding jobs to the queue, while the queue contains a "Stop" task.
+- Fixed potential crashes on the picture settings tab where sources have bad PAR information. 
+- Improved error handling in the Queue file recovery code.
+
+
 ## HandBrake 1.5.1
 
 This is a rebuild of 1.5.0 with no functional changes.
