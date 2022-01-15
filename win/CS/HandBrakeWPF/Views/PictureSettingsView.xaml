@@ -207,7 +207,7 @@
         <Grid Name="PaddingPanel" Margin="45,0,0,0" Grid.Row="3" Grid.Column="2">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" MinWidth="55" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -221,7 +221,7 @@
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Padding}" Grid.Row="0" Grid.Column="0" />
             <ComboBox ItemsSource="{Binding PaddingFilter.PaddingModes}" SelectedItem="{Binding PaddingFilter.Mode}" Grid.Row="0" Grid.Column="1" Width="140" />
 
-            <Grid Margin="0,10,0,10" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid Margin="0,5,0,5" Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -248,7 +248,7 @@
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Top}" />
 
-                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding PaddingFilter.IsCustomPaddingEnabled}" Grid.Row="3" Grid.Column="2"
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,0" IsEnabled="{Binding PaddingFilter.IsCustomPaddingEnabled}" Grid.Row="3" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding PaddingFilter.Bottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}"
                                         AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Bottom}" />
@@ -269,14 +269,14 @@
                       IsEnabled="{Binding PaddingFilter.IsCustomPaddingEnabled}" />
 
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_PaddingCustomColour}" Grid.Row="3" Grid.Column="0"  Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}" />
-            <TextBox Text="{Binding PaddingFilter.CustomColour, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Width="120" Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}"
+            <TextBox Text="{Binding PaddingFilter.CustomColour, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Width="140" Visibility="{Binding PaddingFilter.IsCustomColourVisible, Converter={StaticResource boolToVisConverter}}"
                      ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PaddingCustomColourTooltip}"/>
 
         </Grid>
 
 
         <!-- Output Panel -->
-        <StackPanel Name="PreviewPanel" Margin="5,5,0,5" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+        <StackPanel Name="PreviewPanel" Margin="5,5,0,5" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Output}" Style="{StaticResource sectionHeader}" />
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
