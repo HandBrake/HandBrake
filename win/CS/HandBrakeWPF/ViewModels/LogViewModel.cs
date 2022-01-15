@@ -161,12 +161,15 @@ namespace HandBrakeWPF.ViewModels
                     if (File.Exists(logFile))
                     {
                         this.log.Clear();
-                        using (StreamReader logReader = new StreamReader(logFile))
+                        using (var fs = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            string logContent = logReader.ReadToEnd();
-                            this.log.AppendLine(logContent);
+                            using (StreamReader logReader = new StreamReader(fs))
+                            {
+                                string logContent = logReader.ReadToEnd();
+                                this.log.AppendLine(logContent);
+                            }
                         }
-                    } 
+                    }
                     else
                     {
                         this.log.Clear();
