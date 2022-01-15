@@ -621,10 +621,13 @@ namespace HandBrakeWPF.ViewModels
                     if (!string.IsNullOrEmpty(this.SelectedTask.Statistics.CompletedActivityLogPath)
                         && File.Exists(this.SelectedTask.Statistics.CompletedActivityLogPath))
                     {
-                        using (StreamReader logReader = new StreamReader(this.SelectedTask.Statistics.CompletedActivityLogPath))
+                        using (var fs = new FileStream(this.SelectedTask.Statistics.CompletedActivityLogPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            string logContent = logReader.ReadToEnd();
-                            this.ActivityLog = logContent;
+                            using (StreamReader logReader = new StreamReader(fs))
+                            {
+                                string logContent = logReader.ReadToEnd();
+                                this.ActivityLog = logContent;
+                            }
                         }
                     }
                     else
