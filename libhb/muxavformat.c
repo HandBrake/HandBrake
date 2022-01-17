@@ -8,6 +8,7 @@
  */
 
 #include <ogg/ogg.h>
+#include "libavcodec/bsf.h"
 #include "libavformat/avformat.h"
 #include "libavutil/avstring.h"
 #include "libavutil/intreadwrite.h"
