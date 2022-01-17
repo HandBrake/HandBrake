@@ -259,6 +259,8 @@
 		A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9906B2B1A710920001D82D5 /* HBQueueController.m */; };
 		A990C55322FF4FBA00E07CE2 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
 		A9998605278868220019E76F /* QuickLookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99985F3278868220019E76F /* QuickLookUI.framework */; };
+		A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B989F27957FCE00DCD062 /* Metal.framework */; };
+		A99B98A127957FD400DCD062 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B989F27957FCE00DCD062 /* Metal.framework */; };
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
 		A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
@@ -751,6 +753,7 @@
 		A99422DF1B1887B000DDB077 /* NSJSONSerialization+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSJSONSerialization+HBAdditions.m"; sourceTree = "<group>"; };
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
 		A99985F3278868220019E76F /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
+		A99B989F27957FCE00DCD062 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		A99F40CC1B624E7E00750170 /* HBPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPictureViewController.h; sourceTree = "<group>"; };
 		A99F40CD1B624E7E00750170 /* HBPictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureViewController.m; sourceTree = "<group>"; };
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
@@ -1060,6 +1063,7 @@
 				27D6C74814B102DA00B785E4 /* libavformat.a in Frameworks */,
 				27D6C74A14B102DA00B785E4 /* libavutil.a in Frameworks */,
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
+				A99B98A127957FD400DCD062 /* Metal.framework in Frameworks */,
 				D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
@@ -1149,6 +1153,7 @@
 				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
+				A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */,
 				A91CE2B51C7DABBC0068F46F /* libavfilter.a in Frameworks */,
 				A91CE2B61C7DABBC0068F46F /* libavformat.a in Frameworks */,
 				A91CE2B81C7DABBC0068F46F /* libavutil.a in Frameworks */,
@@ -1278,6 +1283,7 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A99B989F27957FCE00DCD062 /* Metal.framework */,
 				273F202214ADB8650021BE6D /* IOKit.framework */,
 				A95798DA278DEAE500AA7C7D /* AppKit.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
