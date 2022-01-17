@@ -277,7 +277,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
-    av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
 
     // Dynamic Range Compression
     if (w->audio->config.out.dynamic_range_compression >= 0.0f &&
@@ -1546,7 +1545,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
         // Set decoder opts
         AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
         {
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
@@ -1686,7 +1684,6 @@ static int decodePacket( hb_work_object_t * w )
 #endif
 
         AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
         {
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
