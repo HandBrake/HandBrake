@@ -1714,7 +1714,8 @@ namespace HandBrakeWPF.Properties {
         ///
         ///- The duration of each source title is below the &quot;Minimum Title Duration&quot; threshold option in &apos;Preferences &gt; Advanced&apos;. 
         ///- The source file is not a valid video file or is in a format that HandBrake does not support.
-        ///- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections [rest of string was truncated]&quot;;.
+        ///- You may not have read access to the file or another application may have a lock on the file. 
+        ///- The source may be copy prot [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Main_ScanNoTitlesFoundMessage {
             get {

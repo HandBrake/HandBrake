@@ -83,6 +83,5 @@ namespace HandBrakeWPF
         public const string NotifyOnEncodeDone = "NotifyOnEncodeDone";
         public const string NotifyOnQueueDone = "NotifyOnQueueDone";
         public const string RightToLeftUi = "RightToLeftUi";
-        public const string NightlyAgeLimit = "NightlyAgeLimit";
     }
 }
