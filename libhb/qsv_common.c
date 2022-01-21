@@ -407,6 +407,44 @@ static void init_ext_video_signal_info(mfxExtVideoSignalInfo *extVideoSignalInfo
     extVideoSignalInfo->MatrixCoefficients       = 2; // undefined
 }
 
+static void init_ext_chroma_loc_info(mfxExtChromaLocInfo *extChromaLocInfo)
+{
+    if (extChromaLocInfo == NULL)
+    {
+        return;
+    }
+
+    memset(extChromaLocInfo, 0, sizeof(mfxExtChromaLocInfo));
+    extChromaLocInfo->Header.BufferId = MFX_EXTBUFF_CHROMA_LOC_INFO;
+    extChromaLocInfo->Header.BufferSz = sizeof(mfxExtChromaLocInfo);
+}
+
+static void init_ext_mastering_display_colour_volume(mfxExtMasteringDisplayColourVolume *extMasteringDisplayColourVolume)
+{
+    if (extMasteringDisplayColourVolume == NULL)
+    {
+        return;
+    }
+
+    memset(extMasteringDisplayColourVolume, 0, sizeof(mfxExtMasteringDisplayColourVolume));
+    extMasteringDisplayColourVolume->Header.BufferId     = MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME;
+    extMasteringDisplayColourVolume->Header.BufferSz     = sizeof(mfxExtMasteringDisplayColourVolume);
+    extMasteringDisplayColourVolume->InsertPayloadToggle = MFX_PAYLOAD_OFF;
+}
+
+static void init_ext_content_light_level_info(mfxExtContentLightLevelInfo *extContentLightLevelInfo)
+{
+    if (extContentLightLevelInfo == NULL)
+    {
+        return;
+    }
+
+    memset(extContentLightLevelInfo, 0, sizeof(mfxExtContentLightLevelInfo));
+    extContentLightLevelInfo->Header.BufferId     = MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO;
+    extContentLightLevelInfo->Header.BufferSz     = sizeof(mfxExtContentLightLevelInfo);
+    extContentLightLevelInfo->InsertPayloadToggle = MFX_PAYLOAD_OFF;
+}
+
 static void init_ext_coding_option(mfxExtCodingOption *extCodingOption)
 {
     if (extCodingOption == NULL)
@@ -467,6 +505,9 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     mfxExtCodingOption    extCodingOption;
     mfxExtCodingOption2   extCodingOption2;
     mfxExtVideoSignalInfo extVideoSignalInfo;
+    mfxExtChromaLocInfo   extChromaLocInfo;
+    mfxExtMasteringDisplayColourVolume  extMasteringDisplayColourVolume;
+    mfxExtContentLightLevelInfo         extContentLightLevelInfo;
 
     /* Reset capabilities before querying */
     info->capabilities = 0;
@@ -817,11 +858,61 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                         info->codec_id, info->implementation, status);
             }
         }
+        if (HB_CHECK_MFX_VERSION(version, 1, 13) && info->codec_id == MFX_CODEC_AVC)
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_chroma_loc_info(&extChromaLocInfo);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extChromaLocInfo;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+                /* Encoder can be configured via mfxExtChromaLocInfo */
+                info->capabilities |= HB_QSV_CAP_VUI_CHROMALOCINFO;
+            }
+        }
+
         if (HB_CHECK_MFX_VERSION(version, 1, 19))
         {
             if (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7)
             {
                 info->capabilities |= HB_QSV_CAP_VPP_SCALING;
+            }
+        }
+        if (HB_CHECK_MFX_VERSION(version, 1, 25) && info->codec_id == MFX_CODEC_HEVC)
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_mastering_display_colour_volume(&extMasteringDisplayColourVolume);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extMasteringDisplayColourVolume;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+                /* Encoder can be configured via mfxExtMasteringDisplayColourVolume */
+                info->capabilities |= HB_QSV_CAP_VUI_MASTERINGINFO;
+            }
+
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_content_light_level_info(&extContentLightLevelInfo);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extContentLightLevelInfo;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+                /* Encoder can be configured via mfxExtContentLightLevelInfo */
+                info->capabilities |= HB_QSV_CAP_VUI_CLLINFO;
             }
         }
         if (HB_CHECK_MFX_VERSION(version, 1, 33))
@@ -1052,6 +1143,18 @@ static void log_encoder_capabilities(const int log_level, const uint64_t caps, c
     if (caps & HB_QSV_CAP_VUI_VSINFO)
     {
         strcat(buffer, " vsinfo");
+    }
+    if (caps & HB_QSV_CAP_VUI_CHROMALOCINFO)
+    {
+        strcat(buffer, " chromalocinfo");
+    }
+    if (caps & HB_QSV_CAP_VUI_MASTERINGINFO)
+    {
+        strcat(buffer, " masteringinfo");
+    }
+    if (caps & HB_QSV_CAP_VUI_CLLINFO)
+    {
+        strcat(buffer, " cllinfo");
     }
     if (caps & HB_QSV_CAP_OPTION1)
     {
@@ -2487,6 +2590,13 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoSignalInfo.TransferCharacteristics  = 2; // undefined
         param->videoSignalInfo.MatrixCoefficients       = 2; // undefined
 
+        // introduced in API 1.13
+        init_ext_chroma_loc_info(&param->chromaLocInfo);
+
+        // introduced in API 1.25
+        init_ext_mastering_display_colour_volume(&param->masteringDisplayColourVolume);
+        init_ext_content_light_level_info(&param->contentLightLevelInfo);
+
         // introduced in API 1.6
         memset(&param->codingOption2, 0, sizeof(mfxExtCodingOption2));
         param->codingOption2.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
@@ -2553,6 +2663,18 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->videoSignalInfo;
+        }
+        if (info->capabilities & HB_QSV_CAP_VUI_CHROMALOCINFO)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->chromaLocInfo;
+        }
+        if (info->capabilities & HB_QSV_CAP_VUI_MASTERINGINFO)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->masteringDisplayColourVolume;
+        }
+        if (info->capabilities & HB_QSV_CAP_VUI_CLLINFO)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->contentLightLevelInfo;
         }
         if (info->capabilities & HB_QSV_CAP_OPTION1)
         {
