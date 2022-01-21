@@ -66,6 +66,13 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_LOWPOWER_ENCODE   (1LL <<  2)
     // mfxExtVideoSignalInfo
 #define HB_QSV_CAP_VUI_VSINFO        (1LL <<  3)
+    // mfxExtChromaLocInfo
+#define HB_QSV_CAP_VUI_CHROMALOCINFO (1LL <<  4)
+    // mfxExtMasteringDisplayColourVolume
+#define HB_QSV_CAP_VUI_MASTERINGINFO (1LL <<  5)
+    // mfxExtContentLightLevelInfo
+#define HB_QSV_CAP_VUI_CLLINFO       (1LL <<  6)
+
     // optional rate control methods
 #define HB_QSV_CAP_RATECONTROL_LA    (1LL << 10)
 #define HB_QSV_CAP_RATECONTROL_LAi   (1LL << 11)
@@ -160,6 +167,9 @@ typedef struct
      * MFX_EXTBUFF_OPAQUE_SURFACE_ALLOCATION
      * MFX_EXTBUFF_PICTURE_TIMING_SEI
      * MFX_EXTBUFF_VIDEO_SIGNAL_INFO
+     * MFX_EXTBUFF_CHROMA_LOC_INFO
+     * MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME
+     * MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO
      *
      * This should cover all encode-compatible extended
      * buffers that can be attached to an mfxVideoParam.
@@ -169,6 +179,9 @@ typedef struct
     mfxExtCodingOption    codingOption;
     mfxExtCodingOption2   codingOption2;
     mfxExtVideoSignalInfo videoSignalInfo;
+    mfxExtChromaLocInfo   chromaLocInfo;
+    mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
+    mfxExtContentLightLevelInfo        contentLightLevelInfo;
     struct
     {
         int b_pyramid;
