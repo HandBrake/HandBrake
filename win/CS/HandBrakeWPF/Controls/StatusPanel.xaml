@@ -15,7 +15,7 @@
 
         <StackPanel Grid.Row="0" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
-        <Border VerticalAlignment="Center" Grid.Row="0" Width="600"  CornerRadius="4" BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Background="{DynamicResource Ui.Light}" BorderThickness="1">
+        <Border VerticalAlignment="Center" Grid.Row="0" Width="620"  CornerRadius="4" BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Background="{DynamicResource Ui.Light}" BorderThickness="1">
             <Grid VerticalAlignment="Center"  HorizontalAlignment="Stretch">
 
                 <Grid.RowDefinitions>

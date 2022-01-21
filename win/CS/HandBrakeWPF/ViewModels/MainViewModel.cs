@@ -2097,7 +2097,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else if (HandBrakeVersionHelper.IsNightly())
             { 
-                int ageLimit = this.userSettingService.GetUserSetting<int>(UserSettingConstants.NightlyAgeLimit);
+                int ageLimit = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
                 if (HandBrakeVersionHelper.NightlyBuildAge() > ageLimit)
                 {
                     // Any nightly build older than 30 days is considered old. Encourage users to update.

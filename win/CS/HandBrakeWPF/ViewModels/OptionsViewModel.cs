@@ -39,6 +39,7 @@ namespace HandBrakeWPF.ViewModels
     using Ookii.Dialogs.Wpf;
 
     using Execute = Caliburn.Micro.Execute;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
 
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
@@ -48,6 +49,8 @@ namespace HandBrakeWPF.ViewModels
         private readonly IPresetService presetService;
 
         private readonly INotificationService notificationService;
+
+        private readonly ILog logService;
 
         private string arguments;
         private string autoNameDefaultPath;
@@ -117,7 +120,14 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
 
-        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService, IPresetService presetService, INotificationService notificationService)
+        public OptionsViewModel(
+            IUserSettingService userSettingService,
+            IUpdateService updateService, 
+            IAboutViewModel aboutViewModel, 
+            IErrorService errorService, 
+            IPresetService presetService, 
+            INotificationService notificationService, 
+            ILog logService)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
@@ -125,6 +135,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.presetService = presetService;
             this.notificationService = notificationService;
+            this.logService = logService;
             this.AboutViewModel = aboutViewModel;
             this.OnLoad();
 
@@ -1135,7 +1146,10 @@ namespace HandBrakeWPF.ViewModels
                 var player = new MediaPlayer();
                 player.Open(uri);
                 player.Play();
-                player.MediaFailed += (object sender, ExceptionEventArgs e) => { Debug.WriteLine(e); };
+                player.MediaFailed += (object sender, ExceptionEventArgs e) =>
+                {
+                    this.logService.LogMessage(string.Format("{1} # {0}{1}", e?.ErrorException, Environment.NewLine));
+                };
             }
             else
             {

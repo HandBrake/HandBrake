@@ -1,0 +1,13 @@
+diff --git a/libavcodec/aarch64/hevcdsp_init_aarch64.c b/libavcodec/aarch64/hevcdsp_init_aarch64.c
+index c785e46..1101c90 100644
+--- a/libavcodec/aarch64/hevcdsp_init_aarch64.c
++++ b/libavcodec/aarch64/hevcdsp_init_aarch64.c
+@@ -75,7 +75,7 @@ av_cold void ff_hevc_dsp_init_aarch64(HEVCDSPContext *c, const int bit_depth)
+         c->idct_dc[1]                  = ff_hevc_idct_8x8_dc_8_neon;
+         c->idct_dc[2]                  = ff_hevc_idct_16x16_dc_8_neon;
+         c->idct_dc[3]                  = ff_hevc_idct_32x32_dc_8_neon;
+-        c->sao_band_filter[0]          = ff_hevc_sao_band_filter_8x8_8_neon;
++        //c->sao_band_filter[0]          = ff_hevc_sao_band_filter_8x8_8_neon;
+     }
+     if (bit_depth == 10) {
+         c->add_residual[0]             = ff_hevc_add_residual_4x4_10_neon;

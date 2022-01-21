@@ -349,11 +349,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
-
-            // Control Settings that are not user accessible but might be useful to have a way of overriding.  
-            defaults.Add(UserSettingConstants.NightlyAgeLimit, 30);
             
-
             return defaults;
         }
 
