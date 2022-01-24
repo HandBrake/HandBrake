@@ -202,6 +202,16 @@ namespace HandBrake.Interop.Interop
             return AudioEncoders.SingleOrDefault(e => e.Id == codecId);
         }
 
+        /// <summary>
+        /// Gets the default audio encoder for the given container.
+        /// </summary>
+        /// <param name="muxer">The container ID.</param>
+        /// <returns>The codec ID of the default audio encoder.</returns>
+        public static int GetDefaultAudioEncoder(int muxer)
+        {
+            return HBFunctions.hb_audio_encoder_get_default(muxer);
+        }
+
         public static HBAudioEncoder GetAutoPassthruEncoder(int inputCodec, int copyMask, int fallback, int muxer)
         {
            int encoder = HBFunctions.hb_autopassthru_get_encoder(inputCodec, copyMask, fallback, muxer);
@@ -221,6 +231,16 @@ namespace HandBrake.Interop.Interop
         public static HBVideoEncoder GetVideoEncoder(string shortName)
         {
             return VideoEncoders.SingleOrDefault(e => e.ShortName == shortName);
+        }
+
+        /// <summary>
+        /// Gets the default video encoder for the given container.
+        /// </summary>
+        /// <param name="muxer">The container ID.</param>
+        /// <returns>The codec ID of the default video encoder.</returns>
+        public static int GetDefaultVideoEncoder(int muxer)
+        {
+            return HBFunctions.hb_video_encoder_get_default(muxer);
         }
 
         /// <summary>
