@@ -17,7 +17,6 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Utilities;
 
     public static class HandBrakeEncoderHelpers
     {
@@ -281,6 +280,18 @@ namespace HandBrake.Interop.Interop
             return Containers.SingleOrDefault(c => c.ShortName == shortName);
         }
 
+        public static bool VideoEncoderSupportsTwoPass(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return VideoEncoderSupportsTwoPass(encoder.Id);
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns true if the given video encoder supports two-pass mode.
         /// </summary>
@@ -291,9 +302,9 @@ namespace HandBrake.Interop.Interop
         /// True if the given video encoder supports two-pass mode.
         /// </returns>
         public static bool VideoEncoderSupportsTwoPass(int encoderId)
-		{
+        {
             return HBFunctions.hb_video_twopass_is_supported((uint)encoderId) > 0;
-		}
+        }
 
         /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
@@ -566,6 +577,18 @@ namespace HandBrake.Interop.Interop
 
             return new BitrateLimits(low, high);
         }
+        
+        public static VideoQualityLimits GetVideoQualityLimits(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return GetVideoQualityLimits(encoder);
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Gets the video quality limits for the given video codec.
@@ -580,12 +603,24 @@ namespace HandBrake.Interop.Interop
         {
             float low = 0;
             float high = 0;
-            float granularity = 0;
+            float granularity = 0.5f;
             int direction = 0;
 
             HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
 
             return new VideoQualityLimits(low, high, granularity, direction == 0);
+        }
+
+        public static string GetVideoQualityRateControlName(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return InteropUtilities.ToStringFromUtf8Ptr(HBFunctions.hb_video_quality_get_name((uint)encoder.Id));
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
