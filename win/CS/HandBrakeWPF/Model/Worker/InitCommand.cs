@@ -21,7 +21,7 @@ namespace HandBrakeWPF.Model.Worker
 
         public bool EnableHardwareAcceleration { get; set; }
 
-        public bool DisableLibDvdNav { get; set; }
+        public bool EnableLibDvdNav { get; set; }
 
         public bool AllowDisconnectedWorker { get; set; }
     }

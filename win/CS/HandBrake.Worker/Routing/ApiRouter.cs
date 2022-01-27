@@ -166,9 +166,9 @@ namespace HandBrake.Worker.Routing
             this.handbrakeInstance.Initialize(command.LogVerbosity, !command.EnableHardwareAcceleration);
             this.handbrakeInstance.EncodeCompleted += this.HandbrakeInstance_EncodeCompleted;
 
-            if (command.DisableLibDvdNav)
+            if (command.EnableLibDvdNav)
             {
-                HandBrakeUtils.SetDvdNav(true); // TODO check this is correct
+                HandBrakeUtils.SetDvdNav(true);
             }
         }
     }
