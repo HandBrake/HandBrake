@@ -327,13 +327,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
     hb_log( "bd: playlist %05d.MPLS", ti->playlist );
     title->playlist = ti->playlist;
-
-    uint64_t pkt_count = 0;
-    for ( ii = 0; ii < ti->clip_count; ii++ )
-    {
-        pkt_count += ti->clips[ii].pkt_count;
-    }
-
     title->angle_count = ti->angle_count;
 
     /* Get duration */
