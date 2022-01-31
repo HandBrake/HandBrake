@@ -1456,26 +1456,11 @@ ghb_update_all_status(signal_user_data_t *ud, int status)
 static void
 save_queue_file(signal_user_data_t *ud)
 {
-    int ii, count;
-    GhbValue *queue = ghb_value_dup(ud->queue);
-
-    count = ghb_array_len(queue);
-    for (ii = 0; ii < count; ii++)
-    {
-        GhbValue *queueDict, *uiDict;
-
-        queueDict = ghb_array_get(ud->queue, ii);
-        uiDict = ghb_dict_get(queueDict, "uiSettings");
-        if (uiDict == NULL)
-            continue;
-        ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_PENDING);
-    }
-
     GtkWidget *dialog;
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_file_chooser_dialog_new("Queue Destination",
+    dialog = gtk_file_chooser_dialog_new("Export Queue",
                       hb_window,
                       GTK_FILE_CHOOSER_ACTION_SAVE,
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1491,6 +1476,21 @@ save_queue_file(signal_user_data_t *ud)
 
     char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy(dialog);
+
+    int ii, count;
+    GhbValue *queue = ghb_value_dup(ud->queue);
+
+    count = ghb_array_len(queue);
+    for (ii = 0; ii < count; ii++)
+    {
+        GhbValue *queueDict, *uiDict;
+
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        if (uiDict == NULL)
+            continue;
+        ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_PENDING);
+    }
 
     ghb_write_settings_file(filename, queue);
     g_free (filename);
@@ -1610,7 +1610,7 @@ open_queue_file(signal_user_data_t *ud)
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_file_chooser_dialog_new("Queue Destination",
+    dialog = gtk_file_chooser_dialog_new("Import Queue",
                       hb_window,
                       GTK_FILE_CHOOSER_ACTION_OPEN,
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
