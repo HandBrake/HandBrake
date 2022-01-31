@@ -80,7 +80,7 @@ void hb_avcodec_init()
 {
 }
 
-int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
+int hb_avcodec_open(AVCodecContext *avctx, const AVCodec *codec,
                     AVDictionary **av_opts, int thread_count)
 {
     int ret;

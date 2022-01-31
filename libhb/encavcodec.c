@@ -119,7 +119,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     int ret = 0;
     char reason[80];
     char * codec_name = NULL;
-    AVCodec * codec = NULL;
+    const AVCodec * codec = NULL;
     AVCodecContext * context;
     AVRational fps;
 

@@ -52,7 +52,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     ctx->job                   = job;
     ctx->subtitle              = w->subtitle;
 
-    AVCodec        * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
+    const AVCodec  * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
     AVCodecContext * context = avcodec_alloc_context3(codec);
     context->codec = codec;
 

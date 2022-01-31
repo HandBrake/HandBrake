@@ -1242,7 +1242,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     const char *profile_name = NULL;
     if (audio->config.in.codec & HB_ACODEC_FF_MASK)
     {
-        AVCodec *codec = avcodec_find_decoder(audio->config.in.codec_param);
+        const AVCodec *codec = avcodec_find_decoder(audio->config.in.codec_param);
         if (codec != NULL)
         {
             if (info.profile != FF_PROFILE_UNKNOWN)
