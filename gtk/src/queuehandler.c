@@ -1460,7 +1460,7 @@ save_queue_file(signal_user_data_t *ud)
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_file_chooser_dialog_new("Export Queue",
+    dialog = gtk_file_chooser_dialog_new(_("Export Queue"),
                       hb_window,
                       GTK_FILE_CHOOSER_ACTION_SAVE,
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1605,7 +1605,7 @@ open_queue_file(signal_user_data_t *ud)
     GtkWindow *hb_window;
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_file_chooser_dialog_new("Import Queue",
+    dialog = gtk_file_chooser_dialog_new(_("Import Queue"),
                       hb_window,
                       GTK_FILE_CHOOSER_ACTION_OPEN,
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
