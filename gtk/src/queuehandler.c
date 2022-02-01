@@ -1467,34 +1467,29 @@ save_queue_file(signal_user_data_t *ud)
                       GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                       NULL);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "queue.json");
-    if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
+    if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     {
+        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+ 
+        int ii, count;
+        GhbValue *queue = ghb_value_dup(ud->queue);
+        count = ghb_array_len(queue);
+        for (ii = 0; ii < count; ii++)
+        {
+            GhbValue *queueDict, *uiDict;
+
+            queueDict = ghb_array_get(queue, ii);
+            uiDict = ghb_dict_get(queueDict, "uiSettings");
+            if (uiDict == NULL)
+                continue;
+            ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_PENDING);
+        }
+
+        ghb_write_settings_file(filename, queue);
+        g_free (filename); 
         ghb_value_free(&queue);
-        gtk_widget_destroy(dialog);
-        return;
     }
-
-    char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
     gtk_widget_destroy(dialog);
-
-    int ii, count;
-    GhbValue *queue = ghb_value_dup(ud->queue);
-
-    count = ghb_array_len(queue);
-    for (ii = 0; ii < count; ii++)
-    {
-        GhbValue *queueDict, *uiDict;
-
-        queueDict = ghb_array_get(queue, ii);
-        uiDict = ghb_dict_get(queueDict, "uiSettings");
-        if (uiDict == NULL)
-            continue;
-        ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_PENDING);
-    }
-
-    ghb_write_settings_file(filename, queue);
-    g_free (filename);
-    ghb_value_free(&queue);
 }
 
 static void
