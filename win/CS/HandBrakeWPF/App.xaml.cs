@@ -142,40 +142,48 @@ namespace HandBrakeWPF
             ResourceDictionary dark = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml") };
             ResourceDictionary light = new ResourceDictionary { Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml") };
 
-            ResourceDictionary theme = new ResourceDictionary();
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
+            bool themed = false;
             switch (useDarkTheme)
             {
                 case DarkThemeMode.System:
-                    if (SystemInfo.IsAppsUsingDarkTheme())
+                    if (SystemParameters.HighContrast)
                     {
-                        theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
-                        Application.Current.Resources.MergedDictionaries.Add(theme);
-                        Application.Current.Resources.MergedDictionaries.Add(dark);
-                    }
-                    else if (!SystemParameters.HighContrast)
-                    {
-                        theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
-                        Application.Current.Resources.MergedDictionaries.Add(theme);
-                        Application.Current.Resources.MergedDictionaries.Add(light);
-                    }
-                    break;
-                case DarkThemeMode.Dark:
-                    theme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
-                    Application.Current.Resources.MergedDictionaries.Add(theme);
-                    Application.Current.Resources.MergedDictionaries.Add(dark);
-                    break;
-                case DarkThemeMode.Light:
-                    if (!SystemParameters.HighContrast)
-                    {
-                        theme.Source = new Uri("Themes/Light.xaml", UriKind.Relative);
-                        Application.Current.Resources.MergedDictionaries.Add(theme);
-                        Application.Current.Resources.MergedDictionaries.Add(light);
+                        break;
                     }
 
+                    if (SystemInfo.IsAppsUsingDarkTheme())
+                    {
+                        Application.Current.Resources.MergedDictionaries.Add(dark);
+                        Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
+                    }
+                    else
+                    {
+                        Application.Current.Resources.MergedDictionaries.Add(light);
+                        Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
+                    }
+
+                    themed = true;
+
+                    break;
+                case DarkThemeMode.Dark:
+                    Application.Current.Resources.MergedDictionaries.Add(dark);
+                    Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) });
+                    themed = true;                    
+                    break;
+                case DarkThemeMode.Light:
+                    Application.Current.Resources.MergedDictionaries.Add(light);
+                    Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
+                    themed = true;
                     break;
             }
 
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/Styles.xaml", UriKind.Relative) });
+
+            if (themed)
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Views/Styles/ThemedStyles.xaml", UriKind.Relative) });
+            }
 
             // NO-Hardware Mode
             bool noHardware = e.Args.Any(f => f.Equals("--no-hardware")) || (Portable.IsPortable() && !Portable.IsHardwareEnabled());
