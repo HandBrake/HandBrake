@@ -33,9 +33,8 @@
         <Setter Property="Padding" Value="8,2" />
     </Style>
 
-    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource MahApps.Styles.RadioButton}">
+    <Style TargetType="{x:Type RadioButton}">
         <Setter Property="Margin" Value="0,0,0,8" />
-        <Setter Property="Background" Value="Transparent" />
     </Style>
 
     <Style TargetType="{x:Type controls:NumberBox}" >
@@ -65,7 +64,7 @@
         <Setter Property="MaxWidth" Value="500" />
     </Style>
 
-    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MahApps.Styles.CheckBox}" >
+    <Style TargetType="{x:Type CheckBox}">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,2,0,2" />
