@@ -240,27 +240,20 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.X265:
                     case VideoEncoder.X265_10:
                     case VideoEncoder.X265_12:
-                        double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
-                        double rfValue = 51.0 - (value * cqStep);
-                        rfValue = Math.Round(rfValue, 2);
-                        this.Task.Quality = rfValue;
-                        break;
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.VceH264:
                     case VideoEncoder.VceH265:
                     case VideoEncoder.NvencH264:
                     case VideoEncoder.NvencH265:
+                    case VideoEncoder.NvencH26510b:
                     case VideoEncoder.MFH264:
                     case VideoEncoder.MFH265:
-                        rfValue = 51.0 - value;
-                        rfValue = Math.Round(rfValue, 0);
-                        this.Task.Quality = rfValue;
-                        break;
+                        double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+                        this.Task.Quality = Math.Round(51.0 - (value * cqStep), 2);
+                        break; 
                     case VideoEncoder.QuickSyncH26510b:
-                        rfValue = 63.0 - (value - 0);
-                        rfValue = Math.Round(rfValue, 0);
-                        this.Task.Quality = rfValue;
+                        this.Task.Quality = Math.Round(63.0 - (value - 0), 0);
                         break;
                     case VideoEncoder.Theora:
                         Task.Quality = value;
@@ -790,7 +783,7 @@ namespace HandBrakeWPF.ViewModels
                 || this.Task.VideoEncoder == VideoEncoder.X265_12 || this.Task.VideoEncoder == VideoEncoder.QuickSync
                 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b
                 || this.Task.VideoEncoder == VideoEncoder.VceH264 || this.Task.VideoEncoder == VideoEncoder.VceH265
-                || this.Task.VideoEncoder == VideoEncoder.NvencH264 || this.Task.VideoEncoder == VideoEncoder.NvencH265
+                || this.Task.VideoEncoder == VideoEncoder.NvencH264 || this.Task.VideoEncoder == VideoEncoder.NvencH265 || this.Task.VideoEncoder == VideoEncoder.NvencH26510b
                 || this.Task.VideoEncoder == VideoEncoder.MFH264 || this.Task.VideoEncoder == VideoEncoder.MFH265)
             {
                 if (!Equals(preset.Task.VideoPreset, this.Task.VideoPreset))
@@ -876,17 +869,6 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMin = 1;
                     this.QualityMax = 31;
                     break;
-                case VideoEncoder.QuickSync:
-                case VideoEncoder.QuickSyncH265:
-                case VideoEncoder.VceH264:
-                case VideoEncoder.VceH265:
-                case VideoEncoder.NvencH264:
-                case VideoEncoder.NvencH265:
-                case VideoEncoder.MFH264:
-                case VideoEncoder.MFH265:
-                    this.QualityMin = 0;
-                    this.QualityMax = 51;
-                    break;
                 case VideoEncoder.QuickSyncH26510b:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
@@ -896,6 +878,15 @@ namespace HandBrakeWPF.ViewModels
                 case VideoEncoder.X265:
                 case VideoEncoder.X265_10:
                 case VideoEncoder.X265_12:
+                case VideoEncoder.QuickSync:
+                case VideoEncoder.QuickSyncH265:
+                case VideoEncoder.VceH264:
+                case VideoEncoder.VceH265:
+                case VideoEncoder.NvencH264:
+                case VideoEncoder.NvencH265:
+                case VideoEncoder.NvencH26510b:
+                case VideoEncoder.MFH264:
+                case VideoEncoder.MFH265:
                     this.QualityMin = 0;
                     this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
                     break;
@@ -978,7 +969,7 @@ namespace HandBrakeWPF.ViewModels
         {
             VideoQualityLimits limits = HandBrakeEncoderHelpers.GetVideoQualityLimits(EnumHelper<VideoEncoder>.GetShortName(this.SelectedVideoEncoder));
             double cqStep = 1;
-            if (limits.Granularity != 1)
+            if (limits != null && limits.Granularity != 1)
             {
                 cqStep = this.userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             }
@@ -1018,6 +1009,7 @@ namespace HandBrakeWPF.ViewModels
                 case VideoEncoder.VceH265:
                 case VideoEncoder.NvencH264:
                 case VideoEncoder.NvencH265:
+                case VideoEncoder.NvencH26510b:
                 case VideoEncoder.MFH264:
                 case VideoEncoder.MFH265:
                     double multiplier = 1.0 / cqStep;
@@ -1177,7 +1169,7 @@ namespace HandBrakeWPF.ViewModels
             int defaultPreset = (int)Math.Round((decimal)(this.VideoPresetMaxValue / 2), 0);
 
             // Override for NVEnc
-            if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265)
+            if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265 || selectedEncoder == VideoEncoder.NvencH26510b)
             {
                 defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "medium"));
             }

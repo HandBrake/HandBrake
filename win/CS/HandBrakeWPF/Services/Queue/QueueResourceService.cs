@@ -117,6 +117,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     case VideoEncoder.NvencH264:
                     case VideoEncoder.NvencH265:
+                    case VideoEncoder.NvencH26510b:
                         if (this.nvencInstances.Count < this.totalNvidiaInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                         {
                             Guid guid = Guid.NewGuid();
@@ -212,6 +213,7 @@ namespace HandBrakeWPF.Services.Queue
                         break;
                     case VideoEncoder.NvencH264:
                     case VideoEncoder.NvencH265:
+                    case VideoEncoder.NvencH26510b:
                         if (this.nvencInstances.Contains(unlockKey.Value))
                         {
                             this.nvencInstances.Remove(unlockKey.Value);
