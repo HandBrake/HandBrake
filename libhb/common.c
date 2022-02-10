@@ -6027,7 +6027,6 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
-            case HB_FILTER_GRAYSCALE:
                 if (pix_fmt != AV_PIX_FMT_YUV420P)
                 {
                     return 0;

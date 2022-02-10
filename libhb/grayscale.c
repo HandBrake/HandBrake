@@ -23,6 +23,9 @@ typedef struct grayscale_arguments_s {
 struct hb_filter_private_s
 {
     int                    cpu_count;
+    int                    depth;
+    int                    planes_count;
+    int                    chroma_value;
 
     taskset_t              grayscale_taskset;   // Threads - one per CPU
     grayscale_arguments_t *grayscale_arguments; // Arguments to thread for work
@@ -76,10 +79,10 @@ void grayscale_filter_work( void *thread_args_v)
     }
 
     /*
-     * Process all three planes, but only this segment of it.
+     * Process all planes, but only this segment of it.
      */
     src_buf = grayscale_work->src;
-    for (plane = 1; plane < 3; plane++)
+    for (plane = 1; plane < pv->planes_count; plane++)
     {
         int src_stride = src_buf->plane[plane].stride;
         int height     = src_buf->plane[plane].height;
@@ -94,8 +97,19 @@ void grayscale_filter_work( void *thread_args_v)
             segment_stop = (height / pv->cpu_count) * (segment + 1);
         }
 
-        memset(&src_buf->plane[plane].data[segment_start * src_stride],
-               0x80, (segment_stop - segment_start) * src_stride);
+        if (pv->depth == 8)
+        {
+            memset(&src_buf->plane[plane].data[segment_start * src_stride],
+                   0x80, (segment_stop - segment_start) * src_stride);
+        }
+        else
+        {
+            uint16_t *data = (uint16_t *)src_buf->plane[plane].data;
+            for (size_t pos = segment_start * src_stride; pos < segment_stop * src_stride; pos += 1)
+            {
+                data[pos] = pv->chroma_value;
+            }
+        }
     }
 }
 
@@ -138,6 +152,11 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
 
     pv->cpu_count = hb_get_cpu_count();
+
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
+    pv->depth = desc->comp[0].depth;
+    pv->planes_count = av_pix_fmt_count_planes(init->pix_fmt);
+    pv->chroma_value = 0x80 << (pv->depth - 8 + desc->comp[0].shift);
 
     /*
      * Create gray taskset.
