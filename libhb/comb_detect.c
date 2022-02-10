@@ -744,11 +744,10 @@ static void mask_dilate_work( void *thread_args_v )
 static void mask_erode_work( void *thread_args_v )
 {
     hb_filter_private_t * pv;
-    int segment, segment_start, segment_stop;
+    int segment_start, segment_stop;
     decomb_thread_arg_t *thread_args = thread_args_v;
 
     pv = thread_args->pv;
-    segment = thread_args->arg.segment;
 
     int xx, yy, pp;
 
