@@ -885,6 +885,11 @@ namespace HandBrakeWPF.Services.Presets
                 return true;
             }
 
+            if (preset.Task.VideoEncoder == VideoEncoder.NvencH26510b && (!HandBrakeHardwareEncoderHelper.IsNVEncH265Available || !isNvencEnabled))
+            {
+                return true;
+            }
+
             if (preset.Task.VideoEncoder == VideoEncoder.MFH264 || preset.Task.VideoEncoder == VideoEncoder.MFH265)
             {
                 if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)

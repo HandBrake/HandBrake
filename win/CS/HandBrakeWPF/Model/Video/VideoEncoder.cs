@@ -80,6 +80,10 @@ namespace HandBrakeWPF.Model.Video
         [ShortName("nvenc_h265")]
         NvencH265,
 
+        [DisplayName("H.265 10-bit (Nvidia NVEnc)")]
+        [ShortName("nvenc_h265_10bit")]
+        NvencH26510b,
+
         [DisplayName("H.265 (MediaFoundation)")]
         [ShortName("mf_h265")]
         MFH265,

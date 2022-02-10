@@ -157,6 +157,11 @@ static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
     return pv->frame_duration[i];
 }
 
+static inline int64_t rescale(hb_rational_t q, int b)
+{
+    return av_rescale(q.num, b, q.den);
+}
+
 static void qsv_handle_breftype(hb_work_private_t *pv)
 {
     /*
@@ -1006,7 +1011,6 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
 {
     const mfxExtCodingOption  *option1 = NULL;
     const mfxExtCodingOption2 *option2 = NULL;
-    const mfxExtVideoSignalInfo *extVideoSignalInfo = NULL;
 
     // log code path and main output settings
     hb_log("encqsvInit: using %s%s path",
@@ -1038,11 +1042,7 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
     for (int i = 0; i < videoParam->NumExtParam; i++)
     {
         mfxExtCodingOption *option = (mfxExtCodingOption*)videoParam->ExtParam[i];
-        if (option->Header.BufferId == MFX_EXTBUFF_VIDEO_SIGNAL_INFO)
-        {
-            extVideoSignalInfo = (mfxExtVideoSignalInfo*)videoParam->ExtParam[i];
-        }
-        else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION)
+        if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION)
         {
             option1 = (mfxExtCodingOption*)videoParam->ExtParam[i];
         }
@@ -1050,7 +1050,10 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         {
             option2 = (mfxExtCodingOption2*)videoParam->ExtParam[i];
         }
-        else
+        else if (option->Header.BufferId != MFX_EXTBUFF_VIDEO_SIGNAL_INFO &&
+                 option->Header.BufferId != MFX_EXTBUFF_CHROMA_LOC_INFO &&
+                 option->Header.BufferId != MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME &&
+                 option->Header.BufferId != MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO)
         {
             hb_log("Unknown Header.BufferId=%d", option->Header.BufferId);
         }
@@ -1231,6 +1234,44 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoSignalInfo.TransferCharacteristics  = hb_output_color_transfer(job);
     pv->param.videoSignalInfo.MatrixCoefficients       = hb_output_color_matrix(job);
     pv->param.videoSignalInfo.ColourDescriptionPresent = 1;
+
+    if (job->chroma_location != AVCHROMA_LOC_UNSPECIFIED)
+    {
+        pv->param.chromaLocInfo.ChromaSampleLocTypeBottomField =
+        pv->param.chromaLocInfo.ChromaSampleLocTypeTopField = job->chroma_location - 1;
+        pv->param.chromaLocInfo.ChromaLocInfoPresentFlag = 1;
+    }
+
+    /* HDR10 Static metadata */
+    if (job->color_transfer == HB_COLR_TRA_SMPTEST2084)
+    {
+        const int masteringChromaDen = 50000;
+        const int masteringLumaDen = 10000;
+
+        /* Mastering display metadata */
+        if (job->mastering.has_primaries && job->mastering.has_luminance)
+        {
+            pv->param.masteringDisplayColourVolume.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[0] = rescale(job->mastering.display_primaries[0][0], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[0] = rescale(job->mastering.display_primaries[0][1], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[1] = rescale(job->mastering.display_primaries[1][0], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[1] = rescale(job->mastering.display_primaries[1][1], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesX[2] = rescale(job->mastering.display_primaries[2][0], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.DisplayPrimariesY[2] = rescale(job->mastering.display_primaries[2][1], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.WhitePointX = rescale(job->mastering.white_point[0], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.WhitePointY = rescale(job->mastering.white_point[1], masteringChromaDen);
+            pv->param.masteringDisplayColourVolume.MaxDisplayMasteringLuminance = rescale(job->mastering.max_luminance, masteringLumaDen);
+            pv->param.masteringDisplayColourVolume.MinDisplayMasteringLuminance = rescale(job->mastering.min_luminance, masteringLumaDen);
+        }
+
+        /*  Content light level */
+        if (job->coll.max_cll && job->coll.max_fall)
+        {
+            pv->param.contentLightLevelInfo.InsertPayloadToggle = MFX_PAYLOAD_IDR;
+            pv->param.contentLightLevelInfo.MaxContentLightLevel  = job->coll.max_cll;
+            pv->param.contentLightLevelInfo.MaxPicAverageLightLevel = job->coll.max_fall;
+        }
+    }
 
     // parse user-specified encoder options, if present
     if (job->encoder_options != NULL && *job->encoder_options)

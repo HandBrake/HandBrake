@@ -53,83 +53,51 @@ hb_filter_object_t hb_filter_grayscale =
 
 
 typedef struct grayscale_thread_arg_s {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
-    int segment;
 } grayscale_thread_arg_t;
 
-/*
- * gray this segment of all three planes in a single thread.
- */
-void grayscale_filter_thread( void *thread_args_v )
+void grayscale_filter_work( void *thread_args_v)
 {
     grayscale_arguments_t *grayscale_work = NULL;
-    hb_filter_private_t * pv;
-    int run = 1;
     int plane;
     int segment, segment_start, segment_stop;
     grayscale_thread_arg_t *thread_args = thread_args_v;
     hb_buffer_t *src_buf;
 
-    pv = thread_args->pv;
-    segment = thread_args->segment;
+    hb_filter_private_t * pv = thread_args->pv;
+    segment = thread_args->arg.segment;
 
-    hb_deep_log(3, "Grayscale thread started for segment %d", segment);
-
-    while( run )
+    grayscale_work = &pv->grayscale_arguments[segment];
+    if (grayscale_work->src == NULL)
     {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->grayscale_taskset, segment );
+        hb_error( "Thread started when no work available" );
+        return;
+    }
 
-        if( taskset_thread_stop( &pv->grayscale_taskset, segment ) )
+    /*
+     * Process all three planes, but only this segment of it.
+     */
+    src_buf = grayscale_work->src;
+    for (plane = 1; plane < 3; plane++)
+    {
+        int src_stride = src_buf->plane[plane].stride;
+        int height     = src_buf->plane[plane].height;
+        segment_start = (height / pv->cpu_count) * segment;
+        if (segment == pv->cpu_count - 1)
         {
             /*
-             * No more work to do, exit this thread.
+             * Final segment
              */
-            run = 0;
-            goto report_completion;
+            segment_stop = height;
+        } else {
+            segment_stop = (height / pv->cpu_count) * (segment + 1);
         }
 
-        grayscale_work = &pv->grayscale_arguments[segment];
-        if (grayscale_work->src == NULL)
-        {
-            hb_error( "Thread started when no work available" );
-            hb_snooze(500);
-            goto report_completion;
-        }
-
-        /*
-         * Process all three planes, but only this segment of it.
-         */
-        src_buf = grayscale_work->src;
-        for (plane = 1; plane < 3; plane++)
-        {
-            int src_stride = src_buf->plane[plane].stride;
-            int height     = src_buf->plane[plane].height;
-            segment_start = (height / pv->cpu_count) * segment;
-            if (segment == pv->cpu_count - 1)
-            {
-                /*
-                 * Final segment
-                 */
-                segment_stop = height;
-            } else {
-                segment_stop = (height / pv->cpu_count) * (segment + 1);
-            }
-
-            memset(&src_buf->plane[plane].data[segment_start * src_stride],
-                   0x80, (segment_stop - segment_start) * src_stride);
-        }
-
-report_completion:
-        /*
-         * Finished this segment, let everyone know.
-         */
-        taskset_thread_complete( &pv->grayscale_taskset, segment );
+        memset(&src_buf->plane[plane].data[segment_start * src_stride],
+               0x80, (segment_stop - segment_start) * src_stride);
     }
 }
-
 
 /*
  * threaded gray - each thread grays a single segment of all
@@ -177,8 +145,8 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
     pv->grayscale_arguments = malloc(sizeof(grayscale_arguments_t) *
                                      pv->cpu_count);
     if (pv->grayscale_arguments == NULL ||
-        taskset_init( &pv->grayscale_taskset, pv->cpu_count,
-                      sizeof( grayscale_thread_arg_t ) ) == 0)
+        taskset_init( &pv->grayscale_taskset, "grayscale_filter_segment", pv->cpu_count,
+                      sizeof( grayscale_thread_arg_t ), grayscale_filter_work) == 0)
     {
         hb_error( "grayscale could not initialize taskset" );
     }
@@ -191,16 +159,9 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
         thread_args = taskset_thread_args(&pv->grayscale_taskset, ii);
 
         thread_args->pv = pv;
-        thread_args->segment = ii;
+        thread_args->arg.taskset = &pv->grayscale_taskset;
+        thread_args->arg.segment = ii;
         pv->grayscale_arguments[ii].src = NULL;
-
-        if (taskset_thread_spawn(&pv->grayscale_taskset, ii,
-                                 "grayscale_filter_segment",
-                                 grayscale_filter_thread,
-                                 HB_NORMAL_PRIORITY ) == 0)
-        {
-            hb_error( "grayscale could not spawn thread" );
-        }
     }
 
     return 0;

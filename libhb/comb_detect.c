@@ -32,8 +32,8 @@ Original "Faster" settings:
 #include "handbrake/taskset.h"
 
 typedef struct decomb_thread_arg_s {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
-    int segment;
     int segment_start[3];
     int segment_height[3];
 } decomb_thread_arg_t;
@@ -664,415 +664,286 @@ static void detect_combed_segment( hb_filter_private_t * pv,
     }
 }
 
-static void mask_dilate_thread( void *thread_args_v )
+static void mask_dilate_work( void *thread_args_v )
 {
-    hb_filter_private_t * pv;
-    int segment, segment_start, segment_stop;
     decomb_thread_arg_t *thread_args = thread_args_v;
 
-    pv = thread_args->pv;
-    segment = thread_args->segment;
+    int segment_start, segment_stop;
 
-    hb_deep_log(3, "mask dilate thread started for segment %d", segment);
+    hb_filter_private_t * pv = thread_args->pv;
 
-    while (1)
+    int xx, yy, pp;
+
+    int count;
+    int dilation_threshold = 4;
+
+    for (pp = 0; pp < 1; pp++)
     {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->mask_dilate_taskset, segment );
+        int width = pv->mask_filtered->plane[pp].width;
+        int height = pv->mask_filtered->plane[pp].height;
+        int stride = pv->mask_filtered->plane[pp].stride;
 
-        if (taskset_thread_stop(&pv->mask_dilate_taskset, segment))
+        int start, stop, p, c, n;
+        segment_start = thread_args->segment_start[pp];
+        segment_stop = segment_start + thread_args->segment_height[pp];
+
+        if (segment_start == 0)
         {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
-        }
-
-        int xx, yy, pp;
-
-        int count;
-        int dilation_threshold = 4;
-
-        for (pp = 0; pp < 1; pp++)
-        {
-            int width = pv->mask_filtered->plane[pp].width;
-            int height = pv->mask_filtered->plane[pp].height;
-            int stride = pv->mask_filtered->plane[pp].stride;
-
-            int start, stop, p, c, n;
-            segment_start = thread_args->segment_start[pp];
-            segment_stop = segment_start + thread_args->segment_height[pp];
-
-            if (segment_start == 0)
-            {
-                start = 1;
-                p = 0;
-                c = 1;
-                n = 2;
-            }
-            else
-            {
-                start = segment_start;
-                p = segment_start - 1;
-                c = segment_start;
-                n = segment_start + 1;
-            }
-
-            if (segment_stop == height)
-            {
-                stop = height -1;
-            }
-            else
-            {
-                stop = segment_stop;
-            }
-
-            uint8_t *curp = &pv->mask_filtered->plane[pp].data[p * stride + 1];
-            uint8_t *cur  = &pv->mask_filtered->plane[pp].data[c * stride + 1];
-            uint8_t *curn = &pv->mask_filtered->plane[pp].data[n * stride + 1];
-            uint8_t *dst = &pv->mask_temp->plane[pp].data[c * stride + 1];
-
-            for (yy = start; yy < stop; yy++)
-            {
-                for (xx = 1; xx < width - 1; xx++)
-                {
-                    if (cur[xx])
-                    {
-                        dst[xx] = 1;
-                        continue;
-                    }
-
-                    count = curp[xx-1] + curp[xx] + curp[xx+1] +
-                            cur [xx-1] +            cur [xx+1] +
-                            curn[xx-1] + curn[xx] + curn[xx+1];
-
-                    dst[xx] = count >= dilation_threshold;
-                }
-                curp += stride;
-                cur += stride;
-                curn += stride;
-                dst += stride;
-            }
-        }
-
-        taskset_thread_complete( &pv->mask_dilate_taskset, segment );
-    }
-
-    /*
-     * Finished this segment, let everyone know.
-     */
-    taskset_thread_complete( &pv->mask_dilate_taskset, segment );
-}
-
-static void mask_erode_thread( void *thread_args_v )
-{
-    hb_filter_private_t * pv;
-    int segment, segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    pv = thread_args->pv;
-    segment = thread_args->segment;
-
-    hb_deep_log(3, "mask erode thread started for segment %d", segment);
-
-    while (1)
-    {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->mask_erode_taskset, segment );
-
-        if (taskset_thread_stop( &pv->mask_erode_taskset, segment ))
-        {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
-        }
-
-        int xx, yy, pp;
-
-        int count;
-        int erosion_threshold = 2;
-
-        for (pp = 0; pp < 1; pp++)
-        {
-            int width = pv->mask_filtered->plane[pp].width;
-            int height = pv->mask_filtered->plane[pp].height;
-            int stride = pv->mask_filtered->plane[pp].stride;
-
-            int start, stop, p, c, n;
-            segment_start = thread_args->segment_start[pp];
-            segment_stop = segment_start + thread_args->segment_height[pp];
-
-            if (segment_start == 0)
-            {
-                start = 1;
-                p = 0;
-                c = 1;
-                n = 2;
-            }
-            else
-            {
-                start = segment_start;
-                p = segment_start - 1;
-                c = segment_start;
-                n = segment_start + 1;
-            }
-
-            if (segment_stop == height)
-            {
-                stop = height -1;
-            }
-            else
-            {
-                stop = segment_stop;
-            }
-
-            uint8_t *curp = &pv->mask_temp->plane[pp].data[p * stride + 1];
-            uint8_t *cur  = &pv->mask_temp->plane[pp].data[c * stride + 1];
-            uint8_t *curn = &pv->mask_temp->plane[pp].data[n * stride + 1];
-            uint8_t *dst = &pv->mask_filtered->plane[pp].data[c * stride + 1];
-
-            for (yy = start; yy < stop; yy++)
-            {
-                for (xx = 1; xx < width - 1; xx++)
-                {
-                    if (cur[xx] == 0)
-                    {
-                        dst[xx] = 0;
-                        continue;
-                    }
-
-                    count = curp[xx-1] + curp[xx] + curp[xx+1] +
-                            cur [xx-1] +            cur [xx+1] +
-                            curn[xx-1] + curn[xx] + curn[xx+1];
-
-                    dst[xx] = count >= erosion_threshold;
-                }
-                curp += stride;
-                cur += stride;
-                curn += stride;
-                dst += stride;
-            }
-        }
-
-        taskset_thread_complete( &pv->mask_erode_taskset, segment );
-    }
-
-    /*
-     * Finished this segment, let everyone know.
-     */
-    taskset_thread_complete( &pv->mask_erode_taskset, segment );
-}
-
-static void mask_filter_thread( void *thread_args_v )
-{
-    hb_filter_private_t * pv;
-    int segment, segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    pv = thread_args->pv;
-    segment = thread_args->segment;
-
-    hb_deep_log(3, "mask filter thread started for segment %d", segment);
-
-    while (1)
-    {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->mask_filter_taskset, segment );
-
-        if (taskset_thread_stop( &pv->mask_filter_taskset, segment ))
-        {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
-        }
-
-        int xx, yy, pp;
-
-        for (pp = 0; pp < 1; pp++)
-        {
-            int width = pv->mask->plane[pp].width;
-            int height = pv->mask->plane[pp].height;
-            int stride = pv->mask->plane[pp].stride;
-
-            int start, stop, p, c, n;
-            segment_start = thread_args->segment_start[pp];
-            segment_stop = segment_start + thread_args->segment_height[pp];
-
-            if (segment_start == 0)
-            {
-                start = 1;
-                p = 0;
-                c = 1;
-                n = 2;
-            }
-            else
-            {
-                start = segment_start;
-                p = segment_start - 1;
-                c = segment_start;
-                n = segment_start + 1;
-            }
-
-            if (segment_stop == height)
-            {
-                stop = height - 1;
-            }
-            else
-            {
-                stop = segment_stop;
-            }
-
-            uint8_t *curp = &pv->mask->plane[pp].data[p * stride + 1];
-            uint8_t *cur = &pv->mask->plane[pp].data[c * stride + 1];
-            uint8_t *curn = &pv->mask->plane[pp].data[n * stride + 1];
-            uint8_t *dst = (pv->filter_mode == FILTER_CLASSIC ) ?
-                &pv->mask_filtered->plane[pp].data[c * stride + 1] :
-                &pv->mask_temp->plane[pp].data[c * stride + 1] ;
-
-            for (yy = start; yy < stop; yy++)
-            {
-                for (xx = 1; xx < width - 1; xx++)
-                {
-                    int h_count, v_count;
-
-                    h_count = cur[xx-1] & cur[xx] & cur[xx+1];
-                    v_count = curp[xx] & cur[xx] & curn[xx];
-
-                    if (pv->filter_mode == FILTER_CLASSIC)
-                    {
-                        dst[xx] = h_count;
-                    }
-                    else
-                    {
-                        dst[xx] = h_count & v_count;
-                    }
-                }
-                curp += stride;
-                cur += stride;
-                curn += stride;
-                dst += stride;
-            }
-        }
-
-        taskset_thread_complete( &pv->mask_filter_taskset, segment );
-    }
-
-    /*
-     * Finished this segment, let everyone know.
-     */
-    taskset_thread_complete( &pv->mask_filter_taskset, segment );
-}
-
-static void decomb_check_thread( void *thread_args_v )
-{
-    hb_filter_private_t * pv;
-    int segment, segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    pv = thread_args->pv;
-    segment = thread_args->segment;
-
-    hb_deep_log(3, "decomb check thread started for segment %d", segment);
-
-    while (1)
-    {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->decomb_check_taskset, segment );
-
-        if (taskset_thread_stop( &pv->decomb_check_taskset, segment ))
-        {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
-        }
-
-        segment_start = thread_args->segment_start[0];
-        segment_stop = segment_start + thread_args->segment_height[0];
-
-        if (pv->mode & MODE_FILTER)
-        {
-            check_filtered_combing_mask(pv, segment, segment_start, segment_stop);
+            start = 1;
+            p = 0;
+            c = 1;
+            n = 2;
         }
         else
         {
-            check_combing_mask(pv, segment, segment_start, segment_stop);
+            start = segment_start;
+            p = segment_start - 1;
+            c = segment_start;
+            n = segment_start + 1;
         }
 
-        taskset_thread_complete( &pv->decomb_check_taskset, segment );
+        if (segment_stop == height)
+        {
+            stop = height -1;
+        }
+        else
+        {
+            stop = segment_stop;
+        }
+
+        uint8_t *curp = &pv->mask_filtered->plane[pp].data[p * stride + 1];
+        uint8_t *cur  = &pv->mask_filtered->plane[pp].data[c * stride + 1];
+        uint8_t *curn = &pv->mask_filtered->plane[pp].data[n * stride + 1];
+        uint8_t *dst = &pv->mask_temp->plane[pp].data[c * stride + 1];
+
+        for (yy = start; yy < stop; yy++)
+        {
+            for (xx = 1; xx < width - 1; xx++)
+            {
+                if (cur[xx])
+                {
+                    dst[xx] = 1;
+                    continue;
+                }
+
+                count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                        cur [xx-1] +            cur [xx+1] +
+                        curn[xx-1] + curn[xx] + curn[xx+1];
+
+                dst[xx] = count >= dilation_threshold;
+            }
+            curp += stride;
+            cur += stride;
+            curn += stride;
+            dst += stride;
+        }
     }
 
-    /*
-     * Finished this segment, let everyone know.
-     */
-    taskset_thread_complete( &pv->decomb_check_taskset, segment );
 }
 
-/*
- * comb detect this segment of all three planes in a single thread.
- */
-static void decomb_filter_thread( void *thread_args_v )
+static void mask_erode_work( void *thread_args_v )
 {
     hb_filter_private_t * pv;
     int segment, segment_start, segment_stop;
     decomb_thread_arg_t *thread_args = thread_args_v;
 
     pv = thread_args->pv;
-    segment = thread_args->segment;
+    segment = thread_args->arg.segment;
 
-    hb_deep_log(3, "decomb filter thread started for segment %d", segment);
+    int xx, yy, pp;
 
-    while (1)
+    int count;
+    int erosion_threshold = 2;
+
+    for (pp = 0; pp < 1; pp++)
     {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->decomb_filter_taskset, segment );
+        int width = pv->mask_filtered->plane[pp].width;
+        int height = pv->mask_filtered->plane[pp].height;
+        int stride = pv->mask_filtered->plane[pp].stride;
 
-        if (taskset_thread_stop( &pv->decomb_filter_taskset, segment ))
+        int start, stop, p, c, n;
+        segment_start = thread_args->segment_start[pp];
+        segment_stop = segment_start + thread_args->segment_height[pp];
+
+        if (segment_start == 0)
         {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
+            start = 1;
+            p = 0;
+            c = 1;
+            n = 2;
+        }
+        else
+        {
+            start = segment_start;
+            p = segment_start - 1;
+            c = segment_start;
+            n = segment_start + 1;
         }
 
-        /*
-         * Process segment (for now just from luma)
-         */
-        int pp;
-        for (pp = 0; pp < 1; pp++)
+        if (segment_stop == height)
         {
-            segment_start = thread_args->segment_start[pp];
-            segment_stop = segment_start + thread_args->segment_height[pp];
-
-            if (pv->mode & MODE_GAMMA)
-            {
-                detect_gamma_combed_segment( pv, segment_start, segment_stop );
-            }
-            else
-            {
-                detect_combed_segment( pv, segment_start, segment_stop );
-            }
+            stop = height -1;
+        }
+        else
+        {
+            stop = segment_stop;
         }
 
-        taskset_thread_complete( &pv->decomb_filter_taskset, segment );
+        uint8_t *curp = &pv->mask_temp->plane[pp].data[p * stride + 1];
+        uint8_t *cur  = &pv->mask_temp->plane[pp].data[c * stride + 1];
+        uint8_t *curn = &pv->mask_temp->plane[pp].data[n * stride + 1];
+        uint8_t *dst = &pv->mask_filtered->plane[pp].data[c * stride + 1];
+
+        for (yy = start; yy < stop; yy++)
+        {
+            for (xx = 1; xx < width - 1; xx++)
+            {
+                if (cur[xx] == 0)
+                {
+                    dst[xx] = 0;
+                    continue;
+                }
+
+                count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                        cur [xx-1] +            cur [xx+1] +
+                        curn[xx-1] + curn[xx] + curn[xx+1];
+
+                dst[xx] = count >= erosion_threshold;
+            }
+            curp += stride;
+            cur += stride;
+            curn += stride;
+            dst += stride;
+        }
     }
 
+}
+
+static void mask_filter_work( void *thread_args_v)
+{
+    int segment_start, segment_stop;
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t * pv = thread_args->pv;
+
+    int xx, yy, pp;
+
+    for (pp = 0; pp < 1; pp++)
+    {
+        int width = pv->mask->plane[pp].width;
+        int height = pv->mask->plane[pp].height;
+        int stride = pv->mask->plane[pp].stride;
+
+        int start, stop, p, c, n;
+        segment_start = thread_args->segment_start[pp];
+        segment_stop = segment_start + thread_args->segment_height[pp];
+
+        if (segment_start == 0)
+        {
+            start = 1;
+            p = 0;
+            c = 1;
+            n = 2;
+        }
+        else
+        {
+            start = segment_start;
+            p = segment_start - 1;
+            c = segment_start;
+            n = segment_start + 1;
+        }
+
+        if (segment_stop == height)
+        {
+            stop = height - 1;
+        }
+        else
+        {
+            stop = segment_stop;
+        }
+
+        uint8_t *curp = &pv->mask->plane[pp].data[p * stride + 1];
+        uint8_t *cur = &pv->mask->plane[pp].data[c * stride + 1];
+        uint8_t *curn = &pv->mask->plane[pp].data[n * stride + 1];
+        uint8_t *dst = (pv->filter_mode == FILTER_CLASSIC ) ?
+            &pv->mask_filtered->plane[pp].data[c * stride + 1] :
+            &pv->mask_temp->plane[pp].data[c * stride + 1] ;
+
+        for (yy = start; yy < stop; yy++)
+        {
+            for (xx = 1; xx < width - 1; xx++)
+            {
+                int h_count, v_count;
+
+                h_count = cur[xx-1] & cur[xx] & cur[xx+1];
+                v_count = curp[xx] & cur[xx] & curn[xx];
+
+                if (pv->filter_mode == FILTER_CLASSIC)
+                {
+                    dst[xx] = h_count;
+                }
+                else
+                {
+                    dst[xx] = h_count & v_count;
+                }
+            }
+            curp += stride;
+            cur += stride;
+            curn += stride;
+            dst += stride;
+        }
+    }
+
+}
+
+static void decomb_check_work( void *thread_args_v )
+{
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t * pv = thread_args->pv;
+    int segment, segment_start, segment_stop;
+
+    segment = thread_args->arg.segment;
+
+    segment_start = thread_args->segment_start[0];
+    segment_stop = segment_start + thread_args->segment_height[0];
+
+    if (pv->mode & MODE_FILTER)
+    {
+        check_filtered_combing_mask(pv, segment, segment_start, segment_stop);
+    }
+    else
+    {
+        check_combing_mask(pv, segment, segment_start, segment_stop);
+    }
+
+}
+
+static void decomb_filter_work( void *thread_args_v)
+{
+    hb_filter_private_t * pv;
+    int segment_start, segment_stop;
+    decomb_thread_arg_t *thread_args = thread_args_v;
+
+    pv = thread_args->pv;
+
     /*
-     * Finished this segment, let everyone know.
+     * Process segment (for now just from luma)
      */
-    taskset_thread_complete( &pv->decomb_filter_taskset, segment );
+    int pp;
+    for (pp = 0; pp < 1; pp++)
+    {
+        segment_start = thread_args->segment_start[pp];
+        segment_stop = segment_start + thread_args->segment_height[pp];
+
+        if (pv->mode & MODE_GAMMA)
+        {
+            detect_gamma_combed_segment( pv, segment_start, segment_stop );
+        }
+        else
+        {
+            detect_combed_segment( pv, segment_start, segment_stop );
+        }
+    }
+
 }
 
 static int comb_segmenter( hb_filter_private_t * pv )
@@ -1163,8 +1034,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
     /*
      * Create comb detection taskset.
      */
-    if (taskset_init( &pv->decomb_filter_taskset, pv->cpu_count,
-                      sizeof( decomb_thread_arg_t ) ) == 0)
+    if (taskset_init( &pv->decomb_filter_taskset, "decomb_filter_segment", pv->cpu_count,
+                      sizeof( decomb_thread_arg_t ), decomb_filter_work) == 0)
     {
         hb_error( "decomb could not initialize taskset" );
     }
@@ -1176,7 +1047,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
         thread_args = taskset_thread_args( &pv->decomb_filter_taskset, ii );
         thread_args->pv = pv;
-        thread_args->segment = ii;
+        thread_args->arg.segment = ii;
+        thread_args->arg.taskset = &pv->decomb_filter_taskset;
 
         int pp;
         for (pp = 0; pp < 3; pp++)
@@ -1200,14 +1072,6 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
         }
 
-        if (taskset_thread_spawn( &pv->decomb_filter_taskset, ii,
-                                 "decomb_filter_segment",
-                                 decomb_filter_thread,
-                                 HB_NORMAL_PRIORITY ) == 0)
-        {
-            hb_error( "decomb could not spawn thread" );
-        }
-
         decomb_prev_thread_args = thread_args;
     }
 
@@ -1221,8 +1085,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
     /*
      * Create comb check taskset.
      */
-    if (taskset_init( &pv->decomb_check_taskset, pv->comb_check_nthreads,
-                      sizeof( decomb_thread_arg_t ) ) == 0)
+    if (taskset_init( &pv->decomb_check_taskset, "decomb_check_segment", pv->comb_check_nthreads,
+                      sizeof( decomb_thread_arg_t ), decomb_check_work) == 0)
     {
         hb_error( "decomb check could not initialize taskset" );
     }
@@ -1234,7 +1098,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
         thread_args = taskset_thread_args( &pv->decomb_check_taskset, ii);
         thread_args->pv = pv;
-        thread_args->segment = ii;
+        thread_args->arg.segment = ii;
+        thread_args->arg.taskset =  &pv->decomb_check_taskset;
 
         int pp;
         for (pp = 0; pp < 3; pp++)
@@ -1265,21 +1130,13 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
         }
 
-        if (taskset_thread_spawn( &pv->decomb_check_taskset, ii,
-                                  "decomb_check_segment",
-                                  decomb_check_thread,
-                                  HB_NORMAL_PRIORITY ) == 0)
-        {
-            hb_error( "decomb check could not spawn thread" );
-        }
-
         decomb_prev_thread_args = thread_args;
     }
 
     if (pv->mode & MODE_FILTER)
     {
-        if (taskset_init( &pv->mask_filter_taskset, pv->cpu_count,
-                          sizeof( decomb_thread_arg_t ) ) == 0)
+        if (taskset_init( &pv->mask_filter_taskset, "mask_filter_segment", pv->cpu_count,
+                          sizeof( decomb_thread_arg_t ), mask_filter_work) == 0)
         {
             hb_error( "mask filter could not initialize taskset" );
         }
@@ -1291,7 +1148,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
             thread_args = taskset_thread_args( &pv->mask_filter_taskset, ii );
             thread_args->pv = pv;
-            thread_args->segment = ii;
+            thread_args->arg.taskset = &pv->mask_filter_taskset;
+            thread_args->arg.segment = ii;
 
             int pp;
             for (pp = 0; pp < 3; pp++)
@@ -1316,21 +1174,13 @@ static int comb_detect_init( hb_filter_object_t * filter,
                 }
             }
 
-            if (taskset_thread_spawn( &pv->mask_filter_taskset, ii,
-                                     "mask_filter_segment",
-                                     mask_filter_thread,
-                                     HB_NORMAL_PRIORITY ) == 0)
-            {
-                hb_error( "mask filter could not spawn thread" );
-            }
-
             decomb_prev_thread_args = thread_args;
         }
 
         if (pv->filter_mode == FILTER_ERODE_DILATE)
         {
-            if (taskset_init( &pv->mask_erode_taskset, pv->cpu_count,
-                              sizeof( decomb_thread_arg_t ) ) == 0)
+            if (taskset_init( &pv->mask_erode_taskset, "mask_erode_segment", pv->cpu_count,
+                              sizeof( decomb_thread_arg_t ), mask_erode_work) == 0)
             {
                 hb_error( "mask erode could not initialize taskset" );
             }
@@ -1342,7 +1192,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
                 thread_args = taskset_thread_args( &pv->mask_erode_taskset, ii );
                 thread_args->pv = pv;
-                thread_args->segment = ii;
+                thread_args->arg.taskset = &pv->mask_erode_taskset;
+                thread_args->arg.segment = ii;
 
                 int pp;
                 for (pp = 0; pp < 3; pp++)
@@ -1367,19 +1218,11 @@ static int comb_detect_init( hb_filter_object_t * filter,
                     }
                 }
 
-                if (taskset_thread_spawn( &pv->mask_erode_taskset, ii,
-                                         "mask_erode_segment",
-                                         mask_erode_thread,
-                                         HB_NORMAL_PRIORITY ) == 0)
-                {
-                    hb_error( "mask erode could not spawn thread" );
-                }
-
                 decomb_prev_thread_args = thread_args;
             }
 
-            if (taskset_init( &pv->mask_dilate_taskset, pv->cpu_count,
-                              sizeof( decomb_thread_arg_t ) ) == 0)
+            if (taskset_init( &pv->mask_dilate_taskset, "mask_dilate_segment", pv->cpu_count,
+                              sizeof( decomb_thread_arg_t ), mask_dilate_work) == 0)
             {
                 hb_error( "mask dilate could not initialize taskset" );
             }
@@ -1391,7 +1234,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
                 thread_args = taskset_thread_args( &pv->mask_dilate_taskset, ii );
                 thread_args->pv = pv;
-                thread_args->segment = ii;
+                thread_args->arg.segment = ii;
+                thread_args->arg.taskset = &pv->mask_dilate_taskset;
 
                 int pp;
                 for (pp = 0; pp < 3; pp++)
@@ -1414,14 +1258,6 @@ static int comb_detect_init( hb_filter_object_t * filter,
                     } else {
                         thread_args->segment_height[pp] = pv->segment_height[pp];
                     }
-                }
-
-                if (taskset_thread_spawn( &pv->mask_dilate_taskset, ii,
-                                         "mask_dilate_segment",
-                                         mask_dilate_thread,
-                                         HB_NORMAL_PRIORITY ) == 0)
-                {
-                    hb_error( "mask dilate could not spawn thread" );
                 }
 
                 decomb_prev_thread_args = thread_args;

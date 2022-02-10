@@ -4,6 +4,15 @@
     xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton">
 
+
+    <SolidColorBrush x:Key="Ui.Light"  />
+    <SolidColorBrush x:Key="Ui.ContrastLight" />
+
+    <!-- TextBlock -->
+    <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
     <Style TargetType="{x:Type splitButton:SplitMenuButton}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Template">
             <Setter.Value>

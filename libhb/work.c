@@ -289,6 +289,7 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w->codec_param = AV_CODEC_ID_H264;
             break;
         case HB_VCODEC_FFMPEG_NVENC_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_HEVC;
             break;
@@ -550,6 +551,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
+                case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
                 case HB_VCODEC_VT_H264:
                 case HB_VCODEC_VT_H265:
                 case HB_VCODEC_VT_H265_10BIT:
@@ -576,6 +578,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
+                case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
                 case HB_VCODEC_VT_H264:
                 // VT h.265 currently only supports auto level
                 // case HB_VCODEC_VT_H265:
@@ -1368,15 +1371,17 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         int encoder_pix_fmt = *encoder_pix_fmts;
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (!hb_qsv_full_path_is_enabled(job))
-        {
-            // Formats supported by QSV pipeline via system memory
-            if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
-                encoder_pix_fmt != AV_PIX_FMT_YUV420P)
+        if (job->vcodec == HB_VCODEC_QSV_MASK){
+            if (!hb_qsv_full_path_is_enabled(job))
             {
-                // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
-                encoder_pix_fmts++;
-                encoder_pix_fmt = *encoder_pix_fmts;
+                // Formats supported by QSV pipeline via system memory
+                if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
+                    encoder_pix_fmt != AV_PIX_FMT_YUV420P)
+                {
+                    // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
+                    encoder_pix_fmts++;
+                    encoder_pix_fmt = *encoder_pix_fmts;
+                }
             }
         }
 #endif

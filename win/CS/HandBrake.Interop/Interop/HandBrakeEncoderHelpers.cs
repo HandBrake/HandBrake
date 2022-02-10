@@ -17,7 +17,6 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-    using HandBrake.Interop.Utilities;
 
     public static class HandBrakeEncoderHelpers
     {
@@ -202,6 +201,16 @@ namespace HandBrake.Interop.Interop
             return AudioEncoders.SingleOrDefault(e => e.Id == codecId);
         }
 
+        /// <summary>
+        /// Gets the default audio encoder for the given container.
+        /// </summary>
+        /// <param name="muxer">The container ID.</param>
+        /// <returns>The codec ID of the default audio encoder.</returns>
+        public static int GetDefaultAudioEncoder(int muxer)
+        {
+            return HBFunctions.hb_audio_encoder_get_default(muxer);
+        }
+
         public static HBAudioEncoder GetAutoPassthruEncoder(int inputCodec, int copyMask, int fallback, int muxer)
         {
            int encoder = HBFunctions.hb_autopassthru_get_encoder(inputCodec, copyMask, fallback, muxer);
@@ -221,6 +230,16 @@ namespace HandBrake.Interop.Interop
         public static HBVideoEncoder GetVideoEncoder(string shortName)
         {
             return VideoEncoders.SingleOrDefault(e => e.ShortName == shortName);
+        }
+
+        /// <summary>
+        /// Gets the default video encoder for the given container.
+        /// </summary>
+        /// <param name="muxer">The container ID.</param>
+        /// <returns>The codec ID of the default video encoder.</returns>
+        public static int GetDefaultVideoEncoder(int muxer)
+        {
+            return HBFunctions.hb_video_encoder_get_default(muxer);
         }
 
         /// <summary>
@@ -261,6 +280,18 @@ namespace HandBrake.Interop.Interop
             return Containers.SingleOrDefault(c => c.ShortName == shortName);
         }
 
+        public static bool VideoEncoderSupportsTwoPass(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return VideoEncoderSupportsTwoPass(encoder.Id);
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns true if the given video encoder supports two-pass mode.
         /// </summary>
@@ -271,9 +302,9 @@ namespace HandBrake.Interop.Interop
         /// True if the given video encoder supports two-pass mode.
         /// </returns>
         public static bool VideoEncoderSupportsTwoPass(int encoderId)
-		{
+        {
             return HBFunctions.hb_video_twopass_is_supported((uint)encoderId) > 0;
-		}
+        }
 
         /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
@@ -546,6 +577,18 @@ namespace HandBrake.Interop.Interop
 
             return new BitrateLimits(low, high);
         }
+        
+        public static VideoQualityLimits GetVideoQualityLimits(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return GetVideoQualityLimits(encoder);
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Gets the video quality limits for the given video codec.
@@ -560,12 +603,24 @@ namespace HandBrake.Interop.Interop
         {
             float low = 0;
             float high = 0;
-            float granularity = 0;
+            float granularity = 0.5f;
             int direction = 0;
 
             HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
 
             return new VideoQualityLimits(low, high, granularity, direction == 0);
+        }
+
+        public static string GetVideoQualityRateControlName(string encoderShortName)
+        {
+            HBVideoEncoder encoder = GetVideoEncoder(encoderShortName);
+
+            if (encoder != null)
+            {
+                return InteropUtilities.ToStringFromUtf8Ptr(HBFunctions.hb_video_quality_get_name((uint)encoder.Id));
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

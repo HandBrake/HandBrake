@@ -341,7 +341,7 @@ namespace HandBrakeWPF.Instance
                                       {
                                           EnableDiskLogging = false,
                                           AllowDisconnectedWorker = false,
-                                          DisableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
+                                          EnableLibDvdNav = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
                                           EnableHardwareAcceleration = true,
                                           LogDirectory = DirectoryUtilities.GetLogDirectory(),
                                           LogVerbosity = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity)

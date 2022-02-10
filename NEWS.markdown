@@ -7,6 +7,11 @@ Before updating HandBrake, please make sure there are no pending encodes in the 
 
 Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
 
+## HandBrake 1.6.0
+
+#### Hardware Encoding
+- Added support for the 10-bit HEVC NVEnc encoder.
+
 
 ## HandBrake 1.5.0
 

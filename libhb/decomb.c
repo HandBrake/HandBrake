@@ -87,13 +87,14 @@ struct yadif_arguments_s {
 typedef struct yadif_arguments_s yadif_arguments_t;
 
 typedef struct eedi2_thread_arg_s {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
     int plane;
 } eedi2_thread_arg_t;
 
 typedef struct yadif_thread_arg_s {
+    taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
-    int segment;
     int segment_start[3];
     int segment_height[3];
 } yadif_thread_arg_t;
@@ -449,47 +450,16 @@ static void eedi2_interpolate_plane( hb_filter_private_t * pv, int plane )
     }
 }
 
-/*
- *  eedi2 interpolate this plane in a single thread.
- */
-static void eedi2_filter_thread( void *thread_args_v )
+static void eedi2_filter_work( void *thread_args_v )
 {
-    hb_filter_private_t * pv;
-    int plane;
     eedi2_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t * pv = thread_args->pv;
+    int plane = thread_args->arg.segment;
 
-    pv = thread_args->pv;
-    plane = thread_args->plane;
-
-    hb_deep_log(3, "eedi2 thread started for plane %d", plane);
-
-    while (1)
-    {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->eedi2_taskset, plane );
-
-        if( taskset_thread_stop( &pv->eedi2_taskset, plane ) )
-        {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
-        }
-
-        /*
-         * Process plane
-         */
-        eedi2_interpolate_plane( pv, plane );
-
-        /*
-         * Finished this segment, let everyone know.
-         */
-        taskset_thread_complete( &pv->eedi2_taskset, plane );
-    }
-
-    taskset_thread_complete( &pv->eedi2_taskset, plane );
+    /*
+     * Process plane
+     */
+    eedi2_interpolate_plane( pv, plane );
 }
 
 // Sets up the input field planes for EEDI2 in pv->eedi_half[SRCPF]
@@ -680,16 +650,18 @@ static void yadif_filter_line(
     }
 }
 
-/*
- * deinterlace this segment of all three planes in a single thread.
- */
-static void yadif_decomb_filter_thread( void *thread_args_v )
+static void yadif_decomb_filter_work( void *thread_args_v )
 {
-    yadif_arguments_t *yadif_work = NULL;
     hb_filter_private_t * pv;
+
     int segment, segment_start, segment_stop;
     yadif_thread_arg_t *thread_args = thread_args_v;
     filter_param_t filter;
+
+    pv = thread_args->pv;
+    segment = thread_args->arg.segment;
+
+    yadif_arguments_t *yadif_work = &pv->yadif_arguments[segment];
 
     filter.tap[0] = -1;
     filter.tap[1] = 2;
@@ -698,123 +670,87 @@ static void yadif_decomb_filter_thread( void *thread_args_v )
     filter.tap[4] = -1;
     filter.normalize = 3;
 
-    pv = thread_args->pv;
-    segment = thread_args->segment;
+    /*
+     * Process all three planes, but only this segment of it.
+     */
+    hb_buffer_t *dst;
+    int parity, tff, mode;
 
-    hb_deep_log(3, "yadif thread started for segment %d", segment);
+    mode = pv->yadif_arguments[segment].mode;
+    dst = yadif_work->dst;
+    tff = yadif_work->tff;
+    parity = yadif_work->parity;
 
-    while (1)
+    int pp;
+    for (pp = 0; pp < 3; pp++)
     {
-        /*
-         * Wait here until there is work to do.
-         */
-        taskset_thread_wait4start( &pv->yadif_taskset, segment );
+        int yy;
+        int width = dst->plane[pp].width;
+        int stride = dst->plane[pp].stride;
+        int height = dst->plane[pp].height_stride;
+        int penultimate = height - 2;
 
-        if( taskset_thread_stop( &pv->yadif_taskset, segment ) )
+        segment_start = thread_args->segment_start[pp];
+        segment_stop = segment_start + thread_args->segment_height[pp];
+
+        // Filter parity lines
+        int start = parity ? (segment_start + 1) & ~1 : segment_start | 1;
+        uint8_t *dst2 = &dst->plane[pp].data[start * stride];
+        uint8_t *prev = &pv->ref[0]->plane[pp].data[start * stride];
+        uint8_t *cur  = &pv->ref[1]->plane[pp].data[start * stride];
+        uint8_t *next = &pv->ref[2]->plane[pp].data[start * stride];
+
+        if (mode == MODE_DECOMB_BLEND)
         {
-            /*
-             * No more work to do, exit this thread.
-             */
-            break;
+            /* These will be useful if we ever do temporal blending. */
+            for( yy = start; yy < segment_stop; yy += 2 )
+            {
+                /* This line gets blend filtered, not yadif filtered. */
+                blend_filter_line(&filter, dst2, cur, width, height, stride, yy);
+                dst2 += stride * 2;
+                cur += stride * 2;
+            }
         }
-
-        yadif_work = &pv->yadif_arguments[segment];
-
-        /*
-         * Process all three planes, but only this segment of it.
-         */
-        hb_buffer_t *dst;
-        int parity, tff, mode;
-
-        mode = pv->yadif_arguments[segment].mode;
-        dst = yadif_work->dst;
-        tff = yadif_work->tff;
-        parity = yadif_work->parity;
-
-        int pp;
-        for (pp = 0; pp < 3; pp++)
+        else if (mode == MODE_DECOMB_CUBIC)
         {
-            int yy;
-            int width = dst->plane[pp].width;
-            int stride = dst->plane[pp].stride;
-            int height = dst->plane[pp].height_stride;
-            int penultimate = height - 2;
-
-            segment_start = thread_args->segment_start[pp];
-            segment_stop = segment_start + thread_args->segment_height[pp];
-
-            // Filter parity lines
-            int start = parity ? (segment_start + 1) & ~1 : segment_start | 1;
-            uint8_t *dst2 = &dst->plane[pp].data[start * stride];
-            uint8_t *prev = &pv->ref[0]->plane[pp].data[start * stride];
-            uint8_t *cur  = &pv->ref[1]->plane[pp].data[start * stride];
-            uint8_t *next = &pv->ref[2]->plane[pp].data[start * stride];
-
-            if (mode == MODE_DECOMB_BLEND)
+            for( yy = start; yy < segment_stop; yy += 2 )
             {
-                /* These will be useful if we ever do temporal blending. */
-                for( yy = start; yy < segment_stop; yy += 2 )
-                {
-                    /* This line gets blend filtered, not yadif filtered. */
-                    blend_filter_line(&filter, dst2, cur, width, height, stride, yy);
-                    dst2 += stride * 2;
-                    cur += stride * 2;
-                }
+                /* Just apply vertical cubic interpolation */
+                cubic_interpolate_line(dst2, cur, width, height, stride, yy);
+                dst2 += stride * 2;
+                cur += stride * 2;
             }
-            else if (mode == MODE_DECOMB_CUBIC)
+        }
+        else if (mode & MODE_DECOMB_YADIF)
+        {
+            for( yy = start; yy < segment_stop; yy += 2 )
             {
-                for( yy = start; yy < segment_stop; yy += 2 )
+                if( yy > 1 && yy < penultimate )
                 {
-                    /* Just apply vertical cubic interpolation */
-                    cubic_interpolate_line(dst2, cur, width, height, stride, yy);
-                    dst2 += stride * 2;
-                    cur += stride * 2;
+                    // This isn't the top or bottom,
+                    // proceed as normal to yadif
+                    yadif_filter_line(pv, dst2, prev, cur, next, pp,
+                                      width, height, stride,
+                                      parity ^ tff, yy);
                 }
-            }
-            else if (mode & MODE_DECOMB_YADIF)
-            {
-                for( yy = start; yy < segment_stop; yy += 2 )
+                else
                 {
-                    if( yy > 1 && yy < penultimate )
-                    {
-                        // This isn't the top or bottom,
-                        // proceed as normal to yadif
-                        yadif_filter_line(pv, dst2, prev, cur, next, pp,
-                                          width, height, stride,
-                                          parity ^ tff, yy);
-                    }
-                    else
-                    {
-                        // parity == 0 (TFF), y1 = y0
-                        // parity == 1 (BFF), y0 = y1
-                        // parity == 0 (TFF), yu = yp
-                        // parity == 1 (BFF), yp = yu
-                        int yp = (yy ^ parity) * stride;
-                        memcpy(dst2, &pv->ref[1]->plane[pp].data[yp], width);
-                    }
-                    dst2 += stride * 2;
-                    prev += stride * 2;
-                    cur += stride * 2;
-                    next += stride * 2;
+                    // parity == 0 (TFF), y1 = y0
+                    // parity == 1 (BFF), y0 = y1
+                    // parity == 0 (TFF), yu = yp
+                    // parity == 1 (BFF), yp = yu
+                    int yp = (yy ^ parity) * stride;
+                    memcpy(dst2, &pv->ref[1]->plane[pp].data[yp], width);
                 }
+                dst2 += stride * 2;
+                prev += stride * 2;
+                cur += stride * 2;
+                next += stride * 2;
             }
-            else
-            {
-                // No combing, copy frame
-                for( yy = start; yy < segment_stop; yy += 2 )
-                {
-                    memcpy(dst2, cur, width);
-                    dst2 += stride * 2;
-                    cur += stride * 2;
-                }
-            }
-
-            // Copy unfiltered lines
-            start = !parity ? (segment_start + 1) & ~1 : segment_start | 1;
-            dst2 = &dst->plane[pp].data[start * stride];
-            prev = &pv->ref[0]->plane[pp].data[start * stride];
-            cur  = &pv->ref[1]->plane[pp].data[start * stride];
-            next = &pv->ref[2]->plane[pp].data[start * stride];
+        }
+        else
+        {
+            // No combing, copy frame
             for( yy = start; yy < segment_stop; yy += 2 )
             {
                 memcpy(dst2, cur, width);
@@ -822,13 +758,21 @@ static void yadif_decomb_filter_thread( void *thread_args_v )
                 cur += stride * 2;
             }
         }
-        taskset_thread_complete( &pv->yadif_taskset, segment );
+
+        // Copy unfiltered lines
+        start = !parity ? (segment_start + 1) & ~1 : segment_start | 1;
+        dst2 = &dst->plane[pp].data[start * stride];
+        prev = &pv->ref[0]->plane[pp].data[start * stride];
+        cur  = &pv->ref[1]->plane[pp].data[start * stride];
+        next = &pv->ref[2]->plane[pp].data[start * stride];
+        for( yy = start; yy < segment_stop; yy += 2 )
+        {
+            memcpy(dst2, cur, width);
+            dst2 += stride * 2;
+            cur += stride * 2;
+        }
     }
 
-    /*
-     * Finished this segment, let everyone know.
-     */
-    taskset_thread_complete( &pv->yadif_taskset, segment );
 }
 
 static void yadif_filter( hb_filter_private_t * pv,
@@ -1022,8 +966,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
      */
     pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
     if( pv->yadif_arguments == NULL ||
-        taskset_init( &pv->yadif_taskset, pv->cpu_count,
-                      sizeof( yadif_thread_arg_t ) ) == 0 )
+        taskset_init( &pv->yadif_taskset, "yadif_filter_segment", pv->cpu_count,
+                      sizeof( yadif_thread_arg_t ), yadif_decomb_filter_work) == 0 )
     {
         hb_error( "yadif could not initialize taskset" );
     }
@@ -1035,7 +979,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
         thread_args = taskset_thread_args( &pv->yadif_taskset, ii );
         thread_args->pv = pv;
-        thread_args->segment = ii;
+        thread_args->arg.segment = ii;
+        thread_args->arg.taskset = &pv->yadif_taskset;
 
         int pp;
         for (pp = 0; pp < 3; pp++)
@@ -1059,13 +1004,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
             }
         }
         pv->yadif_arguments[ii].dst = NULL;
-        if( taskset_thread_spawn( &pv->yadif_taskset, ii,
-                                 "yadif_filter_segment",
-                                 yadif_decomb_filter_thread,
-                                 HB_NORMAL_PRIORITY ) == 0 )
-        {
-            hb_error( "yadif could not spawn thread" );
-        }
+
         yadif_prev_thread_args = thread_args;
     }
 
@@ -1074,8 +1013,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         /*
          * Create eedi2 taskset.
          */
-        if( taskset_init( &pv->eedi2_taskset, /*thread_count*/3,
-                          sizeof( eedi2_thread_arg_t ) ) == 0 )
+        if( taskset_init( &pv->eedi2_taskset, "eedi2_filter_segment", /*thread_count*/3,
+                          sizeof( eedi2_thread_arg_t ), eedi2_filter_work) == 0 )
         {
             hb_error( "eedi2 could not initialize taskset" );
         }
@@ -1110,15 +1049,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
             eedi2_thread_args = taskset_thread_args( &pv->eedi2_taskset, ii );
 
             eedi2_thread_args->pv = pv;
-            eedi2_thread_args->plane = ii;
-
-            if( taskset_thread_spawn( &pv->eedi2_taskset, ii,
-                                      "eedi2_filter_segment",
-                                      eedi2_filter_thread,
-                                      HB_NORMAL_PRIORITY ) == 0 )
-            {
-                hb_error( "eedi2 could not spawn thread" );
-            }
+            eedi2_thread_args->arg.taskset = &pv->eedi2_taskset;
+            eedi2_thread_args->arg.segment = ii;
         }
     }
 
