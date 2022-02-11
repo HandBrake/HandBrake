@@ -240,8 +240,6 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.X265:
                     case VideoEncoder.X265_10:
                     case VideoEncoder.X265_12:
-                    case VideoEncoder.QuickSync:
-                    case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.VceH264:
                     case VideoEncoder.VceH265:
                     case VideoEncoder.NvencH264:
@@ -251,7 +249,11 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.MFH265:
                         double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                         this.Task.Quality = Math.Round(51.0 - (value * cqStep), 2);
-                        break; 
+                        break;
+                    case VideoEncoder.QuickSync:
+                    case VideoEncoder.QuickSyncH265:
+                        this.Task.Quality = Math.Round(51.0 - (value - 0), 0);
+                        break;
                     case VideoEncoder.QuickSyncH26510b:
                         this.Task.Quality = Math.Round(63.0 - (value - 0), 0);
                         break;
@@ -869,6 +871,11 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMin = 1;
                     this.QualityMax = 31;
                     break;
+                case VideoEncoder.QuickSync:
+                case VideoEncoder.QuickSyncH265:
+                    this.QualityMin = 0;
+                    this.QualityMax = 51;
+                    break;
                 case VideoEncoder.QuickSyncH26510b:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
@@ -878,8 +885,6 @@ namespace HandBrakeWPF.ViewModels
                 case VideoEncoder.X265:
                 case VideoEncoder.X265_10:
                 case VideoEncoder.X265_12:
-                case VideoEncoder.QuickSync:
-                case VideoEncoder.QuickSyncH265:
                 case VideoEncoder.VceH264:
                 case VideoEncoder.VceH265:
                 case VideoEncoder.NvencH264:
