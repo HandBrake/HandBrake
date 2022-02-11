@@ -71,6 +71,7 @@ enum
     HB_GID_VCODEC_THEORA,
     HB_GID_VCODEC_VP8,
     HB_GID_VCODEC_VP9,
+    HB_GID_VCODEC_AV1_QSV,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -274,6 +275,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "H.265 16-bit (x265)", "x265_16bit", "H.265 16-bit (libx265)",  HB_VCODEC_X265_16BIT,        HB_MUX_AV_MP4|HB_MUX_AV_MKV,   },   NULL, 0, 1, HB_GID_VCODEC_H265_X265,  },
     { { "H.265 (Intel QSV)",   "qsv_h265",   "H.265 (Intel Media SDK)", HB_VCODEC_QSV_H265,          HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV,   },
     { { "H.265 10-bit (Intel QSV)","qsv_h265_10bit", "H.265 10-bit (Intel Media SDK)", HB_VCODEC_QSV_H265_10BIT,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_H265_QSV, },
+    { { "AV1 (Intel QSV)",     "qsv_av1",    "AV1 (Intel Media SDK)",   HB_VCODEC_QSV_AV1,           HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV, },
+    { { "AV1 10-bit (Intel QSV)", "qsv_av1_10bit", "AV1 10-bit (Intel Media SDK)", HB_VCODEC_QSV_AV1_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 0, 1, HB_GID_VCODEC_AV1_QSV, },
     { { "H.265 (AMD VCE)",     "vce_h265",   "H.265 (AMD VCE)",         HB_VCODEC_FFMPEG_VCE_H265,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_VCE,   },
     { { "H.265 (NVEnc)",       "nvenc_h265", "H.265 (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H265, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_NVENC, },
     { { "H.265 10-bit (NVEnc)",       "nvenc_h265_10bit", "H.265 10-bit (NVEnc)",           HB_VCODEC_FFMPEG_NVENC_H265_10BIT, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, },  NULL, 0, 1, HB_GID_VCODEC_H265_NVENC, },
@@ -1565,6 +1568,7 @@ int hb_video_encoder_get_depth(int encoder)
     {
 #if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_QSV_H265_10BIT:
+        case HB_VCODEC_QSV_AV1_10BIT:
 #endif
 #ifdef __APPLE__
         case HB_VCODEC_VT_H265_10BIT:

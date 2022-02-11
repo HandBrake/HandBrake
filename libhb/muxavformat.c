@@ -379,6 +379,41 @@ static int avformatInit( hb_mux_object_t * m )
             priv_size                  = 0;
             break;
 
+        case HB_VCODEC_QSV_AV1_10BIT:
+        case HB_VCODEC_QSV_AV1:
+        {
+            const AVBitStreamFilter  *bsf;
+            AVBSFContext             *ctx;
+            int                       ret;
+
+            track->st->codecpar->codec_id = AV_CODEC_ID_AV1;
+            priv_data                  = NULL;
+            priv_size                  = 0;
+
+            bsf = av_bsf_get_by_name("extract_extradata");
+            ret = av_bsf_alloc(bsf, &ctx);
+            if (ret < 0)
+            {
+                hb_error("AV1 bitstream filter: alloc failure");
+                goto error;
+            }
+
+            track->bitstream_context = ctx;
+            track->st->codecpar->extradata = priv_data;
+            track->st->codecpar->extradata_size = priv_size;
+            if (track->bitstream_context != NULL)
+            {
+                avcodec_parameters_copy(track->bitstream_context->par_in,
+                                       track->st->codecpar);
+                ret = av_bsf_init(track->bitstream_context);
+                if (ret < 0)
+                {
+                    hb_error("AV1 bitstream filter: init failure");
+                    goto error;
+                }
+            }
+        } break;
+
         case HB_VCODEC_THEORA:
         {
             track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;

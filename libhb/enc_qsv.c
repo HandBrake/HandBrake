@@ -320,7 +320,7 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
 
     /* need more space for 10bits */
     if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010 ||
-        pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
+        (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC || pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1))
     {
          hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
     }
@@ -853,7 +853,7 @@ int qsv_enc_init(hb_work_private_t *pv)
     }
     else
     {
-        if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+        if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10 || (job->vcodec == HB_VCODEC_QSV_AV1_10BIT))
         {
             pv->sws_context_to_nv12 = hb_sws_get_context(
                                         job->width, job->height,
@@ -938,7 +938,7 @@ int qsv_enc_init(hb_work_private_t *pv)
         }
 
         /* should have 15bpp/AV_PIX_FMT_YUV420P10LE (almost x2) instead of 12bpp/AV_PIX_FMT_NV12 */
-        int bpp12 = (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10) ? 6 : 3;
+        int bpp12 = (pv->param.videoParam->mfx.CodecProfile == (MFX_PROFILE_HEVC_MAIN10) || (job->vcodec == HB_VCODEC_QSV_AV1_10BIT)) ? 6 : 3;
         for (i = 0; i < qsv_encode->surface_num; i++)
         {
             mfxFrameSurface1 *surface = av_mallocz(sizeof(mfxFrameSurface1));
@@ -1341,6 +1341,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     switch (pv->qsv_info->codec_id)
     {
         case MFX_CODEC_HEVC:
+        case MFX_CODEC_AV1:
             job->qsv.enc_info.align_width  = HB_QSV_ALIGN32(job->width);
             job->qsv.enc_info.align_height = HB_QSV_ALIGN32(job->height);
             break;
@@ -1398,7 +1399,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
-    if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+    if ((pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10) || (job->vcodec == HB_VCODEC_QSV_AV1_10BIT))
     {
         pv->param.videoParam->mfx.FrameInfo.FourCC         = MFX_FOURCC_P010;
         pv->param.videoParam->mfx.FrameInfo.BitDepthLuma   = 10;
@@ -1518,6 +1519,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             {
                 upper_limit = 63;
             }
+
             pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CQP;
             pv->param.videoParam->mfx.QPI = HB_QSV_CLIP3(0, upper_limit, job->vquality + pv->param.rc.cqp_offsets[0]);
             pv->param.videoParam->mfx.QPP = HB_QSV_CLIP3(0, upper_limit, job->vquality + pv->param.rc.cqp_offsets[1]);
@@ -1648,11 +1650,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxVersion version;
     mfxLoader loader;
     mfxVideoParam videoParam;
-    mfxExtBuffer *extParamArray[3];
+    mfxExtBuffer *extParamArray[4];
     mfxSession session = (mfxSession)0;
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
+    mfxExtAV1BitstreamParam av1_bitstream_buf, *av1_bitstream = &av1_bitstream_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
     sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, job->qsv.ctx->dx_index, &version, &session, &loader);
@@ -1754,6 +1757,14 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)option2;
     }
+    // introduced in API 2.5
+    memset(av1_bitstream, 0, sizeof(mfxExtAV1BitstreamParam));
+    av1_bitstream->Header.BufferId = MFX_EXTBUFF_AV1_BITSTREAM_PARAM;
+    av1_bitstream->Header.BufferSz = sizeof(mfxExtAV1BitstreamParam);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_AV1_BITSTREAM)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)av1_bitstream;
+    }
     sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
     if (sts != MFX_ERR_NONE)
     {
@@ -1824,6 +1835,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             case MFX_CODEC_AVC:
             case MFX_CODEC_HEVC:
+            case MFX_CODEC_AV1:
                 pv->init_delay = &w->config->init_delay;
                 break;
             default: // unreachable

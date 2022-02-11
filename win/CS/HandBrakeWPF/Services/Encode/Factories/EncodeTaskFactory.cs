@@ -248,14 +248,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
             video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && configuration.EnableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.
-            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265 && job.VideoEncoder != VideoEncoder.QuickSyncH26510b)
+            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265 && job.VideoEncoder != VideoEncoder.QuickSyncH26510b && job.VideoEncoder != VideoEncoder.QuickSyncAV1 && job.VideoEncoder != VideoEncoder.QuickSyncAV110b)
             {
                 video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
             }
             
             video.Options = job.ExtraAdvancedArguments;
 
-            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder == VideoEncoder.QuickSync || job.VideoEncoder == VideoEncoder.QuickSyncH265 || job.VideoEncoder == VideoEncoder.QuickSyncH26510b))
+            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder == VideoEncoder.QuickSync || job.VideoEncoder == VideoEncoder.QuickSyncH265 || job.VideoEncoder == VideoEncoder.QuickSyncH26510b || job.VideoEncoder == VideoEncoder.QuickSyncAV1 || job.VideoEncoder == VideoEncoder.QuickSyncAV110b))
             {
                 if (configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
                 {

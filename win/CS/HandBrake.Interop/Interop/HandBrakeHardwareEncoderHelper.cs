@@ -128,6 +128,38 @@ namespace HandBrake.Interop.Interop
             }
         }
         
+        public static bool IsQsvAvailableAV1
+        {
+            get
+            {
+                try
+                {
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1) > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+        
+        public static bool IsQsvAvailableAV110bit
+        {
+            get
+            {
+                try
+                {
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1_10BIT) > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+        
         /* AMD VCE Support */
 
         public static bool IsVceH264Available

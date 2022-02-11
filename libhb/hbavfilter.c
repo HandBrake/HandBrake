@@ -136,6 +136,8 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
             case HB_VCODEC_QSV_H264:
                 out_alignment = 16;
                 break;
+            case HB_VCODEC_QSV_AV1_10BIT:
+            case HB_VCODEC_QSV_AV1:
             case HB_VCODEC_QSV_H265_10BIT:
             case HB_VCODEC_QSV_H265:
                 out_alignment = 32;

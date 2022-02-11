@@ -758,6 +758,7 @@ namespace HandBrakeWPF.ViewModels
                 || this.Task.VideoEncoder == VideoEncoder.X265 || this.Task.VideoEncoder == VideoEncoder.X265_10
                 || this.Task.VideoEncoder == VideoEncoder.X265_12 || this.Task.VideoEncoder == VideoEncoder.QuickSync
                 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b
+                || this.Task.VideoEncoder == VideoEncoder.QuickSyncAV1 || this.Task.VideoEncoder == VideoEncoder.QuickSyncAV110b
                 || this.Task.VideoEncoder == VideoEncoder.VceH264 || this.Task.VideoEncoder == VideoEncoder.VceH265
                 || this.Task.VideoEncoder == VideoEncoder.NvencH264 || this.Task.VideoEncoder == VideoEncoder.NvencH265 || this.Task.VideoEncoder == VideoEncoder.NvencH26510b
                 || this.Task.VideoEncoder == VideoEncoder.MFH264 || this.Task.VideoEncoder == VideoEncoder.MFH265)
@@ -1157,6 +1158,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "balanced")); // ICL and Earlier.
                 }
+            }
+
+            if (selectedEncoder == VideoEncoder.QuickSyncAV1 || selectedEncoder == VideoEncoder.QuickSyncAV110b)
+            {
+                defaultPreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "speed")); // Alchemist and later
             }
 
             if (selectedEncoder == VideoEncoder.QuickSync || selectedEncoder == VideoEncoder.VceH264 || selectedEncoder == VideoEncoder.VceH265)
