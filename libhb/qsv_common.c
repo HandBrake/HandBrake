@@ -2620,7 +2620,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption2.NumMbPerSlice   = 0;
 
         // GOP & rate control
-        param->gop.b_pyramid          = -1; // set automatically
+        param->gop.b_pyramid          =  1; // enabled by default (if supported)
         param->gop.gop_pic_size       = -1; // set automatically
         param->gop.gop_ref_dist       = -1; // set automatically
         param->gop.int_ref_cycle_size = -1; // set automatically
