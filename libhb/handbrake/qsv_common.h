@@ -90,6 +90,8 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
 #define HB_QSV_CAP_VPP_SCALING       (1LL << 38)
 #define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
+    // mfxExtAV1BitstreamParam
+#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 40)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
@@ -183,6 +185,7 @@ typedef struct
     mfxExtChromaLocInfo   chromaLocInfo;
     mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
     mfxExtContentLightLevelInfo        contentLightLevelInfo;
+    mfxExtAV1BitstreamParam av1BitstreamParam;
     struct
     {
         int b_pyramid;

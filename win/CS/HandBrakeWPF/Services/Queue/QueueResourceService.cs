@@ -101,6 +101,8 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
+                    case VideoEncoder.QuickSyncAV1:
+                    case VideoEncoder.QuickSyncAV110b:
                         if (this.qsvInstances.Count < this.totalQsvInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                         {
                             this.AllocateIntelGPU(task);
@@ -205,6 +207,8 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
+                    case VideoEncoder.QuickSyncAV1:
+                    case VideoEncoder.QuickSyncAV110b:
                         if (this.qsvInstances.Contains(unlockKey.Value))
                         {
                             this.qsvInstances.Remove(unlockKey.Value);
