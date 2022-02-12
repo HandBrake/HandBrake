@@ -123,6 +123,7 @@ namespace HandBrakeWPF.Converters.Video
                 if (!isNvencEnabled || !HandBrakeHardwareEncoderHelper.IsNVEncH265Available)
                 {
                     encoders.Remove(VideoEncoder.NvencH265);
+                    encoders.Remove(VideoEncoder.NvencH26510b);
                 }
 
                 if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
