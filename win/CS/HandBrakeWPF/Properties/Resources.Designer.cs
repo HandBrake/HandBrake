@@ -3329,7 +3329,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Priority Level:.
+        ///   Looks up a localized string similar to Work Priority Level:.
         /// </summary>
         public static string Options_PriorityLevel {
             get {
@@ -4048,15 +4048,6 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_UninstallToast {
             get {
                 return ResourceManager.GetString("OptionsView_UninstallToast", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ( Windows 10 Only! ).
-        /// </summary>
-        public static string OptionsView_Win10Only {
-            get {
-                return ResourceManager.GetString("OptionsView_Win10Only", resourceCulture);
             }
         }
         

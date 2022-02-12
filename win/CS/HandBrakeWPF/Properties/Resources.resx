@@ -1246,7 +1246,7 @@ Would you like to overwrite it?</value>
     <value>Number of picture previews to scan:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Priority Level:</value>
+    <value>Work Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
     <value>Prefer use of Intel QuickSync for decoding video when available. </value>

@@ -677,29 +677,38 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedPriority = value;
                 this.NotifyOfPropertyChange();
+                this.SetProcessPriority(value);
+            }
+        }
 
-                // Set the Process Priority
-                switch (value)
-                {
-                    case ProcessPriority.High:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case ProcessPriority.AboveNormal:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case ProcessPriority.Normal:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case ProcessPriority.BelowNormal:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                    case ProcessPriority.Low:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                }
+        private void SetProcessPriority(ProcessPriority value)
+        {
+            if (this.RemoteServiceEnabled)
+            {
+                return; // We run as "Normal" in Remote mode.
+            }
+
+            // Set the Process Priority
+            switch (value)
+            {
+                case ProcessPriority.High:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    break;
+                case ProcessPriority.AboveNormal:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                    break;
+                case ProcessPriority.Normal:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                    break;
+                case ProcessPriority.BelowNormal:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
+                case ProcessPriority.Low:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                    break;
+                default:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
             }
         }
 
@@ -1270,8 +1279,17 @@ namespace HandBrakeWPF.ViewModels
             this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
 
             // #############################
-            // CLI
+            // Process
             // #############################
+
+            this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
+            this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
+            this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
+            if (this.SimultaneousEncodes > 8)
+            {
+                this.SimultaneousEncodes = 8;
+            }
+
             this.SelectedPriority = (ProcessPriority)userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt);
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
@@ -1332,17 +1350,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.PauseOnLowBattery = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseEncodingOnLowBattery);
             this.LowBatteryLevel = userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
-
-            // #############################
-            // Experimental
-            // #############################
-            this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled);
-            this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessIsolationPort);
-            this.SimultaneousEncodes = userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
-            if (this.SimultaneousEncodes > 8)
-            {
-                this.SimultaneousEncodes = 8;
-            }
         }
 
         public void UpdateSettings()

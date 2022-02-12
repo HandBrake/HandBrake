@@ -170,25 +170,30 @@ namespace HandBrakeWPF.ViewModels
             this.PresetsCategories = new BindingList<IPresetObject>();
             this.Drives = new BindingList<SourceMenuItem>();
 
-            // Set Process Priority
-            switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
+            // Set Process Priority. Only when using in-process encoding. 
+            // When process isolation is enabled, we'll stick to "Normal".
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
             {
-                case ProcessPriority.High:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                    break;
-                case ProcessPriority.AboveNormal:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                    break;
-                case ProcessPriority.Normal:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                    break;
-                case ProcessPriority.Low:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-                    break;
-                default:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                    break;
+                switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
+                {
+                    case ProcessPriority.High:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case ProcessPriority.AboveNormal:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case ProcessPriority.Normal:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case ProcessPriority.Low:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
             }
+
 
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
