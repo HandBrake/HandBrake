@@ -2252,9 +2252,6 @@ Por favor, elija un preajuste diferente.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientación y Recorte:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( ¡Solo en Windows 10! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtros:</value>
   </data>

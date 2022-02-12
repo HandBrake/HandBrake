@@ -2251,9 +2251,6 @@ Lütfen farklı bir ön ayar seçin.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Yönlendirme ve Kırpma:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Sadece Windows 10! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtreler:</value>
   </data>

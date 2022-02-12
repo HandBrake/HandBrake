@@ -461,7 +461,6 @@
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{x:Static Properties:Resources.OptionsView_ProcessIsolation}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_Win10Only}"  Margin="15,10,0,10" />
                         </StackPanel>
 
 

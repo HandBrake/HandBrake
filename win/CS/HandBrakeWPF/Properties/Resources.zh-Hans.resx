@@ -2236,9 +2236,6 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>方向和裁剪：</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>（仅限 Windows 10！）</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>滤镜：</value>
   </data>
@@ -2309,7 +2306,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>您输入的分类名称已经存在。请选择一个不同的名称。</value>

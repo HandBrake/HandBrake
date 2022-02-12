@@ -2244,9 +2244,6 @@ Veuillez choisir un autre préréglage.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation et recadrage :</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 uniquement ! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtres :</value>
   </data>
@@ -2317,7 +2314,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Arrêter</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Le nom de catégorie que vous avez saisi existe déjà. Veuillez choisir un autre nom.</value>

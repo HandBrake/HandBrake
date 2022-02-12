@@ -2245,9 +2245,6 @@ Please choose a different preset.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation and Cropping:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 Only! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filters:</value>
   </data>

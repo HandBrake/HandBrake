@@ -2248,9 +2248,6 @@ This will not impact any of the software encoders.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>การวางแนวและการครอบตัด:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 เท่านั้น! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>ตัง้ค่าตัวกรอง：</value>
   </data>

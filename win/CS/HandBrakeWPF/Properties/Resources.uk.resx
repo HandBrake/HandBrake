@@ -2251,9 +2251,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation and Cropping:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Тільки Windows 10! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Фільтри:</value>
   </data>
