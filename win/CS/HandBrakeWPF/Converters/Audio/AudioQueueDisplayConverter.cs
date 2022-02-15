@@ -11,19 +11,16 @@ namespace HandBrakeWPF.Converters.Audio
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Drawing.Drawing2D;
     using System.Globalization;
     using System.Text;
     using System.Windows.Data;
-
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
+    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
+    using AudioTrack = Services.Encode.Model.Models.AudioTrack;
 
     /// <summary>
     /// Audio Queue Display Converter
@@ -58,7 +55,13 @@ namespace HandBrakeWPF.Converters.Audio
                                       : track.Bitrate + " kbps";
                     }
 
-                    audioTracks.Append(string.Format("{0} - {1} To {2} {3}{4}", trackName, track.TrackName, quality, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
+                    string namedTrack = string.Empty;
+                    if (!string.IsNullOrEmpty(track.TrackName))
+                    {
+                        namedTrack = string.Format(" - \"{0}\"", track.TrackName);
+                    }
+
+                    audioTracks.Append(string.Format("{0}{1}, {2} {3}{4}", trackName, namedTrack, quality, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
                 }
             }
 
