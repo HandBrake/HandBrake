@@ -21,11 +21,13 @@ namespace HandBrakeWPF.Services.Presets
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
@@ -850,52 +852,26 @@ namespace HandBrakeWPF.Services.Presets
             bool isNvencEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
             bool isVcnEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
 
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSync && (!HandBrakeHardwareEncoderHelper.IsQsvAvailable || !isQsvEnabled))
+            HBVideoEncoder foundEncoder = HandBrakeEncoderHelpers.GetVideoEncoder(EnumHelper<VideoEncoder>.GetShortName(preset.Task.VideoEncoder));
+
+            if (foundEncoder == null)
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 && (!HandBrakeHardwareEncoderHelper.IsQsvAvailableH265 || !isQsvEnabled))
+            if (VideoEncoderHelpers.IsQuickSync(preset.Task.VideoEncoder) && !isQsvEnabled)
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b && (!HandBrakeHardwareEncoderHelper.IsQsvAvailableH265 || !isQsvEnabled))
+            if (VideoEncoderHelpers.IsNVEnc(preset.Task.VideoEncoder) && !isNvencEnabled)
             {
                 return true;
             }
 
-            if (preset.Task.VideoEncoder == VideoEncoder.VceH264 && (!HandBrakeHardwareEncoderHelper.IsVceH264Available || !isVcnEnabled))
+            if (VideoEncoderHelpers.IsVCN(preset.Task.VideoEncoder) && !isVcnEnabled)
             {
                 return true;
-            }
-
-            if (preset.Task.VideoEncoder == VideoEncoder.VceH265 && (!HandBrakeHardwareEncoderHelper.IsVceH265Available || !isVcnEnabled))
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder == VideoEncoder.NvencH264 && (!HandBrakeHardwareEncoderHelper.IsNVEncH264Available || !isNvencEnabled))
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder == VideoEncoder.NvencH265 && (!HandBrakeHardwareEncoderHelper.IsNVEncH265Available || !isNvencEnabled))
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder == VideoEncoder.NvencH26510b && (!HandBrakeHardwareEncoderHelper.IsNVEncH265Available || !isNvencEnabled))
-            {
-                return true;
-            }
-
-            if (preset.Task.VideoEncoder == VideoEncoder.MFH264 || preset.Task.VideoEncoder == VideoEncoder.MFH265)
-            {
-                if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
-                {
-                    return true;
-                }
             }
 
             return false;

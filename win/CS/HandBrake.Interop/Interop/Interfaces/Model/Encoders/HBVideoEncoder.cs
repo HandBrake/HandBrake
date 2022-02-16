@@ -101,6 +101,15 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             {
                 return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_levels(this.Id));
             }
-        } 
+        }
+
+        public bool SupportsMP4 => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MP4) == NativeConstants.HB_MUX_MASK_MP4
+                                   || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MP4) == NativeConstants.HB_MUX_AV_MP4;
+
+        public bool SupportsMKV => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MKV) == NativeConstants.HB_MUX_MASK_MKV
+                                   || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_MKV) == NativeConstants.HB_MUX_AV_MKV;
+
+        public bool SupportsWebM => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) == NativeConstants.HB_MUX_MASK_WEBM
+                                    || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_WEBM) == NativeConstants.HB_MUX_AV_WEBM;
     }
 }

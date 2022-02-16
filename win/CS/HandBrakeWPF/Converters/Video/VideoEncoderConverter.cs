@@ -17,7 +17,9 @@ namespace HandBrakeWPF.Converters.Video
     using System.Windows.Data;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
@@ -61,78 +63,57 @@ namespace HandBrakeWPF.Converters.Video
                     isNvencEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
                 }
                 
-                List<VideoEncoder> encoders = EnumHelper<VideoEncoder>.GetEnumList().ToList();
+                List<VideoEncoder> allEncoders = values[0] as List<VideoEncoder>;
                 EncodeTask task = values[1] as EncodeTask;
 
-                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X264_10)))
+                if (task == null || allEncoders == null)
                 {
-                    encoders.Remove(VideoEncoder.X264_10);
+                    return null;
                 }
 
-                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X265_10)))
+                List<VideoEncoder> returnEncoders = new List<VideoEncoder>(allEncoders);
+
+                foreach (var encoder in allEncoders)
                 {
-                    encoders.Remove(VideoEncoder.X265_10);
+                    HBVideoEncoder foundEncoder = HandBrakeEncoderHelpers.GetVideoEncoder(EnumHelper<VideoEncoder>.GetShortName(encoder));
+                    if (foundEncoder == null)
+                    {
+                        returnEncoders.Remove(encoder);
+                        continue;
+                    }
+
+                    if (task.OutputFormat == OutputFormat.Mp4 && !foundEncoder.SupportsMP4)
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
+                    if (task.OutputFormat == OutputFormat.Mkv && !foundEncoder.SupportsMKV)
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
+                    if (task.OutputFormat == OutputFormat.WebM && !foundEncoder.SupportsWebM)
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
+                    if (!isQsvEnabled && VideoEncoderHelpers.IsQuickSync(encoder))
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
+                    if (!isVceEnabled && VideoEncoderHelpers.IsVCN(encoder))
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
+
+                    if (!isNvencEnabled && VideoEncoderHelpers.IsNVEnc(encoder))
+                    {
+                        returnEncoders.Remove(encoder);
+                    }
                 }
 
-                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X265_12)))
-                {
-                    encoders.Remove(VideoEncoder.X265_12);
-                }
-
-                if (task != null && task.OutputFormat == OutputFormat.Mp4)
-                {
-                    encoders.Remove(VideoEncoder.Theora);
-                    encoders.Remove(VideoEncoder.VP8);
-                    encoders.Remove(VideoEncoder.VP9);
-                }
-                else if (task != null && task.OutputFormat == OutputFormat.WebM)
-                {
-                    encoders.RemoveAll(ve => !(ve.Equals(VideoEncoder.VP9) || ve.Equals(VideoEncoder.VP8)));
-                }
-
-                if (!isQsvEnabled || !HandBrakeHardwareEncoderHelper.IsQsvAvailableH264)
-                {
-                    encoders.Remove(VideoEncoder.QuickSync);
-                }
-
-                if (!isQsvEnabled || !HandBrakeHardwareEncoderHelper.IsQsvAvailableH265)
-                {
-                    encoders.Remove(VideoEncoder.QuickSyncH265);
-                    encoders.Remove(VideoEncoder.QuickSyncH26510b);
-                }
-                else if (!HandBrakeHardwareEncoderHelper.IsQsvAvailableH26510bit)
-                {
-                    encoders.Remove(VideoEncoder.QuickSyncH26510b);
-                }
-
-                if (!isVceEnabled || !HandBrakeHardwareEncoderHelper.IsVceH264Available)
-                {
-                    encoders.Remove(VideoEncoder.VceH264);
-                }
-
-                if (!isVceEnabled || !HandBrakeHardwareEncoderHelper.IsVceH265Available)
-                {
-                    encoders.Remove(VideoEncoder.VceH265);
-                }
-
-                if (!isNvencEnabled || !HandBrakeHardwareEncoderHelper.IsNVEncH264Available)
-                {
-                    encoders.Remove(VideoEncoder.NvencH264);
-                }
-
-                if (!isNvencEnabled || !HandBrakeHardwareEncoderHelper.IsNVEncH265Available)
-                {
-                    encoders.Remove(VideoEncoder.NvencH265);
-                    encoders.Remove(VideoEncoder.NvencH26510b);
-                }
-
-                if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
-                {
-                    encoders.Remove(VideoEncoder.MFH264);
-                    encoders.Remove(VideoEncoder.MFH265);
-                }
-
-                return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
+                return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(returnEncoders);
             }
 
             if (values[0].GetType() == typeof(VideoEncoder))
