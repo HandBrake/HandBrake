@@ -155,7 +155,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.Preset = new Preset(presetToEdit); // Clone. We will not touch the existing object.
             
-            
             this.UserPresetCategories = presetService.GetPresetCategories(true).ToList();
             this.NotifyOfPropertyChange(() => this.UserPresetCategories);
             this.PresetsCategories = this.presetService.Presets;
@@ -217,7 +216,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 // Save the Preset
-                this.presetService.Replace(this.existingPreset, this.Preset);
+                this.presetService.Replace(this.existingPreset.Name, this.Preset);
             }
 
             this.Close();

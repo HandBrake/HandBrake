@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PresetManagerViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PresetManagerViewModel.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -27,7 +27,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-    using HandBrakeWPF.Views;
 
     using Microsoft.Win32;
 
@@ -38,7 +37,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
         private readonly IWindowManager windowManager;
-        private readonly PresetDisplayCategory addNewCategory = new PresetDisplayCategory(Resources.AddPresetView_AddNewCategory, true, null);
 
         private IPresetObject selectedPresetCategory;
         private Preset selectedPreset;
@@ -73,9 +71,9 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (this.selectedPreset != null && value != null  && value.Category != this.selectedPreset.Category)
+                if (this.selectedPreset != null && value != null && value.Category != this.selectedPreset.Category)
                 {
-                    this.presetService.ChangePresetCategory(this.selectedPreset, value.Category);
+                    this.presetService.ChangePresetCategory(this.selectedPreset.Name, value.Category);
                 }
             }
         }
@@ -256,9 +254,9 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
 
-                this.presetService.Remove(this.selectedPreset);
+                this.presetService.Remove(this.selectedPreset.Name);
                 this.NotifyOfPropertyChange(() => this.PresetsCategories);
-                this.SelectedPreset = this.presetService.DefaultPreset;
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
             }
             else
             {
@@ -270,7 +268,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.selectedPreset != null)
             {
-                this.presetService.SetDefault(this.selectedPreset);
+                this.presetService.SetDefault(this.selectedPreset.Name);
                 this.errorService.ShowMessageBox(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -309,7 +307,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset, HBConfigurationFactory.Create());
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name, HBConfigurationFactory.Create());
                 }
             }
             else
@@ -342,32 +340,11 @@ namespace HandBrakeWPF.ViewModels
 
         public void DeleteBuiltInPresets()
         {
-            List<Preset> allPresets = this.presetService.FlatPresetList;
-            bool foundDefault = false;
-            foreach (Preset preset in allPresets)
+            this.presetService.DeleteBuiltInPresets();
+            if (this.presetService.GetDefaultPreset() != null)
             {
-                if (preset.IsBuildIn)
-                {
-                    if (preset.IsDefault)
-                    {
-                        foundDefault = true;
-                    }
-
-                    this.presetService.Remove(preset);
-                }
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
             }
-
-            if (foundDefault)
-            {
-                Preset preset = this.presetService.FlatPresetList.FirstOrDefault();
-                if (preset != null)
-                {
-                    this.presetService.SetDefault(preset);
-                    this.SelectedPreset = preset;
-                }
-            }
-
-            this.NotifyOfPropertyChange(() => this.PresetsCategories);
         }
 
         public void ResetBuiltInPresets()
@@ -431,7 +408,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedPreset != null)
             {
-                this.presetService.SetDefault(this.SelectedPreset);
+                this.presetService.SetDefault(this.SelectedPreset.Name);
             }
         }
 
@@ -443,14 +420,14 @@ namespace HandBrakeWPF.ViewModels
         private void SetDefaultPreset()
         {
             // Preset Selection
-            if (this.presetService.DefaultPreset != null)
+            if (this.presetService.GetDefaultPreset() != null)
             {
                 PresetDisplayCategory category =
                     (PresetDisplayCategory)this.PresetsCategories.FirstOrDefault(
-                        p => p.Category == this.presetService.DefaultPreset.Category);
+                        p => p.Category == this.presetService.GetDefaultPreset().Category);
 
                 this.SelectedPresetCategory = category;
-                this.SelectedPreset = this.presetService.DefaultPreset;
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
             }
         }
 
@@ -494,7 +471,7 @@ namespace HandBrakeWPF.ViewModels
             // Reselect the preset as the object has changed due to the reload that occurred.
             if (!string.IsNullOrEmpty(presetName))
             {
-                this.SelectedPreset = this.presetService.FlatPresetList.FirstOrDefault(s => s.Name == presetName);
+                this.SelectedPreset = this.presetService.GetPresetByName(presetName);
             }
         }
     }

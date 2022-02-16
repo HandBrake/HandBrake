@@ -76,18 +76,5 @@ namespace HandBrakeWPF.Views
 
             return source as TreeViewItem;
         }
-
-        private void ToolBarLoaded(object sender, RoutedEventArgs e)
-        {
-            ToolBar toolBar = sender as ToolBar;
-            if (toolBar != null)
-            {
-                var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-                if (overflowGrid != null)
-                {
-                    overflowGrid.Visibility = Visibility.Collapsed;
-                }
-            }
-        }
     }
 }

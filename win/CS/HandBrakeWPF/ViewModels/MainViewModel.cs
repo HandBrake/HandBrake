@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="MainViewModel.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -20,7 +20,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -890,7 +889,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Preset Selection
-            this.SetDefaultPreset();
+            this.SelectDefaultPreset();
 
             // Reset WhenDone if necessary.
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
@@ -1641,7 +1640,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfirmation, Resources.AreYouSure, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 this.selectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours));
-                this.presetService.Update(this.selectedPreset);
+                this.presetService.Update(this.selectedPreset.Name, this.selectedPreset);
                 this.IsModifiedPreset = false;
 
                 this.errorService.ShowMessageBox(
@@ -1702,9 +1701,9 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
 
-                this.presetService.Remove(preset);
+                this.presetService.Remove(preset.Name);
                 this.NotifyOfPropertyChange(() => this.PresetsCategories);
-                this.SelectedPreset = this.presetService.DefaultPreset;
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
             }
             else
             {
@@ -1716,7 +1715,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.selectedPreset != null)
             {
-                this.presetService.SetDefault(this.selectedPreset);
+                this.presetService.SetDefault(this.selectedPreset.Name);
                 this.errorService.ShowMessageBox(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -1755,7 +1754,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset, HBConfigurationFactory.Create());
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name, HBConfigurationFactory.Create());
                 }
             }
             else
@@ -1767,42 +1766,20 @@ namespace HandBrakeWPF.ViewModels
         public void PresetReset()
         {
             this.presetService.UpdateBuiltInPresets();
-
             this.NotifyOfPropertyChange(() => this.PresetsCategories);
-
-            this.SetDefaultPreset();
-
+            this.SelectDefaultPreset();
             this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void PresetDeleteBuildIn()
         {
-            List<Preset> allPresets = this.presetService.FlatPresetList;
-            bool foundDefault = false;
-            foreach (Preset preset in allPresets)
-            {
-                if (preset.IsBuildIn)
-                {
-                    if (preset.IsDefault)
-                    {
-                        foundDefault = true;
-                    }
-
-                    this.presetService.Remove(preset);
-                }
-            }
-
-            if (foundDefault)
-            {
-                Preset preset = this.presetService.FlatPresetList.FirstOrDefault();
-                if (preset != null)
-                {
-                    this.presetService.SetDefault(preset);
-                    this.SelectedPreset = preset;
-                }
-            }
-
+            this.presetService.DeleteBuiltInPresets();
             this.NotifyOfPropertyChange(() => this.PresetsCategories);
+
+            if (this.presetService.GetDefaultPreset() != null)
+            {
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
+            }
         }
 
         public void PresetSelect()
@@ -1823,7 +1800,7 @@ namespace HandBrakeWPF.ViewModels
                 this.selectedPreset = preset;
                 this.NotifyOfPropertyChange(() => this.SelectedPreset);
 
-                this.presetService.SetSelected(this.selectedPreset);
+                this.presetService.SetSelected(this.selectedPreset.Name);
 
                 if (this.selectedPreset != null)
                 {
@@ -2120,16 +2097,11 @@ namespace HandBrakeWPF.ViewModels
             this.AlertWindowText = message;
         }
 
-        private void SetDefaultPreset()
+        private void SelectDefaultPreset()
         {
-            // Preset Selection
-            if (this.presetService.DefaultPreset != null)
+            if (this.presetService.GetDefaultPreset() != null)
             {
-                PresetDisplayCategory category =
-                    (PresetDisplayCategory)this.PresetsCategories.FirstOrDefault(
-                        p => p.Category == this.presetService.DefaultPreset.Category);
-
-                this.SelectedPreset = this.presetService.DefaultPreset;
+                this.SelectedPreset = this.presetService.GetDefaultPreset();
             }
         }
 
