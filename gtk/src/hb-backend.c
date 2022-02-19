@@ -197,9 +197,10 @@ combo_opts_t vqual_granularity_opts =
 
 static options_map_t d_deint_opts[] =
 {
-    {N_("Off"),         "off",         HB_FILTER_INVALID    },
-    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB     },
-    {N_("Yadif"),       "deinterlace", HB_FILTER_DEINTERLACE},
+    {N_("Off"),         "off",         HB_FILTER_INVALID},
+    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB },
+    {N_("Yadif"),       "deinterlace", HB_FILTER_YADIF  },
+    {N_("Bwdif"),       "bwdif",       HB_FILTER_BWDIF  },
 };
 combo_opts_t deint_opts =
 {
