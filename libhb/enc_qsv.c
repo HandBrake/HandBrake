@@ -1007,15 +1007,59 @@ int qsv_enc_init(hb_work_private_t *pv)
     return 0;
 }
 
+static const char* hyper_encode_name(const int hyper_encode_mode)
+{
+    switch (hyper_encode_mode)
+    {
+        case MFX_HYPERMODE_OFF:
+            return "(HyperEncode Off)";
+
+        case MFX_HYPERMODE_ON:
+            return "(HyperEncode On)";
+
+        case MFX_HYPERMODE_ADAPTIVE:
+            return "(HyperEncode Adaptive)";
+
+        default:
+            return NULL;
+    }
+}
+
 static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *videoParam)
 {
     const mfxExtCodingOption  *option1 = NULL;
     const mfxExtCodingOption2 *option2 = NULL;
+    const mfxExtHyperModeParam *extHyperModeOption = NULL;
+
+    for (int i = 0; i < videoParam->NumExtParam; i++)
+    {
+        mfxExtCodingOption *option = (mfxExtCodingOption*)videoParam->ExtParam[i];
+        if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION)
+        {
+            option1 = (mfxExtCodingOption*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION2)
+        {
+            option2 = (mfxExtCodingOption2*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId == MFX_EXTBUFF_HYPER_MODE_PARAM)
+        {
+            extHyperModeOption = (mfxExtHyperModeParam*)videoParam->ExtParam[i];
+        }
+        else if (option->Header.BufferId != MFX_EXTBUFF_VIDEO_SIGNAL_INFO &&
+                 option->Header.BufferId != MFX_EXTBUFF_CHROMA_LOC_INFO &&
+                 option->Header.BufferId != MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME &&
+                 option->Header.BufferId != MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO)
+        {
+            hb_log("Unknown Header.BufferId=%d", option->Header.BufferId);
+        }
+    }
 
     // log code path and main output settings
-    hb_log("encqsvInit: using %s%s path",
-           pv->is_sys_mem ? "encode-only" : "full QSV",
-           videoParam->mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "" );
+    hb_log("encqsvInit: using%s%s%s path",
+           pv->is_sys_mem ? " encode-only" : " full QSV",
+           videoParam->mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "",
+           extHyperModeOption != NULL ? hyper_encode_name(extHyperModeOption->Mode) : "");
     hb_log("encqsvInit: %s %s profile @ level %s",
            hb_qsv_codec_name  (videoParam->mfx.CodecId),
            hb_qsv_profile_name(videoParam->mfx.CodecId, videoParam->mfx.CodecProfile),
@@ -1037,26 +1081,6 @@ static int log_encoder_params(const hb_work_private_t *pv, const mfxVideoParam *
         hb_log("encqsvInit: BFramesMax %d",
                videoParam->mfx.GopRefDist > 1 ?
                videoParam->mfx.GopRefDist - 1 : 0);
-    }
-
-    for (int i = 0; i < videoParam->NumExtParam; i++)
-    {
-        mfxExtCodingOption *option = (mfxExtCodingOption*)videoParam->ExtParam[i];
-        if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION)
-        {
-            option1 = (mfxExtCodingOption*)videoParam->ExtParam[i];
-        }
-        else if (option->Header.BufferId == MFX_EXTBUFF_CODING_OPTION2)
-        {
-            option2 = (mfxExtCodingOption2*)videoParam->ExtParam[i];
-        }
-        else if (option->Header.BufferId != MFX_EXTBUFF_VIDEO_SIGNAL_INFO &&
-                 option->Header.BufferId != MFX_EXTBUFF_CHROMA_LOC_INFO &&
-                 option->Header.BufferId != MFX_EXTBUFF_MASTERING_DISPLAY_COLOUR_VOLUME &&
-                 option->Header.BufferId != MFX_EXTBUFF_CONTENT_LIGHT_LEVEL_INFO)
-        {
-            hb_log("Unknown Header.BufferId=%d", option->Header.BufferId);
-        }
     }
 
     if (option2 && (option2->AdaptiveI != MFX_CODINGOPTION_OFF ||
@@ -1650,12 +1674,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     mfxVersion version;
     mfxLoader loader;
     mfxVideoParam videoParam;
-    mfxExtBuffer *extParamArray[4];
+    mfxExtBuffer *extParamArray[5];
     mfxSession session = (mfxSession)0;
     mfxExtCodingOption  option1_buf, *option1 = &option1_buf;
     mfxExtCodingOption2 option2_buf, *option2 = &option2_buf;
     mfxExtCodingOptionSPSPPS sps_pps_buf, *sps_pps = &sps_pps_buf;
     mfxExtAV1BitstreamParam av1_bitstream_buf, *av1_bitstream = &av1_bitstream_buf;
+    mfxExtHyperModeParam hyper_encode_buf, *hyper_encode = &hyper_encode_buf;
     version.Major = HB_QSV_MINVERSION_MAJOR;
     version.Minor = HB_QSV_MINVERSION_MINOR;
     sts = hb_qsv_create_mfx_session(pv->qsv_info->implementation, job->qsv.ctx->dx_index, &version, &session, &loader);
@@ -1764,6 +1789,13 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (pv->qsv_info->capabilities & HB_QSV_CAP_AV1_BITSTREAM)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)av1_bitstream;
+    }
+    memset(hyper_encode, 0, sizeof(mfxExtHyperModeParam));
+    hyper_encode->Header.BufferId = MFX_EXTBUFF_HYPER_MODE_PARAM;
+    hyper_encode->Header.BufferSz = sizeof(mfxExtHyperModeParam);
+    if (pv->qsv_info->capabilities & HB_QSV_CAP_HYPERENCODE)
+    {
+        videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)hyper_encode;
     }
     sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
     if (sts != MFX_ERR_NONE)
