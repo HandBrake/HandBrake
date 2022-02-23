@@ -2820,6 +2820,12 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
              *
              * Note: this preset is the libhb default (like x264's "medium").
              */
+            if (hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G7)
+            {
+                // Since IceLake only
+                param->rc.lookahead                = 0;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_1;
+            }
         }
         else if (!strcasecmp(preset, "balanced"))
         {
