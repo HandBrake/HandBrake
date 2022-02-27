@@ -9,8 +9,32 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ## HandBrake 1.6.0
 
+### All platforms
+
+#### Filters
+- Small performance improvement on high core count systems for comb detect, decomb and nlmeans
+- The following filters now higher than 8bit content
+  - Grayscale
+
 #### Hardware Encoding
-- Added support for the 10-bit HEVC NVEnc encoder.
+- Added support for QuickSync AV1 Encoder
+- Added support for QuickSync HyperEncode
+- Added support for NVEnc 10-bit HEVC NVEnc encoder.
+
+#### Third-party libraries
+
+- Updated libraries
+  - x265 rev 12712
+
+### Linux
+- Miscellaneous bug fixes and improvements
+
+### Mac
+- Miscellaneous bug fixes and improvements
+
+### Windows
+- Miscellaneous bug fixes and improvements
+
 
 
 ## HandBrake 1.5.0
