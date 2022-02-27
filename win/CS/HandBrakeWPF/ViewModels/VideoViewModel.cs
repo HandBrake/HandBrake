@@ -942,8 +942,16 @@ namespace HandBrakeWPF.ViewModels
                     if (quality.HasValue) 
                     {
                         int cq;
-                        int.TryParse(quality.Value.ToString(CultureInfo.InvariantCulture), out cq); // VP8, VP9, MPEG-2, MPEG-4
-                        this.RF = (int)limits.High - cq;
+                        int.TryParse(quality.Value.ToString(CultureInfo.InvariantCulture), out cq); // VP8, VP9, MPEG-2, MPEG-4, QuickSync
+
+                        if (limits.Low == 0)
+                        {
+                            this.RF = (int)limits.High - cq;
+                        }
+                        else
+                        {
+                            this.RF = (int)(limits.High) - (cq - (int)limits.Low);
+                        }
                     }
                 }
             }
