@@ -3681,6 +3681,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable QuickSync Deep Link Hyper Encode.
+        /// </summary>
+        public static string OptionsView_EnableQuicksyncHyperEncode {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableQuicksyncHyperEncode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Low Power QuickSync Hardware (where supported)..
         /// </summary>
         public static string OptionsView_EnableQuicksyncLowPower {
@@ -3742,6 +3751,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_HardwareDetectFailed {
             get {
                 return ResourceManager.GetString("OptionsView_HardwareDetectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines..
+        /// </summary>
+        public static string OptionsView_HyperEncodeDescription {
+            get {
+                return ResourceManager.GetString("OptionsView_HyperEncodeDescription", resourceCulture);
             }
         }
         

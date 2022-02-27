@@ -364,6 +364,8 @@
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,2,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}" />
+                            <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,2,0,0" Visibility="{Binding IsMultiIntelGPU, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncHyperEncode}" />
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_HyperEncodeDescription}" Margin="50,0,0,10" FontStyle="Italic" TextWrapping="Wrap" Visibility="{Binding IsMultiIntelGPU, Converter={StaticResource boolToVisConverter}}" />
 
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
