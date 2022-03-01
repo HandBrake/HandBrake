@@ -33,5 +33,10 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the path.
         /// </summary>
         public string Path { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether input is an image sequence.
+        /// </summary>
+        public bool ImageSequence { get; set; }
     }
 }

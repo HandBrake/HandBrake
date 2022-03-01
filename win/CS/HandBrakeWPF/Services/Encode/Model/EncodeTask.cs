@@ -58,6 +58,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Angle = task.Angle;
             this.EndPoint = task.EndPoint;
             this.PointToPointMode = task.PointToPointMode;
+            this.ImageSequence = task.ImageSequence;
 
             /* Audio */
             this.AudioPassthruOptions = new AllowedPassthru(task.AudioPassthruOptions);
@@ -167,6 +168,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         public long StartPoint { get; set; }
 
         public long EndPoint { get; set; }
+
+        public bool ImageSequence { get; set; }
 
         /* Destination */
 

@@ -54,6 +54,11 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool ChapterMarkers { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether input is an image sequence.
+        /// </summary>
+        public bool ImageSequence { get; set; }
+
+        /// <summary>
         /// Gets or sets the children array.
         /// </summary>
         public List<object> ChildrenArray { get; set; }

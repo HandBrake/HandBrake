@@ -105,7 +105,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 Range = range,
                 Angle = job.Angle,
                 Path = job.Source,
-            };
+                ImageSequence = job.ImageSequence
+        };
             return source;
         }
         
