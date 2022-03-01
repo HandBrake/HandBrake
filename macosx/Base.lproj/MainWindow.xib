@@ -15,7 +15,6 @@
                 <outlet property="filtersTab" destination="0UB-bG-kwS" id="8wc-MY-h6a"/>
                 <outlet property="mainTabView" destination="1474" id="LnD-zT-6M5"/>
                 <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
-                <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
                 <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
                 <outlet property="pictureTab" destination="eij-Sn-QmJ" id="8Ww-MT-bhs"/>
                 <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
@@ -41,7 +40,7 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="81" y="385" width="885" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1025"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="885" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -860,14 +859,14 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
-            <rect key="frame" x="0.0" y="-2" width="234" height="48"/>
+            <rect key="frame" x="0.0" y="0.0" width="442" height="49"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="nHs-z7-brO">
-                    <rect key="frame" x="10" y="0.0" width="214" height="48"/>
+                <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nHs-z7-brO">
+                    <rect key="frame" x="0.0" y="0.0" width="460" height="49"/>
                     <subviews>
-                        <button toolTip="Scan only the specified title instead of all titles." translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
-                            <rect key="frame" x="18" y="15" width="116" height="18"/>
+                        <button toolTip="Scan only the specified title instead of all titles." misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
+                            <rect key="frame" x="18" y="15" width="116" height="38"/>
                             <buttonCell key="cell" type="check" title="Scan only title:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eQA-t2-FcV">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -876,8 +875,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
                             </connections>
                         </button>
-                        <textField toolTip="Title to scan." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
-                            <rect key="frame" x="142" y="13" width="52" height="21"/>
+                        <textField toolTip="Title to scan." verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
+                            <rect key="frame" x="142" y="23" width="52" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="BGA-yJ-Apd"/>
                             </constraints>
@@ -900,6 +899,34 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </binding>
                             </connections>
                         </textField>
+                        <button toolTip="Scan image as sequence." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mpz-5t-ZA4">
+                            <rect key="frame" x="18" y="5" width="196" height="18"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="check" title="Image sequence, framerate:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a7l-bd-SDs">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.scanImageSequence" id="4GQ-ZK-kGQ"/>
+                            </connections>
+                        </button>
+                        <textField toolTip="Title to scan." verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6JD-lb-ftW">
+                            <rect key="frame" x="215" y="3" width="52" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="jSy-iN-PEH"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="30" drawsBackground="YES" id="SJ3-fc-hbc">
+                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="4oX-hL-XUs">
+                                    <real key="minimum" value="0.0"/>
+                                </numberFormatter>
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.sequenceFramerate" id="bfD-t2-hzj"/>
+                            </connections>
+                        </textField>
                     </subviews>
                     <constraints>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="leading" secondItem="nHs-z7-brO" secondAttribute="leading" constant="20" id="13C-tG-GpU"/>
@@ -919,7 +946,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 <constraint firstAttribute="bottom" secondItem="nHs-z7-brO" secondAttribute="bottom" id="kh1-nj-FYU"/>
                 <constraint firstItem="nHs-z7-brO" firstAttribute="centerX" secondItem="lZQ-gl-3wX" secondAttribute="centerX" id="mKh-Iz-BGz"/>
             </constraints>
-            <point key="canvasLocation" x="458.5" y="-571"/>
+            <point key="canvasLocation" x="354" y="-570.5"/>
         </customView>
         <menu id="my5-n7-OFP">
             <items>

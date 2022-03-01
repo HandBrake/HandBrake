@@ -135,7 +135,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
@@ -145,7 +145,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
         self->_progressHandler = progressHandler;
         self.reply = reply;
 
-        [self.core scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews
+        [self.core scanURL:url titleIndex:index imageSequence:imageSequence sequenceFramerate:sequenceFramerate previews:previewsNum minDuration:seconds keepPreviews:keepPreviews
            progressHandler:self.progressHandler
          completionHandler:self.completionHandler];
     });

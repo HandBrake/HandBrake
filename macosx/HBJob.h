@@ -37,6 +37,10 @@ extern NSString *HBChaptersChangedNotification;
 // Whether the source is a single file or a DVD-Video/Blu-ray
 @property (nonatomic, readonly, getter=isStream) BOOL stream;
 
+// Whether the input is an image sequence
+@property (nonatomic, readonly) BOOL imageSequence;
+@property (nonatomic, readonly) NSString *sequenceFramerate;
+
 @property (nonatomic, readwrite, copy) NSString *presetName;
 
 /// The file URL of the source.

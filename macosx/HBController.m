@@ -102,6 +102,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic, weak) IBOutlet NSView *openTitleView;
 @property (nonatomic) BOOL scanSpecificTitle;
 @property (nonatomic) NSInteger scanSpecificTitleIdx;
+@property (nonatomic) BOOL scanImageSequence;
+@property (nonatomic) NSString *sequenceFramerate;
 
 #pragma mark - Job
 
@@ -160,6 +162,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         _currentPreset = manager.defaultPreset;
 
         _scanSpecificTitleIdx = 1;
+        _scanImageSequence = false;
+        _sequenceFramerate = @"30";
         _progress = @"";
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
@@ -320,7 +324,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if (fileURLs.count)
     {
-        [self openURL:fileURLs.firstObject];
+        [self openURL:fileURLs.firstObject imageSequence:false sequenceFramerate:@"0"];
     }
 
     [self.window.contentView setShowFocusRing:NO];
@@ -674,7 +678,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)scanURL:(NSURL *)fileURL titleIndex:(NSUInteger)index completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
+- (void)scanURL:(NSURL *)fileURL titleIndex:(NSUInteger)index imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate completionHandler:(void(^)(NSArray<HBTitle *> *titles))completionHandler
 {
     // Save the current settings
     [self updateCurrentPreset];
@@ -716,8 +720,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         NSUInteger hb_num_previews = [NSUserDefaults.standardUserDefaults integerForKey:HBPreviewsNumber];
         NSUInteger min_title_duration_seconds = [NSUserDefaults.standardUserDefaults integerForKey:HBMinTitleScanSeconds];
 
-        [self.core scanURL:mediaURL
-                titleIndex:index
+        [self.core scanURL:mediaURL titleIndex:index
+             imageSequence:imageSequence sequenceFramerate:sequenceFramerate
                   previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
            progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
@@ -774,11 +778,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
-- (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index
+- (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate
 {
     [self showWindow:self];
 
-    [self scanURL:fileURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    [self scanURL:fileURL titleIndex:index imageSequence:imageSequence sequenceFramerate:sequenceFramerate completionHandler:^(NSArray<HBTitle *> *titles)
     {
         if (titles.count)
         {
@@ -808,11 +812,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }];
 }
 
-- (void)openURL:(NSURL *)fileURL
+- (void)openURL:(NSURL *)fileURL imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate
 {
     if (self.core.state != HBStateScanning)
     {
-        [self openURL:fileURL titleIndex:0];
+        [self openURL:fileURL titleIndex:0 imageSequence:imageSequence sequenceFramerate:sequenceFramerate];
     }
 }
 
@@ -824,7 +828,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (self.core.state != HBStateScanning)
     {
         [job refreshSecurityScopedResources];
-        [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
+        [self scanURL:job.fileURL titleIndex:job.titleIdx imageSequence:job.imageSequence sequenceFramerate:job.sequenceFramerate completionHandler:^(NSArray<HBTitle *> *titles)
         {
             if (titles.count)
             {
@@ -1016,7 +1020,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         if (result == NSModalResponseOK)
          {
              NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
-             [self openURL:panel.URL titleIndex:titleIdx];
+             [self openURL:panel.URL titleIndex:titleIdx imageSequence:self.scanImageSequence sequenceFramerate:self.sequenceFramerate];
          }
      }];
 }

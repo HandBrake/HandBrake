@@ -256,7 +256,7 @@ HB_OBJC_DIRECT_MEMBERS
     return YES;
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
@@ -292,8 +292,8 @@ HB_OBJC_DIRECT_MEMBERS
     [self preventAutoSleep];
 
     hb_scan(_hb_handle, url.fileSystemRepresentation,
-            (int)index, (int)previewsNum,
-            keepPreviews, min_title_duration_ticks);
+            (int)index, (int)imageSequence, [sequenceFramerate UTF8String],
+            (int)previewsNum, keepPreviews, min_title_duration_ticks);
 
     // Start the timer to handle libhb state changes
     [self startUpdateTimerWithInterval:0.2];
