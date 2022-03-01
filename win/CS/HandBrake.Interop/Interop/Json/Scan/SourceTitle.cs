@@ -51,17 +51,7 @@ namespace HandBrake.Interop.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the cropping values
         /// </summary>
-        public List<int> SmartCrop { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cropping values
-        /// </summary>
         public List<int> LooseCrop { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cropping values
-        /// </summary>
-        public List<int> TightCrop { get; set; }
 
         /// <summary>
         /// Gets or sets the duration.

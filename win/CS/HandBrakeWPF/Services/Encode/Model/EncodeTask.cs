@@ -121,7 +121,6 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Height = task.Height;
             this.AllowUpscaling = task.AllowUpscaling;
             this.OptimalSize = task.OptimalSize;
-            this.HasCropping = task.HasCropping;
             this.PixelAspectX = task.PixelAspectX;
             this.PixelAspectY = task.PixelAspectY;
             this.Cropping = new Cropping(task.Cropping);
@@ -195,8 +194,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         public int? MaxHeight { get; set; }
 
         public Cropping Cropping { get; set; }
-
-        public bool HasCropping { get; set; }
 
         public Anamorphic Anamorphic { get; set; }
 

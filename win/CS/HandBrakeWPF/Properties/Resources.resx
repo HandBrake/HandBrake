@@ -2669,4 +2669,16 @@ This may be due to limitations of the file container you have selected. Please s
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
     <value>Update Now!</value>
   </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Conservative</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
 </root>

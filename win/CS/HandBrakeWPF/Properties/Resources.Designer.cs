@@ -853,6 +853,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string CropMode_Auto {
+            get {
+                return ResourceManager.GetString("CropMode_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string CropMode_Custom {
+            get {
+                return ResourceManager.GetString("CropMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conservative.
+        /// </summary>
+        public static string CropMode_Loose {
+            get {
+                return ResourceManager.GetString("CropMode_Loose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string CropMode_None {
+            get {
+                return ResourceManager.GetString("CropMode_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Dark.
         /// </summary>
         public static string DarkTheme_dark {
