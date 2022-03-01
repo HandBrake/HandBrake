@@ -149,6 +149,7 @@ void hb_job_set_encoder_options(hb_job_t *job, const char *options);
 void hb_job_set_encoder_profile(hb_job_t *job, const char *profile);
 void hb_job_set_encoder_level  (hb_job_t *job, const char *level);
 void hb_job_set_file           (hb_job_t *job, const char *file);
+void hb_job_set_sequence_framerate(hb_job_t *job, const char *sequence_framerate);
 
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
 hb_list_t *hb_audio_list_copy(const hb_list_t *src);
@@ -536,6 +537,10 @@ struct hb_job_s
 
     /* Include chapter marker track in mp4? */
     int             chapter_markers;
+
+    /* Should be opened as an image sequence, Boolean */
+    int             image_sequence;
+    const char    * sequence_framerate;
 
     // Video filters
     int             grayscale;      // Black and white encoding

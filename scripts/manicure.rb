@@ -612,6 +612,7 @@ class Display
 
     #Booleans
     if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["ImageSequence"] == 1 then commandString << " --image-sequence" end
     if hash["VideoGrayScale"] == 1 then commandString << " -g" end
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
@@ -1011,6 +1012,7 @@ class Display
 
     #Booleans
     if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["ImageSequence"] == 1 then commandString << " --image-sequence" end
     if hash["VideoGrayScale"] == 1 then commandString << " -g" end
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
@@ -1472,6 +1474,10 @@ class Display
       commandString << "job->chapter_markers = 1;\n    "
     end
 
+    if hash["ImageSequence"] == 1
+      commandString << "job->image_sequence = 1;\n    "
+    end
+
     if hash["VideoGrayScale"] == 1
       commandString << "job->grayscale = 1;\n    "
     end
@@ -1863,6 +1869,7 @@ class Display
 
     #Booleans
     if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["ImageSequence"] == 1 then commandString << " --image-sequence" end
     if hash["VideoGrayScale"] == 1 then commandString << " -g" end
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end

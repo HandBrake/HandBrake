@@ -166,6 +166,8 @@ struct hb_stream_s
     hb_handle_t * h;
 
     int     scan;
+    int     image_sequence;     /* 1 if we're reading an image sequence */
+    char   *sequence_framerate; /* framerate when reading an image sequence */
     int     frames;             /* video frames so far */
     int     errors;             /* total errors so far */
     int     last_error_frame;   /* frame # at last error message */
@@ -273,7 +275,8 @@ static int update_ts_streams( hb_stream_t * stream, int pid, int stream_id_ext, 
 static void update_pes_kind( hb_stream_t * stream, int idx );
 
 static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan );
-static void ffmpeg_close( hb_stream_t *d );
+static int ffmpeg_open_sequence(hb_stream_t *stream );
+static void ffmpeg_close(hb_stream_t *d);
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title );
 hb_buffer_t *hb_ffmpeg_read( hb_stream_t *stream );
 static int ffmpeg_seek( hb_stream_t *stream, float frac );
@@ -833,17 +836,17 @@ hb_stream_open(hb_handle_t *h, const char *path, hb_title_t *title, int scan)
     }
 
     FILE *f = hb_fopen(path, "rb");
-    if ( f == NULL )
+    if (f == NULL)
     {
-        hb_log( "hb_stream_open: open %s failed", path );
+        hb_log("hb_stream_open: open %s failed", path);
         return NULL;
     }
 
-    hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
-    if ( d == NULL )
+    hb_stream_t *d = calloc(sizeof(hb_stream_t), 1);
+    if (d == NULL)
     {
-        fclose( f );
-        hb_log( "hb_stream_open: can't allocate space for %s stream state", path );
+        fclose(f);
+        hb_log("hb_stream_open: can't allocate space for %s stream state", path);
         return NULL;
     }
 
@@ -860,41 +863,77 @@ hb_stream_open(hb_handle_t *h, const char *path, hb_title_t *title, int scan)
     d->file_handle = f;
     d->title = title;
     d->scan = scan;
-    d->path = strdup( path );
-    if (d->path != NULL )
+    d->path = strdup(path);
+    if (d->path != NULL)
     {
-        if (hb_stream_get_type( d ) != 0)
+        if (hb_stream_get_type(d) != 0)
         {
-            if( !scan )
+            if (!scan)
             {
-                prune_streams( d );
+                prune_streams(d);
             }
             // reset to beginning of file and reset some stream
             // state information
-            hb_stream_seek( d, 0. );
+            hb_stream_seek(d, 0.);
             return d;
         }
-        fclose( d->file_handle );
+        fclose(d->file_handle);
         d->file_handle = NULL;
-        if ( ffmpeg_open( d, title, scan ) )
+        if (ffmpeg_open(d, title, scan))
         {
             return d;
         }
     }
-    if ( d->file_handle )
+    if (d->file_handle)
     {
-        fclose( d->file_handle );
+        fclose(d->file_handle);
     }
     if (d->path)
     {
-        free( d->path );
+        free(d->path);
     }
-    hb_log( "hb_stream_open: open %s failed", path );
-    free( d );
+    hb_log("hb_stream_open: open %s failed", path);
+    free(d);
     return NULL;
 }
 
-static int new_pid( hb_stream_t * stream )
+hb_stream_t *
+hb_sequence_open(hb_handle_t *h, const char *path, const char *framerate)
+{
+    hb_log("hb_sequence_open: trying %s...", path);
+    hb_stream_t *d = calloc(sizeof(hb_stream_t), 1);
+    if (d == NULL)
+    {
+        hb_log("hb_sequence_open: can't allocate space for %s stream state", path);
+        return NULL;
+    }
+
+    /*
+     * If it's something we can deal with (MPEG2 PS or TS) return a stream
+     * reference structure & null otherwise.
+     */
+    d->h = h;
+    d->image_sequence = 1;
+    d->sequence_framerate = strdup(framerate);
+    d->path = strdup(path);
+    if (d->path != NULL && ffmpeg_open_sequence(d))
+    {
+        return d;
+    }
+    if (d->path)
+    {
+        free(d->path);
+    }
+    if (d->sequence_framerate)
+    {
+        free(d->sequence_framerate);
+    }
+    hb_log("hb_sequence_open: open %s failed", path);
+    free(d);
+    return NULL;
+}
+
+static int new_pid(hb_stream_t *stream)
 {
     int num = stream->ts.alloc;
 
@@ -5275,6 +5314,77 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
         if ( i >= info_ic->nb_streams )
             goto fail;
     }
+    return 1;
+
+  fail:
+    if ( info_ic ) avformat_close_input( &info_ic );
+    return 0;
+}
+
+static int ffmpeg_open_sequence(hb_stream_t *stream)
+{
+    hb_log("ffmpeg_open_sequence: trying %s...", stream->path);
+
+    AVFormatContext *info_ic = NULL;
+
+    av_log_set_level( AV_LOG_ERROR );
+
+    // Increase probe buffer size
+    // The default (5MB) is not big enough to successfully scan
+    // some files with large PNGs
+    AVDictionary * av_opts = NULL;
+    av_dict_set( &av_opts, "probesize", "15000000", 0 );
+
+    av_dict_set( &av_opts, "framerate", strdup(stream->sequence_framerate), 0 );
+    av_dict_set( &av_opts, "pattern_type", "sequence", 0 );
+
+    hb_log("trying to open input with pattern_type sequence");
+    // See FFMpeg has issues with seeking comment in ffmpeg_open().
+    if ( avformat_open_input( &info_ic, stream->path, NULL, &av_opts ) < 0 )
+    {
+        av_dict_free( &av_opts );
+        return 0;
+    }
+    // libav populates av_opts with the things it didn't recognize.
+    AVDictionaryEntry *t = NULL;
+    while ((t = av_dict_get(av_opts, "", t, AV_DICT_IGNORE_SUFFIX)) != NULL)
+    {
+        hb_log("ffmpeg_open: unknown option '%s'", t->key);
+    }
+    av_dict_free( &av_opts );
+
+    if ( avformat_find_stream_info( info_ic, NULL ) < 0 )
+        goto fail;
+
+    stream->ffmpeg_ic = info_ic;
+    stream->hb_stream_type = ffmpeg;
+    stream->chapter_end = INT64_MAX;
+    stream->ffmpeg_pkt = av_packet_alloc();
+
+    if (stream->ffmpeg_pkt == NULL)
+    {
+        hb_error("stream: av_packet_alloc failed");
+        goto fail;
+    }
+
+    // we're opening as sequence. let ffmpeg put some info into the
+    // log about what we've got.
+    //TODO stream->ffmpeg_video_id = title->video_id;
+    av_log_set_level( AV_LOG_INFO );
+    av_dump_format( info_ic, 0, stream->path, 0 );
+    av_log_set_level( AV_LOG_ERROR );
+
+    // accept this file if it has at least one video stream we can decode
+    int i;
+    for (i = 0; i < info_ic->nb_streams; ++i )
+    {
+        if (info_ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
+        {
+            break;
+        }
+    }
+    if ( i >= info_ic->nb_streams )
+        goto fail;
     return 1;
 
   fail:

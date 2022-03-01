@@ -359,11 +359,13 @@ void hb_remove_previews( hb_handle_t * h )
  * @param h Handle to hb_handle_t
  * @param path location of VIDEO_TS folder.
  * @param title_index Desired title to scan.  0 for all titles.
+ * @param image_sequence Whether to try  reading an image sequence from the starting image.
  * @param preview_count Number of preview images to generate.
  * @param store_previews Whether or not to write previews to disk.
  */
-void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews, uint64_t min_duration )
+void hb_scan(hb_handle_t *h, const char *path, int title_index,
+             int image_sequence, const char *sequence_framerate,
+             int preview_count, int store_previews, uint64_t min_duration)
 {
     hb_title_t * title;
 
@@ -434,7 +436,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
-                                   &h->title_set, preview_count,
+                                   &h->title_set, image_sequence,
+                                   sequence_framerate, preview_count,
                                    store_previews, min_duration );
 }
 

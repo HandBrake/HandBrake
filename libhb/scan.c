@@ -24,6 +24,9 @@ typedef struct
     hb_stream_t  * stream;
     hb_batch_t   * batch;
 
+    int            image_sequence;
+    char         * sequence_framerate;
+
     int            preview_count;
     int            store_previews;
 
@@ -56,10 +59,11 @@ static const char *aspect_to_string(hb_rational_t *dar)
     return arstr;
 }
 
-hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
-                            const char * path, int title_index,
-                            hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration )
+hb_thread_t *hb_scan_init(hb_handle_t *handle, volatile int *die,
+                          const char *path, int title_index,
+                          hb_title_set_t *title_set, int image_sequence,
+                          const char *sequence_framerate, int preview_count,
+                          int store_previews, uint64_t min_duration)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -69,7 +73,9 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->title_index  = title_index;
     data->title_set    = title_set;
 
-    data->preview_count  = preview_count;
+    data->image_sequence = image_sequence;
+    data->sequence_framerate = strdup(sequence_framerate);
+    data->preview_count = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
 
@@ -188,8 +194,17 @@ static void ScanFunc( void * _data )
         // mode.
         if (data->title_index == 0)
             data->title_index = 1;
-        hb_title_t * title = hb_title_init( data->path, data->title_index );
-        data->stream = hb_stream_open(data->h, data->path, title, 1);
+
+        hb_title_t *title = hb_title_init(data->path, data->title_index);
+        if (data->image_sequence == 1)
+        {
+            hb_log( "trying to load image sequence" );
+            data->stream = hb_sequence_open(data->h, data->path, data->sequence_framerate);
+        }
+        else
+        {
+            data->stream = hb_stream_open(data->h, data->path, title, 1);
+        }
         if (data->stream != NULL)
         {
             title = hb_stream_title_scan( data->stream, title );
@@ -322,6 +337,7 @@ finish:
         hb_batch_close( &data->batch );
     }
     free( data->path );
+    free( data->sequence_framerate );
     free( data );
     _data = NULL;
     hb_buffer_pool_free();
@@ -586,7 +602,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     }
     else if (data->stream)
     {
-        stream = hb_stream_open(data->h, data->path, title, 0);
+        if(data->image_sequence == 0)
+        {
+            stream = hb_stream_open(data->h, data->path, title, 0);
+        }
+        else
+        {
+            stream = hb_sequence_open(data->h, data->path, data->sequence_framerate);
+        }
     }
 
     if (title->video_codec == WORK_NONE)

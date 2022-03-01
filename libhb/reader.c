@@ -155,8 +155,16 @@ static int hb_reader_open( hb_work_private_t * r )
     else if (r->title->type == HB_STREAM_TYPE ||
              r->title->type == HB_FF_STREAM_TYPE)
     {
-        if (!(r->stream = hb_stream_open(r->h, r->title->path, r->title, 0)))
-            return 1;
+        if (r->job->image_sequence == 0)
+        {
+            if (!(r->stream = hb_stream_open(r->h, r->title->path, r->title, 0)))
+                return 1;
+        }
+        else
+        {
+            if (!(r->stream = hb_sequence_open(r->h, r->title->path, r->job->sequence_framerate)))
+                return 1;
+        }
         if (r->job->start_at_preview)
         {
             // First try seeking to PTS title duration / (seek_points + 1)

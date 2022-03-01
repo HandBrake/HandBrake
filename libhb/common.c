@@ -4248,7 +4248,15 @@ void hb_job_set_file(hb_job_t *job, const char *file)
     }
 }
 
-hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
+void hb_job_set_sequence_framerate(hb_job_t *job, const char *sequence_framerate)
+{
+    if (job != NULL)
+    {
+        hb_update_str(&job->sequence_framerate, sequence_framerate);
+    }
+}
+
+hb_filter_object_t *hb_filter_copy(hb_filter_object_t *filter)
 {
     if( filter == NULL )
         return NULL;

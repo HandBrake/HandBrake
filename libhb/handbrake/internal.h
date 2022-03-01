@@ -272,10 +272,11 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 /***********************************************************************
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
-hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
-                            const char * path, int title_index,
-                            hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration );
+hb_thread_t *hb_scan_init(hb_handle_t *, volatile int *die,
+                          const char *path, int title_index,
+                          hb_title_set_t *title_set, int image_sequence,
+                          const char *sequence_framerate, int preview_count,
+                          int store_previews, uint64_t min_duration);
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
@@ -360,6 +361,8 @@ hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title );
 void hb_ts_stream_reset(hb_stream_t *stream);
 hb_stream_t * hb_stream_open(hb_handle_t *h, const char * path,
                              hb_title_t *title, int scan);
+hb_stream_t * hb_sequence_open(hb_handle_t *h, const char * path,
+                               const char * framerate);
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *, hb_title_t *);
 hb_buffer_t * hb_stream_read( hb_stream_t * );

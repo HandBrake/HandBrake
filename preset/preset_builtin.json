@@ -27,6 +27,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -137,6 +139,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -247,6 +251,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -357,6 +363,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -467,6 +475,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": true,
@@ -577,6 +587,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -687,6 +699,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -797,6 +811,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -921,6 +937,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1045,6 +1063,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1169,6 +1189,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1293,6 +1315,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1417,6 +1441,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1541,6 +1567,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1665,6 +1693,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1789,6 +1819,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -1906,6 +1938,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2016,6 +2050,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2126,6 +2162,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2236,6 +2274,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2346,6 +2386,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2456,6 +2498,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2566,6 +2610,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2676,6 +2722,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2786,6 +2834,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -2896,6 +2946,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3006,6 +3058,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3116,6 +3170,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3226,6 +3282,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3357,6 +3415,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3481,6 +3541,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3591,6 +3653,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3701,6 +3765,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3811,6 +3877,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -3921,6 +3989,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4031,6 +4101,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4155,6 +4227,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4279,6 +4353,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4403,6 +4479,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4527,6 +4605,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4651,6 +4731,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4775,6 +4857,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -4899,6 +4983,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5023,6 +5109,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5146,6 +5234,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [],
                     "Default": false,
                     "FileFormat": "mp4",
@@ -5269,6 +5359,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5379,6 +5471,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5489,6 +5583,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5616,6 +5712,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5740,6 +5838,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5864,6 +5964,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -5974,6 +6076,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6084,6 +6188,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6208,6 +6314,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6325,6 +6433,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6435,6 +6545,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6545,6 +6657,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6655,6 +6769,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6765,6 +6881,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6875,6 +6993,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -6985,6 +7105,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7095,6 +7217,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7205,6 +7329,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7315,6 +7441,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7424,6 +7552,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7533,6 +7663,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7642,6 +7774,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7751,6 +7885,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7860,6 +7996,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -7969,6 +8107,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8078,6 +8218,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8187,6 +8329,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8296,6 +8440,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8413,6 +8559,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8522,6 +8670,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8631,6 +8781,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8740,6 +8892,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8849,6 +9003,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -8958,6 +9114,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9067,6 +9225,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9176,6 +9336,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9292,6 +9454,8 @@
                     "AudioSecondaryEncoderMode": false,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9402,6 +9566,8 @@
                     "AudioSecondaryEncoderMode": false,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9512,6 +9678,8 @@
                     "AudioSecondaryEncoderMode": false,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,
@@ -9622,6 +9790,8 @@
                     "AudioSecondaryEncoderMode": false,
                     "AudioTrackSelectionBehavior": "all",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": false,

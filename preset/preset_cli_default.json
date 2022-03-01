@@ -33,6 +33,8 @@
                     "AudioSecondaryEncoderMode": true,
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
+                    "ImageSequence": false,
+                    "SequenceFramerate": "0",
                     "ChildrenArray": [
                     ],
                     "Default": true,

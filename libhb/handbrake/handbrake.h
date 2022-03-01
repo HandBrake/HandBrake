@@ -45,9 +45,12 @@ void          hb_dvd_set_dvdnav( int enable );
 
 /* hb_scan()
    Scan the specified path. Can be a DVD device, a VIDEO_TS folder or
-   a VOB file. If title_index is 0, scan all titles. */
+   a VOB file. If title_index is 0, scan all titles.
+   If image_sequence is non-0, try opening as image sequence with framerate
+   set in sequence_framerate. */
 void          hb_scan( hb_handle_t *, const char * path,
-                       int title_index, int preview_count,
+                       int title_index, int image_sequence,
+                       const char *sequence_framerate, int preview_count,
                        int store_previews, uint64_t min_duration );
 void          hb_scan_stop( hb_handle_t * );
 void          hb_force_rescan( hb_handle_t * );

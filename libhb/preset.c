@@ -2223,6 +2223,13 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     if (hb_list_count(title->list_chapter) <= 1)
         chapters = 0;
 
+    // Apply image sequence settings if present
+    if (hb_dict_get_bool(preset, "ImageSequence"))
+    {
+        hb_dict_set_bool(job_dict, "ImageSequence", 1);
+        hb_dict_set(job_dict, "SequenceFramerate", hb_dict_get(preset, "SequenceFramerate"));
+    }
+
     // Set "Destination" settings in job
     hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
     hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));

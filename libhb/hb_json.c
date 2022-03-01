@@ -920,7 +920,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.
-    hb_scan(h, path, title_index, -1, 0, 0);
+    hb_scan(h, path, title_index, 0, NULL, -1, 0, 0);
 
     // Wait for scan to complete
     hb_state_t state;
@@ -993,6 +993,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
     const char       * destfile = NULL;
     const char       * range_type = NULL;
+    const char       * sequence_framerate = NULL;
     const char       * video_preset = NULL, * video_tune = NULL;
     const char       * video_profile = NULL, * video_level = NULL;
     const char       * video_options = NULL;
@@ -1013,6 +1014,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
     // Source {Angle, Range {Type, Start, End, SeekPoints}}
     "s:{s?i, s?{s:s, s?I, s?I, s?I}},"
+    // ImageSequence, SequenceFramerate
+    "s:b, s:s,"
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
@@ -1058,6 +1061,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "Start",            unpack_I(&range_start),
                 "End",              unpack_I(&range_end),
                 "SeekPoints",       unpack_I(&range_seek_points),
+        "ImageSequence",            unpack_b(&job->image_sequence),
+        "SequenceFramerate",        unpack_s(&sequence_framerate),
         "PAR",
             "Num",                  unpack_i(&job->par.num),
             "Den",                  unpack_i(&job->par.den),
@@ -1174,6 +1179,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     if (destfile != NULL && destfile[0] != 0)
     {
         hb_job_set_file(job, destfile);
+    }
+    if(sequence_framerate != NULL && sequence_framerate[0] != 0)
+    {
+        hb_job_set_sequence_framerate(job, sequence_framerate);
     }
 
     hb_job_set_encoder_preset(job, video_preset);

@@ -401,6 +401,11 @@ void hb_display_job_info(hb_job_t *job)
 
     if( title->container_name != NULL )
         hb_log( "   + container: %s", title->container_name);
+    
+    if( job->image_sequence )
+    {
+        hb_log("   + image sequence, framerate %s", job->sequence_framerate);
+    }
 
     if( title->data_rate )
     {
