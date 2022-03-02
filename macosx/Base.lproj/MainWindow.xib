@@ -15,6 +15,7 @@
                 <outlet property="filtersTab" destination="0UB-bG-kwS" id="8wc-MY-h6a"/>
                 <outlet property="mainTabView" destination="1474" id="LnD-zT-6M5"/>
                 <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
+                <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
                 <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
                 <outlet property="pictureTab" destination="eij-Sn-QmJ" id="8Ww-MT-bhs"/>
                 <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
@@ -859,14 +860,14 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
-            <rect key="frame" x="0.0" y="0.0" width="442" height="49"/>
+            <rect key="frame" x="0.0" y="0.0" width="512" height="48"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nHs-z7-brO">
-                    <rect key="frame" x="0.0" y="0.0" width="460" height="49"/>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="nHs-z7-brO">
+                    <rect key="frame" x="10" y="0.0" width="492" height="48"/>
                     <subviews>
-                        <button toolTip="Scan only the specified title instead of all titles." misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
-                            <rect key="frame" x="18" y="15" width="116" height="38"/>
+                        <button toolTip="Scan only the specified title instead of all titles." translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
+                            <rect key="frame" x="18" y="15" width="116" height="18"/>
                             <buttonCell key="cell" type="check" title="Scan only title:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eQA-t2-FcV">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -875,12 +876,39 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
                             </connections>
                         </button>
-                        <textField toolTip="Title to scan." verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
-                            <rect key="frame" x="142" y="23" width="52" height="21"/>
+                        <textField toolTip="Frames per second for image sequence." verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jZ6-z9-PvG">
+                            <rect key="frame" x="420" y="13" width="52" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="CsJ-bj-fBZ"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="29.97" drawsBackground="YES" usesSingleLineMode="YES" id="eW8-Lg-vV0">
+                                <numberFormatter key="formatter" formatterBehavior="custom10_4" localizesFormat="NO" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="4" minimumFractionDigits="1" maximumFractionDigits="2" id="U93-TV-3iR">
+                                    <real key="minimum" value="0.0"/>
+                                </numberFormatter>
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <allowedInputSourceLocales>
+                                    <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                </allowedInputSourceLocales>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="-2" name="enabled" keyPath="self.scanImageSequence" id="1Po-3l-Kbz"/>
+                                <binding destination="-2" name="value" keyPath="self.sequenceFramerate" id="9AN-5J-jTc">
+                                    <dictionary key="options">
+                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                        <integer key="NSNullPlaceholder" value="0"/>
+                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </textField>
+                        <textField toolTip="Title to scan." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
+                            <rect key="frame" x="142" y="13" width="52" height="22"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="BGA-yJ-Apd"/>
                             </constraints>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="6E4-AG-PEh">
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" usesSingleLineMode="YES" id="6E4-AG-PEh">
                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WUJ-g0-wrL">
                                     <real key="minimum" value="0.0"/>
                                 </numberFormatter>
@@ -899,54 +927,42 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </binding>
                             </connections>
                         </textField>
-                        <button toolTip="Scan image as sequence." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mpz-5t-ZA4">
-                            <rect key="frame" x="18" y="5" width="196" height="18"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="check" title="Image sequence, framerate:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="a7l-bd-SDs">
+                        <button toolTip="Scan only the specified title instead of all titles." translatesAutoresizingMaskIntoConstraints="NO" id="lv0-Jn-ryw">
+                            <rect key="frame" x="216" y="15" width="196" height="18"/>
+                            <buttonCell key="cell" type="check" title="Image sequence, framerate:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ygP-Tm-sBG">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
                             <connections>
-                                <binding destination="-2" name="value" keyPath="self.scanImageSequence" id="4GQ-ZK-kGQ"/>
+                                <binding destination="-2" name="value" keyPath="self.scanImageSequence" id="d2L-9b-mf6"/>
                             </connections>
                         </button>
-                        <textField toolTip="Title to scan." verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6JD-lb-ftW">
-                            <rect key="frame" x="215" y="3" width="52" height="21"/>
-                            <constraints>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="jSy-iN-PEH"/>
-                            </constraints>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="30" drawsBackground="YES" id="SJ3-fc-hbc">
-                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="4oX-hL-XUs">
-                                    <real key="minimum" value="0.0"/>
-                                </numberFormatter>
-                                <font key="font" metaFont="system"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                            <connections>
-                                <binding destination="-2" name="value" keyPath="self.sequenceFramerate" id="bfD-t2-hzj"/>
-                            </connections>
-                        </textField>
                     </subviews>
                     <constraints>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="leading" secondItem="nHs-z7-brO" secondAttribute="leading" constant="20" id="13C-tG-GpU"/>
+                        <constraint firstItem="lv0-Jn-ryw" firstAttribute="leading" secondItem="3w9-Iu-3u2" secondAttribute="trailing" constant="24" id="1eE-TD-h0F"/>
+                        <constraint firstItem="lv0-Jn-ryw" firstAttribute="baseline" secondItem="jZ6-z9-PvG" secondAttribute="baseline" id="27d-1A-wE6"/>
+                        <constraint firstItem="jZ6-z9-PvG" firstAttribute="leading" secondItem="lv0-Jn-ryw" secondAttribute="trailing" constant="8" id="G2Q-iE-Nbt"/>
+                        <constraint firstItem="lv0-Jn-ryw" firstAttribute="top" secondItem="nHs-z7-brO" secondAttribute="top" constant="16" id="Ila-EP-Vui"/>
+                        <constraint firstAttribute="trailing" secondItem="jZ6-z9-PvG" secondAttribute="trailing" constant="20" id="JJ5-lf-szZ"/>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="top" secondItem="nHs-z7-brO" secondAttribute="top" constant="16" id="JZd-2D-fiA"/>
                         <constraint firstItem="DN4-48-aOI" firstAttribute="baseline" secondItem="3w9-Iu-3u2" secondAttribute="baseline" id="MeM-fz-C5e"/>
+                        <constraint firstAttribute="bottom" secondItem="lv0-Jn-ryw" secondAttribute="bottom" constant="16" id="QGs-1p-Ja5"/>
+                        <constraint firstItem="jZ6-z9-PvG" firstAttribute="centerY" secondItem="nHs-z7-brO" secondAttribute="centerY" id="bHU-qF-Acc"/>
                         <constraint firstAttribute="bottom" secondItem="DN4-48-aOI" secondAttribute="bottom" constant="16" id="gRD-Ah-zvX"/>
-                        <constraint firstAttribute="trailing" secondItem="3w9-Iu-3u2" secondAttribute="trailing" constant="20" id="tAR-eN-FSk"/>
                         <constraint firstItem="3w9-Iu-3u2" firstAttribute="leading" secondItem="DN4-48-aOI" secondAttribute="trailing" constant="8" id="txm-vt-aJ8"/>
+                        <constraint firstItem="3w9-Iu-3u2" firstAttribute="centerY" secondItem="nHs-z7-brO" secondAttribute="centerY" id="uau-8m-2bU"/>
                     </constraints>
                 </customView>
             </subviews>
             <constraints>
                 <constraint firstItem="nHs-z7-brO" firstAttribute="top" secondItem="lZQ-gl-3wX" secondAttribute="top" id="Kvj-4E-aem"/>
-                <constraint firstItem="nHs-z7-brO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lZQ-gl-3wX" secondAttribute="leading" priority="750" constant="10" id="Q79-5U-xN5"/>
                 <constraint firstItem="nHs-z7-brO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lZQ-gl-3wX" secondAttribute="leading" priority="250" constant="11" id="gUc-9s-6qh"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nHs-z7-brO" secondAttribute="trailing" priority="750" constant="10" id="gma-1d-Ecc"/>
                 <constraint firstAttribute="bottom" secondItem="nHs-z7-brO" secondAttribute="bottom" id="kh1-nj-FYU"/>
                 <constraint firstItem="nHs-z7-brO" firstAttribute="centerX" secondItem="lZQ-gl-3wX" secondAttribute="centerX" id="mKh-Iz-BGz"/>
             </constraints>
-            <point key="canvasLocation" x="354" y="-570.5"/>
+            <point key="canvasLocation" x="591" y="-571"/>
         </customView>
         <menu id="my5-n7-OFP">
             <items>

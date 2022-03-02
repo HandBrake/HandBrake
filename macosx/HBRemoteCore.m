@@ -149,7 +149,7 @@
     [_proxy preventSleep];
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     if (!_connection)
     {
@@ -173,7 +173,7 @@
 
     __weak HBRemoteCore *weakSelf = self;
 
-    [_proxy scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews withReply:^(HBCoreResult result) {
+    [_proxy scanURL:url titleIndex:index imageSequence:imageSequence sequenceFramerate:sequenceFramerate previews:previewsNum minDuration:seconds keepPreviews:keepPreviews withReply:^(HBCoreResult result) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             HBCoreCompletionHandler handler = weakSelf.completionHandler;
             weakSelf.completionHandler = nil;

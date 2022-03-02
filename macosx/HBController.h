@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)launchAction;
 
-- (void)openURL:(NSURL *)fileURL imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate;
+- (void)openURL:(NSURL *)fileURL;
 - (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler;
 
 - (IBAction)browseSources:(id)sender;

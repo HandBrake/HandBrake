@@ -503,6 +503,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:o, s:o, s:o, s:o, s:[]},"
     // Source {Path, Title, Angle}
     "s:{s:o, s:o, s:o,},"
+    // ImageSequence, SequenceFramerate
+    "s:o, s:o,"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
     // Video {Encoder, QSV {Decode, AsyncDepth, AdapterIndex}}
@@ -527,6 +529,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "Path",             hb_value_string(job->title->path),
             "Title",            hb_value_int(job->title->index),
             "Angle",            hb_value_int(job->angle),
+        "ImageSequence",        hb_value_bool(job->image_sequence),
+        "SequenceFramerate",    hb_value_string(job->sequence_framerate),
         "PAR",
             "Num",              hb_value_int(job->par.num),
             "Den",              hb_value_int(job->par.den),

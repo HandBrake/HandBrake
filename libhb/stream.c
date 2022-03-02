@@ -898,8 +898,40 @@ hb_stream_open(hb_handle_t *h, const char *path, hb_title_t *title, int scan)
 }
 
 hb_stream_t *
-hb_sequence_open(hb_handle_t *h, const char *path, const char *framerate)
+hb_sequence_open(hb_handle_t *h, const char *firstPath, const char *framerate)
 {
+    char *dot = strrchr(firstPath, '.');
+    size_t extLength = firstPath + strlen(firstPath) - dot;
+    const char *extension = firstPath + strlen(firstPath) - extLength;
+    if (dot == NULL)
+    {
+        hb_log("hb_sequence_open: no file extension found in %s", firstPath);
+        return NULL;
+    }
+    dot--;
+    if(*dot > '9' || *dot < '0')
+    {
+        hb_log("hb_sequence_open: no number before file extension in %s", firstPath);
+        return NULL;
+    }
+
+    char *end = dot;
+    while (*dot >= '0' && *dot <= '9')
+        dot--;
+    unsigned int numbers = end - dot;
+
+    if (numbers > 99)
+    {
+        hb_log("hb_sequence_open: more than 99 index numbers found "
+               "in sequence file name %s", firstPath);
+        return NULL;
+    }
+
+    unsigned int baseLength = dot - firstPath + 1;
+    char *path = calloc(baseLength + extLength + 5, 1);
+    strncpy(path, firstPath, baseLength);
+    sprintf(path + baseLength, "%%0%ud%s", numbers, extension);
+
     hb_log("hb_sequence_open: trying %s...", path);
     hb_stream_t *d = calloc(sizeof(hb_stream_t), 1);
     if (d == NULL)

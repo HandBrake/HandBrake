@@ -87,6 +87,9 @@
         job->seek_points = self.range.previewsCount;
         job->pts_to_stop = self.range.ptsToStop;
     }
+    
+    job->image_sequence = self.imageSequence;
+    hb_job_set_sequence_framerate(job, self.sequenceFramerate.UTF8String);
 
     // Format (Muxer) and Video Encoder
     job->mux = self.container;

@@ -45,7 +45,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 @implementation HBJob
 
-- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset
+- (nullable instancetype)initWithTitle:(HBTitle *)title imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate preset:(HBPreset *)preset
 {
     self = [super init];
     if (self) {
@@ -55,6 +55,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _title = title;
         _titleIdx = title.index;
         _stream = title.isStream;
+        
+        _imageSequence = imageSequence;
+        _sequenceFramerate = sequenceFramerate;
 
         _name = [title.name copy];
         _fileURL = title.url;
@@ -383,6 +386,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
         copy->_stream = _stream;
+        
+        copy->_imageSequence = _imageSequence;
+        copy->_sequenceFramerate = [_sequenceFramerate copy];
 
         copy->_fileURLBookmark = [_fileURLBookmark copy];
         copy->_destinationFolderURLBookmark = [_destinationFolderURLBookmark copy];
@@ -433,6 +439,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     encodeObject(_presetName);
     encodeInt(_titleIdx);
     encodeBool(_stream);
+    
+    encodeBool(_imageSequence);
+    encodeObject(_sequenceFramerate);
+
 
 #ifdef __SANDBOX_ENABLED__
     if (!_fileURLBookmark)
@@ -489,6 +499,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObjectOrFail(_presetName, NSString);
         decodeInt(_titleIdx); if (_titleIdx < 0) { goto fail; }
         decodeBool(_stream);
+        
+        decodeBool(_imageSequence);
+        decodeObjectOrFail(_sequenceFramerate, NSString);
 
 #ifdef __SANDBOX_ENABLED__
         decodeObject(_fileURLBookmark, NSData)

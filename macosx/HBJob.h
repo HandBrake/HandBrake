@@ -29,7 +29,7 @@ extern NSString *HBChaptersChangedNotification;
  */
 @interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding, HBSecurityScope>
 
-- (nullable instancetype)initWithTitle:(HBTitle *)title preset:(HBPreset *)preset;
+- (nullable instancetype)initWithTitle:(HBTitle *)title imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate preset:(HBPreset *)preset;
 
 @property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;

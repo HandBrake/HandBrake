@@ -180,7 +180,7 @@
 
 - (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
-    [self.mainController openURL:urls.firstObject imageSequence:false sequenceFramerate:@"0"];
+    [self.mainController openURL:urls.firstObject];
     //[NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 

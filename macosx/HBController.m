@@ -163,7 +163,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
         _scanSpecificTitleIdx = 1;
         _scanImageSequence = false;
-        _sequenceFramerate = @"30";
+        _sequenceFramerate = @"29.97";
         _progress = @"";
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
@@ -324,7 +324,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     if (fileURLs.count)
     {
-        [self openURL:fileURLs.firstObject imageSequence:false sequenceFramerate:@"0"];
+        [self openURL:fileURLs.firstObject];
     }
 
     [self.window.contentView setShowFocusRing:NO];
@@ -812,11 +812,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }];
 }
 
-- (void)openURL:(NSURL *)fileURL imageSequence:(BOOL)imageSequence sequenceFramerate:(NSString *)sequenceFramerate
+- (void)openURL:(NSURL *)fileURL
 {
     if (self.core.state != HBStateScanning)
     {
-        [self openURL:fileURL titleIndex:0 imageSequence:imageSequence sequenceFramerate:sequenceFramerate];
+        [self openURL:fileURL titleIndex:0 imageSequence:self.scanImageSequence sequenceFramerate:self.sequenceFramerate];
     }
 }
 
@@ -876,8 +876,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // If there is already a title load, save the current settings to a preset
     // Save the current settings
     [self updateCurrentPreset];
-
-    HBJob *job = [[HBJob alloc] initWithTitle:title preset:self.currentPreset];
+    
+    HBJob *job = [[HBJob alloc] initWithTitle:title imageSequence:self.scanImageSequence sequenceFramerate:self.sequenceFramerate preset:self.currentPreset];
     if (job)
     {
         job.destinationFolderURL = self.destinationFolderURL;
@@ -1329,7 +1329,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
     for (HBTitle *title in titles)
     {
-        HBJob *job = [[HBJob alloc] initWithTitle:title preset:preset];
+        HBJob *job = [[HBJob alloc] initWithTitle:title imageSequence:self.scanImageSequence sequenceFramerate:self.sequenceFramerate preset:preset];
         job.destinationFolderURL = self.destinationFolderURL;
         job.destinationFileName = job.defaultName;
         job.title = nil;

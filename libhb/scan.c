@@ -209,7 +209,20 @@ static void ScanFunc( void * _data )
         {
             title = hb_stream_title_scan( data->stream, title );
             if ( title )
-                hb_list_add( data->title_set->list_title, title );
+            {
+                if (data->image_sequence == 1)
+                {
+                    char *name = data->path;
+                    char *sep = hb_strr_dir_sep(data->path);
+                    if (sep)
+                        name = sep + 1;
+                    title->name = strdup(name);
+                    char *dot_term = strrchr(title->name, '.');
+                    if (dot_term)
+                        *dot_term = '\0';
+                }
+                hb_list_add(data->title_set->list_title, title);
+            }
         }
         else
         {

@@ -195,6 +195,8 @@ NSString * const HBQueueWorkerItemNotificationItemKey = @"HBQueueWorkerItemNotif
     // only useful for autocrop and static previews, which are already taken care of at this point
     [self.core scanURL:item.fileURL
             titleIndex:item.job.titleIdx
+         imageSequence:item.job.imageSequence
+     sequenceFramerate:item.job.sequenceFramerate
               previews:10
            minDuration:0
           keepPreviews:NO
