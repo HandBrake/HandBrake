@@ -637,6 +637,7 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
             margin       = stride / bps - width;
             margin_front = margin / 2;
             margin_back  = margin - margin_front;
+            width       *= bps;
             for (yy = 0; yy < height; yy++)
             {
                 // Mirror final row pixels into front of stride region
