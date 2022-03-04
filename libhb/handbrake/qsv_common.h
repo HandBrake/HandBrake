@@ -92,6 +92,8 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
     // mfxExtAV1BitstreamParam
 #define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 40)
+    // mfxExtHyperModeParam
+#define HB_QSV_CAP_HYPERENCODE       (1LL << 41)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
@@ -182,6 +184,7 @@ typedef struct
     mfxExtCodingOption    codingOption;
     mfxExtCodingOption2   codingOption2;
     mfxExtVideoSignalInfo videoSignalInfo;
+    mfxExtHyperModeParam hyperEncodeParam;
     mfxExtChromaLocInfo   chromaLocInfo;
     mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
     mfxExtContentLightLevelInfo        contentLightLevelInfo;

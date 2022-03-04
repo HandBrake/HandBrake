@@ -136,6 +136,13 @@ static hb_triplet_t hb_qsv_vpp_interpolation_methods[] =
     { "advanced",           "advanced",         MFX_INTERPOLATION_ADVANCED,         },
     { NULL,                                                                         },
 };
+static hb_triplet_t hb_qsv_hyper_encode_modes[] =
+{
+    { "Hyper Encode off",      "off",           MFX_HYPERMODE_OFF,      },
+    { "Hyper Encode on",       "on",            MFX_HYPERMODE_ON,       },
+    { "Hyper Encode adaptive", "adaptive",      MFX_HYPERMODE_ADAPTIVE, },
+    { NULL,                                                             },
+};
 static hb_triplet_t hb_qsv_h264_levels[] =
 {
     { "1.0", "1.0", MFX_LEVEL_AVC_1,  },
@@ -493,6 +500,19 @@ static void init_ext_content_light_level_info(mfxExtContentLightLevelInfo *extCo
     extContentLightLevelInfo->InsertPayloadToggle = MFX_PAYLOAD_OFF;
 }
 
+static void init_ext_hyperencode_option(mfxExtHyperModeParam *extHyperEncodemParam)
+{
+    if (extHyperEncodemParam == NULL)
+    {
+        return;
+    }
+
+    memset(extHyperEncodemParam, 0, sizeof(mfxExtHyperModeParam));
+    extHyperEncodemParam->Header.BufferId = MFX_EXTBUFF_HYPER_MODE_PARAM;
+    extHyperEncodemParam->Header.BufferSz = sizeof(mfxExtHyperModeParam);
+    extHyperEncodemParam->Mode = MFX_HYPERMODE_ON;
+}
+
 static void init_ext_coding_option(mfxExtCodingOption *extCodingOption)
 {
     if (extCodingOption == NULL)
@@ -570,6 +590,7 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
     mfxExtMasteringDisplayColourVolume  extMasteringDisplayColourVolume;
     mfxExtContentLightLevelInfo         extContentLightLevelInfo;
     mfxExtAV1BitstreamParam extAV1BitstreamParam;
+    mfxExtHyperModeParam extHyperEncodeParam;
 
     /* Reset capabilities before querying */
     info->capabilities = 0;
@@ -987,6 +1008,22 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
             if (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7)
             {
                 info->capabilities |= HB_QSV_CAP_VPP_INTERPOLATION;
+            }
+        }
+        if (info->codec_id == MFX_CODEC_HEVC)
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_hyperencode_option(&extHyperEncodeParam);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extHyperEncodeParam;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE && extHyperEncodeParam.Mode == MFX_HYPERMODE_ON)
+            {
+                info->capabilities |= HB_QSV_CAP_HYPERENCODE;
             }
         }
         if (info->codec_id == MFX_CODEC_AV1)
@@ -1426,6 +1463,10 @@ static void log_encoder_capabilities(const int log_level, const uint64_t caps, c
         {
             strcat(buffer, "+nmpslice");
         }
+    }
+    if (caps & HB_QSV_CAP_HYPERENCODE)
+    {
+        strcat(buffer, " hyperencode");
     }
     if (caps & HB_QSV_CAP_AV1_BITSTREAM)
     {
@@ -2465,6 +2506,29 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, hb_job_t *job
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "hyperencode"))
+    {
+        hb_triplet_t *mode = NULL;
+        if (info->capabilities & HB_QSV_CAP_HYPERENCODE)
+        {
+            mode = hb_triplet4key(hb_qsv_hyper_encode_modes, value);
+            if (!mode)
+            {
+                error = HB_QSV_PARAM_BAD_VALUE;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+        if (mode)
+        {
+            param->videoParam->mfx.GopPicSize  = 30;
+            param->videoParam->mfx.IdrInterval = 1;
+            param->videoParam->AsyncDepth      = 30;
+            param->hyperEncodeParam.Mode = mode->value;
+        }
+    }
     else
     {
         /*
@@ -2756,6 +2820,12 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
              *
              * Note: this preset is the libhb default (like x264's "medium").
              */
+            if (hb_qsv_hardware_generation(hb_qsv_get_platform(hb_qsv_get_adapter_index())) >= QSV_G7)
+            {
+                // Since IceLake only
+                param->rc.lookahead                = 0;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_1;
+            }
         }
         else if (!strcasecmp(preset, "balanced"))
         {
@@ -2929,6 +2999,11 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption2.LookAheadDS     = MFX_LOOKAHEAD_DS_OFF;
         param->codingOption2.NumMbPerSlice   = 0;
         // introduced in API 2.5
+        memset(&param->hyperEncodeParam, 0, sizeof(mfxExtHyperModeParam));
+        param->hyperEncodeParam.Header.BufferId = MFX_EXTBUFF_HYPER_MODE_PARAM;
+        param->hyperEncodeParam.Header.BufferSz = sizeof(mfxExtHyperModeParam);
+        param->hyperEncodeParam.Mode = MFX_HYPERMODE_OFF;
+
         memset(&param->av1BitstreamParam, 0, sizeof(mfxExtAV1BitstreamParam));
         param->av1BitstreamParam.Header.BufferId = MFX_EXTBUFF_AV1_BITSTREAM_PARAM;
         param->av1BitstreamParam.Header.BufferSz = sizeof(mfxExtAV1BitstreamParam);
@@ -2998,6 +3073,10 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         if (info->capabilities & HB_QSV_CAP_OPTION2)
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption2;
+        }
+        if (info->capabilities & HB_QSV_CAP_HYPERENCODE)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->hyperEncodeParam;
         }
         if (info->capabilities & HB_QSV_CAP_AV1_BITSTREAM)
         {
