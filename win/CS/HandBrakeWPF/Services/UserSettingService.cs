@@ -313,7 +313,7 @@ namespace HandBrakeWPF.Services
             // Video
             defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, true);
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, true);
-            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, true);
+            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableVceEncoder, true);
             defaults.Add(UserSettingConstants.EnableNvencEncoder, true);
