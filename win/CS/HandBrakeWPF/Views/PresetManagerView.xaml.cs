@@ -76,5 +76,10 @@ namespace HandBrakeWPF.Views
 
             return source as TreeViewItem;
         }
+
+        private void PresetName_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            ((PresetManagerViewModel)this.DataContext).SetPresetNameChanged();
+        }
     }
 }

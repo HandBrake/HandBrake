@@ -1014,7 +1014,7 @@ namespace HandBrakeWPF.ViewModels
             if (!this.PresetManagerViewModel.IsOpen)
             {
                 this.PresetManagerViewModel.IsOpen = true;
-                this.PresetManagerViewModel.SetupWindow(() => this.NotifyOfPropertyChange(() => this.PresetsCategories));
+                this.PresetManagerViewModel.SetupWindow(this.HandleManagePresetChanges);
                 this.windowManager.ShowWindowAsync(this.PresetManagerViewModel);
             }
             else if (this.PresetManagerViewModel.IsOpen)
@@ -1022,6 +1022,18 @@ namespace HandBrakeWPF.ViewModels
                 Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PresetManagerView));
                 window?.Focus();
             }
+        }
+
+        private void HandleManagePresetChanges(Preset preset)
+        {
+            this.PresetsCategories = null;
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+
+            this.PresetsCategories = this.presetService.Presets;
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+
+            this.selectedPreset = preset; // Reselect the preset      
+            this.NotifyOfPropertyChange(() => this.SelectedPreset);
         }
         
         public void LaunchHelp()

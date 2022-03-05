@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -30,8 +31,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Microsoft.Win32;
 
-    using Action = System.Action;
-
     public class PresetManagerViewModel : ViewModelBase, IPresetManagerViewModel
     {
         private readonly IPresetService presetService;
@@ -41,7 +40,8 @@ namespace HandBrakeWPF.ViewModels
         private IPresetObject selectedPresetCategory;
         private Preset selectedPreset;
         private PictureSettingsResLimitModes selectedPictureSettingsResLimitMode;
-        private Action mainWindowCallback;
+        private Action<Preset> mainWindowCallback;
+        private string presetNameKey;
 
         public PresetManagerViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager)
         {
@@ -78,8 +78,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public string SelectedItem { get; set; }
-
         public IPresetObject SelectedPresetCategory
         {
             get => this.selectedPresetCategory;
@@ -89,9 +87,6 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.selectedPresetCategory = value;
                     this.NotifyOfPropertyChange(() => this.SelectedPresetCategory);
-
-                    this.SelectedItem = value?.Category;
-                    this.NotifyOfPropertyChange(() => this.SelectedItem);
 
                     this.selectedPreset = null;
                     this.NotifyOfPropertyChange(() => this.SelectedPreset);
@@ -112,22 +107,22 @@ namespace HandBrakeWPF.ViewModels
 
                     if (value != null)
                     {
-                        this.SelectedItem = value.Name;
-                        this.NotifyOfPropertyChange(() => this.SelectedItem);
-
-                        this.IsBuildIn = value.IsBuildIn;
-
+                        this.PresetName = value?.Name;
+                        this.presetNameKey = value?.Name;
                         this.CustomWidth = value.Task.MaxWidth;
                         this.CustomHeight = value.Task.MaxHeight;
                         this.SetSelectedPictureSettingsResLimitMode();
                     }
                     else
                     {
+                        this.PresetName = null;
+                        this.presetNameKey = null;
                         this.selectedPresetCategory = null;
                         this.NotifyOfPropertyChange(() => this.SelectedPresetCategory);
                     }
                 }
 
+                this.NotifyOfPropertyChange(() => this.PresetName);
                 this.NotifyOfPropertyChange(() => this.IsBuildIn);
                 this.NotifyOfPropertyChange(() => this.SelectedUserPresetCategory);
                 this.NotifyOfPropertyChange(() => this.IsPresetSelected);
@@ -135,21 +130,15 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsBuildIn { get; private set; }
+        public bool IsBuildIn => this.SelectedPreset?.IsBuildIn ?? true;
 
         public bool IsPresetSelected => this.SelectedPreset != null;
 
-        public BindingList<PictureSettingsResLimitModes> ResolutionLimitModes => new BindingList<PictureSettingsResLimitModes>
-                                                                                 {
-                                                                                     PictureSettingsResLimitModes.None,
-                                                                                     PictureSettingsResLimitModes.Size8K,
-                                                                                     PictureSettingsResLimitModes.Size4K,
-                                                                                     PictureSettingsResLimitModes.Size1080p,
-                                                                                     PictureSettingsResLimitModes.Size720p,
-                                                                                     PictureSettingsResLimitModes.Size576p,
-                                                                                     PictureSettingsResLimitModes.Size480p,
-                                                                                     PictureSettingsResLimitModes.Custom,
-                                                                                 };
+        public BindingList<PictureSettingsResLimitModes> ResolutionLimitModes => new BindingList<PictureSettingsResLimitModes>(EnumHelper<PictureSettingsResLimitModes>.GetEnumList().ToList());
+
+        public bool IsPresetNameChanged => this.PresetName != this.presetNameKey;
+
+        public string PresetName { get; set; }
 
         public PictureSettingsResLimitModes SelectedPictureSettingsResLimitMode
         {
@@ -217,7 +206,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsCustomMaxRes { get; private set; }
 
-        public void SetupWindow(Action mainwindowCallback)
+        public void SetupWindow(Action<Preset> mainwindowCallback)
         {
             this.mainWindowCallback = mainwindowCallback;
             this.PresetsCategories = this.presetService.Presets;
@@ -225,6 +214,31 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.LoadCategoryStates();
             this.UserPresetCategories = presetService.GetPresetCategories(true).ToList(); // .Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
             this.presetService.PresetCollectionChanged += this.PresetService_PresetCollectionChanged;
+        }
+
+        public void RenamePreset()
+        {
+            if (this.SelectedPreset != null)
+            {
+                this.SelectedPreset.Name = this.PresetName;
+
+                this.presetService.Update(this.presetNameKey, this.SelectedPreset);
+
+                this.PresetsCategories = null;
+                this.NotifyOfPropertyChange(() => this.PresetsCategories);
+
+                this.PresetsCategories = this.presetService.Presets;
+                this.NotifyOfPropertyChange(() => this.PresetsCategories);
+
+                this.SelectedPreset = this.presetService.GetPresetByName(this.SelectedPreset.Name);
+
+                this.NotifyOfPropertyChange(() => this.IsPresetNameChanged);
+
+                if (this.mainWindowCallback != null)
+                {
+                    mainWindowCallback(this.selectedPreset);
+                }
+            }
         }
 
         public void DeletePreset()
@@ -400,7 +414,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.mainWindowCallback != null)
             {
-                mainWindowCallback();
+                mainWindowCallback(this.selectedPreset);
             }
         }
 
@@ -415,6 +429,11 @@ namespace HandBrakeWPF.ViewModels
         public void LaunchHelp()
         {
             Process.Start("explorer.exe", "https://handbrake.fr/docs/en/latest/advanced/custom-presets.html");
+        }
+
+        public void SetPresetNameChanged()
+        {
+            this.NotifyOfPropertyChange(() => this.IsPresetNameChanged);
         }
 
         private void SetDefaultPreset()
