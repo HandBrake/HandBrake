@@ -1249,10 +1249,10 @@ Would you like to overwrite it?</value>
     <value>Work Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when available. </value>
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) </value>
+    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Remove common punctuation</value>

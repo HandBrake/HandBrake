@@ -362,6 +362,8 @@
 
                         <TextBlock Text="{x:Static Properties:Resources.Options_Encoding}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,0,0,10" Style="{StaticResource subText}" />
+
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncLowPower}" Margin="25,2,0,10" Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncLowPower}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncHyperEncode}" Margin="25,2,0,0" Visibility="{Binding IsMultiIntelGPU, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding EnableQuickSyncHyperEncode}" />
@@ -370,13 +372,13 @@
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
 
-                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,15,0,0" Style="{StaticResource subText}" />
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:Resources.Options_Decoding}" Style="{StaticResource subHeader}" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:Resources.Options_Decoding}" Style="{StaticResource subHeader}" Margin="0,15,0,10" />
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecode}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncDecoding}" />
-                            <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Visibility="{Binding IsUseQsvDecAvailable, Converter={StaticResource boolToVisConverter}}" IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
+                            <CheckBox Content="{x:Static Properties:Resources.Options_QsvDecodeForNonFullPath}" Margin="25,2,0,0"  Visibility="{Binding IsUseQsvDecAvailable, Converter={StaticResource boolToVisConverter}}"
+                                      IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
                         </StackPanel>
 
                         <TextBlock Text="{x:Static Properties:Resources.Options_Scaling}" Style="{StaticResource subHeader}" Margin="0,20,0,10" Visibility="Collapsed" />

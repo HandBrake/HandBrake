@@ -3347,7 +3347,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer use of Intel QuickSync for decoding video when available. .
+        ///   Looks up a localized string similar to Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use..
         /// </summary>
         public static string Options_QsvDecode {
             get {
@@ -3356,7 +3356,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) .
+        ///   Looks up a localized string similar to Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) .
         /// </summary>
         public static string Options_QsvDecodeForNonFullPath {
             get {
