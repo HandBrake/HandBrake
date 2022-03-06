@@ -65,5 +65,7 @@ static int format_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     init->pix_fmt = av_get_pix_fmt(format);
     pv->output = *init;
 
+    free(format);
+
     return 0;
 }
