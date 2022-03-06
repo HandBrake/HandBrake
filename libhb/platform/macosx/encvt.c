@@ -1652,6 +1652,7 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
 
     if (kCVReturnSuccess != err)
     {
+        hb_buffer_close(&in);
         hb_log("VTCompressionSession: CVPixelBuffer error");
     }
     else
