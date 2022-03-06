@@ -40,6 +40,11 @@ typedef struct decomb_thread_arg_s {
 
 struct hb_filter_private_s
 {
+    int depth;
+    int bps;
+    int max_value;
+    int half_value;
+
     // comb detect parameters
     int                mode;
     int                filter_mode;
@@ -53,7 +58,15 @@ struct hb_filter_private_s
     int                comb_check_complete;
     int                comb_check_nthreads;
 
-    float              gamma_lut[256];
+    // Computed parameters
+    float              gamma_motion_threshold;
+    float              gamma_spatial_threshold;
+    float              gamma_spatial_threshold6;
+    int                spatial_threshold_squared;
+    int                spatial_threshold6;
+    int                comb32detect_min;
+    int                comb32detect_max;
+    float            * gamma_lut;
 
     int                comb_detect_ready;
 
@@ -66,7 +79,6 @@ struct hb_filter_private_s
     hb_buffer_t      * mask_temp;
     int                mask_box_x;
     int                mask_box_y;
-    uint8_t            mask_box_color;
 
     int                cpu_count;
     int                segment_height[3];
@@ -76,6 +88,12 @@ struct hb_filter_private_s
     taskset_t          mask_filter_taskset; // Threads for decomb mask filter
     taskset_t          mask_erode_taskset;  // Threads for decomb mask erode
     taskset_t          mask_dilate_taskset; // Threads for decomb mask dilate
+
+    void (*detect_gamma_combed_segment)(hb_filter_private_t *pv,
+                                        int segment_start, int segment_stop);
+    void (*detect_combed_segment)(hb_filter_private_t *pv,
+                                  int segment_start, int segment_stop);
+    void (*apply_mask)(hb_filter_private_t *pv, hb_buffer_t *b);
 
     hb_buffer_list_t   out_list;
 
@@ -114,99 +132,381 @@ hb_filter_object_t hb_filter_comb_detect =
     .settings_template = comb_detect_template,
 };
 
-static void draw_mask_box( hb_filter_private_t * pv )
+#define BIT_DEPTH 8
+#include "templates/comb_detect_template.c"
+#undef BIT_DEPTH
+
+#define BIT_DEPTH 16
+#include "templates/comb_detect_template.c"
+#undef BIT_DEPTH
+
+static void check_filtered_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
-    int x = pv->mask_box_x;
-    int y = pv->mask_box_y;
-    int box_width = pv->block_width;
-    int box_height = pv->block_height;
-    int stride;
-    uint8_t * mskp;
+    // Go through the mask in X*Y blocks. If any of these windows
+    // have threshold or more combed pixels, consider the whole
+    // frame to be combed and send it on to be deinterlaced.
+    // Block mask threshold -- The number of pixels
+    // in a block_width * block_height window of
+    // the mask that need to show combing for the
+    // whole frame to be seen as such.
 
-    if (pv->mode & MODE_FILTER)
-    {
-        mskp   = pv->mask_filtered->plane[0].data;
-        stride = pv->mask_filtered->plane[0].stride;
-    }
-    else
-    {
-        mskp   = pv->mask->plane[0].data;
-        stride = pv->mask->plane[0].stride;
-    }
+    const int threshold     = pv->block_threshold;
+    const int block_width   = pv->block_width;
+    const int block_height  = pv->block_height;
 
+    const int stride = pv->mask_filtered->plane[0].stride;
+    const int width = pv->mask_filtered->plane[0].width;
 
-    int block_x, block_y;
-    for (block_x = 0; block_x < box_width; block_x++)
+    for (int y = start; y < (stop - block_height + 1); y = y + block_height)
     {
-        mskp[ y               * stride + x + block_x] = 128;
-        mskp[(y + box_height) * stride + x + block_x] = 128;
-    }
+        for (int x = 0; x < (width - block_width); x = x + block_width)
+        {
+            int block_score = 0;
 
-    for (block_y = 0; block_y < box_height; block_y++)
-    {
-        mskp[stride * (y + block_y) + x            ] = 128;
-        mskp[stride * (y + block_y) + x + box_width] = 128;
+            for (int block_y = 0; block_y < block_height; block_y++)
+            {
+                const int my = y + block_y;
+                const uint8_t *mask_p = &pv->mask_filtered->plane[0].data[my * stride + x];
+
+                for (int block_x = 0; block_x < block_width; block_x++)
+                {
+                    block_score += mask_p[0];
+                    mask_p++;
+                }
+            }
+
+            if (pv->comb_check_complete)
+            {
+                // Some other thread found coming before this one
+                return;
+            }
+
+            if (block_score >= (threshold / 2))
+            {
+                pv->mask_box_x = x;
+                pv->mask_box_y = y;
+
+                pv->block_score[segment] = block_score;
+                if (block_score > threshold)
+                {
+                    pv->comb_check_complete = 1;
+                    return;
+                }
+            }
+        }
     }
 }
 
-static void apply_mask_line( uint8_t * srcp,
-                             uint8_t * mskp,
-                             int width )
+static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, int stop)
 {
-    int x;
+    // Go through the mask in X*Y blocks. If any of these windows
+    // have threshold or more combed pixels, consider the whole
+    // frame to be combed and send it on to be deinterlaced.
+    // Block mask threshold -- The number of pixels
+    // in a block_width * block_height window of
+    // the mask that need to show combing for the
+    // whole frame to be seen as such.
 
-    for (x = 0; x < width; x++)
+    const int threshold    = pv->block_threshold;
+    const int block_width  = pv->block_width;
+    const int block_height = pv->block_height;
+
+    const int stride = pv->mask->plane[0].stride;
+    const int width = pv->mask->plane[0].width;
+
+    for (int y = start; y < (stop - block_height + 1); y = y + block_height)
     {
-        if (mskp[x] == 1)
+        for (int x = 0; x < (width - block_width); x = x + block_width)
         {
-            srcp[x] = 255;
-        }
-        if (mskp[x] == 128)
-        {
-            srcp[x] = 128;
+            int block_score = 0;
+
+            for (int block_y = 0; block_y < block_height; block_y++)
+            {
+                const int mask_y = y + block_y;
+                const uint8_t *mask_p = &pv->mask->plane[0].data[mask_y * stride + x];
+
+                for (int block_x = 0; block_x < block_width; block_x++)
+                {
+                    // We only want to mark a pixel in a block as combed
+                    // if the adjacent pixels are as well. Got to
+                    // handle the sides separately.
+                    if ((x + block_x) == 0)
+                    {
+                        block_score += mask_p[0] & mask_p[1];
+                    }
+                    else if ((x + block_x) == (width -1))
+                    {
+                        block_score += mask_p[-1] & mask_p[0];
+                    }
+                    else
+                    {
+                        block_score += mask_p[-1] & mask_p[0] & mask_p[1];
+                    }
+
+                    mask_p++;
+                }
+            }
+
+            if (pv->comb_check_complete)
+            {
+                // Some other thread found coming before this one
+                return;
+            }
+
+            if (block_score >= (threshold / 2))
+            {
+                pv->mask_box_x = x;
+                pv->mask_box_y = y;
+
+                pv->block_score[segment] = block_score;
+                if (block_score > threshold)
+                {
+                    pv->comb_check_complete = 1;
+                    return;
+                }
+            }
         }
     }
 }
 
-static void apply_mask(hb_filter_private_t * pv, hb_buffer_t * b)
+static void mask_dilate_work(void *thread_args_v)
 {
-    /* draw_boxes */
-    draw_mask_box( pv );
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
 
-    int pp, yy;
-    hb_buffer_t * m;
+    const int segment_start = thread_args->segment_start[0];
+    const int segment_stop = segment_start + thread_args->segment_height[0];
 
-    if (pv->mode & MODE_FILTER)
+    const int dilation_threshold = 4;
+
+    const int width = pv->mask_filtered->plane[0].width;
+    const int height = pv->mask_filtered->plane[0].height;
+    const int stride = pv->mask_filtered->plane[0].stride;
+
+    int start, stop, p, c, n;
+
+    if (segment_start == 0)
     {
-        m = pv->mask_filtered;
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
     }
     else
     {
-        m = pv->mask;
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
     }
-    for (pp = 0; pp < 3; pp++)
+
+    if (segment_stop == height)
     {
-        uint8_t * dstp = b->plane[pp].data;
-        uint8_t * mskp = m->plane[pp].data;
+        stop = height -1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
 
-        for (yy = 0; yy < m->plane[pp].height; yy++)
+    const uint8_t *curp = &pv->mask_filtered->plane[0].data[p * stride + 1];
+    const uint8_t *cur  = &pv->mask_filtered->plane[0].data[c * stride + 1];
+    const uint8_t *curn = &pv->mask_filtered->plane[0].data[n * stride + 1];
+    uint8_t *dst = &pv->mask_temp->plane[0].data[c * stride + 1];
+
+    for (int yy = start; yy < stop; yy++)
+    {
+        for (int xx = 1; xx < width - 1; xx++)
         {
-            if (!(pv->mode & MODE_COMPOSITE) && pp == 0)
+            if (cur[xx])
             {
-                memcpy(dstp, mskp, m->plane[pp].width);
-            }
-            else if (!(pv->mode & MODE_COMPOSITE))
-            {
-                memset(dstp, 128, m->plane[pp].width);
-            }
-            if (pp == 0)
-            {
-                apply_mask_line(dstp, mskp, m->plane[pp].width);
+                dst[xx] = 1;
+                continue;
             }
 
-            dstp += b->plane[pp].stride;
-            mskp += m->plane[pp].stride;
+            const int count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                              cur [xx-1] +            cur [xx+1] +
+                              curn[xx-1] + curn[xx] + curn[xx+1];
+
+            dst[xx] = count >= dilation_threshold;
         }
+        curp += stride;
+        cur += stride;
+        curn += stride;
+        dst += stride;
+    }
+}
+
+static void mask_erode_work(void *thread_args_v)
+{
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    const int segment_start = thread_args->segment_start[0];
+    const int segment_stop = segment_start + thread_args->segment_height[0];
+
+    const int erosion_threshold = 2;
+
+    const int width = pv->mask_filtered->plane[0].width;
+    const int height = pv->mask_filtered->plane[0].height;
+    const int stride = pv->mask_filtered->plane[0].stride;
+
+    int start, stop, p, c, n;
+
+    if (segment_start == 0)
+    {
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
+    }
+    else
+    {
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
+    }
+
+    if (segment_stop == height)
+    {
+        stop = height -1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
+
+    const uint8_t *curp = &pv->mask_temp->plane[0].data[p * stride + 1];
+    const uint8_t *cur  = &pv->mask_temp->plane[0].data[c * stride + 1];
+    const uint8_t *curn = &pv->mask_temp->plane[0].data[n * stride + 1];
+    uint8_t *dst = &pv->mask_filtered->plane[0].data[c * stride + 1];
+
+    for (int yy = start; yy < stop; yy++)
+    {
+        for (int xx = 1; xx < width - 1; xx++)
+        {
+            if (cur[xx] == 0)
+            {
+                dst[xx] = 0;
+                continue;
+            }
+
+            const int count = curp[xx-1] + curp[xx] + curp[xx+1] +
+                              cur [xx-1] +            cur [xx+1] +
+                              curn[xx-1] + curn[xx] + curn[xx+1];
+
+            dst[xx] = count >= erosion_threshold;
+        }
+        curp += stride;
+        cur += stride;
+        curn += stride;
+        dst += stride;
+    }
+}
+
+static void mask_filter_work(void *thread_args_v)
+{
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    const int width = pv->mask->plane[0].width;
+    const int height = pv->mask->plane[0].height;
+    const int stride = pv->mask->plane[0].stride;
+
+    int start, stop, p, c, n;
+    int segment_start = thread_args->segment_start[0];
+    int segment_stop = segment_start + thread_args->segment_height[0];
+
+    if (segment_start == 0)
+    {
+        start = 1;
+        p = 0;
+        c = 1;
+        n = 2;
+    }
+    else
+    {
+        start = segment_start;
+        p = segment_start - 1;
+        c = segment_start;
+        n = segment_start + 1;
+    }
+
+    if (segment_stop == height)
+    {
+        stop = height - 1;
+    }
+    else
+    {
+        stop = segment_stop;
+    }
+
+    const uint8_t *curp = &pv->mask->plane[0].data[p * stride + 1];
+    const uint8_t *cur  = &pv->mask->plane[0].data[c * stride + 1];
+    const uint8_t *curn = &pv->mask->plane[0].data[n * stride + 1];
+    uint8_t *dst = (pv->filter_mode == FILTER_CLASSIC) ?
+                     &pv->mask_filtered->plane[0].data[c * stride + 1] :
+                     &pv->mask_temp->plane[0].data[c * stride + 1] ;
+
+    for (int yy = start; yy < stop; yy++)
+    {
+        for (int xx = 1; xx < width - 1; xx++)
+        {
+            const int h_count = cur[xx-1] & cur[xx] & cur[xx+1];
+            const int v_count = curp[xx] & cur[xx] & curn[xx];
+
+            if (pv->filter_mode == FILTER_CLASSIC)
+            {
+                dst[xx] = h_count;
+            }
+            else
+            {
+                dst[xx] = h_count & v_count;
+            }
+        }
+        curp += stride;
+        cur += stride;
+        curn += stride;
+        dst += stride;
+    }
+}
+
+static void decomb_check_work(void *thread_args_v)
+{
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    int segment = thread_args->arg.segment;
+    int segment_start = thread_args->segment_start[0];
+    int segment_stop = segment_start + thread_args->segment_height[0];
+
+    if (pv->mode & MODE_FILTER)
+    {
+        check_filtered_combing_mask(pv, segment, segment_start, segment_stop);
+    }
+    else
+    {
+        check_combing_mask(pv, segment, segment_start, segment_stop);
+    }
+}
+
+static void decomb_filter_work(void *thread_args_v)
+{
+    decomb_thread_arg_t *thread_args = thread_args_v;
+    hb_filter_private_t *pv = thread_args->pv;
+
+    //Process segment (for now just from luma)
+    const int segment_start = thread_args->segment_start[0];
+    const int segment_stop = segment_start + thread_args->segment_height[0];
+
+    if (pv->mode & MODE_GAMMA)
+    {
+        pv->detect_gamma_combed_segment(pv, segment_start, segment_stop);
+    }
+    else
+    {
+        pv->detect_combed_segment(pv, segment_start, segment_stop);
     }
 }
 
@@ -226,8 +526,7 @@ static void store_ref(hb_filter_private_t * pv, hb_buffer_t * b)
 static void reset_combing_results( hb_filter_private_t * pv )
 {
     pv->comb_check_complete = 0;
-    int ii;
-    for (ii = 0; ii < pv->comb_check_nthreads; ii++)
+    for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
     {
        pv->block_score[ii] = 0;
     }
@@ -236,9 +535,7 @@ static void reset_combing_results( hb_filter_private_t * pv )
 static int check_combing_results( hb_filter_private_t * pv )
 {
     int combed = HB_COMB_NONE;
-
-    int ii;
-    for (ii = 0; ii < pv->comb_check_nthreads; ii++)
+    for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
     {
         if (pv->block_score[ii] >= ( pv->block_threshold / 2 ))
         {
@@ -247,702 +544,14 @@ static int check_combing_results( hb_filter_private_t * pv )
                 // Indicate light combing for block_score that is between
                 // ( pv->block_threshold / 2 ) and pv->block_threshold
                 combed = HB_COMB_LIGHT;
-                pv->mask_box_color = 2;
             }
             else if (pv->block_score[ii] > pv->block_threshold)
             {
-                pv->mask_box_color = 1;
                 return HB_COMB_HEAVY;
             }
         }
     }
-
     return combed;
-}
-
-static void check_filtered_combing_mask( hb_filter_private_t * pv, int segment,
-                                         int start, int stop )
-{
-    /* Go through the mask in X*Y blocks. If any of these windows
-       have threshold or more combed pixels, consider the whole
-       frame to be combed and send it on to be deinterlaced.     */
-
-    /* Block mask threshold -- The number of pixels
-       in a block_width * block_height window of
-       he mask that need to show combing for the
-       whole frame to be seen as such.            */
-    int threshold       = pv->block_threshold;
-    int block_width     = pv->block_width;
-    int block_height    = pv->block_height;
-    int block_x, block_y;
-    int block_score = 0;
-    uint8_t * mask_p;
-    int x, y, pp;
-
-    for (pp = 0; pp < 1; pp++)
-    {
-        int stride = pv->mask_filtered->plane[pp].stride;
-        int width = pv->mask_filtered->plane[pp].width;
-
-        pv->mask_box_x = -1;
-        pv->mask_box_y = -1;
-        pv->mask_box_color = 0;
-
-        for (y = start; y < ( stop - block_height + 1 ); y = y + block_height)
-        {
-            for (x = 0; x < ( width - block_width ); x = x + block_width)
-            {
-                block_score = 0;
-
-                for (block_y = 0; block_y < block_height; block_y++)
-                {
-                    int my = y + block_y;
-                    mask_p = &pv->mask_filtered->plane[pp].data[my*stride + x];
-
-                    for (block_x = 0; block_x < block_width; block_x++)
-                    {
-                        block_score += mask_p[0];
-                        mask_p++;
-                    }
-                }
-
-                if (pv->comb_check_complete)
-                {
-                    // Some other thread found coming before this one
-                    return;
-                }
-
-                if (block_score >= ( threshold / 2 ))
-                {
-                    pv->mask_box_x = x;
-                    pv->mask_box_y = y;
-
-                    pv->block_score[segment] = block_score;
-                    if (block_score > threshold)
-                    {
-                        pv->comb_check_complete = 1;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-}
-
-static void check_combing_mask( hb_filter_private_t * pv, int segment,
-                                int start, int stop )
-{
-    /* Go through the mask in X*Y blocks. If any of these windows
-       have threshold or more combed pixels, consider the whole
-       frame to be combed and send it on to be deinterlaced.     */
-
-    /* Block mask threshold -- The number of pixels
-       in a block_width * block_height window of
-       he mask that need to show combing for the
-       whole frame to be seen as such.            */
-    int threshold       = pv->block_threshold;
-    int block_width     = pv->block_width;
-    int block_height    = pv->block_height;
-    int block_x, block_y;
-    int block_score = 0;
-    uint8_t * mask_p;
-    int x, y, pp;
-
-    for (pp = 0; pp < 1; pp++)
-    {
-        int stride = pv->mask->plane[pp].stride;
-        int width = pv->mask->plane[pp].width;
-
-        for (y = start; y < (stop - block_height + 1); y = y + block_height)
-        {
-            for (x = 0; x < (width - block_width); x = x + block_width)
-            {
-                block_score = 0;
-
-                for (block_y = 0; block_y < block_height; block_y++)
-                {
-                    int mask_y = y + block_y;
-                    mask_p = &pv->mask->plane[pp].data[mask_y * stride + x];
-
-                    for (block_x = 0; block_x < block_width; block_x++)
-                    {
-                        /* We only want to mark a pixel in a block as combed
-                           if the adjacent pixels are as well. Got to
-                           handle the sides separately.       */
-                        if ((x + block_x) == 0)
-                        {
-                            block_score += mask_p[0] & mask_p[1];
-                        }
-                        else if ((x + block_x) == (width -1))
-                        {
-                            block_score += mask_p[-1] & mask_p[0];
-                        }
-                        else
-                        {
-                            block_score += mask_p[-1] & mask_p[0] & mask_p[1];
-                        }
-
-                        mask_p++;
-                    }
-                }
-
-                if (pv->comb_check_complete)
-                {
-                    // Some other thread found coming before this one
-                    return;
-                }
-
-                if (block_score >= ( threshold / 2 ))
-                {
-                    pv->mask_box_x = x;
-                    pv->mask_box_y = y;
-
-                    pv->block_score[segment] = block_score;
-                    if (block_score > threshold)
-                    {
-                        pv->comb_check_complete = 1;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-}
-
-static void build_gamma_lut( hb_filter_private_t * pv )
-{
-    int i;
-    for (i = 0; i < 256; i++)
-    {
-        pv->gamma_lut[i] = pow( ( (float)i / (float)255 ), 2.2f );
-    }
-}
-
-static void detect_gamma_combed_segment( hb_filter_private_t * pv,
-                                         int segment_start, int segment_stop )
-{
-    /* A mishmash of various comb detection tricks
-       picked up from neuron2's Decomb plugin for
-       AviSynth and tritical's IsCombedT and
-       IsCombedTIVTC plugins.                       */
-
-    /* Comb scoring algorithm */
-    /* Motion threshold */
-    float mthresh         = (float)pv->motion_threshold / (float)255;
-    /* Spatial threshold */
-    float athresh         = (float)pv->spatial_threshold / (float)255;
-    float athresh6        = 6 *athresh;
-
-    /* One pas for Y, one pass for U, one pass for V */
-    int pp;
-    for (pp = 0; pp < 1; pp++)
-    {
-        int x, y;
-        int stride  = pv->ref[0]->plane[pp].stride;
-        int width   = pv->ref[0]->plane[pp].width;
-        int height  = pv->ref[0]->plane[pp].height;
-
-        /* Comb detection has to start at y = 2 and end at
-           y = height - 2, because it needs to examine
-           2 pixels above and 2 below the current pixel.      */
-        if (segment_start < 2)
-            segment_start = 2;
-        if (segment_stop > height - 2)
-            segment_stop = height - 2;
-
-        for (y =  segment_start; y < segment_stop; y++)
-        {
-            /* These are just to make the buffer locations easier to read. */
-            int up_2    = -2 * stride ;
-            int up_1    = -1 * stride;
-            int down_1  =      stride;
-            int down_2  =  2 * stride;
-
-            /* We need to examine a column of 5 pixels
-               in the prev, cur, and next frames.      */
-            uint8_t * prev = &pv->ref[0]->plane[pp].data[y * stride];
-            uint8_t * cur  = &pv->ref[1]->plane[pp].data[y * stride];
-            uint8_t * next = &pv->ref[2]->plane[pp].data[y * stride];
-            uint8_t * mask = &pv->mask->plane[pp].data[y * stride];
-
-            memset(mask, 0, stride);
-
-            for (x = 0; x < width; x++)
-            {
-                float up_diff, down_diff;
-                up_diff   = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[up_1]];
-                down_diff = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[down_1]];
-
-                if (( up_diff >  athresh && down_diff >  athresh ) ||
-                    ( up_diff < -athresh && down_diff < -athresh ))
-                {
-                    /* The pixel above and below are different,
-                       and they change in the same "direction" too.*/
-                    int motion = 0;
-                    if (mthresh > 0)
-                    {
-                        /* Make sure there's sufficient motion between frame t-1 to frame t+1. */
-                        if (fabs(pv->gamma_lut[prev[0]]     - pv->gamma_lut[cur[0]]      ) > mthresh &&
-                            fabs(pv->gamma_lut[cur[up_1]]   - pv->gamma_lut[next[up_1]]  ) > mthresh &&
-                            fabs(pv->gamma_lut[cur[down_1]] - pv->gamma_lut[next[down_1]]) > mthresh)
-                                motion++;
-                        if (fabs(pv->gamma_lut[next[0]]      - pv->gamma_lut[cur[0]]     ) > mthresh &&
-                            fabs(pv->gamma_lut[prev[up_1]]   - pv->gamma_lut[cur[up_1]]  ) > mthresh &&
-                            fabs(pv->gamma_lut[prev[down_1]] - pv->gamma_lut[cur[down_1]]) > mthresh)
-                                motion++;
-
-                    }
-                    else
-                    {
-                        /* User doesn't want to check for motion,
-                           so move on to the spatial check.       */
-                        motion = 1;
-                    }
-
-                    if (motion || pv->frames == 0)
-                    {
-                        float combing;
-                        /* Tritical's noise-resistant combing scorer.
-                           The check is done on a bob+blur convolution. */
-                        combing = fabs(pv->gamma_lut[cur[up_2]] +
-                                       (4 * pv->gamma_lut[cur[0]]) +
-                                       pv->gamma_lut[cur[down_2]] -
-                                       (3 * (pv->gamma_lut[cur[up_1]] +
-                                             pv->gamma_lut[cur[down_1]])));
-                        /* If the frame is sufficiently combed,
-                           then mark it down on the mask as 1. */
-                        if (combing > athresh6)
-                        {
-                            mask[0] = 1;
-                        }
-                    }
-                }
-
-                cur++;
-                prev++;
-                next++;
-                mask++;
-            }
-        }
-    }
-}
-
-static void detect_combed_segment( hb_filter_private_t * pv,
-                                   int segment_start, int segment_stop )
-{
-    /* A mishmash of various comb detection tricks
-       picked up from neuron2's Decomb plugin for
-       AviSynth and tritical's IsCombedT and
-       IsCombedTIVTC plugins.                       */
-
-
-    /* Comb scoring algorithm */
-    int spatial_metric  = pv->spatial_metric;
-    /* Motion threshold */
-    int mthresh         = pv->motion_threshold;
-    /* Spatial threshold */
-    int athresh         = pv->spatial_threshold;
-    int athresh_squared = athresh * athresh;
-    int athresh6        = 6 * athresh;
-
-    /* One pas for Y, one pass for U, one pass for V */
-    int pp;
-    for (pp = 0; pp < 1; pp++)
-    {
-        int x, y;
-        int stride  = pv->ref[0]->plane[pp].stride;
-        int width   = pv->ref[0]->plane[pp].width;
-        int height  = pv->ref[0]->plane[pp].height;
-
-        /* Comb detection has to start at y = 2 and end at
-           y = height - 2, because it needs to examine
-           2 pixels above and 2 below the current pixel.      */
-        if (segment_start < 2)
-            segment_start = 2;
-        if (segment_stop > height - 2)
-            segment_stop = height - 2;
-
-        for (y =  segment_start; y < segment_stop; y++)
-        {
-            /* These are just to make the buffer locations easier to read. */
-            int up_2    = -2 * stride ;
-            int up_1    = -1 * stride;
-            int down_1  =      stride;
-            int down_2  =  2 * stride;
-
-            /* We need to examine a column of 5 pixels
-               in the prev, cur, and next frames.      */
-            uint8_t * prev = &pv->ref[0]->plane[pp].data[y * stride];
-            uint8_t * cur  = &pv->ref[1]->plane[pp].data[y * stride];
-            uint8_t * next = &pv->ref[2]->plane[pp].data[y * stride];
-            uint8_t * mask = &pv->mask->plane[pp].data[y * stride];
-
-            memset(mask, 0, stride);
-
-            for (x = 0; x < width; x++)
-            {
-                int up_diff = cur[0] - cur[up_1];
-                int down_diff = cur[0] - cur[down_1];
-
-                if (( up_diff >  athresh && down_diff >  athresh ) ||
-                    ( up_diff < -athresh && down_diff < -athresh ))
-                {
-                    /* The pixel above and below are different,
-                       and they change in the same "direction" too.*/
-                    int motion = 0;
-                    if (mthresh > 0)
-                    {
-                        /* Make sure there's sufficient motion between frame t-1 to frame t+1. */
-                        if (abs(prev[0]     - cur[0]      ) > mthresh &&
-                            abs(cur[up_1]   - next[up_1]  ) > mthresh &&
-                            abs(cur[down_1] - next[down_1]) > mthresh)
-                                motion++;
-                        if (abs(next[0]      - cur[0]     ) > mthresh &&
-                            abs(prev[up_1]   - cur[up_1]  ) > mthresh &&
-                            abs(prev[down_1] - cur[down_1]) > mthresh)
-                                motion++;
-                    }
-                    else
-                    {
-                        /* User doesn't want to check for motion,
-                           so move on to the spatial check.       */
-                        motion = 1;
-                    }
-
-                    // If motion, or we can't measure motion yet...
-                    if (motion || pv->frames == 0)
-                    {
-                           /* That means it's time for the spatial check.
-                              We've got several options here.             */
-                        if (spatial_metric == 0)
-                        {
-                            /* Simple 32detect style comb detection */
-                            if ((abs(cur[0] - cur[down_2]) < 10) &&
-                                (abs(cur[0] - cur[down_1]) > 15))
-                            {
-                                mask[0] = 1;
-                            }
-                        }
-                        else if (spatial_metric == 1)
-                        {
-                            /* This, for comparison, is what IsCombed uses.
-                               It's better, but still noise sensitive.      */
-                               int combing = ( cur[up_1] - cur[0] ) *
-                                             ( cur[down_1] - cur[0] );
-
-                               if (combing > athresh_squared)
-                               {
-                                   mask[0] = 1;
-                               }
-                        }
-                        else if (spatial_metric == 2)
-                        {
-                            /* Tritical's noise-resistant combing scorer.
-                               The check is done on a bob+blur convolution. */
-                            int combing = abs( cur[up_2]
-                                             + ( 4 * cur[0] )
-                                             + cur[down_2]
-                                             - ( 3 * ( cur[up_1]
-                                                     + cur[down_1] ) ) );
-
-                            /* If the frame is sufficiently combed,
-                               then mark it down on the mask as 1. */
-                            if (combing > athresh6)
-                            {
-                                mask[0] = 1;
-                            }
-                        }
-                    }
-                }
-
-                cur++;
-                prev++;
-                next++;
-                mask++;
-            }
-        }
-    }
-}
-
-static void mask_dilate_work( void *thread_args_v )
-{
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    int segment_start, segment_stop;
-
-    hb_filter_private_t * pv = thread_args->pv;
-
-    int xx, yy, pp;
-
-    int count;
-    int dilation_threshold = 4;
-
-    for (pp = 0; pp < 1; pp++)
-    {
-        int width = pv->mask_filtered->plane[pp].width;
-        int height = pv->mask_filtered->plane[pp].height;
-        int stride = pv->mask_filtered->plane[pp].stride;
-
-        int start, stop, p, c, n;
-        segment_start = thread_args->segment_start[pp];
-        segment_stop = segment_start + thread_args->segment_height[pp];
-
-        if (segment_start == 0)
-        {
-            start = 1;
-            p = 0;
-            c = 1;
-            n = 2;
-        }
-        else
-        {
-            start = segment_start;
-            p = segment_start - 1;
-            c = segment_start;
-            n = segment_start + 1;
-        }
-
-        if (segment_stop == height)
-        {
-            stop = height -1;
-        }
-        else
-        {
-            stop = segment_stop;
-        }
-
-        uint8_t *curp = &pv->mask_filtered->plane[pp].data[p * stride + 1];
-        uint8_t *cur  = &pv->mask_filtered->plane[pp].data[c * stride + 1];
-        uint8_t *curn = &pv->mask_filtered->plane[pp].data[n * stride + 1];
-        uint8_t *dst = &pv->mask_temp->plane[pp].data[c * stride + 1];
-
-        for (yy = start; yy < stop; yy++)
-        {
-            for (xx = 1; xx < width - 1; xx++)
-            {
-                if (cur[xx])
-                {
-                    dst[xx] = 1;
-                    continue;
-                }
-
-                count = curp[xx-1] + curp[xx] + curp[xx+1] +
-                        cur [xx-1] +            cur [xx+1] +
-                        curn[xx-1] + curn[xx] + curn[xx+1];
-
-                dst[xx] = count >= dilation_threshold;
-            }
-            curp += stride;
-            cur += stride;
-            curn += stride;
-            dst += stride;
-        }
-    }
-
-}
-
-static void mask_erode_work( void *thread_args_v )
-{
-    hb_filter_private_t * pv;
-    int segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    pv = thread_args->pv;
-
-    int xx, yy, pp;
-
-    int count;
-    int erosion_threshold = 2;
-
-    for (pp = 0; pp < 1; pp++)
-    {
-        int width = pv->mask_filtered->plane[pp].width;
-        int height = pv->mask_filtered->plane[pp].height;
-        int stride = pv->mask_filtered->plane[pp].stride;
-
-        int start, stop, p, c, n;
-        segment_start = thread_args->segment_start[pp];
-        segment_stop = segment_start + thread_args->segment_height[pp];
-
-        if (segment_start == 0)
-        {
-            start = 1;
-            p = 0;
-            c = 1;
-            n = 2;
-        }
-        else
-        {
-            start = segment_start;
-            p = segment_start - 1;
-            c = segment_start;
-            n = segment_start + 1;
-        }
-
-        if (segment_stop == height)
-        {
-            stop = height -1;
-        }
-        else
-        {
-            stop = segment_stop;
-        }
-
-        uint8_t *curp = &pv->mask_temp->plane[pp].data[p * stride + 1];
-        uint8_t *cur  = &pv->mask_temp->plane[pp].data[c * stride + 1];
-        uint8_t *curn = &pv->mask_temp->plane[pp].data[n * stride + 1];
-        uint8_t *dst = &pv->mask_filtered->plane[pp].data[c * stride + 1];
-
-        for (yy = start; yy < stop; yy++)
-        {
-            for (xx = 1; xx < width - 1; xx++)
-            {
-                if (cur[xx] == 0)
-                {
-                    dst[xx] = 0;
-                    continue;
-                }
-
-                count = curp[xx-1] + curp[xx] + curp[xx+1] +
-                        cur [xx-1] +            cur [xx+1] +
-                        curn[xx-1] + curn[xx] + curn[xx+1];
-
-                dst[xx] = count >= erosion_threshold;
-            }
-            curp += stride;
-            cur += stride;
-            curn += stride;
-            dst += stride;
-        }
-    }
-
-}
-
-static void mask_filter_work( void *thread_args_v)
-{
-    int segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-    hb_filter_private_t * pv = thread_args->pv;
-
-    int xx, yy, pp;
-
-    for (pp = 0; pp < 1; pp++)
-    {
-        int width = pv->mask->plane[pp].width;
-        int height = pv->mask->plane[pp].height;
-        int stride = pv->mask->plane[pp].stride;
-
-        int start, stop, p, c, n;
-        segment_start = thread_args->segment_start[pp];
-        segment_stop = segment_start + thread_args->segment_height[pp];
-
-        if (segment_start == 0)
-        {
-            start = 1;
-            p = 0;
-            c = 1;
-            n = 2;
-        }
-        else
-        {
-            start = segment_start;
-            p = segment_start - 1;
-            c = segment_start;
-            n = segment_start + 1;
-        }
-
-        if (segment_stop == height)
-        {
-            stop = height - 1;
-        }
-        else
-        {
-            stop = segment_stop;
-        }
-
-        uint8_t *curp = &pv->mask->plane[pp].data[p * stride + 1];
-        uint8_t *cur = &pv->mask->plane[pp].data[c * stride + 1];
-        uint8_t *curn = &pv->mask->plane[pp].data[n * stride + 1];
-        uint8_t *dst = (pv->filter_mode == FILTER_CLASSIC ) ?
-            &pv->mask_filtered->plane[pp].data[c * stride + 1] :
-            &pv->mask_temp->plane[pp].data[c * stride + 1] ;
-
-        for (yy = start; yy < stop; yy++)
-        {
-            for (xx = 1; xx < width - 1; xx++)
-            {
-                int h_count, v_count;
-
-                h_count = cur[xx-1] & cur[xx] & cur[xx+1];
-                v_count = curp[xx] & cur[xx] & curn[xx];
-
-                if (pv->filter_mode == FILTER_CLASSIC)
-                {
-                    dst[xx] = h_count;
-                }
-                else
-                {
-                    dst[xx] = h_count & v_count;
-                }
-            }
-            curp += stride;
-            cur += stride;
-            curn += stride;
-            dst += stride;
-        }
-    }
-
-}
-
-static void decomb_check_work( void *thread_args_v )
-{
-    decomb_thread_arg_t *thread_args = thread_args_v;
-    hb_filter_private_t * pv = thread_args->pv;
-    int segment, segment_start, segment_stop;
-
-    segment = thread_args->arg.segment;
-
-    segment_start = thread_args->segment_start[0];
-    segment_stop = segment_start + thread_args->segment_height[0];
-
-    if (pv->mode & MODE_FILTER)
-    {
-        check_filtered_combing_mask(pv, segment, segment_start, segment_stop);
-    }
-    else
-    {
-        check_combing_mask(pv, segment, segment_start, segment_stop);
-    }
-
-}
-
-static void decomb_filter_work( void *thread_args_v)
-{
-    hb_filter_private_t * pv;
-    int segment_start, segment_stop;
-    decomb_thread_arg_t *thread_args = thread_args_v;
-
-    pv = thread_args->pv;
-
-    /*
-     * Process segment (for now just from luma)
-     */
-    int pp;
-    for (pp = 0; pp < 1; pp++)
-    {
-        segment_start = thread_args->segment_start[pp];
-        segment_stop = segment_start + thread_args->segment_height[pp];
-
-        if (pv->mode & MODE_GAMMA)
-        {
-            detect_gamma_combed_segment( pv, segment_start, segment_stop );
-        }
-        else
-        {
-            detect_combed_segment( pv, segment_start, segment_stop );
-        }
-    }
-
 }
 
 static int comb_segmenter( hb_filter_private_t * pv )
@@ -968,6 +577,15 @@ static int comb_segmenter( hb_filter_private_t * pv )
     return check_combing_results(pv);
 }
 
+static void build_gamma_lut(hb_filter_private_t *pv)
+{
+    const int max = pv->max_value;
+    for (int i = 0; i < max + 1; i++)
+    {
+        pv->gamma_lut[i] = pow(((float)i / (float)max), 2.2f);
+    }
+}
+
 static int comb_detect_init( hb_filter_object_t * filter,
                              hb_filter_init_t   * init )
 {
@@ -975,7 +593,15 @@ static int comb_detect_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
 
     hb_buffer_list_clear(&pv->out_list);
-    build_gamma_lut( pv );
+
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
+    pv->depth      = desc->comp[0].depth;
+    pv->bps        = pv->depth > 8 ? 2 : 1;
+    pv->max_value  = (1 << pv->depth) - 1;
+    pv->half_value = (1 << pv->depth) / 2;
+
+    pv->gamma_lut = malloc(sizeof(float) * (pv->max_value + 1));
+    build_gamma_lut(pv);
 
     pv->frames = 0;
     pv->comb_heavy = 0;
@@ -1008,6 +634,19 @@ static int comb_detect_init( hb_filter_object_t * filter,
         hb_dict_extract_int(&pv->block_height, dict, "block-height");
     }
 
+    // Scale the thresholds for the current depth
+    pv->motion_threshold  <<= (pv->depth - 8);
+    pv->spatial_threshold <<= (pv->depth - 8);
+
+    // Compute thresholds
+    pv->gamma_motion_threshold    = (float)pv->motion_threshold / (float)pv->max_value;
+    pv->gamma_spatial_threshold   = (float)pv->spatial_threshold / (float)pv->max_value;
+    pv->gamma_spatial_threshold6  = 6 * pv->gamma_spatial_threshold;
+    pv->spatial_threshold_squared = pv->spatial_threshold * pv->spatial_threshold;
+    pv->spatial_threshold6        = 6 * pv->spatial_threshold;
+    pv->comb32detect_min = 10 << (pv->depth - 8);
+    pv->comb32detect_max = 15 << (pv->depth - 8);
+
     pv->cpu_count = hb_get_cpu_count();
 
     // Make segment sizes an even number of lines
@@ -1018,17 +657,31 @@ static int comb_detect_init( hb_filter_object_t * filter,
     pv->segment_height[2] = hb_image_height(init->pix_fmt, pv->segment_height[0], 2);
 
     /* Allocate buffers to store comb masks. */
-    pv->mask = hb_frame_buffer_init(init->pix_fmt,
+    pv->mask = hb_frame_buffer_init(AV_PIX_FMT_GRAY8,
                                 init->geometry.width, init->geometry.height);
-    pv->mask_filtered = hb_frame_buffer_init(init->pix_fmt,
+    pv->mask_filtered = hb_frame_buffer_init(AV_PIX_FMT_GRAY8,
                                 init->geometry.width, init->geometry.height);
-    pv->mask_temp = hb_frame_buffer_init(init->pix_fmt,
+    pv->mask_temp = hb_frame_buffer_init(AV_PIX_FMT_GRAY8,
                                 init->geometry.width, init->geometry.height);
     memset(pv->mask->data, 0, pv->mask->size);
     memset(pv->mask_filtered->data, 0, pv->mask_filtered->size);
     memset(pv->mask_temp->data, 0, pv->mask_temp->size);
 
-    int ii;
+    // Set the functions for the current bit depth
+    switch (pv->depth)
+    {
+        case 8:
+            pv->detect_gamma_combed_segment = detect_gamma_combed_segment_8;
+            pv->detect_combed_segment       = detect_combed_segment_8;
+            pv->apply_mask                  = apply_mask_8;
+            break;
+
+        default:
+            pv->detect_gamma_combed_segment = detect_gamma_combed_segment_16;
+            pv->detect_combed_segment       = detect_combed_segment_16;
+            pv->apply_mask                  = apply_mask_16;
+            break;
+    }
 
     /*
      * Create comb detection taskset.
@@ -1040,7 +693,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
     }
 
     decomb_thread_arg_t *decomb_prev_thread_args = NULL;
-    for (ii = 0; ii < pv->cpu_count; ii++)
+    for (int ii = 0; ii < pv->cpu_count; ii++)
     {
         decomb_thread_arg_t *thread_args;
 
@@ -1049,8 +702,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
         thread_args->arg.segment = ii;
         thread_args->arg.taskset = &pv->decomb_filter_taskset;
 
-        int pp;
-        for (pp = 0; pp < 3; pp++)
+        for (int pp = 0; pp < 3; pp++)
         {
             if (decomb_prev_thread_args != NULL)
             {
@@ -1091,7 +743,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
     }
 
     decomb_prev_thread_args = NULL;
-    for (ii = 0; ii < pv->comb_check_nthreads; ii++)
+    for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
     {
         decomb_thread_arg_t *thread_args;
 
@@ -1100,8 +752,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
         thread_args->arg.segment = ii;
         thread_args->arg.taskset =  &pv->decomb_check_taskset;
 
-        int pp;
-        for (pp = 0; pp < 3; pp++)
+        for (int pp = 0; pp < 3; pp++)
         {
             if (decomb_prev_thread_args != NULL)
             {
@@ -1141,7 +792,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
         }
 
         decomb_prev_thread_args = NULL;
-        for (ii = 0; ii < pv->cpu_count; ii++)
+        for (int ii = 0; ii < pv->cpu_count; ii++)
         {
             decomb_thread_arg_t *thread_args;
 
@@ -1150,8 +801,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
             thread_args->arg.taskset = &pv->mask_filter_taskset;
             thread_args->arg.segment = ii;
 
-            int pp;
-            for (pp = 0; pp < 3; pp++)
+            for (int pp = 0; pp < 3; pp++)
             {
                 if (decomb_prev_thread_args != NULL)
                 {
@@ -1185,7 +835,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
 
             decomb_prev_thread_args = NULL;
-            for (ii = 0; ii < pv->cpu_count; ii++)
+            for (int ii = 0; ii < pv->cpu_count; ii++)
             {
                 decomb_thread_arg_t *thread_args;
 
@@ -1194,8 +844,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
                 thread_args->arg.taskset = &pv->mask_erode_taskset;
                 thread_args->arg.segment = ii;
 
-                int pp;
-                for (pp = 0; pp < 3; pp++)
+                for (int pp = 0; pp < 3; pp++)
                 {
                     if (decomb_prev_thread_args != NULL)
                     {
@@ -1227,7 +876,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
 
             decomb_prev_thread_args = NULL;
-            for (ii = 0; ii < pv->cpu_count; ii++)
+            for (int ii = 0; ii < pv->cpu_count; ii++)
             {
                 decomb_thread_arg_t *thread_args;
 
@@ -1236,8 +885,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
                 thread_args->arg.segment = ii;
                 thread_args->arg.taskset = &pv->mask_dilate_taskset;
 
-                int pp;
-                for (pp = 0; pp < 3; pp++)
+                for (int pp = 0; pp < 3; pp++)
                 {
                     if (decomb_prev_thread_args != NULL)
                     {
@@ -1293,8 +941,7 @@ static void comb_detect_close( hb_filter_object_t * filter )
     }
 
     /* Cleanup reference buffers. */
-    int ii;
-    for (ii = 0; ii < 3; ii++)
+    for (int ii = 0; ii < 3; ii++)
     {
         if (!pv->ref_used[ii])
         {
@@ -1307,8 +954,9 @@ static void comb_detect_close( hb_filter_object_t * filter )
     hb_buffer_close(&pv->mask_filtered);
     hb_buffer_close(&pv->mask_temp);
 
+    free(pv->gamma_lut);
     free(pv->block_score);
-    free( pv );
+    free(pv);
     filter->private_data = NULL;
 }
 
@@ -1333,11 +981,11 @@ static void process_frame( hb_filter_private_t * pv )
             break;
     }
     pv->frames++;
-    if ((pv->mode & MODE_MASK) && combed)
+    if (((pv->mode & MODE_MASK) || (pv->mode & MODE_COMPOSITE)) && combed)
     {
         hb_buffer_t * out;
         out = hb_buffer_dup(pv->ref[1]);
-        apply_mask(pv, out);
+        pv->apply_mask(pv, out);
         out->s.combed = combed;
         hb_buffer_list_append(&pv->out_list, out);
     }
