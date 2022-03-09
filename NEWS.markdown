@@ -13,8 +13,17 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 #### Filters
 - Small performance improvement on high core count systems for comb detect, decomb and nlmeans
-- The following filters now higher than 8bit content
+- The following filters have been upgraded to support higher than 8-bit content
+  - Deinterlace
+    - Comb Detect
   - Grayscale
+  - Denoise 
+    - hqdn3d
+  - Sharpen
+    - UnSharp
+    - LapSharp
+  - Chroma Smooth
+  
 
 #### Hardware Encoding
 - Added support for QuickSync AV1 Encoder
@@ -24,7 +33,6 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Third-party libraries
 
 - Updated libraries
-  - x265 rev 12712
 
 ### Linux
 - Miscellaneous bug fixes and improvements
