@@ -2207,7 +2207,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
                     this.WindowTitle = Resources.HandBrake_Title;
                     this.notifyIconService.SetTooltip(this.WindowTitle);
-                    this.windowsTaskbar.SetTaskBarProgressToNoProgress();
+                    this.windowsTaskbar.SetNoProgress();
                 });
         }
 
@@ -2244,6 +2244,8 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.QueueCount);
                     this.NotifyOfPropertyChange(() => this.StartLabel);
                     this.NotifyOfPropertyChange(() => this.IsEncoding);
+
+                    this.windowsTaskbar.SetPaused();
                 });
         }
         
@@ -2288,7 +2290,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else if (queueJobStatuses.Count > 1)
                     {
-                        this.windowsTaskbar.SetTaskBarProgressToNoProgress();
+                        this.windowsTaskbar.SetNoProgress();
                         this.ProgramStatusLabel = string.Format(Resources.Main_QueueMultiJobStatus, this.queueProcessor.CompletedCount, Environment.NewLine, queueJobStatuses.Count, this.queueProcessor.Count);
                         this.IsMultiProcess = true;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
@@ -2302,7 +2304,7 @@ namespace HandBrakeWPF.ViewModels
 
                         this.IsMultiProcess = false;
                         this.NotifyOfPropertyChange(() => this.IsMultiProcess);
-                        this.windowsTaskbar.SetTaskBarProgressToNoProgress();
+                        this.windowsTaskbar.SetNoProgress();
                     }
                 });
         }
