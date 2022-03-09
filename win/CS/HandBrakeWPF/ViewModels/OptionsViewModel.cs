@@ -883,7 +883,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool EnableQuickSyncDecoding
         {
-            get => this.enableQuickSyncDecoding && IsUseQsvDecAvailable;
+            get => this.enableQuickSyncDecoding && IsQuickSyncAvailable;
 
             set
             {
