@@ -4,10 +4,10 @@
     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
 
     <SolidColorBrush x:Key="Menu.Static.Background" Color="#363636" />  <!-- Ui.Mid -->
-    <SolidColorBrush x:Key="Menu.Static.Border" Color="#C0C0C0" /><!-- Ui.ContrastLight -->
+    <SolidColorBrush x:Key="Menu.Static.Border" Color="#acacac" /><!-- Ui.ContrastLight -->
     <SolidColorBrush x:Key="Menu.Static.Foreground" Color="WhiteSmoke" />
 
-    <SolidColorBrush x:Key="Menu.Static.Separator" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Menu.Static.Separator" Color="#606060" />
 
     <SolidColorBrush x:Key="Menu.Disabled.Background" Color="#363636" /><!-- Ui.Mid -->
     <SolidColorBrush x:Key="Menu.Disabled.Border" Color="#FFDADADA" />
@@ -126,7 +126,7 @@
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <themes:SystemDropShadowChrome Name="Shdw" Color="Transparent" SnapsToDevicePixels="true">
                         <Border Name="ContextMenuBorder" Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderBrush="{StaticResource Menu.Static.Border}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ScrollViewer Name="ContextMenuScrollViewer" Grid.ColumnSpan="2" Margin="1,0" Style="{StaticResource MenuScrollViewer}">
                                 <Grid RenderOptions.ClearTypeHint="Enabled">
@@ -137,7 +137,7 @@
                                                    Fill="{Binding ElementName=ContextMenuBorder,Path=Background}" />
                                     </Canvas>
                                     <Rectangle Fill="{DynamicResource Ui.Mid}" HorizontalAlignment="Left" Width="28" Margin="1,2" RadiusX="2" RadiusY="2"/>
-                                    <Rectangle HorizontalAlignment="Left" Width="1" Margin="29,2,0,2" Fill="{DynamicResource Ui.WhiteSmoke}"/>
+                                    <Rectangle HorizontalAlignment="Left" Width="1" Margin="29,2,0,2" Fill="{StaticResource Menu.Static.Separator}"/>
                                     <!--<Rectangle HorizontalAlignment="Left" Width="1" Margin="30,2,0,2" Fill="White"/>-->
                                     <ItemsPresenter Name="ItemsPresenter" Margin="{TemplateBinding Padding}"
                                                 KeyboardNavigation.DirectionalNavigation="Cycle"
