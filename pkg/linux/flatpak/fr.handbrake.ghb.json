@@ -61,7 +61,6 @@
             "no-autogen": true,
             "config-opts": [
                 "--flatpak",
-                "--debug=std",
                 "--disable-gtk-update-checks"
             ],
             "builddir": true,
