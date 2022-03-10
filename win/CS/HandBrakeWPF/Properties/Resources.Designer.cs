@@ -2165,6 +2165,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open HandBrake.
+        /// </summary>
+        public static string MainView_OpenHandBrake {
+            get {
+                return ResourceManager.GetString("MainView_OpenHandBrake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {

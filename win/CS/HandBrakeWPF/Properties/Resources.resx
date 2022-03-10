@@ -2628,4 +2628,7 @@ Only queue files from the current version are supported.</value>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
     <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
   </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Open HandBrake</value>
+  </data>
 </root>
