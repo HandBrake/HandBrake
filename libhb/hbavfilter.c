@@ -341,7 +341,8 @@ void hb_avfilter_combine( hb_list_t * list)
         switch (filter->id)
         {
             case HB_FILTER_AVFILTER:
-            case HB_FILTER_DEINTERLACE:
+            case HB_FILTER_YADIF:
+            case HB_FILTER_BWDIF:
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_CROP_SCALE:
             case HB_FILTER_PAD:
