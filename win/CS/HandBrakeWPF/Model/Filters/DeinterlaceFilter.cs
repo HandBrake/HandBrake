@@ -23,6 +23,9 @@ namespace HandBrakeWPF.Model.Filters
         Yadif = 1,
 
         [ShortName("Decomb")]
-        Decomb = 2
+        Decomb = 2,
+
+        [ShortName("Bwdif")]
+        Bwdif = 3,
     }
 }

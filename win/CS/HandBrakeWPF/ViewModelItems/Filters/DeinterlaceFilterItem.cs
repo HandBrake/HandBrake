@@ -87,9 +87,11 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 switch (this.SelectedDeinterlaceFilter)
                 {
                     case DeinterlaceFilter.Yadif:
-                        return new BindingList<HBPresetTune>(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEINTERLACE));
+                        return new BindingList<HBPresetTune>(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_YADIF));
                     case DeinterlaceFilter.Decomb:
                         return new BindingList<HBPresetTune>(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DECOMB));
+                    case DeinterlaceFilter.Bwdif:
+                        return new BindingList<HBPresetTune>(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_BWDIF));
                     default:
                         return new BindingList<HBPresetTune>();
                 }
