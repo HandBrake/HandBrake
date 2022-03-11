@@ -4338,7 +4338,7 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                     case HB_FILTER_CROP_SCALE:
                         break;
 
-                    case HB_FILTER_DEINTERLACE:
+                    case HB_FILTER_YADIF:
                     case HB_FILTER_ROTATE:
                     case HB_FILTER_RENDER_SUB:
                     case HB_FILTER_AVFILTER:

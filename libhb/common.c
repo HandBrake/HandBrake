@@ -4326,8 +4326,12 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_decomb;
             break;
 
-        case HB_FILTER_DEINTERLACE:
-            filter = &hb_filter_deinterlace;
+        case HB_FILTER_YADIF:
+            filter = &hb_filter_yadif;
+            break;
+
+        case HB_FILTER_BWDIF:
+            filter = &hb_filter_bwdif;
             break;
 
         case HB_FILTER_COLORSPACE:

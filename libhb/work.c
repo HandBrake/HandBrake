@@ -1277,7 +1277,7 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
     {
-        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_DEINTERLACE};
+        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_YADIF, HB_FILTER_BWDIF};
         int ii, count = sizeof(selective) / sizeof(int);
 
         for (ii = 0; ii < count; ii++)
