@@ -70,8 +70,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 #define UNSHARP_DEFAULT_PRESET       "medium"
 #define CHROMA_SMOOTH_DEFAULT_PRESET "medium"
 #define NLMEANS_DEFAULT_PRESET       "medium"
-#define DEINTERLACE_DEFAULT_PRESET   "default"
+#define YADIF_DEFAULT_PRESET         "default"
 #define DECOMB_DEFAULT_PRESET        "default"
+#define BWDIF_DEFAULT_PRESET         "default"
 #define DETELECINE_DEFAULT_PRESET    "default"
 #define COMB_DETECT_DEFAULT_PRESET   "default"
 #define HQDN3D_DEFAULT_PRESET        "medium"
@@ -112,8 +113,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         case HB_FILTER_NLMEANS:
             preset = NLMEANS_DEFAULT_PRESET;
             break;
-        case HB_FILTER_DEINTERLACE:
-            preset = DEINTERLACE_DEFAULT_PRESET;
+        case HB_FILTER_YADIF:
+            preset = YADIF_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_BWDIF:
+            preset = BWDIF_DEFAULT_PRESET;
             break;
         case HB_FILTER_DECOMB:
             preset = DECOMB_DEFAULT_PRESET;
@@ -135,7 +139,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     }
     switch (filter_id)
     {
-        case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_YADIF:
+        case HB_FILTER_BWDIF:
         case HB_FILTER_NLMEANS:
         case HB_FILTER_CHROMA_SMOOTH:
         case HB_FILTER_COLORSPACE:
@@ -353,7 +358,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     int filter_id = HB_FILTER_DECOMB;
     if ([self.deinterlace isEqualToString:@"deinterlace"])
     {
-        filter_id = HB_FILTER_DEINTERLACE;
+        filter_id = HB_FILTER_YADIF;
+    }
+    else if ([self.deinterlace isEqualToString:@"bwdif"])
+    {
+        filter_id = HB_FILTER_BWDIF;
     }
 
     if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL, NULL))
@@ -391,7 +400,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         int filter_id = HB_FILTER_DECOMB;
         if ([self.deinterlace isEqualToString:@"deinterlace"])
         {
-            filter_id = HB_FILTER_DEINTERLACE;
+            filter_id = HB_FILTER_YADIF;
+        }
+        else if ([self.deinterlace isEqualToString:@"bwdif"])
+        {
+            filter_id = HB_FILTER_BWDIF;
         }
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
                                                              "custom",
@@ -403,7 +416,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
             retval = NO;
             if (outError)
             {
-                if (filter_id == HB_FILTER_DEINTERLACE)
+                if (filter_id == HB_FILTER_YADIF)
                 {
                     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid Yadif custom settings.",
                                                                                             @"HBFilters -> invalid Yadif custom string description"),
@@ -414,6 +427,13 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
                 {
                     NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid Decomb custom settings.",
                                                                                             @"HBFilters -> invalid Decomb custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: [self filterKeysDescription:filter_id]};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
+                else if (filter_id == HB_FILTER_BWDIF)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid Bwdif custom settings.",
+                                                                                            @"HBFilters -> invalid Bwdif custom string description"),
                                                NSLocalizedRecoverySuggestionErrorKey: [self filterKeysDescription:filter_id]};
                     *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
                 }
