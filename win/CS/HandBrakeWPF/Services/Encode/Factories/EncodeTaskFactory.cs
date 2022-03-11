@@ -364,12 +364,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Deinterlace
             if (job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DEINTERLACE, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_YADIF, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
                     JsonDocument root = JsonDocument.Parse(unparsedJson);
 
-                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = root };
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_YADIF, Settings = root };
                     filter.FilterList.Add(filterItem);
                 }
             }
@@ -387,7 +387,20 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
+            // Bwdif
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
+            {
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_BWDIF, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_BWDIF, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
+            }
+
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif || job.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
             {
                 if (job.CombDetect != CombDetect.Off)
                 {

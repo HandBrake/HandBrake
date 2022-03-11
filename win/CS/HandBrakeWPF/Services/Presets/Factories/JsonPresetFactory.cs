@@ -174,6 +174,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "yadif":
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Yadif;
                     break;
+                case "bwdif":
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Bwdif;
+                    break;
                 default:
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Off;
                     break;
@@ -189,13 +192,21 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEINTERLACE);
+                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_YADIF);
                 HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
                 preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
                 preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
             }
 
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif || preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
+            {
+                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_BWDIF);
+                HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
+                preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
+                preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
+            }
+
+            if (preset.Task.DeinterlaceFilter != DeinterlaceFilter.Off)
             {
                 switch (importedPreset.PictureCombDetectPreset)
                 {
@@ -646,9 +657,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDeblockTune = export.Task.DeblockTune?.Key;
             preset.PictureDeblockCustom = export.Task.CustomDeblock;
 
-            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
-                ? "decomb"
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif" : "off";
+            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb ? "decomb"
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif"
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif ? "bwdif" : "off";
             preset.PictureDeinterlacePreset = export.Task.DeinterlacePreset?.ShortName;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlaceSettings;
 

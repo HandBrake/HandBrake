@@ -18,7 +18,8 @@ namespace HandBrake.Interop.Interop.HbLib
         HB_FILTER_DETELECINE,
         HB_FILTER_COMB_DETECT,
         HB_FILTER_DECOMB,
-        HB_FILTER_DEINTERLACE,
+        HB_FILTER_YADIF,
+        HB_FILTER_BWDIF,
         HB_FILTER_VFR,
         // Filters that must operate on the original source image are next
         HB_FILTER_DEBLOCK,
