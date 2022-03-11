@@ -132,8 +132,9 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 {
     if (self = [super init])
     {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[HBFilters deinterlacePresetsDict]];
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[HBFilters yadifPresetsDict]];
         [dict addEntriesFromDictionary:[HBFilters decombPresetsDict]];
+        [dict addEntriesFromDictionary:[HBFilters bwdifPresetsDict]];
         self.dict = [dict copy];
     }
 
@@ -280,7 +281,8 @@ static NSDictionary *combDetectionPresetsDict = nil;
 
 static NSDictionary *deinterlaceTypesDict = nil;
 static NSDictionary *decombPresetsDict = nil;
-static NSDictionary *deinterlacePresetsDict = nil;
+static NSDictionary *yadifPresetsDict = nil; 
+static NSDictionary *bwdifPresetsDict = nil;
 
 static NSDictionary *denoisePresetDict = nil;
 static NSDictionary *nlmeansTunesDict = nil;
@@ -327,14 +329,18 @@ static NSDictionary *colorspacePresetDict = nil;
     {
         deinterlaceTypesDict = @{HBKitLocalizedString(@"Off", @"HBFilters -> filter display name"):        @"off",
                                  HBKitLocalizedString(@"Yadif", @"HBFilters -> filter display name"):      @"deinterlace",
-                                 HBKitLocalizedString(@"Decomb", @"HBFilters -> filter display name"):     @"decomb"};;
+                                 HBKitLocalizedString(@"Decomb", @"HBFilters -> filter display name"):     @"decomb",
+                                 HBKitLocalizedString(@"Bwdif", @"HBFilters -> filter display name"):      @"bwdif"};;
     }
     return deinterlaceTypesDict;
 }
 
 - (NSArray *)deinterlaceTypes
 {
-    return @[HBKitLocalizedString(@"Off", @"HBFilters -> filter display name"), HBKitLocalizedString(@"Yadif", @"HBFilters -> filter display name"), HBKitLocalizedString(@"Decomb", @"HBFilters -> filter display name")];
+    return @[HBKitLocalizedString(@"Off", @"HBFilters -> filter display name"),
+             HBKitLocalizedString(@"Yadif", @"HBFilters -> filter display name"),
+             HBKitLocalizedString(@"Decomb", @"HBFilters -> filter display name"),
+             HBKitLocalizedString(@"Bwdif", @"HBFilters -> filter display name")];
 }
 
 + (NSDictionary *)decombPresetsDict
@@ -346,13 +352,22 @@ static NSDictionary *colorspacePresetDict = nil;
     return decombPresetsDict;
 }
 
-+ (NSDictionary *)deinterlacePresetsDict
++ (NSDictionary *)yadifPresetsDict
 {
-    if (!deinterlacePresetsDict)
+    if (!yadifPresetsDict)
     {
-        deinterlacePresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_DEINTERLACE);
+        yadifPresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_YADIF);
     }
-    return deinterlacePresetsDict;
+    return yadifPresetsDict;
+}
+
++ (NSDictionary *)bwdifPresetsDict
+{
+    if (!bwdifPresetsDict)
+    {
+        bwdifPresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_BWDIF);
+    }
+    return bwdifPresetsDict;
 }
 
 + (NSDictionary *)denoisePresetDict
@@ -478,7 +493,11 @@ static NSDictionary *colorspacePresetDict = nil;
 {
     if ([self.deinterlace isEqualToString:@"deinterlace"])
     {
-        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DEINTERLACE);
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_YADIF);
+    }
+    else if ([self.deinterlace isEqualToString:@"bwdif"])
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_BWDIF);
     }
     else
     {

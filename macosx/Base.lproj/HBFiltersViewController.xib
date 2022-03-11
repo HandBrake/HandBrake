@@ -142,7 +142,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     <rect key="frame" x="118" y="234" width="138" height="22"/>
                     <string key="toolTip">Deinterlace removes comb artifacts from the picture.
 
-Yadif is a popular and fast deinterlacer.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
 Decomb switches between multiple interpolation algorithms for speed and quality.</string>
                     <constraints>
@@ -172,9 +172,9 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                     <rect key="frame" x="539" y="237" width="180" height="19"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
-Yadif syntax: mode=m:parity=p
+Bwdif and Yadif syntax: mode=m:parity=p
 
-Yadif default: mode=3
+Bwdif and Yadif default: mode=3
 
 Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
 
