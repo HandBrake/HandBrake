@@ -69,6 +69,7 @@ struct hb_filter_private_s
     float            * gamma_lut;
 
     int                comb_detect_ready;
+    int                force_exaustive_check;
 
     hb_buffer_t      * ref[3];
     int                ref_used[3];
@@ -604,6 +605,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
     build_gamma_lut(pv);
 
     pv->frames = 0;
+    pv->force_exaustive_check = 1;
     pv->comb_heavy = 0;
     pv->comb_light = 0;
     pv->comb_none = 0;
@@ -995,6 +997,8 @@ static void process_frame( hb_filter_private_t * pv )
         pv->ref[1]->s.combed = combed;
         hb_buffer_list_append(&pv->out_list, pv->ref[1]);
     }
+
+    pv->force_exaustive_check = 0;
 }
 
 static int comb_detect_work( hb_filter_object_t * filter,
@@ -1012,6 +1016,7 @@ static int comb_detect_work( hb_filter_object_t * filter,
         store_ref(pv, hb_buffer_dup(pv->ref[2]));
         if (pv->ref[0] != NULL)
         {
+            pv->force_exaustive_check = 1;
             process_frame(pv);
         }
         hb_buffer_list_append(&pv->out_list, in);

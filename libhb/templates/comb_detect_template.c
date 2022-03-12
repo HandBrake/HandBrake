@@ -213,7 +213,7 @@ static void FUNC(detect_gamma_combed_segment)(hb_filter_private_t *pv,
                     motion = 1;
                 }
 
-                if (motion || pv->frames == 0)
+                if (motion || pv->force_exaustive_check)
                 {
                     // Tritical's noise-resistant combing scorer.
                     // The check is done on a bob+blur convolution.
@@ -324,7 +324,7 @@ static void FUNC(detect_combed_segment)(hb_filter_private_t *pv,
                 }
 
                 // If motion, or we can't measure motion yet...
-                if (motion || pv->frames == 0)
+                if (motion || pv->force_exaustive_check)
                 {
                     // That means it's time for the spatial check.
                     // We've got several options here.
