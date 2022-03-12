@@ -108,7 +108,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             get
             {
-                return this.queue.Count(item => item.Status == QueueItemStatus.Waiting);
+                return this.queue.Count(item => item.Status == QueueItemStatus.Waiting && item.TaskType != QueueTaskType.Breakpoint);
             }
         }
 
