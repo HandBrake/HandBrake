@@ -7,7 +7,7 @@ jobs:
     name: Build on macOS
     runs-on: macos-11.0
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Toolchain Cache
       id: mac-toolchain
