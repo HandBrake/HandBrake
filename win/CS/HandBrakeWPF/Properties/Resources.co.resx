@@ -1871,9 +1871,6 @@ Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Modu purtabile : Impussibule di leghje portable.ini. Forse ci hè qualchì sbagliu in stu schedariu. Ci vole à pruvà torna impieghendu portable.ini.template cum’è esempiu.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>U mutore d’HandBrake ùn hà micca pussutu inizziasi. Ghjè aspessu cagiunatu da piloti GPU troppu anziani.\nCi vole à rinnovà sti piloti per tutte e carte grafiche integrate è specificate di u vostru sistema.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Ozzioni mudificate direttamente : {source} {title} {chapters} 
 Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>

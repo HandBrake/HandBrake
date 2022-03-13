@@ -1873,9 +1873,6 @@ Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Portabler Modus: Das Lesen von portable.ini ist nicht möglich. Die Datei könnte fehlerhaft sein. Bitte erneut portable.ini.template als Vorlage benutzen.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte die GPU-Treiber für alle Onboard- und diskreten Grafikkarten aktualisieren, die dieses System besitzt.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Austausch-Platzhalter: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>

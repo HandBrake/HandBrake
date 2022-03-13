@@ -73,6 +73,21 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
 
+            // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
+            if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
+            {
+                this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
+            }
+
+            if (this.maxAllowedInstances == 1)
+            {
+                this.totalQsvInstances = 1;
+                this.totalNvidiaInstances = 1;
+                this.totalVceInstances = 1;
+                this.totalMfInstances = 1;
+                return;
+            } 
+
             // Allow QSV adapter scaling. 
             this.qsvGpus = HandBrakeEncoderHelpers.GetQsvAdaptorList();
             this.totalQsvInstances = this.qsvGpus.Count * 2; // Allow two instances per GPU
@@ -83,19 +98,14 @@ namespace HandBrakeWPF.Services.Queue
                 this.totalQsvInstances = 1;
             }
 
-            // Most Nvidia cards support 3 instances.
+            // NVEnc Support - (Most cards support 3 but not all)
             this.totalNvidiaInstances = 3;
 
-            // VCE Support still TBD
+            // VCN Support
             this.totalVceInstances = 3;
 
+            // ARM64 Support
             this.totalMfInstances = 1;
-
-            // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
-            if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
-            {
-                this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
-            }
         }
 
         public Guid? GetToken(EncodeTask task)

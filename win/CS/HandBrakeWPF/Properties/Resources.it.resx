@@ -1870,9 +1870,6 @@ Tempo rimanente: {5}, Trascorso: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Modalità Portatile: Impossibile leggere il file portable.ini. Potrebbe esserci un errore in questo file. Riprova usando portable.ini.template come riferimento.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>Inizializzazione motore di HandBrake fallita. Ciò è spesso causato da driver GPU obsoleti.\n Si prega di aggiornare i driver di ogni GPU integrata o dedicata del sistema</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Segnaposto da Sostituire: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>

@@ -1860,9 +1860,6 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 0211
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>免安裝模式：無法讀取 portable.ini，該檔案可能有錯誤。請使用 portable.ini.template 作為範本重試。</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 無法初始化引擎。這常因為 GPU 驅動程式太舊。\n 請更新您電腦中所有內顯、獨顯的驅動程式。</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Replacement Placeholders: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>

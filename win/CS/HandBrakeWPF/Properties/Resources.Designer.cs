@@ -3962,6 +3962,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Safe Mode.
+        /// </summary>
+        public static string OptionsView_ResetSafeMode {
+            get {
+                return ResourceManager.GetString("OptionsView_ResetSafeMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please restart HandBrake..
+        /// </summary>
+        public static string OptionsView_ResetSafeModeMessage {
+            get {
+                return ResourceManager.GetString("OptionsView_ResetSafeModeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset all HandBrake settings back to defaults:.
         /// </summary>
         public static string OptionsView_ResetSettingsToDefaults {
@@ -6325,11 +6343,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake&apos;s engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has..
+        ///   Looks up a localized string similar to HandBrake was unable to start..
         /// </summary>
-        public static string Startup_InitFailed {
+        public static string Startup_UnableToStart {
             get {
-                return ResourceManager.GetString("Startup_InitFailed", resourceCulture);
+                return ResourceManager.GetString("Startup_UnableToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hardware encoding support has been disabled as it is a common cause of start-up issues.
+        ///- Please try restarting HandBrake. 
+        ///- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+        ///
+        ///Hardware encoding support can be re-enabled in preferences. .
+        /// </summary>
+        public static string Startup_UnableToStartInfo {
+            get {
+                return ResourceManager.GetString("Startup_UnableToStartInfo", resourceCulture);
             }
         }
         

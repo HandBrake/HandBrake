@@ -962,7 +962,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsHardwareOptionsVisible => !IsSafeMode && !IsHardwareFallbackMode;
 
-
+        public bool IsAutomaticSafeMode { get; private set; }
+        
         /* About HandBrake */
 
         public string Version { get; } = string.Format("{0}", HandBrakeVersionHelper.GetVersion());
@@ -1188,6 +1189,19 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ResetAutomaticSafeMode()
+        {
+            userSettingService.SetUserSetting(UserSettingConstants.ForceDisableHardwareSupport, false);
+            this.errorService.ShowMessageBox(
+                Resources.OptionsView_ResetSafeModeMessage,
+                Resources.Notice,
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            this.IsAutomaticSafeMode = false;
+            this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
+        }
+
         #endregion
 
         public override void OnLoad()
@@ -1369,6 +1383,12 @@ namespace HandBrakeWPF.ViewModels
 
             this.PauseOnLowBattery = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseEncodingOnLowBattery);
             this.LowBatteryLevel = userSettingService.GetUserSetting<int>(UserSettingConstants.LowBatteryLevel);
+
+            // #############################
+            // Safe Mode
+            // #############################
+            this.IsAutomaticSafeMode = userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport);
+            this.NotifyOfPropertyChange(() => this.IsAutomaticSafeMode);
         }
 
         public void UpdateSettings()

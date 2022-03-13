@@ -1874,9 +1874,6 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>ポータブルモード: portable.iniを読み込むことができませんでした。このファイルにエラーがある可能性があります。portable.ini.templateをガイドとして使用しやり直してください。</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrakeエンジンの初期化に失敗しました。これはしばしば古すぎるGPUドライバによって引き起こされます。オンボードか拡張カードかに関わらず、システムに存在するすべてのGPUドライバを更新してください。</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>自動更新オプション: {source} {title} {chapters} 
 自動更新でないオプション: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更した時のみ更新されます。)</value>

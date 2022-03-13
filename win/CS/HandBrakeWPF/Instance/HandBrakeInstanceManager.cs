@@ -10,11 +10,14 @@
 namespace HandBrakeWPF.Instance
 {
     using System;
+    using System.Threading;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model;
 
+    using HandBrakeWPF.Exceptions;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -31,11 +34,29 @@ namespace HandBrakeWPF.Instance
         private static HandBrakeInstance previewInstance;
         private static bool noHardware;
        
-        public static void Init(bool noHardwareMode)
+        public static void Init(bool noHardwareMode, IUserSettingService userSettingService)
         {
-            noHardware = noHardwareMode;
-            HandBrakeUtils.RegisterLogger();
-            HandBrakeUtils.EnsureGlobalInit(noHardwareMode);
+            Thread thread = new Thread(() =>
+            {
+                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport))
+                {
+                    noHardware = true;
+                }
+                else
+                {
+                    noHardware = noHardwareMode;
+                }
+
+                HandBrakeUtils.RegisterLogger();
+                HandBrakeUtils.EnsureGlobalInit(noHardware);
+            });
+            thread.Start();
+            if (!thread.Join(8000))
+            {
+                // Something is likely handing in a graphics driver.  Force disable this feature so we don't probe the hardware next time around.
+                userSettingService.SetUserSetting(UserSettingConstants.ForceDisableHardwareSupport, true);
+                throw new GeneralApplicationException(Resources.Startup_UnableToStart, Resources.Startup_UnableToStartInfo);
+            }
         }
 
         public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService, IPortService portService)

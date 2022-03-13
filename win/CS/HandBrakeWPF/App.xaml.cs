@@ -81,6 +81,13 @@ namespace HandBrakeWPF
                 return;
             }
 
+            if (!File.Exists("hb.dll"))
+            {
+                MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_HbDllMissing, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+                return;
+            }
+
             if (e.Args.Any(f => f.StartsWith("--recover-queue-ids")))
             {
                 string command = e.Args.FirstOrDefault(f => f.StartsWith("--recover-queue-ids"));
@@ -190,20 +197,7 @@ namespace HandBrakeWPF
 
             // Initialise the Engine
             HandBrakeWPF.Helpers.LogManager.Init();
-
-            try
-            {
-                HandBrakeInstanceManager.Init(noHardware);
-            }
-            catch (Exception)
-            {
-                if (!noHardware)
-                {
-                    MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_InitFailed, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                throw;
-            }
+            HandBrakeInstanceManager.Init(noHardware, userSettingService);
 
             // Initialise the GUI
             base.OnStartup(e);
