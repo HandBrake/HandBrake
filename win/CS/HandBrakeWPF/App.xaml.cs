@@ -81,13 +81,6 @@ namespace HandBrakeWPF
                 return;
             }
 
-            if (!File.Exists("hb.dll"))
-            {
-                MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_HbDllMissing, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-                return;
-            }
-
             if (e.Args.Any(f => f.StartsWith("--recover-queue-ids")))
             {
                 string command = e.Args.FirstOrDefault(f => f.StartsWith("--recover-queue-ids"));
