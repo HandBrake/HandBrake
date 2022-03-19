@@ -76,7 +76,7 @@
     {
         [self.categories selectItemWithTitle:lastUsedCategory];
     }
-    if (!self.categories.selectedItem)
+    if (self.categories.selectedItem.tag != 2)
     {
         [self.categories selectItemWithTag:2];
     }
