@@ -1055,7 +1055,6 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     }
 
     pv->output = *init;
-    init->job->use_decomb = 1;
 
     return 0;
 }

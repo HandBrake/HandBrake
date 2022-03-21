@@ -754,8 +754,6 @@ struct hb_job_s
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
-    PRIVATE int use_decomb;
-    PRIVATE int use_detelecine;
 
     // QSV-specific settings
     struct
