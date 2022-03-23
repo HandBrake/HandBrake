@@ -1524,6 +1524,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set rate control parameters
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
+        unsigned int upper_limit = 51;
+
         if (pv->param.rc.icq)
         {
             // introduced in API 1.8
@@ -1535,18 +1537,20 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             {
                 pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
             }
-            pv->param.videoParam->mfx.ICQQuality = HB_QSV_CLIP3(1, 51, job->vquality);
+            pv->param.videoParam->mfx.ICQQuality = HB_QSV_CLIP3(1, upper_limit, job->vquality);
         }
         else
         {
             // introduced in API 1.1
             // HEVC 10b has QP range as [-12;51]
             // with shift +12 needed to be in QSV's U16 range
-            unsigned int upper_limit = 51;
-
             if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
             {
                 upper_limit = 63;
+            }
+            if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1)
+            {
+                upper_limit = 255;
             }
 
             pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CQP;
