@@ -34,6 +34,7 @@ typedef struct hb_qsv_adapter_details
 {
     // DirectX index
     int index;
+    int type;
     // QSV info for each codec
     hb_qsv_info_t *hb_qsv_info_avc;
     hb_qsv_info_t *hb_qsv_info_hevc;
@@ -66,6 +67,7 @@ static int qsv_init_result = -2;
 static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 {
     adapter_details->index                                 = 0;
+    adapter_details->type                                  = MFX_MEDIA_INTEGRATED;
     // QSV info for each codec
     adapter_details->hb_qsv_info_avc                       = NULL;
     adapter_details->hb_qsv_info_hevc                      = NULL;
@@ -1249,9 +1251,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
 {
     for (int i = 0; i < hb_list_count(hb_qsv_adapter_details_list); i++)
     {
-        int *dx_index = (int *)hb_list_item(qsv_adapters_list, i);
         hb_qsv_adapter_details_t *details = hb_list_item(hb_qsv_adapter_details_list, i);
-        details->index = *dx_index;
         /*
         * First, check for any MSDK version to determine whether one or
         * more implementations are present; then check if we can use them.
@@ -1306,7 +1306,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                 //
                 // Note: this-party hardware (QSV_G0) is unsupported for the time being
                 MFXQueryVersion(session, &details->qsv_hardware_version);
-                if (hb_qsv_hardware_generation(hb_qsv_get_platform(*dx_index)) >= QSV_G1 &&
+                if (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) >= QSV_G1 &&
                     HB_CHECK_MFX_VERSION(details->qsv_hardware_version,
                                         HB_QSV_MINVERSION_MAJOR,
                                         HB_QSV_MINVERSION_MINOR))
@@ -1315,7 +1315,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                     details->qsv_hardware_info_avc.implementation = hw_impl | hw_preference;
                     query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc);
                     details->qsv_hardware_info_hevc.implementation = hw_impl | hw_preference;
-                    if (hb_qsv_hardware_generation(hb_qsv_get_platform(*dx_index)) > QSV_G8)
+                    if ((details->type == MFX_MEDIA_DISCRETE) && (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) > QSV_G8))
                     {
                         query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_av1);
                         details->qsv_hardware_info_av1.implementation = hw_impl | hw_preference;
@@ -4012,6 +4012,8 @@ static int hb_qsv_make_adapters_details_list(const mfxAdaptersInfo* adapters_inf
                 return -1;
             }
             init_adapter_details(adapter_details);
+            adapter_details->index = info->Number;
+            adapter_details->type = info->Platform.MediaAdapterType;
             hb_list_add(list, (void*)adapter_details);
         }
     }
