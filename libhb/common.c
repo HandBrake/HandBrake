@@ -2864,7 +2864,7 @@ const char* hb_audio_decoder_get_name(int codec, int codec_param)
 {
     if (codec & HB_ACODEC_FF_MASK)
     {
-        AVCodec * codec;
+        const AVCodec *codec;
 
         codec = avcodec_find_decoder(codec_param);
         if (codec != NULL)

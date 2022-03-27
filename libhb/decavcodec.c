@@ -116,7 +116,7 @@ struct hb_work_private_s
 {
     hb_job_t             * job;
     hb_title_t           * title;
-    AVCodec              * codec;
+    const AVCodec        * codec;
     AVCodecContext       * context;
     AVCodecParserContext * parser;
     AVFrame              * frame;
@@ -168,7 +168,7 @@ static void decodeAudio( hb_work_private_t *pv, packet_info_t * packet_info );
  **********************************************************************/
 static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 {
-    AVCodec * codec;
+    const AVCodec *codec;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -625,7 +625,7 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
     if (audio->priv.config.extradata.length == 0)
     {
         const uint8_t * extradata;
-        int             size;
+        size_t          size;
 
         extradata = av_packet_get_side_data(pkt, AV_PKT_DATA_NEW_EXTRADATA,
                                             &size);
@@ -655,7 +655,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         return decavcodecaInfo( w, info );
     }
 
-    AVCodec *codec = avcodec_find_decoder( w->codec_param );
+    const AVCodec *codec = avcodec_find_decoder( w->codec_param );
     if ( ! codec )
     {
         // there's no ffmpeg codec for this audio type - give up
