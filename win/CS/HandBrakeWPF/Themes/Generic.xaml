@@ -6,6 +6,7 @@
 
 
     <SolidColorBrush x:Key="Ui.Light"  />
+    <SolidColorBrush x:Key="Ui.ToolbarHover" />
     <SolidColorBrush x:Key="Ui.ContrastLight" />
 
     <!-- TextBlock -->

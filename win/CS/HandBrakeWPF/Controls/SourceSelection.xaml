@@ -67,7 +67,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" Width="32" Grid.Column="0" />
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenFolderWIth}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
