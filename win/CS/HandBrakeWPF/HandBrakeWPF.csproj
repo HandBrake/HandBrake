@@ -34,6 +34,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Factories\**" />
+    <EmbeddedResource Remove="Factories\**" />
+    <None Remove="Factories\**" />
+    <Page Remove="Factories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="handbrakepineapple.ico" />
     <None Remove="Views\Images\Dark\Reorder.png" />
     <None Remove="Views\Images\Light\Reorder.png" />
@@ -171,7 +178,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
