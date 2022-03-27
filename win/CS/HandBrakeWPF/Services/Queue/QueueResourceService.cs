@@ -79,15 +79,6 @@ namespace HandBrakeWPF.Services.Queue
                 this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
             }
 
-            if (this.maxAllowedInstances == 1)
-            {
-                this.totalQsvInstances = 1;
-                this.totalNvidiaInstances = 1;
-                this.totalVceInstances = 1;
-                this.totalMfInstances = 1;
-                return;
-            } 
-
             // Allow QSV adapter scaling. 
             this.qsvGpus = HandBrakeEncoderHelpers.GetQsvAdaptorList();
             this.totalQsvInstances = this.qsvGpus.Count * 2; // Allow two instances per GPU
@@ -97,6 +88,15 @@ namespace HandBrakeWPF.Services.Queue
                 // When HyperEncode is supported, we encode 1 job across multiple media engines. 
                 this.totalQsvInstances = 1;
             }
+
+            if (this.maxAllowedInstances == 1)
+            {
+                this.totalQsvInstances = 1;
+                this.totalNvidiaInstances = 1;
+                this.totalVceInstances = 1;
+                this.totalMfInstances = 1;
+                return;
+            } 
 
             // NVEnc Support - (Most cards support 3 but not all)
             this.totalNvidiaInstances = 3;
@@ -267,17 +267,17 @@ namespace HandBrakeWPF.Services.Queue
                 return; // Not a multi-Intel-GPU system.
             }
 
-            if (task.ExtraAdvancedArguments.Contains("gpu"))
-            {
-                return; // Users choice
-            }
-
             // HyperEncode takes priority over load balancing when enabled. 
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode))
             {
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                                                   ? "hyperencode=adaptive" : string.Format("{0}:hyperencode=adaptive", task.ExtraAdvancedArguments);
                 return;
+            }
+
+            if (task.ExtraAdvancedArguments.Contains("gpu"))
+            {
+                return; // Users choice
             }
 
             if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
