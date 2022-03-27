@@ -171,6 +171,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Factories\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 

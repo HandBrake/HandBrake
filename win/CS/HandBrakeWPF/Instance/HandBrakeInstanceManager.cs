@@ -59,7 +59,7 @@ namespace HandBrakeWPF.Instance
             }
         }
 
-        public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration, ILog logService, IUserSettingService userSettingService, IPortService portService)
+        public static IEncodeInstance GetEncodeInstance(int verbosity, ILog logService, IUserSettingService userSettingService, IPortService portService)
         {
             lock (ProcessingLock)
             {

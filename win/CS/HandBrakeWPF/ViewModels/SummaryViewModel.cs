@@ -15,7 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Runtime.ExceptionServices;
     using System.Text;
-    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
@@ -23,7 +22,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;

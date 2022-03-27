@@ -15,18 +15,15 @@ namespace HandBrakeWPF.Services.Presets
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Text.Json;
     using System.Windows;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Utilities;
 
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -223,19 +220,19 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        public void Export(string filename, string presetName, HBConfiguration configuration)
+        public void Export(string filename, string presetName)
         {
             Preset foundPreset = this.flatPresetList.FirstOrDefault(s => s.Name == presetName);
             if (foundPreset != null)
             {
-                PresetTransportContainer container = JsonPresetFactory.ExportPreset(foundPreset, configuration);
+                PresetTransportContainer container = JsonPresetFactory.ExportPreset(foundPreset);
                 HandBrakePresetService.ExportPreset(filename, container);
             }
         }
 
-        public void ExportCategories(string filename, IList<PresetDisplayCategory> categories, HBConfiguration configuration)
+        public void ExportCategories(string filename, IList<PresetDisplayCategory> categories)
         {
-            PresetTransportContainer container = JsonPresetFactory.ExportPresetCategories(categories, configuration);
+            PresetTransportContainer container = JsonPresetFactory.ExportPresetCategories(categories);
             HandBrakePresetService.ExportPreset(filename, container);
         }
 
@@ -817,11 +814,11 @@ namespace HandBrakeWPF.Services.Presets
             {
                 if (string.IsNullOrEmpty(item.Category))
                 {
-                    uncategorisedPresets.Add(JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create()));
+                    uncategorisedPresets.Add(JsonPresetFactory.CreateHbPreset(item));
                 }
                 else
                 {
-                    HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
+                    HBPreset preset = JsonPresetFactory.CreateHbPreset(item);
                     if (presetCategories.ContainsKey(item.Category))
                     {
                         presetCategories[item.Category].ChildrenArray.Add(preset);

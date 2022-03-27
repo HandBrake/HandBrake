@@ -30,7 +30,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Audio;
@@ -1125,7 +1124,7 @@ namespace HandBrakeWPF.ViewModels
                 return new AddQueueError(Resources.Subtitles_WebmSubtitleIncompatibilityHeader, Resources.Main_PleaseFixSubtitleSettings, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset, this.IsModifiedPreset, this.selectedTitle);
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), this.ScannedSource.ScanPath, this.SelectedPreset, this.IsModifiedPreset, this.selectedTitle);
 
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
@@ -1766,7 +1765,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name, HBConfigurationFactory.Create());
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name);
                 }
             }
             else
