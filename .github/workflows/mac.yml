@@ -11,7 +11,7 @@ jobs:
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /usr/local
         key: mac-toolchain
