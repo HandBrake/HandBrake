@@ -5,13 +5,13 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-11.0
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /usr/local
         key: mac-toolchain
@@ -23,7 +23,6 @@ jobs:
 
     - name: Build HandBrake
       run: |
-        git submodule update --init --recursive
         ./configure
         cd build
         make ub && make pkg.create
