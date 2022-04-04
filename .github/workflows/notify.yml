@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Handle Commit
-        uses: rectalogic/notify-irc@v1
+        uses: rectalogic/notify-irc@v2
         if: github.event_name == 'push' && github.repository == 'HandBrake/HandBrake'
         with:
           channel: "#handbrake"
