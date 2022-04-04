@@ -700,10 +700,18 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    ass_set_frame_size( pv->renderer, width, height);
+    ass_set_frame_size(pv->renderer, width, height);
+    ass_set_storage_size(pv->renderer, width, height);
 
-    double par = (double)job->par.num / job->par.den;
-    ass_set_pixel_aspect( pv->renderer, par );
+    double par = (double)job->title->geometry.par.num / job->title->geometry.par.den;
+
+    if (filter->subtitle->source != IMPORTSSA && filter->subtitle->source != SSASUB && par != 1)
+    {
+        double dar = (double)width * par / height;
+        double sar = (double)width / height;
+        double pixel_aspect = sar / dar;
+        ass_set_pixel_aspect(pv->renderer, pixel_aspect);
+    }
 
     return 0;
 }
