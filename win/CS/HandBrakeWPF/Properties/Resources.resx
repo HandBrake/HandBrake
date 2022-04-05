@@ -2644,4 +2644,13 @@ Hardware encoding support can be re-enabled in preferences. </value>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
     <value>Please restart HandBrake.</value>
   </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Export Queue Statistics Data (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export Done!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>You must first scan a source and have an initial destination directory set</value>
+  </data>
 </root>

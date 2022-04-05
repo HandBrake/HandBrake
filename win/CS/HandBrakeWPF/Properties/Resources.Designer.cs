@@ -880,6 +880,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Queue Statistics Data (csv).
+        /// </summary>
+        public static string Debug_QueueDataExport {
+            get {
+                return ResourceManager.GetString("Debug_QueueDataExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Done!.
+        /// </summary>
+        public static string Debug_QueueExportDataDone {
+            get {
+                return ResourceManager.GetString("Debug_QueueExportDataDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must first scan a source and have an initial destination directory set.
+        /// </summary>
+        public static string Debug_QueueSweep_NotSetup {
+            get {
+                return ResourceManager.GetString("Debug_QueueSweep_NotSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Folder?.
         /// </summary>
         public static string DirectoryUtils_CreateFolder {

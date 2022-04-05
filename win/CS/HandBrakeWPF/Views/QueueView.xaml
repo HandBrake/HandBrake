@@ -178,6 +178,10 @@
                             <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
                             <Separator />
                             <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
+                            <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
+                            <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
+                                <MenuItem Header="{x:Static Properties:Resources.Debug_QueueDataExport}" Command="{Binding QueueExtractResultDataCommand}" />
+                            </MenuItem>
                         </MenuItem>
                     </Menu>
                 </Grid>

@@ -133,6 +133,8 @@
                 <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
                     <MenuItem Header="Export Scan Data" cal:Message.Attach="[Event Click] = [Action ExportSourceData]" />
                     <MenuItem Header="Import Scan Data" cal:Message.Attach="[Event Click] = [Action ImportSourceData]" />
+                    <Separator/>
+                    <MenuItem Header="Add to Queue - Quality Sweep" Command="{Binding AddToQueueQualitySweepCommand}" />
                 </MenuItem>
             </Menu>
 

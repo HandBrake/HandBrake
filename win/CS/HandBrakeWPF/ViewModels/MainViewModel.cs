@@ -28,6 +28,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
@@ -226,6 +227,9 @@ namespace HandBrakeWPF.ViewModels
         public IPresetManagerViewModel PresetManagerViewModel { get; set; }
 
         public int SelectedTab { get; set; }
+
+        /* Commands */
+        public ICommand AddToQueueQualitySweepCommand => new AddToQueueQualitySweepCommand(this, this.VideoViewModel, this.userSettingService, this.errorService);
 
 
         /* Properties */
