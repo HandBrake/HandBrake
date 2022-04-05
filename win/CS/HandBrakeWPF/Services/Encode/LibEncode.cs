@@ -14,12 +14,12 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
+    using HandBrake.App.Core.Exceptions;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
 
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Interfaces;

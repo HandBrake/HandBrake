@@ -16,6 +16,8 @@ namespace HandBrakeWPF.Views
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Services.Logging.EventArgs;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;

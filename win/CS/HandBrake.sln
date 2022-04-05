@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSIS Installer", "NSIS Inst
 		HandBrake.Nsis.Installer\MakeNightly64.nsi = HandBrake.Nsis.Installer\MakeNightly64.nsi
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.App.Core", "HandBrake.App.Core\HandBrake.App.Core.csproj", "{F3D54128-F034-4241-BB73-AA7BBE9A47C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{02684A37-C3E0-43F6-A4F0-2465AFEDD6DF}.Release|Any CPU.ActiveCfg = Release|x86
+		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D54128-F034-4241-BB73-AA7BBE9A47C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

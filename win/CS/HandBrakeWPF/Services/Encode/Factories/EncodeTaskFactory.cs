@@ -35,7 +35,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using PointToPointMode = Model.Models.PointToPointMode;
     using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = Model.Models.SubtitleTrack;
-    using Validate = Helpers.Validate;
+    using Validate = HandBrake.App.Core.Utilities.Validate;
     using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
 

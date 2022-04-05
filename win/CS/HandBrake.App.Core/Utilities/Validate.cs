@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.App.Core.Utilities
 {
     using System;
 

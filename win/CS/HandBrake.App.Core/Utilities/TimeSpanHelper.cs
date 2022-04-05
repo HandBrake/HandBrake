@@ -7,17 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.App.Core.Utilities
 {
     using System;
     using System.Globalization;
 
-    using HandBrakeWPF.Services.Encode.Model.Models;
-
     /// <summary>
     /// Helper functions for handling <see cref="TimeSpan"/> structures
     /// </summary>
-    internal static class TimeSpanHelper
+    public static class TimeSpanHelper
     {
         /// <summary>
         /// Parses chapter time start value from a chapter marker input file. 
@@ -28,7 +26,7 @@ namespace HandBrakeWPF.Helpers
         /// <returns>
         /// The <see cref="TimeSpan"/>.
         /// </returns>
-        internal static TimeSpan ParseChapterTimeStart(string chapterStartRaw)
+        public static TimeSpan ParseChapterTimeStart(string chapterStartRaw)
         {
             if (string.IsNullOrEmpty(chapterStartRaw))
             {

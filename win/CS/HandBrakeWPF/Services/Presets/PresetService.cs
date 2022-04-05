@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
 
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class PresetService : IPresetService

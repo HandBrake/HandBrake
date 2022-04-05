@@ -25,7 +25,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
     using SystemInfo = Utilities.SystemInfo;
 

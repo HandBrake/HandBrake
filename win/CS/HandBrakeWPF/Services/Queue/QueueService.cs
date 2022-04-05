@@ -18,11 +18,12 @@ namespace HandBrakeWPF.Services.Queue
     using System.Timers;
     using System.Windows;
 
+    using HandBrake.App.Core.Extensions;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Utilities;
 
-    using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode;
@@ -38,7 +39,7 @@ namespace HandBrakeWPF.Services.Queue
     
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using ILog = Logging.Interfaces.ILog;
     using QueueCompletedEventArgs = EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = EventArgs.QueueProgressEventArgs;

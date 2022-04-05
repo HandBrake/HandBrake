@@ -12,11 +12,11 @@ namespace HandBrakeWPF.Instance
     using System;
     using System.Threading;
 
+    using HandBrake.App.Core.Exceptions;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model;
 
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;

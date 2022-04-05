@@ -31,7 +31,7 @@ namespace HandBrakeWPF.ViewModels
 
     using ChapterMarker = Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
 
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {

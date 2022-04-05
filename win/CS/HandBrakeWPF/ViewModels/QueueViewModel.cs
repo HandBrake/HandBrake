@@ -23,11 +23,11 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Exceptions;
     using HandBrake.Interop.Interop;
 
     using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;

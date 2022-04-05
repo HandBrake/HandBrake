@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Extensions
+namespace HandBrake.App.Core.Extensions
 {
     using System;
     using System.Collections;

@@ -32,7 +32,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// Interaction logic for App.xaml

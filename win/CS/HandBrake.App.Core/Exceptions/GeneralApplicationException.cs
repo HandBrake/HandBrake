@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Exceptions
+namespace HandBrake.App.Core.Exceptions
 {
     using System;
 

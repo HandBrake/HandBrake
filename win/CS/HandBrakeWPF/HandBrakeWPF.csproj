@@ -57,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HandBrake.App.Core\HandBrake.App.Core.csproj" />
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
   </ItemGroup>
 
