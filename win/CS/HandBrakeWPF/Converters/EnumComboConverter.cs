@@ -14,6 +14,8 @@ namespace HandBrakeWPF.Converters
     using System.Globalization;
     using System.Windows.Data;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Video;

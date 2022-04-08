@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Encode
     using System.IO;
 
     using HandBrake.App.Core.Exceptions;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;

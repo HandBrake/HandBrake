@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.Text.Json;
     using System.Windows;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;

@@ -18,4 +18,8 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
+	</ItemGroup>
+
 </Project>

@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;

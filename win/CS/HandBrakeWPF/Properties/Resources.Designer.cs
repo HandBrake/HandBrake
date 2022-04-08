@@ -4766,9 +4766,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.
-        ///
-        ///    {0}.
+        ///   Looks up a localized string similar to Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable..
         /// </summary>
         public static string Portable_StorageNotWritable {
             get {
@@ -4777,9 +4775,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.
-        ///
-        ///    {0}.
+        ///   Looks up a localized string similar to Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable..
         /// </summary>
         public static string Portable_TmpNotWritable {
             get {

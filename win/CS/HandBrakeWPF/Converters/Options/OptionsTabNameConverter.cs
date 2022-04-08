@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Converters.Options
     using System.Globalization;
     using System.Windows.Data;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;
 

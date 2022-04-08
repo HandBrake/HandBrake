@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Instance
     using System.Threading;
     using System.Threading.Tasks;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;

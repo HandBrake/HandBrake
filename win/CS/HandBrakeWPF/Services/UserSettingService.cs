@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services
     using System.Linq;
     using System.Text.Json;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Utilities;
 

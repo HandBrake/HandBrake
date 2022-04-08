@@ -7,12 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrake.App.Core.Utilities
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Windows;
 
     /// <summary>
     /// This class is responsible for reading the Portable.ini file that allows HandBrake to be run out of a directory.
@@ -25,11 +24,11 @@ namespace HandBrakeWPF.Utilities
         /// <summary>
         /// Initializes a new instance of the <see cref="Portable"/> class.
         /// </summary>
-        public static bool Initialise()
+        public static int Initialise()
         {
             if (!IsPortable())
             {
-                return true;
+                return 0;
             }
 
             // Read the INI file     
@@ -57,14 +56,9 @@ namespace HandBrakeWPF.Utilities
                         }
                     }
                 }
-                catch 
+                catch
                 {
-                    MessageBox.Show(
-                        HandBrakeWPF.Properties.Resources.Portable_IniFileError,
-                        Properties.Resources.Error,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return false;
+                    return -1;
                 }
             }
 
@@ -78,12 +72,7 @@ namespace HandBrakeWPF.Utilities
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(
-                        string.Format(Properties.Resources.Portable_TmpNotWritable, tmpDir),
-                        Properties.Resources.Error,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return false;
+                    return -2;
                 }
             }
 
@@ -96,12 +85,7 @@ namespace HandBrakeWPF.Utilities
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(
-                        string.Format(HandBrakeWPF.Properties.Resources.Portable_StorageNotWritable, stroageDir),
-                        Properties.Resources.Error,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return false;
+                    return -3;
                 }
             }
 
@@ -111,7 +95,7 @@ namespace HandBrakeWPF.Utilities
                 Environment.SetEnvironmentVariable("TMP", GetTempDirectory());
             }
 
-            return true;
+            return 0;
         }
 
         /// <summary>

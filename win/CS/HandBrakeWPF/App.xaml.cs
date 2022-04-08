@@ -22,6 +22,7 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
     using HandBrakeWPF.Instance;
@@ -100,8 +101,35 @@ namespace HandBrakeWPF
             // Portable Mode
             if (Portable.IsPortable())
             {
-                if (!Portable.Initialise())
+                int portableInit = Portable.Initialise();
+                if (portableInit != 0)
                 {
+                    switch (portableInit)
+                    {
+                        case -1:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_IniFileError,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+
+                        case -2:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_TmpNotWritable,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+                        case -3:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_StorageNotWritable,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+                    }
+                    
                     Application.Current.Shutdown();
                     return;
                 }

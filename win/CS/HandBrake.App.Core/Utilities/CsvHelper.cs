@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities.Output
+namespace HandBrake.App.Core.Utilities
 {
     /// <summary>
     /// Utility functions for writing CSV files
     /// </summary>
-    internal sealed class CsvHelper
+    public sealed class CsvHelper
     {
         private const string QUOTE = "\"";
         private const string ESCAPED_QUOTE = "\"\"";

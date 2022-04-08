@@ -10,6 +10,8 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;

@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Instance
     using System.Threading;
 
     using HandBrake.App.Core.Exceptions;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.Model;
