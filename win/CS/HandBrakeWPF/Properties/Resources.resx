@@ -2649,4 +2649,7 @@ Hardware encoding support can be re-enabled in preferences. </value>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
     <value>You must first scan a source and have an initial destination directory set</value>
   </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Only when file already exists on disk.</value>
+  </data>
 </root>

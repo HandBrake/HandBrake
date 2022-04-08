@@ -224,6 +224,8 @@
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.OptionsView_FileCollisionBehaviour}" />
                                 <ComboBox Width="120" ItemsSource="{Binding AutonameFileCollisionBehaviours, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedCollisionBehaviour}" HorizontalAlignment="Left" />
                                 <TextBox Text="{Binding PrePostFilenameText, UpdateSourceTrigger=PropertyChanged}" Width="150"  VerticalAlignment="Center" Visibility="{Binding ShowPrePostFilenameBox, Converter={StaticResource boolToVisConverter}}" HorizontalAlignment="Left"  Margin="5,0,0,0" />
+                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_FileCollisionNotice}" FontStyle="Italic" Margin="5,0,0,0" />
+
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,15,0,0">

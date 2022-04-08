@@ -3762,6 +3762,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only when file already exists on disk..
+        /// </summary>
+        public static string OptionsView_FileCollisionNotice {
+            get {
+                return ResourceManager.GetString("OptionsView_FileCollisionNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File overwrite behaviour:.
         /// </summary>
         public static string OptionsView_FileOverwriteBehaviour {
