@@ -1414,7 +1414,10 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are jobs on the queue with the same destination path. Please choose a different path for this job..
+        ///   Looks up a localized string similar to There are jobs on the queue with the same destination path. Please choose a different path for this job.
+        /// 
+        ///You may wish to configure the automatic file naming options in &quot;Tools Menu -&gt; Preferences -&gt; Output Files&quot;
+        ///.
         /// </summary>
         public static string Main_DuplicateDestinationOnQueue {
             get {
