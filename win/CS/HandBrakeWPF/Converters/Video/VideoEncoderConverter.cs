@@ -103,13 +103,6 @@ namespace HandBrakeWPF.Converters.Video
                         returnEncoders.Remove(encoder);
                     }
 
-                    // Older generation parts seem to be having increasing problems and are no longer recieving driver feature updates. 
-                    // Support Skylake (6th gen) and newer.
-                    if (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration < 6 && VideoEncoderHelpers.IsQuickSync(encoder))
-                    {
-                        returnEncoders.Remove(encoder);
-                    }
-
                     if (!isVceEnabled && VideoEncoderHelpers.IsVCN(encoder))
                     {
                         returnEncoders.Remove(encoder);

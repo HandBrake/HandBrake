@@ -50,7 +50,8 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return HBFunctions.hb_qsv_available() > 0;
+                    // We support Skylake 6th gen and newer. 
+                    return HBFunctions.hb_qsv_available() > 0 && QsvHardwareGeneration >= 6;
                 }
                 catch (Exception)
                 {
