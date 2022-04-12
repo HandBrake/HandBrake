@@ -351,6 +351,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
+            defaults.Add(UserSettingConstants.IsUpdateAvailableBuild, 0);
             
             return defaults;
         }

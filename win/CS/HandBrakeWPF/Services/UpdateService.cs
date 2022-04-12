@@ -72,6 +72,14 @@ namespace HandBrakeWPF.Services
             // Make sure it's running on the calling thread
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {
+                // If a previous update check detected an update, don't bother calling out to the HandBrake website again. Just return the result. 
+                int lastLatestBuildNumberCheck = this.userSettingService.GetUserSetting<int>(UserSettingConstants.IsUpdateAvailableBuild);
+                if (lastLatestBuildNumberCheck != 0 && lastLatestBuildNumberCheck > HandBrakeVersionHelper.Build)
+                {
+                    callback(new UpdateCheckInformation { NewVersionAvailable = true, Error = null });
+                    return;
+                }
+
                 DateTime lastUpdateCheck = this.userSettingService.GetUserSetting<DateTime>(UserSettingConstants.LastUpdateCheckDate);
                 int checkFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck) == 0 ? 7 : 30;
 
@@ -105,8 +113,6 @@ namespace HandBrakeWPF.Services
                             url = SystemInfo.IsArmDevice ? Constants.AppcastUnstable64Arm : Constants.AppcastUnstable64;
                         }
 
-                        var currentBuild = HandBrakeVersionHelper.Build;
-
                         // Fetch the Appcast from our server.
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                         request.AllowAutoRedirect = false; // We will never do this.
@@ -120,7 +126,6 @@ namespace HandBrakeWPF.Services
                         // Further parse the information
                         string build = reader.Build;
                         int latest = int.Parse(build);
-                        int current = currentBuild;
 
                         // Security Check
                         // Verify the download URL is for handbrake.fr and served over https.
@@ -130,6 +135,7 @@ namespace HandBrakeWPF.Services
                         bool result = Uri.TryCreate(reader.DownloadFile, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttps;
                         if (!result || (uriResult.Host != "handbrake.fr" && uriResult.Host != "download.handbrake.fr" && uriResult.Host != "github.com"))
                         {
+                            this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, 0);
                             callback(new UpdateCheckInformation { NewVersionAvailable = false, Error = new Exception("The HandBrake update service is currently unavailable.") });
                             return;
                         }
@@ -137,7 +143,7 @@ namespace HandBrakeWPF.Services
                         // Validate the URL from the appcast is ours.
                         var info2 = new UpdateCheckInformation
                             {
-                                NewVersionAvailable = latest > current,
+                                NewVersionAvailable = latest > HandBrakeVersionHelper.Build,
                                 DescriptionUrl = reader.DescriptionUrl,
                                 DownloadFile = reader.DownloadFile,
                                 Build = reader.Build,
@@ -145,10 +151,13 @@ namespace HandBrakeWPF.Services
                                 Signature = reader.Hash
                             };
 
+                        this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, latest);
+
                         callback(info2);
                     }
                     catch (Exception exc)
                     {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.IsUpdateAvailableBuild, 0);
                         callback(new UpdateCheckInformation { NewVersionAvailable = false, Error = exc });
                     }
                 });
