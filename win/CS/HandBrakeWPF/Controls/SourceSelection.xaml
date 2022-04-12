@@ -109,16 +109,18 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Row="7" Margin="20,10,0,10" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition  Width="Auto"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Image Source="../Views/Images/information.png" Width="24" />
-                <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0">           
+                <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" Grid.Column="1" FontWeight="Bold">           
                     <Hyperlink x:Name="UpdateAvailable" NavigateUri="/" RequestNavigate="UpdateAvailable_OnRequestNavigate">
-                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" TextWrapping="Wrap" />
                     </Hyperlink>
                 </TextBlock>
-            </StackPanel>
-
+            </Grid>
 
             <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
@@ -135,9 +137,7 @@
                         </Hyperlink>
                     </TextBlock>
                 </StackPanel>
-               
             </Grid>
-       
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
