@@ -41,6 +41,16 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     if (type != _type)
     {
         [[self.undo prepareWithInvocationTarget:self] setType:_type];
+
+        if (_type == HBRangeTypeSeconds && _secondsStart == 0 && _secondsStop == 0) {
+            [self setSecondsStart: 0];
+            [self setSecondsStop: _title.duration];
+        }
+
+        if (_type == HBRangeTypeFrames && _frameStart == 0 && _frameStop == 0) {
+            [self setFrameStart: 0];
+            [self setFrameStop: _title.frames];
+        }
     }
     _type = type;
 }
