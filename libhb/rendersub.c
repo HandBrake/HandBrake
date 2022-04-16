@@ -705,7 +705,7 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     double par = (double)job->title->geometry.par.num / job->title->geometry.par.den;
 
-    if (filter->subtitle->source != IMPORTSSA && filter->subtitle->source != SSASUB && par != 1)
+    if (par != 1)
     {
         double dar = (double)width * par / height;
         double sar = (double)width / height;
