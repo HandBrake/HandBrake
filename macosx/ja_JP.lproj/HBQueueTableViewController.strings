@@ -1,0 +1,42 @@
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "5AR-we-iHC"; */
+"5AR-we-iHC.title" = "全ジョブ削除";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
+"5Rl-P0-bhc.title" = "テーブルビューセル";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
+"c1Z-ZC-b8b.title" = "出力先をファインダーで表示する";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
+"DTF-om-j0l.title" = "編集";
+
+/* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
+"eEU-Dr-Qh8.title" = "エンコード状態";
+
+/* Class = "NSMenuItem"; title = "Remove"; ObjectID = "egD-8R-PTJ"; */
+"egD-8R-PTJ.title" = "削除";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
+"gNj-D1-wa7.title" = "完了したジョブを削除";
+
+/* Class = "NSMenuItem"; title = "Move to Bottom"; ObjectID = "HwR-LP-IK8"; */
+"HwR-LP-IK8.title" = "一番下に移動";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
+"K6c-HW-um8.title" = "テキストボックス";
+
+/* Class = "NSMenuItem"; title = "Move to Top"; ObjectID = "NN5-Yq-Cth"; */
+"NN5-Yq-Cth.title" = "一番上に移動";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
+"Pps-jm-zcd.title" = "ソースをファインダーで表示する";
+
+/* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
+"xMs-43-lL0.title" = "リセット";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
+"xSd-Hl-5Qk.title" = "テーブルビューセル";
+
+/* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
+"zA7-r8-i4L.title" = "アクティビティログをファインダーで表示する";
+

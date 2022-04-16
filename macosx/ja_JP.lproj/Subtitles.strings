@@ -1,0 +1,174 @@
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "字幕トラック";
+
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "エンコード";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
+"4PX-In-DpF.title" = "全トラック追加";
+
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "言語";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
+"ABd-Ec-K2L.title" = "他のビュー";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSAオフセット";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "ミリ秒(ms)で表す選択されたSRT/SSA形式字幕トラックのプラス/マイナスオフセットです。他の形式には適用されません。";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
+"cSW-OC-qKA.title" = "ポップアップ";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
+"dap-ee-kor.title" = "アイテム 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
+"fAW-To-EeP.title" = "アイテム 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "オフセット";
+
+/* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
+"fIe-Fg-ufj.headerCell.title" = "焼き込み";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
+"Fr7-eG-NuL.title" = "他のビュー";
+
+/* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
+"fvq-pE-sOC.headerCell.title" = "既定";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "外部字幕トラックを追加する…";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
+"g4b-FM-qX4.title" = "アイテム 2";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
+"gHY-6m-ASb.title" = "アイテム 2";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
+"gYk-0C-2tR.title" = "テキストボックス";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "強制字幕のみ";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibShadowedToolTip" = "強制のみです。選択されたソーストラックで\"強制\"とマークされた字幕トラックのみを使用します。";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
+"hhH-c3-gD0.title" = "0";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
+"HQq-Mp-4sI.title" = "アイテム 2";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "リストに新しいSRT/SSA字幕を追加する。";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "外部字幕トラックを追加する…";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA言語";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "選択されたSRT/SSA形式ソーストラックの言語です。他の形式には適用されません。";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "再読み込み";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
+"jG8-uo-1tv.title" = "再読み込み";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
+"JLr-Qi-X0X.title" = "確認";
+
+/* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
+"klV-Gy-igk.headerCell.title" = "強制のみ";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "既定";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibShadowedToolTip" = "既定フラグです。選択された字幕トラックを再生時に既定で表示するようマークします。";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
+"mVi-zH-KUq.title" = "全トラック削除";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
+"N3S-st-yGv.headerCell.title" = "トラック";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
+"ooy-Sh-Edm.title" = "確認";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
+"oxg-bs-1si.title" = "選択の振る舞い…";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "選択の振る舞い…";
+
+/* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
+"QRj-KI-a03.title" = "テキスト";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "自動選択される字幕トラックを設定します。この設定は字幕トラックリストにどれを追加するかに影響し、それぞれのトラックに使用されます。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT/SSA文字エンコーディング";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "選択されたSRT/SSA形式ソーストラックの文字エンコードです。他の形式には適用されません。";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
+"R8a-qg-ASg.title" = "全トラック削除";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
+"R9w-Bn-CCt.title" = "確認";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
+"Rj8-KI-k4L.title" = "アイテム 1";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
+"S2I-Jd-Lyg.title" = "全トラック追加";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "字幕トラックのリストです。選択されたプリセットによりトラック自動選択と設定が読み込まれ、ダイアログで編集ができます。";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "選択されたトラック";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibShadowedToolTip" = "字幕言語とタイプ。";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
+"ThR-Cn-Vfr.title" = "アイテム 3";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
+"TJO-RZ-jgb.title" = "トラック";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
+"Umu-1b-U1Z.title" = "他のビュー";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
+"UOP-xa-WpP.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
+"vHW-fn-RSG.title" = "ポップアップ";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "設定された自動選択を使って字幕トラックリストを再読み込みします。";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
+"yDg-DK-z5D.title" = "アイテム 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
+"yEC-jb-q8b.title" = "アイテム 3";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "焼き込み";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibShadowedToolTip" = "焼き込みです。選択された字幕トラックがビデオトラックの上に永久的に表示されます。";
+

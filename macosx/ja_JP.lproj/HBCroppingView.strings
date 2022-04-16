@@ -1,0 +1,48 @@
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibExternalAccessibilityDescription" = "下部切り取り";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Bottom edge cropping amount in pixels."; ObjectID = "6Gj-ZU-E1E"; */
+"6Gj-ZU-E1E.ibShadowedToolTip" = "ピクセル数で表される下部縁の切り取り量です。";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "8e5-zI-IBg"; */
+"8e5-zI-IBg.ibExternalAccessibilityDescription" = "上部切り取り";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibExternalAccessibilityDescription" = "上部切り取り";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Top edge cropping amount in pixels."; ObjectID = "Cp5-xz-x1h"; */
+"Cp5-xz-x1h.ibShadowedToolTip" = "ピクセル数で表される上部縁の切り取り量です。";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "cWv-q0-EN9"; */
+"cWv-q0-EN9.ibShadowedToolTip" = "画像を90度ごとに回転させます。";
+
+/* Class = "NSMenuItem"; title = "Custom"; ObjectID = "dD5-og-dxx"; */
+"dD5-og-dxx.title" = "カスタム";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibExternalAccessibilityDescription" = "右側切り取り";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Right edge cropping amount in pixels."; ObjectID = "php-p6-Nz6"; */
+"php-p6-Nz6.ibShadowedToolTip" = "ピクセル数で表される右端縁の切り取り量です。";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "Pqk-fS-pyy"; */
+"Pqk-fS-pyy.title" = "なし";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "sUG-Cw-nQU"; */
+"sUG-Cw-nQU.title" = "自動";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "sWf-fq-lvl"; */
+"sWf-fq-lvl.ibExternalAccessibilityDescription" = "下部切り取り";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibExternalAccessibilityDescription" = "左側切り取り";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Left edge cropping amount in pixels."; ObjectID = "Td7-sa-0TV"; */
+"Td7-sa-0TV.ibShadowedToolTip" = "ピクセル数で表される左端縁の切り取り量です。";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop right"; ObjectID = "y7P-yk-q46"; */
+"y7P-yk-q46.ibExternalAccessibilityDescription" = "右側切り取り";
+
+/* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop left"; ObjectID = "Yua-R6-mWU"; */
+"Yua-R6-mWU.ibExternalAccessibilityDescription" = "左側切り取り";
+
