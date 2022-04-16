@@ -137,5 +137,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Browse for and set a destination file.
         /// </summary>
         void BrowseDestination();
+
+        /// <summary>
+        /// Select next title if available.
+        /// </summary>
+        void NextTitle();
+
+        /// <summary>
+        /// Select previous title if available.
+        /// </summary>
+        void PreviousTitle();
     }
 }

@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
@@ -67,6 +68,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #region Properties
+
+        public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
 
         public OutputFormat OutputFormat { get; private set; }
 

@@ -97,6 +97,10 @@
                  ItemsSource="{Binding Task.SubtitleTracks}"
                  SelectionMode="Extended">
 
+            <ListBox.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"  />
+            </ListBox.InputBindings>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

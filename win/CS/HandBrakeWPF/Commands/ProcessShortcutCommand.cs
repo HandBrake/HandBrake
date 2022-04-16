@@ -166,6 +166,16 @@ namespace HandBrakeWPF.Commands
                     GC.Collect();
                     MessageBox.Show("DEBUG: Garbage Collection Completed");
                 }
+
+                if (gesture.Modifiers == ModifierKeys.Control && (gesture.Key == Key.OemPlus || gesture.Key == Key.Add))
+                {
+                    mainViewModel.NextTitle();
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && (gesture.Key == Key.OemMinus || gesture.Key == Key.Subtract))
+                {
+                    mainViewModel.PreviousTitle();
+                }
             }
         }
 

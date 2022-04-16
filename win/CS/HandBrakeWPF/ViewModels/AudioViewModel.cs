@@ -21,12 +21,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
@@ -77,6 +77,8 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the audio defaults view model.
         /// </summary>
         public IAudioDefaultsViewModel AudioDefaultsViewModel { get; set; }
+
+        public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
 
         /// <summary>
         /// Gets or sets AudioEncoders.

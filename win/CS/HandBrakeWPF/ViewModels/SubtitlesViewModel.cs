@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
@@ -83,6 +84,8 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the audio defaults view model.
         /// </summary>
         public ISubtitlesDefaultsViewModel SubtitleDefaultsViewModel { get; set; }
+
+        public ListboxDeleteCommand DeleteCommand => new ListboxDeleteCommand();
 
         /// <summary>
         /// Gets or sets CharacterCodes.
