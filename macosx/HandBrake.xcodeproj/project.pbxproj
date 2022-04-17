@@ -328,7 +328,6 @@
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
-		D0924626280B72BA00B79A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0924624280B72BA00B79A40 /* Localizable.strings */; };
 		D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86C9DD41C6D372500F06F1B /* Assets.xcassets */; };

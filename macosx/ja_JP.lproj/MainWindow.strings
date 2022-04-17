@@ -161,7 +161,7 @@
 "AhR-pK-Oz4.ibShadowedToolTip" = "現在選択されているプリセットでエンコード設定を再読み込みします。編集は破棄されます。";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "aID-g7-zTF"; */
-"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "aaeffbdebc703c50e2574782f0579842_tr";
+"aID-g7-zTF.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTabViewItem"; label = "Summary"; ObjectID = "BA0-eg-2Ka"; */
 "BA0-eg-2Ka.label" = "概要";
