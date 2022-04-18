@@ -14,10 +14,10 @@
 "29.title" = "MenuPrincipal";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "56"; */
-"56.title" = "Sua fila do HandBrake está concluída!";
+"56.title" = "HandBrake";
 
 /* Class = "NSMenu"; title = "HandBrake"; ObjectID = "57"; */
-"57.title" = "Sua fila do HandBrake está concluída!";
+"57.title" = "HandBrake";
 
 /* Class = "NSMenuItem"; title = "About HandBrake"; ObjectID = "58"; */
 "58.title" = "Sobre o HandBrake";
@@ -167,7 +167,7 @@
 "2295.title" = "Janela da Atividade";
 
 /* Class = "NSMenuItem"; title = "HandBrake"; ObjectID = "2368"; */
-"2368.title" = "Sua fila do HandBrake está concluída!";
+"2368.title" = "HandBrake";
 
 /* Class = "NSMenuItem"; title = "Select Default"; ObjectID = "2421"; */
 "2421.title" = "Selecione Padrão";

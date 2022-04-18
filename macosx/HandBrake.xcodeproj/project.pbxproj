@@ -590,10 +590,10 @@
 		A91D850B26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
 		A91D850C26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
 		A91D850D26676733008987A0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "fr.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
-		A91D851126676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
-		A91D851226676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
-		A91D851326676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
-		A91D851426676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851126676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = "pt_BR.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851226676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = "pt_BR.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851326676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = "pt_BR.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		A91D851426676752008987A0 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = "pt_BR.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTransformers.h; sourceTree = "<group>"; };
 		A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTransformers.m; sourceTree = "<group>"; };
 		A92268761A6E555500A8D5C5 /* HBAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAppDelegate.h; sourceTree = "<group>"; };
@@ -627,6 +627,7 @@
 		A943874022ED911B005F701B /* HBJob+HBAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBAdditions.m"; sourceTree = "<group>"; };
 		A945CC3122ED7C6A00E9C2E3 /* HBPreferencesKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreferencesKeys.h; sourceTree = "<group>"; };
 		A94A98F41C858EFB004BA9BA /* HBDictTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDictTests.m; sourceTree = "<group>"; };
+		A94D0454280D488600E24AA6 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A94DC2DD20CADA2C00EAC8FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HBAdditions.h"; sourceTree = "<group>"; };
 		A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HBAdditions.m"; sourceTree = "<group>"; };
@@ -644,7 +645,7 @@
 		A954010122FF397000F83A5F /* HBRedirect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRedirect.h; sourceTree = "<group>"; };
 		A954010222FF397000F83A5F /* HBRedirect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRedirect.m; sourceTree = "<group>"; };
 		A95512881A320A12001BFC6F /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = external/contrib/lib/libjansson.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9551FD5250E08000018E596 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A9551FD5250E08000018E596 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A95798D8278DEAE500AA7C7D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A95798D9278DEAE500AA7C7D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A95798DA278DEAE500AA7C7D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -824,7 +825,7 @@
 		A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFocusRingView.h; sourceTree = "<group>"; };
 		A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFocusRingView.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
-		A9D2DDE524B3B1C2009C92DA /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A9D2DDE524B3B1C2009C92DA /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9D3634F2209C08500D8EFEA /* HBQueueItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQueueItemView.h; sourceTree = "<group>"; };
 		A9D363502209C08500D8EFEA /* HBQueueItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueItemView.m; sourceTree = "<group>"; };
 		A9D3E2F3234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
@@ -963,42 +964,41 @@
 		D0530EC02706DF6A00CB946A /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = "zh.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		D062DF6422FAE05700A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
 		D062DF6522FAE06000A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
-		D0924607280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/AddPreset.strings"; sourceTree = "<group>"; };
-		D0924608280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Audio.strings"; sourceTree = "<group>"; };
-		D0924609280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/AudioDefaults.strings"; sourceTree = "<group>"; };
-		D092460A280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/ChaptersTitles.strings"; sourceTree = "<group>"; };
-		D092460B280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/ExceptionAlert.strings"; sourceTree = "<group>"; };
-		D092460C280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBAddCategoryController.strings"; sourceTree = "<group>"; };
-		D092460D280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBCroppingView.strings"; sourceTree = "<group>"; };
-		D092460E280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBEncodingProgressHUDController.strings"; sourceTree = "<group>"; };
-		D092460F280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBFiltersViewController.strings"; sourceTree = "<group>"; };
-		D0924610280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBPictureHUDController.strings"; sourceTree = "<group>"; };
-		D0924611280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBPictureViewController.strings"; sourceTree = "<group>"; };
-		D0924612280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBPlayerHUDController.strings"; sourceTree = "<group>"; };
-		D0924613280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBPreviewViewController.strings"; sourceTree = "<group>"; };
-		D0924614280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBQueueInfoViewController.strings"; sourceTree = "<group>"; };
-		D0924615280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBQueueTableViewController.strings"; sourceTree = "<group>"; };
-		D0924616280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBRenamePresetController.strings"; sourceTree = "<group>"; };
-		D0924617280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBSummaryViewController.strings"; sourceTree = "<group>"; };
-		D0924618280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBTitleSelection.strings"; sourceTree = "<group>"; };
-		D0924619280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HBTrackTitleViewController.strings"; sourceTree = "<group>"; };
-		D092461A280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/MainMenu.strings"; sourceTree = "<group>"; };
-		D092461B280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/MainWindow.strings"; sourceTree = "<group>"; };
-		D092461C280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/OutputPanel.strings"; sourceTree = "<group>"; };
-		D092461D280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/PicturePreview.strings"; sourceTree = "<group>"; };
-		D092461E280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Preferences.strings"; sourceTree = "<group>"; };
-		D092461F280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Presets.strings"; sourceTree = "<group>"; };
-		D0924620280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Queue.strings"; sourceTree = "<group>"; };
-		D0924621280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Subtitles.strings"; sourceTree = "<group>"; };
-		D0924622280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/SubtitlesDefaults.strings"; sourceTree = "<group>"; };
-		D0924623280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Video.strings"; sourceTree = "<group>"; };
-		D0924625280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D0924627280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		D0924628280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D0924629280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
-		D092462A280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
-		D092462B280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
-		D092462C280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ja_JP"; path = "ja_JP.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
+		D0924607280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		D0924608280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Audio.strings; sourceTree = "<group>"; };
+		D0924609280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		D092460A280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		D092460B280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		D092460C280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		D092460D280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
+		D092460E280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		D092460F280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		D0924610280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		D0924611280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		D0924612280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		D0924613280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		D0924614280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		D0924615280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		D0924616280B72B900B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		D0924617280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		D0924618280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		D0924619280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		D092461A280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		D092461B280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		D092461C280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		D092461D280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		D092461E280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Preferences.strings; sourceTree = "<group>"; };
+		D092461F280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Presets.strings; sourceTree = "<group>"; };
+		D0924620280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Queue.strings; sourceTree = "<group>"; };
+		D0924621280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		D0924622280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		D0924623280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Video.strings; sourceTree = "<group>"; };
+		D0924627280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D0924628280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = ja_JP.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0924629280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
+		D092462A280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
+		D092462B280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
+		D092462C280B72BA00B79A40 /* ja_JP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja_JP; path = "ja_JP.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0322706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0A8A0332706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService1-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0A8A0342706E3710008018A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1039,37 +1039,37 @@
 		D0B806C726E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/HandBrakeXPCService2-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0B806C826E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/HandBrakeXPCService3-InfoPlist.strings"; sourceTree = "<group>"; };
 		D0B806C926E7F2760013D332 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = "co.lproj/HandBrakeXPCService4-InfoPlist.strings"; sourceTree = "<group>"; };
-		D0DA2AAD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		D0DA2AB124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBPictureHUDController.strings"; sourceTree = "<group>"; };
-		D0DA2AB224B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D0DA2AB624B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Presets.strings"; sourceTree = "<group>"; };
-		D0DA2AB724B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/MainMenu.strings"; sourceTree = "<group>"; };
-		D0DA2AB824B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBPlayerHUDController.strings"; sourceTree = "<group>"; };
-		D0DA2AB924B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBAddCategoryController.strings"; sourceTree = "<group>"; };
-		D0DA2ABA24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBFiltersViewController.strings"; sourceTree = "<group>"; };
-		D0DA2ABB24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBQueueTableViewController.strings"; sourceTree = "<group>"; };
-		D0DA2ABC24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/AddPreset.strings"; sourceTree = "<group>"; };
-		D0DA2ABD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/PicturePreview.strings"; sourceTree = "<group>"; };
-		D0DA2ABE24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBSummaryViewController.strings"; sourceTree = "<group>"; };
-		D0DA2ABF24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/AudioDefaults.strings"; sourceTree = "<group>"; };
-		D0DA2AC024B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/MainWindow.strings"; sourceTree = "<group>"; };
-		D0DA2AC124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBCroppingView.strings"; sourceTree = "<group>"; };
-		D0DA2AC224B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBTrackTitleViewController.strings"; sourceTree = "<group>"; };
-		D0DA2AC324B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Subtitles.strings"; sourceTree = "<group>"; };
-		D0DA2AC424B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Queue.strings"; sourceTree = "<group>"; };
-		D0DA2AC524B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBTitleSelection.strings"; sourceTree = "<group>"; };
-		D0DA2AC624B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBRenamePresetController.strings"; sourceTree = "<group>"; };
-		D0DA2AC724B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBPreviewViewController.strings"; sourceTree = "<group>"; };
-		D0DA2AC824B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/SubtitlesDefaults.strings"; sourceTree = "<group>"; };
-		D0DA2AC924B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Audio.strings"; sourceTree = "<group>"; };
-		D0DA2ACA24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/ChaptersTitles.strings"; sourceTree = "<group>"; };
-		D0DA2ACB24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBQueueInfoViewController.strings"; sourceTree = "<group>"; };
-		D0DA2ACC24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Preferences.strings"; sourceTree = "<group>"; };
-		D0DA2ACD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/OutputPanel.strings"; sourceTree = "<group>"; };
-		D0DA2ACE24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/ExceptionAlert.strings"; sourceTree = "<group>"; };
-		D0DA2ACF24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBEncodingProgressHUDController.strings"; sourceTree = "<group>"; };
-		D0DA2AD024B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/HBPictureViewController.strings"; sourceTree = "<group>"; };
-		D0DA2AD124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt_BR"; path = "pt_BR.lproj/Video.strings"; sourceTree = "<group>"; };
+		D0DA2AAD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D0DA2AB124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		D0DA2AB224B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0DA2AB624B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Presets.strings; sourceTree = "<group>"; };
+		D0DA2AB724B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		D0DA2AB824B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		D0DA2AB924B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		D0DA2ABA24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		D0DA2ABB24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		D0DA2ABC24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		D0DA2ABD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		D0DA2ABE24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		D0DA2ABF24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		D0DA2AC024B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		D0DA2AC124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBCroppingView.strings; sourceTree = "<group>"; };
+		D0DA2AC224B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		D0DA2AC324B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		D0DA2AC424B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Queue.strings; sourceTree = "<group>"; };
+		D0DA2AC524B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		D0DA2AC624B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		D0DA2AC724B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		D0DA2AC824B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		D0DA2AC924B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Audio.strings; sourceTree = "<group>"; };
+		D0DA2ACA24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		D0DA2ACB24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		D0DA2ACC24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Preferences.strings; sourceTree = "<group>"; };
+		D0DA2ACD24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		D0DA2ACE24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		D0DA2ACF24B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		D0DA2AD024B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		D0DA2AD124B384AD003ACA30 /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Video.strings; sourceTree = "<group>"; };
 		D0DC8F672331573500C12A24 /* libdav1d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdav1d.a; path = external/contrib/lib/libdav1d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D86C9DD41C6D372500F06F1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1277,7 +1277,6 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
-				D0924624280B72BA00B79A40 /* Localizable.strings */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				A9736F031C7DA5FE008F1D18 /* HandBrakeKit */,
@@ -2121,10 +2120,10 @@
 				it,
 				fr,
 				ru,
-				"pt_BR",
+				pt_BR,
 				co,
 				zh,
-				"ja_JP",
+				ja_JP,
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			packageReferences = (
@@ -2166,7 +2165,6 @@
 				A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */,
 				A9A96BB620CAD5D600A39AFB /* HBTitleSelection.xib in Resources */,
 				A9E52CD8218DD52B00E17B86 /* ExceptionAlert.xib in Resources */,
-				D0924626280B72BA00B79A40 /* Localizable.strings in Resources */,
 				A9A96B8820CAD2D100A39AFB /* HBPlayerHUDController.xib in Resources */,
 				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
 				A9E1468016BC2AD800C307BC /* NextTemplate.pdf in Resources */,
@@ -2717,6 +2715,7 @@
 				A9551FD5250E08000018E596 /* pt_BR */,
 				A91CAB412707267000006BEA /* co */,
 				A91CAB532707267200006BEA /* zh */,
+				A94D0454280D488600E24AA6 /* ja_JP */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3102,14 +3101,6 @@
 				D092460B280B72B900B79A40 /* ja_JP */,
 			);
 			name = ExceptionAlert.xib;
-			sourceTree = "<group>";
-		};
-		D0924624280B72BA00B79A40 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D0924625280B72BA00B79A40 /* ja_JP */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

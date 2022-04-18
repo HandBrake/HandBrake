@@ -23,7 +23,7 @@
 "8r8-nZ-dYs.toolTip" = "Código-Fonte Aberto";
 
 /* Class = "NSWindow"; title = "HandBrake"; ObjectID = "21"; */
-"21.title" = "Sua fila do HandBrake está concluída!";
+"21.title" = "HandBrake";
 
 /* Class = "NSTabViewItem"; label = "Audio"; ObjectID = "1475"; */
 "1475.label" = "Áudio";

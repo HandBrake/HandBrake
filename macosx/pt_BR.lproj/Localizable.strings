@@ -197,7 +197,7 @@
 "General" = "Geral";
 
 /* Main Window -> title */
-"HandBrake" = "Sua fila do HandBrake está concluída!";
+"HandBrake" = "HandBrake";
 
 /* Preview -> live preview alert message */
 "HandBrake can't open the preview." = "O HandBrake não pode abrir a pré-visualização.";
