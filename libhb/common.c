@@ -3901,6 +3901,9 @@ hb_title_t * hb_title_init( char * path, int index )
     t->angle_count        = 1;
     t->geometry.par.num   = 0;
     t->geometry.par.den   = 1;
+    t->color_prim         = HB_COLR_PRI_UNDEF;
+    t->color_transfer     = HB_COLR_TRA_UNDEF;
+    t->color_matrix       = HB_COLR_MAT_UNDEF;
 
     return t;
 }
