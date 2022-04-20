@@ -5981,12 +5981,14 @@ int hb_get_bit_depth(int format)
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(format);
     int i, min, max;
 
-    if (!desc || !desc->nb_components) {
+    if (!desc || !desc->nb_components)
+    {
         return -1;
     }
 
     min = INT_MAX, max = -INT_MAX;
-    for (i = 0; i < desc->nb_components; i++) {
+    for (i = 0; i < desc->nb_components; i++)
+    {
         min = FFMIN(desc->comp[i].depth, min);
         max = FFMAX(desc->comp[i].depth, max);
     }
@@ -5994,12 +5996,21 @@ int hb_get_bit_depth(int format)
     return max;
 }
 
-static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
+static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 {
-    int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
-    int pix_fmt_bit_depth = hb_get_bit_depth(pix_fmt);
+    const int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
+    const int pix_fmt_bit_depth = hb_get_bit_depth(pix_fmt);
 
     if (pix_fmt_bit_depth > title_bit_depth)
+    {
+        return 0;
+    }
+
+    const AVPixFmtDescriptor *title_desc = av_pix_fmt_desc_get(job->title->pix_fmt);
+    const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(pix_fmt);
+
+    if (pix_fmt_desc->log2_chroma_w < title_desc->log2_chroma_w ||
+        pix_fmt_desc->log2_chroma_h < title_desc->log2_chroma_h)
     {
         return 0;
     }
@@ -6018,7 +6029,7 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
     {
         // Allow biplanar formats only if
         // hardware decoding is enabled.
-        if (pix_fmt == AV_PIX_FMT_P010LE || pix_fmt == AV_PIX_FMT_P010 ||
+        if (pix_fmt == AV_PIX_FMT_P010 ||
             pix_fmt == AV_PIX_FMT_NV12)
         {
             return 0;
@@ -6059,7 +6070,9 @@ static int pix_fmt_is_supported(hb_job_t * job, int pix_fmt)
 
 static const enum AVPixelFormat pipeline_pix_fmts[] =
 {
-    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010LE, AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_YUV422P12, AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P,
+    AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P10,
+    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
 };
 
 int hb_get_best_pix_fmt(hb_job_t * job)
