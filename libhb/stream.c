@@ -5247,6 +5247,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
             title->color_transfer = codecpar->color_trc;
             title->color_matrix   = codecpar->color_space;
             title->color_range    = codecpar->color_range;
+            break;
         }
     }
 
@@ -5812,13 +5813,13 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecParameters *codecpar = st->codecpar;
-            // Check for unsupported color space.
+            // Check for unsupported pixel formats.
             // Exclude 'NONE' from check since we may not know this
             // information yet.
             if ( codecpar->format != AV_PIX_FMT_NONE &&
                  !sws_isSupportedInput( codecpar->format ) )
             {
-                hb_log( "ffmpeg_title_scan: Unsupported color space (%d)",
+                hb_log( "ffmpeg_title_scan: Unsupported pixel format (%d)",
                         codecpar->format );
                 continue;
             }
