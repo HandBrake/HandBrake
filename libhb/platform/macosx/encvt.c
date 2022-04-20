@@ -405,7 +405,7 @@ static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_YUV420P)
     {
-        return job->output_pix_fmt == AVCOL_RANGE_JPEG ?
+        return job->color_range == AVCOL_RANGE_JPEG ?
                                         kCVPixelFormatType_420YpCbCr8PlanarFullRange :
                                         kCVPixelFormatType_420YpCbCr8Planar;
     }
@@ -415,9 +415,35 @@ static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_P010LE)
     {
-        return job->output_pix_fmt == AVCOL_RANGE_JPEG ?
+        return job->color_range == AVCOL_RANGE_JPEG ?
                                         kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
                                         kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_NV16)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_422YpCbCr8BiPlanarFullRange :
+                                        kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P210)
+    {
+        return kCVPixelFormatType_422YpCbCr16BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_NV24)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_444YpCbCr8BiPlanarFullRange :
+                                        kCVPixelFormatType_444YpCbCr8BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P410)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
+                                        kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P416)
+    {
+        return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
     }
     else
     {
