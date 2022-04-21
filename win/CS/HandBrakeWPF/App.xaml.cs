@@ -267,7 +267,7 @@ namespace HandBrakeWPF
                 {
                     GeneralApplicationException exception = new GeneralApplicationException(
                         "A file appears to be missing.",
-                        "Try re-installing Microsoft .NET 5 Desktop Runtime",
+                        "Try re-installing Microsoft .NET 6 Desktop Runtime",
                         (Exception)e.ExceptionObject);
                     this.ShowError(exception);
                 }

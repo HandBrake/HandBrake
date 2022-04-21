@@ -77,14 +77,14 @@ namespace HandBrakeWPF.Commands
                     mainViewModel.OpenQueueWindow();
                 }
 
-                // Add to Queue (Ctrl+A)
-                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.A)
+                // Add to Queue (Alt+A)
+                if (gesture.Modifiers == ModifierKeys.Alt && gesture.Key == Key.A)
                 {
                     mainViewModel.AddToQueueWithErrorHandling();
                 }
 
                 // Add all to Queue (Alt+A)
-                if (gesture.Modifiers == ModifierKeys.Alt && gesture.Key == Key.A)
+                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && gesture.Key == Key.A)
                 {
                     mainViewModel.AddAllToQueue();
                 }
