@@ -1333,6 +1333,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use System Language.
         /// </summary>
         public static string Language_UseSystem {
@@ -6772,6 +6781,17 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitleView_AddRemainingCC {
             get {
                 return ResourceManager.GetString("SubtitleView_AddRemainingCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There were no subtitle tracks added. 
+        ///
+        ///This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information..
+        /// </summary>
+        public static string SubtitleView_NoSubtitlesAdded {
+            get {
+                return ResourceManager.GetString("SubtitleView_NoSubtitlesAdded", resourceCulture);
             }
         }
         

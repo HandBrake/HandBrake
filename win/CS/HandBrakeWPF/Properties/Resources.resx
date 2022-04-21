@@ -2655,4 +2655,12 @@ Hardware encoding support can be re-enabled in preferences. </value>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
     <value>Only when file already exists on disk.</value>
   </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>There were no subtitle tracks added. 
+
+This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+  </data>
 </root>
