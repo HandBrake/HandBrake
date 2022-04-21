@@ -119,6 +119,7 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         uint8_t * dst = buf->plane[pp].data;
         uint8_t * src = frame->data[pp];
 
+#if HB_PROJECT_FEATURE_NVENC
         if (frame->hw_frames_ctx) {
           int ret = 0;
           dst = src;
@@ -126,13 +127,14 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
           if (!buf->hw_ctx.frame) {
             buf->hw_ctx.frame = av_frame_alloc();
           } else {
-              av_frame_unref((AVFrame*)buf->hw_ctx.frame);
+            av_frame_unref((AVFrame *)buf->hw_ctx.frame);
           }
           ret = av_frame_ref((AVFrame *)(buf->hw_ctx.frame), frame);
           if (ret)
             return NULL;
           continue;
         }
+#endif
 
         for (yy = 0; yy < height; yy++)
         {
