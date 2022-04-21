@@ -126,10 +126,13 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
           buf->hw_ctx.frames_ctx = (void *)av_buffer_ref(frame->hw_frames_ctx);
           if (!buf->hw_ctx.frame) {
             buf->hw_ctx.frame = av_frame_alloc();
-          } else {
-            av_frame_unref((AVFrame *)buf->hw_ctx.frame);
+            ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
+            if (ret) {
+                av_frame_free(buf->hw_ctx.frame);
+                return NULL;
+            }
           }
-          ret = av_frame_ref((AVFrame *)(buf->hw_ctx.frame), frame);
+          ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
           if (ret)
             return NULL;
           continue;

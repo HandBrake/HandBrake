@@ -1166,6 +1166,7 @@ struct hb_title_s
     int           video_decode_support;
 #define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
 #define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_NVDEC 0x03 // Nvidia Nvdec
 
     hb_metadata_t * metadata;
 

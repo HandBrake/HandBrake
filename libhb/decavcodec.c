@@ -1409,8 +1409,11 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     av_packet_unref(avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
-        ++pv->decode_errors;
-        return 0;
+      char errstr[64];
+      av_strerror(ret, errstr, sizeof(errstr));
+      hb_error("avcodec_send_packet: failed with error '%s'", errstr);
+      ++pv->decode_errors;
+      return 0;
     }
 
     do
@@ -1464,33 +1467,6 @@ static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
 
   ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
   return err;
-}
-
-static const char *find_cuvid_codec_by_name(enum AVCodecID id) {
-  switch (id) {
-  case AV_CODEC_ID_AV1:
-    return "av1_cuvid";
-  case AV_CODEC_ID_HEVC:
-    return "hevc_cuvid";
-  case AV_CODEC_ID_H264:
-    return "h264_cuvid";
-  case AV_CODEC_ID_MJPEG:
-    return "mjpeg_cuvid";
-  case AV_CODEC_ID_MPEG1VIDEO:
-    return "mpeg1_cuvid";
-  case AV_CODEC_ID_MPEG2VIDEO:
-    return "mpeg2_cuvid";
-  case AV_CODEC_ID_MPEG4:
-    return "mpeg4_cuvid";
-  case AV_CODEC_ID_VP8:
-    return "vp8_cuvid";
-  case AV_CODEC_ID_VP9:
-    return "vp9_cuvid";
-  case AV_CODEC_ID_VC1:
-    return "vc1_cuvid";
-  default:
-    return (const char *)NULL;
-  }
 }
 #endif
 
@@ -1569,7 +1545,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
 #if HB_PROJECT_FEATURE_NVENC
     // During the scan pv->job will be NULL and SW decoder will be used.
-    const int use_hw_dec = (NULL != pv->job);
+    int use_hw_dec = (NULL != pv->job);
 #endif
 
 #if HB_PROJECT_FEATURE_QSV
@@ -1580,16 +1556,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     else
 #endif
     {
-#if HB_PROJECT_FEATURE_NVENC
-      const char *codec_name = find_cuvid_codec_by_name(w->codec_param);
-      if (use_hw_dec && codec_name) {
-        pv->codec = avcodec_find_decoder_by_name(codec_name);
-      } else {
-        pv->codec = avcodec_find_decoder(w->codec_param);
-      }
-#else
       pv->codec = avcodec_find_decoder(w->codec_param);
-#endif
     }
     if ( pv->codec == NULL )
     {
@@ -1606,10 +1573,12 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
       if (!config) {
         hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
                av_hwdevice_get_type_name(type));
+        use_hw_dec = 0;
         break;
       }
       if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
           config->device_type == type) {
+        pv->job->title->video_decode_support = HB_DECODE_SUPPORT_NVDEC;
         break;
       }
     }
