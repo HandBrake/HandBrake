@@ -1567,6 +1567,11 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
+#if HB_PROJECT_FEATURE_NVENC
+    // During the scan pv->job will be NULL and SW decoder will be used.
+    const int use_hw_dec = (NULL != pv->job);
+#endif
+
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode)
     {
@@ -1577,7 +1582,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     {
 #if HB_PROJECT_FEATURE_NVENC
       const char *codec_name = find_cuvid_codec_by_name(w->codec_param);
-      if (codec_name) {
+      if (use_hw_dec && codec_name) {
         pv->codec = avcodec_find_decoder_by_name(codec_name);
       } else {
         pv->codec = avcodec_find_decoder(w->codec_param);
@@ -1596,7 +1601,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     AVBufferRef *hw_device_ctx = NULL;
     enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
 
-    for (int i = 0;; i++) {
+    for (int i = 0; use_hw_dec; i++) {
       const AVCodecHWConfig *config = avcodec_get_hw_config(pv->codec, i);
       if (!config) {
         hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
@@ -1616,7 +1621,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (AV_HWDEVICE_TYPE_CUDA == type) {
+    if (AV_HWDEVICE_TYPE_CUDA == type && use_hw_dec) {
       pv->context->get_format = get_hw_pix_fmt;
       if (cuda_hw_ctx_init(pv->context, hw_device_ctx, type) < 0)
         hb_log("failed to initialize hw context");
