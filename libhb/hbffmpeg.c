@@ -122,8 +122,6 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
 #if HB_PROJECT_FEATURE_NVENC
         if (frame->hw_frames_ctx) {
           int ret = 0;
-          dst = src;
-          buf->hw_ctx.frames_ctx = (void *)av_buffer_ref(frame->hw_frames_ctx);
           if (!buf->hw_ctx.frame) {
             buf->hw_ctx.frame = av_frame_alloc();
             ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);

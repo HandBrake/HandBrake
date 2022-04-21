@@ -154,7 +154,6 @@ FFMPEG.CONFIGURE.extra += \
      --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
      --enable-encoder=hevc_nvenc \
-     --enable-nonfree \
      --enable-hwaccels \
      --enable-nvdec
 endif

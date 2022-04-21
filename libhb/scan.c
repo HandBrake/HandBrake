@@ -480,7 +480,7 @@ static inline int clampBlack( int x )
 static int row_all_dark( hb_buffer_t* buf, int row )
 {
 #if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frames_ctx) {
+    if(buf->hw_ctx.frame) {
         return 0;
     }
 #endif
@@ -514,7 +514,7 @@ static int row_all_dark( hb_buffer_t* buf, int row )
 static int column_all_dark( hb_buffer_t* buf, int top, int bottom, int col )
 {
 #if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frames_ctx) {
+    if(buf->hw_ctx.frame) {
         return 0;
     }
 #endif

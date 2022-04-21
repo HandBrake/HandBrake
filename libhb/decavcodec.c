@@ -1543,11 +1543,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
-#if HB_PROJECT_FEATURE_NVENC
-    // During the scan pv->job will be NULL and SW decoder will be used.
-    int use_hw_dec = (NULL != pv->job);
-#endif
-
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode)
     {
@@ -1565,6 +1560,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
 
 #if HB_PROJECT_FEATURE_NVENC
+    // During the scan pv->job will be NULL and SW decoder will be used.
+    int use_hw_dec = (NULL != pv->job);
+
     AVBufferRef *hw_device_ctx = NULL;
     enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
 

@@ -1133,7 +1133,7 @@ fail:
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
 #if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frames_ctx) {
+    if(buf->hw_ctx.frame) {
         return 0;
     }
 #endif

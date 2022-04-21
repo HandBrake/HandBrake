@@ -164,7 +164,6 @@ struct hb_buffer_s
 
 #if HB_PROJECT_FEATURE_NVENC
     struct hw_ctx {
-      void *frames_ctx;
       void *frame;
     } hw_ctx;
 #endif
