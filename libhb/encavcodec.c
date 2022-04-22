@@ -1412,10 +1412,9 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     // Encode
 #if HB_PROJECT_FEATURE_NVENC
     if (in->hw_ctx.frame) {
-      AVFrame *p_frame = (AVFrame *)in->hw_ctx.frame;
+      AVFrame *p_frame = in->hw_ctx.frame;
       av_frame_copy_props(p_frame, &frame);
       ret = avcodec_send_frame(pv->context, p_frame);
-      av_frame_unref(p_frame);
     } else {
       ret = avcodec_send_frame(pv->context, &frame);
     }

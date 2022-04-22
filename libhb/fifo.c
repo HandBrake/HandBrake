@@ -584,6 +584,15 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
     buf->f.fmt = pix_fmt;
 
     hb_buffer_init_planes(buf);
+
+#if HB_PROJECT_FEATURE_NVENC
+    /* Only allocate frame, can't initalize it here due to lack of ffmpeg
+     * HW frames context;; */
+    if (AV_PIX_FMT_CUDA == pix_fmt) {
+      buf->hw_ctx.frame = av_frame_alloc();
+    }
+#endif
+
     return buf;
 }
 
@@ -756,6 +765,13 @@ void hb_buffer_close( hb_buffer_t ** _b )
             }
             hb_qsv_flush_stages(b->qsv_details.ctx->pipes,
                                 (hb_qsv_list**)&b->qsv_details.qsv_atom);
+        }
+#endif
+
+#if HB_PROJECT_FEATURE_NVENC
+        if (b->hw_ctx.frame) {
+          av_frame_free(&b->hw_ctx.frame);
+          b->hw_ctx.frame = NULL;
         }
 #endif
 

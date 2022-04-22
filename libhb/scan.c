@@ -479,12 +479,6 @@ static inline int clampBlack( int x )
 
 static int row_all_dark( hb_buffer_t* buf, int row )
 {
-#if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frame) {
-        return 0;
-    }
-#endif
-
     int width = buf->plane[0].width;
     int stride = buf->plane[0].stride;
     uint8_t *luma = buf->plane[0].data + stride * row;
@@ -513,12 +507,6 @@ static int row_all_dark( hb_buffer_t* buf, int row )
 
 static int column_all_dark( hb_buffer_t* buf, int top, int bottom, int col )
 {
-#if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frame) {
-        return 0;
-    }
-#endif
-
     int stride = buf->plane[0].stride;
     int height = buf->plane[0].height - top - bottom;
     uint8_t *luma = buf->plane[0].data + stride * top + col;

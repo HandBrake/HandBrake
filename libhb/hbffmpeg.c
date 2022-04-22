@@ -121,18 +121,18 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
 
 #if HB_PROJECT_FEATURE_NVENC
         if (frame->hw_frames_ctx) {
-          int ret = 0;
-          if (!buf->hw_ctx.frame) {
-            buf->hw_ctx.frame = av_frame_alloc();
-            ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
-            if (ret) {
-                av_frame_free(buf->hw_ctx.frame);
-                return NULL;
-            }
-          }
-          ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
-          if (ret)
+          int ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
+          if (ret) {
+            hb_buffer_close(&buf);
             return NULL;
+          }
+
+          ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
+          if (ret) {
+            hb_buffer_close(&buf);
+            return NULL;
+          }
+
           continue;
         }
 #endif

@@ -1132,12 +1132,6 @@ fail:
  */
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
-#if HB_PROJECT_FEATURE_NVENC
-    if(buf->hw_ctx.frame) {
-        return 0;
-    }
-#endif
-
     int j, k, n, off, cc_1, cc_2, cc[3];
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;
