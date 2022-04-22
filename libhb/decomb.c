@@ -11,7 +11,7 @@
    http://web.missouri.edu/~kes25c/
 */
 
-/*****
+/*
 Parameters:
     Mode:
         1 = yadif
@@ -31,9 +31,6 @@ Plus:
 Defaults:
     7:10:20:20:4:2:50:24:1:-1
 
-*****/
-
-/*****
 These modes can be layered. For example, Yadif (1) + EEDI2 (8) = 9,
 which will feed EEDI2 interpolations to yadif.
 
@@ -52,7 +49,7 @@ which will feed EEDI2 interpolations to yadif.
 ...okay I'm getting bored now listing all these different modes
 
 12-15: EEDI2 will override cubic interpolation
-*****/
+*/
 
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
@@ -77,22 +74,23 @@ which will feed EEDI2 interpolations to yadif.
 #define TMP2PF 3
 #define DST2MPF 4
 
-struct yadif_arguments_s {
+typedef struct yadif_arguments_s
+{
     hb_buffer_t *dst;
     int parity;
     int tff;
     int mode;
-};
+} yadif_arguments_t;
 
-typedef struct yadif_arguments_s yadif_arguments_t;
-
-typedef struct eedi2_thread_arg_s {
+typedef struct eedi2_thread_arg_s
+{
     taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
     int plane;
 } eedi2_thread_arg_t;
 
-typedef struct yadif_thread_arg_s {
+typedef struct yadif_thread_arg_s
+{
     taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
     int segment_start[3];
@@ -129,15 +127,15 @@ struct hb_filter_private_s
     int                 unfiltered;
     int                 frames;
 
-    hb_buffer_t       * ref[3];
+    hb_buffer_t        *ref[3];
 
-    const void        * eedi_limlut;
-    hb_buffer_t       * eedi_half[4];
-    hb_buffer_t       * eedi_full[5];
-    int               * cx2;
-    int               * cy2;
-    int               * cxy;
-    int               * tmpc;
+    const void         *eedi_limlut;
+    hb_buffer_t        *eedi_half[4];
+    hb_buffer_t        *eedi_full[5];
+    int                *cx2;
+    int                *cy2;
+    int                *cxy;
+    int                *tmpc;
 
     const void         *crop_table;
     int                 cpu_count;
@@ -150,7 +148,7 @@ struct hb_filter_private_s
                         int tff);
 
     taskset_t           yadif_taskset;     // Threads for Yadif - one per CPU
-    yadif_arguments_t * yadif_arguments;   // Arguments to thread for work
+    yadif_arguments_t  *yadif_arguments;   // Arguments to thread for work
 
     taskset_t           eedi2_taskset;     // Threads for eedi2 - one per plane
 
@@ -166,14 +164,14 @@ typedef struct
     int normalize;
 } filter_param_t;
 
-static int hb_decomb_init( hb_filter_object_t * filter,
-                           hb_filter_init_t * init );
+static int hb_decomb_init(hb_filter_object_t *filter,
+                          hb_filter_init_t *init);
 
-static int hb_decomb_work( hb_filter_object_t * filter,
-                           hb_buffer_t ** buf_in,
-                           hb_buffer_t ** buf_out );
+static int hb_decomb_work(hb_filter_object_t *filter,
+                           hb_buffer_t **buf_in,
+                           hb_buffer_t **buf_out);
 
-static void hb_decomb_close( hb_filter_object_t * filter );
+static void hb_decomb_close(hb_filter_object_t *filter);
 
 static const char decomb_template[] =
     "mode=^"HB_INT_REG"$:"
@@ -194,10 +192,10 @@ hb_filter_object_t hb_filter_decomb =
     .settings_template = decomb_template,
 };
 
-static void store_ref(hb_filter_private_t * pv, hb_buffer_t * b)
+static void store_ref(hb_filter_private_t *pv, hb_buffer_t *b)
 {
     hb_buffer_close(&pv->ref[0]);
-    memmove(&pv->ref[0], &pv->ref[1], sizeof(hb_buffer_t *) * 2 );
+    memmove(&pv->ref[0], &pv->ref[1], sizeof(hb_buffer_t *) * 2);
     pv->ref[2] = b;
 }
 
@@ -209,11 +207,11 @@ static void store_ref(hb_filter_private_t * pv, hb_buffer_t * b)
 #include "templates/decomb_template.c"
 #undef BIT_DEPTH
 
-static int hb_decomb_init( hb_filter_object_t * filter,
-                           hb_filter_init_t * init )
+static int hb_decomb_init(hb_filter_object_t *filter,
+                          hb_filter_init_t *init)
 {
-    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
-    hb_filter_private_t * pv = filter->private_data;
+    filter->private_data = calloc(1, sizeof(struct hb_filter_private_s));
+    hb_filter_private_t *pv = filter->private_data;
     pv->input                = *init;
     hb_buffer_list_clear(&pv->out_list);
 
@@ -228,8 +226,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     pv->frames       = 0;
     pv->ready        = 0;
 
-    pv->mode                    = MODE_DECOMB_YADIF | MODE_DECOMB_BLEND |
-                                  MODE_DECOMB_CUBIC;
+    pv->mode                    = MODE_DECOMB_YADIF | MODE_DECOMB_BLEND | MODE_DECOMB_CUBIC;
     pv->magnitude_threshold     = 10;
     pv->variance_threshold      = 20;
     pv->laplacian_threshold     = 20;
@@ -242,7 +239,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     if (filter->settings)
     {
-        hb_value_t * dict = filter->settings;
+        hb_value_t *dict = filter->settings;
 
         // Get comb detection settings
         hb_dict_extract_int(&pv->mode, dict, "mode");
@@ -280,21 +277,20 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     pv->segment_height[1] = hb_image_height(init->pix_fmt, pv->segment_height[0], 1);
     pv->segment_height[2] = hb_image_height(init->pix_fmt, pv->segment_height[0], 2);
 
-    int ii;
-    if( pv->mode & MODE_DECOMB_EEDI2 )
+    if (pv->mode & MODE_DECOMB_EEDI2)
     {
-        /* Allocate half-height eedi2 buffers */
-        for( ii = 0; ii < 4; ii++ )
+        // Allocate half-height eedi2 buffers
+        for (int ii = 0; ii < 4; ii++)
         {
-            pv->eedi_half[ii] = hb_frame_buffer_init(
-                init->pix_fmt, init->geometry.width, init->geometry.height / 2);
+            pv->eedi_half[ii] = hb_frame_buffer_init(init->pix_fmt,
+                                                     init->geometry.width, init->geometry.height / 2);
         }
 
-        /* Allocate full-height eedi2 buffers */
-        for( ii = 0; ii < 5; ii++ )
+        // Allocate full-height eedi2 buffers
+        for (int ii = 0; ii < 5; ii++)
         {
-            pv->eedi_full[ii] = hb_frame_buffer_init(
-                init->pix_fmt, init->geometry.width, init->geometry.height);
+            pv->eedi_full[ii] = hb_frame_buffer_init(init->pix_fmt,
+                                                     init->geometry.width, init->geometry.height);
         }
     }
 
@@ -326,29 +322,26 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     init_crop_table((void **)&pv->crop_table, pv->max_value);
     eedi2_init_limlut((void **)&pv->eedi_limlut, pv->depth);
 
-    /*
-     * Setup yadif taskset.
-     */
-    pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
-    if( pv->yadif_arguments == NULL ||
-        taskset_init( &pv->yadif_taskset, "yadif_filter_segment", pv->cpu_count,
-                      sizeof( yadif_thread_arg_t ), yadif_decomb_filter_work) == 0 )
+    // Setup yadif taskset.
+    pv->yadif_arguments = malloc(sizeof(yadif_arguments_t) * pv->cpu_count);
+    if (pv->yadif_arguments == NULL ||
+        taskset_init(&pv->yadif_taskset, "yadif_filter_segment", pv->cpu_count,
+                     sizeof(yadif_thread_arg_t), yadif_decomb_filter_work) == 0)
     {
-        hb_error( "yadif could not initialize taskset" );
+        hb_error("yadif could not initialize taskset");
     }
 
     yadif_thread_arg_t *yadif_prev_thread_args = NULL;
-    for( ii = 0; ii < pv->cpu_count; ii++ )
+    for (int ii = 0; ii < pv->cpu_count; ii++)
     {
         yadif_thread_arg_t *thread_args;
 
-        thread_args = taskset_thread_args( &pv->yadif_taskset, ii );
+        thread_args = taskset_thread_args(&pv->yadif_taskset, ii);
         thread_args->pv = pv;
         thread_args->arg.segment = ii;
         thread_args->arg.taskset = &pv->yadif_taskset;
 
-        int pp;
-        for (pp = 0; pp < 3; pp++)
+        for (int pp = 0; pp < 3; pp++)
         {
             if (yadif_prev_thread_args != NULL)
             {
@@ -356,15 +349,15 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                     yadif_prev_thread_args->segment_start[pp] +
                     yadif_prev_thread_args->segment_height[pp];
             }
-            if( ii == pv->cpu_count - 1 )
+            if (ii == pv->cpu_count - 1)
             {
-                /*
-                 * Final segment
-                 */
+                // Final segment
                 thread_args->segment_height[pp] =
                     ((hb_image_height(init->pix_fmt, init->geometry.height, pp)
                      + 3) & ~3) - thread_args->segment_start[pp];
-            } else {
+            }
+            else
+            {
                 thread_args->segment_height[pp] = pv->segment_height[pp];
             }
         }
@@ -373,45 +366,39 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         yadif_prev_thread_args = thread_args;
     }
 
-    if( pv->mode & MODE_DECOMB_EEDI2 )
+    if (pv->mode & MODE_DECOMB_EEDI2)
     {
-        /*
-         * Create eedi2 taskset.
-         */
-        if( taskset_init( &pv->eedi2_taskset, "eedi2_filter_segment", /*thread_count*/3,
-                          sizeof( eedi2_thread_arg_t ), eedi2_filter_work) == 0 )
+        // Create eedi2 taskset.
+        if (taskset_init(&pv->eedi2_taskset, "eedi2_filter_segment", /*thread_count*/3,
+                         sizeof(eedi2_thread_arg_t), eedi2_filter_work) == 0)
         {
-            hb_error( "eedi2 could not initialize taskset" );
+            hb_error("eedi2 could not initialize taskset");
         }
 
-        if( pv->post_processing > 1 )
+        if (pv->post_processing > 1)
         {
-            int stride;
-            stride = hb_image_stride(init->pix_fmt, init->geometry.width, 0);
+            int stride = hb_image_stride(init->pix_fmt, init->geometry.width, 0);
 
-            pv->cx2 = (int*)eedi2_aligned_malloc(
-                    init->geometry.height * stride * sizeof(int), 16);
+            pv->cx2 = (int *)eedi2_aligned_malloc(init->geometry.height * stride * sizeof(int), 16);
+            pv->cy2 = (int *)eedi2_aligned_malloc(init->geometry.height * stride * sizeof(int), 16);
+            pv->cxy = (int *)eedi2_aligned_malloc(init->geometry.height * stride * sizeof(int), 16);
+            pv->tmpc = (int*)eedi2_aligned_malloc(init->geometry.height * stride * sizeof(int), 16);
 
-            pv->cy2 = (int*)eedi2_aligned_malloc(
-                    init->geometry.height * stride * sizeof(int), 16);
-
-            pv->cxy = (int*)eedi2_aligned_malloc(
-                    init->geometry.height * stride * sizeof(int), 16);
-
-            pv->tmpc = (int*)eedi2_aligned_malloc(
-                    init->geometry.height * stride * sizeof(int), 16);
-
-            if( !pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc )
+            if (!pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc)
+            {
                 hb_error("EEDI2: failed to malloc derivative arrays");
+            }
             else
+            {
                 hb_log("EEDI2: successfully malloced derivative arrays");
+            }
         }
 
-        for( ii = 0; ii < 3; ii++ )
+        for (int ii = 0; ii < 3; ii++)
         {
             eedi2_thread_arg_t *eedi2_thread_args;
 
-            eedi2_thread_args = taskset_thread_args( &pv->eedi2_taskset, ii );
+            eedi2_thread_args = taskset_thread_args(&pv->eedi2_taskset, ii);
 
             eedi2_thread_args->pv = pv;
             eedi2_thread_args->arg.taskset = &pv->eedi2_taskset;
@@ -424,11 +411,11 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static void hb_decomb_close( hb_filter_object_t * filter )
+static void hb_decomb_close(hb_filter_object_t *filter)
 {
-    hb_filter_private_t * pv = filter->private_data;
+    hb_filter_private_t *pv = filter->private_data;
 
-    if( !pv )
+    if (!pv)
     {
         return;
     }
@@ -439,37 +426,35 @@ static void hb_decomb_close( hb_filter_object_t * filter )
                pv->deinterlaced, pv->blended, pv->unfiltered, pv->frames);
     }
 
-    taskset_fini( &pv->yadif_taskset );
+    taskset_fini(&pv->yadif_taskset);
 
-    if( pv->mode & MODE_DECOMB_EEDI2 )
+    if (pv->mode & MODE_DECOMB_EEDI2)
     {
-        taskset_fini( &pv->eedi2_taskset );
+        taskset_fini(&pv->eedi2_taskset);
     }
 
-    /* Cleanup reference buffers. */
-    int ii;
-    for (ii = 0; ii < 3; ii++)
+    // Cleanup reference buffers
+    for (int ii = 0; ii < 3; ii++)
     {
         hb_buffer_close(&pv->ref[ii]);
     }
 
-    if( pv->mode & MODE_DECOMB_EEDI2 )
+    if (pv->mode & MODE_DECOMB_EEDI2)
     {
-        /* Cleanup eedi-half  buffers */
-        int ii;
-        for( ii = 0; ii < 4; ii++ )
+        // Cleanup eedi-half buffers
+        for (int ii = 0; ii < 4; ii++)
         {
             hb_buffer_close(&pv->eedi_half[ii]);
         }
 
-        /* Cleanup eedi-full  buffers */
-        for( ii = 0; ii < 5; ii++ )
+        // Cleanup eedi-full buffers
+        for (int ii = 0; ii < 5; ii++)
         {
             hb_buffer_close(&pv->eedi_full[ii]);
         }
     }
 
-    if( pv->post_processing > 1  && ( pv->mode & MODE_DECOMB_EEDI2 ) )
+    if (pv->post_processing > 1  && (pv->mode & MODE_DECOMB_EEDI2))
     {
         if (pv->cx2) eedi2_aligned_free(pv->cx2);
         if (pv->cy2) eedi2_aligned_free(pv->cy2);
@@ -480,30 +465,26 @@ static void hb_decomb_close( hb_filter_object_t * filter )
     free((void *)pv->eedi_limlut);
     free((void *)pv->crop_table);
 
-    /*
-     * free memory for yadif structs
-     */
-    free( pv->yadif_arguments );
+    // free memory for yadif structs
+    free(pv->yadif_arguments);
 
-    free( pv );
+    free(pv);
     filter->private_data = NULL;
 }
 
 // Fill rows above height with copy of last row to prevent color distortion
 // during blending
-static void fill_stride(hb_buffer_t * buf)
+static void fill_stride(hb_buffer_t *buf)
 {
-    int pp, ii;
-
-    for (pp = 0; pp < 3; pp++)
+    for (int pp = 0; pp < 3; pp++)
     {
-        uint8_t * src, * dst;
+        uint8_t *src, *dst;
 
         src = buf->plane[pp].data + (buf->plane[pp].height - 1) *
               buf->plane[pp].stride;
         dst = buf->plane[pp].data + buf->plane[pp].height *
               buf->plane[pp].stride;
-        for (ii = 0; ii < 3; ii++)
+        for (int ii = 0; ii < 3; ii++)
         {
             memcpy(dst, src, buf->plane[pp].stride);
             dst += buf->plane[pp].stride;
@@ -511,20 +492,20 @@ static void fill_stride(hb_buffer_t * buf)
     }
 }
 
-static void process_frame( hb_filter_private_t * pv )
+static void process_frame(hb_filter_private_t *pv)
 {
     if ((pv->mode & MODE_DECOMB_SELECTIVE) &&
         pv->ref[1]->s.combed == HB_COMB_NONE)
     {
         // Input buffer is not combed.  Just make a dup of it.
-        hb_buffer_t * buf = hb_buffer_dup(pv->ref[1]);
+        hb_buffer_t *buf = hb_buffer_dup(pv->ref[1]);
         hb_buffer_list_append(&pv->out_list, buf);
         pv->frames++;
         pv->unfiltered++;
     }
     else
     {
-        /* Determine if top-field first layout */
+        // Determine if top-field first layout
         int tff;
         if (pv->parity < 0)
         {
@@ -535,7 +516,7 @@ static void process_frame( hb_filter_private_t * pv )
             tff = (pv->parity & 1) ^ 1;
         }
 
-        /* deinterlace both fields if bob */
+        // Deinterlace both fields if bob
         int frame, num_frames = 1;
         if (pv->mode & MODE_DECOMB_BOB)
         {
@@ -547,7 +528,7 @@ static void process_frame( hb_filter_private_t * pv )
         // Perform filtering
         for (frame = 0; frame < num_frames; frame++)
         {
-            hb_buffer_t * buf;
+            hb_buffer_t *buf;
             int parity = frame ^ tff ^ 1;
 
             // tff for eedi2
@@ -563,14 +544,14 @@ static void process_frame( hb_filter_private_t * pv )
             buf->f.chroma_location = pv->output.chroma_location;
             pv->filter(pv, buf, parity, tff);
 
-            /* Copy buffered settings to output buffer settings */
+            // Copy buffered settings to output buffer settings
             buf->s = pv->ref[1]->s;
 
             hb_buffer_list_append(&pv->out_list, buf);
         }
 
-        /* if this frame was deinterlaced and bob mode is engaged, halve
-           the duration of the saved timestamps. */
+        // if this frame was deinterlaced and bob mode is engaged, halve
+        // the duration of the saved timestamps.
         if (pv->mode & MODE_DECOMB_BOB)
         {
             hb_buffer_t *first  = hb_buffer_list_head(&pv->out_list);
@@ -582,12 +563,12 @@ static void process_frame( hb_filter_private_t * pv )
     }
 }
 
-static int hb_decomb_work( hb_filter_object_t * filter,
-                           hb_buffer_t ** buf_in,
-                           hb_buffer_t ** buf_out )
+static int hb_decomb_work(hb_filter_object_t *filter,
+                          hb_buffer_t **buf_in,
+                          hb_buffer_t **buf_out)
 {
-    hb_filter_private_t * pv = filter->private_data;
-    hb_buffer_t * in = *buf_in;
+    hb_filter_private_t *pv = filter->private_data;
+    hb_buffer_t *in = *buf_in;
 
     // Input buffer is always consumed.
     *buf_in = NULL;
@@ -630,7 +611,6 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
     void *crop_table;
     init_crop_table_8(&crop_table, 255);
 
-    int pp;
     filter_param_t filter;
 
     filter.tap[0] = -1;
@@ -641,9 +621,8 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
     filter.normalize = 3;
 
     fill_stride(src);
-    for (pp = 0; pp < 3; pp++)
+    for (int pp = 0; pp < 3; pp++)
     {
-        int yy;
         int width  = src->plane[pp].width;
         int stride = src->plane[pp].stride;
         int height = src->plane[pp].height_stride;
@@ -652,10 +631,10 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
         uint8_t *pdst = &dst->plane[pp].data[0];
         uint8_t *psrc = &src->plane[pp].data[0];
 
-        /* These will be useful if we ever do temporal blending. */
-        for( yy = 0; yy < height - 1; yy += 2 )
+        // These will be useful if we ever do temporal blending.
+        for (int yy = 0; yy < height - 1; yy += 2)
         {
-            /* This line gets blend filtered, not yadif filtered. */
+            // This line gets blend filtered, not yadif filtered.
             memcpy(pdst, psrc, width);
             pdst += stride;
             psrc += stride;
