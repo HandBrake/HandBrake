@@ -1548,9 +1548,9 @@ int hb_video_encoder_is_supported(int encoder)
     return 0;
 }
 
-int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt)
+int hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile)
 {
-    const int *pix_fmts = hb_video_encoder_get_pix_fmts(encoder);
+    const int *pix_fmts = hb_video_encoder_get_pix_fmts(encoder, profile);
     while (*pix_fmts != AV_PIX_FMT_NONE)
     {
         if (pix_fmt == *pix_fmts)
@@ -1656,16 +1656,16 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
-            return hb_h264_profile_names_8bit;
+            return hb_x264_profile_names_8bit;
         case HB_VCODEC_X264_10BIT:
-            return hb_h264_profile_names_10bit;
+            return hb_x264_profile_names_10bit;
 
         case HB_VCODEC_X265_8BIT:
-            return hb_h265_profile_names_8bit;
+            return hb_x265_profile_names_8bit;
         case HB_VCODEC_X265_10BIT:
-            return hb_h265_profile_names_10bit;
+            return hb_x265_profile_names_10bit;
         case HB_VCODEC_X265_12BIT:
-            return hb_h265_profile_names_12bit;
+            return hb_x265_profile_names_12bit;
         case HB_VCODEC_X265_16BIT:
             return hb_h265_profile_names_16bit;
 
@@ -1741,9 +1741,29 @@ static const enum AVPixelFormat standard_pix_fmts[] =
     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat standard_422_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV422P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_444_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
+};
+
 static const enum AVPixelFormat standard_10bit_pix_fmts[] =
 {
     AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_422_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_444_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat standard_12bit_pix_fmts[] =
@@ -1751,12 +1771,22 @@ static const enum AVPixelFormat standard_12bit_pix_fmts[] =
     AV_PIX_FMT_YUV420P12, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat standard_422_12bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV422P12, AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat standard_444_12bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
+};
+
 static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
 {
      AV_PIX_FMT_P010, AV_PIX_FMT_NONE
 };
 
-const int* hb_video_encoder_get_pix_fmts(int encoder)
+const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
 #if HB_PROJECT_FEATURE_QSV
     if (encoder & HB_VCODEC_QSV_MASK)
@@ -1777,13 +1807,84 @@ const int* hb_video_encoder_get_pix_fmts(int encoder)
 
     switch (encoder)
     {
+        case HB_VCODEC_X264_8BIT:
+        {
+            if (!strcasecmp(profile, "high422"))
+            {
+                return standard_422_pix_fmts;
+            }
+            else if (!strcasecmp(profile, "high444"))
+            {
+                return standard_444_pix_fmts;
+            }
+            else
+            {
+                return standard_pix_fmts;
+            }
+        }
         case HB_VCODEC_X264_10BIT:
-            return standard_10bit_pix_fmts;
+        {
+            if (!strcasecmp(profile, "high422"))
+            {
+                return standard_422_10bit_pix_fmts;
+            }
+            else if (!strcasecmp(profile, "high444"))
+            {
+                return standard_444_10bit_pix_fmts;
+            }
+            else
+            {
+                return standard_10bit_pix_fmts;
+            }
+        }
 #if HB_PROJECT_FEATURE_X265
+        case HB_VCODEC_X265_8BIT:
+        {
+            if (!strcasecmp(profile, "main444-8") ||
+                !strcasecmp(profile, "main444-intra"))
+            {
+                return standard_444_pix_fmts;
+            }
+            else
+            {
+                return standard_pix_fmts;
+            }
+        }
         case HB_VCODEC_X265_10BIT:
-            return standard_10bit_pix_fmts;
+        {
+            if (!strcasecmp(profile, "main422-10") ||
+                !strcasecmp(profile, "main422-10-intra"))
+            {
+                return standard_422_10bit_pix_fmts;
+            }
+            else if (!strcasecmp(profile, "main444-10") ||
+                     !strcasecmp(profile, "main444-10-intra"))
+            {
+                return standard_444_10bit_pix_fmts;
+            }
+            else
+            {
+                return standard_10bit_pix_fmts;
+            }
+        }
         case HB_VCODEC_X265_12BIT:
-            return standard_12bit_pix_fmts;
+        {
+            if (!strcasecmp(profile, "main422-12") ||
+                !strcasecmp(profile, "main422-12-intra"))
+            {
+                return standard_422_12bit_pix_fmts;
+            }
+            else if (!strcasecmp(profile, "main444-12") ||
+                     !strcasecmp(profile, "main444-12-intra"))
+            {
+                return standard_444_12bit_pix_fmts;
+            }
+
+            else
+            {
+                return standard_12bit_pix_fmts;
+            }
+        }
 #endif
 #if __APPLE__
         case HB_VCODEC_VT_H264:
@@ -6050,15 +6151,16 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
                 }
             case HB_FILTER_COMB_DETECT:
             case HB_FILTER_DECOMB:
+            case HB_FILTER_YADIF:
+            case HB_FILTER_BWDIF:
             case HB_FILTER_DENOISE:
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
             case HB_FILTER_GRAYSCALE:
             case HB_FILTER_RENDER_SUB:
-               if (pix_fmt != AV_PIX_FMT_YUV420P   &&
-                   pix_fmt != AV_PIX_FMT_YUV420P10 &&
-                   pix_fmt != AV_PIX_FMT_YUV420P12)
+               if (pix_fmt == AV_PIX_FMT_P010 ||
+                   pix_fmt == AV_PIX_FMT_NV12)
                {
                    return 0;
                }
@@ -6070,6 +6172,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
 static const enum AVPixelFormat pipeline_pix_fmts[] =
 {
+    AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P,
     AV_PIX_FMT_YUV422P12, AV_PIX_FMT_YUV422P10, AV_PIX_FMT_YUV422P,
     AV_PIX_FMT_YUV420P12, AV_PIX_FMT_P010, AV_PIX_FMT_YUV420P10,
     AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
