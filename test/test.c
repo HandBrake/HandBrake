@@ -2208,8 +2208,9 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_CHROMA_SMOOTH_TUNE     324
     #define FILTER_DEBLOCK_TUNE           325
     #define FILTER_COLORSPACE             326
-    #define CROP_THRESHOLD_PIXELS    327
-    #define CROP_THRESHOLD_FRAMES         328
+    #define FILTER_BWDIF                  327
+    #define CROP_THRESHOLD_PIXELS         328
+    #define CROP_THRESHOLD_FRAMES         329
     
     for( ;; )
     {
