@@ -11,9 +11,13 @@
 #define HANDBRAKE_H264_COMMON_H
 
 static const char * const hb_h264_profile_names_8bit[]  = {
-    "auto", "high", "main", "baseline", NULL, };
+    "auto", "baseline", "main", "high", NULL, };
+static const char * const hb_x264_profile_names_8bit[] = {
+    "auto", "baseline", "main", "high", "high422", "high444", NULL, };
 static const char * const hb_h264_profile_names_10bit[] = {
     "auto", "high10", NULL, };
+static const char * const hb_x264_profile_names_10bit[] = {
+    "auto", "high10", "high422", "high444", NULL, };
 static const char * const hb_h264_level_names[]         = {
     "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0",
     "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL, };

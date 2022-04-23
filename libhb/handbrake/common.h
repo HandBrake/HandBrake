@@ -411,13 +411,13 @@ int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_twopass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
-int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
+int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
-const int*         hb_video_encoder_get_pix_fmts(int encoder);
+const int*         hb_video_encoder_get_pix_fmts(int encoder, const char *profile);
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
