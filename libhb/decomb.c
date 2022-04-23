@@ -328,7 +328,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
         taskset_init(&pv->yadif_taskset, "yadif_filter_segment", pv->cpu_count,
                      sizeof(yadif_thread_arg_t), yadif_decomb_filter_work) == 0)
     {
-        hb_error("yadif could not initialize taskset");
+        hb_error("decomb yadif could not initialize taskset");
     }
 
     yadif_thread_arg_t *yadif_prev_thread_args = NULL;
@@ -372,7 +372,7 @@ static int hb_decomb_init(hb_filter_object_t *filter,
         if (taskset_init(&pv->eedi2_taskset, "eedi2_filter_segment", /*thread_count*/3,
                          sizeof(eedi2_thread_arg_t), eedi2_filter_work) == 0)
         {
-            hb_error("eedi2 could not initialize taskset");
+            hb_error("decomb eedi2 could not initialize taskset");
         }
 
         if (pv->post_processing > 1)
