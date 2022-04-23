@@ -163,6 +163,10 @@ CGColorSpaceRef copyColorSpace(int primaries, int transfer, int matrix)
             break;
             }
 
+        case HB_COLR_TRA_IEC61966_2_1:
+            transferValue = kCVImageBufferTransferFunction_sRGB;
+            break;
+
         case HB_COLR_TRA_BT2020_10:
         case HB_COLR_TRA_BT2020_12:
             transferValue = kCVImageBufferTransferFunction_ITU_R_2020;
