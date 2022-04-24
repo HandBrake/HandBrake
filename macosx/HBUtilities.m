@@ -42,6 +42,11 @@ static BOOL hb_resolveBookmarks = YES;
 
 + (NSURL *)documentationURL
 {
+    return [NSURL URLWithString:@"https://handbrake.fr/docs/"];
+}
+
++ (NSURL *)documentationBaseURL
+{
     return [NSURL URLWithString:@"https://handbrake.fr/docs/en/latest/"];
 }
 

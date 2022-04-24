@@ -281,7 +281,7 @@
 
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/custom-presets.html"]];
+    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationBaseURL URLByAppendingPathComponent:@"advanced/custom-presets.html"]];
 }
 
 @end
