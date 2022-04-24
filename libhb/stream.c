@@ -5231,23 +5231,28 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     }
     av_dict_free( &av_opts );
 
-    // Read the video track color info
-    // before it's overwritten with the stream info
-    // in avformat_find_stream_info
-    for (int i = 0; i < info_ic->nb_streams; ++i)
+    if (title->color_prim     == -1 &&
+        title->color_transfer == -1 &&
+        title->color_matrix   == -1)
     {
-        AVStream *st = info_ic->streams[i];
-
-        if ( st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
-           !(st->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
-             avcodec_find_decoder(st->codecpar->codec_id))
+        // Read the video track color info
+        // before it's overwritten with the stream info
+        // in avformat_find_stream_info
+        for (int i = 0; i < info_ic->nb_streams; ++i)
         {
-            AVCodecParameters *codecpar = st->codecpar;
-            title->color_prim     = codecpar->color_primaries;
-            title->color_transfer = codecpar->color_trc;
-            title->color_matrix   = codecpar->color_space;
-            title->color_range    = codecpar->color_range;
-            break;
+            AVStream *st = info_ic->streams[i];
+
+            if ( st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
+                !(st->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
+                avcodec_find_decoder(st->codecpar->codec_id))
+            {
+                AVCodecParameters *codecpar = st->codecpar;
+                title->color_prim     = codecpar->color_primaries;
+                title->color_transfer = codecpar->color_trc;
+                title->color_matrix   = codecpar->color_space;
+                title->color_range    = codecpar->color_range;
+                break;
+            }
         }
     }
 
