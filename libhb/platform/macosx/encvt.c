@@ -173,6 +173,7 @@ enum
 {
     HB_VT_H265_PROFILE_MAIN = 0,
     HB_VT_H265_PROFILE_MAIN_10,
+    HB_VT_H265_PROFILE_MAIN_422_10,
     HB_VT_H265_PROFILE_NB,
 };
 
@@ -183,7 +184,7 @@ static struct
 }
 hb_vt_h265_levels[] =
 {
-    { "auto", { CFSTR("HEVC_Main_AutoLevel"), CFSTR("HEVC_Main10_AutoLevel") }, }
+    { "auto", { CFSTR("HEVC_Main_AutoLevel"), CFSTR("HEVC_Main10_AutoLevel"), CFSTR("HEVC_Main42210_AutoLevel") } }
 };
 
 /*
@@ -427,7 +428,9 @@ static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_P210)
     {
-        return kCVPixelFormatType_422YpCbCr16BiPlanarVideoRange;
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
+                                        kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_NV24)
     {
@@ -508,10 +511,14 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         }
         else if (job->vcodec == HB_VCODEC_VT_H265_10BIT)
         {
-            if (!strcasecmp(job->encoder_profile, "main") ||
+            if (!strcasecmp(job->encoder_profile, "main10") ||
                 !strcasecmp(job->encoder_profile, "auto"))
             {
                 pv->settings.profile = HB_VT_H265_PROFILE_MAIN_10;
+            }
+            else if (!strcasecmp(job->encoder_profile, "main422-10"))
+            {
+                pv->settings.profile = HB_VT_H265_PROFILE_MAIN_422_10;
             }
             else
             {
