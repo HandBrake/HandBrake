@@ -6097,6 +6097,11 @@ int hb_get_bit_depth(int format)
     return max;
 }
 
+int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift)
+{
+    return av_pix_fmt_get_chroma_sub_sample(format, h_shift, v_shift);
+}
+
 static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 {
     const int title_bit_depth = hb_get_bit_depth(job->title->pix_fmt);
