@@ -1878,9 +1878,6 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Портативный режим: Невозможно прочитать файл portable.ini. Возможно, в этом файле ошибка. Пожалуйста, попробуйте снова с использование файла portable.ini.template в качестве руководства.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>Движок HandBrake не смог инициализироваться. Чаще всего причиной могут являться устаревшие драйвера.\n Пожалуйста, обновите видео-драйвера для всех встроенных и дискретных видеоадаптеров в вашей системе.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Опции живого обновления: {source} {title} {chapters}
 Опции неживого обновления: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Они меняются только если вы сканируете новый источник, изменяете заголовок или главы)</value>
@@ -2252,9 +2249,6 @@ Please choose a different preset.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation and Cropping:</value>
-  </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 Only! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Фильтры:</value>

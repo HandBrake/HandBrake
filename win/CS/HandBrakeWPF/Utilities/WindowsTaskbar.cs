@@ -33,7 +33,15 @@ namespace HandBrakeWPF.Utilities
                 });
         }
 
-        public void SetTaskBarProgressToNoProgress()
+        public void SetPaused()
+        {
+            if (wintaskbar.ProgressState != TaskbarItemProgressState.None)
+            {
+                Caliburn.Micro.Execute.OnUIThread(() => wintaskbar.ProgressState = TaskbarItemProgressState.Paused);
+            }
+        }
+
+        public void SetNoProgress()
         {
             if (wintaskbar.ProgressState != TaskbarItemProgressState.None)
             {

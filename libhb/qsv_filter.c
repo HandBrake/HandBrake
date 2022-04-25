@@ -340,7 +340,6 @@ static int filter_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
     }
     return 0;
 }
-#endif
 
 static int hb_qsv_filter_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init )
@@ -674,6 +673,7 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
 
     return HB_FILTER_OK;
 }
+#endif
 
 #endif // HB_PROJECT_FEATURE_QSV
 

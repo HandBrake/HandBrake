@@ -1873,9 +1873,6 @@ This will not impact any of the software encoders.</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>โหมดพกพา: ไม่สามารถอ่าน portable.ini อาจมีข้อผิดพลาดในไฟล์นี้ กรุณาใช้ portable.ini.template ลองอีกครั้งเป็นเทมเพลต</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake ไม่สามารถเริ่มต้น engine ได้ ซึ่งมักเกิดจากไดรเวอร์ GPU ที่ล้าสมัย\n โปรดอัปเดตไดรเวอร์การ์ดแสดงผล</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>ตัวเลือกการอัปเดตตามเวลาจริง：{source} {title} {chapters} 
 ตัวเลือกการอัปเดตตามเวลาจริง：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （เปลี่ยนแปลงเฉพาะเมื่อสแกนแหล่งใหม่ เปลี่ยนชื่อหรือบท）</value>
@@ -2247,9 +2244,6 @@ This will not impact any of the software encoders.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>การวางแนวและการครอบตัด:</value>
-  </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 เท่านั้น! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>ตัง้ค่าตัวกรอง：</value>

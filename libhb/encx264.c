@@ -567,6 +567,22 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    switch (job->output_pix_fmt)
+    {
+        case AV_PIX_FMT_YUV422P:
+        case AV_PIX_FMT_YUV422P10:
+        case AV_PIX_FMT_YUV422P12:
+        case AV_PIX_FMT_YUV422P16:
+            param.i_csp = X264_CSP_I422;
+            break;
+        case AV_PIX_FMT_YUV444P:
+        case AV_PIX_FMT_YUV444P10:
+        case AV_PIX_FMT_YUV444P12:
+        case AV_PIX_FMT_YUV444P16:
+            param.i_csp = X264_CSP_I444;
+            break;
+    }
+
     /* Apply profile and level settings last, if present. */
     if (job->encoder_profile != NULL && *job->encoder_profile)
     {
@@ -643,7 +659,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->api->picture_init( &pv->pic_in );
 
-    pv->pic_in.img.i_csp = X264_CSP_I420;
+    pv->pic_in.img.i_csp = param.i_csp;
     if (pv->api->bit_depth > 8)
     {
         pv->pic_in.img.i_csp |= X264_CSP_HIGH_DEPTH;
@@ -792,22 +808,34 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     return buf;
 }
 
-static hb_buffer_t * expand_buf(int bit_depth, hb_buffer_t *in)
+static hb_buffer_t * expand_buf(int bit_depth, hb_buffer_t *in, int input_pix_fmt)
 {
     hb_buffer_t *buf;
-    int          pp;
-    int          shift = bit_depth - 8;
+    const int    shift = bit_depth - 8;
+    int          output_pix_fmt;
 
-    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P16BE,
-                               in->f.width, in->f.height);
-    for (pp = 0; pp < 3; pp++)
+    switch (input_pix_fmt)
     {
-        int       xx, yy;
+        case AV_PIX_FMT_YUV420P:
+            output_pix_fmt = AV_PIX_FMT_YUV420P16;
+            break;
+        case AV_PIX_FMT_YUV422P:
+            output_pix_fmt = AV_PIX_FMT_YUV422P16;
+            break;
+        case AV_PIX_FMT_YUV444P:
+        default:
+            output_pix_fmt = AV_PIX_FMT_YUV444P16;
+            break;
+    }
+
+    buf = hb_frame_buffer_init(output_pix_fmt, in->f.width, in->f.height);
+    for (int pp = 0; pp < 3; pp++)
+    {
         uint8_t  *src =  in->plane[pp].data;
         uint16_t *dst = (uint16_t*)buf->plane[pp].data;
-        for (yy = 0; yy < in->plane[pp].height; yy++)
+        for (int yy = 0; yy < in->plane[pp].height; yy++)
         {
-            for (xx = 0; xx < in->plane[pp].width; xx++)
+            for (int xx = 0; xx < in->plane[pp].width; xx++)
             {
                 dst[xx] = (uint16_t)src[xx] << shift;
             }
@@ -826,9 +854,11 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
 
     /* Point x264 at our current buffers Y(UV) data.  */
     if (pv->pic_in.img.i_csp & X264_CSP_HIGH_DEPTH &&
-        job->output_pix_fmt == AV_PIX_FMT_YUV420P)
+        (job->output_pix_fmt == AV_PIX_FMT_YUV420P ||
+         job->output_pix_fmt == AV_PIX_FMT_YUV422P ||
+         job->output_pix_fmt == AV_PIX_FMT_YUV444P))
     {
-        tmp = expand_buf(pv->api->bit_depth, in);
+        tmp = expand_buf(pv->api->bit_depth, in, job->output_pix_fmt);
         pv->pic_in.img.i_stride[0] = tmp->plane[0].stride;
         pv->pic_in.img.i_stride[1] = tmp->plane[1].stride;
         pv->pic_in.img.i_stride[2] = tmp->plane[2].stride;
@@ -1075,10 +1105,10 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
     {
         // Main or Baseline (equivalent)
         HB_ENCX264_PROFILE_MAIN,
-        // High (no 4:2:2 or 10-bit support, so anything lossy is equivalent)
         HB_ENCX264_PROFILE_HIGH,
         HB_ENCX264_PROFILE_HIGH10,
-        // Lossless (4:2:0 8-bit for now)
+        HB_ENCX264_PROFILE_HIGH422,
+        // Lossless
         HB_ENCX264_PROFILE_HIGH444,
     } hb_encx264_profile;
 
@@ -1098,6 +1128,10 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
         if (!strcasecmp(h264_profile, "high444"))
         {
             hb_encx264_profile = HB_ENCX264_PROFILE_HIGH444;
+        }
+        else if (!strcasecmp(h264_profile, "high422"))
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH422;
         }
         else if (!strcasecmp(h264_profile, "main") ||
                  !strcasecmp(h264_profile, "baseline"))
@@ -1121,6 +1155,10 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
         else if (param->analyse.b_transform_8x8 ||
                  param->i_cqm_preset != X264_CQM_FLAT)
         {
+            if (h264_profile != NULL && !strcasecmp(h264_profile, "high422"))
+            {
+                hb_encx264_profile = HB_ENCX264_PROFILE_HIGH422;
+            }
             if (api->bit_depth == 10)
             {
                 hb_encx264_profile = HB_ENCX264_PROFILE_HIGH10;

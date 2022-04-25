@@ -201,7 +201,10 @@ avec ce programme; sinon écrivez à la Free Software Foundation, Inc.,
     <value>HandBrake est déjà en train d'encoder.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Il y a des tâches dans la file d'attente avec le même chemin de destination. Veuillez choisir un chemin différent pour cette tâche.</value>
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+ 
+You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>Travaux en attente {0}</value>
@@ -367,13 +370,14 @@ Si vous continuez, vos sous-titres non-incrustés seront perdus.</value>
     <value>Aucune source ou titre valide trouvé.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake ne pourra pas encoder la source sélectionnée car il n'a pas trouvé de source valide avec des titres à encoder.
-Cela pourrait être dû à l'une des raisons suivantes:
-- La durée de chaque titre source est inférieure à l'option de seuil "Durée minimale du titre" dans "Préférences &gt; Avancées".
-- Le fichier source n'est pas un fichier vidéo valide ou est dans un format non pris en charge par HandBrake.
-- La source peut être protégée contre la copie ou inclure un DRM. Veuillez noter que HandBrake ne prend pas en charge la suppression des protections contre la copie.
+    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. This could be due to one of the following reasons:
 
-Le journal d'activité peut contenir des informations supplémentaires.</value>
+- The duration of each source title is below the "Minimum Title Duration" threshold option in 'Preferences &gt; Advanced'. 
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- You may not have read access to the file or another application may have a lock on the file. 
+- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+
+The Activity log may have further information.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>File{0}</value>
@@ -1245,13 +1249,13 @@ Souhaitez-vous l'écraser ?</value>
     <value>Nombre d'aperçus d'images à analyser :</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Niveau de priorité :</value>
+    <value>Work Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Privilégier l'utilisation d'Intel QuickSync pour le décodage vidéo lorsque celui-ci est disponible.</value>
+    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Utiliser aussi le décodage QSV lorsque l'encodeur QuickSync n'est pas utilisé. (ex: x265)</value>
+    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Supprimer la ponctuation commune</value>
@@ -1858,20 +1862,13 @@ Temps restant : {5}, Écoulé : {6} {7}</value>
     <value>Supprimer la sélection</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Mode Portable: Impossible de créer un répertoire temporaire. Veuillez vérifier que le chemin est correct et qu'il est accessible en écriture.
-
- {0}</value>
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Mode Portable: Impossible de créer un répertoire de stockage. Veuillez vérifier que le chemin est correct et qu'il est accessible en écriture.
-
- {0}</value>
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Mode Portable: Impossible de lire portable.ini. Il peut y avoir une erreur dans ce fichier. Veuillez réessayer en utilisant portable.ini.template.</value>
-  </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>Le moteur d'HandBrake n'a pas pu s'initialiser. Cela est souvent dû à des pilotes GPU obsolètes.\n Veuillez mettre à jour les pilotes GPU de toutes les cartes graphiques intégrés et dédiées de votre système.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Caractères de substitution : {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
@@ -2244,9 +2241,6 @@ Veuillez choisir un autre préréglage.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation et recadrage :</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 uniquement ! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtres :</value>
   </data>
@@ -2317,7 +2311,7 @@ Veuillez choisir un autre préréglage.</value>
     <value>Arrêter</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Le nom de catégorie que vous avez saisi existe déjà. Veuillez choisir un autre nom.</value>
@@ -2602,5 +2596,63 @@ Seul les fichier de file d'attente de la version actuelle sont supportés.</valu
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>Tout déplier</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Right to Left display mode:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Text Only</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Entire User Interface</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>The current development build you are running is getting old. You may wish to update!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Download via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Download Development Builds (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Enable QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Open HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
+- Please try restarting HandBrake. 
+- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+
+Hardware encoding support can be re-enabled in preferences. </value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake was unable to start.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Reset Safe Mode</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Please restart HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Export Queue Statistics Data (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export Done!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>You must first scan a source and have an initial destination directory set</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Only when file already exists on disk.</value>
   </data>
 </root>

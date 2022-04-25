@@ -90,11 +90,16 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
 #define HB_QSV_CAP_VPP_SCALING       (1LL << 38)
 #define HB_QSV_CAP_VPP_INTERPOLATION (1LL << 39)
+    // mfxExtAV1BitstreamParam
+#define HB_QSV_CAP_AV1_BITSTREAM     (1LL << 40)
+    // mfxExtHyperModeParam
+#define HB_QSV_CAP_HYPERENCODE       (1LL << 41)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
 
 /* Intel Quick Sync Video utilities */
+int            hb_qsv_create_mfx_session(mfxIMPL implementation, int adapter_index, mfxVersion *pver, mfxSession *psession, mfxLoader *ploader);
 hb_display_t * hb_qsv_display_init(void);
 int            hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
@@ -179,9 +184,11 @@ typedef struct
     mfxExtCodingOption    codingOption;
     mfxExtCodingOption2   codingOption2;
     mfxExtVideoSignalInfo videoSignalInfo;
+    mfxExtHyperModeParam hyperEncodeParam;
     mfxExtChromaLocInfo   chromaLocInfo;
     mfxExtMasteringDisplayColourVolume masteringDisplayColourVolume;
     mfxExtContentLightLevelInfo        contentLightLevelInfo;
+    mfxExtAV1BitstreamParam av1BitstreamParam;
     struct
     {
         int b_pyramid;
@@ -250,6 +257,7 @@ const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
 const char* hb_qsv_impl_get_name(int impl);
+int         hb_qsv_impl_get_num(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
 mfxIMPL     hb_qsv_dx_index_to_impl(int dx_index);
 

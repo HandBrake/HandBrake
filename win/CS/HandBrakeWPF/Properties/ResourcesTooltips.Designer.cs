@@ -70,6 +70,18 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Target a specific quality level for audio.
+        ///1 is lowest quality and 5 is highest quality.
+        ///
+        ///Bitrate will vary source to source..
+        /// </summary>
+        public static string AudioView_Quality {
+            get {
+                return ResourceManager.GetString("AudioView_Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh the list below based on the behaviours configured. .
         /// </summary>
         public static string BehavioursReload {
@@ -153,7 +165,7 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Deinterlace removes comb artifacts from the picture.
         ///
-        ///Yadif is a popular and fast deinterlacer.
+        ///Bwdif and Yadif are two popular and fast deinterlacers.
         ///
         ///Decomb switches between multiple interpolation algorithms for speed and quality..
         /// </summary>
@@ -166,9 +178,9 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Custom Deinterlace parameters.
         /// 
-        /// Yadif syntax: mode=m:parity=p
+        /// Bwdif and Yadif syntax: mode=m:parity=p
         /// 
-        /// Yadif default: mode=3
+        /// Bwdif and Yadif default: mode=3
         /// 
         /// Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
         /// 

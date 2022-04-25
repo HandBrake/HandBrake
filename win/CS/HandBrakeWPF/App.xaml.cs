@@ -22,6 +22,7 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
     using HandBrakeWPF.Instance;
@@ -32,7 +33,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -100,8 +101,35 @@ namespace HandBrakeWPF
             // Portable Mode
             if (Portable.IsPortable())
             {
-                if (!Portable.Initialise())
+                int portableInit = Portable.Initialise();
+                if (portableInit != 0)
                 {
+                    switch (portableInit)
+                    {
+                        case -1:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_IniFileError,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+
+                        case -2:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_TmpNotWritable,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+                        case -3:
+                            MessageBox.Show(
+                                HandBrakeWPF.Properties.Resources.Portable_StorageNotWritable,
+                                HandBrakeWPF.Properties.Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                            break;
+                    }
+                    
                     Application.Current.Shutdown();
                     return;
                 }
@@ -190,20 +218,7 @@ namespace HandBrakeWPF
 
             // Initialise the Engine
             HandBrakeWPF.Helpers.LogManager.Init();
-
-            try
-            {
-                HandBrakeInstanceManager.Init(noHardware);
-            }
-            catch (Exception)
-            {
-                if (!noHardware)
-                {
-                    MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_InitFailed, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                throw;
-            }
+            HandBrakeInstanceManager.Init(noHardware, userSettingService);
 
             // Initialise the GUI
             base.OnStartup(e);
@@ -252,7 +267,7 @@ namespace HandBrakeWPF
                 {
                     GeneralApplicationException exception = new GeneralApplicationException(
                         "A file appears to be missing.",
-                        "Try re-installing Microsoft .NET 5 Desktop Runtime",
+                        "Try re-installing Microsoft .NET 6 Desktop Runtime",
                         (Exception)e.ExceptionObject);
                     this.ShowError(exception);
                 }
@@ -277,7 +292,7 @@ namespace HandBrakeWPF
         {
             if (e.Exception.GetType() == typeof(FileNotFoundException))
             {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 5 Desktop Runtime", e.Exception);
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET 6 Desktop Runtime", e.Exception);
                 this.ShowError(exception);
             }
             else if (e.Exception.GetType() == typeof(GeneralApplicationException))

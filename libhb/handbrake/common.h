@@ -411,13 +411,13 @@ int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_twopass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
-int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
+int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
-const int*         hb_video_encoder_get_pix_fmts(int encoder);
+const int*         hb_video_encoder_get_pix_fmts(int encoder, const char *profile);
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
@@ -578,7 +578,10 @@ struct hb_job_s
 #define HB_VCODEC_QSV_H265_10BIT    0x0000400
 #define HB_VCODEC_QSV_H265_MASK     0x0000600
 #define HB_VCODEC_QSV_H265     HB_VCODEC_QSV_H265_8BIT
-#define HB_VCODEC_QSV_MASK     0x0000F00
+#define HB_VCODEC_QSV_AV1_8BIT  0x0000800
+#define HB_VCODEC_QSV_AV1_10BIT 0x0000900
+#define HB_VCODEC_QSV_AV1      HB_VCODEC_QSV_AV1_8BIT
+#define HB_VCODEC_QSV_MASK     (0x0000F00)
 #define HB_VCODEC_X264_8BIT    0x0010000
 #define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
 #define HB_VCODEC_X264_10BIT   0x0020000
@@ -751,8 +754,6 @@ struct hb_job_s
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
-    PRIVATE int use_decomb;
-    PRIVATE int use_detelecine;
 
     // QSV-specific settings
     struct
@@ -1419,7 +1420,8 @@ enum
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,
     HB_FILTER_DECOMB,
-    HB_FILTER_DEINTERLACE,
+    HB_FILTER_YADIF,
+    HB_FILTER_BWDIF,
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
@@ -1506,6 +1508,7 @@ int hb_output_color_transfer(hb_job_t * job);
 int hb_output_color_matrix(hb_job_t * job);
 
 int hb_get_bit_depth(int format);
+int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"

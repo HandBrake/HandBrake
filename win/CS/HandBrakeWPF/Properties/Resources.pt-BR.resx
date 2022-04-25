@@ -1876,9 +1876,6 @@ Tempo Restante: {5},  Decorrido: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Modo Portátil: Não foi possível ler 'portable.ini'. Pode existir um erro no arquivo. Por favor, tente novamente 'portable.ini.template' como modelo.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>O mecanismo do HandBrake falhou ao inicializar. Isso geralmente é causado por drivers de GPU desatualizados.\n Por favor, atualize os drivers de GPU para quaisquer gráficos integrados e discretos que seu sistema possua.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Opções de Atualização Ao Vivo: {source} {title} {chapters} 
 Opções Não Ativas: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Elas só mudam se você procurar uma nova fonte, alterar o título ou capítulos)</value>
@@ -2249,9 +2246,6 @@ Por favor, escolha uma predefinição diferente.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientação e Corte:</value>
-  </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Apenas Windows 10! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtros:</value>

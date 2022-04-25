@@ -55,6 +55,8 @@ dnl
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>__HB_build</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.video</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>

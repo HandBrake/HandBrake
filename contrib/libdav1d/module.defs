@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDAV1D,libdav1d,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,LIBDAV1D))
 
-LIBDAV1D.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/dav1d-0.9.2.tar.bz2
-LIBDAV1D.FETCH.url    += https://code.videolan.org/videolan/dav1d/-/archive/0.9.2/dav1d-0.9.2.tar.bz2
-LIBDAV1D.FETCH.sha256  = 0d198c4fe63fe7f0395b1b17de75b21c8c4508cd3204996229355759efa30ef8
+LIBDAV1D.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/dav1d-1.0.0.tar.bz2
+LIBDAV1D.FETCH.url    += https://code.videolan.org/videolan/dav1d/-/archive/1.0.0/dav1d-1.0.0.tar.bz2
+LIBDAV1D.FETCH.sha256  = 4a4eb6cecbc8c26916ef58886d478243de8bcc46710b369c04d6891b0155ac0f
 
 LIBDAV1D.build_dir     = build/
 
@@ -14,7 +14,7 @@ LIBDAV1D.CONFIGURE.host   =
 LIBDAV1D.CONFIGURE.build  =
 LIBDAV1D.CONFIGURE.static = -Ddefault_library=static
 LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ \
-                            -Denable_tools=false -Denable_tests=false -Denable_avx512=false
+                            -Denable_tools=false -Denable_tests=false
 LIBDAV1D.CONFIGURE.env    =
 
 ifneq (none,$(LIBDAV1D.GCC.g))

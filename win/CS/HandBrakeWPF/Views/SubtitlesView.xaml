@@ -58,10 +58,10 @@
 
                 <Button.ContextMenu>
                     <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                        <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddRemainingCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action AddUser]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingUser]" />
+                        <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddRemainingCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptionsUser]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguagesUser]" />
                         <Separator/>
                         <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}" cal:Message.Attach="[Event Click] = [Action Import]" />
                     </ContextMenu>
@@ -97,6 +97,10 @@
                  ItemsSource="{Binding Task.SubtitleTracks}"
                  SelectionMode="Extended">
 
+            <ListBox.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"  />
+            </ListBox.InputBindings>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -106,10 +110,10 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                    <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action AddUser]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingUser]" />
+                    <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptionsUser]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguagesUser]" />    
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
                     <Separator />

@@ -5,7 +5,8 @@
     "sdk": "org.freedesktop.Sdk",
     "command": "HandBrakeCLI",
     "finish-args": [
-        "--filesystem=host"
+        "--filesystem=host",
+        "--device=dri"
     ],
     "modules": [
         {

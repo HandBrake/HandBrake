@@ -178,6 +178,10 @@
                             <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
                             <Separator />
                             <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
+                            <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
+                            <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
+                                <MenuItem Header="{x:Static Properties:Resources.Debug_QueueDataExport}" Command="{Binding QueueExtractResultDataCommand}" />
+                            </MenuItem>
                         </MenuItem>
                     </Menu>
                 </Grid>
@@ -297,15 +301,6 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Text="Stop" Grid.Column="0" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" />
-
-                                        <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
-                                            AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>
                                     </Grid>
                                     
                                 </Grid>

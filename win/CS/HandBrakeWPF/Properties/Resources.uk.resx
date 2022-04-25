@@ -1876,9 +1876,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Портативний режим: не вдається прочитати portable.ini. Можливо, виникла помилка у цьому файлі. Повторіть спробу, використовуючи portable.ini.template як основу.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>Не вдалося ініціалізувати рушій HandBrake. Це часто викликано через застарілі драйвери GPU.\n  Оновіть драйвери GPU для будь-якої вбудованої та дискретної графіки, що містить ваша система.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Динамічні опції оновлення: {source} {title} {chapters} 
 Нединамічні опції: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (вони змінюються, лише при скануванні нового джерела, зміни назви чи глав)</value>
@@ -2250,9 +2247,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation and Cropping:</value>
-  </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Тільки Windows 10! )</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Фільтри:</value>

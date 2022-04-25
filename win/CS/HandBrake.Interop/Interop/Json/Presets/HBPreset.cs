@@ -394,16 +394,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public double VideoQualitySlider { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video qsv decode.
-        /// </summary>
-        public bool VideoQSVDecode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video qsv async depth.
-        /// </summary>
-        public int VideoQSVAsyncDepth { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether video two pass.
         /// </summary>
         public bool VideoTwoPass { get; set; }

@@ -22,10 +22,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.Interop.Interop.Interfaces.Model.Picture;
-
-    using HandBrakeWPF.Exceptions;
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -33,7 +29,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using EncodeCompletedEventArgs = Services.Encode.EventArgs.EncodeCompletedEventArgs;
@@ -472,7 +467,7 @@ namespace HandBrakeWPF.ViewModels
                 encodeTask.SubtitleTracks.Remove(scanTrack);
             }
 
-            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, null, false, null);
+            QueueTask task = new QueueTask(encodeTask, this.ScannedSource.ScanPath, null, false, null);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
@@ -550,7 +545,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted += this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
 
-            this.encodeService.Start(((QueueTask)state).Task, ((QueueTask)state).Configuration, null);
+            this.encodeService.Start(((QueueTask)state).Task, null);
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
 

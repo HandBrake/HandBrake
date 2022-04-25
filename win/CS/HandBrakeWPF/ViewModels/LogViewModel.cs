@@ -20,6 +20,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Logging;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;

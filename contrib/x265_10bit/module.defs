@@ -2,9 +2,8 @@ __deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_10,x265_10,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_10))
 
-X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265_3.5.tar.gz
-X265_10.FETCH.url    += https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.5.tar.gz
-X265_10.FETCH.sha256  = e70a3335cacacbba0b3a20ec6fecd6783932288ebc8163ad74bcc9606477cae8
+X265_10.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220209-12707.tar.gz
+X265_10.FETCH.sha256  = ef09012449f535d2399ab489dfe094e91dc49fda3e847017f9830dd3233fc44f
 
 # Silence "warning: overriding recipe for target" messages
 X265_10.FETCH.target =
@@ -15,7 +14,7 @@ X265_10.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_10.CONFIGURE.pref
 X265_10.CONFIGURE.deps        =
 X265_10.CONFIGURE.static      =
 X265_10.CONFIGURE.shared      = -DENABLE_SHARED=OFF
-X265_10.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy -DCMAKE_CXX_FLAGS=-flax-vector-conversions
+X265_10.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
 
 ifneq (1,$(FEATURE.numa))
     X265_10.CONFIGURE.extra  += -DENABLE_LIBNUMA=OFF
@@ -39,9 +38,6 @@ else
     endif
 endif
 
-ifeq (aarch64,$(HOST.machine))
-    X265_10.CONFIGURE.extra += -DCMAKE_CXX_FLAGS=-flax-vector-conversions
-endif
 
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))

@@ -96,6 +96,7 @@
                                         <menuItem title="Alert and Notification" tag="3" id="aat-1N-Odn"/>
                                         <menuItem title="Put Computer to Sleep" tag="4" id="GUQ-xb-HVS"/>
                                         <menuItem title="Shut Down Computer" tag="5" id="QmP-SQ-XKK"/>
+                                        <menuItem title="Quit HandBrake" tag="6" id="tBG-Gf-ynI"/>
                                     </items>
                                 </menu>
                             </popUpButtonCell>

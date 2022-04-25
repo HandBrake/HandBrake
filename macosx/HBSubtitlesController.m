@@ -92,14 +92,14 @@
 - (IBAction)browseImportExternalFile:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
-    panel.allowsMultipleSelection = NO;
+    panel.allowsMultipleSelection = YES;
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
 
     NSURL *sourceDirectory;
-    if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastExternalSubImportDirectoryURL"])
+    if ([NSUserDefaults.standardUserDefaults URLForKey:@"LastExternalSubImportDirectoryURL"])
     {
-        sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastExternalSubImportDirectoryURL"];
+        sourceDirectory = [NSUserDefaults.standardUserDefaults URLForKey:@"LastExternalSubImportDirectoryURL"];
     }
     else
     {
@@ -113,11 +113,11 @@
     {
         if (result == NSModalResponseOK)
         {
-            NSURL *importFileURL = panel.URL;
-            NSURL *importDirectory = importFileURL.URLByDeletingLastPathComponent;
-            [[NSUserDefaults standardUserDefaults] setURL:importDirectory forKey:@"LastExternalSubImportDirectoryURL"];
-
-            [self.subtitles addExternalTrackFromURL:importFileURL];
+            for (NSURL *importFileURL in panel.URLs)
+            {
+                [NSUserDefaults.standardUserDefaults setURL:importFileURL.URLByDeletingLastPathComponent forKey:@"LastExternalSubImportDirectoryURL"];
+                [self.subtitles addExternalTrackFromURL:importFileURL];
+            }
         }
     }];
 }

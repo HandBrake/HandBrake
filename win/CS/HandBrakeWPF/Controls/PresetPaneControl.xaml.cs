@@ -1,7 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PresetPaneControl.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PresetPaneControl.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
+// <summary>
+//   
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Controls
@@ -39,6 +42,7 @@ namespace HandBrakeWPF.Controls
             {
                 return (Preset)this.GetValue(SelectedPresetProperty);
             }
+
             set
             {
                 this.SetValue(SelectedPresetProperty, value);
@@ -53,7 +57,7 @@ namespace HandBrakeWPF.Controls
             {
                 if (preset != null)
                 {
-                    presetService.SetSelected(preset);
+                    presetService.SetSelected(preset.Name);
                 }
             }
         }
@@ -95,7 +99,9 @@ namespace HandBrakeWPF.Controls
         private static TreeViewItem VisualUpwardSearch(DependencyObject source)
         {
             while (source != null && !(source is TreeViewItem))
+            {
                 source = VisualTreeHelper.GetParent(source);
+            }
 
             return source as TreeViewItem;
         }

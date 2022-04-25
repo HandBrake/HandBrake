@@ -360,22 +360,22 @@ Riduzione del Rumore specifiche per determinati scenari.
 - Sprite è adatto ai videogiochi bidimensionali a 1-/4-/8-/16-bit. Sprite non è adatto per i video ad alta definizione</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Il Deinterlacciamento rimuove gli artefatti a "righe" dall'immagine.
+    <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif è un deinterlacciatore rapido molto usato.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
-Decomb sfrutta vari algoritmi di interpolazione per ottenere velocità e qualità.</value>
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Parametri Deinterlacciamento personalizzati.
+    <value>Custom Deinterlace parameters.
  
- Sintassi Yadif: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Predefinito Yadif: mode=3
+ Bwdif and Yadif default: mode=3
  
- Sintassi Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
- Predefinito Decomb: mode=7</value>
+ Decomb default: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Preimpostazione filtro di Deinterlacciamento.
@@ -516,5 +516,11 @@ Nota Bene: i codici di errore sono supposizioni e potrebbero quindi non essere c
     <value>Per le lingue che si leggono da destra a sinistra, è possibile abilitare una di queste due modalità:  "Solo Testo" scriverà esclusivamente i testi da destra a sinistra,  "Interfaccia Utente Completa" mostrerà così anche gli altri elementi grafici.
 
 Usando una di queste modalità, potrebbero esserci dei problemi nella visualizzazione dell'interfaccia. A secoda della lingua, potrebbe essere necessario provare quale delle due funziona meglio.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
   </data>
 </root>

@@ -60,14 +60,13 @@
             <!-- Ctrl + R -->
             <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
-
-                <Grid MinWidth="220">
+                <Grid MinWidth="240">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" Width="32" Grid.Column="0" />
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenFolderWIth}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
@@ -77,7 +76,7 @@
             <!--Ctrl + F-->
             <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
-                <Grid MinWidth="220">
+                <Grid MinWidth="240">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -90,14 +89,15 @@
                 </Grid>
             </Button>
 
-            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
+            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,25,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
                                 cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
                                 Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
                                 Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseDisc}">
-                            <StackPanel Orientation="Horizontal" MinWidth="100">
+                            <StackPanel Orientation="Horizontal" MinWidth="240">
                                 <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Disc.png'}" Width="32" />
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
@@ -109,16 +109,18 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Row="7" Margin="20,10,0,10" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition  Width="Auto"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Image Source="../Views/Images/information.png" Width="24" />
-                <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0">           
+                <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" Grid.Column="1" FontWeight="Bold">           
                     <Hyperlink x:Name="UpdateAvailable" NavigateUri="/" RequestNavigate="UpdateAvailable_OnRequestNavigate">
-                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" TextWrapping="Wrap" />
                     </Hyperlink>
                 </TextBlock>
-            </StackPanel>
-
+            </Grid>
 
             <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
@@ -135,9 +137,7 @@
                         </Hyperlink>
                     </TextBlock>
                 </StackPanel>
-               
             </Grid>
-       
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">

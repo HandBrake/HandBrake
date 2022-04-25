@@ -173,6 +173,7 @@ enum
 {
     HB_VT_H265_PROFILE_MAIN = 0,
     HB_VT_H265_PROFILE_MAIN_10,
+    HB_VT_H265_PROFILE_MAIN_422_10,
     HB_VT_H265_PROFILE_NB,
 };
 
@@ -183,7 +184,7 @@ static struct
 }
 hb_vt_h265_levels[] =
 {
-    { "auto", { CFSTR("HEVC_Main_AutoLevel"), CFSTR("HEVC_Main10_AutoLevel") }, }
+    { "auto", { CFSTR("HEVC_Main_AutoLevel"), CFSTR("HEVC_Main10_AutoLevel"), CFSTR("HEVC_Main42210_AutoLevel") } }
 };
 
 /*
@@ -405,7 +406,7 @@ static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_YUV420P)
     {
-        return job->output_pix_fmt == AVCOL_RANGE_JPEG ?
+        return job->color_range == AVCOL_RANGE_JPEG ?
                                         kCVPixelFormatType_420YpCbCr8PlanarFullRange :
                                         kCVPixelFormatType_420YpCbCr8Planar;
     }
@@ -415,9 +416,37 @@ static OSType hb_vt_get_cv_pixel_format(hb_job_t* job)
     }
     else if (job->output_pix_fmt == AV_PIX_FMT_P010LE)
     {
-        return job->output_pix_fmt == AVCOL_RANGE_JPEG ?
+        return job->color_range == AVCOL_RANGE_JPEG ?
                                         kCVPixelFormatType_420YpCbCr10BiPlanarFullRange :
                                         kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_NV16)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_422YpCbCr8BiPlanarFullRange :
+                                        kCVPixelFormatType_422YpCbCr8BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P210)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_422YpCbCr10BiPlanarFullRange :
+                                        kCVPixelFormatType_422YpCbCr10BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_NV24)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_444YpCbCr8BiPlanarFullRange :
+                                        kCVPixelFormatType_444YpCbCr8BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P410)
+    {
+        return job->color_range == AVCOL_RANGE_JPEG ?
+                                        kCVPixelFormatType_444YpCbCr10BiPlanarFullRange :
+                                        kCVPixelFormatType_444YpCbCr10BiPlanarVideoRange;
+    }
+    else if (job->output_pix_fmt == AV_PIX_FMT_P416)
+    {
+        return kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange;
     }
     else
     {
@@ -482,10 +511,14 @@ static int hb_vt_settings_xlat(hb_work_private_t *pv, hb_job_t *job)
         }
         else if (job->vcodec == HB_VCODEC_VT_H265_10BIT)
         {
-            if (!strcasecmp(job->encoder_profile, "main") ||
+            if (!strcasecmp(job->encoder_profile, "main10") ||
                 !strcasecmp(job->encoder_profile, "auto"))
             {
                 pv->settings.profile = HB_VT_H265_PROFILE_MAIN_10;
+            }
+            else if (!strcasecmp(job->encoder_profile, "main422-10"))
+            {
+                pv->settings.profile = HB_VT_H265_PROFILE_MAIN_422_10;
             }
             else
             {
@@ -1652,6 +1685,7 @@ static hb_buffer_t *vt_encode(hb_work_object_t *w, hb_buffer_t *in)
 
     if (kCVReturnSuccess != err)
     {
+        hb_buffer_close(&in);
         hb_log("VTCompressionSession: CVPixelBuffer error");
     }
     else

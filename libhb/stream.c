@@ -1936,7 +1936,7 @@ static const char *stream_type_name2(hb_stream_t *stream, hb_pes_stream_t *pes)
     }
     if ( pes->codec & HB_ACODEC_FF_MASK )
     {
-        AVCodec * codec = avcodec_find_decoder( pes->codec_param );
+        const AVCodec *codec = avcodec_find_decoder( pes->codec_param );
         if ( codec && codec->name && codec->name[0] )
         {
             strncpyupper( codec_name_caps, codec->name, 80 );
@@ -4071,7 +4071,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
             return 0;
     }
     const char *profile_name;
-    AVCodec *codec = avcodec_find_decoder( pes->codec_param );
+    const AVCodec *codec = avcodec_find_decoder( pes->codec_param );
     profile_name = av_get_profile_name( codec, info.profile );
     if ( profile_name )
     {
@@ -4086,7 +4086,7 @@ static int
 do_deep_probe(hb_stream_t *stream, hb_pes_stream_t *pes)
 {
     int       result = 0;
-    AVCodec * codec = avcodec_find_decoder(pes->codec_param);
+    const AVCodec *codec = avcodec_find_decoder(pes->codec_param);
 
     if (codec == NULL)
     {
@@ -4214,7 +4214,7 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
         return result;
     }
 
-    AVInputFormat *fmt = NULL;
+    const AVInputFormat *fmt = NULL;
     int score = 0;
     AVProbeData pd = {0,};
 
@@ -4223,7 +4223,7 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
     fmt = av_probe_input_format2( &pd, 1, &score );
     if ( fmt && score > AVPROBE_SCORE_MAX / 2 )
     {
-        AVCodec *codec = avcodec_find_decoder_by_name( fmt->name );
+        const AVCodec *codec = avcodec_find_decoder_by_name( fmt->name );
         if( !codec )
         {
             int i;
@@ -5231,6 +5231,31 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     }
     av_dict_free( &av_opts );
 
+    if (title->color_prim     == -1 &&
+        title->color_transfer == -1 &&
+        title->color_matrix   == -1)
+    {
+        // Read the video track color info
+        // before it's overwritten with the stream info
+        // in avformat_find_stream_info
+        for (int i = 0; i < info_ic->nb_streams; ++i)
+        {
+            AVStream *st = info_ic->streams[i];
+
+            if ( st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
+                !(st->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
+                avcodec_find_decoder(st->codecpar->codec_id))
+            {
+                AVCodecParameters *codecpar = st->codecpar;
+                title->color_prim     = codecpar->color_primaries;
+                title->color_transfer = codecpar->color_trc;
+                title->color_matrix   = codecpar->color_space;
+                title->color_range    = codecpar->color_range;
+                break;
+            }
+        }
+    }
+
     if ( avformat_find_stream_info( info_ic, NULL ) < 0 )
         goto fail;
 
@@ -5793,13 +5818,13 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecParameters *codecpar = st->codecpar;
-            // Check for unsupported color space.
+            // Check for unsupported pixel formats.
             // Exclude 'NONE' from check since we may not know this
             // information yet.
             if ( codecpar->format != AV_PIX_FMT_NONE &&
                  !sws_isSupportedInput( codecpar->format ) )
             {
-                hb_log( "ffmpeg_title_scan: Unsupported color space (%d)",
+                hb_log( "ffmpeg_title_scan: Unsupported pixel format (%d)",
                         codecpar->format );
                 continue;
             }
@@ -6111,7 +6136,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         }
 
         const uint8_t *palette;
-        int size;
+        size_t size;
         palette = av_packet_get_side_data(stream->ffmpeg_pkt,
                                           AV_PKT_DATA_PALETTE, &size);
         if (palette != NULL)

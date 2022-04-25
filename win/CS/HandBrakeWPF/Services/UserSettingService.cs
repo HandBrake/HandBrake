@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services
     using System.Linq;
     using System.Text.Json;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Utilities;
 
@@ -25,7 +26,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = EventArgs.SettingChangedEventArgs;
     using SystemInfo = Utilities.SystemInfo;
 
@@ -300,7 +301,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.AlwaysUseDefaultPath, true);
             defaults.Add(UserSettingConstants.RemovePunctuation, false);
             defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);
-            defaults.Add(UserSettingConstants.UseM4v, 0);
+            defaults.Add(UserSettingConstants.UseM4v, 1);
 
             // When Done
             defaults.Add(UserSettingConstants.SendFile, false);
@@ -313,6 +314,7 @@ namespace HandBrakeWPF.Services
             // Video
             defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, true);
             defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, true);
+            defaults.Add(UserSettingConstants.EnableQuickSyncHyperEncode, false);
             defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
             defaults.Add(UserSettingConstants.EnableVceEncoder, true);
             defaults.Add(UserSettingConstants.EnableNvencEncoder, true);
@@ -349,6 +351,7 @@ namespace HandBrakeWPF.Services
             defaults.Add(UserSettingConstants.PreviewShowPictureSettingsOverlay, false);
             defaults.Add(UserSettingConstants.RunCounter, 0);
             defaults.Add(UserSettingConstants.ForceSoftwareRendering, false);
+            defaults.Add(UserSettingConstants.IsUpdateAvailableBuild, 0);
             
             return defaults;
         }

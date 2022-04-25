@@ -458,7 +458,11 @@
         int filter_id = HB_FILTER_DECOMB;
         if ([self.filters.deinterlace isEqualToString:@"deinterlace"])
         {
-            filter_id = HB_FILTER_DEINTERLACE;
+            filter_id = HB_FILTER_YADIF;
+        }
+        else if ([self.filters.deinterlace isEqualToString:@"bwdif"])
+        {
+            filter_id = HB_FILTER_BWDIF;
         }
 
         hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,

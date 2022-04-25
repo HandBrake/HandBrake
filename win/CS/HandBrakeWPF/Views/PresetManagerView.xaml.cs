@@ -77,17 +77,9 @@ namespace HandBrakeWPF.Views
             return source as TreeViewItem;
         }
 
-        private void ToolBarLoaded(object sender, RoutedEventArgs e)
+        private void PresetName_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            ToolBar toolBar = sender as ToolBar;
-            if (toolBar != null)
-            {
-                var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-                if (overflowGrid != null)
-                {
-                    overflowGrid.Visibility = Visibility.Collapsed;
-                }
-            }
+            ((PresetManagerViewModel)this.DataContext).SetPresetNameChanged();
         }
     }
 }

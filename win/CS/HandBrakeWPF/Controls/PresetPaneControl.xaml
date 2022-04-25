@@ -62,16 +62,17 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button Background="Transparent" cm:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" Height="29" BorderThickness="0"  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
+                <Button  cm:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" Height="29" 
+                        ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="18" Height="18" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Add.png'}" />
-                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" Text="{x:Static Properties:Resources.MainView_SaveNewPreset}" />
+                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" Text="{x:Static Properties:Resources.AddPresetView_AddPreset}" />
                         </StackPanel>
                     </Button.Content>
                 </Button>
 
-                <Button Background="Transparent" cm:Message.Attach="[Event Click] = [Action OpenPresetWindow]" AutomationProperties.Name="Add Preset" Height="29" BorderThickness="0" Grid.Column="2" >
+                <Button cm:Message.Attach="[Event Click] = [Action OpenPresetWindow]" AutomationProperties.Name="Add Preset" Height="29" Grid.Column="2" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="18" Height="18" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" />

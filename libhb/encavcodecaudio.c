@@ -44,7 +44,7 @@ hb_work_object_t hb_encavcodeca =
 
 static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 {
-    AVCodec *codec;
+    const AVCodec *codec;
     AVCodecContext *context;
     hb_audio_t *audio = w->audio;
 

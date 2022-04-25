@@ -18,20 +18,21 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities.Input;
-    using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
 
     using ChapterMarker = Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
 
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {

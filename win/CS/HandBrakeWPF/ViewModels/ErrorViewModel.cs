@@ -14,6 +14,8 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Windows;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;

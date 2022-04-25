@@ -49,6 +49,11 @@ namespace HandBrakeWPF.Converters.Subtitles
                         text += string.Format(", {0}", track.SrtCharCode);
                     }
 
+                    if (!string.IsNullOrEmpty(track.Name))
+                    {
+                        text = string.Format("{0} - \"{1}\"", text, track.Name);
+                    }
+
                     if (track.Burned)
                     {
                         text = text + string.Format(", {0}", Resources.SummaryView_Burned);

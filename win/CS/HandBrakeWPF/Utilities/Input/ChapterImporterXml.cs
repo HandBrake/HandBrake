@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities.Input
     using System.Xml.Linq;
     using System.Xml.XPath;
 
-    using HandBrakeWPF.Helpers;
+    using HandBrake.App.Core.Utilities;
 
     /// <summary>
     /// Imports chapter markers in the ChaptersDb.org XML format

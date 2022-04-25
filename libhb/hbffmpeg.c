@@ -527,7 +527,7 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
  * Set sample format to the request format if supported by the codec.
  * The planar/packed variant of the requested format is the next best thing.
  */
-void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec,
+void hb_ff_set_sample_fmt(AVCodecContext *context, const AVCodec *codec,
                           enum AVSampleFormat request_sample_fmt)
 {
     if (context != NULL && codec != NULL &&

@@ -16,6 +16,10 @@
 struct hb_filter_private_s
 {
     // Common
+    int                 pix_fmt_alpha;
+    int                 depth;
+    int                 hshift;
+    int                 wshift;
     int                 crop[4];
     int                 type;
     struct SwsContext * sws;
@@ -104,9 +108,8 @@ hb_filter_object_t hb_filter_render_sub =
     .close         = hb_rendersub_close,
 };
 
-// blends src YUVA420P buffer into dst
-// dst is currently YUV420P, but in future will be other formats as well
-static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
+// blends src YUVA4**P buffer into dst
+static void blend(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top)
 {
     int xx, yy;
     int ww, hh;
@@ -175,7 +178,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
         {
             alpha = a_in[xx << wshift];
 
-            // Blend averge U and alpha
+            // Blend U and alpha
             u_out[(left >> wshift) + xx] =
                 ( (uint16_t)u_out[(left >> wshift) + xx] * ( 255 - alpha ) +
                   (uint16_t)u_in[xx] * alpha ) / 255;
@@ -188,7 +191,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
     }
 }
 
-static void blend8on1x( hb_buffer_t *dst, hb_buffer_t *src, int left, int top, int shift )
+static void blend8on1x(hb_buffer_t *dst, const hb_buffer_t *src, const int left, const int top, const int shift)
 {
     int xx, yy;
     int ww, hh;
@@ -266,7 +269,7 @@ static void blend8on1x( hb_buffer_t *dst, hb_buffer_t *src, int left, int top, i
         {
             alpha = a_in[xx << wshift] << shift;
 
-            // Blend averge U and alpha
+            // Blend U and alpha
             u_out[(left >> wshift) + xx] =
                 ( (uint32_t)u_out[(left >> wshift) + xx] * ( max - alpha ) +
                   ((uint32_t)u_in[xx] << shift) * alpha ) / max;
@@ -281,17 +284,15 @@ static void blend8on1x( hb_buffer_t *dst, hb_buffer_t *src, int left, int top, i
 
 // Assumes that the input destination buffer has the same dimensions
 // as the original title dimensions
-static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t * sub )
+static void ApplySub(const hb_filter_private_t *pv, hb_buffer_t *buf, const hb_buffer_t *sub)
 {
-    switch (pv->output.pix_fmt) {
-        case AV_PIX_FMT_YUV420P10:
-            blend8on1x(buf, sub, sub->f.x, sub->f.y, 2);
-            break;
-        case AV_PIX_FMT_YUV420P12:
-            blend8on1x(buf, sub, sub->f.x, sub->f.y, 4);
+    switch (pv->output.pix_fmt)
+    {
+        case AV_PIX_FMT_YUV420P:
+            blend(buf, sub, sub->f.x, sub->f.y);
             break;
         default:
-            blend(buf, sub, sub->f.x, sub->f.y);
+            blend8on1x(buf, sub, sub->f.x, sub->f.y, pv->depth - 8);
             break;
     }
 }
@@ -541,38 +542,37 @@ static int vobsub_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-static uint8_t ssaAlpha( ASS_Image *frame, int x, int y )
+static uint8_t ssaAlpha(const ASS_Image *frame, const int x, const int y)
 {
-    unsigned frameA = ( frame->color ) & 0xff;
-    unsigned gliphA = frame->bitmap[y*frame->stride + x];
+    const unsigned frameA = (frame->color) & 0xff;
+    const unsigned gliphA = frame->bitmap[y*frame->stride + x];
 
     // Alpha for this pixel is the frame opacity (255 - frameA)
-    // multiplied by the gliph alfa (gliphA) for this pixel
+    // multiplied by the gliph alpha (gliphA) for this pixel
     unsigned alpha = (255 - frameA) * gliphA >> 8;
 
     return (uint8_t)alpha;
 }
 
-// Returns a subtitle rendered to a YUVA420P frame
-static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame )
+// Returns a subtitle rendered to a YUVA4**P frame
+static hb_buffer_t * RenderSSAFrame(const hb_filter_private_t *pv, const ASS_Image *frame)
 {
-    hb_buffer_t *sub;
-    int xx, yy;
+    const unsigned r = (frame->color >> 24) & 0xff;
+    const unsigned g = (frame->color >> 16) & 0xff;
+    const unsigned b = (frame->color >>  8) & 0xff;
 
-    unsigned r = ( frame->color >> 24 ) & 0xff;
-    unsigned g = ( frame->color >> 16 ) & 0xff;
-    unsigned b = ( frame->color >>  8 ) & 0xff;
+    const int yuv = hb_rgb2yuv_bt709((r << 16) | (g << 8) | b);
 
-    int yuv = hb_rgb2yuv_bt709((r << 16) | (g << 8) | b );
+    const unsigned frameY = (yuv >> 16) & 0xff;
+    const unsigned frameV = (yuv >> 8 ) & 0xff;
+    const unsigned frameU = (yuv >> 0 ) & 0xff;
 
-    unsigned frameY = (yuv >> 16) & 0xff;
-    unsigned frameV = (yuv >> 8 ) & 0xff;
-    unsigned frameU = (yuv >> 0 ) & 0xff;
-
-    // Note that subtitle frame buffer is YUVA420P, not YUV420P, it has alpha
-    sub = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, frame->w, frame->h);
+    // Note that subtitle frame buffer has alpha
+    hb_buffer_t *sub = hb_frame_buffer_init(pv->pix_fmt_alpha, frame->w, frame->h);
     if (sub == NULL)
+    {
         return NULL;
+    }
 
     uint8_t *y_out, *u_out, *v_out, *a_out;
     y_out = sub->plane[0].data;
@@ -580,26 +580,28 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     v_out = sub->plane[2].data;
     a_out = sub->plane[3].data;
 
-    for( yy = 0; yy < frame->h; yy++ )
+    for (int yy = 0; yy < frame->h; yy++)
     {
-        for( xx = 0; xx < frame->w; xx++ )
+        for (int xx = 0; xx < frame->w; xx++)
         {
             y_out[xx] = frameY;
-            if( ( yy & 1 ) == 0 )
-            {
-                u_out[xx>>1] = frameU;
-                v_out[xx>>1] = frameV;
-            }
-            a_out[xx] = ssaAlpha( frame, xx, yy );;
+            a_out[xx] = ssaAlpha(frame, xx, yy);
         }
         y_out += sub->plane[0].stride;
-        if( ( yy & 1 ) == 0 )
-        {
-            u_out += sub->plane[1].stride;
-            v_out += sub->plane[2].stride;
-        }
         a_out += sub->plane[3].stride;
     }
+
+    for (int yy = 0; yy < frame->h >> pv->hshift; yy++)
+    {
+        for (int xx = 0; xx < frame->w >> pv->wshift; xx++)
+        {
+            u_out[xx] = frameU;
+            v_out[xx] = frameV;
+        }
+        u_out += sub->plane[1].stride;
+        v_out += sub->plane[2].stride;
+    }
+
     sub->f.width = frame->w;
     sub->f.height = frame->h;
     sub->f.x = frame->dst_x + pv->crop[2];
@@ -700,10 +702,18 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    ass_set_frame_size( pv->renderer, width, height);
+    ass_set_frame_size(pv->renderer, width, height);
+    ass_set_storage_size(pv->renderer, width, height);
 
-    double par = (double)job->par.num / job->par.den;
-    ass_set_pixel_aspect( pv->renderer, par );
+    double par = (double)job->title->geometry.par.num / job->title->geometry.par.den;
+
+    if (par != 1)
+    {
+        double dar = (double)width * par / height;
+        double sar = (double)width / height;
+        double pixel_aspect = sar / dar;
+        ass_set_pixel_aspect(pv->renderer, pixel_aspect);
+    }
 
     return 0;
 }
@@ -1057,6 +1067,34 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     int ii;
 
     pv->input = *init;
+
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
+    pv->depth      = desc->comp[0].depth;
+    pv->wshift     = desc->log2_chroma_w;
+    pv->hshift     = desc->log2_chroma_h;
+
+    switch (init->pix_fmt)
+    {
+        case AV_PIX_FMT_YUV420P:
+        case AV_PIX_FMT_YUV420P10:
+        case AV_PIX_FMT_YUV420P12:
+        case AV_PIX_FMT_YUV420P16:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA420P;
+            break;
+        case AV_PIX_FMT_YUV422P:
+        case AV_PIX_FMT_YUV422P10:
+        case AV_PIX_FMT_YUV422P12:
+        case AV_PIX_FMT_YUV422P16:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA422P;
+            break;
+        case AV_PIX_FMT_YUV444P:
+        case AV_PIX_FMT_YUV444P10:
+        case AV_PIX_FMT_YUV444P12:
+        case AV_PIX_FMT_YUV444P16:
+        default:
+            pv->pix_fmt_alpha = AV_PIX_FMT_YUVA444P;
+            break;
+    }
 
     // Find the subtitle we need
     for( ii = 0; ii < hb_list_count(init->job->list_subtitle); ii++ )

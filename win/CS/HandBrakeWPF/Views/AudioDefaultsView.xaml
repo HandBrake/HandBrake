@@ -208,6 +208,10 @@
                  ItemsSource="{Binding BehaviourTracks}"
                  SelectionMode="Extended">
 
+                <ListBox.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}"  />
+                </ListBox.InputBindings>
+
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -291,7 +295,7 @@
                                 </ComboBox>
 
                                 <ComboBox Grid.Column="5" Width="55" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
-                                      SelectedItem="{Binding Quality}" >
+                                      SelectedItem="{Binding Quality}" ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_Quality}">
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
                                             <Binding Path="IsQualityVisible" />

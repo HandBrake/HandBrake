@@ -136,6 +136,8 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
             case HB_VCODEC_QSV_H264:
                 out_alignment = 16;
                 break;
+            case HB_VCODEC_QSV_AV1_10BIT:
+            case HB_VCODEC_QSV_AV1:
             case HB_VCODEC_QSV_H265_10BIT:
             case HB_VCODEC_QSV_H265:
                 out_alignment = 32;
@@ -339,12 +341,14 @@ void hb_avfilter_combine( hb_list_t * list)
         switch (filter->id)
         {
             case HB_FILTER_AVFILTER:
-            case HB_FILTER_DEINTERLACE:
+            case HB_FILTER_YADIF:
+            case HB_FILTER_BWDIF:
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_CROP_SCALE:
             case HB_FILTER_PAD:
             case HB_FILTER_ROTATE:
             case HB_FILTER_COLORSPACE:
+            case HB_FILTER_GRAYSCALE:
             case HB_FILTER_FORMAT:
             {
                 settings = pv->avfilters;

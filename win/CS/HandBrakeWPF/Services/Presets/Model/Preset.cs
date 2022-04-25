@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Services.Presets.Model
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Interfaces;
 
     using EncodeTask = Encode.Model.EncodeTask;
@@ -21,7 +20,6 @@ namespace HandBrakeWPF.Services.Presets.Model
     public class Preset : PropertyChangedBase, IPresetObject
     {
         private bool isDefault;
-
         private bool isSelected;
 
         public Preset()
@@ -32,9 +30,13 @@ namespace HandBrakeWPF.Services.Presets.Model
         {
             this.Category = preset.Category;
             this.Description = preset.Description;
-            this.IsBuildIn = preset.IsBuildIn;
             this.Name = preset.Name;
+            this.IsExpanded = preset.IsExpanded;
+            this.IsSelected = preset.IsSelected;
+            this.IsBuildIn = preset.IsBuildIn;
+            this.IsDefault = preset.IsDefault;
             this.Task = new EncodeTask(preset.Task);
+            this.IsPresetDisabled = preset.IsPresetDisabled;
             this.AudioTrackBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
             this.SubtitleTrackBehaviours = new SubtitleBehaviours(preset.SubtitleTrackBehaviours);
         }
@@ -45,14 +47,7 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public bool IsExpanded { get; set; }
 
-        public string DisplayValue
-        {
-            get
-            {
-                string globalCategory = this.IsBuildIn ? Resources.Preset_Official : Resources.Preset_Custom;
-                return string.Format("{0}", this.Name);
-            }
-        }
+        public string DisplayValue => string.Format("{0}", this.Name);
 
         public bool IsSelected
         {
@@ -69,10 +64,8 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         public bool IsDefault
         {
-            get
-            {
-                return this.isDefault;
-            }
+            get => this.isDefault;
+
             set
             {
                 this.isDefault = value;

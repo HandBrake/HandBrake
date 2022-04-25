@@ -14,13 +14,13 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
+    using HandBrake.App.Core.Exceptions;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
 
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Interfaces;
@@ -69,7 +69,7 @@ namespace HandBrakeWPF.Services.Encode
 
         public bool IsEncoding { get; protected set; }
 
-        public void Start(EncodeTask task, HBConfiguration configuration, string basePresetName)
+        public void Start(EncodeTask task, string basePresetName)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace HandBrakeWPF.Services.Encode
                 // Prevent port stealing if multiple jobs start at the same time.
                 lock (this.portLock) 
                 {
-                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, this.userSettingService, this.portService);
+                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, this.encodeLogService, this.userSettingService, this.portService);
 
                     this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                     this.instance.EncodeProgress += this.InstanceEncodeProgress;
@@ -132,7 +132,7 @@ namespace HandBrakeWPF.Services.Encode
                     this.VerifyEncodeDestinationPath(task);
 
                     // Get an EncodeJob object for the Interop Library
-                    JsonEncodeObject work = this.encodeTaskFactory.Create(task, configuration);
+                    JsonEncodeObject work = this.encodeTaskFactory.Create(task);
 
                     this.instance.StartEncode(work);
                 }

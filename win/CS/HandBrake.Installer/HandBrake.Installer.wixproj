@@ -19,7 +19,6 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Product.wxs" />
   </ItemGroup>
@@ -37,6 +36,7 @@
     <Content Include="assets\COPYING.rtf" />
     <Content Include="gfx\banner.bmp" />
     <Content Include="gfx\dialog.bmp" />
+    <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="gfx\" />
