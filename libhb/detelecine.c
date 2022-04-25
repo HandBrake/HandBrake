@@ -889,7 +889,6 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     pv->pullup_fakecount = 1;
     pv->pullup_skipflag = 0;
 
-    init->job->use_detelecine = 1;
     pv->output = *init;
 
     return 0;

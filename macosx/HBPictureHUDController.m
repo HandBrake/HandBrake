@@ -47,7 +47,7 @@
 
     // we set the preview length popup in seconds
     [self.durationPopUp removeAllItems];
-    [self.durationPopUp addItemsWithTitles:@[@"15", @"30", @"45", @"60", @"90",
+    [self.durationPopUp addItemsWithTitles:@[@"5", @"15", @"30", @"45", @"60", @"90",
                                              @"120", @"150", @"180", @"210", @"240"]];
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"])

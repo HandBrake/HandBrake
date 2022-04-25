@@ -50,7 +50,8 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    return HBFunctions.hb_qsv_available() > 0;
+                    // We support Skylake 6th gen and newer. 
+                    return HBFunctions.hb_qsv_available() > 0 && QsvHardwareGeneration >= 6;
                 }
                 catch (Exception)
                 {
@@ -119,6 +120,38 @@ namespace HandBrake.Interop.Interop
                 try
                 {
                     return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265_10BIT) > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+        
+        public static bool IsQsvAvailableAV1
+        {
+            get
+            {
+                try
+                {
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1) > 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+        
+        public static bool IsQsvAvailableAV110bit
+        {
+            get
+            {
+                try
+                {
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_AV1_10BIT) > 0;
                 }
                 catch (Exception)
                 {

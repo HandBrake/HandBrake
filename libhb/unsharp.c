@@ -20,6 +20,8 @@
 typedef struct
 {
     int        pix_fmt;   // source pixel format
+    int        bps;
+    int        max_value;
     int        width;     // source video width
     double     strength;  // strength
     int        size;      // pixel context region width (must be odd)
@@ -39,6 +41,8 @@ typedef unsharp_thread_context_t unsharp_thread_context3_t[3];
 
 struct hb_filter_private_s
 {
+    int depth;
+
     unsharp_plane_context_t     plane_ctx[3];
     unsharp_thread_context3_t * thread_ctx;
     int                         threads;
@@ -80,84 +84,101 @@ hb_filter_object_t hb_filter_unsharp =
     .settings_template = unsharp_template,
 };
 
-static void unsharp(const uint8_t *src,
-                          uint8_t *dst,
-                    const int width,
-                    const int height,
-                    const int stride,
-                    unsharp_plane_context_t * ctx,
-                    unsharp_thread_context_t * tctx)
-{
-    uint32_t **SC = tctx->SC;
-    uint32_t SR[UNSHARP_SIZE_MAX - 1],
-             Tmp1,
-             Tmp2;
-    const uint8_t *src2 = src; // avoid gcc warning
-    int32_t res;
-    int x, y, z;
-    int amount        = ctx->amount;
-    int steps         = ctx->steps;
-    int scalebits     = ctx->scalebits;
-    int32_t halfscale = ctx->halfscale;
 
-    if (!amount)
-    {
-        if (src != dst)
-        {
-            memcpy(dst, src, stride*height);
-        }
+#define DEF_UNSHARP_FUNC(name, nbits)                                                           \
+static void name##_##nbits(const uint8_t *frame_src,                                            \
+                                 uint8_t *frame_dst,                                            \
+                           const int width,                                                     \
+                           const int height,                                                    \
+                           int stride,                                                          \
+                           unsharp_plane_context_t *ctx,                                        \
+                           unsharp_thread_context_t *tctx)                                      \
+{                                                                                               \
+    uint32_t **SC = tctx->SC;                                                                   \
+    uint32_t SR[UNSHARP_SIZE_MAX - 1];                                                          \
+    const uint##nbits##_t *src  = (const uint##nbits##_t *)frame_src;                           \
+    uint##nbits##_t       *dst  = (uint##nbits##_t *)frame_dst;                                 \
+    const uint##nbits##_t *src2 = (const uint##nbits##_t *)frame_src;                           \
+    const int amount        = ctx->amount;                                                      \
+    const int steps         = ctx->steps;                                                       \
+    const int scalebits     = ctx->scalebits;                                                   \
+    const int32_t halfscale = ctx->halfscale;                                                   \
+    const int16_t max_value = ctx->max_value;                                                   \
+                                                                                                \
+    int32_t res;                                                                                \
+    int x, y, z;                                                                                \
+    uint32_t Tmp1, Tmp2;                                                                        \
+                                                                                                \
+    if (!amount)                                                                                \
+    {                                                                                           \
+        if (src != dst)                                                                         \
+        {                                                                                       \
+            memcpy(dst, src, stride * height);                                                  \
+        }                                                                                       \
+                                                                                                \
+        return;                                                                                 \
+    }                                                                                           \
+                                                                                                \
+    for (y = 0; y < 2 * steps; y++)                                                             \
+    {                                                                                           \
+        memset(SC[y], 0, sizeof(SC[y][0]) * (width + 2 * steps));                               \
+    }                                                                                           \
+                                                                                                \
+    stride /= ctx->bps;                                                                         \
+                                                                                                \
+    for (y = -steps; y < height + steps; y++)                                                   \
+    {                                                                                           \
+        if (y < height)                                                                         \
+        {                                                                                       \
+            src2 = src;                                                                         \
+        }                                                                                       \
+                                                                                                \
+        memset(SR, 0, sizeof(SR[0]) * (2 * steps - 1));                                         \
+                                                                                                \
+        for (x = -steps; x < width + steps; x++)                                                \
+        {                                                                                       \
+            Tmp1 = x <= 0 ? src2[0] : x >= width ? src2[width - 1] : src2[x];                   \
+                                                                                                \
+            for (z = 0; z < steps * 2; z += 2)                                                  \
+            {                                                                                   \
+                Tmp2 = SR[z + 0] + Tmp1; SR[z + 0] = Tmp1;                                      \
+                Tmp1 = SR[z + 1] + Tmp2; SR[z + 1] = Tmp2;                                      \
+            }                                                                                   \
+                                                                                                \
+            for (z = 0; z < steps * 2; z += 2)                                                  \
+            {                                                                                   \
+                Tmp2 = SC[z + 0][x + steps] + Tmp1; SC[z + 0][x + steps] = Tmp1;                \
+                Tmp1 = SC[z + 1][x + steps] + Tmp2; SC[z + 1][x + steps] = Tmp2;                \
+            }                                                                                   \
+                                                                                                \
+            if (x >= steps && y >= steps)                                                       \
+            {                                                                                   \
+                const uint##nbits##_t *srx = src - steps * stride + x - steps;                  \
+                uint##nbits##_t       *dsx = dst - steps * stride + x - steps;                  \
+                                                                                                \
+                res = (int32_t)*srx + ((((int32_t)*srx -                                        \
+                     (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);              \
+                *dsx = res > max_value ? max_value : res < 0 ? 0 : (uint##nbits##_t)res;        \
+            }                                                                                   \
+        }                                                                                       \
+                                                                                                \
+        if (y >= 0)                                                                             \
+        {                                                                                       \
+            dst += stride;                                                                      \
+            src += stride;                                                                      \
+        }                                                                                       \
+    }                                                                                           \
+}                                                                                               \
 
-        return;
-    }
+DEF_UNSHARP_FUNC(unsharp, 16)
+DEF_UNSHARP_FUNC(unsharp, 8)
 
-    for (y = 0; y < 2 * steps; y++)
-    {
-        memset(SC[y], 0, sizeof(SC[y][0]) * (width + 2 * steps));
-    }
-
-    for (y = -steps; y < height + steps; y++)
-    {
-        if (y < height)
-        {
-            src2 = src;
-        }
-
-        memset(SR, 0, sizeof(SR[0]) * (2 * steps - 1));
-
-        for (x = -steps; x < width + steps; x++)
-        {
-            Tmp1 = x <= 0 ? src2[0] : x >= width ? src2[width - 1] : src2[x];
-
-            for (z = 0; z < steps * 2; z += 2)
-            {
-                Tmp2 = SR[z + 0] + Tmp1; SR[z + 0] = Tmp1;
-                Tmp1 = SR[z + 1] + Tmp2; SR[z + 1] = Tmp2;
-            }
-
-            for (z = 0; z < steps * 2; z += 2)
-            {
-                Tmp2 = SC[z + 0][x + steps] + Tmp1; SC[z + 0][x + steps] = Tmp1;
-                Tmp1 = SC[z + 1][x + steps] + Tmp2; SC[z + 1][x + steps] = Tmp2;
-            }
-
-            if (x >= steps && y >= steps)
-            {
-                const uint8_t * srx = src - steps * stride + x - steps;
-                uint8_t       * dsx = dst - steps * stride + x - steps;
-
-                res = (int32_t)*srx + ((((int32_t)*srx -
-                     (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);
-                *dsx = res > 255 ? 255 : res < 0 ? 0 : (uint8_t)res;
-            }
-        }
-
-        if (y >= 0)
-        {
-            dst += stride;
-            src += stride;
-        }
-    }
-}
+#define unsharp(...)                                  \
+    switch (pv->depth)                                \
+    {                                                 \
+        case  8: unsharp_8(__VA_ARGS__); break;       \
+        default: unsharp_16(__VA_ARGS__); break;      \
+    }                                                 \
 
 static int unsharp_init(hb_filter_object_t *filter,
                         hb_filter_init_t   *init)
@@ -171,6 +192,9 @@ static int unsharp_init(hb_filter_object_t *filter,
     hb_filter_private_t * pv = filter->private_data;
 
     pv->input = *init;
+
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(init->pix_fmt);
+    pv->depth = desc->comp[0].depth;
 
     // Mark parameters unset
     for (int c = 0; c < 3; c++)
@@ -209,6 +233,9 @@ static int unsharp_init(hb_filter_object_t *filter,
         unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
 
         ctx->width = init->geometry.width;
+        ctx->pix_fmt = init->pix_fmt;
+        ctx->bps = pv->depth > 8 ? 2 : 1;
+        ctx->max_value = (1 << pv->depth) - 1;
 
         // Replace unset values with defaults
         if (ctx->strength == -1)

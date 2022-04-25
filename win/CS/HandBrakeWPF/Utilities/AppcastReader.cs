@@ -60,11 +60,14 @@ namespace HandBrakeWPF.Utilities
 
                 // Regular Expressions
                 Match ver = Regex.Match(result, @"sparkle:version=""([0-9]*)\""");
-                Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""(([svn]*)([0-9.\s]*))\""");
+                Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""([0-9.]*)");
 
                 this.Build = ver.ToString().Replace("sparkle:version=", string.Empty).Replace("\"", string.Empty);
-                this.Version = verShort.ToString().Replace("sparkle:shortVersionString=", string.Empty).Replace(
-                    "\"", string.Empty);
+                if (verShort.Success)
+                {
+                    this.Version = verShort.Groups[1].Value;
+                }
+               
                 this.DownloadFile = nodeItem["windows"].InnerText;
                 this.Hash = nodeItem["windowsHash"].InnerText;  
                 this.DescriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);

@@ -13,6 +13,9 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System.IO;
     using System.Xml.Serialization;
 
+    using HandBrake.App.Core.Model;
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;
 

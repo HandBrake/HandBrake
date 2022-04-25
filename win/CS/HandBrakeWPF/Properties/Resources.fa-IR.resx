@@ -1875,10 +1875,6 @@ Time Remaining: {5},  Elapsed: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>موتور HandBrake در مقداردهی اولیه ناموفق بود. این معمولا ناشی از رانه‌های (درایور‌های) GPU‌های قدیمی است.
-لطفاً رانه‌های تمام GPUهای خود را ، اعم از گرافیک‌های داخلی و مجزای دستگاهتان، بروزرسانی کنید.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Live Update Options: {source} {title} {chapters} 
 Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
@@ -2250,9 +2246,6 @@ Please choose a different preset.</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientation and Cropping:</value>
-  </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>(فقط ویندوز 10!)</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>پالایه‌ها</value>

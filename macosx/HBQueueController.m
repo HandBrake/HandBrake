@@ -554,6 +554,12 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to shut down"];
         [scriptObject executeAndReturnError:NULL];
     }
+
+    // If Quit HB has been selected
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionQuit)
+    {
+        [NSApp terminate:self];
+    }
 }
 
 - (void)queueLowDiskSpaceAlert

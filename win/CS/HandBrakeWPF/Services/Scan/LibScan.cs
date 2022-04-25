@@ -20,7 +20,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
 
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
@@ -33,7 +32,7 @@ namespace HandBrakeWPF.Services.Scan
 
     using ILog = Logging.Interfaces.ILog;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.Interfaces.EventArgs.ScanProgressEventArgs;
-    using Source = HandBrakeWPF.Services.Scan.Model.Source;
+    using Source = Model.Source;
     using Title = Model.Title;
 
     public class LibScan : IScan, IDisposable
@@ -178,7 +177,7 @@ namespace HandBrakeWPF.Services.Scan
             try
             {
                 EncodeTaskFactory factory = new EncodeTaskFactory(this.userSettingService);
-                JsonEncodeObject jobDict = factory.Create(job, HBConfigurationFactory.Create());
+                JsonEncodeObject jobDict = factory.Create(job);
                 RawPreviewData bitmapData = this.instance.GetPreview(jobDict, preview);
                 bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
             }

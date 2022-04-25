@@ -50,7 +50,8 @@
 #define UNSHARP_DEFAULT_PRESET       "medium"
 #define CHROMA_SMOOTH_DEFAULT_PRESET "medium"
 #define NLMEANS_DEFAULT_PRESET       "medium"
-#define DEINTERLACE_DEFAULT_PRESET   "default"
+#define YADIF_DEFAULT_PRESET         "default"
+#define BWDIF_DEFAULT_PRESET         "default"
 #define DECOMB_DEFAULT_PRESET        "default"
 #define DETELECINE_DEFAULT_PRESET    "default"
 #define COMB_DETECT_DEFAULT_PRESET   "default"
@@ -79,9 +80,12 @@ static char *  pad                 = NULL;
 static int     colorspace_disable  = 0;
 static int     colorspace_custom   = 0;
 static char *  colorspace          = NULL;
-static int     deinterlace_disable = 0;
-static int     deinterlace_custom  = 0;
-static char *  deinterlace         = NULL;
+static int     yadif_disable       = 0;
+static int     yadif_custom        = 0;
+static char *  yadif               = NULL;
+static int     bwdif_disable       = 0;
+static int     bwdif_custom        = 0;
+static char *  bwdif               = NULL;
 static int     deblock_disable     = 0;
 static int     deblock_custom      = 0;
 static char *  deblock             = NULL;
@@ -627,7 +631,8 @@ cleanup:
     free(deblock);
     free(deblock_tune);
     free(detelecine);
-    free(deinterlace);
+    free(yadif);
+    free(bwdif);
     free(decomb);
     free(hqdn3d);
     free(nlmeans);
@@ -1209,8 +1214,11 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_NLMEANS:
             preset = NLMEANS_DEFAULT_PRESET;
             break;
-        case HB_FILTER_DEINTERLACE:
-            preset = DEINTERLACE_DEFAULT_PRESET;
+        case HB_FILTER_YADIF:
+            preset = YADIF_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_BWDIF:
+            preset = BWDIF_DEFAULT_PRESET;
             break;
         case HB_FILTER_DECOMB:
             preset = DECOMB_DEFAULT_PRESET;
@@ -1232,7 +1240,8 @@ static void showFilterDefault(FILE* const out, int filter_id)
     }
     switch (filter_id)
     {
-        case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_YADIF:
+        case HB_FILTER_BWDIF:
         case HB_FILTER_NLMEANS:
         case HB_FILTER_CHROMA_SMOOTH:
         case HB_FILTER_COLORSPACE:
@@ -1695,11 +1704,17 @@ static void ShowHelp()
 "   --no-comb-detect        Disable preset comb-detect filter\n"
 "   -d, --deinterlace[=string]\n"
 "                           Deinterlace video using FFmpeg yadif.\n");
-    showFilterPresets(out, HB_FILTER_DEINTERLACE);
-    showFilterKeys(out, HB_FILTER_DEINTERLACE);
-    showFilterDefault(out, HB_FILTER_DEINTERLACE);
+    showFilterPresets(out, HB_FILTER_YADIF);
+    showFilterKeys(out, HB_FILTER_YADIF);
+    showFilterDefault(out, HB_FILTER_YADIF);
     fprintf( out,
 "       --no-deinterlace    Disable preset deinterlace filter\n"
+"   --bwdif[=string]    Deinterlace video using FFmpeg bwdif.\n");
+    showFilterPresets(out, HB_FILTER_BWDIF);
+    showFilterKeys(out, HB_FILTER_BWDIF);
+    showFilterDefault(out, HB_FILTER_BWDIF);
+    fprintf( out,
+"   --no-bwdif              Disable preset bwdif deinterlace filter\n"
 "   -5, --decomb[=string]   Deinterlace video using a combination of yadif,\n"
 "                           blend, cubic, or EEDI2 interpolation.\n");
     showFilterPresets(out, HB_FILTER_DECOMB);
@@ -2184,6 +2199,7 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_CHROMA_SMOOTH_TUNE 324
     #define FILTER_DEBLOCK_TUNE  325
     #define FILTER_COLORSPACE    326
+    #define FILTER_BWDIF         327
     for( ;; )
     {
         static struct option long_options[] =
@@ -2257,7 +2273,9 @@ static int ParseOptions( int argc, char ** argv )
             { "two-pass",    no_argument,       NULL,    '2' },
             { "no-two-pass", no_argument,       &twoPass, 0 },
             { "deinterlace", optional_argument, NULL,    'd' },
-            { "no-deinterlace", no_argument,    &deinterlace_disable, 1 },
+            { "no-deinterlace", no_argument,    &yadif_disable,       1 },
+            { "bwdif",       optional_argument, NULL,    FILTER_BWDIF },
+            { "no-bwdif",    no_argument,       &bwdif_disable,       1 },
             { "deblock",     optional_argument, NULL,    '7' },
             { "no-deblock",  no_argument,       &deblock_disable,     1 },
             { "deblock-tune",required_argument, NULL,    FILTER_DEBLOCK_TUNE },
@@ -2704,14 +2722,14 @@ static int ParseOptions( int argc, char ** argv )
                 twoPass = 1;
                 break;
             case 'd':
-                free(deinterlace);
+                free(yadif);
                 if (optarg != NULL)
                 {
-                    deinterlace = strdup(optarg);
+                    yadif = strdup(optarg);
                 }
                 else
                 {
-                    deinterlace = strdup(DEINTERLACE_DEFAULT_PRESET);
+                    yadif = strdup(YADIF_DEFAULT_PRESET);
                 }
                 break;
             case '7':
@@ -3110,6 +3128,17 @@ static int ParseOptions( int argc, char ** argv )
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
                 break;
+            case FILTER_BWDIF:
+                free(bwdif);
+                if (optarg != NULL)
+                {
+                    bwdif = strdup(optarg);
+                }
+                else
+                {
+                    bwdif = strdup(BWDIF_DEFAULT_PRESET);
+                } 
+                break;
 #if HB_PROJECT_FEATURE_QSV
             case QSV_BASELINE:
                 hb_qsv_force_workarounds();
@@ -3229,28 +3258,54 @@ static int ParseOptions( int argc, char ** argv )
         }
     }
 
-    if (deinterlace != NULL)
+    if (yadif != NULL)
     {
-        if (deinterlace_disable)
+        if (yadif_disable)
         {
             fprintf(stderr,
                     "Incompatible options --deinterlace and --no-deinterlace\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_DEINTERLACE,
-                                       deinterlace, NULL, NULL))
+        if (!hb_validate_filter_preset(HB_FILTER_YADIF,
+                                       yadif, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_string(HB_FILTER_DEINTERLACE, deinterlace))
+        else if (!hb_validate_filter_string(HB_FILTER_YADIF, yadif))
         {
-            deinterlace_custom = 1;
+            yadif_custom = 1;
         }
         else
         {
-            fprintf(stderr, "Invalid deinterlace option %s\n", deinterlace);
+            fprintf(stderr, "Invalid deinterlace option %s\n", yadif);
+            return -1;
+        }
+    }
+
+    if (bwdif != NULL)
+    {
+        if (bwdif_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --bwdif and --no-bwdif\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_BWDIF,
+                                       bwdif, NULL, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_BWDIF, bwdif))
+        {
+            bwdif_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid bwdif option %s\n", bwdif);
             return -1;
         }
     }
@@ -4312,7 +4367,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoGrayScale", hb_value_bool(grayscale));
     }
-    if (decomb_disable || deinterlace_disable)
+    if (decomb_disable || yadif_disable || bwdif_disable)
     {
         hb_dict_set(preset, "PictureDeinterlaceFilter", hb_value_string("off"));
     }
@@ -4335,21 +4390,21 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string(comb_detect));
         }
     }
-    if (deinterlace != NULL)
+    if (yadif != NULL)
     {
         hb_dict_set(preset, "PictureDeinterlaceFilter",
                     hb_value_string("deinterlace"));
-        if (!deinterlace_custom)
+        if (!yadif_custom)
         {
             hb_dict_set(preset, "PictureDeinterlacePreset",
-                        hb_value_string(deinterlace));
+                        hb_value_string(yadif));
         }
         else
         {
             hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDeinterlaceCustom",
-                        hb_value_string(deinterlace));
+                        hb_value_string(yadif));
         }
     }
     if (decomb != NULL)
@@ -4367,6 +4422,23 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDeinterlaceCustom",
                         hb_value_string(decomb));
+        }
+    }
+    if (bwdif != NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("bwdif"));
+        if (!bwdif_custom)
+        {
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string(bwdif));
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureDeinterlaceCustom",
+                        hb_value_string(bwdif));
         }
     }
     if (detelecine_disable)

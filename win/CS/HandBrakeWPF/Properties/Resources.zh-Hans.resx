@@ -1862,9 +1862,6 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 无法初始化引擎。这通常是由过时的GPU驱动程序引起的。\n 请更新显卡驱动程序。</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>替换占位符：{source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
@@ -2236,9 +2233,6 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>方向和裁剪：</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>（仅限 Windows 10！）</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>滤镜：</value>
   </data>
@@ -2309,7 +2303,7 @@ Foreign Audio Preferred, else First：如果存在外语轨道，则会将其烧
     <value>停止</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>您输入的分类名称已经存在。请选择一个不同的名称。</value>

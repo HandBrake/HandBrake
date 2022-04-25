@@ -109,14 +109,25 @@
 - (IBAction)moveSelectedQueueItemsToTop:(id)sender
 {
     NSIndexSet *indexes = self.tableView.targetedRowIndexes;
-    NSArray *items = [self.queue.items objectsAtIndexes:indexes];
-    [self.queue moveItems:items toIndex:0];
+    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
+
+    NSUInteger index = 0;
+    for (id<HBQueueItem> item in self.queue.items)
+    {
+        if (item.state == HBQueueItemStateReady)
+        {
+            break;
+        }
+        index += 1;
+    }
+
+    [self.queue moveItems:items toIndex:index];
 }
 
 - (IBAction)moveSelectedQueueItemsToBottom:(id)sender
 {
     NSIndexSet *indexes = self.tableView.targetedRowIndexes;
-    NSArray *items = [self.queue.items objectsAtIndexes:indexes];
+    NSArray<id<HBQueueItem>> *items = [self.queue.items objectsAtIndexes:indexes];
     [self.queue moveItems:items toIndex:self.queue.items.count];
 }
 

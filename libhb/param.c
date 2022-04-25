@@ -211,7 +211,7 @@ static hb_filter_param_t decomb_presets[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
-static hb_filter_param_t deinterlace_presets[] =
+static hb_filter_param_t yadif_presets[] =
 {
     { 1, "Custom",             "custom",       NULL             },
     { 3, "Default",            "default",      "mode=3"         },
@@ -225,6 +225,14 @@ static hb_filter_param_t deinterlace_presets[] =
     { 3, "Slow",               "slow",         "mode=1"         },
     { 4, "Slower",             "slower",       "mode=3"         },
     { 7, "QSV",                "qsv",          "mode=3"         }
+};
+
+static hb_filter_param_t bwdif_presets[] =
+{
+    { 1, "Custom",             "custom",       NULL             },
+    { 3, "Default",            "default",      "mode=3"         },
+    { 2, "Bob",                "bob",          "mode=7"         },
+    { 0,  NULL,                NULL,           NULL             },
 };
 
 typedef struct
@@ -269,8 +277,11 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_DECOMB,      decomb_presets,      NULL,
       sizeof(decomb_presets) / sizeof(hb_filter_param_t),      0, },
 
-    { HB_FILTER_DEINTERLACE, deinterlace_presets, NULL,
-      sizeof(deinterlace_presets) / sizeof(hb_filter_param_t), 0, },
+    { HB_FILTER_YADIF, yadif_presets, NULL,
+      sizeof(yadif_presets) / sizeof(hb_filter_param_t),       0, },
+
+    { HB_FILTER_BWDIF, bwdif_presets, NULL,
+      sizeof(bwdif_presets) / sizeof(hb_filter_param_t),       0, },
 
     { HB_FILTER_DEBLOCK, deblock_presets, deblock_tunes,
       sizeof(deblock_presets) / sizeof(hb_filter_param_t),
@@ -284,7 +295,7 @@ void hb_param_configure_qsv(void)
 #if HB_PROJECT_FEATURE_QSV
     if (!hb_qsv_available())
     {
-        memset(&deinterlace_presets[4], 0, sizeof(hb_filter_param_t));
+        memset(&yadif_presets[4], 0, sizeof(hb_filter_param_t));
     }
 #endif
 }
@@ -1273,7 +1284,8 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
-        case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_YADIF:
+        case HB_FILTER_BWDIF:
         case HB_FILTER_COLORSPACE:
             settings = generate_generic_settings(filter_id, preset,
                                                  tune, custom);

@@ -151,7 +151,7 @@ dapervoi secondu i termini di a Licenza Publica Generale GNU tale
 chì publicata da a Free Software Foundation ; sia a versione 2 di
 a licenza, o s’è voi preferite, una versione più recente.
 
-Stu prugramma hè distribuitu cù a sperenza d’esse ghjuvevule, ma SENZA NISUNA ASSICURANZA ; senza manc’una assicuranza di CUMMERCIALISAZIONE o di CURRISPONDENZA À UN IMPIEGU PARTICULARE.  Fighjate a licenza GNU General Public License per sapene di più.
+Stu prugramma hè distribuitu cù a sperenza d’esse ghjuvevule, ma SENZA NISUNA ASSICURANZA ; senza manc’una assicuranza di CUMMERCIALISAZIONE o di CURRISPUNDENZA À UN IMPIEGU PARTICULARE.  Fighjate a licenza GNU General Public License per sapene di più.
 
 Duveriate avè ricevutu una copia di a licenza GNU General Public License
 cù stu prugramma ; osinnò, ci vole à scrive à : Free Software Foundation,
@@ -197,10 +197,13 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
     <value>HandBrake hè in corsu di cudificazione.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Ci sò travagli in a fila d’attesa cù u listessu chjassu di destinazione. Ci vole à sceglie un chjassu sfarente per stu travagliu.</value>
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+ 
+You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   {0} travagli in attesa</value>
+    <value>{0} travagli in attesa</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>Nova prerigatura predefinita : {0}</value>
@@ -321,12 +324,6 @@ Vulete cuntinuà ?</value>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
     <value>Esciuta : {0}</value>
   </data>
-  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>U furmatu di u schedariu d’esciuta. In più di i caratteri accettati da u sistema di schedariu, pudete impiegà i campi di sustituzione seguente chì seranu rimpiazzati quandu vo cambiate di titulu o analizate una fonte.
-
-Ozzioni mudificate direttamente : {source} {title} {chapters} 
-Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
-  </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Ozzioni cumplementarie dispunibule : {source_path} o {source_folder_name} o {source}</value>
   </data>
@@ -372,7 +369,8 @@ S’è vo cuntinuate, i vostri sottutituli micca intarsiati seranu persi.</value
     <value>HandBrake ùn puderà micca cudificà a fonte selezziunata perchè ùn hà micca trovu di fonte accettevule cù tituli à cudificà. E cagioni pussibule sò :
 - A durata d’ogni titulu di a fonte hè più corta chì l’ozzione di sogliu « Durata minima » in « Ozzioni &gt; Espertu ». 
 - U schedariu di fonte ùn hè micca un schedariu video accettevule o si trova in un furmatu scunnisciutu da HandBrake.
-- U schedariu di fonte pò esse prutettu contr’à a copia o cuntene un dirittu DRM. Ci vole à sapè ch’HandBrake ùn permette micca di squassà e prutezzioni contr’à a copia.
+- Forse, ùn avete micca u dirittu d’accede à u schedariu o un’altra appiecazione l’hà ammarchjunatu.
+- U schedariu di fonte pò esse prutettu contr’à a copia o cuntene un dirittu DRM. Sappiate chì HandBrake ùn permette micca di squassà e prutezzioni contr’à a copia.
 
 U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
   </data>
@@ -419,7 +417,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>Traccie audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selezzione di cumpurtamentu</value>
+    <value>Cumpurtamentu di a selezzione…</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Rivene à e traccie</value>
@@ -459,7 +457,7 @@ U ghjurnale d’attività puderia cuntene infurmazioni addiziunale.</value>
     <value>Serviziu di rinnovu micca dispunibule. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>Rinnovu fiascu. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
+    <value>Rinnovu fiascatu. Pudete pruvà di scaricà u rinnovu da u situ https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
     <value>Dimensione d’allucamentu : {0}x{1}</value>
@@ -532,7 +530,7 @@ Site sicuru di vulè esce d’HandBrake ?</value>
     <value>Da prima, ci vole à analizà una fonte è definisce a vostra cudificazione nanzu di creà una fighjulata.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>Impussibule di truvà u schedariu di fighjulata. U schedariu hè statu squassatu o a cudificazione hè fiasca. Fighjate u ghjurnale d’attività per sapene di più.</value>
+    <value>Impussibule di truvà u schedariu di fighjulata. U schedariu hè statu squassatu o a cudificazione hè fiascata. Fighjate u ghjurnale d’attività per sapene di più.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
     <value>Ci hè dighjà una cudificazione video in corsu ! HandBrake pò cudificà una sola video in una volta.</value>
@@ -547,7 +545,7 @@ Site sicuru di vulè esce d’HandBrake ?</value>
     <value>Rivene à e traccie</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Selezzione di cumpurtamentu</value>
+    <value>Cumpurtamentu di a selezzione…</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Schedariu archiviatu :</value>
@@ -751,13 +749,13 @@ Vulete rimpiazzallu ?</value>
     <value>Selezzione di a traccia di fonte</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Permette u passthru di :</value>
+    <value>Permette a ricopia di :</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
     <value>Cunfigurate cumu e traccie audio sò autumaticamente selezziunate è cunfigurate quandu vo selezziunate un novu titulu o una nova fonte video.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>Cumpurtamentu di l’« Auto Passthru » :</value>
+    <value>Cumpurtamentu di a ricopia autumatica » :</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
     <value>Flussu binariu</value>
@@ -799,7 +797,7 @@ Vulete rimpiazzallu ?</value>
     <value>Per e traccie addiziunale :</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Quandu l’« Auto Passthru » hè selezziunatu cum’è cudecu audio.</value>
+    <value>Quandu a ricopia autumatica hè selezziunata cum’è cudecu audio.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
     <value>Marcatori di capitulu</value>
@@ -916,7 +914,7 @@ Vulete rimpiazzallu ?</value>
     <value>Chjode</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>Cupià ver di u preme’papei</value>
+    <value>Cupià in u preme’papei</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
     <value>Move à manca</value>
@@ -928,7 +926,7 @@ Vulete rimpiazzallu ?</value>
     <value>Arregistrà</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>Cupià ver di u preme’papei</value>
+    <value>Cupià in u preme’papei</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
     <value>Ghjurnale di cudificazione</value>
@@ -1021,7 +1019,7 @@ Vulete rimpiazzallu ?</value>
     <value>Dimensioni</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Rinuminà a prerigatura</value>
+    <value>Mudificà a prerigatura</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Listinu cuntestuale di l’ozzioni di prerigatura</value>
@@ -1138,7 +1136,7 @@ Vulete rimpiazzallu ?</value>
     <value>Sente un sonu quandu a fila d’attesa si compia</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Affissà l’apprezzazioni nant’à l’unghjetta Riassuntu.</value>
+    <value>Affissà e fighjulate nant’à l’unghjetta Riassuntu.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Affissà u statu di a cudificazione in a barra di titulu di l’appiecazione.</value>
@@ -1243,16 +1241,16 @@ Vulete rimpiazzallu ?</value>
     <value>Impedisce u sistema di mettesi in veghja durante a cudificazione</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Numeru d’apprezzazioni di fiure à analizà :</value>
+    <value>Numeru di e fighjulate di fiura à analizà :</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Livellu di priurità :</value>
+    <value>Livellu di priurità di travagliu :</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Preferisce l’adopru d’Intel QuickSync, quand’ellu hè dispunibule, per a discudificazione video. </value>
+    <value>Preferisce l’impiegu d’Intel QuickSync per discudificà una video quandu s’impiega u cudificatore QuickSync è chì u materiale hè dispunibule.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Impiegà dinù a discudificazione QSV quandu u cudificatore QuickSync ùn hè micca impiegatu. (i.e. x265) </value>
+    <value>Impiegà dinù a discudificazione QuickSync quandu ùn s’impiega micca u cudificatore QuickSync, (i.e. x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Caccià a puntuazione cumuna</value>
@@ -1859,27 +1857,19 @@ Tempu rimanente : {5}, Trascorsu : {6} {7}</value>
     <value>Squassà a selezzione</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Modu purtabile : Impussibule di creà u cartulare timpurariu. Ci vole à verificà chì u chjassu hè currettu è accessibile in scrittura.
-
-    {0}</value>
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Modu purtabile : Impussibule di creà u cartulare d’allucamentu. Ci vole à verificà chì u chjassu hè currettu è accessibile in scrittura.
-
-    {0}</value>
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Modu purtabile : Impussibule di leghje portable.ini. Forse ci hè qualchì sbagliu in stu schedariu. Ci vole à pruvà torna impieghendu portable.ini.template cum’è esempiu.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>U mutore d’HandBrake ùn hà micca pussutu inizziasi. Ghjè aspessu cagiunatu da piloti GPU troppu anziani.\nCi vole à rinnovà sti piloti per tutte e carte grafiche integrate è specificate di u vostru sistema.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Ozzioni mudificate direttamente : {source} {title} {chapters} 
-Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Quesse cambianu solu quandu voi analizate una nova fonte, cambiate di titulu o di capitulu)</value>
+    <value>Campi di sustituzione : {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Ozzioni dispunibule : {source_path} {source_folder_name} {source}</value>
+    <value>Campi di sustituzione : {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Dumandà per rimpiazzà u schedariu</value>
@@ -1900,7 +1890,7 @@ Ozzioni tramandate : {date} {time} {creation-date} {creation-time} {quality} {b
     <value>Cudificazione compia</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Nutificazioni</value>
+    <value>Nutificazioni sonore</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
     <value>Fila d’attesa compia</value>
@@ -2145,8 +2135,8 @@ Induve hè accettatu, tutte e prerigature persunalizate seranu state impurtate.<
     <value>A stesa di porti deve esse scelta trà 5000 è 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>Campi di sustituzione : {source} {destination}</value>
-    <comment>Note: {source} and {destination} are not translatable. </comment>
+    <value>Campi di sustituzione : {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>Una nova versione d’HandBrake hè dispunibule !</value>
@@ -2246,9 +2236,6 @@ Ci vole à sceglie una prerigatura sfarente.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Orientazione è inquadratura :</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Windows 10 solu ! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filtri :</value>
   </data>
@@ -2328,7 +2315,7 @@ Ci vole à sceglie una prerigatura sfarente.</value>
     <value>U nome di categuria era viotu. Ci vole à pruvede un nome.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>Scrivite un nome : </value>
+    <value>Stampittate un nome : </value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
     <value>Ùn ci hè alcuna prerigatura selezziunata.</value>
@@ -2422,15 +2409,6 @@ Ci vole à sceglie una prerigatura sfarente.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
     <value>Avertimentu : Fate casu chì sta versione in « Modu assicuratu » d’HandBrake ùn cuntene micca l’accessu à i cudificatori materiale. S’è vò vulete impiegà i cudificatori materiale, ci vole à scaricà da u situ web una versione altra chì quella in « Modu assicuratu ».</value>
-  </data>
-  <data name="OldOperatingSystem" xml:space="preserve">
-    <value>Fate casu chì HandBrake ùn hè più accettatu nant’à tutte e versioni di Windows 7 o Windows 8.
-
-Bench’ella fussi pussibule di cuntinuà à impiegà l’appiecazione à u vostru risicu, sapete chì certe funzioni ùn funziuneghjanu più è chì d’altri penseri ponu accade. Ùn ci hè micca assistenza quandu sti penseri accadenu. 
-
-L’impiegu nant’à Windows 7 è 8 hè statu disprezzatu in e versioni 1.3. Vole si dì ch’ella ùn ci serà più mudificazioni per currege i penseri nant’à sti sistemi. 
-
-St’avertimentu serà affissatu solu duie volte.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
     <value>Neru</value>
@@ -2563,6 +2541,113 @@ Pudete cambià a vostra scelta à ogni mumentu cambiendu l’ozzioni in Preferen
     <value>Arburiscenza undighjante</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>Please make sure you have appropriate file associations setup in Windows to allow it to open this file with a supported video player</value>
+    <value>Assicuratevvi chì voi abbiate l’associ di schedarii apposti in Windows per permette d’apre stu schedariu cù un lettore adattatu</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Impussibule di leghje u schedariu di fila d’attesa.</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Forse u schedariu hè alteratu o vene d’una vechja anteriore d’HandBrake.
+Solu i schedarii di fila d’attesa da a versione attuale sò accettati.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>A vostra cudificazione HandBrake hè compia !</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>A vostra fila d’attesa d’HandBrake hè compia !</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Què hà da disattivà dinù l’ozzioni d’affissera di e nutificazioni in a barra di e tacche Windows nant’à l’unghjetta « Quandu hè compiu ». Attivitatele torna s’è vo vulete permette torna sta funzione.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Caccià HandBrake da u pannellu di cuntrollu di e nutificazioni Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Disinstallatu</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>E preferenze di nutificazione sò state cacciate.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Squassà è disinstallà</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Mandà una nutificazione in a barra di e tacche Windows.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Nutificazioni Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} travagli compi. {1}Travagliu nant’à {2} travagli cù {3} in attesa d’esse trattati.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Rigenerà (nome autumaticu)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Apre stu cartulare</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Tuttu ripiegà</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Tuttu spiegà</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Modu d’affissera da diritta à manca :</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Innò</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Solu u testu</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Interfaccia cumpleta di l’utilizatore</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>A custruzzione di sviluppu hè chì vò impiegate hè appena vechja. Hè ora di rinnovalla !</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Scaricà via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Scaricà e custruzzioni di sviluppu (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Attivà QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Preferisce l’impiegu di parechji mutori medià per accelerà una cudificazione unica quand’ella hè pussibule. Disattivà a pussibilità d’equilibrà e cariche di parechje cudificazioni in parallelu trà i mutori medià.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Apre HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>L’usu di a cudificazione materiale hè statu disattivatu perchè ghjè una causa classica di i prublemi d’avviu.
+- Pruvate di riavvià HandBrake.
+- S’è u prublema ùn smarisce micca, forse ghjè per via d’un pilotu di carta grafica (integratu o distintu) chì hè troppu anzianu.
+
+L’usu di a cudificazione materiale pò esse attivatu torna in e preferenze.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake ùn pò micca riavvià.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Reinizià u modu assicuratu</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Ci vole à rilancià HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Espurtà i dati statistichi di fila d’attesa (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Espurtazione compia !</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>In primu locu, duvete analizà una fonte è definisce un cartulare di destinazione iniziale</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Only when file already exists on disk.</value>
   </data>
 </root>

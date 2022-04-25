@@ -618,9 +618,12 @@ void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
 
 void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
 {
+    const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(buf->f.fmt);
     uint8_t * data;
     int       pp, ii, yy, width, height, stride, height_stride;
-    int       pos, margin, margin_front, margin_back;
+    int       bps, pos, margin, margin_front, margin_back;
+
+    bps = desc->comp[0].depth > 8 ? 2 : 1;
 
     for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
@@ -631,9 +634,10 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
         height_stride = buf->plane[pp].height_stride;
         if (data != NULL)
         {
-            margin       = stride - width;
+            margin       = stride / bps - width;
             margin_front = margin / 2;
             margin_back  = margin - margin_front;
+            width       *= bps;
             for (yy = 0; yy < height; yy++)
             {
                 // Mirror final row pixels into front of stride region

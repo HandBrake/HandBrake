@@ -204,7 +204,9 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
     <value>HandBrake encodiert bereits.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Es sind Aufgaben mit demselben Ausgabepfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
+    <value>In der Warteschlange gibt es Aufträge mit demselben Zielpfad. Bitte wählen Sie einen anderen Pfad für diesen Auftrag.
+
+Sie können die Optionen für die automatische Dateibenennung unter "Menü Extras -&gt; Einstellungen -&gt; Ausgabedateien" konfigurieren.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>Anstehende Aufgaben {0}</value>
@@ -370,14 +372,14 @@ Beim Fortfahren gehen nicht-eingebrannte Untertitel verloren.</value>
     <value>Keine gültige Quelle oder Titel gefunden</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake kann die ausgewählte Quelle nicht kodieren, da es keine gültige Quelle mit zu kodierenden Titeln gefunden hat. 
-Dies kann auf einen der folgenden Gründe zurückzuführen werden: 
+    <value>HandBrake ist nicht in der Lage, die ausgewählte Quelle zu kodieren, da es keine gültige Quelle mit zu kodierenden Titeln gefunden hat. Dies könnte an einem der folgenden Gründe liegen:
 
-– Die Dauer jedes Titels liegt unterhalb des Schwellenwertes „Minimale Titeldauer“ in „Einstellungen &gt; Erweitert“. 
-– Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
-– Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmaßnahmen nicht unterstützt. 
+- Die Dauer der einzelnen Quellentitel liegt unter der Schwellenwertoption "Minimale Titeldauer" in "Einstellungen &gt; Erweitert". 
+- Die Quelldatei ist keine gültige Videodatei oder hat ein Format, das HandBrake nicht unterstützt.
+- Sie haben möglicherweise keinen Lesezugriff auf die Datei oder eine andere Anwendung hat die Datei gesperrt. 
+- Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmechanismen nicht unterstützt.
 
-Das Aktivitätsprotokoll kann hierzu weitere Informationen enthalten.</value>
+Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Warteschlange {0}</value>
@@ -1248,13 +1250,13 @@ Soll sie überschrieben werden?</value>
     <value>Anzahl der Bilder für die Vorschau:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Prioritätslevel:</value>
+    <value>Arbeitspriorität:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Intel QuickSync für das Decodieren von Videos bevorzugen, wenn verfügbar.</value>
+    <value>Bevorzugt die Verwendung von Intel QuickSync für die Dekodierung von Videos, wenn der QuickSync-Encoder verwendet wird und die Hardware dafür verfügbar ist.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>QSV-Decodierung auch verwenden, wenn kein QuickSync-Encoder verwendet wird (z. B. x265)</value>
+    <value>QuickSync-Decodierung auch verwenden, wenn kein QuickSync-Encoder verwendet wird (z. B. x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Punktationen entfernen</value>
@@ -1861,20 +1863,13 @@ Verbleibende Zeit: {5}, vergangen: {6} {7}</value>
     <value>Ausgewähltes löschen</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portabler Modus: Erstellen von TMP-Verzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.
-
-    {0}</value>
+    <value>Portabler Modus: Erstellen von TMP-Verzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portabler Modus: Erstellen von Speicherverzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.
-
-    {0}</value>
+    <value>Portabler Modus: Erstellen von Speicherverzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Portabler Modus: Das Lesen von portable.ini ist nicht möglich. Die Datei könnte fehlerhaft sein. Bitte erneut portable.ini.template als Vorlage benutzen.</value>
-  </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte die GPU-Treiber für alle Onboard- und diskreten Grafikkarten aktualisieren, die dieses System besitzt.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Austausch-Platzhalter: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
@@ -2153,7 +2148,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Eine neue Version von HandBrake ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 Das HandBrake Team</value>
+    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>Geringe Batteriekapazität:</value>
@@ -2247,9 +2242,6 @@ Bitte eine andere Voreinstellung auswählen.</value>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
     <value>Ausrichtung und Beschnitt:</value>
   </data>
-  <data name="OptionsView_Win10Only" xml:space="preserve">
-    <value>( Nur Windows 10! )</value>
-  </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
     <value>Filter:</value>
   </data>
@@ -2320,7 +2312,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Stop</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
     <value>Der eingegebene Name der Kategorie existiert schon. Bitte einen anderen Namen wählen.</value>
@@ -2605,5 +2597,63 @@ Es werden nur Warteschlangen-Dateien der aktuellen Version unterstützt.</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>Alle maximieren</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>RTL-Anzeigemodus:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Nur Text</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Gesamte Benutzeroberfläche</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>Die momentane Entwicklungsversion, die Sie verwenden, ist veraltet. Vielleicht möchten Sie aktualisieren!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Download via Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Download Entwicklungsversion (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>QuickSync Deep Link Hyper-Encodierung aktivieren</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Bevorzugt die Verwendung mehrerer Medien-Engines, um eine einzelne Kodierung zu beschleunigen, sofern unterstützt. Deaktivieren Sie diese Option, um einen Lastausgleich für mehrere parallele Kodierungen über verschiedene Medien-Engines hinweg zu ermöglichen.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>HandBrake öffnen</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Die Unterstützung der Hardware-Kodierung wurde deaktiviert, da sie eine häufige Ursache für Startprobleme ist.
+- Bitte versuchen Sie, HandBrake neu zu starten. 
+- Wenn das Problem weiterhin besteht, ist möglicherweise ein veralteter Grafikkartentreiber (onboard oder diskret) die Ursache des Problems.
+
+Die Unterstützung der Hardware-Kodierung kann in den Einstellungen wieder aktiviert werden. </value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake war nicht in der Lage zu starten.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Abgesicherter Modus zurücksetzen</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Bitte HandBrake neu starten.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Statistik der Warteschlange exportieren (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export beendet!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Es muss zuerst eine Quelle gescannt und ein Zielverzeichnis gewählt werden</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Nur wenn die Datei bereits auf dem Speichermedium vorhanden ist.</value>
   </data>
 </root>

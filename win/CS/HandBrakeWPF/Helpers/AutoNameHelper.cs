@@ -15,7 +15,8 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Extensions;
+    using HandBrake.App.Core.Extensions;
+
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;

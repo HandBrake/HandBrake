@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
 

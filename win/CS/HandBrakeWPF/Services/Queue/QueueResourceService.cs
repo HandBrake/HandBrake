@@ -73,23 +73,39 @@ namespace HandBrakeWPF.Services.Queue
         {
             this.maxAllowedInstances = this.userSettingService.GetUserSetting<int>(UserSettingConstants.SimultaneousEncodes);
 
-            // Allow QSV adapter scaling. 
-            this.qsvGpus = HandBrakeEncoderHelpers.GetQsvAdaptorList();
-            this.totalQsvInstances = this.qsvGpus.Count * 2; // Allow two instances per GPU
-
-            // Most Nvidia cards support 3 instances.
-            this.totalNvidiaInstances = 3;
-
-            // VCE Support still TBD
-            this.totalVceInstances = 3;
-
-            this.totalMfInstances = 1;
-
             // Whether using hardware or not, some CPU is needed so don't allow more jobs than CPU.
             if (this.maxAllowedInstances > Utilities.SystemInfo.MaximumSimultaneousInstancesSupported)
             {
                 this.maxAllowedInstances = Utilities.SystemInfo.MaximumSimultaneousInstancesSupported;
             }
+
+            // Allow QSV adapter scaling. 
+            this.qsvGpus = HandBrakeEncoderHelpers.GetQsvAdaptorList();
+            this.totalQsvInstances = this.qsvGpus.Count * 2; // Allow two instances per GPU
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode))
+            {
+                // When HyperEncode is supported, we encode 1 job across multiple media engines. 
+                this.totalQsvInstances = 1;
+            }
+
+            if (this.maxAllowedInstances == 1)
+            {
+                this.totalQsvInstances = 1;
+                this.totalNvidiaInstances = 1;
+                this.totalVceInstances = 1;
+                this.totalMfInstances = 1;
+                return;
+            } 
+
+            // NVEnc Support - (Most cards support 3 but not all)
+            this.totalNvidiaInstances = 3;
+
+            // VCN Support
+            this.totalVceInstances = 3;
+
+            // ARM64 Support
+            this.totalMfInstances = 1;
         }
 
         public Guid? GetToken(EncodeTask task)
@@ -101,6 +117,8 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
+                    case VideoEncoder.QuickSyncAV1:
+                    case VideoEncoder.QuickSyncAV110b:
                         if (this.qsvInstances.Count < this.totalQsvInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                         {
                             this.AllocateIntelGPU(task);
@@ -205,6 +223,8 @@ namespace HandBrakeWPF.Services.Queue
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.QuickSyncH26510b:
+                    case VideoEncoder.QuickSyncAV1:
+                    case VideoEncoder.QuickSyncAV110b:
                         if (this.qsvInstances.Contains(unlockKey.Value))
                         {
                             this.qsvInstances.Remove(unlockKey.Value);
@@ -245,6 +265,14 @@ namespace HandBrakeWPF.Services.Queue
             if (this.qsvGpus.Count <= 1)
             {
                 return; // Not a multi-Intel-GPU system.
+            }
+
+            // HyperEncode takes priority over load balancing when enabled. 
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode))
+            {
+                task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
+                                                  ? "hyperencode=adaptive" : string.Format("{0}:hyperencode=adaptive", task.ExtraAdvancedArguments);
+                return;
             }
 
             if (task.ExtraAdvancedArguments.Contains("gpu"))

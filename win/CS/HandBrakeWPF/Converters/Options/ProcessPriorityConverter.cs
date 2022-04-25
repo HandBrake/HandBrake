@@ -9,14 +9,9 @@
 
 namespace HandBrakeWPF.Converters.Options
 {
-    using System;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
     using System.Windows.Data;
 
     using HandBrakeWPF.Model.Options;
-    using HandBrakeWPF.Utilities;
 
     public class ProcessPriorityConverter : ResourceConverterBase<ProcessPriority>, IValueConverter
     {

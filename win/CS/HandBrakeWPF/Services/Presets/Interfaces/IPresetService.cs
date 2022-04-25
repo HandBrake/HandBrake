@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPresetService.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IPresetService.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -32,13 +32,6 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </summary>
         ObservableCollection<IPresetObject> Presets { get; }
 
-        List<Preset> FlatPresetList { get; }
-
-        /// <summary>
-        /// Gets DefaultPreset.
-        /// </summary>
-        Preset DefaultPreset { get; }
-
         /// <summary>
         /// The load.
         /// </summary>
@@ -70,6 +63,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </returns>
         IList<PresetDisplayCategory> GetPresetCategories(bool userCategoriesOnly);
 
+        Preset GetPresetByName(string presetName);
+
+        Preset GetDefaultPreset();
+
         /// <summary>
         /// Add a new preset to the system
         /// </summary>
@@ -96,34 +93,37 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <param name="filename">
         /// The filename.
         /// </param>
-        /// <param name="preset">
+        /// <param name="presetName">
         /// The preset.
         /// </param>
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        void Export(string filename, Preset preset, HBConfiguration configuration);
+        void Export(string filename, string presetName);
 
-        void ExportCategories(string filename, IList<PresetDisplayCategory> categories, HBConfiguration configuration);
+        void ExportCategories(string filename, IList<PresetDisplayCategory> categories);
 
         /// <summary>
         /// Update a preset
         /// </summary>
+        /// <param name="presetName">
+        /// The preset Name.
+        /// </param>
         /// <param name="update">
         /// The updated preset
         /// </param>
-        void Update(Preset update);
+        void Update(string presetName, Preset update);
 
         /// <summary>
         /// Remove a preset with a given name from either the built in or user preset list.
         /// </summary>
-        /// <param name="preset">
+        /// <param name="presetName">
         /// The Preset to remove
         /// </param>
         /// <returns>
         /// True if it was removed successfully, false otherwise.
         /// </returns>
-        bool Remove(Preset preset);
+        bool Remove(string presetName);
 
         /// <summary>
         /// Remove a group of presets by category
@@ -157,10 +157,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// Set Default Preset
         /// </summary>
-        /// <param name="name">
+        /// <param name="presetName">
         /// The name.
         /// </param>
-        void SetDefault(Preset name);
+        void SetDefault(string presetName);
 
         /// <summary>
         /// Returns a value if the preset can be updated / resaved
@@ -179,6 +179,11 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         void UpdateBuiltInPresets();
 
         /// <summary>
+        /// Remove all built-in presets that are not default.
+        /// </summary>
+        void DeleteBuiltInPresets();
+
+        /// <summary>
         /// Check if the preset "name" exists in either Presets or UserPresets lists.
         /// </summary>
         /// <param name="name">Name of the preset</param>
@@ -188,23 +193,29 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// Replace an existing preset with a modified one.
         /// </summary>
-        /// <param name="existing">
-        /// The existing.
+        /// <param name="presetName">
+        /// The existing preset name
         /// </param>
         /// <param name="replacement">
         /// The replacement.
         /// </param>
-        void Replace(Preset existing, Preset replacement);
+        void Replace(string presetName, Preset replacement);
 
         /// <summary>
         /// Set the selected preset
         /// </summary>
-        /// <param name="selectedPreset">The preset we want to select.</param>
-        void SetSelected(Preset selectedPreset);
+        /// <param name="presetName">The preset we want to select.</param>
+        void SetSelected(string presetName);
 
         /// <summary>
         /// Change the category to which a preset belongs.
         /// </summary>
-        void ChangePresetCategory(Preset preset, string categoryName);
+        /// <param name="presetName">
+        /// The preset.
+        /// </param>
+        /// <param name="categoryName">
+        /// The category Name.
+        /// </param>
+        void ChangePresetCategory(string presetName, string categoryName);
     }
 }

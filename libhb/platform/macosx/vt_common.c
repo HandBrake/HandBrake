@@ -66,6 +66,7 @@ static int is_hardware_encoder_available(CMVideoCodecType codecType, CFStringRef
 static int vt_h264_available;
 static int vt_h265_available;
 static int vt_h265_10bit_available;
+static int vt_h265_422_10bit_available;
 
 int hb_vt_is_encoder_available(int encoder)
 {
@@ -94,6 +95,7 @@ int hb_vt_is_encoder_available(int encoder)
                 if (__builtin_available (macOS 11, *))
                 {
                     vt_h265_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, kVTProfileLevel_HEVC_Main10_AutoLevel);
+                    vt_h265_422_10bit_available = is_hardware_encoder_available(kCMVideoCodecType_HEVC, CFSTR("HEVC_Main42210_AutoLevel"));
                 }
                 else
                 {
@@ -206,7 +208,17 @@ static const char * const vt_h264_profile_name[] =
 
 static const char * const vt_h265_profile_name[] =
 {
-    "auto", NULL
+    "auto", "main", NULL
+};
+
+static const char * const vt_h265_10_profile_name[] =
+{
+    "auto", "main10", NULL
+};
+
+static const char * const vt_h265_422_10_profile_name[] =
+{
+    "auto", "main10", "main422-10", NULL
 };
 
 static const char * vt_h264_level_names[] =
@@ -221,12 +233,12 @@ static const char * const vt_h265_level_names[] =
 
 static const enum AVPixelFormat vt_h26x_pix_fmts[] =
 {
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    /*AV_PIX_FMT_NV12, */AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat vt_h265_10bit_pix_fmts[] =
 {
-    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
+    AV_PIX_FMT_P210, AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
 };
 
 const int* hb_vt_get_pix_fmts(int encoder)
@@ -254,8 +266,18 @@ const char* const* hb_vt_profile_get_names(int encoder)
         case HB_VCODEC_VT_H264:
             return vt_h264_profile_name;
         case HB_VCODEC_VT_H265:
-        case HB_VCODEC_VT_H265_10BIT:
             return vt_h265_profile_name;
+        case HB_VCODEC_VT_H265_10BIT:
+        {
+            if (vt_h265_422_10bit_available)
+            {
+                return vt_h265_422_10_profile_name;
+            }
+            else
+            {
+                return vt_h265_10_profile_name;
+            }
+        }
     }
     return NULL;
 }

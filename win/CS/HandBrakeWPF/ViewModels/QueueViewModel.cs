@@ -16,15 +16,19 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Versioning;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Input;
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Exceptions;
+    using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop;
+
+    using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -60,6 +64,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
         }
+
+        public ICommand QueueExtractResultDataCommand => new QueueExtractResultDataCommand(this, this.errorService);
+
+        public bool IsNightly => HandBrakeVersionHelper.IsNightly();
 
         public bool IsQueueRunning
         {

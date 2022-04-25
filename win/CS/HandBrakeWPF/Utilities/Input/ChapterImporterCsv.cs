@@ -13,7 +13,8 @@ namespace HandBrakeWPF.Utilities.Input
     using System.Collections.Generic;
     using System.IO;
 
-    using HandBrakeWPF.Exceptions;
+    using HandBrake.App.Core.Exceptions;
+
     using HandBrakeWPF.Properties;
 
     /// <summary>

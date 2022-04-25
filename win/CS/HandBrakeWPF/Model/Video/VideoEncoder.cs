@@ -72,6 +72,14 @@ namespace HandBrakeWPF.Model.Video
         [ShortName("qsv_h265_10bit")]
         QuickSyncH26510b,
 
+        [DisplayName("AV1 (Intel QSV)")]
+        [ShortName("qsv_av1")]
+        QuickSyncAV1,
+
+        [DisplayName("AV1 10-bit (Intel QSV)")]
+        [ShortName("qsv_av1_10bit")]
+        QuickSyncAV110b,
+
         [DisplayName("H.265 (AMD VCE)")]
         [ShortName("vce_h265")]
         VceH265,

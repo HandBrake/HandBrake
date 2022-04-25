@@ -1,6 +1,6 @@
 /* deinterlace.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2022 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -11,35 +11,53 @@
 #include "handbrake/decomb.h"
 #include "handbrake/avfilter_priv.h"
 
+#define FFMPEG_DEINTERLACE_FILTER(FILTER_ID, FILTER_NAME, FFMPEG_NAME, OPTS_TEMPLATE)  \
+    static int deinterlace_##FFMPEG_NAME(hb_filter_object_t * filter,   \
+        hb_filter_init_t * init);                                       \
+                                                                        \
+    hb_filter_object_t hb_filter_##FFMPEG_NAME =                        \
+    {                                                                   \
+        .id                = FILTER_ID,                                 \
+        .enforce_order     = 1,                                         \
+        .skip              = 1,                                         \
+        .name              = FILTER_NAME,                               \
+        .settings          = NULL,                                      \
+        .init              = deinterlace_##FFMPEG_NAME,                 \
+        .work              = hb_avfilter_null_work,                     \
+        .close             = hb_avfilter_alias_close,                   \
+        .settings_template = OPTS_TEMPLATE,                             \
+    };                                                                  \
+                                                                        \
+    static int deinterlace_##FFMPEG_NAME(hb_filter_object_t * filter,   \
+        hb_filter_init_t * init)                                        \
+    {                                                                   \
+        return deinterlace_init(filter, init, #FFMPEG_NAME);            \
+    }                                                                   \
+
 static int deinterlace_init(hb_filter_object_t * filter,
-                            hb_filter_init_t * init);
+                            hb_filter_init_t * init, char *filter_name);
 
 const char deint_template[] =
     "mode=^"HB_INT_REG"$:parity=^([01])$";
 
-hb_filter_object_t hb_filter_deinterlace =
-{
-    .id                = HB_FILTER_DEINTERLACE,
-    .enforce_order     = 1,
-    .skip              = 1,
-    .name              = "Deinterlace",
-    .settings          = NULL,
-    .init              = deinterlace_init,
-    .work              = hb_avfilter_null_work,
-    .close             = hb_avfilter_alias_close,
-    .settings_template = deint_template,
-};
+FFMPEG_DEINTERLACE_FILTER(HB_FILTER_YADIF, "Deinterlace", yadif,
+                          deint_template);
+FFMPEG_DEINTERLACE_FILTER(HB_FILTER_BWDIF, "Bwdif", bwdif,
+                          deint_template);
+/* FFMPEG_DEINTERLACE_FILTER(..., "Estdif", estdif,
+                          estdif_template); */
 
 /* Deinterlace Settings
  *  mode:parity
  *
  *  mode   - yadif deinterlace mode
  *  parity - field parity
+
  *
  *  Modes:
- *      1 = Enabled
- *      2 = Spatial
- *      4 = Bob
+ *      1 = Enabled ("send_frame")
+ *      2 = Spatial [Yadif only]
+ *      4 = Bob ("send_field")
  *      8 = Selective
  *
  *  Parity:
@@ -49,7 +67,7 @@ hb_filter_object_t hb_filter_deinterlace =
  *
  */
 static int deinterlace_init(hb_filter_object_t * filter,
-                            hb_filter_init_t * init)
+                            hb_filter_init_t * init, char *filter_name)
 {
     hb_filter_private_t * pv = NULL;
 
@@ -61,11 +79,12 @@ static int deinterlace_init(hb_filter_object_t * filter,
     }
     pv->input = *init;
 
-    hb_dict_t        * settings = filter->settings;
+    hb_dict_t *settings = filter->settings;
 
-    int          mode = 3, parity = -1;
+    int  mode = 3, parity = -1;
+    uint8_t is_yadif = !(strncmp("yadif", filter_name, 5)); //yadif_cuda compliant
 
-    hb_dict_extract_int(&mode, settings, "mode");
+    hb_dict_extract_int(&mode,   settings, "mode");
     hb_dict_extract_int(&parity, settings, "parity");
 
     if (!(mode & MODE_YADIF_ENABLE))
@@ -76,9 +95,9 @@ static int deinterlace_init(hb_filter_object_t * filter,
     hb_dict_t * avfilter = hb_dict_init();
     hb_dict_t * avsettings = hb_dict_init();
 
-    if (mode & MODE_YADIF_BOB)
+    if (mode & MODE_XXDIF_BOB)
     {
-        if (mode & MODE_YADIF_SPATIAL)
+        if ((mode & MODE_YADIF_SPATIAL) || !is_yadif)
         {
             hb_dict_set(avsettings, "mode", hb_value_string("send_field"));
         }
@@ -90,7 +109,7 @@ static int deinterlace_init(hb_filter_object_t * filter,
     }
     else
     {
-        if (mode & MODE_YADIF_SPATIAL)
+        if ((mode & MODE_YADIF_SPATIAL) || !is_yadif)
         {
             hb_dict_set(avsettings, "mode", hb_value_string("send_frame"));
         }
@@ -113,7 +132,7 @@ static int deinterlace_init(hb_filter_object_t * filter,
     {
         hb_dict_set(avsettings, "parity", hb_value_string("bff"));
     }
-    hb_dict_set(avfilter, "yadif", avsettings);
+    hb_dict_set(avfilter, filter_name, avsettings);
     pv->avfilters = avfilter;
 
     pv->output = *init;

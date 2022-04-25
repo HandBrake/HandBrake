@@ -66,7 +66,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 - (IBAction)openUserGuide:(id)sender
 {
-    [NSWorkspace.sharedWorkspace openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/audio-subtitle-defaults.html"]];
+    [NSWorkspace.sharedWorkspace openURL:[HBUtilities.documentationBaseURL URLByAppendingPathComponent:@"advanced/audio-subtitle-defaults.html"]];
 }
 
 @end

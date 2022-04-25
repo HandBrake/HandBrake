@@ -14,9 +14,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Globalization;
     using System.Linq;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
@@ -174,6 +174,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "yadif":
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Yadif;
                     break;
+                case "bwdif":
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Bwdif;
+                    break;
                 default:
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Off;
                     break;
@@ -189,13 +192,21 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEINTERLACE);
+                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_YADIF);
                 HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
                 preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
                 preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
             }
 
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif || preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
+            {
+                List<HBPresetTune> filterPresets = HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_BWDIF);
+                HBPresetTune presetTune = filterPresets.FirstOrDefault(f => f.ShortName == importedPreset.PictureDeinterlacePreset);
+                preset.Task.DeinterlacePreset = presetTune ?? new HBPresetTune("Default", "default");
+                preset.Task.CustomDeinterlaceSettings = importedPreset.PictureDeinterlaceCustom;
+            }
+
+            if (preset.Task.DeinterlaceFilter != DeinterlaceFilter.Off)
             {
                 switch (importedPreset.PictureCombDetectPreset)
                 {
@@ -497,22 +508,22 @@ namespace HandBrakeWPF.Services.Presets.Factories
             return preset;
         }
 
-        public static PresetTransportContainer ExportPreset(Preset export, HBConfiguration config)
+        public static PresetTransportContainer ExportPreset(Preset export)
         {
             PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
             PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
 
-            container.PresetList = new List<object> { CreateHbPreset(export, config) };
+            container.PresetList = new List<object> { CreateHbPreset(export) };
 
             return container;
         }
 
-        public static PresetTransportContainer ExportPresets(IEnumerable<Preset> exportList, HBConfiguration config)
+        public static PresetTransportContainer ExportPresets(IEnumerable<Preset> exportList)
         {
             PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
             PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
 
-            List<HBPreset> presets = exportList.Select(item => CreateHbPreset(item, config)).ToList();
+            List<HBPreset> presets = exportList.Select(item => CreateHbPreset(item)).ToList();
 
             container.PresetList = new List<object>();
             container.PresetList.AddRange(presets);
@@ -520,7 +531,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             return container;
         }
 
-        public static PresetTransportContainer ExportPresetCategories(IList<PresetDisplayCategory> categories, HBConfiguration config)
+        public static PresetTransportContainer ExportPresetCategories(IList<PresetDisplayCategory> categories)
         {
             PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
             PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
@@ -528,7 +539,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             List<object> presets = new List<object>();
             foreach (var category in categories)
             {
-                presets.Add(CreatePresetCategory(category, config));
+                presets.Add(CreatePresetCategory(category));
             }
 
             container.PresetList = presets;
@@ -536,7 +547,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             return container;
         }
 
-        public static HBPresetCategory CreatePresetCategory(PresetDisplayCategory category, HBConfiguration config)
+        public static HBPresetCategory CreatePresetCategory(PresetDisplayCategory category)
         {
             HBPresetCategory preset = new HBPresetCategory();
             preset.Folder = true;
@@ -546,13 +557,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             foreach (Preset singlePreset in category.Presets)
             {
-                preset.ChildrenArray.Add(CreateHbPreset(singlePreset, config));
+                preset.ChildrenArray.Add(CreateHbPreset(singlePreset));
             }
 
             return preset;
         }
 
-        public static HBPreset CreateHbPreset(Preset export, HBConfiguration config)
+        public static HBPreset CreateHbPreset(Preset export)
         {
             HBPreset preset = new HBPreset();
 
@@ -646,9 +657,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDeblockTune = export.Task.DeblockTune?.Key;
             preset.PictureDeblockCustom = export.Task.CustomDeblock;
 
-            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
-                ? "decomb"
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif" : "off";
+            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb ? "decomb"
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif"
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Bwdif ? "bwdif" : "off";
             preset.PictureDeinterlacePreset = export.Task.DeinterlacePreset?.ShortName;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlaceSettings;
 
@@ -684,7 +695,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
             preset.VideoPreset = export.Task.VideoPreset != null ? export.Task.VideoPreset.ShortName : null;
             preset.VideoProfile = export.Task.VideoProfile != null ? export.Task.VideoProfile.ShortName : null;
-            preset.VideoQSVDecode = config.EnableQuickSyncDecoding;
             preset.VideoQualitySlider = export.Task.Quality.HasValue ? export.Task.Quality.Value : 0;
             preset.VideoQualityType = (int)export.Task.VideoEncodeRateType;
             preset.VideoScaler = EnumHelper<VideoScaler>.GetShortName(VideoScaler.Lanczos);

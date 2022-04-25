@@ -1,15 +1,15 @@
 $(eval $(call import.MODULE.defs,LIBVPL,libvpl))
 $(eval $(call import.CONTRIB.defs,LIBVPL))
 
-LIBVPL.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2021.6.0.tar.gz
-LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2021.6.0.tar.gz
-LIBVPL.FETCH.sha256    = c83590c4b0d12c4a48f4cbf4b6e8d595bf1f6f96bb262d21457793d19f7b2b6a
-LIBVPL.FETCH.basename  = oneVPL-2021.6.0.tar.gz
-LIBVPL.EXTRACT.tarbase = oneVPL-2021.6.0
+LIBVPL.FETCH.url       = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2022.0.4.tar.gz
+LIBVPL.FETCH.url      += https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2022.0.4.tar.gz
+LIBVPL.FETCH.sha256    = 7fb0965f1a22344a044840462637f23be0d019bacd011ca2ff179d72dc40064b
+LIBVPL.FETCH.basename  = oneVPL-2022.0.4.tar.gz
+LIBVPL.EXTRACT.tarbase = oneVPL-2022.0.4
 
 LIBVPL.build_dir             = build
 LIBVPL.CONFIGURE.exe         = cmake
-LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF
+LIBVPL.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(LIBVPL.CONFIGURE.prefix)" -DBUILD_PREVIEW=OFF -DBUILD_TOOLS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_SHARED_LIBS=OFF
 LIBVPL.CONFIGURE.deps        =
 LIBVPL.CONFIGURE.static      =
 LIBVPL.CONFIGURE.shared      =

@@ -12,6 +12,8 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Windows.Threading;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Utilities;
