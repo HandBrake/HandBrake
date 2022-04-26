@@ -56,6 +56,7 @@ jobs:
         path: ./build/libhb/hb.dll
 
   build_gui:
+    if: false
     name: Windows UI
     runs-on: windows-2022
     needs: build_mingw

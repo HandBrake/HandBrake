@@ -24,3 +24,9 @@ jobs:
         ./configure --disable-gtk-update-checks --enable-qsv --enable-fdk-aac
         cd build
         make -j 3
+
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v3
+      with:
+        name: HandBrakeCLI
+        path: ./build/
