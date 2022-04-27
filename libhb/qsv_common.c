@@ -564,7 +564,7 @@ static void init_ext_av1bitstream_option(mfxExtAV1BitstreamParam *extAV1Bitstrea
     extAV1BitstreamParam->WriteIVFHeaders = MFX_CODINGOPTION_OFF;
 }
 
-static int query_capabilities(mfxSession session, int index, mfxVersion version, hb_qsv_info_t *info)
+static int query_capabilities(mfxSession session, int index, mfxVersion version, hb_qsv_info_t *info, int lowpower)
 {
     /*
      * MFXVideoENCODE_Query(mfxSession, mfxVideoParam *in, mfxVideoParam *out);
@@ -626,7 +626,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
             mfxStatus mfxRes;
             init_video_param(&inputParam);
             inputParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                inputParam.mfx.LowPower = lowpower;
+            }
             memset(&videoParam, 0, sizeof(mfxVideoParam));
             videoParam.mfx.CodecId = inputParam.mfx.CodecId;
 
@@ -681,6 +684,11 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 {
                     info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
                 }
+                if (info->codec_id == MFX_CODEC_AVC &&
+                    (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7))
+                {
+                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
+                }
                 if (info->codec_id == MFX_CODEC_HEVC &&
                     (hb_qsv_hardware_generation(hb_qsv_get_platform(index)) >= QSV_G7))
                 {
@@ -721,6 +729,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                inputParam.mfx.LowPower      = lowpower;
+            }
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_LA;
             inputParam.mfx.TargetKbps        = 5000;
 
@@ -735,6 +747,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 // also check for LA + interlaced support
                 init_video_param(&inputParam);
                 inputParam.mfx.CodecId             = info->codec_id;
+                if (hb_qsv_implementation_is_hardware(info->implementation))
+                {
+                    inputParam.mfx.LowPower        = lowpower;
+                }
                 inputParam.mfx.RateControlMethod   = MFX_RATECONTROL_LA;
                 inputParam.mfx.FrameInfo.PicStruct = MFX_PICSTRUCT_FIELD_TFF;
                 inputParam.mfx.TargetKbps          = 5000;
@@ -754,6 +770,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                inputParam.mfx.LowPower      = lowpower;
+            }
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
             inputParam.mfx.ICQQuality        = 20;
 
@@ -774,7 +794,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_video_signal_info(&extVideoSignalInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extVideoSignalInfo;
@@ -806,7 +829,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_coding_option(&extCodingOption);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption;
@@ -842,7 +868,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_coding_option2(&extCodingOption2);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
@@ -952,7 +981,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_chroma_loc_info(&extChromaLocInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extChromaLocInfo;
@@ -977,7 +1009,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_mastering_display_colour_volume(&extMasteringDisplayColourVolume);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extMasteringDisplayColourVolume;
@@ -992,7 +1027,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
 
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_content_light_level_info(&extContentLightLevelInfo);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extContentLightLevelInfo;
@@ -1016,7 +1054,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_hyperencode_option(&extHyperEncodeParam);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extHyperEncodeParam;
@@ -1032,7 +1073,10 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-
+            if (hb_qsv_implementation_is_hardware(info->implementation))
+            {
+                videoParam.mfx.LowPower = lowpower;
+            }
             init_ext_av1bitstream_option(&extAV1BitstreamParam);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extAV1BitstreamParam;
@@ -1262,11 +1306,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
         mfxSession session;
         mfxVersion version = { .Major = 1, .Minor = 0, };
         mfxLoader loader;
-#if defined(_WIN32) || defined(__MINGW32__)
-        mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
-#else
-        mfxIMPL hw_preference = MFX_IMPL_VIA_ANY;
-#endif
+
         // check for software fallback
         if (MFXInit(MFX_IMPL_SOFTWARE, &version, &session) == MFX_ERR_NONE)
         {
@@ -1276,8 +1316,8 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                                     HB_QSV_MINVERSION_MAJOR,
                                     HB_QSV_MINVERSION_MINOR))
             {
-                query_capabilities(session, details->index, details->qsv_software_version, &details->qsv_software_info_avc);
-                query_capabilities(session, details->index, details->qsv_software_version, &details->qsv_software_info_hevc);
+                query_capabilities(session, details->index, details->qsv_software_version, &details->qsv_software_info_avc, MFX_CODINGOPTION_OFF);
+                query_capabilities(session, details->index, details->qsv_software_version, &details->qsv_software_info_hevc, MFX_CODINGOPTION_OFF);
                 // now that we know which hardware encoders are
                 // available, we can set the preferred implementation
                 qsv_impl_set_preferred(details, "software");
@@ -1285,6 +1325,11 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
             MFXClose(session);
         }
         // check for actual hardware support
+#if defined(_WIN32) || defined(__MINGW32__)
+        mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
+#else
+        mfxIMPL hw_preference = MFX_IMPL_VIA_ANY;
+#endif
         do{
 #if defined(_WIN32) || defined(__MINGW32__)
             mfxIMPL hw_impl = hb_qsv_dx_index_to_impl(details->index);
@@ -1311,13 +1356,27 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                                         HB_QSV_MINVERSION_MAJOR,
                                         HB_QSV_MINVERSION_MINOR))
                 {
-                    query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_avc);
+                    if (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) >= QSV_G7)
+                    {
+                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_avc, MFX_CODINGOPTION_ON);
+                    }
+                    if (details->qsv_hardware_info_avc.available == 0)
+                    {
+                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_avc, MFX_CODINGOPTION_OFF);
+                    }
                     details->qsv_hardware_info_avc.implementation = hw_impl | hw_preference;
-                    query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc);
+                    if (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) >= QSV_G7)
+                    {
+                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc, MFX_CODINGOPTION_ON);
+                    }
+                    if (details->qsv_hardware_info_hevc.available == 0)
+                    {
+                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc, MFX_CODINGOPTION_OFF);
+                    }
                     details->qsv_hardware_info_hevc.implementation = hw_impl | hw_preference;
                     if ((details->type == MFX_MEDIA_DISCRETE) && (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) > QSV_G8))
                     {
-                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_av1);
+                        query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_av1, MFX_CODINGOPTION_ON);
                         details->qsv_hardware_info_av1.implementation = hw_impl | hw_preference;
                     }
                     // now that we know which hardware encoders are
