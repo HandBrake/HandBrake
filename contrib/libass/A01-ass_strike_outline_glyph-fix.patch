@@ -1,0 +1,182 @@
+From 0915955733bd236ecc44645ee968fb7a55ad5079 Mon Sep 17 00:00:00 2001
+From: Oleg Oshmyan <chortos@inbox.lv>
+Date: Mon, 20 Sep 2021 23:37:23 +0300
+Subject: [PATCH] Add strikeout/underline to ASS_Outline, not FreeType-owned
+ memory
+
+ass_strike_outline_glyph was realloc()ing memory that was
+allocated by FreeType, not us. This isn't generally safe.
+Indeed, FreeType recently switched to a different allocator
+on Windows, so this code started crashing.
+
+To avoid this, move the ass_strike_outline_glyph call
+after the FT_Outline -> ASS_Outline conversion.
+
+It's safer (less chance to exceed outline size limits)
+and easier to work with ASS_Outline, anyway.
+
+Fixes the crash in https://github.com/mpv-player/mpv/issues/9227.
+---
+ libass/ass_font.c   | 55 +++++++++++++++++++--------------------------
+ libass/ass_font.h   |  5 +++++
+ libass/ass_render.c |  4 ++++
+ 3 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/libass/ass_font.c b/libass/ass_font.c
+index 221a7b4a7..46b797598 100644
+--- a/libass/ass_font.c
++++ b/libass/ass_font.c
+@@ -357,29 +357,25 @@ void ass_font_get_asc_desc(ASS_Font *font, int face_index,
+     *desc = FT_MulFix(-face->descender, y_scale);
+ }
+ 
+-static void add_line(FT_Outline *ol, int bear, int advance, int dir, int pos, int size) {
+-    FT_Vector points[4] = {
+-        {.x = bear,      .y = pos + size},
+-        {.x = advance,   .y = pos + size},
+-        {.x = advance,   .y = pos - size},
++static void add_line(ASS_Outline *ol, int bear, int advance, int dir, int pos, int size) {
++    ASS_Vector points[4] = {
+         {.x = bear,      .y = pos - size},
++        {.x = advance,   .y = pos - size},
++        {.x = advance,   .y = pos + size},
++        {.x = bear,      .y = pos + size},
+     };
+ 
+     if (dir == FT_ORIENTATION_TRUETYPE) {
+-        int i;
+-        for (i = 0; i < 4; i++) {
+-            ol->points[ol->n_points] = points[i];
+-            ol->tags[ol->n_points++] = 1;
+-        }
++        for (int i = 0; i < 4; i++)
++            ol->points[ol->n_points++] = points[i];
+     } else {
+-        int i;
+-        for (i = 3; i >= 0; i--) {
+-            ol->points[ol->n_points] = points[i];
+-            ol->tags[ol->n_points++] = 1;
+-        }
++        for (int i = 3; i >= 0; i--)
++            ol->points[ol->n_points++] = points[i];
+     }
+ 
+-    ol->contours[ol->n_contours++] = ol->n_points - 1;
++    for (int i = 0; i < 4; i++)
++        ol->segments[ol->n_segments++] = OUTLINE_LINE_SEGMENT;
++    ol->segments[ol->n_segments - 1] |= OUTLINE_CONTOUR_END;
+ }
+ 
+ /*
+@@ -389,12 +385,13 @@ static void add_line(FT_Outline *ol, int bear, int advance, int dir, int pos, in
+  * being accurate.
+  *
+  */
+-static int ass_strike_outline_glyph(FT_Face face, ASS_Font *font,
+-                                    FT_Glyph glyph, int under, int through)
++int ass_strike_outline_glyph(ASS_Font *font, int face_index,
++                             FT_Glyph glyph, ASS_Outline *ol,
++                             int under, int through)
+ {
++    FT_Face face = font->faces[face_index];
+     TT_OS2 *os2 = FT_Get_Sfnt_Table(face, ft_sfnt_os2);
+     TT_Postscript *ps = FT_Get_Sfnt_Table(face, ft_sfnt_post);
+-    FT_Outline *ol = &((FT_OutlineGlyph) glyph)->outline;
+     int advance, y_scale, i, dir;
+ 
+     if (!under && !through)
+@@ -402,23 +399,20 @@ static int ass_strike_outline_glyph(FT_Face face, ASS_Font *font,
+ 
+     // Grow outline
+     i = (under ? 4 : 0) + (through ? 4 : 0);
+-    if (ol->n_points > SHRT_MAX - i)
+-        return 0;
+-    if (!ASS_REALLOC_ARRAY(ol->points, ol->n_points + i))
++    if (ol->n_points > SIZE_MAX - i)
+         return 0;
+-    if (!ASS_REALLOC_ARRAY(ol->tags, ol->n_points + i))
++    if (ol->n_segments > SIZE_MAX - i)
+         return 0;
+-    i = !!under + !!through;
+-    if (ol->n_contours > SHRT_MAX - i)
++    if (!ASS_REALLOC_ARRAY(ol->points, ol->n_points + i))
+         return 0;
+-    if (!ASS_REALLOC_ARRAY(ol->contours, ol->n_contours + i))
++    if (!ASS_REALLOC_ARRAY(ol->segments, ol->n_segments + i))
+         return 0;
+ 
+     advance = d16_to_d6(glyph->advance.x);
+     y_scale = face->size->metrics.y_scale;
+ 
+     // Reverse drawing direction for non-truetype fonts
+-    dir = FT_Outline_Get_Orientation(ol);
++    dir = FT_Outline_Get_Orientation(&((FT_OutlineGlyph) glyph)->outline);
+ 
+     // Add points to the outline
+     if (under && ps) {
+@@ -428,7 +422,7 @@ static int ass_strike_outline_glyph(FT_Face face, ASS_Font *font,
+         if (pos > 0 || size <= 0)
+             return 1;
+ 
+-        add_line(ol, 0, advance, dir, pos, size);
++        add_line(ol, 0, advance, dir, -pos, size);
+     }
+ 
+     if (through && os2) {
+@@ -438,7 +432,7 @@ static int ass_strike_outline_glyph(FT_Face face, ASS_Font *font,
+         if (pos < 0 || size <= 0)
+             return 1;
+ 
+-        add_line(ol, 0, advance, dir, pos, size);
++        add_line(ol, 0, advance, dir, -pos, size);
+     }
+ 
+     return 0;
+@@ -593,9 +587,6 @@ FT_Glyph ass_font_get_glyph(ASS_Font *font, int face_index, int index,
+         glyph->advance.x = face->glyph->linearVertAdvance;
+     }
+ 
+-    ass_strike_outline_glyph(face, font, glyph, deco & DECO_UNDERLINE,
+-                             deco & DECO_STRIKETHROUGH);
+-
+     return glyph;
+ }
+ 
+diff --git a/libass/ass_font.h b/libass/ass_font.h
+index 98ac1c85b..57f832d67 100644
+--- a/libass/ass_font.h
++++ b/libass/ass_font.h
+@@ -30,6 +30,7 @@ typedef struct ass_font ASS_Font;
+ #include "ass_types.h"
+ #include "ass_fontselect.h"
+ #include "ass_cache.h"
++#include "ass_outline.h"
+ 
+ #define VERTICAL_LOWER_BOUND 0x02f1
+ 
+@@ -63,6 +64,10 @@ FT_Glyph ass_font_get_glyph(ASS_Font *font, int face_index, int index,
+                             ASS_Hinting hinting, int deco);
+ void ass_font_clear(ASS_Font *font);
+ 
++int ass_strike_outline_glyph(ASS_Font *font, int face_index,
++                             FT_Glyph glyph, ASS_Outline *ol,
++                             int under, int through);
++
+ FT_Face ass_face_open(ASS_Library *lib, FT_Library ftlib, const char *path,
+                       const char *postscript_name, int index);
+ FT_Face ass_face_stream(ASS_Library *lib, FT_Library ftlib, const char *name,
+diff --git a/libass/ass_render.c b/libass/ass_render.c
+index 59c54b923..5fcbe968b 100644
+--- a/libass/ass_render.c
++++ b/libass/ass_render.c
+@@ -1173,6 +1173,10 @@ size_t ass_outline_construct(void *key, void *value, void *priv)
+                 if (!outline_convert(&v->outline[0], src))
+                     return 1;
+                 v->advance = d16_to_d6(glyph->advance.x);
++                ass_strike_outline_glyph(k->font, k->face_index,
++                                         glyph, &v->outline[0],
++                                         k->flags & DECO_UNDERLINE,
++                                         k->flags & DECO_STRIKETHROUGH);
+                 FT_Done_Glyph(glyph);
+                 ass_font_get_asc_desc(k->font, k->face_index,
+                                       &v->asc, &v->desc);
