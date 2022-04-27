@@ -2,6 +2,9 @@ name: Windows Build
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build_mingw:
     name: CLI / LibHB
