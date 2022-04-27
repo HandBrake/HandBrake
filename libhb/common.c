@@ -205,12 +205,12 @@ hb_dither_t *hb_audio_dithers_first_item = NULL;
 hb_dither_t *hb_audio_dithers_last_item  = NULL;
 hb_dither_internal_t hb_audio_dithers[]  =
 {
-    { { "default",                       "auto",          SWR_DITHER_NONE - 1,      }, NULL, 1, },
-    { { "none",                          "none",          SWR_DITHER_NONE,          }, NULL, 1, },
-    { { "rectangular",                   "rectangular",   SWR_DITHER_RECTANGULAR,   }, NULL, 1, },
-    { { "triangular",                    "triangular",    SWR_DITHER_TRIANGULAR,    }, NULL, 1, },
+    { { "default",                       "auto",          SWR_DITHER_NONE - 1,            }, NULL, 1, },
+    { { "none",                          "none",          SWR_DITHER_NONE,                }, NULL, 1, },
+    { { "rectangular",                   "rectangular",   SWR_DITHER_RECTANGULAR,         }, NULL, 1, },
+    { { "triangular",                    "triangular",    SWR_DITHER_TRIANGULAR,          }, NULL, 1, },
     { { "triangular with high pass",     "triangular_hp", SWR_DITHER_TRIANGULAR_HIGHPASS, }, NULL, 1, },
-    { { "lipshitz noise shaping",        "lipshitz_ns",   SWR_DITHER_NS_LIPSHITZ, }, NULL, 1, },
+    { { "lipshitz noise shaping",        "lipshitz_ns",   SWR_DITHER_NS_LIPSHITZ,         }, NULL, 1, },
 };
 int hb_audio_dithers_count = sizeof(hb_audio_dithers) / sizeof(hb_audio_dithers[0]);
 
