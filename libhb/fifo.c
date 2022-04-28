@@ -586,11 +586,8 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
     hb_buffer_init_planes(buf);
 
 #if HB_PROJECT_FEATURE_NVENC
-    /* Only allocate frame, can't initalize it here due to lack of ffmpeg
-     * HW frames context;; */
-    if (AV_PIX_FMT_CUDA == pix_fmt) {
-      buf->hw_ctx.frame = av_frame_alloc();
-    }
+    if (AV_PIX_FMT_CUDA == pix_fmt)
+        buf->hw_ctx.frame = av_frame_alloc();
 #endif
 
     return buf;
@@ -769,10 +766,8 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #endif
 
 #if HB_PROJECT_FEATURE_NVENC
-        if (b->hw_ctx.frame) {
-          av_frame_free(&b->hw_ctx.frame);
-          b->hw_ctx.frame = NULL;
-        }
+        if (b->hw_ctx.frame)
+            av_frame_free(&b->hw_ctx.frame);
 #endif
 
         hb_buffer_t * next = b->next;

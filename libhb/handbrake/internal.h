@@ -163,8 +163,9 @@ struct hb_buffer_s
 #endif
 
 #if HB_PROJECT_FEATURE_NVENC
-    struct hw_ctx {
-      void *frame;
+    struct hw_ctx
+    {
+        void *frame;
     } hw_ctx;
 #endif
 

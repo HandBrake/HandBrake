@@ -120,21 +120,8 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         uint8_t * src = frame->data[pp];
 
 #if HB_PROJECT_FEATURE_NVENC
-        if (frame->hw_frames_ctx) {
-          int ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
-          if (ret) {
-            hb_buffer_close(&buf);
-            return NULL;
-          }
-
-          ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
-          if (ret) {
-            hb_buffer_close(&buf);
-            return NULL;
-          }
-
-          continue;
-        }
+        if (frame->hw_frames_ctx)
+            continue;
 #endif
 
         for (yy = 0; yy < height; yy++)
@@ -144,6 +131,25 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
             src += linesize;
         }
     }
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (frame->hw_frames_ctx)
+    {
+        int ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
+        if (ret)
+        {
+            hb_buffer_close(&buf);
+            return NULL;
+        }
+
+        ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
+        if (ret)
+        {
+            hb_buffer_close(&buf);
+            return NULL;
+        }
+    }
+#endif
 
     return buf;
 }

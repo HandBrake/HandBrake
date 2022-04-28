@@ -1161,8 +1161,9 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVColorRange  color_range;
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (pv->frame->hw_frames_ctx) {
-      return 0;
+    if (pv->frame->hw_frames_ctx)
+    {
+        return 0;
     }
 #endif
 
@@ -1409,11 +1410,8 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     av_packet_unref(avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
-      char errstr[64];
-      av_strerror(ret, errstr, sizeof(errstr));
-      hb_error("avcodec_send_packet: failed with error '%s'", errstr);
-      ++pv->decode_errors;
-      return 0;
+        ++pv->decode_errors;
+        return 0;
     }
 
     do
@@ -1444,29 +1442,30 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 
 #if HB_PROJECT_FEATURE_NVENC
 static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
-                                         const enum AVPixelFormat *pix_fmts) {
-  const enum AVPixelFormat *p;
+                                         const enum AVPixelFormat *pix_fmts)
+{
+    const enum AVPixelFormat *p;
 
-  for (p = pix_fmts; *p != -1; p++) {
-    if (*p == AV_PIX_FMT_CUDA) {
-      return *p;
-    }
-  }
+    for (p = pix_fmts; *p != -1; p++)
+        if (*p == AV_PIX_FMT_CUDA)
+            return *p;
 
-  hb_error("Failed to get HW surface format.\n");
-  return AV_PIX_FMT_NONE;
+    hb_error("Failed to get HW surface format.\n");
+    return AV_PIX_FMT_NONE;
 }
 
 static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
-                            const enum AVHWDeviceType type) {
-  int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
-  if (err < 0) {
-    hb_error("Failed to create specified HW device.\n");
-    return err;
-  }
+                            const enum AVHWDeviceType type)
+{
+    int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
+    if (err < 0)
+    {
+        hb_error("Failed to create specified HW device.\n");
+        return err;
+    }
 
-  ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
-  return err;
+    ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
+    return err;
 }
 #endif
 
@@ -1551,7 +1550,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     else
 #endif
     {
-      pv->codec = avcodec_find_decoder(w->codec_param);
+        pv->codec = avcodec_find_decoder(w->codec_param);
     }
     if ( pv->codec == NULL )
     {
@@ -1566,19 +1565,22 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     AVBufferRef *hw_device_ctx = NULL;
     enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
 
-    for (int i = 0; use_hw_dec; i++) {
-      const AVCodecHWConfig *config = avcodec_get_hw_config(pv->codec, i);
-      if (!config) {
-        hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
-               av_hwdevice_get_type_name(type));
-        use_hw_dec = 0;
-        break;
-      }
-      if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
-          config->device_type == type) {
-        pv->job->title->video_decode_support = HB_DECODE_SUPPORT_NVDEC;
-        break;
-      }
+    for (int i = 0; use_hw_dec; i++)
+    {
+        const AVCodecHWConfig *config = avcodec_get_hw_config(pv->codec, i);
+        if (!config)
+        {
+            hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
+                   av_hwdevice_get_type_name(type));
+            use_hw_dec = 0;
+            break;
+        }
+        if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
+            config->device_type == type)
+        {
+            pv->job->title->video_decode_support = HB_DECODE_SUPPORT_NVDEC;
+            break;
+        }
     }
 #endif
 
@@ -1588,10 +1590,14 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (AV_HWDEVICE_TYPE_CUDA == type && use_hw_dec) {
-      pv->context->get_format = get_hw_pix_fmt;
-      if (cuda_hw_ctx_init(pv->context, hw_device_ctx, type) < 0)
-        hb_log("failed to initialize hw context");
+    if (AV_HWDEVICE_TYPE_CUDA == type && use_hw_dec)
+    {
+        pv->context->get_format = get_hw_pix_fmt;
+        if (cuda_hw_ctx_init(pv->context, hw_device_ctx, type) < 0)
+        {
+            hb_log("failed to initialize hw context");
+        }
+        pv->job->title->nv_hw_ctx.hw_device_ctx = av_buffer_ref(pv->context->hw_device_ctx);
     }
 #endif
 

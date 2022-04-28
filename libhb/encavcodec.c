@@ -145,29 +145,16 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 
 #if HB_PROJECT_FEATURE_NVENC
 static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
-                                         const enum AVPixelFormat *pix_fmts) {
-  const enum AVPixelFormat *p;
+                                         const enum AVPixelFormat *pix_fmts)
+{
+    const enum AVPixelFormat *p;
 
-  for (p = pix_fmts; *p != -1; p++) {
-    if (*p == AV_PIX_FMT_CUDA) {
-      return *p;
-    }
-  }
+    for (p = pix_fmts; *p != -1; p++)
+        if (*p == AV_PIX_FMT_CUDA)
+            return *p;
 
-  hb_error("Failed to get HW surface format.\n");
-  return AV_PIX_FMT_NONE;
-}
-
-static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
-                            const enum AVHWDeviceType type) {
-  int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
-  if (err < 0) {
-    hb_error("Failed to create specified HW device.\n");
-    return err;
-  }
-
-  ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
-  return err;
+    hb_error("Failed to get HW surface format.\n");
+    return AV_PIX_FMT_NONE;
 }
 #endif
 
@@ -282,33 +269,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         goto done;
     }
 
-#if HB_PROJECT_FEATURE_NVENC
-    AVBufferRef *hw_device_ctx = NULL;
-    const int use_hw_frames =
-        (HB_DECODE_SUPPORT_NVDEC == pv->job->title->video_decode_support);
-
-    enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
-    for (int i = 0; use_hw_frames; i++) {
-      const AVCodecHWConfig *config = avcodec_get_hw_config(codec, i);
-      if (!config) {
-        hb_log("Encoder %s does not support device type %s.\n", codec->name,
-               av_hwdevice_get_type_name(type));
-        break;
-      }
-      if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
-          config->device_type == type) {
-        break;
-      }
-    }
-#endif
-
     context = avcodec_alloc_context3(codec);
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (use_hw_frames && AV_HWDEVICE_TYPE_CUDA == type) {
-      context->get_format = get_hw_pix_fmt;
-      if (cuda_hw_ctx_init(context, hw_device_ctx, type) < 0)
-        hb_log("failed to initialize hw context");
+    const int use_hw_frames =
+        (HB_DECODE_SUPPORT_NVDEC == pv->job->title->video_decode_support);
+    if (use_hw_frames)
+    {
+        context->get_format = get_hw_pix_fmt;
+        context->hw_device_ctx = pv->job->title->nv_hw_ctx.hw_device_ctx;
     }
 #endif
 
@@ -910,24 +879,28 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
      * TODO (rarzumanyan): reference hw_frames_ctx from decoder.
      * Don't re-initialize.
      */
-    if (context->hw_device_ctx) {
-      context->pix_fmt = AV_PIX_FMT_CUDA;
-      context->hw_frames_ctx = av_hwframe_ctx_alloc(context->hw_device_ctx);
-      AVHWFramesContext *frames_ctx =
-          (AVHWFramesContext *)context->hw_frames_ctx->data;
-      frames_ctx->format = AV_PIX_FMT_CUDA;
-      frames_ctx->sw_format = AV_PIX_FMT_NV12;
-      frames_ctx->width = context->width;
-      frames_ctx->height = context->height;
-      ret = av_hwframe_ctx_init(context->hw_frames_ctx);
-      if (0 != ret) {
-        hb_error("failed to initialize hw frames context");
-      }
-    } else {
-      context->pix_fmt = job->output_pix_fmt;
+    if (context->hw_device_ctx)
+    {
+        context->pix_fmt = AV_PIX_FMT_CUDA;
+        context->hw_frames_ctx = av_hwframe_ctx_alloc(context->hw_device_ctx);
+        AVHWFramesContext *frames_ctx =
+            (AVHWFramesContext *)context->hw_frames_ctx->data;
+        frames_ctx->format = AV_PIX_FMT_CUDA;
+        frames_ctx->sw_format = AV_PIX_FMT_NV12;
+        frames_ctx->width = context->width;
+        frames_ctx->height = context->height;
+        ret = av_hwframe_ctx_init(context->hw_frames_ctx);
+        if (0 != ret)
+        {
+            hb_error("failed to initialize hw frames context");
+        }
+    }
+    else
+    {
+        context->pix_fmt = job->output_pix_fmt;
     }
 #else
-    context->pix_fmt   = job->output_pix_fmt;
+    context->pix_fmt = job->output_pix_fmt;
 #endif
 
     context->sample_aspect_ratio.num = job->par.num;
@@ -1411,12 +1384,15 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
 
     // Encode
 #if HB_PROJECT_FEATURE_NVENC
-    if (in->hw_ctx.frame) {
-      AVFrame *p_frame = in->hw_ctx.frame;
-      av_frame_copy_props(p_frame, &frame);
-      ret = avcodec_send_frame(pv->context, p_frame);
-    } else {
-      ret = avcodec_send_frame(pv->context, &frame);
+    if (in->hw_ctx.frame)
+    {
+        AVFrame *p_frame = in->hw_ctx.frame;
+        av_frame_copy_props(p_frame, &frame);
+        ret = avcodec_send_frame(pv->context, p_frame);
+    }
+    else
+    {
+        ret = avcodec_send_frame(pv->context, &frame);
     }
 #else
     ret = avcodec_send_frame(pv->context, &frame);
