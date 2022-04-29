@@ -871,6 +871,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string DarkTheme_None {
+            get {
+                return ResourceManager.GetString("DarkTheme_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Match System.
         /// </summary>
         public static string DarkTheme_system {
@@ -6369,11 +6378,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A new version of HandBrake is available!.
+        ///   Looks up a localized string similar to A new version is available!.
         /// </summary>
         public static string SourceSelection_UpdateAvailable {
             get {
                 return ResourceManager.GetString("SourceSelection_UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Now!.
+        /// </summary>
+        public static string SourceSelection_UpdateNow {
+            get {
+                return ResourceManager.GetString("SourceSelection_UpdateNow", resourceCulture);
             }
         }
         

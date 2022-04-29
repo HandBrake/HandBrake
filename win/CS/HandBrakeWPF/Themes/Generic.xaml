@@ -5,9 +5,10 @@
     xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton">
 
 
-    <SolidColorBrush x:Key="Ui.Light"  />
+    <SolidColorBrush x:Key="Ui.Light" />
     <SolidColorBrush x:Key="Ui.ToolbarHover" />
     <SolidColorBrush x:Key="Ui.ContrastLight" />
+    <SolidColorBrush x:Key="Ui.UltraLight2" />
 
     <!-- TextBlock -->
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">

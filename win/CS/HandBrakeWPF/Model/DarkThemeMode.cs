@@ -20,5 +20,8 @@ namespace HandBrakeWPF.Model
 
         [DisplayName(typeof(Resources), "DarkTheme_system")]
         System,
+
+        [DisplayName(typeof(Resources), "DarkTheme_None")]
+        None,
     }
 }

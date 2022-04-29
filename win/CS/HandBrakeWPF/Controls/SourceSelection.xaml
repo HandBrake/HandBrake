@@ -109,35 +109,46 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.ColumnDefinitions >
-                    <ColumnDefinition  Width="Auto"/>
-                    <ColumnDefinition  Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Source="../Views/Images/information.png" Width="24" />
-                <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" Grid.Column="1" FontWeight="Bold">           
-                    <Hyperlink x:Name="UpdateAvailable" NavigateUri="/" RequestNavigate="UpdateAvailable_OnRequestNavigate">
-                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" TextWrapping="Wrap" />
-                    </Hyperlink>
-                </TextBlock>
-            </Grid>
+            <Border Background="{StaticResource Ui.UltraLight2}" CornerRadius="4" Grid.Row="7" Margin="20,10,0,20" HorizontalAlignment="Stretch" 
+                    Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid Margin="8" >
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition  Width="Auto"/>
+                        <ColumnDefinition  Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image Source="../Views/Images/information.png" Width="24" Grid.Column="0" VerticalAlignment="Top"  />
-                <StackPanel Orientation="Vertical" Grid.Column="1">
-                    <TextBlock Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,0,0" />
+                    <Image Source="../Views/Images/information64.png" Width="48" Grid.Column="0" />
 
-                    <TextBlock Margin="10,0,0,0">           
-                        <Hyperlink NavigateUri="/" RequestNavigate="NightlyAvailable_OnRequestNavigate">
-                            <TextBlock Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" TextWrapping="Wrap" />
-                        </Hyperlink>
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" TextWrapping="Wrap" Style="{StaticResource subHeader}"
+                                   TextAlignment="Center"
+                                   Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" />
+
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_UpdateNow}" Margin="0,5,0,0" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" HorizontalAlignment="Center" />
+                    </StackPanel>
+               
+                </Grid>
+            </Border>
+
+            <Border Background="{StaticResource Ui.UltraLight2}" CornerRadius="4" Grid.Row="7" Margin="20,10,0,20" HorizontalAlignment="Stretch" 
+                    Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid Margin="8" >
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition  Width="Auto"/>
+                        <ColumnDefinition  Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="../Views/Images/information.png" Width="32" Grid.Column="0" />
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <TextBlock HorizontalAlignment="Center" Margin="2,0,0,0" TextWrapping="Wrap" Style="{StaticResource subText}"
+                                   TextAlignment="Center"
+                                   Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}" />
+
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" Margin="0,5,0,0" cal:Message.Attach="[Event Click] = [Action NightlyUpdate]" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
@@ -160,10 +171,7 @@
         </Grid>
 
         <Grid Grid.Column="1" Background="Black" Opacity="0.75" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Border BorderThickness="8" CornerRadius="4"  VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Border.BorderBrush>
-                    <SolidColorBrush Color="White" Opacity=".65"/>
-                </Border.BorderBrush>
+            <Border BorderThickness="2" CornerRadius="4" BorderBrush="{StaticResource Ui.Light}" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="{x:Static Properties:Resources.SourceSelection_DropFileHere}" TextWrapping="WrapWithOverflow" Foreground="White" Margin="100,125,100,125"  FontSize="30"  />
             </Border>
         </Grid>
