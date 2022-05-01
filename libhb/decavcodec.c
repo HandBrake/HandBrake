@@ -1467,6 +1467,19 @@ static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
     ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
     return err;
 }
+
+static int is_nvenc_used(int codec_id)
+{
+    switch (codec_id)
+    {
+    case HB_VCODEC_FFMPEG_NVENC_H264:
+    case HB_VCODEC_FFMPEG_NVENC_H265:
+    case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        return 1;
+    default:
+        return 0;
+    }
+}
 #endif
 
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
@@ -1559,8 +1572,15 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
 
 #if HB_PROJECT_FEATURE_NVENC
-    // During the scan pv->job will be NULL and SW decoder will be used.
-    int use_hw_dec = (NULL != pv->job);
+    /* When to use HW decoding:
+     ** Within main decoding loop (not during the scan).
+     ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
+     ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
+     */
+    const int main_dec_loop = (NULL != pv->job);
+    const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
+    const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
+    int use_hw_dec = main_dec_loop && no_video_filters && nvenc_is_used;
 
     AVBufferRef *hw_device_ctx = NULL;
     enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
