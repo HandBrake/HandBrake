@@ -156,6 +156,23 @@ static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
     hb_error("Failed to get HW surface format.\n");
     return AV_PIX_FMT_NONE;
 }
+
+static AVBufferRef *init_hw_frames_ctx(AVCodecContext *avctx)
+{
+    AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(avctx->hw_device_ctx);
+    AVHWFramesContext *frames_ctx = hw_frames_ctx->data;
+    frames_ctx->format = AV_PIX_FMT_CUDA;
+    frames_ctx->sw_format = AV_PIX_FMT_NV12;
+    frames_ctx->width = avctx->width;
+    frames_ctx->height = avctx->height;
+    if (0 != av_hwframe_ctx_init(hw_frames_ctx))
+    {
+        hb_error("failed to initialize hw frames context");
+        return NULL;
+    }
+
+    return hw_frames_ctx;
+}
 #endif
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
@@ -882,18 +899,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (context->hw_device_ctx)
     {
         context->pix_fmt = AV_PIX_FMT_CUDA;
-        context->hw_frames_ctx = av_hwframe_ctx_alloc(context->hw_device_ctx);
-        AVHWFramesContext *frames_ctx =
-            (AVHWFramesContext *)context->hw_frames_ctx->data;
-        frames_ctx->format = AV_PIX_FMT_CUDA;
-        frames_ctx->sw_format = AV_PIX_FMT_NV12;
-        frames_ctx->width = context->width;
-        frames_ctx->height = context->height;
-        ret = av_hwframe_ctx_init(context->hw_frames_ctx);
-        if (0 != ret)
-        {
-            hb_error("failed to initialize hw frames context");
-        }
+        context->hw_frames_ctx = init_hw_frames_ctx(context);
     }
     else
     {
@@ -1389,6 +1395,20 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
         AVFrame *p_frame = in->hw_ctx.frame;
         av_frame_copy_props(p_frame, &frame);
         ret = avcodec_send_frame(pv->context, p_frame);
+    }
+    else if (pv->job->align_av_start)
+    {
+        /* Normally the HW frame shall be sent to encoder.
+         * In this case, sync generates a SW frame which we copy to newly
+         * allocated HW frame to mimic existing sync behavior. */
+        AVFrame *blank_frame = av_frame_alloc();
+        AVBufferRef *hw_frames_ctx = init_hw_frames_ctx(pv->context);
+        av_hwframe_get_buffer(hw_frames_ctx, blank_frame, 0);
+        av_hwframe_transfer_data(blank_frame, &frame, 0);
+        av_frame_copy_props(blank_frame, &frame);
+        ret = avcodec_send_frame(pv->context, blank_frame);
+        av_frame_unref(blank_frame);
+        av_buffer_unref(&hw_frames_ctx);
     }
     else
     {
