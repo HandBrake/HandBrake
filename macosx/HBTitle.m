@@ -367,10 +367,12 @@ fail:
     chroma_available = hb_get_chroma_sub_sample(_hb_title->pix_fmt, &h_shift, &v_shift);
     if (chroma_available == 0)
     {
-        [format appendFormat:@"4:%d:%d", 4 - h_shift * 2, 4 - (v_shift + h_shift) * 2];
+        int h_value = 4 >> h_shift;
+        int v_value = v_shift ? 0 : h_value;
+        [format appendFormat:@"4:%d:%d", h_value, v_value];
     }
 
-    if (bit_depth > -1 || chroma_available == 0)
+    if (bit_depth || chroma_available == 0)
     {
         [format appendString:@", "];
     }
