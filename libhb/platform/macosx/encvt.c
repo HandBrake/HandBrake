@@ -244,6 +244,8 @@ static CFStringRef hb_vt_colr_tra_xlat(int color_transfer)
             return kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
         case HB_COLR_TRA_LINEAR:
             if (__builtin_available(macOS 10.14, *)) { return kCVImageBufferTransferFunction_Linear; }
+        case HB_COLR_TRA_IEC61966_2_1:
+            return kCVImageBufferTransferFunction_sRGB;
         case HB_COLR_TRA_ARIB_STD_B67:
             return kCVImageBufferTransferFunction_ITU_R_2100_HLG;
         case HB_COLR_TRA_GAMMA22:
