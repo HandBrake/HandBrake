@@ -1396,20 +1396,6 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
         av_frame_copy_props(p_frame, &frame);
         ret = avcodec_send_frame(pv->context, p_frame);
     }
-    else if (pv->job->align_av_start)
-    {
-        /* Normally the HW frame shall be sent to encoder.
-         * In this case, sync generates a SW frame which we copy to newly
-         * allocated HW frame to mimic existing sync behavior. */
-        AVFrame *blank_frame = av_frame_alloc();
-        AVBufferRef *hw_frames_ctx = init_hw_frames_ctx(pv->context);
-        av_hwframe_get_buffer(hw_frames_ctx, blank_frame, 0);
-        av_hwframe_transfer_data(blank_frame, &frame, 0);
-        av_frame_copy_props(blank_frame, &frame);
-        ret = avcodec_send_frame(pv->context, blank_frame);
-        av_frame_unref(blank_frame);
-        av_buffer_unref(&hw_frames_ctx);
-    }
     else
     {
         ret = avcodec_send_frame(pv->context, &frame);
