@@ -1809,11 +1809,11 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
     {
         case HB_VCODEC_X264_8BIT:
         {
-            if (!strcasecmp(profile, "high422"))
+            if (profile && !strcasecmp(profile, "high422"))
             {
                 return standard_422_pix_fmts;
             }
-            else if (!strcasecmp(profile, "high444"))
+            else if (profile && !strcasecmp(profile, "high444"))
             {
                 return standard_444_pix_fmts;
             }
@@ -1824,11 +1824,11 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         }
         case HB_VCODEC_X264_10BIT:
         {
-            if (!strcasecmp(profile, "high422"))
+            if (profile && !strcasecmp(profile, "high422"))
             {
                 return standard_422_10bit_pix_fmts;
             }
-            else if (!strcasecmp(profile, "high444"))
+            else if (profile && !strcasecmp(profile, "high444"))
             {
                 return standard_444_10bit_pix_fmts;
             }
@@ -1840,8 +1840,8 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 #if HB_PROJECT_FEATURE_X265
         case HB_VCODEC_X265_8BIT:
         {
-            if (!strcasecmp(profile, "main444-8") ||
-                !strcasecmp(profile, "main444-intra"))
+            if (profile && (!strcasecmp(profile, "main444-8") ||
+                            !strcasecmp(profile, "main444-intra")))
             {
                 return standard_444_pix_fmts;
             }
@@ -1852,13 +1852,13 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         }
         case HB_VCODEC_X265_10BIT:
         {
-            if (!strcasecmp(profile, "main422-10") ||
-                !strcasecmp(profile, "main422-10-intra"))
+            if (profile && (!strcasecmp(profile, "main422-10") ||
+                            !strcasecmp(profile, "main422-10-intra")))
             {
                 return standard_422_10bit_pix_fmts;
             }
-            else if (!strcasecmp(profile, "main444-10") ||
-                     !strcasecmp(profile, "main444-10-intra"))
+            else if (profile && (!strcasecmp(profile, "main444-10") ||
+                                 !strcasecmp(profile, "main444-10-intra")))
             {
                 return standard_444_10bit_pix_fmts;
             }
@@ -1869,13 +1869,13 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         }
         case HB_VCODEC_X265_12BIT:
         {
-            if (!strcasecmp(profile, "main422-12") ||
-                !strcasecmp(profile, "main422-12-intra"))
+            if (profile && (!strcasecmp(profile, "main422-12") ||
+                            !strcasecmp(profile, "main422-12-intra")))
             {
                 return standard_422_12bit_pix_fmts;
             }
-            else if (!strcasecmp(profile, "main444-12") ||
-                     !strcasecmp(profile, "main444-12-intra"))
+            else if (profile && (!strcasecmp(profile, "main444-12") ||
+                                 !strcasecmp(profile, "main444-12-intra")))
             {
                 return standard_444_12bit_pix_fmts;
             }
