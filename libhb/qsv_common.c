@@ -1842,6 +1842,12 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
         return 0;
     }
 
+    // scale_qsv filter can't convert from full to limited range
+    if (job->title->color_range == AVCOL_RANGE_JPEG && job->color_range == AVCOL_RANGE_MPEG)
+    {
+        return 0;
+    }
+
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
         device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters);
