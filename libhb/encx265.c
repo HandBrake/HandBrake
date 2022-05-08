@@ -211,7 +211,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         if (depth > 8)
         {
-            if (param_parse(pv, param, "hdr-opt", "1"))
+            if (param_parse(pv, param, "hdr10-opt", "1"))
             {
                 goto fail;
             }
