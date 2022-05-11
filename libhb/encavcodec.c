@@ -157,12 +157,12 @@ static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
     return AV_PIX_FMT_NONE;
 }
 
-static AVBufferRef *init_hw_frames_ctx(AVCodecContext *avctx)
+static AVBufferRef *init_hw_frames_ctx(AVCodecContext *avctx, enum AVPixelFormat sw_fmt)
 {
     AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(avctx->hw_device_ctx);
     AVHWFramesContext *frames_ctx = hw_frames_ctx->data;
     frames_ctx->format = AV_PIX_FMT_CUDA;
-    frames_ctx->sw_format = AV_PIX_FMT_NV12;
+    frames_ctx->sw_format = sw_fmt;
     frames_ctx->width = avctx->width;
     frames_ctx->height = avctx->height;
     if (0 != av_hwframe_ctx_init(hw_frames_ctx))
@@ -892,14 +892,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->width     = job->width;
     context->height    = job->height;
 #if HB_PROJECT_FEATURE_NVENC
-    /*
-     * TODO (rarzumanyan): reference hw_frames_ctx from decoder.
-     * Don't re-initialize.
-     */
     if (context->hw_device_ctx)
     {
         context->pix_fmt = AV_PIX_FMT_CUDA;
-        context->hw_frames_ctx = init_hw_frames_ctx(context);
+        context->hw_frames_ctx = init_hw_frames_ctx(context, job->input_pix_fmt);
     }
     else
     {
