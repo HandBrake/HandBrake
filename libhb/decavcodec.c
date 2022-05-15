@@ -1611,38 +1611,97 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
 static int setup_extradata( hb_work_private_t * pv, AVCodecContext * context )
 {
-    // we can't call the avstream funcs but the read_header func in the
-    // AVInputFormat may set up some state in the AVContext. In particular
-    // vc1t_read_header allocates 'extradata' to deal with header issues
-    // related to Microsoft's bizarre engineering notions. We alloc a chunk
-    // of space to make vc1 work then associate the codec with the context.
-    if (context->extradata == NULL)
+    const AVBitStreamFilter * bsf;
+    AVBSFContext            * ctx = NULL;
+    int                       ii, ret;
+    AVPacket                * avp = pv->pkt;
+    const enum AVCodecID    * ids;
+
+    if (context->extradata != NULL)
     {
-        if (pv->parser == NULL || pv->parser->parser == NULL ||
-            pv->parser->parser->split == NULL)
+        return 0;
+    }
+    bsf = av_bsf_get_by_name("extract_extradata");
+    if (bsf == NULL)
+    {
+        hb_error("setup_extradata: bitstream filter lookup failure");
+        return 0;
+    }
+    if (bsf->codec_ids == NULL)
+    {
+        hb_error("setup_extradata: extract_extradata missing codec_ids");
+        return 0;
+    }
+    for (ids = bsf->codec_ids; *ids != AV_CODEC_ID_NONE; ids++)
+    {
+        if (*ids == context->codec_id)
         {
-            return 0;
+            break;
         }
-        else
+    }
+    if (*ids == AV_CODEC_ID_NONE)
+    {
+        // Codec not supported by extract_extradata BSF
+        return 0;
+    }
+    ret = av_bsf_alloc(bsf, &ctx);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: bitstream filter alloc failure");
+        return 0;
+    }
+    avcodec_parameters_from_context(ctx->par_in, context);
+    ret = av_bsf_init(ctx);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: bitstream filter init failure");
+        av_bsf_free(&ctx);
+        return 0;
+    }
+
+    avp->data = pv->packet_info.data;
+    avp->size = pv->packet_info.size;
+    avp->pts  = pv->sequence;
+    avp->dts  = pv->sequence;
+    ret = av_bsf_send_packet(ctx, avp);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: av_bsf_send_packet failure");
+        av_bsf_free(&ctx);
+        return 0;
+    }
+
+    ret = av_bsf_receive_packet(ctx, avp);
+    av_bsf_free(&ctx);
+    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+    {
+        return 1;
+    }
+    else if (ret < 0)
+    {
+        if (ret != AVERROR_INVALIDDATA)
         {
-            int size;
-            size = pv->parser->parser->split(pv->context, pv->packet_info.data,
-                                             pv->packet_info.size);
-            if (size > 0)
+            hb_error("setup_extradata: av_bsf_receive_packet failure %x", -ret);
+        }
+        return ret;
+    }
+    for (ii = 0; ii < avp->side_data_elems; ii++)
+    {
+        if (avp->side_data[ii].type == AV_PKT_DATA_NEW_EXTRADATA)
+        {
+            context->extradata      = avp->side_data[ii].data;
+            context->extradata_size = avp->side_data[ii].size;
+            avp->side_data[ii].data = NULL;
+            avp->side_data[ii].size = 0;
+            if (context->extradata != NULL)
             {
-                context->extradata_size = size;
-                context->extradata =
-                                av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (context->extradata == NULL)
-                    return 1;
-                memcpy(context->extradata, pv->packet_info.data, size);
                 return 0;
             }
         }
-        return 1;
     }
+    av_packet_unref(avp);
 
-    return 0;
+    return 1;
 }
 
 static int decodePacket( hb_work_object_t * w )
