@@ -48,7 +48,7 @@ else
 endif
 
 ifeq ($(HOST.system),darwin)
-    HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_CORETEXT=OFF -DHB_HAVE_GLIB=OFF
+    HARFBUZZ.CONFIGURE.extra += -DHB_HAVE_CORETEXT=OFF -DHB_HAVE_GLIB=OFF -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
 endif
 
 ## find CMakeLists.txt
