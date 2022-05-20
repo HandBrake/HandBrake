@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Queue
 
     using HandBrake.Interop.Interop;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
 
@@ -112,82 +113,68 @@ namespace HandBrakeWPF.Services.Queue
         {
             lock (this.lockObj)
             {
-                switch (task.VideoEncoder)
+                if (VideoEncoderHelpers.IsQuickSync(task.VideoEncoder))
                 {
-                    case VideoEncoder.QuickSync:
-                    case VideoEncoder.QuickSyncH265:
-                    case VideoEncoder.QuickSyncH26510b:
-                    case VideoEncoder.QuickSyncAV1:
-                    case VideoEncoder.QuickSyncAV110b:
-                        if (this.qsvInstances.Count < this.totalQsvInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
-                        {
-                            this.AllocateIntelGPU(task);
+                    if (this.qsvInstances.Count < this.totalQsvInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
+                    {
+                        this.AllocateIntelGPU(task);
 
-                            Guid guid = Guid.NewGuid();
-                            this.qsvInstances.Add(guid);
-                            this.totalInstances.Add(guid);
-                            return guid;
-                        }
-                        else
-                        {
-                            return Guid.Empty; // Busy
-                        }
+                        Guid guid = Guid.NewGuid();
+                        this.qsvInstances.Add(guid);
+                        this.totalInstances.Add(guid);
+                        return guid;
+                    }
 
-                    case VideoEncoder.NvencH264:
-                    case VideoEncoder.NvencH265:
-                    case VideoEncoder.NvencH26510b:
-                        if (this.nvencInstances.Count < this.totalNvidiaInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
-                        {
-                            Guid guid = Guid.NewGuid();
-                            this.nvencInstances.Add(guid);
-                            this.totalInstances.Add(guid);
-                            return guid;
-                        }
-                        else
-                        {
-                            return Guid.Empty; // Busy
-                        }
+                    return Guid.Empty; // Busy
+                }
+                else if (VideoEncoderHelpers.IsNVEnc(task.VideoEncoder))
+                {
+                    if (this.nvencInstances.Count < this.totalNvidiaInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
+                    {
+                        Guid guid = Guid.NewGuid();
+                        this.nvencInstances.Add(guid);
+                        this.totalInstances.Add(guid);
+                        return guid;
+                    }
 
-                    case VideoEncoder.VceH264:
-                    case VideoEncoder.VceH265:
-                        if (this.vceInstances.Count < this.totalVceInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
-                        {
-                            Guid guid = Guid.NewGuid();
-                            this.vceInstances.Add(guid);
-                            this.totalInstances.Add(guid);
-                            return guid;
-                        }
-                        else
-                        {
-                            return Guid.Empty; // Busy
-                        }
+                    return Guid.Empty; // Busy
+                }
+                else if (VideoEncoderHelpers.IsVCN(task.VideoEncoder))
+                {
+                    if (this.vceInstances.Count < this.totalVceInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
+                    {
+                        Guid guid = Guid.NewGuid();
+                        this.vceInstances.Add(guid);
+                        this.totalInstances.Add(guid);
+                        return guid;
+                    }
 
-                    case VideoEncoder.MFH264:
-                    case VideoEncoder.MFH265:
-                        if (this.mfInstances.Count < this.totalMfInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
-                        {
-                            Guid guid = Guid.NewGuid();
-                            this.mfInstances.Add(guid);
-                            this.totalInstances.Add(guid);
-                            return guid;
-                        }
-                        else
-                        {
-                            return Guid.Empty; // Busy
-                        }
+                    return Guid.Empty; // Busy
+                }
+                else if (VideoEncoderHelpers.IsMediaFoundation(task.VideoEncoder))
+                {
+                    if (this.mfInstances.Count < this.totalMfInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
+                    {
+                        Guid guid = Guid.NewGuid();
+                        this.mfInstances.Add(guid);
+                        this.totalInstances.Add(guid);
+                        return guid;
+                    }
 
-
-                    default:
-                        if (this.TotalActiveInstances <= this.maxAllowedInstances)
-                        {
-                            Guid guid = Guid.NewGuid();
-                            this.totalInstances.Add(guid);
-                            return guid;
-                        }
-                        else
-                        {
-                            return Guid.Empty; // Busy
-                        }
+                    return Guid.Empty; // Busy
+                }
+                else
+                {
+                    if (this.TotalActiveInstances <= this.maxAllowedInstances)
+                    {
+                        Guid guid = Guid.NewGuid();
+                        this.totalInstances.Add(guid);
+                        return guid;
+                    }
+                    else
+                    {
+                        return Guid.Empty; // Busy
+                    }
                 }
             }
         }
@@ -218,44 +205,33 @@ namespace HandBrakeWPF.Services.Queue
                     this.totalInstances.Remove(unlockKey.Value);
                 }
 
-                switch (encoder)
+                if (VideoEncoderHelpers.IsQuickSync(encoder))
                 {
-                    case VideoEncoder.QuickSync:
-                    case VideoEncoder.QuickSyncH265:
-                    case VideoEncoder.QuickSyncH26510b:
-                    case VideoEncoder.QuickSyncAV1:
-                    case VideoEncoder.QuickSyncAV110b:
-                        if (this.qsvInstances.Contains(unlockKey.Value))
-                        {
-                            this.qsvInstances.Remove(unlockKey.Value);
-                        }
-
-                        break;
-                    case VideoEncoder.NvencH264:
-                    case VideoEncoder.NvencH265:
-                    case VideoEncoder.NvencH26510b:
-                        if (this.nvencInstances.Contains(unlockKey.Value))
-                        {
-                            this.nvencInstances.Remove(unlockKey.Value);
-                        }
-
-                        break;
-                    case VideoEncoder.VceH264:
-                    case VideoEncoder.VceH265:
-                        if (this.vceInstances.Contains(unlockKey.Value))
-                        {
-                            this.vceInstances.Remove(unlockKey.Value);
-                        }
-
-                        break;
-                    case VideoEncoder.MFH264:
-                    case VideoEncoder.MFH265:
-                        if (this.mfInstances.Contains(unlockKey.Value))
-                        {
-                            this.mfInstances.Remove(unlockKey.Value);
-                        }
-
-                        break;
+                    if (this.qsvInstances.Contains(unlockKey.Value))
+                    {
+                        this.qsvInstances.Remove(unlockKey.Value);
+                    }
+                }
+                else if (VideoEncoderHelpers.IsNVEnc(encoder))
+                {
+                    if (this.nvencInstances.Contains(unlockKey.Value))
+                    {
+                        this.nvencInstances.Remove(unlockKey.Value);
+                    }
+                }
+                else if (VideoEncoderHelpers.IsVCN(encoder))
+                {
+                    if (this.vceInstances.Contains(unlockKey.Value))
+                    {
+                        this.vceInstances.Remove(unlockKey.Value);
+                    }
+                }
+                else if (VideoEncoderHelpers.IsMediaFoundation(encoder))
+                {
+                    if (this.mfInstances.Contains(unlockKey.Value))
+                    {
+                        this.mfInstances.Remove(unlockKey.Value);
+                    }
                 }
             }
         }

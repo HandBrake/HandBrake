@@ -102,6 +102,14 @@ namespace HandBrakeWPF.Model.Video
 
         [DisplayName("VP9")]
         [ShortName("VP9")]
-        VP9
+        VP9,
+
+        [DisplayName("AV1 (SVT)")]
+        [ShortName("svt_av1")]
+        AV1,
+
+        [DisplayName("AV1 10-bit (SVT)")]
+        [ShortName("svt_av1_10bit")]
+        AV110b
     }
 }
