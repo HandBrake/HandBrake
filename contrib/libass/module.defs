@@ -7,24 +7,27 @@ endif
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libass-0.15.2.tar.gz
-LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.15.2/libass-0.15.2.tar.gz
-LIBASS.FETCH.sha256  = 1b2a54dda819ef84fa2dee3069cf99748a886363d2adb630fde87fe046e2d1d5
+LIBASS.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libass-0.16.0.tar.gz
+LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.16.0/libass-0.16.0.tar.gz
+LIBASS.FETCH.sha256  = fea8019b1887cab9ab00c1e58614b4ec2b1cee339b3f7e446f5fab01b032d430
 
 # Tell configure where to find our versions of these libs
+ifneq (1,$(FEATURE.flatpak))
 LIBASS.CONFIGURE.extra = \
-    --enable-asm \
     HARFBUZZ_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lharfbuzz" \
     HARFBUZZ_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/harfbuzz" \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2"
+endif
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     # Tell configure where to find our version of fontconfig
+    LIBASS.CONFIGURE.extra += --enable-fontconfig
+ifneq (1,$(FEATURE.flatpak))
     LIBASS.CONFIGURE.extra += \
-        --enable-fontconfig \
         FONTCONFIG_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfontconfig" \
         FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+endif
 else
     LIBASS.CONFIGURE.extra += --disable-fontconfig
 endif

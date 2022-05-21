@@ -11,8 +11,6 @@ namespace HandBrakeWPF.Helpers
 {
     using HandBrake.App.Core.Utilities;
 
-    using HandBrakeWPF.Utilities;
-
     using VideoEncoder = Model.Video.VideoEncoder;
 
     public class VideoEncoderHelpers
@@ -68,6 +66,27 @@ namespace HandBrakeWPF.Helpers
             return false;
         }
 
+        public static bool IsQuickSyncH265(VideoEncoder encoder)
+        {
+            if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("qsv_h265"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsQuickSyncAV1(VideoEncoder encoder)
+        {
+            if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("qsv_av1"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
         public static bool IsNVEnc(VideoEncoder encoder)
         {
             if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("nvenc"))
@@ -81,6 +100,16 @@ namespace HandBrakeWPF.Helpers
         public static bool IsVCN(VideoEncoder encoder)
         {
             if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("vce") || EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("vcn"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsMediaFoundation(VideoEncoder encoder)
+        {
+            if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("mf"))
             {
                 return true;
             }

@@ -172,14 +172,16 @@ namespace HandBrakeWPF
 
             Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Generic.xaml", UriKind.Relative) });
             bool themed = false;
+            if (SystemParameters.HighContrast)
+            {
+                Application.Current.Resources["Ui.Light"] = new SolidColorBrush(SystemColors.HighlightTextColor);
+                Application.Current.Resources["Ui.ContrastLight"] = new SolidColorBrush(SystemColors.ActiveBorderBrush.Color);
+                useDarkTheme = DarkThemeMode.None;
+            }
+
             switch (useDarkTheme)
             {
                 case DarkThemeMode.System:
-                    if (SystemParameters.HighContrast)
-                    {
-                        break;
-                    }
-
                     if (SystemInfo.IsAppsUsingDarkTheme())
                     {
                         Application.Current.Resources.MergedDictionaries.Add(dark);
@@ -192,7 +194,6 @@ namespace HandBrakeWPF
                     }
 
                     themed = true;
-
                     break;
                 case DarkThemeMode.Dark:
                     Application.Current.Resources.MergedDictionaries.Add(dark);
@@ -203,6 +204,12 @@ namespace HandBrakeWPF
                     Application.Current.Resources.MergedDictionaries.Add(light);
                     Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) });
                     themed = true;
+                    break;
+
+                case DarkThemeMode.None:
+                    Application.Current.Resources["Ui.Light"] = new SolidColorBrush(SystemColors.HighlightTextColor);
+                    Application.Current.Resources["Ui.ContrastLight"] = new SolidColorBrush(SystemColors.ActiveBorderBrush.Color);
+                    themed = false;
                     break;
             }
 

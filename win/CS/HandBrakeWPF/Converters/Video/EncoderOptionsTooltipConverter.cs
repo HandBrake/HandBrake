@@ -14,8 +14,9 @@ namespace HandBrakeWPF.Converters.Video
     using System.Linq;
     using System.Windows.Data;
 
+    using HandBrakeWPF.Helpers;
+
     using EncodeTask = Services.Encode.Model.EncodeTask;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoLevel = Services.Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Services.Encode.Model.Models.Video.VideoPreset;
     using VideoProfile = Services.Encode.Model.Models.Video.VideoProfile;
@@ -44,7 +45,8 @@ namespace HandBrakeWPF.Converters.Video
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             EncodeTask task = value as EncodeTask;
-            if (task != null && (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X264_10 || task.VideoEncoder == VideoEncoder.X265 || task.VideoEncoder == VideoEncoder.X265_10 || task.VideoEncoder == VideoEncoder.X265_12))
+           
+            if (task != null)
             {
                 VideoTune tune = task.VideoTunes.FirstOrDefault();
 

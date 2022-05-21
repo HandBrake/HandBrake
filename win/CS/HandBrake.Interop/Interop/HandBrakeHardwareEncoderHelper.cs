@@ -51,7 +51,7 @@ namespace HandBrake.Interop.Interop
                 try
                 {
                     // We support Skylake 6th gen and newer. 
-                    return HBFunctions.hb_qsv_available() > 0 && QsvHardwareGeneration >= 6;
+                    return HBFunctions.hb_qsv_available() > 0 && QsvHardwareGeneration >= 5; // 5 == Skylake
                 }
                 catch (Exception)
                 {
@@ -101,7 +101,7 @@ namespace HandBrake.Interop.Interop
                 {
                     int adapter_index = HBFunctions.hb_qsv_get_adapter_index();
                     int qsv_platform = HBFunctions.hb_qsv_get_platform(adapter_index);
-                    int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform);
+                    int hardware = HBFunctions.hb_qsv_hardware_generation(qsv_platform); 
                     return hardware;
                 }
                 catch (Exception exc)

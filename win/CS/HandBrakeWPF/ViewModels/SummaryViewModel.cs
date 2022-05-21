@@ -33,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 

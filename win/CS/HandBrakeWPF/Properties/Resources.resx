@@ -2144,7 +2144,7 @@ Where supported, any user presets will have been imported.</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>A new version of HandBrake is available!</value>
+    <value>A new version is available!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
@@ -2662,5 +2662,11 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>There were no subtitle tracks added. 
 
 This may be due to limitations of the file container you have selected. Please see our subtitle help documentation for more information.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Update Now!</value>
   </data>
 </root>
