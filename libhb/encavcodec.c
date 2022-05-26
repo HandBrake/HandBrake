@@ -25,11 +25,11 @@
  * frame number, we use this as an index.
  *
  * The size of the array is chosen so that two frames can't use the same
- * slot during the encoder's max frame delay (set by the standard as 16
- * frames) and so that, up to some minimum frame rate, frames are guaranteed
+ * slot during the encoder's max frame delay and so that,
+ * up to some minimum frame rate, frames are guaranteed
  * to map to * different slots.
  */
-#define FRAME_INFO_SIZE 32
+#define FRAME_INFO_SIZE 256
 #define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
 
 struct hb_work_private_s
