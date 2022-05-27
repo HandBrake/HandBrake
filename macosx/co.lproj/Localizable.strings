@@ -1,3 +1,6 @@
+/* Job statistics */
+" (%@ %% of the source file)" = "(%@ %% di u schedariu di fonte)";
+
 /* Preview -> size info label */
 " Scaled To Screen" = " Adattata à u screnu";
 
@@ -15,6 +18,9 @@
 
 /* Main Window -> preset modified */
 "(Modified)" = "(mudificata)";
+
+/* Job statistics */
+"%@ fps" = "%@ fps";
 
 /* Queue status */
 "%lu encode pending" = "%lu cudificazione in attesa";
@@ -89,6 +95,9 @@
 /* Player HUD -> audio menu */
 "Audio" = "Audio";
 
+/* Job statistics */
+"Average speed:" = "Vitezza mediana :";
+
 /* Copy Protection Alert -> second button
    Delete preset alert -> second button
    File already exists alert -> first button
@@ -158,7 +167,7 @@
 
 /* HBQueueItemView -> Encode state accessibility label
    Queue done notification failed message */
-"Encode failed" = "Cudificazione fiasca";
+"Encode failed" = "Cudificazione fiascata";
 
 /* HBQueueItemView -> Encode state accessibility label */
 "Encode ready" = "Cudificazione pronta";
@@ -221,6 +230,9 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "Dispiazzà i travaglii in a fila d’attesa";
 
+/* Add preset window -> My Presets */
+"My Presets" = "E mo prerigature";
+
 /* Queue status */
 "No encode pending" = "Nisuna cudificazione in attesa";
 
@@ -229,6 +241,9 @@
 
 /* No comment provided by engineer. */
 "No job selected" = "Nisunu travagliu selezziunatu";
+
+/* Main Window -> Info text */
+"No Valid Preset" = "Alcuna prerigatura accettevule";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Ùn si pò truvà nisuna fonte";
@@ -276,7 +291,7 @@
 
 /* Add preset window -> name alert informative text
    Rename preset window -> name alert informative text */
-"Please enter a name." = "Scrivite un nome.";
+"Please enter a name." = "Stampittate un nome.";
 
 /* Copy Protection Alert -> informative text */
 "Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Ci vole à sapè chì HandBrake ùn accetta micca di caccià a prutezzione contr’à a copia nant’à i dischi DVD. S’è vo vulete fà sta funzione, ci vulerà à impiegà un prugramma esternu. St’avertimentu serà affissatu solu una volta à ogni avviu d’HandBrake.";
@@ -298,7 +313,7 @@
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Fighjulata di a fiura, dimensione : %1$zu x %2$zu, scala : %3$.0f%%";
 
 /* Touch bar */
-"Previews" = "Apprezzazioni";
+"Previews" = "Fighjulate";
 
 /* Queue done alert message
    Queue notification alert message */

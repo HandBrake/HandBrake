@@ -148,6 +148,9 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
 "r9i-tL-qtD.title" = "他のビュー";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
+"r64-vI-ymx.ibShadowedToolTip" = "インターレース解除のカスタムパラメーターです。\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7";
+
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
 "rfp-ah-CVB.title" = "他のビュー";
 
@@ -177,6 +180,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Detelecine:"; ObjectID = "vTS-MJ-8nt"; */
 "vTS-MJ-8nt.title" = "逆テレシネ:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
+"xct-UB-bKm.ibShadowedToolTip" = "インターレース解除は画像からくし状のノイズを除去します。\n\nBwdifとYadifは人気で速い解除フィルターです。\n\nDecombは品質と速度に応じて複数の補完法を切り替えることができます。";
 
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "インターレース検出:";

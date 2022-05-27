@@ -50,7 +50,7 @@
 "RXJ-DZ-4mh.title" = "Furmatu :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
-"txV-1R-WoD.ibShadowedToolTip" = "Furmatu di u cuntenentu. E traccie video, audio è altre sò addunite in un schedariu unicu di stu tipu. Què affetta a cumpatibilità.";
+"txV-1R-WoD.ibShadowedToolTip" = "Furmatu di u cuntenidore. E traccie video, audio è altre sò adunite in un schedariu unicu di stu tipu. Què affetta a cumpatibilità.";
 
 /* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
 "wcc-5d-Dgj.title" = "Megliuratu per u Web";

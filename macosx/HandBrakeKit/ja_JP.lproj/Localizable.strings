@@ -113,6 +113,9 @@
 /* Subtitles description */
 "Burned In" = "焼き込み";
 
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
 /* Title -> chapter name
    Title description */
 "Chapter %d" = "チャプター %d";
@@ -221,6 +224,9 @@
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "無効なBwdifカスタム設定です。";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "無効なクロマスムーズカスタム設定です。";
