@@ -2,7 +2,7 @@
 "5Xb-gz-QEa.title" = "Abbandunà";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
-"8kl-Sh-Gh7.ibShadowedToolTip" = "Scrivite una discrizzione per a nova prerigatura. A discrizzione serà affissata quandu vo passerete u cursore sopra a prerigatura nant’à a lista di e prerigature.";
+"8kl-Sh-Gh7.ibShadowedToolTip" = "Stampittate una discrizzione per a nova prerigatura. A discrizzione serà affissata quandu vo passerete u cursore sopra a prerigatura nant’à a lista di e prerigature.";
 
 /* Class = "NSTextFieldCell"; title = "Resolution Limit:"; ObjectID = "75B-xq-Qbe"; */
 "75B-xq-Qbe.title" = "Cunfina di risuluzione :";
@@ -14,7 +14,7 @@
 "aez-2b-JXx.ibShadowedToolTip" = "U cumpurtamentu di a selezzione determineghja e traccie è e preferenze impiegate quandu a prerigatura hè selezziunata.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
-"aKg-n4-OUS.ibShadowedToolTip" = "Scrivite un nome per a nova prerigatura Stu nome serà affissatu nant’à a lista di e prerigature.";
+"aKg-n4-OUS.ibShadowedToolTip" = "Stampittate un nome per a nova prerigatura Stu nome serà affissatu nant’à a lista di e prerigature.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
 "bma-pS-phM.ibShadowedToolTip" = "Dimensione di fiura cuntrolleghja cumu e dimensioni di a video sò appiecate quandu una prerigatura hè selezziunata.\n\nNisuna impiegheghja e dimensioni definite attualmente.\n\nPersunalizata vi permette di definisce una larghezza è/o altezza massima.\n\nFonte massima impiegheghja e dimensioni sane d’ogni fonte.";
