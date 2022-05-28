@@ -693,20 +693,12 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
     {
         int track_count = hb_value_array_len(list);
         char key[8];
-        snprintf(key, sizeof(key), "%d", track);
 
         count = mode && track_count ? 1 : count;
         int ii;
         for (ii = 0; ii < count; ii++)
         {
-            // Check if this source track has already been added using these
-            // same encoder settings.  If so, continue to next track.
-            hb_dict_t *used = source_audio_track_used(track_dict, ii);
-            if (hb_value_get_bool(hb_dict_get(used, key)))
-                continue;
-
             // Create new audio output track settings
-            hb_dict_t *audio_dict = hb_dict_init();
             hb_value_t *acodec_value;
             hb_dict_t *encoder_dict = hb_value_array_get(encoder_list, ii);
             int out_codec;
@@ -721,15 +713,26 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             {
                 out_codec = hb_value_get_int(acodec_value);
             }
-            // Save the encoder value before sanitizing.  This value is
-            // useful to the frontends.
-            hb_dict_set(audio_dict, "PresetEncoder",
-                hb_value_string(hb_audio_encoder_get_short_name(out_codec)));
-
             hb_audio_config_t *aconfig;
             aconfig = hb_list_audio_config_item(title->list_audio, track);
             aconfig = best_linked_audio(title->list_audio, aconfig,
                                         out_codec, copy_mask);
+
+            // Check if this source track has already been added using these
+            // same encoder settings.  If so, continue to next track.
+            snprintf(key, sizeof(key), "%d", aconfig->index);
+            hb_dict_t *used = source_audio_track_used(track_dict, ii);
+            if (hb_value_get_bool(hb_dict_get(used, key)))
+            {
+                continue;
+            }
+
+            // Save the encoder value before sanitizing.  This value is
+            // useful to the frontends.
+            hb_dict_t *audio_dict = hb_dict_init();
+            hb_dict_set(audio_dict, "PresetEncoder",
+                hb_value_string(hb_audio_encoder_get_short_name(out_codec)));
+
             out_codec = sanitize_audio_codec(aconfig->in.codec, out_codec,
                                              copy_mask, fallback, mux);
             if (out_codec == HB_ACODEC_NONE || HB_ACODEC_INVALID)
