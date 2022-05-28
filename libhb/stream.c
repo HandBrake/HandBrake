@@ -2100,7 +2100,7 @@ static void pes_add_subtitle_to_title(
 // out of order in pes_add_audio_to_title
 static void pes_set_audio_indices(hb_title_t * title)
 {
-    int ii, count;
+    int ii, jj, count;
 
     count = hb_list_count( title->list_audio );
 
@@ -2110,6 +2110,18 @@ static void pes_set_audio_indices(hb_title_t * title)
 
         audio_ii = hb_list_item( title->list_audio, ii );
         audio_ii->config.index        = ii;
+        audio_ii->config.linked_index = -1;
+        for ( jj = ii + 1; jj < count; jj++ )
+        {
+            hb_audio_t *audio_jj;
+
+            audio_jj = hb_list_item( title->list_audio, jj );
+            if ((audio_ii->id & 0xffff) == (audio_jj->id & 0xffff))
+            {
+                audio_ii->config.linked_index = jj;
+                audio_jj->config.linked_index = ii;
+            }
+        }
     }
 }
 
@@ -5391,6 +5403,7 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
     hb_audio_t *audio              = calloc(1, sizeof(*audio));
     audio->id                      = id;
     audio->config.index            = hb_list_count(title->list_audio);
+    audio->config.linked_index     = -1;
     audio->config.in.track         = id;
     audio->config.in.codec         = HB_ACODEC_FFMPEG;
     audio->config.in.codec_param   = codecpar->codec_id;
