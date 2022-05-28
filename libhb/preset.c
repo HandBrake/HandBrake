@@ -399,6 +399,58 @@ static hb_dict_t * source_audio_track_used(hb_dict_t *track_dict, int track)
     return used;
 }
 
+static hb_audio_config_t * best_linked_audio(hb_list_t * list_audio,
+                                             hb_audio_config_t * audio,
+                                             int out_codec, int copy_mask)
+{
+    hb_audio_config_t   * linked_audio;
+    if (audio->linked_index < 0)
+    {
+        return audio;
+    }
+    linked_audio = hb_list_audio_config_item(list_audio, audio->linked_index);
+    if (out_codec == HB_ACODEC_AUTO_PASS)
+    {
+        // If auto-passthru, and exactly one option is in the copy mask,
+        // return that one
+        if (!(linked_audio->in.codec & copy_mask))
+        {
+            if (audio->in.codec & copy_mask)
+            {
+                return audio;
+            }
+        }
+        else
+        {
+            if (!(audio->in.codec & copy_mask))
+            {
+                return linked_audio;
+            }
+        }
+    }
+    else if (out_codec & HB_ACODEC_PASS_FLAG)
+    {
+        // if passthru for a specific codec, check if either option is
+        // the requested codec
+        if (audio->in.codec & out_codec)
+        {
+            return audio;
+        }
+        if (linked_audio->in.codec & out_codec)
+        {
+            return linked_audio;
+        }
+    }
+    switch (linked_audio->in.codec)
+    {
+        // Return the "best" quality option
+        case HB_ACODEC_FFTRUEHD:
+        case HB_ACODEC_DCA_HD:
+            return linked_audio;
+    }
+    return audio;
+}
+
 // Find a source audio track matching given language
 static int find_audio_track(const hb_title_t *title,
                             const char *lang, int start, int behavior)
@@ -676,6 +728,8 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
 
             hb_audio_config_t *aconfig;
             aconfig = hb_list_audio_config_item(title->list_audio, track);
+            aconfig = best_linked_audio(title->list_audio, aconfig,
+                                        out_codec, copy_mask);
             out_codec = sanitize_audio_codec(aconfig->in.codec, out_codec,
                                              copy_mask, fallback, mux);
             if (out_codec == HB_ACODEC_NONE || HB_ACODEC_INVALID)
@@ -683,7 +737,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 hb_value_free(&audio_dict);
                 continue;
             }
-            hb_dict_set(audio_dict, "Track", hb_value_int(track));
+            hb_dict_set(audio_dict, "Track", hb_value_int(aconfig->index));
             hb_dict_set(audio_dict, "Encoder", hb_value_string(
                         hb_audio_encoder_get_short_name(out_codec)));
             const char * name = hb_dict_get_string(encoder_dict, "AudioTrackName");
