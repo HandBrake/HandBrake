@@ -5368,6 +5368,7 @@ void hb_audio_close( hb_audio_t **audio )
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
     audiocfg->index = 0;
+    audiocfg->linked_index = -1;
 
     /* Set read-only parameters to invalid values */
     audiocfg->in.codec = 0;

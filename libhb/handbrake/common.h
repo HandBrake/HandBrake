@@ -928,6 +928,14 @@ struct hb_audio_config_s
     // index of this item in title.list_audio
     int index;
 
+    // index of a "linked" audio item in title.list_audio
+    // a linked audio is *exactly* the same audio encoded differently
+    //
+    // e.g. TrueHD tracks that have embedded AC3 and DTSHD that have
+    // embedded DTS are split into distinct "tracks" by HandBrake but
+    // are actually the exact same source track.
+    int linked_index;
+
     /* Output */
     struct
     {
