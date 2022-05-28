@@ -1013,6 +1013,9 @@ ghb_vquality_default(signal_user_data_t *ud)
     case HB_VCODEC_FFMPEG_MPEG2:
     case HB_VCODEC_FFMPEG_MPEG4:
         return 3;
+    case HB_VCODEC_FFMPEG_SVT_AV1_8BIT:
+    case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        return 30;
     default:
     {
         float min, max, step;
@@ -2594,7 +2597,7 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
 
     for (ii = 0; ii < count; ii++)
     {
-        if (((encoder & HB_VCODEC_X264_MASK) &&
+        if (((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_FFMPEG_SVT_AV1_MASK)) &&
              !strcmp(tunes[ii], "fastdecode")) ||
             ((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_X265_MASK)) &&
              !strcmp(tunes[ii], "zerolatency")))

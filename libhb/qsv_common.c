@@ -22,6 +22,7 @@
 #include "handbrake/qsv_common.h"
 #include "handbrake/h264_common.h"
 #include "handbrake/h265_common.h"
+#include "handbrake/av1_common.h"
 #include "handbrake/hbffmpeg.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
@@ -122,7 +123,7 @@ static hb_triplet_t hb_qsv_av1_profiles[] =
 {
     { "Main",               "main",             MFX_PROFILE_AV1_MAIN,    },
     { "High",               "high",             MFX_PROFILE_AV1_HIGH,    },
-    { "Pro",                "pro",              MFX_PROFILE_AV1_PRO,     },
+    { "Professional",       "professional",     MFX_PROFILE_AV1_PRO,     },
     { NULL,                                                              },
 };
 static hb_triplet_t hb_qsv_vpp_scale_modes[] =
@@ -2741,7 +2742,7 @@ const char* const* hb_qsv_profile_get_names(int encoder)
             return hb_h265_qsv_profile_names_10bit;
         case HB_VCODEC_QSV_AV1_10BIT:
         case HB_VCODEC_QSV_AV1:
-            return hb_av1_qsv_profile_names;
+            return hb_av1_profile_names;
         default:
             return NULL;
     }
