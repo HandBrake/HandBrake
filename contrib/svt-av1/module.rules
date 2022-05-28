@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,SVT-AV1))
+$(eval $(call import.CONTRIB.rules,SVT-AV1))

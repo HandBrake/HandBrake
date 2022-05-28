@@ -15,6 +15,16 @@ namespace HandBrakeWPF.Helpers
 
     public class VideoEncoderHelpers
     {
+        public static bool IsSVTAV1(VideoEncoder encoder)
+        {
+            if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("svt_av1"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool IsX264(VideoEncoder encoder)
         {
             if (EnumHelper<VideoEncoder>.GetShortName(encoder).Contains("x264"))
