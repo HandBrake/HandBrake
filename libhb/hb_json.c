@@ -910,7 +910,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
 
         audio_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Track",                hb_value_int(audio->config.in.track),
+            "Track",                hb_value_int(audio->config.index),
             "Encoder",              hb_value_int(audio->config.out.codec),
             "Gain",                 hb_value_double(audio->config.out.gain),
             "DRC",                  hb_value_double(audio->config.out.dynamic_range_compression),
@@ -1535,7 +1535,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
                 "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
-                "Track",                unpack_i(&audio.in.track),
+                "Track",                unpack_i(&audio.index),
                 "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
                 "Gain",                 unpack_f(&audio.out.gain),
@@ -1607,7 +1607,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 audio.out.name = name;
             }
-            if (audio.in.track >= 0)
+            if (audio.index >= 0)
             {
                 audio.out.track = ii;
                 hb_audio_add(job, &audio);

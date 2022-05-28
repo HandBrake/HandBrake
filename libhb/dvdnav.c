@@ -703,6 +703,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
                audio->config.lang.simple, codec_name,
                audio->config.lang.iso639_2, lang_extension);
 
+        audio->config.index           = hb_list_count(title->list_audio);
         audio->config.in.track        = i;
         audio->config.in.timebase.num = 1;
         audio->config.in.timebase.den = 90000;
