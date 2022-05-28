@@ -925,6 +925,9 @@ struct hb_job_s
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s
 {
+    // index of this item in title.list_audio
+    int index;
+
     /* Output */
     struct
     {
@@ -961,7 +964,7 @@ struct hb_audio_config_s
     /* Input */
     struct
     {
-        int track; /* Input track number */
+        PRIVATE int track; /* Input track number */
         PRIVATE uint32_t codec; /* Input audio codec */
         PRIVATE uint32_t codec_param; /* Per-codec config info */
         PRIVATE uint32_t reg_desc; /* Registration descriptor of source */

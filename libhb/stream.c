@@ -2096,15 +2096,32 @@ static void pes_add_subtitle_to_title(
     }
 }
 
+// Fix up title.list_audio indexes since audio can be inserted
+// out of order in pes_add_audio_to_title
+static void pes_set_audio_indices(hb_title_t * title)
+{
+    int ii, count;
+
+    count = hb_list_count( title->list_audio );
+
+    for ( ii = 0; ii < count; ii++ )
+    {
+        hb_audio_t *audio_ii;
+
+        audio_ii = hb_list_item( title->list_audio, ii );
+        audio_ii->config.index        = ii;
+    }
+}
+
 // Sort specifies the index in the audio list where you would
 // like sorted items to begin.
 static void pes_add_audio_to_title(
     hb_stream_t *stream,
-    int         idx,
+    int         track,
     hb_title_t  *title,
     int         sort)
 {
-    hb_pes_stream_t *pes = &stream->pes.list[idx];
+    hb_pes_stream_t *pes = &stream->pes.list[track];
 
     // Sort by id when adding to the list
     // This assures that they are always displayed in the same order
@@ -2139,7 +2156,7 @@ static void pes_add_audio_to_title(
     hb_log("stream id 0x%x (type 0x%x substream 0x%x) audio 0x%x",
            pes->stream_id, pes->stream_type, pes->stream_id_ext, audio->id);
 
-    audio->config.in.track = idx;
+    audio->config.in.track = track;
 
     // Search for the sort position
     if ( sort >= 0 )
@@ -2236,6 +2253,7 @@ static void hb_init_audio_list(hb_stream_t *stream, hb_title_t *title)
             pes_add_audio_to_title( stream, ii, title, count );
         }
     }
+    pes_set_audio_indices(title);
 }
 
 /***********************************************************************
@@ -5372,6 +5390,7 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
     hb_audio_t *audio              = calloc(1, sizeof(*audio));
     audio->id                      = id;
+    audio->config.index            = hb_list_count(title->list_audio);
     audio->config.in.track         = id;
     audio->config.in.codec         = HB_ACODEC_FFMPEG;
     audio->config.in.codec_param   = codecpar->codec_id;

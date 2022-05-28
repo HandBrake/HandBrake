@@ -5367,6 +5367,8 @@ void hb_audio_close( hb_audio_t **audio )
  *********************************************************************/
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
+    audiocfg->index = 0;
+
     /* Set read-only parameters to invalid values */
     audiocfg->in.codec = 0;
     audiocfg->in.codec_param = 0;
@@ -5413,7 +5415,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     hb_title_t *title = job->title;
     hb_audio_t *audio;
 
-    audio = hb_audio_copy( hb_list_item( title->list_audio, audiocfg->in.track ) );
+    audio = hb_audio_copy( hb_list_item( title->list_audio, audiocfg->index ) );
     if( audio == NULL )
     {
         /* We fail! */
@@ -5427,14 +5429,6 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         hb_audio_close(&audio);
         return 0;
     }
-
-    /* Set the job's "in track" to the value passed in audiocfg.
-     * HandBrakeCLI assumes this value is preserved in the jobs
-     * audio list, but in.track in the title's audio list is not
-     * required to be the same. */
-    // "track" in title->list_audio is an index into the source's tracks.
-    // "track" in job->list_audio is an index into title->list_audio
-    audio->config.in.track = audiocfg->in.track;
 
     /* Really shouldn't ignore the passed out track, but there is currently no
      * way to handle duplicates or out-of-order track numbers. */

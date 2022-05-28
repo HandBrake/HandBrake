@@ -395,7 +395,7 @@
                                    inputTrack.sampleRate :
                                    audioTrack.sampleRate);
 
-            audio->in.track = (int)audioTrack.sourceTrackIdx - 1;
+            audio->index = (int)audioTrack.sourceTrackIdx - 1;
 
             // We go ahead and assign values to our audio->out.<properties>
             audio->out.track                     = audio->in.track;
