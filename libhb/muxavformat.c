@@ -719,7 +719,7 @@ static int avformatInit( hb_mux_object_t * m )
 
                     fallback = hb_list_item( job->list_audio, jj );
                     codec = fallback->config.out.codec & HB_ACODEC_MASK;
-                    if (fallback->config.in.track == audio->config.in.track &&
+                    if (fallback->config.index == audio->config.index &&
                         (codec == HB_ACODEC_FFAAC ||
                          codec == HB_ACODEC_CA_AAC ||
                          codec == HB_ACODEC_CA_HAAC ||
