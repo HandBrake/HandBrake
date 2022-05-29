@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrakeWPF.Services.Logging
 {
     using System.IO;
 
@@ -20,9 +20,9 @@ namespace HandBrakeWPF.Helpers
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
-    using ILog = Services.Logging.Interfaces.ILog;
+    using ILog = Interfaces.ILog;
 
-    public static class LogManager
+    public static class GlobalLoggingManager
     {
         private static ILog generalAppLogger;
 
@@ -35,7 +35,7 @@ namespace HandBrakeWPF.Helpers
             generalAppLogger.ConfigureLogging(filename, logFile);
 
             IoC.Get<ILogInstanceManager>().Register(filename, generalAppLogger, true);
-            
+
             HandBrakeUtils.MessageLogged += HandBrakeUtils_MessageLogged;
             HandBrakeUtils.ErrorLogged += HandBrakeUtils_ErrorLogged;
         }

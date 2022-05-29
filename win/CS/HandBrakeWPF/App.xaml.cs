@@ -224,7 +224,7 @@ namespace HandBrakeWPF
             bool noHardware = e.Args.Any(f => f.Equals("--no-hardware")) || (Portable.IsPortable() && !Portable.IsHardwareEnabled());
 
             // Initialise the Engine
-            HandBrakeWPF.Helpers.LogManager.Init();
+            Services.Logging.GlobalLoggingManager.Init();
             HandBrakeInstanceManager.Init(noHardware, userSettingService);
 
             // Initialise the GUI

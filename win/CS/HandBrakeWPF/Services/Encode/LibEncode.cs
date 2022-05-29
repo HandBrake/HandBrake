@@ -26,7 +26,6 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using EncodeTask = Model.EncodeTask;
     using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
@@ -84,9 +83,9 @@ namespace HandBrakeWPF.Services.Encode
                 this.currentTask = task;
                 this.isPreviewInstance = task.IsPreviewEncode;
 
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
                 {
-                    this.InitLogging(task.Destination);
+                    this.InitRemoteLogging(task.Destination);
                 }
                 else
                 {
@@ -309,7 +308,7 @@ namespace HandBrakeWPF.Services.Encode
             return 0;
         }
 
-        private void InitLogging(string destination)
+        private void InitRemoteLogging(string destination)
         {
             if (!this.isLoggingInitialised)
             {
@@ -342,7 +341,9 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Copy the Log to HandBrakes log folder in the users application data folder.
                 // Only needed for process isolation mode. Worker will handle it's own logging.
-                if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
+                bool processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled();
+
+                if (!processIsolationEnabled)
                 {
                     string logType = this.isPreviewInstance ? "preview" : "encode";
                     string destinationFile = Path.GetFileNameWithoutExtension(destination);
