@@ -11,11 +11,16 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 
 ### All platforms
 
+#### Video
+- Added AV1 encoder using SVT-AV1
+- Added support for H.264 levels 6, 6.1 and 6.2
+
 #### Filters
 - Small performance improvement on high core count systems for comb detect, decomb and nlmeans
 - The following filters have been upgraded to support higher than 8-bit content
   - Deinterlace
-    - Comb Detect
+  - Comb Detect
+  - Decomb
   - Grayscale
   - Denoise 
     - hqdn3d
@@ -23,16 +28,27 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
     - UnSharp
     - LapSharp
   - Chroma Smooth
-  
+- The following new filters were added:  
+  - Deinterlace
+    - Bwidf
 
 #### Hardware Encoding
 - Added support for QuickSync AV1 Encoder
 - Added support for QuickSync HyperEncode
+- Removed support for Intel CPU's older than 6th generation (Skylake) when using Intel QuickSync. 
 - Added support for NVEnc 10-bit HEVC NVEnc encoder.
+- Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
 
 #### Third-party libraries
 
 - Updated libraries
+  - FFmpeg 5.0.1 (decoding and filters)
+  - FreeType 2.12.1 (subtitles)
+  - Fribidi 1.0.12 (subtitles)
+  - HarfBuzz 4.2.1 (subtitles)
+  - libass 0.16.0 (subtitles)
+  - oneVPL 2022.1.2 (Intel QuickSync Support)
+  - libdav1d 1.0.0 (AV1 decoding)
 
 ### Linux
 - Miscellaneous bug fixes and improvements
