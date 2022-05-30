@@ -58,7 +58,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=*_crystalhd \
     --enable-demuxer=av1 \
     --enable-demuxer=obu \
-    --enable-muxer=av1 \
     --enable-decoder=av1 \
     --enable-libdav1d \
     --enable-decoder=libdav1d \

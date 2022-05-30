@@ -73,6 +73,9 @@
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "エンコードを開始";
 
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "tBG-Gf-ynI"; */
+"tBG-Gf-ynI.title" = "HandBrakeを終了";
+
 /* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
 "Tvo-xt-sag.title" = "全ジョブ削除";
 

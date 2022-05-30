@@ -113,6 +113,9 @@
 /* Subtitles description */
 "Burned In" = "Eingebrannt";
 
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
 /* Title -> chapter name
    Title description */
 "Chapter %d" = "Kapitel %d";
@@ -221,6 +224,9 @@
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Ungültige benutzerdefinierte Bwdif-Einstellungen.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "Ungültige benutzerdefinierte Chroma-Glättungs-Einstellungen.";

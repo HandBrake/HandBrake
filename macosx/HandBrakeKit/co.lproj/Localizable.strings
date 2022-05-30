@@ -113,6 +113,9 @@
 /* Subtitles description */
 "Burned In" = "Intarsiati";
 
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
 /* Title -> chapter name
    Title description */
 "Chapter %d" = "Capitulu %d";
@@ -222,6 +225,9 @@
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
 
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Preferenze persunalizate Bwdif inaccettevule.";
+
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "Preferenze persunalizate d’allisciata cromatica inaccettevule.";
 
@@ -251,6 +257,9 @@
 
 /* HBJob -> invalid name error description */
 "Invalid name" = "Nome inaccettevule";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "Prerigatura inaccettevule";
 
 /* HBFilters -> invalid unsharp custom string description */
 "Invalid unsharp custom settings." = "Preferenze persunalizate unsharp inaccettevule.";
@@ -378,6 +387,9 @@
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "A prerigatura « %@ » ùn pò micca esse impurtata.";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "A prerigatura ùn hè micca accettevule, pruvate di selezziunane un’altra.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "A prerigatura selezziunata ùn hè micca accettevule.";

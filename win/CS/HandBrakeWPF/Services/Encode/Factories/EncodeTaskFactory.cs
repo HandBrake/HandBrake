@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Services.Encode.Factories
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -24,7 +25,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using AudioEncoder = Model.Models.AudioEncoder;
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
@@ -34,6 +34,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using FramerateMode = Model.Models.FramerateMode;
     using OutputFormat = Model.Models.OutputFormat;
     using PointToPointMode = Model.Models.PointToPointMode;
+    using Range = HandBrake.Interop.Interop.Json.Encode.Range;
     using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = Model.Models.SubtitleTrack;
     using Validate = HandBrake.App.Core.Utilities.Validate;
@@ -196,7 +197,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         Import =
                             new SubImport
                             {
-                                Format = item.SrtPath.EndsWith("srt") ? "SRT" : "SSA",
+                                Format = item.SrtPath.EndsWith("srt", StringComparison.InvariantCultureIgnoreCase) ? "SRT" : "SSA",
                                 Filename = item.SrtPath,
                                 Codeset = item.SrtCharCode,
                                 Language = item.SrtLangCode

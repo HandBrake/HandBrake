@@ -458,7 +458,7 @@ static int validate_audio_encoders(const hb_dict_t *preset)
         value = hb_dict_get(audio_dict, "AudioMixdown");
         if (hb_value_type(value) == HB_VALUE_TYPE_STRING)
         {
-            mix = hb_audio_encoder_get_from_name(hb_value_get_string(value));
+            mix = hb_mixdown_get_from_name(hb_value_get_string(value));
         }
         else
         {
