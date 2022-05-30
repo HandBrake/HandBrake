@@ -2109,17 +2109,21 @@ static void pes_set_audio_indices(hb_title_t * title)
         hb_audio_t *audio_ii;
 
         audio_ii = hb_list_item( title->list_audio, ii );
-        audio_ii->config.index        = ii;
-        audio_ii->config.linked_index = -1;
-        for ( jj = ii + 1; jj < count; jj++ )
+        audio_ii->config.index = ii;
+        for ( jj = 0; jj < count; jj++ )
         {
             hb_audio_t *audio_jj;
 
             audio_jj = hb_list_item( title->list_audio, jj );
-            if ((audio_ii->id & 0xffff) == (audio_jj->id & 0xffff))
+            // if same PID or stream_id and not same audio track, link
+            if ((audio_ii->id & 0xffff) == (audio_jj->id & 0xffff) && ii != jj)
             {
-                audio_ii->config.linked_index = jj;
-                audio_jj->config.linked_index = ii;
+                if (audio_ii->config.list_linked_index == NULL)
+                {
+                    audio_ii->config.list_linked_index = hb_list_init();
+                }
+                hb_list_add_dup(audio_ii->config.list_linked_index,
+                                &jj, sizeof(jj));
             }
         }
     }
@@ -5391,6 +5395,75 @@ static const char * ffmpeg_track_name(AVStream * st, const char * lang)
     return NULL;
 }
 
+static void add_ffmpeg_linked_audio(hb_audio_t * audio, int audio_index, hb_list_t * list_linked_index)
+{
+    if (audio->config.list_linked_index != NULL)
+    {
+	return;
+    }
+    audio->config.list_linked_index = hb_list_init();
+    hb_list_add_dup(audio->config.list_linked_index, &audio_index, sizeof(audio_index));
+
+    int ii;
+    int linked_count = hb_list_count(list_linked_index);
+    for (ii = 0; ii < linked_count; ii++)
+    {
+	int linked_index = *(int*)hb_list_item(list_linked_index, ii);
+	if (linked_index != audio_index && linked_index != audio->config.index)
+	{
+            hb_list_add_dup(audio->config.list_linked_index, &linked_index, sizeof(audio_index));
+	}
+    }
+}
+
+static void find_ffmpeg_fallback_audio(hb_title_t *title)
+{
+    int count = hb_list_count(title->list_audio);
+    int ii, jj, kk;
+
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_audio_t *audio_ii = hb_list_item(title->list_audio, ii);
+
+        if (audio_ii->config.list_linked_index != NULL)
+        {
+            hb_list_t * list_linked_index = audio_ii->config.list_linked_index;
+            hb_list_t * new_list_linked_index = hb_list_init();
+            int         linked_count = hb_list_count(list_linked_index);
+
+            for (jj = 0; jj < linked_count; jj++)
+            {
+                int linked_index = *(int*)hb_list_item(list_linked_index, jj);
+                for (kk = 0; kk < count; kk++)
+                {
+                    hb_audio_t *audio_kk = hb_list_item(title->list_audio, kk);
+                    if (linked_index == audio_kk->id && kk != ii)
+                    {
+                        hb_list_add_dup(new_list_linked_index, &kk, sizeof(kk));
+                        add_ffmpeg_linked_audio(audio_kk, ii, list_linked_index);
+                        break;
+                    }
+                }
+            }
+            int * item;
+            while ((item = hb_list_item(list_linked_index, 0)))
+            {
+                hb_list_rem(list_linked_index, item);
+                free(item);
+            }
+            hb_list_close(&audio_ii->config.list_linked_index);
+            if (hb_list_count(new_list_linked_index) > 0)
+            {
+                audio_ii->config.list_linked_index = new_list_linked_index;
+            }
+            else
+            {
+                hb_list_close(&new_list_linked_index);
+            }
+        }
+    }
+}
+
 static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
     AVStream *st                = stream->ffmpeg_ic->streams[id];
@@ -5400,10 +5473,39 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
                                               tag_lang->value : "und");
     const char        * name = ffmpeg_track_name(st, lang->iso639_2);
 
-    hb_audio_t *audio              = calloc(1, sizeof(*audio));
+    hb_audio_t        * audio = calloc(1, sizeof(*audio));
+    int ii;
+    for (ii = 0; ii < st->codecpar->nb_coded_side_data; ii++)
+    {
+        AVPacketSideData *sd = &st->codecpar->coded_side_data[ii];
+        switch (sd->type)
+        {
+            case AV_PKT_DATA_FALLBACK_TRACK:
+            {
+                if (sd->size == sizeof(int))
+                {
+                    int fallback = *(int*)sd->data;
+                    if (audio->config.list_linked_index == NULL)
+                    {
+                        audio->config.list_linked_index = hb_list_init();
+                    }
+                    // This is not actually the "right" index to store
+                    // in list_linked_index. But we need the complete
+                    // audio list before we can correct it.
+                    //
+                    // This gets corrected in find_ffmpeg_fallback_audio
+                    // after all tracks have been scanned.
+                    hb_list_add_dup(audio->config.list_linked_index,
+                                    &fallback, sizeof(fallback));
+                }
+            } break;
+
+            default:
+                break;
+        }
+    }
     audio->id                      = id;
     audio->config.index            = hb_list_count(title->list_audio);
-    audio->config.linked_index     = -1;
     audio->config.in.track         = id;
     audio->config.in.codec         = HB_ACODEC_FFMPEG;
     audio->config.in.codec_param   = codecpar->codec_id;
@@ -5965,6 +6067,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             add_ffmpeg_attachment( title, stream, i );
         }
     }
+    find_ffmpeg_fallback_audio(title);
 
     title->container_name = strdup( ic->iformat->name );
     title->data_rate = ic->bit_rate;
