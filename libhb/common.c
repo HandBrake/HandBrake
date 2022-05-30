@@ -3742,6 +3742,14 @@ void hb_list_add( hb_list_t * l, void * p )
     (l->items_count)++;
 }
 
+void hb_list_add_dup( hb_list_t * l, void * p, int size )
+{
+    void * item = malloc(size);
+
+    memcpy(item, p, size);
+    hb_list_add(l, item);
+}
+
 /**********************************************************************
  * hb_list_insert
  **********************************************************************
@@ -5314,6 +5322,18 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
         {
             audio->config.in.name = strdup(src->config.in.name);
         }
+        if ( src->config.list_linked_index != NULL )
+        {
+            int ii;
+            int count = hb_list_count(src->config.list_linked_index);
+            audio->config.list_linked_index = hb_list_init();
+            for (ii = 0; ii < count; ii++)
+            {
+                hb_list_add_dup(audio->config.list_linked_index,
+                                hb_list_item(src->config.list_linked_index, ii),
+                                sizeof(int));
+            }
+        }
         audio->priv.extradata = hb_data_dup(src->priv.extradata);
     }
     return audio;
@@ -5348,15 +5368,24 @@ hb_list_t *hb_audio_list_copy(const hb_list_t *src)
  **********************************************************************
  *
  *********************************************************************/
-void hb_audio_close( hb_audio_t **audio )
+void hb_audio_close( hb_audio_t **_audio )
 {
-    if ( audio && *audio )
+    if ( _audio && *_audio )
     {
-        hb_data_close(&(*audio)->priv.extradata);
-        free((char*)(*audio)->config.in.name);
-        free((char*)(*audio)->config.out.name);
-        free(*audio);
-        *audio = NULL;
+        hb_audio_t * audio = *_audio;
+        void       * item;
+
+        hb_data_close(&(audio)->priv.extradata);
+        while ((item = hb_list_item(audio->config.list_linked_index, 0)))
+        {
+            hb_list_rem(audio->config.list_linked_index, item);
+            free(item);
+        }
+        hb_list_close(&audio->config.list_linked_index);
+        free((char*)audio->config.in.name);
+        free((char*)audio->config.out.name);
+        free(audio);
+        *_audio = NULL;
     }
 }
 
@@ -5368,7 +5397,7 @@ void hb_audio_close( hb_audio_t **audio )
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
     audiocfg->index = 0;
-    audiocfg->linked_index = -1;
+    audiocfg->list_linked_index = NULL;
 
     /* Set read-only parameters to invalid values */
     audiocfg->in.codec = 0;

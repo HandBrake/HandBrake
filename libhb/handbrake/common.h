@@ -133,6 +133,7 @@ int hb_buffer_list_size(hb_buffer_list_t *list);
 hb_list_t * hb_list_init(void);
 int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
+void        hb_list_add_dup( hb_list_t *, void *, int );
 void        hb_list_insert( hb_list_t * l, int pos, void * p );
 void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( const hb_list_t *, int );
@@ -934,7 +935,7 @@ struct hb_audio_config_s
     // e.g. TrueHD tracks that have embedded AC3 and DTSHD that have
     // embedded DTS are split into distinct "tracks" by HandBrake but
     // are actually the exact same source track.
-    int linked_index;
+    hb_list_t * list_linked_index;
 
     /* Output */
     struct

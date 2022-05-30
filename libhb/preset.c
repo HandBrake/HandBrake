@@ -11,6 +11,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/lang.h"
+#include "libavcodec/avcodec.h"
 
 #if defined(SYS_LINUX)
 #define HB_PRESET_JSON_FILE     "ghb/presets.json"
@@ -395,56 +396,149 @@ static hb_dict_t * source_audio_track_used(hb_dict_t *track_dict, int track)
     return used;
 }
 
+static int audio_codec_rank(hb_audio_config_t * audio)
+{
+    switch (audio->in.codec)
+    {
+        case HB_ACODEC_DCA_HD:
+            return 4;
+        case HB_ACODEC_LPCM:
+            return 2;
+
+        default:
+        {
+            switch (audio->in.codec_param)
+            {
+                case AV_CODEC_ID_TRUEHD:
+                case AV_CODEC_ID_PCM_BLURAY:
+                    return 4;
+                case AV_CODEC_ID_EAC3:
+                case AV_CODEC_ID_AAC:
+                case AV_CODEC_ID_AAC_LATM:
+                    return 3;
+                case AV_CODEC_ID_AC3:
+                case AV_CODEC_ID_DTS:
+                    return 2;
+                case AV_CODEC_ID_MP2:
+                    return 1;
+            }
+        } break;
+    }
+    return -1;
+}
+
+static hb_audio_config_t * better_audio(hb_audio_config_t * audio_a,
+                                        hb_audio_config_t * audio_b)
+{
+    int channels_a, channels_b;
+
+    if (audio_a == NULL)
+        return audio_b;
+    if (audio_b == NULL)
+        return audio_a;
+
+    channels_a = hb_layout_get_discrete_channel_count(
+                        audio_a->in.channel_layout);
+    channels_b = hb_layout_get_discrete_channel_count(
+                        audio_b->in.channel_layout);
+    if (channels_a > channels_b)
+    {
+        return audio_a;
+    }
+    if (channels_b > channels_a)
+    {
+        return audio_b;
+    }
+    if (audio_a->in.samplerate > audio_b->in.samplerate)
+    {
+        return audio_a;
+    }
+    if (audio_b->in.samplerate > audio_a->in.samplerate)
+    {
+        return audio_b;
+    }
+    int rank_a = audio_codec_rank(audio_a);
+    int rank_b = audio_codec_rank(audio_b);
+    if (rank_a >= 0 && rank_b >= 0 && rank_a > rank_b)
+    {
+        return audio_a;
+    }
+    return audio_b;
+}
+
 static hb_audio_config_t * best_linked_audio(hb_list_t * list_audio,
                                              hb_audio_config_t * audio,
-                                             int out_codec, int copy_mask)
+                                             int out_codec, int copy_mask,
+                                             int mix_channels)
 {
-    hb_audio_config_t   * linked_audio;
-    if (audio->linked_index < 0)
+    if (audio->list_linked_index == NULL)
     {
         return audio;
     }
-    linked_audio = hb_list_audio_config_item(list_audio, audio->linked_index);
+
+    hb_audio_config_t * best_pass_audio = NULL;
     if (out_codec == HB_ACODEC_AUTO_PASS)
     {
-        // If auto-passthru, and exactly one option is in the copy mask,
-        // return that one
-        if (!(linked_audio->in.codec & copy_mask))
+        // Autopassthru
+        if (audio->in.codec & copy_mask)
         {
-            if (audio->in.codec & copy_mask)
-            {
-                return audio;
-            }
-        }
-        else
-        {
-            if (!(audio->in.codec & copy_mask))
-            {
-                return linked_audio;
-            }
+            best_pass_audio = audio;
         }
     }
     else if (out_codec & HB_ACODEC_PASS_FLAG)
     {
-        // if passthru for a specific codec, check if either option is
-        // the requested codec
+        // Specific codec passthru
         if (audio->in.codec & out_codec)
         {
-            return audio;
-        }
-        if (linked_audio->in.codec & out_codec)
-        {
-            return linked_audio;
+            best_pass_audio = audio;
         }
     }
-    switch (linked_audio->in.codec)
+    hb_audio_config_t * best_audio = audio;
+    int count = hb_list_count(audio->list_linked_index);
+    int ii;
+    for (ii = 0; ii < count; ii++)
     {
-        // Return the "best" quality option
-        case HB_ACODEC_FFTRUEHD:
-        case HB_ACODEC_DCA_HD:
-            return linked_audio;
+        int                 linked_index;
+        hb_audio_config_t * linked_audio;
+
+        linked_index = *(int*)hb_list_item(audio->list_linked_index, ii);
+        linked_audio = hb_list_audio_config_item(list_audio, linked_index);
+        if (out_codec == HB_ACODEC_AUTO_PASS)
+        {
+            // If auto-passthru, select the best that can be passed
+            if (linked_audio->in.codec & copy_mask)
+            {
+                best_pass_audio = better_audio(linked_audio, best_pass_audio);
+            }
+        }
+        else if (out_codec & HB_ACODEC_PASS_FLAG)
+        {
+            // if passthru for a specific codec, check if either option is
+            // the requested codec
+            if (linked_audio->in.codec & out_codec)
+            {
+                best_pass_audio = better_audio(linked_audio, best_pass_audio);
+            }
+        }
+        best_audio = better_audio(linked_audio, best_audio);
     }
-    return audio;
+    if (best_pass_audio != NULL)
+    {
+        int channels_pass = 0;
+        int channels_enc;
+
+        channels_enc  = hb_layout_get_discrete_channel_count(
+                                best_audio->in.channel_layout);
+        channels_pass = hb_layout_get_discrete_channel_count(
+                            best_pass_audio->in.channel_layout);
+        if (channels_pass >= channels_enc ||
+            (channels_pass >= 6 && channels_pass >= mix_channels))
+        {
+            return best_pass_audio;
+        }
+    }
+
+    return best_audio;
 }
 
 // Find a source audio track matching given language
@@ -709,10 +803,27 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             {
                 out_codec = hb_value_get_int(acodec_value);
             }
-            hb_audio_config_t *aconfig;
+            int mix_channels = 2;
+            if (hb_dict_get(encoder_dict, "AudioMixdown") != NULL)
+            {
+                int mixdown = hb_mixdown_get_from_name(
+                              hb_dict_get_string(encoder_dict, "AudioMixdown"));
+                mix_channels = hb_mixdown_get_discrete_channel_count(mixdown);
+            }
+
+            hb_audio_config_t * aconfig;
+            hb_audio_config_t * linked_aconfig;
+
             aconfig = hb_list_audio_config_item(title->list_audio, track);
-            aconfig = best_linked_audio(title->list_audio, aconfig,
-                                        out_codec, copy_mask);
+            linked_aconfig = best_linked_audio(title->list_audio, aconfig,
+                                               out_codec, copy_mask,
+                                               mix_channels);
+            if (aconfig != linked_aconfig)
+            {
+                hb_log("Substituting linked audio track %d for track %d\n",
+                        linked_aconfig->index, aconfig->index);
+                aconfig = linked_aconfig;
+            }
 
             // Check if this source track has already been added using these
             // same encoder settings.  If so, continue to next track.
