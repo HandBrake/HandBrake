@@ -425,7 +425,6 @@ static int audio_codec_rank(hb_audio_config_t * audio)
                     return 2;
                 case AV_CODEC_ID_MP2:
                     return 1;
-                default:
             }
         } break;
     }
