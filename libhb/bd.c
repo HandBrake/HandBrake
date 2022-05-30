@@ -141,7 +141,12 @@ static void add_audio(int index, int linked_index, int track, hb_list_t *list_au
 
     audio->id = (substream_type << 16) | bdaudio->pid;
     audio->config.index = index;
-    audio->config.linked_index = linked_index;
+    if (linked_index >= 0)
+    {
+        audio->config.list_linked_index = hb_list_init();
+        hb_list_add_dup(audio->config.list_linked_index,
+                        &linked_index, sizeof(linked_index));
+    }
     audio->config.in.reg_desc = STR4_TO_UINT32("HDMV");
     audio->config.in.stream_type = bdaudio->coding_type;
     audio->config.in.substream_type = substream_type;

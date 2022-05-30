@@ -1,0 +1,81 @@
+From 0afad452f2f57254a44e34966534566facd7a78f Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Mon, 30 May 2022 11:31:49 -0600
+Subject: [PATCH] avformat/mov: add support audio fallback track ref
+
+---
+ libavformat/isom.h |  3 +++
+ libavformat/mov.c  | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/libavformat/isom.h b/libavformat/isom.h
+index cf36f04d5b..f4ce527071 100644
+--- a/libavformat/isom.h
++++ b/libavformat/isom.h
+@@ -258,6 +258,9 @@ typedef struct MOVStreamContext {
+         AVEncryptionInfo *default_encrypted_sample;
+         MOVEncryptionIndex *encryption_index;
+     } cenc;
++
++    int has_fallback;   // Audio fallback track
++    int fallback;
+ } MOVStreamContext;
+ 
+ typedef struct MOVContext {
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index d7be593a86..f37a366250 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -7567,6 +7567,22 @@ static int mov_read_iloc(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     return atom.size;
+ }
+ 
++static int mov_read_fall(MOVContext *c, AVIOContext *pb, MOVAtom atom)
++{
++    AVStream *st;
++    MOVStreamContext *sc;
++
++    if (c->fc->nb_streams < 1)
++        return 0;
++    st = c->fc->streams[c->fc->nb_streams-1];
++    sc = st->priv_data;
++
++    sc->fallback = avio_rb32(pb);
++    sc->has_fallback = 1;
++
++    return 0;
++}
++
+ static const MOVParseTableEntry mov_default_parse_table[] = {
+ { MKTAG('A','C','L','R'), mov_read_aclr },
+ { MKTAG('A','P','R','G'), mov_read_avid },
+@@ -7663,6 +7679,7 @@ static const MOVParseTableEntry mov_default_parse_table[] = {
+ { MKTAG('v','p','c','C'), mov_read_vpcc },
+ { MKTAG('m','d','c','v'), mov_read_mdcv },
+ { MKTAG('c','l','l','i'), mov_read_clli },
++{ MKTAG('f','a','l','l'), mov_read_fall },
+ { MKTAG('d','v','c','C'), mov_read_dvcc_dvvc },
+ { MKTAG('d','v','v','C'), mov_read_dvcc_dvvc },
+ { MKTAG('d','v','w','C'), mov_read_dvcc_dvvc },
+@@ -8456,6 +8473,18 @@ static int mov_read_header(AVFormatContext *s)
+             err = ff_replaygain_export(st, s->metadata);
+             if (err < 0)
+                 return err;
++            if (sc->has_fallback) {
++                for (i = 0; i < s->nb_streams; i++) {
++                    if (s->streams[i]->id == sc->fallback) {
++                        int *side;
++                        side = (int*)av_stream_new_side_data(st, AV_PKT_DATA_FALLBACK_TRACK, sizeof(int));
++                        if (!side)
++                            return AVERROR(ENOMEM);
++                        *side = i;
++                        break;
++                    }
++                }
++            }
+             break;
+         case AVMEDIA_TYPE_VIDEO:
+             if (sc->display_matrix) {
+-- 
+2.35.3
+
