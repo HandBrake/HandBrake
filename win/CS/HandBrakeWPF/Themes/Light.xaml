@@ -2,8 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#D8D8D8" />
     <SolidColorBrush x:Key="Ui.Light" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
 
     <!-- StatusBar -->

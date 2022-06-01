@@ -211,7 +211,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         if (depth > 8)
         {
-            if (param_parse(pv, param, "hdr-opt", "1"))
+            if (param_parse(pv, param, "hdr10-opt", "1"))
             {
                 goto fail;
             }
@@ -374,6 +374,21 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     param->bRepeatHeaders = job->inline_parameter_sets;
     param->sourceWidth    = job->width;
     param->sourceHeight   = job->height;
+
+    switch (job->output_pix_fmt)
+    {
+        case AV_PIX_FMT_YUV422P:
+        case AV_PIX_FMT_YUV422P10:
+        case AV_PIX_FMT_YUV422P12:
+        case AV_PIX_FMT_YUV422P16:
+            param->internalCsp = X265_CSP_I422;
+            break;
+        case AV_PIX_FMT_YUV444P:
+        case AV_PIX_FMT_YUV444P10:
+        case AV_PIX_FMT_YUV444P12:
+        case AV_PIX_FMT_YUV444P16:
+            param->internalCsp = X265_CSP_I444;
+    }
 
     /*
      * Let x265 determine whether to use an aspect ratio

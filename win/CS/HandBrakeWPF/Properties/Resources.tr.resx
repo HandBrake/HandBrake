@@ -1876,9 +1876,6 @@ Kalan Süre: {5},  Geçen: {6} {7}</value>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Taşınabilir Mod: portable.ini okunamıyor. Bu dosyada bir hata olabilir. Lütfen portable.ini.template'i kılavuz olarak kullanmayı deneyin.</value>
   </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake'nin motoru başlatılamadı. Bu genellikle güncel olmayan GPU sürücülerinden kaynaklanır.\n  Lütfen sisteminizde bulunan tüm yerleşik ve ayrı grafikler için GPU sürücülerini güncelleyin.</value>
-  </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Canlı Güncelleme Seçenekleri: {source} {title} {chapters} 
 Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>

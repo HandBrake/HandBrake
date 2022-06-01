@@ -20,6 +20,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Logging;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -150,6 +152,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.logService = this.logInstanceManager.GetLogInstance(this.SelectedLogFile.LogFileName);
+            if (this.logService == null && this.SelectedLogFile != null && this.SelectedLogFile.LogFileName.Equals(this.logInstanceManager.ApplicationLogInstance.FileName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                this.logService = this.logInstanceManager.ApplicationLogInstance;
+            }
+            
             string logDir = DirectoryUtilities.GetLogDirectory();
             string logFile = Path.Combine(logDir, this.selectedLogFile.LogFileName);
 

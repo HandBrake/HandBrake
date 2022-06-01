@@ -200,7 +200,10 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>HandBrake는 이미 인코딩 중 입니다.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>동일한 대상 경로를 가진 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.</value>
+    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
+ 
+You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>보류된 작업 {0}</value>
@@ -366,11 +369,12 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>올바른 원본 또는 제목을 찾을 수 없습니다.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake는 인코딩할 제목이 있는 유효한 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나로 인해 발생할 수 있습니다.
+    <value>HandBrake는 인코딩할 제목을 가진 올바른 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나가 원인일 수 있습니다.
 
 - 각 소스 제목의 재생 시간은 '기본 설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
 - 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
-- 소스는 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
+- 파일에 대한 읽기 권한이 없거나 다른 응용 프로그램에서 파일을 잠글 수 있습니다.
+- 소스가 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
 
 활동 로그에 추가 정보가 있을 수 있습니다.</value>
   </data>
@@ -444,8 +448,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>새 업데이트가 가능합니다! 웹 사이트에서 출시 정보를 확인하십시오.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>사용자의 시스템이 HandBrake 64비트 버전을 지원합니다! 이것은 32비트 버전을 넘어서는 성능과 안정성을 제공합니다.
- 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>사용자의 시스템은 64비트 버전의 HandBrake!를 지원합니다! 이것은 이 32비트 버전에 비해 성능과 안정성이 향상되었습니다.
+    릴리스 정보는 웹사이트를 확인하십시오.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
     <value>현재 새로운 업데이트가 없습니다.</value>
@@ -758,7 +762,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>'자동 경유' 동작:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>비트 전송속도</value>
+    <value>비트전송률</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
     <value>코덱</value>
@@ -1244,13 +1248,13 @@ HandBrake를 종료하시겠습니까?</value>
     <value>스캔할 사진 미리보기 개수:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>우선순위 수준:</value>
+    <value>작업 우선순위 수준:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>사용 가능한 경우 비디오를 디코딩에 있어서 Intel QuickSync 사용을 선호합니다.</value>
+    <value>QuickSync 인코더를 사용하고 하드웨어를 사용할 수 있는 경우 비디오 디코딩에 Intel QuickSync를 사용하는 것이 좋습니다.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>또한 QuickSync 인코더 사용 불가한 경우 QSV 디코딩을 사용합니다. (i.e. x265)</value>
+    <value>QuickSync 인코더를 사용하지 않을 때도 QuickSync 디코딩을 사용합니다. (즉, x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>공통 구두점 제거</value>
@@ -1641,7 +1645,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>2-Pass 인코딩</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>평균 비트 전송 속도 (kbps):</value>
+    <value>평균 비트전송률 (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>비디오 인코더:</value>
@@ -1857,20 +1861,13 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>선택한 항목 삭제</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>휴대용 모드: TMP 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오. 
-
-    {0}</value>
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>휴대용 모드: Storage 디렉토리 생성이 불가능합니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.
-
-    {0}</value>
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>휴대용 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
-  </data>
-  <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrake 엔진이 초기화하는데 실패하였습니다. GPU 드라이버들이 오래되었을 경우 종종 발생하는 문제입니다.\n 시스템에 탑재된 개별 그래픽에 대한 GPU 드라이버들을 업데이트하십시오.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>대체 자리표시자: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
@@ -2149,7 +2146,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
-    <value>Copyright (C) 2003-2022 HandBrake 팀</value>
+    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
     <value>저전력 단계:</value>
@@ -2509,7 +2506,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>맨 위로 이동</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>출력 비트레이트:</value>
+    <value>출력 비트전송률:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
     <value>평균 인코딩 속도:</value>
@@ -2598,5 +2595,63 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
     <value>모두 펼치기</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>오른쪽에서 왼쪽으로 표시 모드:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>끄기</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>텍스트만</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>전체 사용자 인터페이스</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>현재 실행 중인 개발 빌드가 오래되었습니다. 업데이트할 수 있습니다!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Github를 통해 다운로드</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>개발 빌드 다운로드(HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>QuickSync Deep Link Hyper Encode 활성화</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>지원되는 경우 단일 인코딩 속도를 높이기 위해 여러 미디어 엔진을 사용하는 것을 선호합니다. 미디어 엔진에서 여러 병렬 인코딩의 로드 밸런싱을 허용하려면 비활성화합니다.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>HandBrake 열기</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>하드웨어 인코딩 지원은 시작 문제의 일반적인 원인이므로 비활성화되었습니다.
+- HandBrake를 다시 시작하십시오.
+- 문제가 지속되면 문제를 일으키는 오래된 그래픽 카드 드라이버(온보드 또는 개별 부품)일 수 있습니다.
+
+하드웨어 인코딩 지원은 환경 설정에서 다시 활성화할 수 있습니다.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake를 시작할 수 없습니다.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>안전 모드 재설정</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>HandBrake를 다시 시작하십시오.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Export Queue Statistics Data (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Export Done!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>You must first scan a source and have an initial destination directory set</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Only when file already exists on disk.</value>
   </data>
 </root>

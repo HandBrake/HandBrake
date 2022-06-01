@@ -18,7 +18,8 @@
 
 + (NSDictionary *)deinterlaceTypesDict;
 + (NSDictionary *)decombPresetsDict;
-+ (NSDictionary *)deinterlacePresetsDict;
++ (NSDictionary *)yadifPresetsDict;
++ (NSDictionary *)bwdifPresetsDict;
 
 + (NSDictionary *)denoisePresetDict;
 + (NSDictionary *)nlmeansTunesDict;

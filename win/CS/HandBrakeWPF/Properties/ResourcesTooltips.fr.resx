@@ -366,18 +366,18 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 "Sprite" est utile pour les jeux 2D en 1, 4, 8 ou 16 bits. Il n'est pas destiné à la haute définition.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Le désentrelacement supprime les artefacts de l'image.
+    <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif est un désentrelaceur populaire et rapide.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
-Decomb bascule entre plusieurs algorithmes d'interpolation pour optimiser la vitesse et la qualité.</value>
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Paramètres de désentrelacement personnalisés.
+    <value>Custom Deinterlace parameters.
  
- Yadif syntax: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Yadif default: mode=3
+ Bwdif and Yadif default: mode=3
  
  Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
@@ -517,5 +517,16 @@ Il est recommandé que le fichier de sortie soit validé avant d'effectuer des a
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
     <value>Format du fichier de sortie. En plus de tout caractère de système de fichiers pris en charge, vous pouvez utiliser l'un des caractères de substitution qui seront remplacés lorsque vous changerez de titre ou que vous analyserez une source ou mettrez à jour certains paramètres.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
+
+Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
   </data>
 </root>

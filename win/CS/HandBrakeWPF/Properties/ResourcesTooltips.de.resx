@@ -365,16 +365,16 @@ Sprite ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite ist nicht geeignet f
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Deinterlace entfernt Kammartefakte aus dem Bild.
 
-Yadif ist ein populärer und schneller Deinterlacer.
+Bwdif  und Yadif sind populäre und schnelle Deinterlacer.
 
 Decomb wechselt zwischen verschiedenen Interpolationsalgorithmen für Geschwindigkeit und Qualität.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Eigene Deinterlaceparameter.
  
- Yadif-Syntax: mode=m:parity=p
+  Bwdif - und Yadif-Syntax: mode=m:parity=p
  
- Yadif-Standard: mode=3
+ Bwdif - und Yadif-Standard: mode=3
  
  Decomb-Syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
@@ -513,5 +513,16 @@ Es wird empfohlen, die Ausgabedatei vor der Durchführung von Aktionen zu validi
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
     <value>Das Format der Ausgabedatei. Zusätzlich zu jedem unterstützten Dateisystemzeichen können Sie einen der Platzhalter verwenden, die ersetzt werden, wenn Sie den Titel ändern, eine Quelle scannen oder bestimmte Einstellungen aktualisieren.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Für Sprachen, die von rechts nach links geschrieben werden, können Sie einen von zwei Modi aktivieren. Bei "Nur Text" wird nur der Text im Rechts-Links-Stil dargestellt. Bei "Gesamte Benutzeroberfläche" werden alle Steuerelemente in RTL dargestellt.
+
+Bitte beachten Sie, dass es bei der Verwendung dieser Modi zu Ungenauigkeiten im Layout der Benutzeroberfläche kommen kann. Je nach Sprache kann es sich lohnen, beide Modi auszuprobieren, um die beste Lösung zu finden.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Bestimmt eine spezifische Qualitätsstufe für Audio.
+1 ist die niedrigste Qualität und 5 ist die höchste Qualität.
+
+Die Bitrate variiert von Quelle zu Quelle.</value>
   </data>
 </root>

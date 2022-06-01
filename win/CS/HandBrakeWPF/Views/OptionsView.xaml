@@ -224,6 +224,8 @@
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.OptionsView_FileCollisionBehaviour}" />
                                 <ComboBox Width="120" ItemsSource="{Binding AutonameFileCollisionBehaviours, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedCollisionBehaviour}" HorizontalAlignment="Left" />
                                 <TextBox Text="{Binding PrePostFilenameText, UpdateSourceTrigger=PropertyChanged}" Width="150"  VerticalAlignment="Center" Visibility="{Binding ShowPrePostFilenameBox, Converter={StaticResource boolToVisConverter}}" HorizontalAlignment="Left"  Margin="5,0,0,0" />
+                                <TextBlock Text="{x:Static Properties:Resources.OptionsView_FileCollisionNotice}" FontStyle="Italic" Margin="5,0,0,0" />
+
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,15,0,0">
@@ -342,9 +344,10 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
+                        
                         <Image Source="Images/warningsmall.png" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_SafeMode}" TextWrapping="Wrap" Grid.Column="1" Style="{StaticResource subText}" />
+
                     </Grid>
                     
 
@@ -354,8 +357,17 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
                         <Image Source="Images/ErrorX.png" Width="32" Height="32" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_HardwareDetectFailed}" TextWrapping="Wrap" Grid.Column="1" />
+
+                        <Button Content="{x:Static Properties:Resources.OptionsView_ResetSafeMode}" cal:Message.Attach="[Event Click] = [Action ResetAutomaticSafeMode]"
+                                Visibility="{Binding IsAutomaticSafeMode, Converter={StaticResource boolToVisConverter}}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
+                                Margin="0,10,0,0" />
                     </Grid>
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20" Visibility="{Binding IsHardwareOptionsVisible, Converter={StaticResource boolToVisConverter}}">

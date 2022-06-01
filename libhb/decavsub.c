@@ -52,7 +52,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     ctx->job                   = job;
     ctx->subtitle              = w->subtitle;
 
-    AVCodec        * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
+    const AVCodec  * codec   = avcodec_find_decoder(ctx->subtitle->codec_param);
     AVCodecContext * context = avcodec_alloc_context3(codec);
     context->codec = codec;
 
@@ -64,7 +64,6 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
-    av_dict_set( &av_opts, "sub_text_format", "ass", 0 );
     if (ctx->subtitle->source == CC608SUB)
     {
         av_dict_set( &av_opts, "data_field", "first", 0 );

@@ -14,19 +14,18 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
+    using HandBrake.App.Core.Exceptions;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.State;
 
-    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using EncodeTask = Model.EncodeTask;
     using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
@@ -69,7 +68,7 @@ namespace HandBrakeWPF.Services.Encode
 
         public bool IsEncoding { get; protected set; }
 
-        public void Start(EncodeTask task, HBConfiguration configuration, string basePresetName)
+        public void Start(EncodeTask task, string basePresetName)
         {
             try
             {
@@ -84,9 +83,9 @@ namespace HandBrakeWPF.Services.Encode
                 this.currentTask = task;
                 this.isPreviewInstance = task.IsPreviewEncode;
 
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
                 {
-                    this.InitLogging(task.Destination);
+                    this.InitRemoteLogging(task.Destination);
                 }
                 else
                 {
@@ -121,7 +120,7 @@ namespace HandBrakeWPF.Services.Encode
                 // Prevent port stealing if multiple jobs start at the same time.
                 lock (this.portLock) 
                 {
-                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, configuration, this.encodeLogService, this.userSettingService, this.portService);
+                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, this.encodeLogService, this.userSettingService, this.portService);
 
                     this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                     this.instance.EncodeProgress += this.InstanceEncodeProgress;
@@ -132,7 +131,7 @@ namespace HandBrakeWPF.Services.Encode
                     this.VerifyEncodeDestinationPath(task);
 
                     // Get an EncodeJob object for the Interop Library
-                    JsonEncodeObject work = this.encodeTaskFactory.Create(task, configuration);
+                    JsonEncodeObject work = this.encodeTaskFactory.Create(task);
 
                     this.instance.StartEncode(work);
                 }
@@ -309,7 +308,7 @@ namespace HandBrakeWPF.Services.Encode
             return 0;
         }
 
-        private void InitLogging(string destination)
+        private void InitRemoteLogging(string destination)
         {
             if (!this.isLoggingInitialised)
             {
@@ -342,7 +341,9 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Copy the Log to HandBrakes log folder in the users application data folder.
                 // Only needed for process isolation mode. Worker will handle it's own logging.
-                if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled))
+                bool processIsolationEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled();
+
+                if (!processIsolationEnabled)
                 {
                     string logType = this.isPreviewInstance ? "preview" : "encode";
                     string destinationFile = Path.GetFileNameWithoutExtension(destination);

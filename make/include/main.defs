@@ -32,6 +32,7 @@ ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
 endif
 
 ifeq (1,$(FEATURE.flatpak))
+    MODULES += contrib/libass
     MODULES += contrib/jansson
     MODULES += contrib/x264
 endif
@@ -48,6 +49,7 @@ ifeq (1,$(FEATURE.x265))
 endif
 
 MODULES += contrib/libdav1d
+MODULES += contrib/svt-av1
 MODULES += contrib/zimg
 MODULES += contrib/ffmpeg
 MODULES += contrib/libdvdread

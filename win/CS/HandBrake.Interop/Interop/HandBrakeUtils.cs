@@ -74,7 +74,7 @@ namespace HandBrake.Interop.Interop
                         initNoHardware = true;
                         if (HBFunctions.hb_global_init_no_hardware() == -1)
                         {
-                            throw new InvalidOperationException("HB global init failed.");
+                            throw new InvalidOperationException("HB global init failed. (-1)");
                         }
 
                         initSuccess = true;
@@ -94,7 +94,7 @@ namespace HandBrake.Interop.Interop
                 {
                     if (HBFunctions.hb_global_init_no_hardware() == -1)
                     {
-                        throw new InvalidOperationException("HB global init failed.");
+                        throw new InvalidOperationException("HB global init failed. (-2)");
                     }
 
                     initNoHardware = true;

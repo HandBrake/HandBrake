@@ -1,0 +1,267 @@
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
+"3dN-MN-DcP.title" = "形式:";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
+"5.title" = "設定";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
+"290.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
+"292.title" = "自動";
+
+/* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
+"302.title" = "自動で出力ファイルに名前を付ける";
+
+/* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
+"304.title" = "完了時:";
+
+/* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
+"305.title" = "更新を毎週自動的に確認する";
+
+/* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
+"306.title" = "ファイルを送る:";
+
+/* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
+"307.title" = "起動時:";
+
+/* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
+"308.title" = "出力ファイル:";
+
+/* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
+"348.title" = "ビデオと同じ場所にアクティビティログを格納する";
+
+/* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
+"351.title" = "アクティビティログ:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
+"352.ibShadowedToolTip" = "スキャンするプレビュー画像の数です。高い値にするとタイトルスキャンの時間と引き換えに自動切り抜きの正確性が上がります。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
+"354.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
+"355.title" = "10";
+
+/* Class = "NSMenuItem"; title = "15"; ObjectID = "356"; */
+"356.title" = "15";
+
+/* Class = "NSMenuItem"; title = "20"; ObjectID = "357"; */
+"357.title" = "20";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
+"359.ibShadowedToolTip" = "スキャンするプレビュー画像の数です。高い値にするとタイトルスキャンの時間と引き換えに自動切り抜きの正確性が上がります。";
+
+/* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
+"360.title" = "スキャンするプレビュー画像数:";
+
+/* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
+"361.title" = "25";
+
+/* Class = "NSMenuItem"; title = "30"; ObjectID = "362"; */
+"362.title" = "30";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
+"363.ibShadowedToolTip" = "冗長性レベルです。拡張レベルではアクティビティログにより技術的な情報を記録します。最小では少なくなります。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
+"365.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
+"368.title" = "拡張";
+
+/* Class = "NSMenuItem"; title = "Standard"; ObjectID = "369"; */
+"369.title" = "標準";
+
+/* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
+"370.title" = "最小";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
+"371.ibShadowedToolTip" = "冗長性レベルです。拡張レベルではアクティビティログにより技術的な情報を記録します。最小では少なくなります。";
+
+/* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
+"372.title" = "冗長性レベル:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
+"387.ibShadowedToolTip" = "x264固定品質設定のステップを決めます。小さい値にするとより細かく品質を変えられます。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
+"389.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
+"390.title" = "0.20";
+
+/* Class = "NSMenuItem"; title = "0.25"; ObjectID = "391"; */
+"391.title" = "0.25";
+
+/* Class = "NSMenuItem"; title = "0.50"; ObjectID = "393"; */
+"393.title" = "0.50";
+
+/* Class = "NSMenuItem"; title = "1.0"; ObjectID = "394"; */
+"394.title" = "1.0";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
+"395.ibShadowedToolTip" = "x264固定品質設定のステップを決めます。小さい値にするとより細かく品質を変えられます。";
+
+/* Class = "NSTextFieldCell"; title = "Constant Quality fractional granularity:"; ObjectID = "396"; */
+"396.title" = "固定品質ステップ:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)."; ObjectID = "398"; */
+"398.ibShadowedToolTip" = "DVDを読み込むのにlibdvdnavを使用します。libdvdreadの方がちゃんと読み込める問題の多いDVDのときにのみこれを無効にします(稀)。";
+
+/* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
+"399.title" = "libdvdnavを使用 (libdvdreadの代わり)";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
+"449.title" = "なし";
+
+/* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
+"451.title" = "開く…";
+
+/* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
+"458.title" = "システムアラートサウンドを再生";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
+"463.ibShadowedToolTip" = "秒単位のDVDとBlu-rayタイトルの最小長さです。これより短いものはスキップされます。";
+
+/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
+"464.title" = "次の長さ未満のDVDとBlu-rayタイトルを無視:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
+"480.ibShadowedToolTip" = "タイトルの最小長さです。これより短いタイトルはスキップされます。";
+
+/* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
+"484.title" = ".m4v";
+
+/* Class = "NSMenuItem"; title = ".mp4"; ObjectID = "485"; */
+"485.title" = ".mp4";
+
+/* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
+"487.title" = "既定MP4拡張子:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
+"493.title" = "他のビュー";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
+"494.title" = "何もしない";
+
+/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
+"495.title" = "アラート";
+
+/* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
+"496.title" = "アラートと通知";
+
+/* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
+"497.title" = "コンピューターをスリープ";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
+"498.title" = "コンピューターをシャットダウン";
+
+/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
+"499.title" = "通知";
+
+/* Class = "NSMenuItem"; title = "Quit HandBrake"; ObjectID = "500"; */
+"500.title" = "HandBrakeを終了";
+
+/* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
+"514.title" = "35";
+
+/* Class = "NSMenuItem"; title = "40"; ObjectID = "515"; */
+"515.title" = "40";
+
+/* Class = "NSMenuItem"; title = "45"; ObjectID = "516"; */
+"516.title" = "45";
+
+/* Class = "NSMenuItem"; title = "50"; ObjectID = "517"; */
+"517.title" = "50";
+
+/* Class = "NSMenuItem"; title = "55"; ObjectID = "518"; */
+"518.title" = "55";
+
+/* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
+"519.title" = "60";
+
+/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
+"Aao-Tf-JeJ.title" = "プレビュー画像を表示";
+
+/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
+"BPU-E2-N8l.title" = "エンコードが完了したら常に完了済みアイテムをクリアする";
+
+/* Class = "NSTextFieldCell"; title = "Scan:"; ObjectID = "c0L-TU-WML"; */
+"c0L-TU-WML.title" = "スキャン:";
+
+/* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
+"cqp-xU-GOe.title" = "エンコーダー:";
+
+/* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
+"dQ6-Dh-9sD.title" = "ラベルをフォーマットにドラッグして名前形式を作ります。";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
+"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "なし";
+
+/* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
+"FKi-zh-5gc.title" = "キュー:";
+
+/* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
+"FZE-ZR-g93.title" = "GB";
+
+/* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
+"ggR-Zs-P8G.title" = "タイトルケースの大文字小文字にする";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "概要:";
+
+/* Class = "NSTextFieldCell"; title = "Number of simultaneous encodes:"; ObjectID = "iGS-b5-ip7"; */
+"iGS-b5-ip7.title" = "エンコードの同時実行数:";
+
+/* Class = "NSMenuItem"; title = "2"; ObjectID = "JcO-br-AXz"; */
+"JcO-br-AXz.title" = "2";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
+"klQ-DW-Kc6.title" = "秒";
+
+/* Class = "NSButtonCell"; title = "Keep preset edits when selecting a new title"; ObjectID = "L3N-te-KLg"; */
+"L3N-te-KLg.title" = "新しいタイトルを選択しても編集されたプリセットを維持する";
+
+/* Class = "NSMenuItem"; title = "1"; ObjectID = "l8v-ns-6UR"; */
+"l8v-ns-6UR.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
+"lgn-RF-k0d.title" = "メインアクティビティログフォルダから30日経過したログを消去する";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Higher values may help to fully utilize the CPU if a single encode can't scale to all available CPU cores."; ObjectID = "MLd-Te-AbW"; */
+"MLd-Te-AbW.ibShadowedToolTip" = "単一エンコードが利用可能なすべてのCPUコアを使い切っていないときに、より高い値にすると最適化できます。";
+
+/* Class = "NSMenuItem"; title = "4"; ObjectID = "nTJ-DB-eOd"; */
+"nTJ-DB-eOd.title" = "4";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
+"PaR-zw-opS.ibShadowedToolTip" = "出力先ディスクの最小空き容量。";
+
+/* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
+"pUi-lK-cHw.title" = "アンダースコアをスペースに置き換え";
+
+/* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
+"Tk3-Ig-fFI.ibShadowedToolTip" = "ラベルをフォーマットフィールドにドラッグして名前形式を作ります。";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "TpU-3v-fhx"; */
+"TpU-3v-fhx.title" = "他のビュー";
+
+/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
+"Uxv-oN-c1r.title" = "起動ごとに\"何もしない\"にリセット";
+
+/* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "wiP-Ia-DfB"; */
+"wiP-Ia-DfB.title" = "プリセット:";
+
+/* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
+"wo5-iR-2mb.title" = "よく使われる記号を削除する";
+
+/* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
+"yG9-mz-tqQ.title" = "キューを一時停止するディスク容量:";
+
+/* Class = "NSMenuItem"; title = "3"; ObjectID = "ZGL-FR-zSW"; */
+"ZGL-FR-zSW.title" = "3";
+
+/* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
+"Zqz-Kn-xOS.title" = "ソースを開くパネルを表示";
+

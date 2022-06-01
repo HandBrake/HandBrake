@@ -1,35 +1,38 @@
 name: macOS build
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-11.0
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
-        path: /usr/local
+        path: ~/mac-toolchain
         key: mac-toolchain
+
+    - name: Setup Path
+      run: |
+        echo ~/mac-toolchain/bin >> $GITHUB_PATH
 
     - name: Setup Environment
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
-        scripts/mac-toolchain-build /usr/local
+        scripts/mac-toolchain-build ~/mac-toolchain
 
     - name: Build HandBrake
       run: |
-        git submodule update --init --recursive
         ./configure
         cd build
         make ub && make pkg.create
 
     - name: Upload Assets
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-macos
         path: ./build/pkg

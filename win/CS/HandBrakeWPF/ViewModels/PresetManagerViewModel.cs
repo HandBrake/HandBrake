@@ -18,7 +18,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Factories;
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
@@ -321,7 +322,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name, HBConfigurationFactory.Create());
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name);
                 }
             }
             else
@@ -348,7 +349,7 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(filename))
             {
                 IList<PresetDisplayCategory> userPresets = this.presetService.GetPresetCategories(true);
-                this.presetService.ExportCategories(savefiledialog.FileName, userPresets, HBConfigurationFactory.Create());
+                this.presetService.ExportCategories(savefiledialog.FileName, userPresets);
             }
         }
 

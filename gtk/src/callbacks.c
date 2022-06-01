@@ -2468,8 +2468,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     g_free(text);
 
     // Filters
-    gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
+    gboolean detel, comb_detect, yadif, decomb, deblock, nlmeans, denoise, bwdif;
+    gboolean unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
     const char * sval;
 
     sval        = ghb_dict_get_string(ud->settings, "PictureDetelecine");
@@ -2477,7 +2477,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     sval        = ghb_dict_get_string(ud->settings, "PictureCombDetectPreset");
     comb_detect = sval != NULL && !!strcasecmp(sval, "off");
     sval        = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
-    deint       = sval != NULL && !strcasecmp(sval, "deinterlace");
+    yadif       = sval != NULL && !strcasecmp(sval, "deinterlace");
+    bwdif       = sval != NULL && !strcasecmp(sval, "bwdif");
     decomb      = sval != NULL && !strcasecmp(sval, "decomb");
     sval        = ghb_dict_get_string(ud->settings, "PictureDeblockPreset");
     deblock     = sval != NULL && !!strcasecmp(sval, "off");
@@ -2510,9 +2511,15 @@ ghb_update_summary_info(signal_user_data_t *ud)
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }
-    if (deint)
+    if (yadif)
     {
-        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEINTERLACE);
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_YADIF);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (bwdif)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_BWDIF);
         g_string_append_printf(str, "%s%s", sval, filter->name);
         sval = ", ";
     }

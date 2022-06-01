@@ -9,14 +9,15 @@
 
 namespace HandBrakeWPF.Services.Encode.Factories
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text.Json;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
-    using HandBrake.Interop.Interop.Interfaces.Model;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Shared;
@@ -24,7 +25,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using AudioEncoder = Model.Models.AudioEncoder;
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
@@ -34,9 +34,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using FramerateMode = Model.Models.FramerateMode;
     using OutputFormat = Model.Models.OutputFormat;
     using PointToPointMode = Model.Models.PointToPointMode;
+    using Range = HandBrake.Interop.Interop.Json.Encode.Range;
     using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = Model.Models.SubtitleTrack;
-    using Validate = Helpers.Validate;
+    using Validate = HandBrake.App.Core.Utilities.Validate;
     using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
 
@@ -53,7 +54,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             this.userSettingService = userSettingService;
         }
 
-        internal JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration)
+        internal JsonEncodeObject Create(EncodeTask job)
         {
             JsonEncodeObject encode = new JsonEncodeObject
                                       {
@@ -63,15 +64,15 @@ namespace HandBrakeWPF.Services.Encode.Factories
                                           Filters = CreateFilters(job),
                                           PAR = CreatePAR(job),
                                           Metadata = CreateMetadata(job),
-                                          Source = CreateSource(job, configuration),
+                                          Source = CreateSource(job),
                                           Subtitle = CreateSubtitle(job),
-                                          Video = CreateVideo(job, configuration)
+                                          Video = CreateVideo(job)
                                       };
 
             return encode;
         }
 
-        private Source CreateSource(EncodeTask job, HBConfiguration configuration)
+        private Source CreateSource(EncodeTask job)
         {
             Range range = new Range();
             switch (job.PointToPointMode)
@@ -94,7 +95,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 case PointToPointMode.Preview:
                     range.Type = "preview";
                     range.Start = job.PreviewEncodeStartAt;
-                    range.SeekPoints = configuration.PreviewScanCount;
+                    range.SeekPoints = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
                     range.End = job.PreviewEncodeDuration * 90000;
                     break;
             }
@@ -196,7 +197,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         Import =
                             new SubImport
                             {
-                                Format = item.SrtPath.EndsWith("srt") ? "SRT" : "SSA",
+                                Format = item.SrtPath.EndsWith("srt", StringComparison.InvariantCultureIgnoreCase) ? "SRT" : "SSA",
                                 Filename = item.SrtPath,
                                 Codeset = item.SrtCharCode,
                                 Language = item.SrtLangCode
@@ -210,7 +211,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             return subtitle;
         }
 
-        private Video CreateVideo(EncodeTask job, HBConfiguration configuration)
+        private Video CreateVideo(EncodeTask job)
         {
             Video video = new Video();
 
@@ -245,23 +246,28 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Turbo = job.TurboFirstPass;
             }
 
-            video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && configuration.EnableQuickSyncDecoding;
+
+            bool enableQuickSyncDecoding = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
+            bool useQSVDecodeForNonQSVEnc = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
+            bool enableQsvLowPower = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncLowPower);
+
+            video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.
-            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265 && job.VideoEncoder != VideoEncoder.QuickSyncH26510b && job.VideoEncoder != VideoEncoder.QuickSyncAV1 && job.VideoEncoder != VideoEncoder.QuickSyncAV110b)
+            if (video.QSV.Decode && !VideoEncoderHelpers.IsQuickSync(job.VideoEncoder))
             {
-                video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
+                video.QSV.Decode = useQSVDecodeForNonQSVEnc;
             }
             
             video.Options = job.ExtraAdvancedArguments;
 
-            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && (job.VideoEncoder == VideoEncoder.QuickSync || job.VideoEncoder == VideoEncoder.QuickSyncH265 || job.VideoEncoder == VideoEncoder.QuickSyncH26510b || job.VideoEncoder == VideoEncoder.QuickSyncAV1 || job.VideoEncoder == VideoEncoder.QuickSyncAV110b))
+            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && VideoEncoderHelpers.IsQuickSync(job.VideoEncoder))
             {
-                if (configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
+                if (enableQsvLowPower && !video.Options.Contains("lowpower"))
                 {
                     video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=1" : string.Concat(video.Options, ":lowpower=1");
                 }
-                else if(!configuration.EnableQsvLowPower && !video.Options.Contains("lowpower"))
+                else if(!enableQsvLowPower && !video.Options.Contains("lowpower"))
                 {
                     video.Options = string.IsNullOrEmpty(video.Options) ? "lowpower=0" : string.Concat(video.Options, ":lowpower=0");
                 }
@@ -364,12 +370,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Deinterlace
             if (job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_DEINTERLACE, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_YADIF, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
                     JsonDocument root = JsonDocument.Parse(unparsedJson);
 
-                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = root };
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_YADIF, Settings = root };
                     filter.FilterList.Add(filterItem);
                 }
             }
@@ -387,7 +393,20 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
+            // Bwdif
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
+            {
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)hb_filter_ids.HB_FILTER_BWDIF, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JsonDocument settings = JsonDocument.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_BWDIF, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
+            }
+
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif || job.DeinterlaceFilter == DeinterlaceFilter.Bwdif)
             {
                 if (job.CombDetect != CombDetect.Off)
                 {

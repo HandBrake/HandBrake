@@ -75,13 +75,10 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         /// <param name="job">
         /// The job.
         /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
         /// <param name="basePresetName">
         /// Name of the base preset used for logging purposes.
         /// </param>
-        void Start(EncodeTask job, HBConfiguration configuration, string basePresetName);
+        void Start(EncodeTask job, string basePresetName);
 
         /// <summary>
         /// The pause.

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
     <value>Deblock reduces blocky artifacts caused by low quality video compression.</value>
@@ -367,16 +367,16 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Deinterlace removes comb artifacts from the picture.
 
-Yadif is a popular and fast deinterlacer.
+Bwdif and Yadif are two popular and fast deinterlacers.
 
 Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Custom Deinterlace parameters.
  
- Yadif syntax: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Yadif default: mode=3
+ Bwdif and Yadif default: mode=3
  
  Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
@@ -520,5 +520,11 @@ It is recommended the output file is validated before performing actions on it.<
     <value>For languages that are right to left, you can enable one of two modes.   "Text Only" will only render the text in right to left style.  "Entire User Interface" will render all controls in right to left.
 
 Please note, there may be inperfections in the UI layout when using these modes. Depending on the language, it may be worth trying both modes to find the best fit.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
   </data>
 </root>

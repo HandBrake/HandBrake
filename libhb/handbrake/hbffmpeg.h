@@ -27,12 +27,13 @@
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
 
 void hb_avcodec_init(void);
-int  hb_avcodec_open(AVCodecContext *, AVCodec *, AVDictionary **, int);
+int  hb_avcodec_open(AVCodecContext *, const AVCodec *, AVDictionary **, int);
 void hb_avcodec_free_context(AVCodecContext **avctx);
 const char* const* hb_av_preset_get_names(int encoder);
+const char* const* hb_av_tune_get_names(int encoder);
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode);
-void     hb_ff_set_sample_fmt(AVCodecContext *, AVCodec *, enum AVSampleFormat);
+void     hb_ff_set_sample_fmt(AVCodecContext *, const AVCodec *, enum AVSampleFormat);
 
 int hb_sws_get_colorspace(int color_matrix);
 int hb_colr_pri_hb_to_ff(int colr_prim);

@@ -24,13 +24,15 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Model;
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Audio;
@@ -227,6 +229,9 @@ namespace HandBrakeWPF.ViewModels
         public IPresetManagerViewModel PresetManagerViewModel { get; set; }
 
         public int SelectedTab { get; set; }
+
+        /* Commands */
+        public ICommand AddToQueueQualitySweepCommand => new AddToQueueQualitySweepCommand(this, this.VideoViewModel, this.userSettingService, this.errorService);
 
 
         /* Properties */
@@ -1096,7 +1101,7 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), false, this.errorService))
+            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), false))
             {
                 return new AddQueueError(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -1125,7 +1130,7 @@ namespace HandBrakeWPF.ViewModels
                 return new AddQueueError(Resources.Subtitles_WebmSubtitleIncompatibilityHeader, Resources.Main_PleaseFixSubtitleSettings, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset, this.IsModifiedPreset, this.selectedTitle);
+            QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), this.ScannedSource.ScanPath, this.SelectedPreset, this.IsModifiedPreset, this.selectedTitle);
 
             if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
@@ -1473,6 +1478,34 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => IsPresetPaneDisplayed);
         }
 
+        public void NextTitle()
+        {
+            if (this.ScannedSource == null || this.SelectedTitle == null)
+            {
+                return;
+            }
+
+            int index = this.ScannedSource.Titles.IndexOf(this.selectedTitle);
+            if (this.ScannedSource.Titles.Count >= (index + 2))
+            {
+                this.SelectedTitle = this.ScannedSource.Titles[index + 1];
+            }
+        }
+
+        public void PreviousTitle()
+        {
+            if (this.ScannedSource == null || this.SelectedTitle == null)
+            {
+                return;
+            }
+
+            int index = this.ScannedSource.Titles.IndexOf(this.selectedTitle);
+            if (index >= 1)
+            {
+                this.SelectedTitle = this.ScannedSource.Titles[index -1];
+            }
+        }
+
         /* Main Window Public Methods*/
 
         public void FilesDroppedOnWindow(DragEventArgs e)
@@ -1766,7 +1799,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name, HBConfigurationFactory.Create());
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset.Name);
                 }
             }
             else

@@ -31,12 +31,13 @@ Original "Faster" settings:
 #include "handbrake/handbrake.h"
 #include "handbrake/taskset.h"
 
-typedef struct decomb_thread_arg_s {
+typedef struct comb_detect_thread_arg_s
+{
     taskset_thread_arg_t arg;
     hb_filter_private_t *pv;
     int segment_start[3];
     int segment_height[3];
-} decomb_thread_arg_t;
+} comb_detect_thread_arg_t;
 
 struct hb_filter_private_s
 {
@@ -54,7 +55,7 @@ struct hb_filter_private_s
     int                block_threshold;
     int                block_width;
     int                block_height;
-    int              * block_score;
+    int               *block_score;
     int                comb_check_complete;
     int                comb_check_nthreads;
 
@@ -66,28 +67,29 @@ struct hb_filter_private_s
     int                spatial_threshold6;
     int                comb32detect_min;
     int                comb32detect_max;
-    float            * gamma_lut;
+    float             *gamma_lut;
 
     int                comb_detect_ready;
+    int                force_exaustive_check;
 
-    hb_buffer_t      * ref[3];
+    hb_buffer_t       *ref[3];
     int                ref_used[3];
 
-    /* Make buffers to store a comb masks. */
-    hb_buffer_t      * mask;
-    hb_buffer_t      * mask_filtered;
-    hb_buffer_t      * mask_temp;
+    // Make buffers to store a comb masks.
+    hb_buffer_t       *mask;
+    hb_buffer_t       *mask_filtered;
+    hb_buffer_t       *mask_temp;
     int                mask_box_x;
     int                mask_box_y;
 
     int                cpu_count;
     int                segment_height[3];
 
-    taskset_t          decomb_filter_taskset; // Threads for comb detection
-    taskset_t          decomb_check_taskset;  // Threads for comb check
-    taskset_t          mask_filter_taskset; // Threads for decomb mask filter
-    taskset_t          mask_erode_taskset;  // Threads for decomb mask erode
-    taskset_t          mask_dilate_taskset; // Threads for decomb mask dilate
+    taskset_t          comb_detect_filter_taskset; // Threads for comb detection
+    taskset_t          comb_detect_check_taskset;  // Threads for comb check
+    taskset_t          mask_filter_taskset; // Threads for comb detect mask filter
+    taskset_t          mask_erode_taskset;  // Threads for comb detect mask erode
+    taskset_t          mask_dilate_taskset; // Threads for comb detect mask dilate
 
     void (*detect_gamma_combed_segment)(hb_filter_private_t *pv,
                                         int segment_start, int segment_stop);
@@ -104,14 +106,14 @@ struct hb_filter_private_s
     int                frames;
 };
 
-static int comb_detect_init( hb_filter_object_t * filter,
-                             hb_filter_init_t * init );
+static int comb_detect_init(hb_filter_object_t *filter,
+                            hb_filter_init_t *init);
 
-static int comb_detect_work( hb_filter_object_t * filter,
-                             hb_buffer_t ** buf_in,
-                             hb_buffer_t ** buf_out );
+static int comb_detect_work(hb_filter_object_t *filter,
+                            hb_buffer_t **buf_in,
+                            hb_buffer_t **buf_out );
 
-static void comb_detect_close( hb_filter_object_t * filter );
+static void comb_detect_close(hb_filter_object_t *filter);
 
 static const char comb_detect_template[] =
     "mode=^"HB_INT_REG"$:spatial-metric=^([012])$:"
@@ -271,7 +273,7 @@ static void check_combing_mask(hb_filter_private_t *pv, int segment, int start, 
 
 static void mask_dilate_work(void *thread_args_v)
 {
-    decomb_thread_arg_t *thread_args = thread_args_v;
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
     hb_filter_private_t *pv = thread_args->pv;
 
     const int segment_start = thread_args->segment_start[0];
@@ -339,7 +341,7 @@ static void mask_dilate_work(void *thread_args_v)
 
 static void mask_erode_work(void *thread_args_v)
 {
-    decomb_thread_arg_t *thread_args = thread_args_v;
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
     hb_filter_private_t *pv = thread_args->pv;
 
     const int segment_start = thread_args->segment_start[0];
@@ -407,7 +409,7 @@ static void mask_erode_work(void *thread_args_v)
 
 static void mask_filter_work(void *thread_args_v)
 {
-    decomb_thread_arg_t *thread_args = thread_args_v;
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
     hb_filter_private_t *pv = thread_args->pv;
 
     const int width = pv->mask->plane[0].width;
@@ -472,9 +474,9 @@ static void mask_filter_work(void *thread_args_v)
     }
 }
 
-static void decomb_check_work(void *thread_args_v)
+static void comb_detect_check_work(void *thread_args_v)
 {
-    decomb_thread_arg_t *thread_args = thread_args_v;
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
     hb_filter_private_t *pv = thread_args->pv;
 
     int segment = thread_args->arg.segment;
@@ -491,9 +493,9 @@ static void decomb_check_work(void *thread_args_v)
     }
 }
 
-static void decomb_filter_work(void *thread_args_v)
+static void comb_detect_filter_work(void *thread_args_v)
 {
-    decomb_thread_arg_t *thread_args = thread_args_v;
+    comb_detect_thread_arg_t *thread_args = thread_args_v;
     hb_filter_private_t *pv = thread_args->pv;
 
     //Process segment (for now just from luma)
@@ -510,20 +512,20 @@ static void decomb_filter_work(void *thread_args_v)
     }
 }
 
-static void store_ref(hb_filter_private_t * pv, hb_buffer_t * b)
+static void store_ref(hb_filter_private_t *pv, hb_buffer_t *b)
 {
     // Free unused buffer
     if (!pv->ref_used[0])
     {
         hb_buffer_close(&pv->ref[0]);
     }
-    memmove(&pv->ref[0],      &pv->ref[1],      sizeof(pv->ref[0])      * 2 );
-    memmove(&pv->ref_used[0], &pv->ref_used[1], sizeof(pv->ref_used[0]) * 2 );
+    memmove(&pv->ref[0],      &pv->ref[1],      sizeof(pv->ref[0])      * 2);
+    memmove(&pv->ref_used[0], &pv->ref_used[1], sizeof(pv->ref_used[0]) * 2);
     pv->ref[2]      = b;
     pv->ref_used[2] = 0;
 }
 
-static void reset_combing_results( hb_filter_private_t * pv )
+static void reset_combing_results(hb_filter_private_t *pv)
 {
     pv->comb_check_complete = 0;
     for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
@@ -532,12 +534,12 @@ static void reset_combing_results( hb_filter_private_t * pv )
     }
 }
 
-static int check_combing_results( hb_filter_private_t * pv )
+static int check_combing_results(hb_filter_private_t *pv)
 {
     int combed = HB_COMB_NONE;
     for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
     {
-        if (pv->block_score[ii] >= ( pv->block_threshold / 2 ))
+        if (pv->block_score[ii] >= (pv->block_threshold / 2))
         {
             if (pv->block_score[ii] <= pv->block_threshold)
             {
@@ -554,26 +556,26 @@ static int check_combing_results( hb_filter_private_t * pv )
     return combed;
 }
 
-static int comb_segmenter( hb_filter_private_t * pv )
+static int comb_segmenter(hb_filter_private_t *pv)
 {
     /*
-     * Now that all data for decomb detection is ready for
+     * Now that all data for comb detection is ready for
      * our threads, fire them off and wait for their completion.
      */
-    taskset_cycle( &pv->decomb_filter_taskset );
+    taskset_cycle(&pv->comb_detect_filter_taskset);
 
     if (pv->mode & MODE_FILTER)
     {
-        taskset_cycle( &pv->mask_filter_taskset );
+        taskset_cycle(&pv->mask_filter_taskset);
         if (pv->filter_mode == FILTER_ERODE_DILATE)
         {
-            taskset_cycle( &pv->mask_erode_taskset );
-            taskset_cycle( &pv->mask_dilate_taskset );
-            taskset_cycle( &pv->mask_erode_taskset );
+            taskset_cycle(&pv->mask_erode_taskset);
+            taskset_cycle(&pv->mask_dilate_taskset);
+            taskset_cycle(&pv->mask_erode_taskset);
         }
     }
     reset_combing_results(pv);
-    taskset_cycle(&pv->decomb_check_taskset);
+    taskset_cycle(&pv->comb_detect_check_taskset);
     return check_combing_results(pv);
 }
 
@@ -586,11 +588,11 @@ static void build_gamma_lut(hb_filter_private_t *pv)
     }
 }
 
-static int comb_detect_init( hb_filter_object_t * filter,
-                             hb_filter_init_t   * init )
+static int comb_detect_init(hb_filter_object_t *filter,
+                            hb_filter_init_t   *init)
 {
-    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
-    hb_filter_private_t * pv = filter->private_data;
+    filter->private_data = calloc(1, sizeof(struct hb_filter_private_s));
+    hb_filter_private_t *pv = filter->private_data;
 
     hb_buffer_list_clear(&pv->out_list);
 
@@ -604,6 +606,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
     build_gamma_lut(pv);
 
     pv->frames = 0;
+    pv->force_exaustive_check = 1;
     pv->comb_heavy = 0;
     pv->comb_light = 0;
     pv->comb_none = 0;
@@ -621,7 +624,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
     if (filter->settings)
     {
-        hb_value_t * dict = filter->settings;
+        hb_value_t *dict = filter->settings;
 
         // Get comb detection settings
         hb_dict_extract_int(&pv->mode, dict, "mode");
@@ -686,29 +689,29 @@ static int comb_detect_init( hb_filter_object_t * filter,
     /*
      * Create comb detection taskset.
      */
-    if (taskset_init( &pv->decomb_filter_taskset, "decomb_filter_segment", pv->cpu_count,
-                      sizeof( decomb_thread_arg_t ), decomb_filter_work) == 0)
+    if (taskset_init(&pv->comb_detect_filter_taskset, "comb_detect_filter_segment", pv->cpu_count,
+                     sizeof(comb_detect_thread_arg_t), comb_detect_filter_work) == 0)
     {
-        hb_error( "decomb could not initialize taskset" );
+        hb_error("comb_detect could not initialize taskset");
     }
 
-    decomb_thread_arg_t *decomb_prev_thread_args = NULL;
+    comb_detect_thread_arg_t *comb_detect_prev_thread_args = NULL;
     for (int ii = 0; ii < pv->cpu_count; ii++)
     {
-        decomb_thread_arg_t *thread_args;
+        comb_detect_thread_arg_t *thread_args;
 
-        thread_args = taskset_thread_args( &pv->decomb_filter_taskset, ii );
+        thread_args = taskset_thread_args( &pv->comb_detect_filter_taskset, ii );
         thread_args->pv = pv;
         thread_args->arg.segment = ii;
-        thread_args->arg.taskset = &pv->decomb_filter_taskset;
+        thread_args->arg.taskset = &pv->comb_detect_filter_taskset;
 
         for (int pp = 0; pp < 3; pp++)
         {
-            if (decomb_prev_thread_args != NULL)
+            if (comb_detect_prev_thread_args != NULL)
             {
                 thread_args->segment_start[pp] =
-                    decomb_prev_thread_args->segment_start[pp] +
-                    decomb_prev_thread_args->segment_height[pp];
+                    comb_detect_prev_thread_args->segment_start[pp] +
+                    comb_detect_prev_thread_args->segment_height[pp];
             }
             if (ii == pv->cpu_count - 1)
             {
@@ -723,42 +726,44 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
         }
 
-        decomb_prev_thread_args = thread_args;
+        comb_detect_prev_thread_args = thread_args;
     }
 
     pv->comb_check_nthreads = init->geometry.height / pv->block_height;
 
     if (pv->comb_check_nthreads > pv->cpu_count)
+    {
         pv->comb_check_nthreads = pv->cpu_count;
+    }
 
     pv->block_score = calloc(pv->comb_check_nthreads, sizeof(int));
 
     /*
      * Create comb check taskset.
      */
-    if (taskset_init( &pv->decomb_check_taskset, "decomb_check_segment", pv->comb_check_nthreads,
-                      sizeof( decomb_thread_arg_t ), decomb_check_work) == 0)
+    if (taskset_init(&pv->comb_detect_check_taskset, "comb_detect_check_segment", pv->comb_check_nthreads,
+                     sizeof(comb_detect_thread_arg_t), comb_detect_check_work) == 0)
     {
-        hb_error( "decomb check could not initialize taskset" );
+        hb_error("comb_detect check could not initialize taskset");
     }
 
-    decomb_prev_thread_args = NULL;
+    comb_detect_prev_thread_args = NULL;
     for (int ii = 0; ii < pv->comb_check_nthreads; ii++)
     {
-        decomb_thread_arg_t *thread_args;
+        comb_detect_thread_arg_t *thread_args;
 
-        thread_args = taskset_thread_args( &pv->decomb_check_taskset, ii);
+        thread_args = taskset_thread_args(&pv->comb_detect_check_taskset, ii);
         thread_args->pv = pv;
         thread_args->arg.segment = ii;
-        thread_args->arg.taskset =  &pv->decomb_check_taskset;
+        thread_args->arg.taskset =  &pv->comb_detect_check_taskset;
 
         for (int pp = 0; pp < 3; pp++)
         {
-            if (decomb_prev_thread_args != NULL)
+            if (comb_detect_prev_thread_args != NULL)
             {
                 thread_args->segment_start[pp] =
-                    decomb_prev_thread_args->segment_start[pp] +
-                    decomb_prev_thread_args->segment_height[pp];
+                    comb_detect_prev_thread_args->segment_start[pp] +
+                    comb_detect_prev_thread_args->segment_height[pp];
             }
 
             // Make segment height a multiple of block_height
@@ -780,34 +785,34 @@ static int comb_detect_init( hb_filter_object_t * filter,
             }
         }
 
-        decomb_prev_thread_args = thread_args;
+        comb_detect_prev_thread_args = thread_args;
     }
 
     if (pv->mode & MODE_FILTER)
     {
-        if (taskset_init( &pv->mask_filter_taskset, "mask_filter_segment", pv->cpu_count,
-                          sizeof( decomb_thread_arg_t ), mask_filter_work) == 0)
+        if (taskset_init(&pv->mask_filter_taskset, "mask_filter_segment", pv->cpu_count,
+                         sizeof(comb_detect_thread_arg_t), mask_filter_work) == 0)
         {
             hb_error( "mask filter could not initialize taskset" );
         }
 
-        decomb_prev_thread_args = NULL;
+        comb_detect_prev_thread_args = NULL;
         for (int ii = 0; ii < pv->cpu_count; ii++)
         {
-            decomb_thread_arg_t *thread_args;
+            comb_detect_thread_arg_t *thread_args;
 
-            thread_args = taskset_thread_args( &pv->mask_filter_taskset, ii );
+            thread_args = taskset_thread_args(&pv->mask_filter_taskset, ii);
             thread_args->pv = pv;
             thread_args->arg.taskset = &pv->mask_filter_taskset;
             thread_args->arg.segment = ii;
 
             for (int pp = 0; pp < 3; pp++)
             {
-                if (decomb_prev_thread_args != NULL)
+                if (comb_detect_prev_thread_args != NULL)
                 {
                     thread_args->segment_start[pp] =
-                        decomb_prev_thread_args->segment_start[pp] +
-                        decomb_prev_thread_args->segment_height[pp];
+                        comb_detect_prev_thread_args->segment_start[pp] +
+                        comb_detect_prev_thread_args->segment_height[pp];
                 }
 
                 if (ii == pv->cpu_count - 1)
@@ -823,21 +828,21 @@ static int comb_detect_init( hb_filter_object_t * filter,
                 }
             }
 
-            decomb_prev_thread_args = thread_args;
+            comb_detect_prev_thread_args = thread_args;
         }
 
         if (pv->filter_mode == FILTER_ERODE_DILATE)
         {
-            if (taskset_init( &pv->mask_erode_taskset, "mask_erode_segment", pv->cpu_count,
-                              sizeof( decomb_thread_arg_t ), mask_erode_work) == 0)
+            if (taskset_init(&pv->mask_erode_taskset, "mask_erode_segment", pv->cpu_count,
+                             sizeof(comb_detect_thread_arg_t), mask_erode_work) == 0)
             {
-                hb_error( "mask erode could not initialize taskset" );
+                hb_error("mask erode could not initialize taskset");
             }
 
-            decomb_prev_thread_args = NULL;
+            comb_detect_prev_thread_args = NULL;
             for (int ii = 0; ii < pv->cpu_count; ii++)
             {
-                decomb_thread_arg_t *thread_args;
+                comb_detect_thread_arg_t *thread_args;
 
                 thread_args = taskset_thread_args( &pv->mask_erode_taskset, ii );
                 thread_args->pv = pv;
@@ -846,11 +851,11 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
                 for (int pp = 0; pp < 3; pp++)
                 {
-                    if (decomb_prev_thread_args != NULL)
+                    if (comb_detect_prev_thread_args != NULL)
                     {
                         thread_args->segment_start[pp] =
-                            decomb_prev_thread_args->segment_start[pp] +
-                            decomb_prev_thread_args->segment_height[pp];
+                            comb_detect_prev_thread_args->segment_start[pp] +
+                            comb_detect_prev_thread_args->segment_height[pp];
                     }
 
                     if (ii == pv->cpu_count - 1)
@@ -866,19 +871,19 @@ static int comb_detect_init( hb_filter_object_t * filter,
                     }
                 }
 
-                decomb_prev_thread_args = thread_args;
+                comb_detect_prev_thread_args = thread_args;
             }
 
-            if (taskset_init( &pv->mask_dilate_taskset, "mask_dilate_segment", pv->cpu_count,
-                              sizeof( decomb_thread_arg_t ), mask_dilate_work) == 0)
+            if (taskset_init(&pv->mask_dilate_taskset, "mask_dilate_segment", pv->cpu_count,
+                             sizeof(comb_detect_thread_arg_t), mask_dilate_work) == 0)
             {
-                hb_error( "mask dilate could not initialize taskset" );
+                hb_error("mask dilate could not initialize taskset");
             }
 
-            decomb_prev_thread_args = NULL;
+            comb_detect_prev_thread_args = NULL;
             for (int ii = 0; ii < pv->cpu_count; ii++)
             {
-                decomb_thread_arg_t *thread_args;
+                comb_detect_thread_arg_t *thread_args;
 
                 thread_args = taskset_thread_args( &pv->mask_dilate_taskset, ii );
                 thread_args->pv = pv;
@@ -887,11 +892,11 @@ static int comb_detect_init( hb_filter_object_t * filter,
 
                 for (int pp = 0; pp < 3; pp++)
                 {
-                    if (decomb_prev_thread_args != NULL)
+                    if (comb_detect_prev_thread_args != NULL)
                     {
                         thread_args->segment_start[pp] =
-                            decomb_prev_thread_args->segment_start[pp] +
-                            decomb_prev_thread_args->segment_height[pp];
+                            comb_detect_prev_thread_args->segment_start[pp] +
+                            comb_detect_prev_thread_args->segment_height[pp];
                     }
 
                     if (ii == pv->cpu_count - 1)
@@ -907,7 +912,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
                     }
                 }
 
-                decomb_prev_thread_args = thread_args;
+                comb_detect_prev_thread_args = thread_args;
             }
         }
     }
@@ -915,9 +920,9 @@ static int comb_detect_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static void comb_detect_close( hb_filter_object_t * filter )
+static void comb_detect_close(hb_filter_object_t *filter)
 {
-    hb_filter_private_t * pv = filter->private_data;
+    hb_filter_private_t *pv = filter->private_data;
 
     if (pv == NULL)
     {
@@ -927,16 +932,16 @@ static void comb_detect_close( hb_filter_object_t * filter )
     hb_log("comb detect: heavy %i | light %i | uncombed %i | total %i",
            pv->comb_heavy,  pv->comb_light,  pv->comb_none, pv->frames);
 
-    taskset_fini( &pv->decomb_filter_taskset );
-    taskset_fini( &pv->decomb_check_taskset );
+    taskset_fini(&pv->comb_detect_filter_taskset);
+    taskset_fini(&pv->comb_detect_check_taskset);
 
     if (pv->mode & MODE_FILTER)
     {
         taskset_fini( &pv->mask_filter_taskset );
         if (pv->filter_mode == FILTER_ERODE_DILATE)
         {
-            taskset_fini( &pv->mask_erode_taskset );
-            taskset_fini( &pv->mask_dilate_taskset );
+            taskset_fini(&pv->mask_erode_taskset);
+            taskset_fini(&pv->mask_dilate_taskset);
         }
     }
 
@@ -960,11 +965,10 @@ static void comb_detect_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
-static void process_frame( hb_filter_private_t * pv )
+static void process_frame(hb_filter_private_t *pv)
 {
-    int combed;
+    int combed = comb_segmenter(pv);
 
-    combed = comb_segmenter(pv);
     switch (combed)
     {
         case HB_COMB_HEAVY:
@@ -983,7 +987,7 @@ static void process_frame( hb_filter_private_t * pv )
     pv->frames++;
     if (((pv->mode & MODE_MASK) || (pv->mode & MODE_COMPOSITE)) && combed)
     {
-        hb_buffer_t * out;
+        hb_buffer_t *out;
         out = hb_buffer_dup(pv->ref[1]);
         pv->apply_mask(pv, out);
         out->s.combed = combed;
@@ -995,14 +999,16 @@ static void process_frame( hb_filter_private_t * pv )
         pv->ref[1]->s.combed = combed;
         hb_buffer_list_append(&pv->out_list, pv->ref[1]);
     }
+
+    pv->force_exaustive_check = 0;
 }
 
-static int comb_detect_work( hb_filter_object_t * filter,
-                             hb_buffer_t ** buf_in,
-                             hb_buffer_t ** buf_out )
+static int comb_detect_work(hb_filter_object_t *filter,
+                            hb_buffer_t **buf_in,
+                            hb_buffer_t **buf_out )
 {
-    hb_filter_private_t * pv = filter->private_data;
-    hb_buffer_t         * in = *buf_in;
+    hb_filter_private_t *pv = filter->private_data;
+    hb_buffer_t         *in = *buf_in;
 
     // Input buffer is always consumed.
     *buf_in = NULL;
@@ -1012,6 +1018,7 @@ static int comb_detect_work( hb_filter_object_t * filter,
         store_ref(pv, hb_buffer_dup(pv->ref[2]));
         if (pv->ref[0] != NULL)
         {
+            pv->force_exaustive_check = 1;
             process_frame(pv);
         }
         hb_buffer_list_append(&pv->out_list, in);

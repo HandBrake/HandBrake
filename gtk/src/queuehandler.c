@@ -446,16 +446,17 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     g_free(rate_str);
 
     // Append Filters to video summary
-    gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
-    gboolean     unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
+    gboolean detel, comb_detect, yadif, decomb, deblock, nlmeans, denoise, bwdif;
+    gboolean unsharp, lapsharp, hflip, rot, gray, colorspace, chroma_smooth;
 
     ctext       = ghb_dict_get_string(uiDict, "PictureDetelecine");
     detel       = ctext != NULL && !!strcasecmp(ctext, "off");
     ctext       = ghb_dict_get_string(uiDict, "PictureCombDetectPreset");
     comb_detect = ctext != NULL && !!strcasecmp(ctext, "off");
     ctext       = ghb_dict_get_string(uiDict, "PictureDeinterlaceFilter");
-    deint       = ctext != NULL && !strcasecmp(ctext, "deinterlace");
+    yadif       = ctext != NULL && !strcasecmp(ctext, "deinterlace");
     decomb      = ctext != NULL && !strcasecmp(ctext, "decomb");
+    bwdif       = ctext != NULL && !strcasecmp(ctext, "bwdif");
     ctext       = ghb_dict_get_string(uiDict, "PictureDeblockPreset");
     deblock     = ctext != NULL && !!strcasecmp(ctext, "off");
     ctext       = ghb_dict_get_string(uiDict, "PictureDenoiseFilter");
@@ -486,9 +487,15 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         g_string_append_printf(str, "%s%s", sep, filter->name);
         sep = ", ";
     }
-    if (deint)
+    if (yadif)
     {
-        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEINTERLACE);
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_YADIF);
+        g_string_append_printf(str, "%s%s", sep, filter->name);
+        sep = ", ";
+    }
+    if (bwdif)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_BWDIF);
         g_string_append_printf(str, "%s%s", sep, filter->name);
         sep = ", ";
     }

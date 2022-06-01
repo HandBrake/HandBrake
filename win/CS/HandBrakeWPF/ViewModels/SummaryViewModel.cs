@@ -15,15 +15,14 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Runtime.ExceptionServices;
     using System.Text;
-    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Options;
@@ -34,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 

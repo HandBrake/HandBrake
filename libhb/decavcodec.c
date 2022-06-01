@@ -62,10 +62,6 @@ static void decavcodecClose( hb_work_object_t * );
 static int decavcodecaInfo( hb_work_object_t *, hb_work_info_t * );
 static int decavcodecaBSInfo( hb_work_object_t *, const hb_buffer_t *, hb_work_info_t * );
 
-static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate);
-static int get_color_transfer(int color_trc);
-static int get_color_matrix(int colorspace, hb_geometry_t geometry);
-
 hb_work_object_t hb_decavcodeca =
 {
     .id = WORK_DECAVCODEC,
@@ -116,7 +112,7 @@ struct hb_work_private_s
 {
     hb_job_t             * job;
     hb_title_t           * title;
-    AVCodec              * codec;
+    const AVCodec        * codec;
     AVCodecContext       * context;
     AVCodecParserContext * parser;
     AVFrame              * frame;
@@ -168,7 +164,7 @@ static void decodeAudio( hb_work_private_t *pv, packet_info_t * packet_info );
  **********************************************************************/
 static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 {
-    AVCodec * codec;
+    const AVCodec *codec;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -277,7 +273,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
-    av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
 
     // Dynamic Range Compression
     if (w->audio->config.out.dynamic_range_compression >= 0.0f &&
@@ -626,7 +621,7 @@ static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
     if (audio->priv.config.extradata.length == 0)
     {
         const uint8_t * extradata;
-        int             size;
+        size_t          size;
 
         extradata = av_packet_get_side_data(pkt, AV_PKT_DATA_NEW_EXTRADATA,
                                             &size);
@@ -656,7 +651,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         return decavcodecaInfo( w, info );
     }
 
-    AVCodec *codec = avcodec_find_decoder( w->codec_param );
+    const AVCodec *codec = avcodec_find_decoder( w->codec_param );
     if ( ! codec )
     {
         // there's no ffmpeg codec for this audio type - give up
@@ -1546,7 +1541,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
         // Set decoder opts
         AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
         {
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
@@ -1617,38 +1611,97 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
 static int setup_extradata( hb_work_private_t * pv, AVCodecContext * context )
 {
-    // we can't call the avstream funcs but the read_header func in the
-    // AVInputFormat may set up some state in the AVContext. In particular
-    // vc1t_read_header allocates 'extradata' to deal with header issues
-    // related to Microsoft's bizarre engineering notions. We alloc a chunk
-    // of space to make vc1 work then associate the codec with the context.
-    if (context->extradata == NULL)
+    const AVBitStreamFilter * bsf;
+    AVBSFContext            * ctx = NULL;
+    int                       ii, ret;
+    AVPacket                * avp = pv->pkt;
+    const enum AVCodecID    * ids;
+
+    if (context->extradata != NULL)
     {
-        if (pv->parser == NULL || pv->parser->parser == NULL ||
-            pv->parser->parser->split == NULL)
+        return 0;
+    }
+    bsf = av_bsf_get_by_name("extract_extradata");
+    if (bsf == NULL)
+    {
+        hb_error("setup_extradata: bitstream filter lookup failure");
+        return 0;
+    }
+    if (bsf->codec_ids == NULL)
+    {
+        hb_error("setup_extradata: extract_extradata missing codec_ids");
+        return 0;
+    }
+    for (ids = bsf->codec_ids; *ids != AV_CODEC_ID_NONE; ids++)
+    {
+        if (*ids == context->codec_id)
         {
-            return 0;
+            break;
         }
-        else
+    }
+    if (*ids == AV_CODEC_ID_NONE)
+    {
+        // Codec not supported by extract_extradata BSF
+        return 0;
+    }
+    ret = av_bsf_alloc(bsf, &ctx);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: bitstream filter alloc failure");
+        return 0;
+    }
+    avcodec_parameters_from_context(ctx->par_in, context);
+    ret = av_bsf_init(ctx);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: bitstream filter init failure");
+        av_bsf_free(&ctx);
+        return 0;
+    }
+
+    avp->data = pv->packet_info.data;
+    avp->size = pv->packet_info.size;
+    avp->pts  = pv->sequence;
+    avp->dts  = pv->sequence;
+    ret = av_bsf_send_packet(ctx, avp);
+    if (ret < 0)
+    {
+        hb_error("setup_extradata: av_bsf_send_packet failure");
+        av_bsf_free(&ctx);
+        return 0;
+    }
+
+    ret = av_bsf_receive_packet(ctx, avp);
+    av_bsf_free(&ctx);
+    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+    {
+        return 1;
+    }
+    else if (ret < 0)
+    {
+        if (ret != AVERROR_INVALIDDATA)
         {
-            int size;
-            size = pv->parser->parser->split(pv->context, pv->packet_info.data,
-                                             pv->packet_info.size);
-            if (size > 0)
+            hb_error("setup_extradata: av_bsf_receive_packet failure %x", -ret);
+        }
+        return ret;
+    }
+    for (ii = 0; ii < avp->side_data_elems; ii++)
+    {
+        if (avp->side_data[ii].type == AV_PKT_DATA_NEW_EXTRADATA)
+        {
+            context->extradata      = avp->side_data[ii].data;
+            context->extradata_size = avp->side_data[ii].size;
+            avp->side_data[ii].data = NULL;
+            avp->side_data[ii].size = 0;
+            if (context->extradata != NULL)
             {
-                context->extradata_size = size;
-                context->extradata =
-                                av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (context->extradata == NULL)
-                    return 1;
-                memcpy(context->extradata, pv->packet_info.data, size);
                 return 0;
             }
         }
-        return 1;
     }
+    av_packet_unref(avp);
 
-    return 0;
+    return 1;
 }
 
 static int decodePacket( hb_work_object_t * w )
@@ -1686,7 +1739,6 @@ static int decodePacket( hb_work_object_t * w )
 #endif
 
         AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
         {
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
@@ -1992,128 +2044,6 @@ static void compute_frame_duration( hb_work_private_t *pv )
     }
 }
 
-static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate)
-{
-    switch (color_primaries)
-    {
-        case AVCOL_PRI_BT709:
-            return HB_COLR_PRI_BT709;
-        case AVCOL_PRI_BT470M:
-            return HB_COLR_PRI_BT470M;
-        case AVCOL_PRI_BT470BG:
-            return HB_COLR_PRI_EBUTECH;
-        case AVCOL_PRI_SMPTE170M:
-        case AVCOL_PRI_SMPTE240M:
-            return HB_COLR_PRI_SMPTEC;
-        case AVCOL_PRI_FILM:
-            return HB_COLR_PRI_FILM;
-        case AVCOL_PRI_SMPTE428:
-            return HB_COLR_PRI_SMPTE428;
-        case AVCOL_PRI_SMPTE431:
-            return HB_COLR_PRI_SMPTE431;
-        case AVCOL_PRI_SMPTE432:
-            return HB_COLR_PRI_SMPTE432;
-        case AVCOL_PRI_JEDEC_P22:
-            return HB_COLR_PRI_JEDEC_P22;
-        case AVCOL_PRI_BT2020:
-            return HB_COLR_PRI_BT2020;
-        default:
-        {
-            if ((geometry.width >= 1280 || geometry.height >= 720)||
-                (geometry.width >   720 && geometry.height >  576 ))
-                // ITU BT.709 HD content
-                return HB_COLR_PRI_BT709;
-            else if (rate.den == 1080000)
-                // ITU BT.601 DVD or SD TV content (PAL)
-                return HB_COLR_PRI_EBUTECH;
-            else
-                // ITU BT.601 DVD or SD TV content (NTSC)
-                return HB_COLR_PRI_SMPTEC;
-        }
-    }
-}
-
-static int get_color_transfer(int color_trc)
-{
-    switch (color_trc)
-    {
-        case AVCOL_TRC_GAMMA22:
-            return HB_COLR_TRA_GAMMA22;
-        case AVCOL_TRC_GAMMA28:
-            return HB_COLR_TRA_GAMMA28;
-        case AVCOL_TRC_SMPTE170M:
-            return HB_COLR_TRA_SMPTE170M;
-        case AVCOL_TRC_LINEAR:
-            return HB_COLR_TRA_LINEAR;
-        case AVCOL_TRC_LOG:
-            return HB_COLR_TRA_LOG;
-        case AVCOL_TRC_LOG_SQRT:
-            return HB_COLR_TRA_LOG_SQRT;
-        case AVCOL_TRC_IEC61966_2_4:
-            return HB_COLR_TRA_IEC61966_2_4;
-        case AVCOL_TRC_BT1361_ECG:
-            return HB_COLR_TRA_BT1361_ECG;
-        case AVCOL_TRC_IEC61966_2_1:
-            return HB_COLR_TRA_IEC61966_2_1;
-        case AVCOL_TRC_SMPTE240M:
-            return HB_COLR_TRA_SMPTE240M;
-        case AVCOL_TRC_SMPTEST2084:
-            return HB_COLR_TRA_SMPTEST2084;
-        case AVCOL_TRC_ARIB_STD_B67:
-            return HB_COLR_TRA_ARIB_STD_B67;
-        case AVCOL_TRC_BT2020_10:
-            return HB_COLR_TRA_BT2020_10;
-        case AVCOL_TRC_BT2020_12:
-            return HB_COLR_TRA_BT2020_12;
-        default:
-            // ITU BT.601, BT.709, anything else
-            return HB_COLR_TRA_BT709;
-    }
-}
-
-static int get_color_matrix(int colorspace, hb_geometry_t geometry)
-{
-    switch (colorspace)
-    {
-        case AVCOL_SPC_RGB:
-            return HB_COLR_MAT_RGB;
-        case AVCOL_SPC_BT709:
-            return HB_COLR_MAT_BT709;
-        case AVCOL_SPC_FCC:
-            return HB_COLR_MAT_FCC;
-        case AVCOL_SPC_BT470BG:
-            return HB_COLR_MAT_BT470BG;
-        case AVCOL_SPC_SMPTE170M:
-            return HB_COLR_MAT_SMPTE170M;
-        case AVCOL_SPC_SMPTE240M:
-            return HB_COLR_MAT_SMPTE240M;
-        case AVCOL_SPC_YCGCO:
-            return HB_COLR_MAT_YCGCO;
-        case AVCOL_SPC_BT2020_NCL:
-            return HB_COLR_MAT_BT2020_NCL;
-        case AVCOL_SPC_BT2020_CL:
-            return HB_COLR_MAT_BT2020_CL;
-        case AVCOL_SPC_CHROMA_DERIVED_NCL:
-            return HB_COLR_MAT_CD_NCL;
-        case AVCOL_SPC_CHROMA_DERIVED_CL:
-            return HB_COLR_MAT_CD_CL;
-        case AVCOL_SPC_ICTCP:
-            return HB_COLR_MAT_ICTCP;
-        default:
-        {
-            if ((geometry.width >= 1280 || geometry.height >= 720)||
-                (geometry.width >   720 && geometry.height >  576 ))
-                // ITU BT.709 HD content
-                return HB_COLR_MAT_BT709;
-            else
-                // ITU BT.601 DVD or SD TV content (PAL)
-                // ITU BT.601 DVD or SD TV content (NTSC)
-                return HB_COLR_MAT_SMPTE170M;
-        }
-    }
-}
-
-
 static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
@@ -2160,11 +2090,9 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->name = pv->context->codec->name;
 
     info->pix_fmt        = pv->context->pix_fmt;
-    info->color_prim     = get_color_prim(pv->context->color_primaries,
-                                          info->geometry, info->rate);
-    info->color_transfer = get_color_transfer(pv->context->color_trc);
-    info->color_matrix   = get_color_matrix(pv->context->colorspace,
-                                            info->geometry);
+    info->color_prim     = pv->context->color_primaries;
+    info->color_transfer = pv->context->color_trc;
+    info->color_matrix   = pv->context->colorspace;
     info->color_range     = pv->context->color_range;
     info->chroma_location = pv->context->chroma_sample_location;
 

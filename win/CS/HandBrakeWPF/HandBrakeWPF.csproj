@@ -23,6 +23,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <LangVersion>latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,6 +35,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Factories\**" />
+    <EmbeddedResource Remove="Factories\**" />
+    <None Remove="Factories\**" />
+    <Page Remove="Factories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="handbrakepineapple.ico" />
     <None Remove="Views\Images\Dark\Reorder.png" />
     <None Remove="Views\Images\Light\Reorder.png" />
@@ -42,7 +50,7 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
-    <PackageReference Include="gong-wpf-dragdrop" Version="2.4.3" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
@@ -50,6 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HandBrake.App.Core\HandBrake.App.Core.csproj" />
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
   </ItemGroup>
 

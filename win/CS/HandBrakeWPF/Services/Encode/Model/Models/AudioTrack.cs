@@ -20,6 +20,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using Caliburn.Micro;
 
+    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 

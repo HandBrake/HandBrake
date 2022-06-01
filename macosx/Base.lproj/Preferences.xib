@@ -125,6 +125,7 @@
                                                         <menuItem title="Alert And Notification" tag="3" id="496"/>
                                                         <menuItem title="Put Computer To Sleep" tag="4" id="497"/>
                                                         <menuItem title="Shut Down Computer" tag="5" id="498"/>
+                                                        <menuItem title="Quit HandBrake" tag="6" id="500"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

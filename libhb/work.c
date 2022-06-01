@@ -313,6 +313,11 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w->codec_param = AV_CODEC_ID_HEVC;
             break;
 #endif
+        case HB_VCODEC_FFMPEG_SVT_AV1:
+        case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_AV1;
+            break;
 
         default:
             hb_error("Unknown video codec (0x%x)", vcodec );
@@ -526,6 +531,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_10BIT:
                 case HB_VCODEC_X265_12BIT:
                 case HB_VCODEC_X265_16BIT:
+                case HB_VCODEC_FFMPEG_SVT_AV1:
+                case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
                     hb_log("     + tune:    %s", job->encoder_tune);
                 default:
                     break;
@@ -561,6 +568,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_VT_H265_10BIT:
                 case HB_VCODEC_FFMPEG_MF_H264:
                 case HB_VCODEC_FFMPEG_MF_H265:
+                case HB_VCODEC_FFMPEG_SVT_AV1:
+                case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -586,8 +595,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_NVENC_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
                 case HB_VCODEC_VT_H264:
-                // VT h.265 currently only supports auto level
-                // case HB_VCODEC_VT_H265:
+                case HB_VCODEC_VT_H265_10BIT:
+                case HB_VCODEC_FFMPEG_SVT_AV1:
+                case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
                 // MF h.264/h.265 currently only supports auto level
                 // case HB_VCODEC_FFMPEG_MF_H264:
                 // case HB_VCODEC_FFMPEG_MF_H265:
@@ -1286,7 +1296,7 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
     {
-        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_DEINTERLACE};
+        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_YADIF, HB_FILTER_BWDIF};
         int ii, count = sizeof(selective) / sizeof(int);
 
         for (ii = 0; ii < count; ii++)
@@ -1369,15 +1379,32 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
 #endif
 
-    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt) == 0)
+    if (hb_video_encoder_pix_fmt_is_supported(job->vcodec, job->input_pix_fmt, job->encoder_profile) == 0)
     {
         // Some encoders require a specific input pixel format
         // that could be different from the current pipeline format.
-        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec);
+        const int *encoder_pix_fmts = hb_video_encoder_get_pix_fmts(job->vcodec, job->encoder_profile);
         int encoder_pix_fmt = *encoder_pix_fmts;
 
+        // Prefer a pixel format with the
+        // same chroma subsampling
+        while (*encoder_pix_fmts != AV_PIX_FMT_NONE)
+        {
+            const AVPixFmtDescriptor *input_desc = av_pix_fmt_desc_get(job->input_pix_fmt);
+            const AVPixFmtDescriptor *pix_fmt_desc = av_pix_fmt_desc_get(*encoder_pix_fmts);
+
+            if (pix_fmt_desc->log2_chroma_w >= input_desc->log2_chroma_w &&
+                pix_fmt_desc->log2_chroma_h >= input_desc->log2_chroma_h)
+            {
+                encoder_pix_fmt = *encoder_pix_fmts;
+                break;
+            }
+            encoder_pix_fmts++;
+        }
+
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (job->vcodec == HB_VCODEC_QSV_MASK){
+        if (job->vcodec == HB_VCODEC_QSV_MASK)
+        {
             if (!hb_qsv_full_path_is_enabled(job))
             {
                 // Formats supported by QSV pipeline via system memory

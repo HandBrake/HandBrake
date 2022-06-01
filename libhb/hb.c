@@ -80,7 +80,7 @@ void hb_avcodec_init()
 {
 }
 
-int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
+int hb_avcodec_open(AVCodecContext *avctx, const AVCodec *codec,
                     AVDictionary **av_opts, int thread_count)
 {
     int ret;
@@ -911,7 +911,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
             case HB_FILTER_COLORSPACE:
             case HB_FILTER_DECOMB:
             case HB_FILTER_DETELECINE:
-            case HB_FILTER_DEINTERLACE:
+            case HB_FILTER_YADIF:
             case HB_FILTER_GRAYSCALE:
                 break;
 
@@ -925,6 +925,7 @@ hb_image_t * hb_get_preview3(hb_handle_t * h, int picture,
             case HB_FILTER_DEBLOCK:
             case HB_FILTER_COMB_DETECT:
             case HB_FILTER_HQDN3D:
+            case HB_FILTER_BWDIF:
                 // Not implemented, N/A, or requires multiple frame input
                 hb_list_rem(list_filter, filter);
                 hb_filter_close(&filter);

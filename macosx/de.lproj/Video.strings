@@ -14,7 +14,7 @@
 "9tc-EO-QMd.ibShadowedToolTip" = "Bildfrequenz (Bilder pro Sekunde, BpS). Bilder die pro Sekunde im Video angezeigt werden.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "Die durchschnittliche Bitrate variiert die Qualität um sicherzustellen, dass die Datenrate relativ konstant über das gesammte Video bleibt.";
+"A3o-Zx-OfM.ibShadowedToolTip" = "Die durchschnittliche Bitrate variiert die Qualität um sicherzustellen, dass die Datenrate relativ konstant über das gesamte Video bleibt.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "OtherViews";

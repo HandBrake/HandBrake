@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services.Queue
                 this.encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
                 this.encodeService.EncodeStatusChanged += this.EncodeStatusChanged;
                 
-                this.encodeService.Start(this.job.Task, this.job.Configuration, this.job.SelectedPresetKey);
+                this.encodeService.Start(this.job.Task, this.job.SelectedPresetKey);
             }
         }
 

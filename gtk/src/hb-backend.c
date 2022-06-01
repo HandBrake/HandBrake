@@ -197,9 +197,10 @@ combo_opts_t vqual_granularity_opts =
 
 static options_map_t d_deint_opts[] =
 {
-    {N_("Off"),         "off",         HB_FILTER_INVALID    },
-    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB     },
-    {N_("Yadif"),       "deinterlace", HB_FILTER_DEINTERLACE},
+    {N_("Off"),         "off",         HB_FILTER_INVALID},
+    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB },
+    {N_("Yadif"),       "deinterlace", HB_FILTER_YADIF  },
+    {N_("Bwdif"),       "bwdif",       HB_FILTER_BWDIF  },
 };
 combo_opts_t deint_opts =
 {
@@ -1012,6 +1013,9 @@ ghb_vquality_default(signal_user_data_t *ud)
     case HB_VCODEC_FFMPEG_MPEG2:
     case HB_VCODEC_FFMPEG_MPEG4:
         return 3;
+    case HB_VCODEC_FFMPEG_SVT_AV1_8BIT:
+    case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
+        return 30;
     default:
     {
         float min, max, step;
@@ -2593,7 +2597,7 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
 
     for (ii = 0; ii < count; ii++)
     {
-        if (((encoder & HB_VCODEC_X264_MASK) &&
+        if (((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_FFMPEG_SVT_AV1_MASK)) &&
              !strcmp(tunes[ii], "fastdecode")) ||
             ((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_X265_MASK)) &&
              !strcmp(tunes[ii], "zerolatency")))

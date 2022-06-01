@@ -3,6 +3,41 @@
 
     <converters:BooleanToVisibilityConverter x:Key="darkThemeVisConverter" />
 
+    <Style x:Key="ToolBarButtonBaseStyle" TargetType="{x:Type ButtonBase}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <Border x:Name="Border" BorderThickness="1" BorderBrush="Transparent" Background="Transparent" CornerRadius="4">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Ui.ContrastLight}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Ui.ToolbarHover}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type Button}" />
+
     <Style x:Key="ToolBarThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Cursor" Value="SizeAll" />
@@ -70,7 +105,7 @@
                             </ToggleButton>
 
                             <Thumb x:Name="ToolBarThumb" Style="{StaticResource ToolBarThumbStyle}" Width="10" />
-                            <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="0,1,2,2" />
+                            <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" Margin="4,1,2,2" />
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>

@@ -99,9 +99,9 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        void Export(string filename, string presetName, HBConfiguration configuration);
+        void Export(string filename, string presetName);
 
-        void ExportCategories(string filename, IList<PresetDisplayCategory> categories, HBConfiguration configuration);
+        void ExportCategories(string filename, IList<PresetDisplayCategory> categories);
 
         /// <summary>
         /// Update a preset

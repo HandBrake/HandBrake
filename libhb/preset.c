@@ -458,7 +458,7 @@ static int validate_audio_encoders(const hb_dict_t *preset)
         value = hb_dict_get(audio_dict, "AudioMixdown");
         if (hb_value_type(value) == HB_VALUE_TYPE_STRING)
         {
-            mix = hb_audio_encoder_get_from_name(hb_value_get_string(value));
+            mix = hb_mixdown_get_from_name(hb_value_get_string(value));
         }
         else
         {
@@ -1353,7 +1353,11 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
         else if (!strcasecmp(deint_filter, "deinterlace"))
         {
-            filter_id = HB_FILTER_DEINTERLACE;
+            filter_id = HB_FILTER_YADIF;
+        }
+        else if (!strcasecmp(deint_filter, "bwdif"))
+        {
+            filter_id = HB_FILTER_BWDIF;
         }
         else
         {
@@ -2895,7 +2899,7 @@ static void import_filters_11_1_0(hb_value_t *preset)
         {
             if (strcasecmp(str, "deinterlace"))
             {
-                import_custom_11_1_0(preset, HB_FILTER_DEINTERLACE,
+                import_custom_11_1_0(preset, HB_FILTER_YADIF,
                                      "PictureDeinterlaceCustom");
             }
             else if (strcasecmp(str, "decomb"))
@@ -3217,7 +3221,7 @@ static void import_deint_0_0_0(hb_value_t *preset)
     {
         const char *s;
         int index = hb_value_get_int(val);
-        s = import_indexed_filter(HB_FILTER_DEINTERLACE, index);
+        s = import_indexed_filter(HB_FILTER_YADIF, index);
         if (s != NULL)
         {
             hb_dict_set(preset, "PictureDeinterlace", hb_value_string(s));

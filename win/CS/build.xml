@@ -62,9 +62,9 @@
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\doc /I /Y" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish\doc /I /Y" />
 
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"      Condition="'$(Profile)'=='Release'"/>
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"    Condition="'$(Profile)'=='Nightly'"/>
-    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Nsis.Installer\Installer64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"      Condition="'$(Profile)'=='Release'"/>
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Nsis.Installer\MakeNightly64.nsi $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y"    Condition="'$(Profile)'=='Nightly'"/>
+    <Exec Command="copy $(MSBuildProjectDirectory)\HandBrake.Nsis.Installer\InstallerBackground.bmp $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\portable.ini.template $(MSBuildProjectDirectory)\HandBrakeWPF\bin\publish /Y" />
   </Target>

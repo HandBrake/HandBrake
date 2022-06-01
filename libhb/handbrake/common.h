@@ -411,13 +411,13 @@ int         hb_video_quality_is_supported(uint32_t codec);
 int         hb_video_twopass_is_supported(uint32_t codec);
 
 int                hb_video_encoder_is_supported(int encoder);
-int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt);
+int                hb_video_encoder_pix_fmt_is_supported(int encoder, int pix_fmt, const char *profile);
 int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
 const char* const* hb_video_encoder_get_levels  (int encoder);
-const int*         hb_video_encoder_get_pix_fmts(int encoder);
+const int*         hb_video_encoder_get_pix_fmts(int encoder, const char *profile);
 
 void  hb_audio_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_audio_quality_get_best(uint32_t codec, float quality);
@@ -554,7 +554,7 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x7FFFFFF
+#define HB_VCODEC_MASK         0x3FFFFFFF
 #define HB_VCODEC_INVALID      0x0000000
 #define HB_VCODEC_THEORA       0x0000002
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
@@ -569,19 +569,19 @@ struct hb_job_s
 #define HB_VCODEC_VT_H264       0x00400000
 #define HB_VCODEC_VT_H265       0x00800000
 #define HB_VCODEC_VT_H265_10BIT 0x01000000
-#define HB_VCODEC_VT_MASK       0x1C00000
+#define HB_VCODEC_VT_MASK       0x01C00000
 #define HB_VCODEC_FFMPEG_MF_H264 0x02000000
 #define HB_VCODEC_FFMPEG_MF_H265 0x04000000
-#define HB_VCODEC_FFMPEG_MASK  (0x00000F0|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_MF_H264|HB_VCODEC_FFMPEG_MF_H265|HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
+#define HB_VCODEC_FFMPEG_MASK  (0x00000F0|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_MF_H264|HB_VCODEC_FFMPEG_MF_H265|HB_VCODEC_FFMPEG_NVENC_H265_10BIT|HB_VCODEC_FFMPEG_SVT_AV1|HB_VCODEC_FFMPEG_SVT_AV1_10BIT)
 #define HB_VCODEC_QSV_H264     0x0000100
 #define HB_VCODEC_QSV_H265_8BIT     0x0000200
 #define HB_VCODEC_QSV_H265_10BIT    0x0000400
 #define HB_VCODEC_QSV_H265_MASK     0x0000600
 #define HB_VCODEC_QSV_H265     HB_VCODEC_QSV_H265_8BIT
 #define HB_VCODEC_QSV_AV1_8BIT  0x0000800
-#define HB_VCODEC_QSV_AV1_10BIT 0x0000900
+#define HB_VCODEC_QSV_AV1_10BIT 0x08000000
 #define HB_VCODEC_QSV_AV1      HB_VCODEC_QSV_AV1_8BIT
-#define HB_VCODEC_QSV_MASK     (0x0000F00)
+#define HB_VCODEC_QSV_MASK     (0x8000F00)
 #define HB_VCODEC_X264_8BIT    0x0010000
 #define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
 #define HB_VCODEC_X264_10BIT   0x0020000
@@ -594,6 +594,11 @@ struct hb_job_s
 #define HB_VCODEC_X265_16BIT   0x0008000
 #define HB_VCODEC_X265_MASK    0x000F000
 #define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_VT_H265|HB_VCODEC_FFMPEG_VT_H265_10BIT|HB_VCODEC_FFMPEG_MF_H265|HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
+#define HB_VCODEC_FFMPEG_SVT_AV1_8BIT    0x10000000
+#define HB_VCODEC_FFMPEG_SVT_AV1        HB_VCODEC_FFMPEG_SVT_AV1_8BIT
+#define HB_VCODEC_FFMPEG_SVT_AV1_10BIT   0x20000000
+#define HB_VCODEC_FFMPEG_SVT_AV1_MASK    0x30000000
+#define HB_VCODEC_AV1_MASK    (HB_VCODEC_FFMPEG_SVT_AV1_MASK|HB_VCODEC_QSV_MASK)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -754,8 +759,6 @@ struct hb_job_s
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
-    PRIVATE int use_decomb;
-    PRIVATE int use_detelecine;
 
     // QSV-specific settings
     struct
@@ -1422,7 +1425,8 @@ enum
     HB_FILTER_DETELECINE,
     HB_FILTER_COMB_DETECT,
     HB_FILTER_DECOMB,
-    HB_FILTER_DEINTERLACE,
+    HB_FILTER_YADIF,
+    HB_FILTER_BWDIF,
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
     HB_FILTER_DEBLOCK,
@@ -1509,6 +1513,7 @@ int hb_output_color_transfer(hb_job_t * job);
 int hb_output_color_matrix(hb_job_t * job);
 
 int hb_get_bit_depth(int format);
+int hb_get_chroma_sub_sample(int format, int *h_shift, int *v_shift);
 int hb_get_best_pix_fmt(hb_job_t * job);
 
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"

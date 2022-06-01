@@ -20,32 +20,28 @@ static const char * const hb_h265_tier_names[]              = {
     "auto", "main", "high", NULL, };
 static const char * const hb_h265_profile_names_8bit[]      = {
     "auto", "main", "mainstillpicture", NULL, };
+static const char * const hb_x265_profile_names_8bit[]      = {
+    "auto", "main", "mainstillpicture", "main444-8", "main444-intra", NULL, };
 static const char * const hb_h265_profile_names_10bit[]     = {
     "auto", "main10", "main10-intra", NULL, };
+static const char * const hb_x265_profile_names_10bit[]     = {
+    "auto", "main10", "main10-intra", "main422-10", "main422-10-intra", "main444-10", "main444-10-intra", NULL, };
 #if HB_PROJECT_FEATURE_QSV
 static const char * const hb_h265_qsv_profile_names_10bit[] = {
     "auto", "main10", NULL, };
 #endif
 static const char * const hb_h265_profile_names_12bit[]     = {
     "auto", "main12", "main12-intra", NULL, };
+static const char * const hb_x265_profile_names_12bit[]     = {
+    "auto", "main12", "main12-intra", "main422-12", "main422-12-intra", "main444-12", "main444-12-intra", NULL, };
 static const char * const hb_h265_profile_names_16bit[]     = {
     "auto", "main16", "main16-intra", NULL, };
 static const char * const hb_h265_level_names[]             = {
     "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
     "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL, };
-#if HB_PROJECT_FEATURE_QSV
-static const char * const hb_av1_qsv_profile_names[]        = {
-    "auto", "main", "high", "pro", NULL, };
-#endif
 static const char * const hb_h265_level_names2[]            = {
     "auto", "10", "20", "21", "30", "31", "40", "41",
     "50", "51", "52", "60", "61", "62",  NULL, };
-#if HB_PROJECT_FEATURE_QSV
-static const char * const hb_av1_level_names[]              = {
-    "auto", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1", "3.2",
-    "3.3", "4.0", "4.1", "4.2", "4.3", "5.0", "5.1", "5.2",
-    "5.3", "6.0", "6.1", "6.2", "6.3", NULL, };
-#endif
 static const int          hb_h265_level_values[]            = {
     -1,  30,  60,  63,  90,  93, 120, 123,
     150, 153, 156, 180, 183, 186,   0, };

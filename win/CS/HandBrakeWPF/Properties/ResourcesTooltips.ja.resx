@@ -327,7 +327,9 @@ FFMpegとTheoraのスケールはより直線的です。
     <value>選択したプリセットを削除します。</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>全タイトルの代わりに特定のタイトルのみスキャンする。</value>
+    <value>いくつかのソースに2つ以上のビデオクリップか、タイトルがあります。Blu-rayとDVDソースには複数タイトルがあることがあります。
+
+もしエンコードしたいタイトルがあれば、ここに入力すればHandbrakeはソースファイルの全てではなくこのタイトルのみをスキャンします。でなければここは空欄にしてください。</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>デノイズのカスタムパラメーターです。
@@ -361,18 +363,18 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 - Spriteは 1-/4-/8-/16-bitの2次元ゲームに有効です。Spriteは高精細度映像向けには作られていません。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>インターレース解除は画像からくし状のノイズを除去します。
+    <value>Deinterlace removes comb artifacts from the picture.
 
-Yadifは人気で速い解除フィルターです。
+Bwdif and Yadif are two popular and fast deinterlacers.
 
-Decombは品質と速度に応じて複数の補完法を切り替えることができます。</value>
+Decomb switches between multiple interpolation algorithms for speed and quality.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>インターレース解除のカスタムパラメーターです。
  
- Yadif syntax: mode=m:parity=p
+ Bwdif and Yadif syntax: mode=m:parity=p
  
- Yadif default: mode=3
+ Bwdif and Yadif default: mode=3
  
  Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
@@ -483,5 +485,44 @@ LapsharpのSpriteは1-/4-/8-/16-bitの2次元ゲームに向いています。Sp
     <value>フラット - プリセットは一列で表示されます。
 一部フラット - 8つのユーザープリセットが一列で表示され、続いて全てのプリセットがカテゴリで表示されます。
 カテゴリ - すべてのプリセットがカテゴリごとにサブメニューに表示されます。</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>新しいソースやタイトルを選択した時に、このタブがどのように音声トラックを自動追加するかを設定します。</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>設定した通りのリストにするには更新してください。</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>新しいソースやタイトルを選択した時に、このタブがどのように字幕トラックを自動追加するかを設定します。</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>以下の環境変数は常に設定されます:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+終了ステータスは次の通りです。
+0 : 成功
+2 : 入力引数エラー
+3 : 初期化失敗 
+4 : 不明なエラー
+5 : ソースファイル読み込みエラー。
+
+エラーコードはベストエフォートであり正確であるとは限らないことに留意してください。
+出力ファイルに何かする前にそれが正しいものであるか確認することが推奨されます。</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>出力ファイルの形式です。ファイルシステムでサポートされるすべての文字の他に、タイトル変更やソースのスキャンや設定を更新した際に自動的に置き換わるようにプレースホルダを使うことができます。</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>右から左に読む言語用に2つのモードがあります。"テキストのみ"はテキストのみ右から始まるようになります。"全ユーザーインターフェイス"は全ての操作を右からにします。
+
+これらを使うとUIレイアウトがおかしくなる可能性には留意してください。言語により、両方を試して合うものを探すのが好ましいです。</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Target a specific quality level for audio.
+1 is lowest quality and 5 is highest quality.
+
+Bitrate will vary source to source.</value>
   </data>
 </root>

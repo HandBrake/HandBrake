@@ -17,7 +17,7 @@ TEST.GCC.l = \
         ass avformat avfilter avcodec avutil swresample postproc mp3lame dvdnav \
         dvdread fribidi swscale vpx theoraenc theoradec vorbis vorbisenc ogg \
         x264 bluray freetype xml2 bz2 z jansson harfbuzz opus speex lzma dav1d \
-        turbojpeg zimg
+        turbojpeg zimg SvtAv1Enc
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     TEST.GCC.l += fontconfig
@@ -62,7 +62,7 @@ endif
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(HOST.system),darwin)
-    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation DiskArbitration
+    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation DiskArbitration Metal
     TEST.GCC.l += iconv
 else ifeq ($(HOST.system),linux)
     TEST.GCC.l += pthread dl m

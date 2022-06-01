@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Services
     using System;
     using System.Timers;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;

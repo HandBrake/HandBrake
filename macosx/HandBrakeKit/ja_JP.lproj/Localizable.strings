@@ -1,0 +1,427 @@
+/* Video description */
+" - fastdecode" = " - fastdecode";
+
+/* HBStateFormatter -> work time format */
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, 平均 %2$.2f fps, 推定残り時間 %3$@)";
+
+/* HBStateFormatter -> search time format
+   HBStateFormatter -> work time format */
+" (ETA %@)" = " (推定残り時間 %@)";
+
+/* HBJob -> video short description framerate */
+" FPS CFR" = " FPS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = " FPS PFR";
+
+/* Title short description -> audio format */
+", %d audio tracks" = ", %d 音声トラック";
+
+/* Title short description -> subtitles format */
+", %d subtitles tracks" = ", %d 字幕トラック";
+
+/* Title short description -> audio format */
+", 1 audio track" = ", 1 音声トラック";
+
+/* Title short description -> subtitles format */
+", 1 subtitles track" = ", 1 字幕トラック";
+
+/* Format description */
+", Align A/V Start" = ", A/V開始地点の同期";
+
+/* HBPicture -> summary */
+", Border: %d/%d/%d/%d" = ", 境界: %1$d/%2$d/%3$d/%4$d";
+
+/* HBJob -> subtitles short description */
+", Burned" = ", 焼き込み";
+
+/* Format description */
+", Chapter Markers" = ", チャプターマーカー";
+
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", 切り抜き: %1$@ %2$d/%3$d/%4$d/%5$d";
+
+/* Format description */
+", iPod 5G Support" = ", iPod 5G サポート";
+
+/* Format description */
+", Web Optimized" = ", ウェブ用に最適化";
+
+/* HBStateFormatter -> work pass type format */
+"(subtitle scan)" = "(字幕スキャン)";
+
+/* Title short description -> video format */
+"%.6g FPS" = "%.6g FPS";
+
+/* Audio description */
+"%@ ▸ Encoder: %@" = "%1$@ ▸ エンコーダー: %2$@";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d" = "%1$@出力: %2$dx%3$d";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Automatic" = "%1$@出力: %2$dx%3$d, アナモルフィック: %4$dx%5$d 自動";
+
+/* HBPicture -> short info */
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@出力: %2$dx%3$d, アナモルフィック: %4$dx%5$d カスタム";
+
+/* HBPicture -> short info */
+"%dx%d Storage, %dx%d Display" = "%1$dx%2$d 格納, %3$dx%4$d 表示";
+
+/* HBJob -> audio short description */
+"+ %lu additional audio tracks" = "+ %lu つの追加音声トラック";
+
+/* HBJob -> subtitles short description */
+"+ %lu additional subtitles tracks" = "+ %lu つの追加字幕トラック";
+
+/* HBJob -> audio short description */
+"+ 1 additional audio track" = "+ 1 つの追加音声トラック";
+
+/* HBJob -> subtitles short description */
+"+ 1 additional subtitles track" = "+ 1 つの追加字幕トラック";
+
+/* Title description */
+"1 Foreign Language Search Pass - " = "1パス吹き替え字幕スキャン -";
+
+/* Title description */
+"2 Video Passes" = "2パスビデオ";
+
+/* Title description */
+"2 Video Passes First Turbo" = "2パスビデオ 1パス目高速";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "5.1 Channels";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "6.1 Channels";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "7.1 Channels";
+
+/* Audio description */
+"Audio:" = "音声:";
+
+/* HBPicture -> summary */
+"Automatic" = "自動";
+
+/* Video description */
+"Bitrate: %d kbps" = "ビットレート: %d kbps";
+
+/* Subtitles description */
+"Burned In" = "焼き込み";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
+
+/* Title -> chapter name
+   Title description */
+"Chapter %d" = "チャプター %d";
+
+/* HBJob -> chapters short description */
+"Chapter Markers" = "チャプターマーカー";
+
+/* HBRange -> display name */
+"Chapters" = "チャプター";
+
+/* Title description */
+"Chapters %d through %d" = "チャプター %1$d から %2$d";
+
+/* Filters description
+   HBJob -> filters short description */
+"Chroma Smooth" = "クロマスムーズ";
+
+/* Filters description
+   HBJob -> filters short description */
+"Colorspace" = "色空間";
+
+/* HBJob -> filters short description */
+"Comb Detect" = "Comb検出";
+
+/* Video description */
+"Constant Quality: %.2f %s" = "固定品質: %1$.2f %2$s";
+
+/* HBJob -> video short description framerate */
+"CRF" = "CRF";
+
+/* HBFilters -> custom display name
+   HBPicture -> summary */
+"Custom" = "カスタム";
+
+/* Filters description
+   HBJob -> filters short description */
+"Deblock" = "デブロック";
+
+/* HBFilters -> filter display name */
+"Decomb" = "Decomb";
+
+/* Subtitles description */
+"Default" = "既定";
+
+/* Video description */
+"default settings" = "既定の設定";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Default: " = "既定:";
+
+/* Filters description */
+"Denoise" = "デノイズ";
+
+/* Destination description */
+"Destination:" = "出力先:";
+
+/* Dimensions description
+   HBJob -> filters short description */
+"Detelecine" = "逆テレシネ";
+
+/* Dimensions description */
+"Dimensions:" = "解像度:";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "DRC: %.2f";
+
+/* Video description */
+"Encoder: %@, " = "エンコーダー: %@, ";
+
+/* HBStateFormatter -> work pass display name */
+"Encoding %@ " = "エンコード中 %@ ";
+
+/* Filters description */
+"Filters:" = "フィルター:";
+
+/* Subtitles description */
+"Forced Only" = "強制のみ";
+
+/* HBSubtitles -> search pass name */
+"Foreign Audio Search" = "吹き替え字幕スキャン";
+
+/* Format description */
+"Format:" = "形式:";
+
+/* Video description */
+"Framerate: " = "フレームレート:";
+
+/* HBRange -> display name */
+"Frames" = "フレーム";
+
+/* Title description */
+"Frames %d through %d" = "フレーム %1$d から %2$d";
+
+/* Audio description */
+"Gain: %.2f" = "ゲイン: %.2f";
+
+/* Filters description
+   HBJob -> filters short description */
+"Grayscale" = "グレースケール";
+
+/* HBFilters -> filter display name */
+"HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "無効なBwdifカスタム設定です。";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid chroma smooth custom settings." = "無効なクロマスムーズカスタム設定です。";
+
+/* HBFilters -> invalid chroma smooth custom string description */
+"Invalid colorspace custom settings." = "無効な色空間カスタム設定です。";
+
+/* HBFilters -> invalid comb detect custom string description */
+"Invalid custom comb detect settings." = "無効なcomb検出カスタム設定です。";
+
+/* HBFilters -> invalid detelecine custom string description */
+"Invalid custom detelecine settings." = "無効な逆テレシネカスタム設定です。";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom HQDN3D settings" = "無効なHQDN3Dカスタム設定です。";
+
+/* HBFilters -> invalid denoise custom string description */
+"Invalid custom NLMeans settings" = "無効なNLMeansカスタム設定です。";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "無効なデブロックカスタム設定です。";
+
+/* HBFilters -> invalid Decomb custom string description */
+"Invalid Decomb custom settings." = "無効なDecombカスタム設定です。";
+
+/* HBFilters -> invalid lapsharp custom string description */
+"Invalid lapsharp custom settings." = "無効なlapsharpカスタム設定です。";
+
+/* HBJob -> invalid name error description */
+"Invalid name" = "無効な名前です";
+
+/* HBJob -> invalid preset */
+"Invalid preset" = "無効なプリセットです";
+
+/* HBFilters -> invalid unsharp custom string description */
+"Invalid unsharp custom settings." = "無効なunsharpカスタム設定です。";
+
+/* HBFilters -> invalid Yadif custom string description */
+"Invalid Yadif custom settings." = "無効なYadifカスタム設定です。";
+
+/* HBFilters -> filter display name */
+"Lapsharp" = "Lapsharp";
+
+/* Video description */
+"Level: %@" = "レベル: %@";
+
+/* Audio description */
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "ミックスダウン: %1$@, サンプリングレート: %2$@, ビットレート: %3$d kbps";
+
+/* HBAudio -> Mixdown */
+"Mono" = "モノラル";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "モノラル(左のみ)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "モノラル(右のみ)";
+
+/* HBStateFormatter -> pass display name */
+"Muxing…" = "結合中...";
+
+/* HBFilters -> filter display name */
+"NLMeans" = "NLMeans";
+
+/* HBVideo -> tune */
+"none" = "none";
+
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
+   HBJob -> filters short description
+   HBSubtitles -> none track name */
+"None" = "なし";
+
+/* HBFilters -> filter display name
+   HBFilters -> off display name */
+"Off" = "オフ";
+
+/* Video description */
+"Options: %@" = "オプション: %@";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d %@ of %d, %.2f %%" = "%3$d パス中 %1$d パス目, %4$.2f %%";
+
+/* HBStateFormatter -> work pass number format */
+"Pass %d of %d, %.2f %%" = "%2$d パス中 %1$d パス目, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "1パス目";
+
+/* HBStateFormatter -> pass display name */
+"Paused" = "一時停止中";
+
+/* Video description */
+"Peak %@ (constant frame rate)" = "最高 %@ (固定フレームレート)";
+
+/* Video description */
+"Peak %@ (may be lower)" = "最高 %@ (またはそれ以下)";
+
+/* Preset description */
+"Preset:" = "プリセット:";
+
+/* Video description */
+"Preset: %@" = "プリセット: %@";
+
+/* Video description */
+"Profile: %@" = "プロファイル: %@";
+
+/* Range description */
+"Range:" = "範囲:";
+
+/* HBVideo -> frame rates display name */
+"Same as source" = "ソースと同じ";
+
+/* Video description */
+"Same as source (constant)" = "ソースと同じ(固定)";
+
+/* Video description */
+"Same as source (variable)" = "ソースと同じ (可変)";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d, preview %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中, プレビュー %3$d …";
+
+/* HBStateFormatter -> scan pass format */
+"Scanning title %d of %d…" = "%2$d 中 %1$d つ目のタイトルをスキャン中…";
+
+/* HBStateFormatter -> search pass display name */
+"Searching for start point:  %.2f %%" = "開始地点を検索中: %.2f %%";
+
+/* HBRange -> display name */
+"Seconds" = "秒";
+
+/* Title description */
+"Seconds %d through %d" = "%1$d 秒から %2$d 秒";
+
+/* Filters description */
+"Sharpen" = "シャープ化";
+
+/* Source description */
+"Source:" = "ソース:";
+
+/* HBPicture -> short info */
+"Source: %dx%d, " = "ソース: %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "ステレオ";
+
+/* Subtitles description */
+"Subtitles:" = "字幕:";
+
+/* HBFilters -> invalid filter custom settings error recovery suggestion */
+"Syntax: " = "シンタックス:";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "ファイル名は空にできません。";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "ファイル名に / 文字を含むことはできません。";
+
+/* Preset -> import error description */
+"The preset \"%@\" could not be imported." = "プリセット \"%@\" はインポートできませんでした。";
+
+/* Job preset -> invalid preset recovery suggestion */
+"The preset is not a valid, try to select a different one." = "プリセットが有効ではありません、違うものを選択してみてください。";
+
+/* Preset -> import error reason */
+"The selected preset is invalid." = "選択されたプリセットが無効です。";
+
+/* Preset -> import error reason */
+"The selected preset was created with a newer version of HandBrake." = "選択されたプリセットはより新しいバージョンのHandBrakeで作成されています。";
+
+/* Title description */
+"Title %d, %@" = "タイトル %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "タイトル %1$d, %2$@, %3$@";
+
+/* Video description */
+"Tune: " = "チューニング: ";
+
+/* HBJob -> video short description encoder name
+   Video description */
+"Unknown" = "不明";
+
+/* HBFilters -> filter display name */
+"Unsharp" = "Unsharp";
+
+/* HBJob -> video short description framerate */
+"VFR" = "VFR";
+
+/* Video description */
+"Video Options:" = "ビデオオプション:";
+
+/* Video description */
+"Video:" = "映像:";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
+

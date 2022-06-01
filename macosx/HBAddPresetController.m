@@ -76,7 +76,7 @@
     {
         [self.categories selectItemWithTitle:lastUsedCategory];
     }
-    if (!self.categories.selectedItem)
+    if (self.categories.selectedItem.tag != 2)
     {
         [self.categories selectItemWithTag:2];
     }
@@ -281,7 +281,7 @@
 
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/custom-presets.html"]];
+    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationBaseURL URLByAppendingPathComponent:@"advanced/custom-presets.html"]];
 }
 
 @end
