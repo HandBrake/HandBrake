@@ -6170,17 +6170,13 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
 
         switch (filter->id)
         {
-            case HB_FILTER_NLMEANS:
-                if (pix_fmt != AV_PIX_FMT_YUV420P)
-                {
-                    return 0;
-                }
             case HB_FILTER_DETELECINE:
             case HB_FILTER_COMB_DETECT:
             case HB_FILTER_DECOMB:
             case HB_FILTER_YADIF:
             case HB_FILTER_BWDIF:
             case HB_FILTER_DENOISE:
+            case HB_FILTER_NLMEANS:
             case HB_FILTER_CHROMA_SMOOTH:
             case HB_FILTER_LAPSHARP:
             case HB_FILTER_UNSHARP:
