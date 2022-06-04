@@ -124,6 +124,15 @@
     _allowMP3Passthru = allowMP3Passthru;
 }
 
+- (void)setAllowOpusPassthru:(BOOL)allowOpusPassthru
+{
+    if (allowOpusPassthru != _allowOpusPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowOpusPassthru:_allowOpusPassthru];
+    }
+    _allowOpusPassthru = allowOpusPassthru;
+}
+
 - (void)setAllowTrueHDPassthru:(BOOL)allowTrueHDPassthru
 {
     if (allowTrueHDPassthru != _allowTrueHDPassthru)
@@ -215,6 +224,7 @@
     self.allowFLACPassthru   = NO;
     self.allowMP2Passthru    = NO;
     self.allowMP3Passthru    = NO;
+    self.allowOpusPassthru   = NO;
     self.allowTrueHDPassthru = NO;
 
     // then, enable allowed passthru encoders
@@ -248,6 +258,9 @@
                     break;
                 case HB_ACODEC_MP3_PASS:
                     self.allowMP3Passthru = YES;
+                    break;
+                case HB_ACODEC_OPUS_PASS:
+                    self.allowOpusPassthru = YES;
                     break;
                 case HB_ACODEC_TRUEHD_PASS:
                     self.allowTrueHDPassthru = YES;
@@ -356,6 +369,10 @@
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_MP3_PASS))];
     }
+    if (self.allowOpusPassthru)
+    {
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_OPUS_PASS))];
+    }
     if (self.allowTrueHDPassthru)
     {
         [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_TRUEHD_PASS))];
@@ -448,6 +465,7 @@
         copy->_allowDTSPassthru = _allowDTSPassthru;
         copy->_allowMP2Passthru = _allowMP2Passthru;
         copy->_allowMP3Passthru = _allowMP3Passthru;
+        copy->_allowOpusPassthru = _allowOpusPassthru;
         copy->_allowTrueHDPassthru = _allowTrueHDPassthru;
         copy->_allowFLACPassthru = _allowFLACPassthru;
 
@@ -482,6 +500,7 @@
     encodeBool(_allowDTSPassthru);
     encodeBool(_allowMP2Passthru);
     encodeBool(_allowMP3Passthru);
+    encodeBool(_allowOpusPassthru);
     encodeBool(_allowTrueHDPassthru);
     encodeBool(_allowFLACPassthru);
 
@@ -510,6 +529,7 @@
     decodeBool(_allowDTSPassthru);
     decodeBool(_allowMP2Passthru);
     decodeBool(_allowMP3Passthru);
+    decodeBool(_allowOpusPassthru);
     decodeBool(_allowTrueHDPassthru);
     decodeBool(_allowFLACPassthru);
 

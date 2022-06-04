@@ -119,7 +119,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                         fallback.AudioAllowDTSHDPass,
                         fallback.AudioAllowEAC3Pass,
                         fallback.AudioAllowFlacPass,
-                        fallback.AudioAllowTrueHDPass));
+                        fallback.AudioAllowTrueHDPass,
+                        fallback.AudioAllowOpusPass));
 
                     HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoderInfo.Id, format);
                     AudioEncoder autoPassthru = EnumHelper<AudioEncoder>.GetValue(autoPassthruEncoderOption.ShortName);
@@ -427,9 +428,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             {
                 if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough
                     || this.Encoder == AudioEncoder.DtsHDPassthrough || this.Encoder == AudioEncoder.AacPassthru
-                    || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough ||
-                    this.Encoder == AudioEncoder.EAc3Passthrough || this.Encoder == AudioEncoder.TrueHDPassthrough
-                    || this.Encoder == AudioEncoder.FlacPassthru || this.Encoder == AudioEncoder.Mp2Passthru)
+                    || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough
+                    || this.Encoder == AudioEncoder.EAc3Passthrough || this.Encoder == AudioEncoder.TrueHDPassthrough
+                    || this.Encoder == AudioEncoder.FlacPassthru || this.Encoder == AudioEncoder.Mp2Passthru
+                    || this.Encoder == AudioEncoder.OpusPassthru)
                 {
                     return true;
                 }

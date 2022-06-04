@@ -416,6 +416,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                         case AudioEncoder.TrueHDPassthrough:
                             preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass = true;
                             break;
+                        case AudioEncoder.OpusPassthru:
+                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowOpusPass = true;
+                            break;
                     }
                 }
             }

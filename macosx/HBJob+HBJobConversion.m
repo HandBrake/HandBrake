@@ -356,6 +356,10 @@
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3_PASS;
     }
+    if (audioDefaults.allowOpusPassthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_OPUS_PASS;
+    }
     if (audioDefaults.allowTrueHDPassthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_TRUEHD_PASS;

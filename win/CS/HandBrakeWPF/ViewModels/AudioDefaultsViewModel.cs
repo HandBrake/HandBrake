@@ -170,6 +170,20 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool AudioAllowOpusPass
+        {
+            get
+            {
+                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowOpusPass;
+            }
+
+            set
+            {
+                this.audioBehaviours.AllowedPassthruOptions.AudioAllowOpusPass = value;
+                this.NotifyOfPropertyChange(() => this.AudioAllowOpusPass);
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether audio allow ac3 pass.
         /// </summary>
@@ -483,6 +497,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AudioAllowMP2Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowMP3Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowAACPass);
+            this.NotifyOfPropertyChange(() => this.AudioAllowOpusPass);
             this.NotifyOfPropertyChange(() => this.AudioAllowAC3Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowEAC3Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowDTSPass);
