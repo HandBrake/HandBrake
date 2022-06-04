@@ -19,10 +19,10 @@
 
 static void build_integral_sse2(uint32_t *integral,
                                 int       integral_stride,
-                          const uint8_t  *src,
-                          const uint8_t  *src_pre,
-                          const uint8_t  *compare,
-                          const uint8_t  *compare_pre,
+                          const void  *in_src,
+                          const void  *in_src_pre,
+                          const void  *in_compare,
+                          const void  *in_compare_pre,
                                 int       w,
                                 int       border,
                                 int       dst_w,
@@ -34,6 +34,9 @@ static void build_integral_sse2(uint32_t *integral,
     const __m128i zero = _mm_set1_epi8(0);
     const int bw = w + 2 * border;
     const int n_half = (n-1) /2;
+
+    const uint8_t *src_pre      = (const uint8_t *)in_src_pre;
+    const uint8_t *compare_pre  = (const uint8_t *)in_compare_pre;
 
     for (int y = 0; y < dst_h + n; y++)
     {

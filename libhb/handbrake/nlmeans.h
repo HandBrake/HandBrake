@@ -15,17 +15,17 @@ typedef struct
 {
     void (*build_integral)(uint32_t *integral,
                            int       integral_stride,
-                     const uint8_t  *src,
-                     const uint8_t  *src_pre,
-                     const uint8_t  *compare,
-                     const uint8_t  *compare_pre,
-                           int       w,
-                           int       border,
-                           int       dst_w,
-                           int       dst_h,
-                           int       dx,
-                           int       dy,
-                           int       n);
+                     const void  *src,
+                     const void  *src_pre,
+                     const void  *compare,
+                     const void  *compare_pre,
+                           int    w,
+                           int    border,
+                           int    dst_w,
+                           int    dst_h,
+                           int    dx,
+                           int    dy,
+                           int    n);
 } NLMeansFunctions;
 
 void nlmeans_init_x86(NLMeansFunctions *functions);

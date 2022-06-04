@@ -526,7 +526,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.VideoTunes.Add(value);
                 }
 
-                if (VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder) && hasFastDecode)
+                if ((VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder) || VideoEncoderHelpers.IsSVTAV1(this.SelectedVideoEncoder)) && hasFastDecode)
                 {
                     this.Task.VideoTunes.Add(VideoTune.FastDecode);
                 }
@@ -1048,7 +1048,8 @@ namespace HandBrakeWPF.ViewModels
                     this.VideoTunes.Add(VideoTune.None);
                     foreach (var item in encoder.Tunes)
                     {
-                        if (item == VideoTune.FastDecode.ShortName && VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder))
+                        if (item == VideoTune.FastDecode.ShortName &&
+                            (VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder) || VideoEncoderHelpers.IsSVTAV1(this.SelectedVideoEncoder)))
                         {
                             continue;
                         }
@@ -1112,7 +1113,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.DisplayLevelControl = encoder?.Levels?.Count > 0;
 
-            this.DisplayFastDecode = VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder);
+            this.DisplayFastDecode = VideoEncoderHelpers.IsX264(this.SelectedVideoEncoder) || VideoEncoderHelpers.IsSVTAV1(this.SelectedVideoEncoder);
             this.NotifyOfPropertyChange(() => this.DisplayFastDecode);
 
             if (!this.DisplayFastDecode)

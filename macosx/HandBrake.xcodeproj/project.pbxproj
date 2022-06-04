@@ -261,6 +261,8 @@
 		A9998605278868220019E76F /* QuickLookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99985F3278868220019E76F /* QuickLookUI.framework */; };
 		A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B989F27957FCE00DCD062 /* Metal.framework */; };
 		A99B98A127957FD400DCD062 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A99B989F27957FCE00DCD062 /* Metal.framework */; };
+		A99E13382833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A99E13372833B97A0006D720 /* libSvtAv1Enc.a */; };
+		A99E13392833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A99E13372833B97A0006D720 /* libSvtAv1Enc.a */; };
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
 		A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
@@ -755,6 +757,7 @@
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
 		A99985F3278868220019E76F /* QuickLookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookUI.framework; path = System/Library/Frameworks/QuickLookUI.framework; sourceTree = SDKROOT; };
 		A99B989F27957FCE00DCD062 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		A99E13372833B97A0006D720 /* libSvtAv1Enc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSvtAv1Enc.a; path = external/contrib/lib/libSvtAv1Enc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99F40CC1B624E7E00750170 /* HBPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPictureViewController.h; sourceTree = "<group>"; };
 		A99F40CD1B624E7E00750170 /* HBPictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureViewController.m; sourceTree = "<group>"; };
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
@@ -1106,6 +1109,7 @@
 				1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */,
 				1CDCF0C3241F28D400FB62C6 /* libturbojpeg.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
+				A99E13382833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
 				1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */,
@@ -1187,6 +1191,7 @@
 				1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
 				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
+				A99E13392833B97A0006D720 /* libSvtAv1Enc.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
 				A99B98A027957FCE00DCD062 /* Metal.framework in Frameworks */,
@@ -1262,6 +1267,7 @@
 				A9E165511C523016003EF30E /* libavfilter.a */,
 				1C15C82B1CD7722500368223 /* libharfbuzz.a */,
 				A9935867256C349B00A6875E /* libzimg.a */,
+				A99E13372833B97A0006D720 /* libSvtAv1Enc.a */,
 			);
 			name = "Static Libraries";
 			sourceTree = "<group>";
