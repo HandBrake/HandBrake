@@ -18,7 +18,7 @@ SVT-AV1.CONFIGURE.extra       = -DBUILD_DEC=OFF
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
 else
-    ifneq (none,$(X265_8.GCC.g))
+    ifneq (none,$(SVT-AV1.GCC.g))
         SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
     else
         SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
