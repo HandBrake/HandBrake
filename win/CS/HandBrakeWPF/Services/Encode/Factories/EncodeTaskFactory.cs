@@ -290,6 +290,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.AudioPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.Mp3Passthru));
             if (job.AudioPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.TrueHDPassthrough));
             if (job.AudioPassthruOptions.AudioAllowMP2Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.Mp2Passthru));
+            if (job.AudioPassthruOptions.AudioAllowOpusPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.OpusPassthru));
 
             audio.CopyMask = copyMaskList.ToArray();
 

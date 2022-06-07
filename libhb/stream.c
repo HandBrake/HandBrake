@@ -5440,6 +5440,14 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             audio->config.in.codec = HB_ACODEC_MP3;
             break;
 
+        case AV_CODEC_ID_OPUS:
+        {
+            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
+            audio->priv.config.extradata.length = len;
+            audio->config.in.codec              = HB_ACODEC_OPUS;
+        } break;
+
         default:
             break;
     }

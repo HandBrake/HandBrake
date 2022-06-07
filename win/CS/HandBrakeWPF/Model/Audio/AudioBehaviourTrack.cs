@@ -343,9 +343,10 @@ namespace HandBrakeWPF.Model.Audio
             {
                 if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough
                     || this.Encoder == AudioEncoder.DtsHDPassthrough || this.Encoder == AudioEncoder.AacPassthru
-                    || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough ||
-                    this.Encoder == AudioEncoder.EAc3Passthrough || this.Encoder == AudioEncoder.TrueHDPassthrough
-                    || this.Encoder == AudioEncoder.FlacPassthru || this.Encoder == AudioEncoder.Mp2Passthru)
+                    || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough
+                    || this.Encoder == AudioEncoder.EAc3Passthrough || this.Encoder == AudioEncoder.TrueHDPassthrough
+                    || this.Encoder == AudioEncoder.FlacPassthru || this.Encoder == AudioEncoder.Mp2Passthru
+                    || this.Encoder == AudioEncoder.OpusPassthru)
                 {
                     return true;
                 }

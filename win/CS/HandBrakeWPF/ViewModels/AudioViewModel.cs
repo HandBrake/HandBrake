@@ -301,6 +301,11 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowOpusPass != this.Task.AudioPassthruOptions.AudioAllowOpusPass)
+            {
+                return false;
+            }
+
             if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass != this.Task.AudioPassthruOptions.AudioAllowAC3Pass)
             {
                 return false;
