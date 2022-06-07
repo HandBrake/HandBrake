@@ -114,13 +114,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                         fallback.AudioAllowMP2Pass,
                         fallback.AudioAllowMP3Pass,
                         fallback.AudioAllowAACPass,
+                        fallback.AudioAllowOpusPass,
                         fallback.AudioAllowAC3Pass,
                         fallback.AudioAllowDTSPass,
                         fallback.AudioAllowDTSHDPass,
                         fallback.AudioAllowEAC3Pass,
                         fallback.AudioAllowFlacPass,
-                        fallback.AudioAllowTrueHDPass,
-                        fallback.AudioAllowOpusPass));
+                        fallback.AudioAllowTrueHDPass));
 
                     HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoderInfo.Id, format);
                     AudioEncoder autoPassthru = EnumHelper<AudioEncoder>.GetValue(autoPassthruEncoderOption.ShortName);
