@@ -148,6 +148,7 @@
                 </StackPanel>
 
                 <StackPanel Margin="10,10,0,0" Orientation="Vertical"  Grid.Column="1">
+                    <CheckBox Margin="0,2,5,0" Content="Opus" VerticalAlignment="Center" IsChecked="{Binding AudioAllowOpusPass}" />
                     <CheckBox Margin="0,2,5,0" Content="FLAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowFlacPass}" />
                     <CheckBox Margin="0,2,5,0" Content="DTS" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSPass}" />
                     <CheckBox Margin="0,2,5,0" Content="DTSHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSHDPass}" />

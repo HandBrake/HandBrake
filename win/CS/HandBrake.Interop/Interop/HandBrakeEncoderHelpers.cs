@@ -730,7 +730,7 @@ namespace HandBrake.Interop.Interop
             return HBFunctions.hb_audio_compression_get_default((uint)encoder.Id);
         }
 
-        public static uint BuildCopyMask(bool audioAllowMP2Pass, bool audioAllowMP3Pass, bool audioAllowAACPass, bool audioAllowAC3Pass, bool audioAllowDTSPass, bool audioAllowDTSHDPass, bool audioAllowEac3Pass, bool audioAllowFlacPass, bool audioAllowTruehdPass)
+        public static uint BuildCopyMask(bool audioAllowMP2Pass, bool audioAllowMP3Pass, bool audioAllowAACPass, bool audioAllowOpusPass, bool audioAllowAC3Pass, bool audioAllowDTSPass, bool audioAllowDTSHDPass, bool audioAllowEac3Pass, bool audioAllowFlacPass, bool audioAllowTruehdPass)
         {
             uint mask = 0;
 
@@ -747,6 +747,11 @@ namespace HandBrake.Interop.Interop
             if (audioAllowAACPass)
             {
                 mask |= NativeConstants.HB_ACODEC_AAC_PASS;
+            }
+
+            if (audioAllowOpusPass)
+            {
+                mask |= NativeConstants.HB_ACODEC_OPUS_PASS;
             }
 
             if (audioAllowAC3Pass)

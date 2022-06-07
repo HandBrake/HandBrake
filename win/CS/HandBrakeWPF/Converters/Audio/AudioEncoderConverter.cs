@@ -81,7 +81,6 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.ffflac);
                     encoders.Remove(AudioEncoder.ffflac24);
                     encoders.Remove(AudioEncoder.FlacPassthru);
-                    encoders.Remove(AudioEncoder.Opus);
 
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
                 }
@@ -103,6 +102,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Passthrough);
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
                     encoders.Remove(AudioEncoder.FlacPassthru);
+                    encoders.Remove(AudioEncoder.OpusPassthru);
 
                     encoders.Add(AudioEncoder.None);
                 }
@@ -121,6 +121,7 @@ namespace HandBrakeWPF.Converters.Audio
                     RemoveIfNotSupported(AudioEncoder.TrueHDPassthrough, sourceTrack, encoders);
                     RemoveIfNotSupported(AudioEncoder.FlacPassthru, sourceTrack, encoders);
                     RemoveIfNotSupported(AudioEncoder.Mp2Passthru, sourceTrack, encoders);
+                    RemoveIfNotSupported(AudioEncoder.OpusPassthru, sourceTrack, encoders);
                 }
 
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);

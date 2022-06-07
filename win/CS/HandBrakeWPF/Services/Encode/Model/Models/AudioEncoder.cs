@@ -99,5 +99,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [DisplayName("Opus (libopus)")]
         [ShortName("opus")]
         Opus,
+
+        [DisplayName("Opus Passthru")]
+        [ShortName("copy:opus")]
+        OpusPassthru,
     }
 }

@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowTrueHDPass = true;
             this.AudioAllowFlacPass = true;
             this.AudioAllowMP2Pass = true;
+            this.AudioAllowOpusPass = true;
 
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
@@ -39,6 +40,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowTrueHDPass = initialValue;
             this.AudioAllowFlacPass = initialValue;
             this.AudioAllowMP2Pass = initialValue;
+            this.AudioAllowOpusPass = initialValue;
 
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
@@ -55,6 +57,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowTrueHDPass = initialValue.AudioAllowTrueHDPass;
             this.AudioAllowFlacPass = initialValue.AudioAllowFlacPass;
             this.AudioAllowMP2Pass = initialValue.AudioAllowMP2Pass;
+            this.AudioAllowOpusPass = initialValue.AudioAllowOpusPass;
 
             this.AudioEncoderFallback = initialValue.AudioEncoderFallback;
         }
@@ -77,6 +80,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         public bool AudioAllowEAC3Pass { get; set; }
 
         public bool AudioAllowMP2Pass { get; set; }
+
+        public bool AudioAllowOpusPass { get; set; }
 
         public AudioEncoder AudioEncoderFallback { get; set; }
 
@@ -121,6 +126,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 {
                     audioEncoders.Add(AudioEncoder.Mp2Passthru);
                 }
+                if (this.AudioAllowOpusPass)
+                {
+                    audioEncoders.Add(AudioEncoder.OpusPassthru);
+                }
 
                 return audioEncoders;
             }
@@ -137,6 +146,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowTrueHDPass = false;
             this.AudioAllowFlacPass = false;
             this.AudioAllowMP2Pass = false;
+            this.AudioAllowOpusPass = false;
         }
     }
 }

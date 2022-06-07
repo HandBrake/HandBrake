@@ -338,6 +338,10 @@ int ghb_get_copy_mask(GhbValue *settings)
     {
         mask |= HB_ACODEC_TRUEHD_PASS;
     }
+    if (ghb_dict_get_bool(settings, "AudioAllowOPUSPass"))
+    {
+        mask |= HB_ACODEC_OPUS_PASS;
+    }
     return mask;
 }
 
