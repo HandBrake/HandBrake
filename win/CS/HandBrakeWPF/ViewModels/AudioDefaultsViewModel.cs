@@ -548,7 +548,7 @@ namespace HandBrakeWPF.ViewModels
         private void CorrectAudioEncoders(OutputFormat outputFormat)
         {
             if (outputFormat == OutputFormat.Mp4 &&
-                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis || this.AudioEncoderFallback == AudioEncoder.Opus))
+                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
             {
                 this.AudioEncoderFallback = AudioEncoder.ffaac;
             }
