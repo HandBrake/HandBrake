@@ -35,8 +35,7 @@ namespace HandBrakeWPF.Helpers
                 bool audio =
                     task.AudioTracks.Any(
                         item =>
-                        item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.Ac3
-                        || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
+                        item.Encoder.IsPassthrough);
 
                 bool subtitles = task.SubtitleTracks.Any(track => track.SubtitleType != SubtitleType.VobSub);
 

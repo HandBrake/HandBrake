@@ -14,21 +14,18 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
-    using System.Windows.Navigation;
 
     using Caliburn.Micro;
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -56,7 +53,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedAvailableToMove = new BindingList<string>();
             this.SelectedLanguagesToMove = new BindingList<string>();
             this.AvailableLanguages = new BindingList<string>();
-            this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
+            this.AudioEncoders = new List<HBAudioEncoder>(HandBrakeEncoderHelpers.AudioEncoders) { HBAudioEncoder.None }; // TODO check
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
@@ -289,7 +286,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the audio encoder fallback.
         /// </summary>
-        public AudioEncoder AudioEncoderFallback
+        public HBAudioEncoder AudioEncoderFallback
         {
             get
             {
@@ -359,7 +356,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AudioEncoders.
         /// </summary>
-        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+        public IEnumerable<HBAudioEncoder> AudioEncoders { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.
@@ -547,31 +544,29 @@ namespace HandBrakeWPF.ViewModels
 
         private void CorrectAudioEncoders(OutputFormat outputFormat)
         {
-            if (outputFormat == OutputFormat.Mp4 &&
-                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
+            if (outputFormat == OutputFormat.Mp4 && !this.AudioEncoderFallback.SupportsMP4)
             {
-                this.AudioEncoderFallback = AudioEncoder.ffaac;
+                this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
             }
 
-            if (outputFormat == OutputFormat.WebM &&
-                (this.AudioEncoderFallback != AudioEncoder.Opus && this.AudioEncoderFallback != AudioEncoder.Vorbis))
+            if (outputFormat == OutputFormat.WebM && !this.AudioEncoderFallback.SupportsWebM)
             {
-                this.AudioEncoderFallback = AudioEncoder.Vorbis;
+                this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
             }
 
             if (outputFormat == OutputFormat.Mp4)
             {
-                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.ffflac24 || track.Encoder == AudioEncoder.Opus || track.Encoder == AudioEncoder.Vorbis))
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsMP4))
                 {
-                    track.Encoder = AudioEncoder.ffaac;
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
                 }
             }
 
             if (outputFormat == OutputFormat.WebM)
             {
-                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsWebM))
                 {
-                    track.Encoder = AudioEncoder.Vorbis;
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
                 }
             }
         }

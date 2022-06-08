@@ -159,7 +159,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:Resources.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="AudioEncoderFallback" />
@@ -264,7 +264,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!--  Row 1  -->
-                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0">
+                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
                                     <ComboBox.SelectedItem>
                                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                             <Binding Path="Encoder" />

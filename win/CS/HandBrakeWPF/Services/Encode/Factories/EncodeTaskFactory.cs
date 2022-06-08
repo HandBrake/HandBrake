@@ -26,7 +26,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
 
-    using AudioEncoder = Model.Models.AudioEncoder;
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
     using AudioTrack = Model.Models.AudioTrack;
     using ChapterMarker = Model.Models.ChapterMarker;
@@ -281,34 +280,30 @@ namespace HandBrakeWPF.Services.Encode.Factories
             Audio audio = new Audio();
 
             List<string> copyMaskList = new List<string>();
-            if (job.AudioPassthruOptions.AudioAllowAACPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.AacPassthru));
-            if (job.AudioPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.Ac3Passthrough));
-            if (job.AudioPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.DtsHDPassthrough));
-            if (job.AudioPassthruOptions.AudioAllowDTSPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.DtsPassthrough));
-            if (job.AudioPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.EAc3Passthrough));
-            if (job.AudioPassthruOptions.AudioAllowFlacPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.FlacPassthru));
-            if (job.AudioPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.Mp3Passthru));
-            if (job.AudioPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.TrueHDPassthrough));
-            if (job.AudioPassthruOptions.AudioAllowMP2Pass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.Mp2Passthru));
-            if (job.AudioPassthruOptions.AudioAllowOpusPass) copyMaskList.Add(EnumHelper<AudioEncoder>.GetShortName(AudioEncoder.OpusPassthru));
+            if (job.AudioPassthruOptions.AudioAllowAACPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AacPassthru)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Ac3Passthrough)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.DtsHDPassthrough)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowDTSPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.DtsPassthrough)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.EAc3Passthrough)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowFlacPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.FlacPassthru)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Mp3Passthru)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.TrueHDPassthrough)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowMP2Pass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Mp2Passthru)?.ShortName);
+            if (job.AudioPassthruOptions.AudioAllowOpusPass) copyMaskList.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.OpusPassthru)?.ShortName);
 
             audio.CopyMask = copyMaskList.ToArray();
 
-            HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AudioPassthruOptions.AudioEncoderFallback));
-            audio.FallbackEncoder = audioEncoder?.ShortName;
+            audio.FallbackEncoder = job.AudioPassthruOptions.AudioEncoderFallback?.ShortName;
 
             Validate.NotNull(audio.FallbackEncoder, string.Format("Unrecognized audio encoder: {0} \n", job.AudioPassthruOptions.AudioEncoderFallback));
 
             audio.AudioList = new List<HandBrake.Interop.Interop.Json.Encode.AudioTrack>();
             foreach (AudioTrack item in job.AudioTracks)
             {
-                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(item.Encoder));
-                Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
-
-                if (item.IsPassthru && (item.ScannedTrack.Codec & encoder.Id) == 0)
+                if (item.IsPassthru && (item.ScannedTrack.Codec & item.Encoder.Id) == 0)
                 {
                     // We have an unsupported passthru. Rather than let libhb drop the track, switch it to the fallback.
-                    encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AudioPassthruOptions.AudioEncoderFallback));
+                    item.Encoder = job.AudioPassthruOptions.AudioEncoderFallback;
                 }
 
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(item.MixDown);
@@ -319,7 +314,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 {
                     Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
                     DRC = item.DRC,
-                    Encoder = encoder.ShortName,
+                    Encoder = item.Encoder.ShortName,
                     Gain = item.Gain,
                     Mixdown = mixdown != null ? mixdown.Id : -1,
                     NormalizeMixLevel = false,

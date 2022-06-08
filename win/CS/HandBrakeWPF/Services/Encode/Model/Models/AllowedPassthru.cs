@@ -11,6 +11,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System.Collections.Generic;
 
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+
     public class AllowedPassthru
     {
         public AllowedPassthru()
@@ -26,7 +29,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowMP2Pass = true;
             this.AudioAllowOpusPass = true;
 
-            this.AudioEncoderFallback = AudioEncoder.Ac3;
+            this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
         }
 
         public AllowedPassthru(bool initialValue)
@@ -42,7 +45,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowMP2Pass = initialValue;
             this.AudioAllowOpusPass = initialValue;
 
-            this.AudioEncoderFallback = AudioEncoder.Ac3;
+            this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
         }
 
 
@@ -83,52 +86,52 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         public bool AudioAllowOpusPass { get; set; }
 
-        public AudioEncoder AudioEncoderFallback { get; set; }
+        public HBAudioEncoder AudioEncoderFallback { get; set; }
 
-        public IEnumerable<AudioEncoder> AllowedPassthruOptions
+        public IEnumerable<HBAudioEncoder> AllowedPassthruOptions
         {
             get
             {
-                List<AudioEncoder> audioEncoders = new List<AudioEncoder>();
+                List<HBAudioEncoder> audioEncoders = new List<HBAudioEncoder>();
                 if (this.AudioAllowAACPass)
                 {
-                    audioEncoders.Add(AudioEncoder.AacPassthru);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AacPassthru));
                 }
                 if (this.AudioAllowAC3Pass)
                 {
-                    audioEncoders.Add(AudioEncoder.Ac3Passthrough);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Ac3Passthrough));
                 }
                 if (this.AudioAllowDTSHDPass)
                 {
-                    audioEncoders.Add(AudioEncoder.DtsHDPassthrough);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.DtsHDPassthrough));
                 }
                 if (this.AudioAllowDTSPass)
                 {
-                    audioEncoders.Add(AudioEncoder.DtsPassthrough);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.DtsPassthrough));
                 }
                 if (this.AudioAllowMP3Pass)
                 {
-                    audioEncoders.Add(AudioEncoder.Mp3Passthru);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Mp3Passthru));
                 }
                 if (this.AudioAllowTrueHDPass)
                 {
-                    audioEncoders.Add(AudioEncoder.TrueHDPassthrough);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.TrueHDPassthrough));
                 }
                 if (this.AudioAllowFlacPass)
                 {
-                    audioEncoders.Add(AudioEncoder.FlacPassthru);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.FlacPassthru));
                 }
                 if (this.AudioAllowEAC3Pass)
                 {
-                    audioEncoders.Add(AudioEncoder.EAc3Passthrough);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.EAc3Passthrough));
                 }
                 if (this.AudioAllowMP2Pass)
                 {
-                    audioEncoders.Add(AudioEncoder.Mp2Passthru);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Mp2Passthru));
                 }
                 if (this.AudioAllowOpusPass)
                 {
-                    audioEncoders.Add(AudioEncoder.OpusPassthru);
+                    audioEncoders.Add(HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.OpusPassthru));
                 }
 
                 return audioEncoders;

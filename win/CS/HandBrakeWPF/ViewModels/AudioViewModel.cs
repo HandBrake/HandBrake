@@ -16,7 +16,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
@@ -29,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = Services.Encode.Model.Models.AudioTrack;
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
@@ -63,7 +61,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SampleRates.Add(item.Name);
             }
 
-            this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
+            this.AudioEncoders = HandBrakeEncoderHelpers.AudioEncoders.ToList();
             this.SourceTracks = new List<Audio>();
         }
 
@@ -83,7 +81,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AudioEncoders.
         /// </summary>
-        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+        public IEnumerable<HBAudioEncoder> AudioEncoders { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.
@@ -173,17 +171,23 @@ namespace HandBrakeWPF.ViewModels
 
             if (format == OutputFormat.Mp4)
             {
-                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.Vorbis))
+                foreach (AudioTrack track in this.Task.AudioTracks)
                 {
-                    track.Encoder = AudioEncoder.ffaac;
+                    if (!track.Encoder.SupportsMP4)
+                    {
+                        track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+                    }
                 }
             }
 
             if (format == OutputFormat.WebM)
             {
-                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                foreach (AudioTrack track in this.Task.AudioTracks)
                 {
-                    track.Encoder = AudioEncoder.Vorbis;
+                    if (!track.Encoder.SupportsWebM)
+                    {
+                        track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
+                    }
                 }
             }
 
@@ -242,6 +246,7 @@ namespace HandBrakeWPF.ViewModels
             // Audio Behaviours
             this.AudioDefaultsViewModel.Setup(preset.AudioTrackBehaviours, preset.Task.OutputFormat);
             this.AudioBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
+            this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
 
             if (preset.Task != null)
             {
@@ -455,12 +460,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
+        private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, HBAudioEncoder fallback)
         {
-            if (fallback == AudioEncoder.None && track != null)
+            if (fallback == HBAudioEncoder.None && track != null)
             {
-                HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
-                if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
+                if (track.IsPassthru && (sourceTrack.Codec & track.Encoder.Id) == 0)
                 {
                     return false;
                 }

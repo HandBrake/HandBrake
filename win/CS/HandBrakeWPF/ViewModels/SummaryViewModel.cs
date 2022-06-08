@@ -646,7 +646,7 @@ namespace HandBrakeWPF.ViewModels
                 AudioTrack track1 = this.Task.AudioTracks[0];
                 HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track1.MixDown);
                 string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
-                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track1.Encoder), mixdown));
+                desc.AppendLine(string.Format("{0}{1}", track1.Encoder.DisplayName, mixdown));
             }
 
             if (this.Task.AudioTracks.Count >= 2)
@@ -654,7 +654,7 @@ namespace HandBrakeWPF.ViewModels
                 AudioTrack track2 = this.Task.AudioTracks[1];
                 HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track2.MixDown);
                 string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
-                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track2.Encoder), mixdown));
+                desc.AppendLine(string.Format("{0}{1}", track2.Encoder.DisplayName, mixdown));
             }
 
             if (this.Task.AudioTracks.Count > 2)
