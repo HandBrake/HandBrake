@@ -17,18 +17,6 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         public const string Vorbis = "vorbis";
         public const string Passthru = "copy";
 
-        // TODO Passthru options code to allow removal of these.
-        public const string Ac3Passthrough = "copy:ac3";
-        public const string EAc3Passthrough = "copy:eac3";
-        public const string DtsPassthrough = "copy:dts";
-        public const string DtsHDPassthrough = "copy:dtshd";
-        public const string TrueHDPassthrough = "copy:truehd";
-        public const string AacPassthru = "copy:aac";
-        public const string Mp2Passthru = "copy:mp2";
-        public const string Mp3Passthru = "copy:mp3";
-        public const string OpusPassthru = "copy:opus";
-        public const string FlacPassthru = "copy:flac";
-
         public static HBAudioEncoder None = new HBAudioEncoder(-1, null, 1, 1, "None", -1, null, "none");
 
         public HBAudioEncoder(int compatibleContainers, RangeLimits compressionLimits, float defaultCompression, float defaultQuality, string displayName, int id, RangeLimits qualityLimits, string shortName)
@@ -68,6 +56,15 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         /// </summary>
         public string DisplayName { get; private set; }
 
+        public string CodecName
+        {
+            get
+            {
+                // The name of the codec without "passthru"
+                return this.DisplayName.Replace("Passthru", string.Empty).Trim();
+            }
+        }
+
         /// <summary>
         /// Gets the id.
         /// </summary>
@@ -81,6 +78,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             get
             {
                 return (this.Id & NativeConstants.HB_ACODEC_PASS_FLAG) > 0;
+            }
+        }
+
+        public bool IsAutoPassthru
+        {
+            get
+            {
+                return this.ShortName.Equals("copy");
             }
         }
 

@@ -11,15 +11,14 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Threading;
 
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
-    using AllowedPassthru = Models.AllowedPassthru;
     using AudioTrack = Models.AudioTrack;
     using ChapterMarker = Models.ChapterMarker;
     using DenoisePreset = Models.DenoisePreset;
@@ -43,7 +42,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
-            this.AudioPassthruOptions = new AllowedPassthru();
+            this.AudioPassthruOptions = new ObservableCollection<HBAudioEncoder>();
             this.MetaData = new MetaData();
             this.Padding = new PaddingFilter();
             this.VideoTunes = new List<VideoTune>();
@@ -60,7 +59,13 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.PointToPointMode = task.PointToPointMode;
 
             /* Audio */
-            this.AudioPassthruOptions = new AllowedPassthru(task.AudioPassthruOptions);
+            this.AudioFallbackEncoder = task.AudioFallbackEncoder;
+            this.AudioPassthruOptions = new ObservableCollection<HBAudioEncoder>();
+            foreach (var allowed in task.AudioPassthruOptions)
+            {
+                this.AudioPassthruOptions.Add(allowed);
+            }
+            
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             foreach (AudioTrack track in task.AudioTracks)
             {
@@ -299,7 +304,10 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public ObservableCollection<AudioTrack> AudioTracks { get; set; }
 
-        public AllowedPassthru AudioPassthruOptions { get; set; }
+        public IList<HBAudioEncoder> AudioPassthruOptions { get; set; }
+
+        public HBAudioEncoder AudioFallbackEncoder { get; set; }
+
 
         /* Subtitles */
 

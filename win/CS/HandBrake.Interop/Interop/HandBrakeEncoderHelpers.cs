@@ -729,60 +729,14 @@ namespace HandBrake.Interop.Interop
         {
             return HBFunctions.hb_audio_compression_get_default((uint)encoder.Id);
         }
-
-        public static uint BuildCopyMask(bool audioAllowMP2Pass, bool audioAllowMP3Pass, bool audioAllowAACPass, bool audioAllowOpusPass, bool audioAllowAC3Pass, bool audioAllowDTSPass, bool audioAllowDTSHDPass, bool audioAllowEac3Pass, bool audioAllowFlacPass, bool audioAllowTruehdPass)
+        
+        public static uint BuildCopyMask(IList<HBAudioEncoder> encoderList)
         {
             uint mask = 0;
-
-            if (audioAllowMP2Pass)
+            foreach (HBAudioEncoder encoder in encoderList)
             {
-                mask |= NativeConstants.HB_ACODEC_MP2_PASS;
-            }
-
-            if (audioAllowMP3Pass)
-            {
-                mask |= NativeConstants.HB_ACODEC_MP3_PASS;
-            }
-
-            if (audioAllowAACPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_AAC_PASS;
-            }
-
-            if (audioAllowOpusPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_OPUS_PASS;
-            }
-
-            if (audioAllowAC3Pass)
-            {
-                mask |= NativeConstants.HB_ACODEC_AC3_PASS;
-            }
-
-            if (audioAllowDTSPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_DCA_PASS;
-            }
-
-            if (audioAllowDTSHDPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_DCA_HD_PASS;
-            }
-
-            if (audioAllowEac3Pass)
-            {
-                mask |= NativeConstants.HB_ACODEC_EAC3_PASS;
-            }
-
-            if (audioAllowFlacPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_FLAC_PASS;
-            }
-
-            if (audioAllowTruehdPass)
-            {
-                mask |= NativeConstants.HB_ACODEC_TRUEHD_PASS;
-            }
+                mask |= (uint)encoder.Id;
+            }   
 
             return mask;
         }

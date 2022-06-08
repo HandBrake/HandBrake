@@ -91,32 +91,22 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SetupLimits();
         }
 
-        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, AllowedPassthru fallback, OutputFormat container)
+        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, IList<HBAudioEncoder> passthruEncoders, HBAudioEncoder fallbackEncoder, OutputFormat container)
         {
             HBAudioEncoder chosenEncoder = track.Encoder;
             if (track.IsPassthru && (sourceTrack.Codec & chosenEncoder.Id) == 0)
             {
-                chosenEncoder = fallback.AudioEncoderFallback;
+                chosenEncoder = fallbackEncoder;
             }
 
             if (track.IsPassthru && chosenEncoder.ShortName == HBAudioEncoder.Passthru)
             {
-                if (fallback.AudioEncoderFallback != null)
+                if (passthruEncoders != null)
                 {
                     int format = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(container)).Id;
-                    int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(
-                        fallback.AudioAllowMP2Pass,
-                        fallback.AudioAllowMP3Pass,
-                        fallback.AudioAllowAACPass,
-                        fallback.AudioAllowOpusPass,
-                        fallback.AudioAllowAC3Pass,
-                        fallback.AudioAllowDTSPass,
-                        fallback.AudioAllowDTSHDPass,
-                        fallback.AudioAllowEAC3Pass,
-                        fallback.AudioAllowFlacPass,
-                        fallback.AudioAllowTrueHDPass));
-
-                    HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallback.AudioEncoderFallback.Id, format);
+                    int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(passthruEncoders));
+              
+                    HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoder.Id, format);
                     chosenEncoder = autoPassthruEncoderOption;
                 }
             }
