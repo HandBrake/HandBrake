@@ -450,7 +450,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
             if (!buf->hw_ctx.frame)
             {
                 AVBufferRef *hw_frames_ctx = NULL;
-                AVBufferRef *hw_device_ctx = stream->common->job->title->nv_hw_ctx.hw_device_ctx;
+                AVBufferRef *hw_device_ctx = stream->common->job->nv_hw_ctx.hw_device_ctx;
                 buf->hw_ctx.frame = av_frame_alloc();
                 hw_frames_ctx = init_hw_frames_ctx(hw_device_ctx, stream->common->job->input_pix_fmt, frame.width, frame.height);
                 av_hwframe_get_buffer(hw_frames_ctx, buf->hw_ctx.frame, 0);

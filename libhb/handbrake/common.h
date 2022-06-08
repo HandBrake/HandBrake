@@ -806,6 +806,12 @@ struct hb_job_s
                                        // Other pipeline stages need to know
                                        // this.  E.g. sync and decsrtsub
 #endif
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_device_ctx;
+    } nv_hw_ctx;
+#endif
 };
 
 /* Audio starts here */
@@ -1167,11 +1173,7 @@ struct hb_title_s
 #define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
 #define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
 #if HB_PROJECT_FEATURE_NVENC
-#define HB_DECODE_SUPPORT_NVDEC 0x03 // Nvidia Nvdec
-    struct
-    {
-        void *hw_device_ctx;
-    } nv_hw_ctx;
+#define HB_DECODE_SUPPORT_NVDEC 0x04 // Nvidia Nvdec
 #endif
 
     hb_metadata_t * metadata;

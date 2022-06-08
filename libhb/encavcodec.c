@@ -294,7 +294,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if (use_hw_frames)
     {
         context->get_format = get_hw_pix_fmt;
-        context->hw_device_ctx = pv->job->title->nv_hw_ctx.hw_device_ctx;
+        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
     }
 #endif
 
