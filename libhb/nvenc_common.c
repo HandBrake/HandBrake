@@ -23,8 +23,8 @@ int hb_check_nvenc_available()
     {
         return 0;
     }
-    
-    if (is_nvenc_available != -1) 
+
+    if (is_nvenc_available != -1)
     {
         return is_nvenc_available;
     }
@@ -98,4 +98,24 @@ char * hb_map_nvenc_preset_name (const char * preset){
     }
 
     return "p4"; // Default to Medium
+}
+
+int hb_nvdec_available(int codec_id)
+{
+    if (is_hardware_disabled())
+        return 0;
+
+    AVCodec *codec = avcodec_find_decoder(codec_id);
+    enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
+    for (int i = 0; codec; i++)
+    {
+        const AVCodecHWConfig *config = avcodec_get_hw_config(codec, i);
+        if (!config)
+            return 0;
+        if ((AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX & config->methods) &&
+            (type == config->device_type))
+            return 1;
+    }
+
+    return 0;
 }
