@@ -346,29 +346,6 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
     return hb_buffer_list_clear(&list);
 }
 
-#if HB_PROJECT_FEATURE_NVENC
-static AVBufferRef *init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
-                                       enum AVPixelFormat sw_fmt,
-                                       int width,
-                                       int height)
-{
-    AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(hw_device_ctx);
-    AVHWFramesContext *frames_ctx = hw_frames_ctx->data;
-    frames_ctx->format = AV_PIX_FMT_CUDA;
-    frames_ctx->sw_format = sw_fmt;
-    frames_ctx->width = width;
-    frames_ctx->height = height;
-    if (0 != av_hwframe_ctx_init(hw_frames_ctx))
-    {
-        hb_error("failed to initialize hw frames context");
-        av_buffer_unref(&hw_frames_ctx);
-        return NULL;
-    }
-
-    return hw_frames_ctx;
-}
-#endif
-
 static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
                                      int64_t dur, int64_t pts )
 {
@@ -449,11 +426,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
 
             if (!buf->hw_ctx.frame)
             {
-                AVBufferRef *hw_frames_ctx = NULL;
-                AVBufferRef *hw_device_ctx = stream->common->job->nv_hw_ctx.hw_device_ctx;
-                buf->hw_ctx.frame = av_frame_alloc();
-                hw_frames_ctx = init_hw_frames_ctx(hw_device_ctx, stream->common->job->input_pix_fmt, frame.width, frame.height);
-                av_hwframe_get_buffer(hw_frames_ctx, buf->hw_ctx.frame, 0);
+                hb_nvdec_hwframe_init(stream->common->job, &buf->hw_ctx.frame);
             }
 
             av_frame_copy_props(buf->hw_ctx.frame, &frame);

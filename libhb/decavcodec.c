@@ -1441,33 +1441,6 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 }
 
 #if HB_PROJECT_FEATURE_NVENC
-static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
-                                         const enum AVPixelFormat *pix_fmts)
-{
-    const enum AVPixelFormat *p;
-
-    for (p = pix_fmts; *p != -1; p++)
-        if (*p == AV_PIX_FMT_CUDA)
-            return *p;
-
-    hb_error("Failed to get HW surface format.\n");
-    return AV_PIX_FMT_NONE;
-}
-
-static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
-                            const enum AVHWDeviceType type)
-{
-    int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
-    if (err < 0)
-    {
-        hb_error("Failed to create specified HW device.\n");
-        return err;
-    }
-
-    ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
-    return err;
-}
-
 static int is_nvenc_used(int codec_id)
 {
     switch (codec_id)
@@ -1580,26 +1553,11 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     const int main_dec_loop = (NULL != pv->job);
     const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
     const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
-    int use_hw_dec = main_dec_loop && no_video_filters && nvenc_is_used;
+    int use_hw_dec = 0;
 
-    AVBufferRef *hw_device_ctx = NULL;
-    enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
-
-    for (int i = 0; use_hw_dec; i++)
+    if (main_dec_loop && no_video_filters && nvenc_is_used)
     {
-        const AVCodecHWConfig *config = avcodec_get_hw_config(pv->codec, i);
-        if (!config)
-        {
-            hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
-                   av_hwdevice_get_type_name(type));
-            use_hw_dec = 0;
-            break;
-        }
-        if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
-            config->device_type == type)
-        {
-            break;
-        }
+        use_hw_dec = hb_nvdec_available(w->codec_param);
     }
 #endif
 
@@ -1609,14 +1567,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (AV_HWDEVICE_TYPE_CUDA == type && use_hw_dec)
+    if (use_hw_dec)
     {
-        pv->context->get_format = get_hw_pix_fmt;
-        if (cuda_hw_ctx_init(pv->context, hw_device_ctx, type) < 0)
-        {
-            hb_log("failed to initialize hw context");
-        }
-        pv->job->nv_hw_ctx.hw_device_ctx = av_buffer_ref(pv->context->hw_device_ctx);
+        hb_nvdec_hw_ctx_init(pv->context, pv->job);
     }
 #endif
 

@@ -143,38 +143,6 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
-#if HB_PROJECT_FEATURE_NVENC
-static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
-                                         const enum AVPixelFormat *pix_fmts)
-{
-    const enum AVPixelFormat *p;
-
-    for (p = pix_fmts; *p != -1; p++)
-        if (*p == AV_PIX_FMT_CUDA)
-            return *p;
-
-    hb_error("Failed to get HW surface format.\n");
-    return AV_PIX_FMT_NONE;
-}
-
-static AVBufferRef *init_hw_frames_ctx(AVCodecContext *avctx, enum AVPixelFormat sw_fmt)
-{
-    AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(avctx->hw_device_ctx);
-    AVHWFramesContext *frames_ctx = hw_frames_ctx->data;
-    frames_ctx->format = AV_PIX_FMT_CUDA;
-    frames_ctx->sw_format = sw_fmt;
-    frames_ctx->width = avctx->width;
-    frames_ctx->height = avctx->height;
-    if (0 != av_hwframe_ctx_init(hw_frames_ctx))
-    {
-        hb_error("failed to initialize hw frames context");
-        return NULL;
-    }
-
-    return hw_frames_ctx;
-}
-#endif
-
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -287,16 +255,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     context = avcodec_alloc_context3(codec);
-
-#if HB_PROJECT_FEATURE_NVENC
-    const int use_hw_frames =
-        (HB_DECODE_SUPPORT_NVDEC == pv->job->title->video_decode_support);
-    if (use_hw_frames)
-    {
-        context->get_format = get_hw_pix_fmt;
-        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
-    }
-#endif
 
     // Set things in context that we will allow the user to
     // override with advanced settings.
@@ -892,10 +850,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->width     = job->width;
     context->height    = job->height;
 #if HB_PROJECT_FEATURE_NVENC
-    if (context->hw_device_ctx)
+    if (HB_DECODE_SUPPORT_NVDEC == pv->job->title->video_decode_support)
     {
-        context->pix_fmt = AV_PIX_FMT_CUDA;
-        context->hw_frames_ctx = init_hw_frames_ctx(context, job->input_pix_fmt);
+        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
+        hb_nvdec_hwframes_ctx_init(context, job);
     }
     else
     {
