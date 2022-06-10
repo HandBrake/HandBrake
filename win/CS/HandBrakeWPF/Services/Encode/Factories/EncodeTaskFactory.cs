@@ -22,7 +22,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Shared;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
 
@@ -36,8 +35,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using Range = HandBrake.Interop.Interop.Json.Encode.Range;
     using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = Model.Models.SubtitleTrack;
-    using Validate = HandBrake.App.Core.Utilities.Validate;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
 
     /// <summary>
@@ -116,7 +113,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 File = job.Destination,
                 Mp4Options = new Mp4Options
                 {
-                    IpodAtom = VideoEncoderHelpers.IsH264(job.VideoEncoder) ? job.IPod5GSupport : false,
+                    IpodAtom = job.VideoEncoder.IsH264 ? job.IPod5GSupport : false,
                     Mp4Optimize = job.OptimizeMP4
                 },
                 ChapterMarkers = job.IncludeChapterMarkers,
@@ -214,11 +211,9 @@ namespace HandBrakeWPF.Services.Encode.Factories
         {
             Video video = new Video();
 
-            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == EnumHelper<VideoEncoder>.GetShortName(job.VideoEncoder));
-            Validate.NotNull(videoEncoder, "Video encoder " + job.VideoEncoder + " not recognized.");
-            if (videoEncoder != null)
+            if (job.VideoEncoder != null)
             {
-                video.Encoder = videoEncoder.ShortName;
+                video.Encoder = job.VideoEncoder.ShortName;
             }
 
             video.Level = job.VideoLevel?.ShortName;
@@ -253,14 +248,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
             video.QSV.Decode = HandBrakeHardwareEncoderHelper.IsQsvAvailable && enableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.
-            if (video.QSV.Decode && !VideoEncoderHelpers.IsQuickSync(job.VideoEncoder))
+            if (video.QSV.Decode && !job.VideoEncoder.IsQuickSync)
             {
                 video.QSV.Decode = useQSVDecodeForNonQSVEnc;
             }
             
             video.Options = job.ExtraAdvancedArguments;
 
-            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && VideoEncoderHelpers.IsQuickSync(job.VideoEncoder))
+            if (HandBrakeHardwareEncoderHelper.IsQsvAvailable && (HandBrakeHardwareEncoderHelper.QsvHardwareGeneration > 6) && job.VideoEncoder.IsQuickSync)
             {
                 if (enableQsvLowPower && !video.Options.Contains("lowpower"))
                 {

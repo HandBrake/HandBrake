@@ -13,12 +13,10 @@ namespace HandBrakeWPF.Services.Queue
     using System.Collections.Generic;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
-
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class QueueResourceService
     {
@@ -113,7 +111,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             lock (this.lockObj)
             {
-                if (VideoEncoderHelpers.IsQuickSync(task.VideoEncoder))
+                if (task.VideoEncoder.IsQuickSync)
                 {
                     if (this.qsvInstances.Count < this.totalQsvInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                     {
@@ -127,7 +125,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     return Guid.Empty; // Busy
                 }
-                else if (VideoEncoderHelpers.IsNVEnc(task.VideoEncoder))
+                else if (task.VideoEncoder.IsNVEnc)
                 {
                     if (this.nvencInstances.Count < this.totalNvidiaInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                     {
@@ -139,7 +137,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     return Guid.Empty; // Busy
                 }
-                else if (VideoEncoderHelpers.IsVCN(task.VideoEncoder))
+                else if (task.VideoEncoder.IsVCN)
                 {
                     if (this.vceInstances.Count < this.totalVceInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                     {
@@ -151,7 +149,7 @@ namespace HandBrakeWPF.Services.Queue
 
                     return Guid.Empty; // Busy
                 }
-                else if (VideoEncoderHelpers.IsMediaFoundation(task.VideoEncoder))
+                else if (task.VideoEncoder.IsMediaFoundation)
                 {
                     if (this.mfInstances.Count < this.totalMfInstances && this.TotalActiveInstances <= this.maxAllowedInstances)
                     {
@@ -191,7 +189,7 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        public void ReleaseToken(VideoEncoder encoder, Guid? unlockKey)
+        public void ReleaseToken(HBVideoEncoder encoder, Guid? unlockKey)
         {
             if (unlockKey == null)
             {
@@ -205,28 +203,28 @@ namespace HandBrakeWPF.Services.Queue
                     this.totalInstances.Remove(unlockKey.Value);
                 }
 
-                if (VideoEncoderHelpers.IsQuickSync(encoder))
+                if (encoder.IsQuickSync)
                 {
                     if (this.qsvInstances.Contains(unlockKey.Value))
                     {
                         this.qsvInstances.Remove(unlockKey.Value);
                     }
                 }
-                else if (VideoEncoderHelpers.IsNVEnc(encoder))
+                else if (encoder.IsNVEnc)
                 {
                     if (this.nvencInstances.Contains(unlockKey.Value))
                     {
                         this.nvencInstances.Remove(unlockKey.Value);
                     }
                 }
-                else if (VideoEncoderHelpers.IsVCN(encoder))
+                else if (encoder.IsVCN)
                 {
                     if (this.vceInstances.Contains(unlockKey.Value))
                     {
                         this.vceInstances.Remove(unlockKey.Value);
                     }
                 }
-                else if (VideoEncoderHelpers.IsMediaFoundation(encoder))
+                else if (encoder.IsMediaFoundation)
                 {
                     if (this.mfInstances.Contains(unlockKey.Value))
                     {

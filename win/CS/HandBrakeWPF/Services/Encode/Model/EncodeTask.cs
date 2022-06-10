@@ -27,7 +27,6 @@ namespace HandBrakeWPF.Services.Encode.Model
     using OutputFormat = Models.OutputFormat;
     using PointToPointMode = Models.PointToPointMode;
     using SubtitleTrack = Models.SubtitleTrack;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Models.Video.VideoLevel;
     using VideoPreset = Models.Video.VideoPreset;
@@ -275,7 +274,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public VideoEncodeRateType VideoEncodeRateType { get; set; }
 
-        public VideoEncoder VideoEncoder { get; set; }
+        public HBVideoEncoder VideoEncoder { get; set; }
 
         public VideoProfile VideoProfile { get; set; }
 

@@ -12,8 +12,6 @@
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-        <Converters:EnumComboConverter x:Key="enumComboConverter" />
-        <Converters:InverseBooleanConverter x:Key="inverseConverter" />
         <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
     </UserControl.Resources>
 
@@ -42,7 +40,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_Codec}" Width="100" />
 
-                    <ComboBox Width="120" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Encoders}" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_Codec}" >
+                    <ComboBox Width="120" DisplayMemberPath="DisplayName" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Encoders}" AutomationProperties.Name="{x:Static Properties:Resources.VideoView_Codec}" >
                         <ComboBox.SelectedItem>
                             <MultiBinding Converter="{StaticResource videoEncoderConverter}">
                                 <Binding Path="SelectedVideoEncoder" />

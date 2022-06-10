@@ -37,7 +37,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using EncodeTask = Encode.Model.EncodeTask;
     using FramerateMode = Encode.Model.Models.FramerateMode;
     using OutputFormat = Encode.Model.Models.OutputFormat;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Encode.Model.Models.Video.VideoPreset;
@@ -324,7 +323,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Video Settings */
-            preset.Task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(importedPreset.VideoEncoder);
+            preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
             preset.Task.TwoPass = importedPreset.VideoTwoPass;
             preset.Task.TurboFirstPass = importedPreset.VideoTurboTwoPass;
@@ -656,7 +655,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureChromaSmoothCustom = export.Task.CustomChromaSmooth;
             
             // Video
-            preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);
+            preset.VideoEncoder = export.Task.VideoEncoder?.ShortName;
             preset.VideoFramerate = export.Task.Framerate.HasValue ? export.Task.Framerate.ToString() : null;
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
             preset.VideoGrayScale = export.Task.Grayscale;
