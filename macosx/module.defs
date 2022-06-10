@@ -79,7 +79,7 @@ MACOSX.SIGN.flags = $(if $(filter 1,$(SECURITY.sandbox)),-sr,-r)
 MACOSX.SIGN.id = $(if $(ID),$(ID),-)
 MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign $(MACOSX.SIGN.flags) '$(MACOSX.SIGN.id)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
 
-MACOSX.NOTARIZE = $(strip $(MACOSX.src/)hbnotarize '$(USERNAME)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
+MACOSX.NOTARIZE = $(strip $(MACOSX.src/)hbnotarize '$(USERNAME)' '$(TEAMID)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
 
 ###############################################################################
 ##
