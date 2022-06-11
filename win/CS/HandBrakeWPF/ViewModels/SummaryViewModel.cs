@@ -260,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
                     return false;
                 }
 
-                return this.SelectedOutputFormat == OutputFormat.Mp4 && this.task.VideoEncoder.IsH264;
+                return this.SelectedOutputFormat == OutputFormat.Mp4 && this.task.VideoEncoder != null && this.task.VideoEncoder.IsH264;
             }
         }
 
@@ -512,7 +512,7 @@ namespace HandBrakeWPF.ViewModels
                 this.AlignAVStart = false;
             }
 
-            if (!this.task.VideoEncoder.IsH264)
+            if (this.task.VideoEncoder == null || !this.task.VideoEncoder.IsH264)
             {
                 this.IPod5GSupport = false;
             }
@@ -540,8 +540,8 @@ namespace HandBrakeWPF.ViewModels
 
             // Dimension Section
             this.VideoTrackInfo = this.Task.Framerate == null 
-                                      ? string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder.DisplayName, Resources.SummaryView_SameAsSource, this.Task.FramerateMode) 
-                                      : string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder.DisplayName, this.Task.Framerate, this.Task.FramerateMode);
+                                      ? string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder?.DisplayName, Resources.SummaryView_SameAsSource, this.Task.FramerateMode) 
+                                      : string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder?.DisplayName, this.Task.Framerate, this.Task.FramerateMode);
             
             this.NotifyOfPropertyChange(() => this.VideoTrackInfo);
 
