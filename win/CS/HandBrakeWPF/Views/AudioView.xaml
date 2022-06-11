@@ -170,7 +170,7 @@
                                       SelectedItem="{Binding ScannedTrack}" />
 
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.AudioView_Codec}" />
-                            <ComboBox Grid.Column="3" Width="105" Margin="5,0,5,0">
+                            <ComboBox Grid.Column="3" Width="105" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                         <Binding Path="Encoder" />

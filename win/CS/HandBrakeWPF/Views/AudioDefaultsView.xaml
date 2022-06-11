@@ -133,33 +133,23 @@
                 <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:Resources.AudioView_AllowPassThruOf}" VerticalAlignment="Center" />
             </StackPanel>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <ItemsControl x:Name="StreamsItemsControl" ItemsSource="{Binding PassthruEncoders}" Margin="10,5,0,0" HorizontalAlignment="Left">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="6" Columns="2" IsItemsHost="true" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <CheckBox VerticalAlignment="Center" Margin="0,2,5,0" Content="{Binding Encoder.CodecName}" IsChecked="{Binding IsEnabled}" />
+                    </ItemContainerTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                <StackPanel Margin="10,10,0,0" Orientation="Vertical" Grid.Column="0">
-                    <CheckBox Margin="0,2,5,0" Content="MP2" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP2Pass}" />
-                    <CheckBox Margin="0,2,5,0" Content="MP3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowMP3Pass}" />
-                    <CheckBox Margin="0,2,5,0" Content="AAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAACPass}" />
-                    <CheckBox Margin="0,2,5,0" Content="AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowAC3Pass}" />
-                    <CheckBox Margin="0,2,5,0" Content="E-AC3" VerticalAlignment="Center" IsChecked="{Binding AudioAllowEAC3Pass}" />
-                </StackPanel>
-
-                <StackPanel Margin="10,10,0,0" Orientation="Vertical"  Grid.Column="1">
-                    <CheckBox Margin="0,2,5,0" Content="Opus" VerticalAlignment="Center" IsChecked="{Binding AudioAllowOpusPass}" />
-                    <CheckBox Margin="0,2,5,0" Content="FLAC" VerticalAlignment="Center" IsChecked="{Binding AudioAllowFlacPass}" />
-                    <CheckBox Margin="0,2,5,0" Content="DTS" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSPass}" />
-                    <CheckBox Margin="0,2,5,0" Content="DTSHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowDTSHDPass}" />
-                    <CheckBox Margin="0,2,5,0" Content="TrueHD" VerticalAlignment="Center" IsChecked="{Binding AudioAllowTrueHDPass}" />
-                </StackPanel>
-            </Grid>
-
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:Resources.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="110" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="AudioEncoderFallback" />
@@ -264,7 +254,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!--  Row 1  -->
-                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0">
+                                <ComboBox Grid.Column="3" Width="100" Margin="5,0,5,0" DisplayMemberPath="DisplayName">
                                     <ComboBox.SelectedItem>
                                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                                             <Binding Path="Encoder" />

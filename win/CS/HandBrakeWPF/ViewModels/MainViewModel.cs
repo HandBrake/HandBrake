@@ -968,35 +968,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void OpenLogWindow()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(LogView));
-
-            if (window != null)
-            {
-                window.Activate();
-            }
-            else
-            {
-                ILogViewModel logvm = IoC.Get<ILogViewModel>();
-                this.windowManager.ShowWindowAsync(logvm);
-            }
+            WindowHelper.SpawnWindow<ILogViewModel>(this.windowManager, typeof(LogView));
         }
 
         public void OpenQueueWindow()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
-            if (window != null)
-            {
-                if (window.WindowState == WindowState.Minimized)
-                {
-                    window.WindowState = WindowState.Normal;
-                }
-
-                window.Activate();
-            }
-            else
-            {
-                this.windowManager.ShowWindowAsync(IoC.Get<IQueueViewModel>());
-            }
+            WindowHelper.SpawnWindow<IQueueViewModel>(this.windowManager, typeof(QueueView));
         }
 
         public void OpenPreviewWindow()
@@ -1009,8 +986,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else if (this.StaticPreviewViewModel.IsOpen)
             {
-                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(StaticPreviewView));
-                window?.Focus();
+                WindowHelper.SpawnWindow<IPresetManagerViewModel>(this.windowManager, typeof(StaticPreviewView));
             }
         }
 
@@ -1024,8 +1000,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else if (this.PresetManagerViewModel.IsOpen)
             {
-                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PresetManagerView));
-                window?.Focus();
+                WindowHelper.SpawnWindow<IPresetManagerViewModel>(this.windowManager, typeof(PresetManagerView));
             }
         }
 

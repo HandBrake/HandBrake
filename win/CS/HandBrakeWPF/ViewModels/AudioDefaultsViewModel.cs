@@ -14,21 +14,18 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
-    using System.Windows.Navigation;
 
     using Caliburn.Micro;
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -56,7 +53,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedAvailableToMove = new BindingList<string>();
             this.SelectedLanguagesToMove = new BindingList<string>();
             this.AvailableLanguages = new BindingList<string>();
-            this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
+            this.AudioEncoders = new List<HBAudioEncoder>(HandBrakeEncoderHelpers.AudioEncoders) { HBAudioEncoder.None }; // TODO check
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
@@ -65,6 +62,14 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.Title = Resources.AudioViewModel_AudioDefaults;
+
+            BindingList<AudioFallbackWrapper> data = new BindingList<AudioFallbackWrapper>();
+            foreach (HBAudioEncoder encoder in HandBrakeEncoderHelpers.AudioEncoders.Where(s => s.IsPassthrough && !s.IsAutoPassthru))
+            {
+                data.Add(new AudioFallbackWrapper(encoder));
+            }
+
+            this.PassthruEncoders = data;
         }
 
         #region Properties
@@ -122,183 +127,21 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public BindingList<string> SelectedLanguagesToMove { get; private set; }
 
-        public bool AudioAllowMP2Pass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowMP2Pass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowMP2Pass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowMP2Pass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow m p 3 pass.
-        /// </summary>
-        public bool AudioAllowMP3Pass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowMP3Pass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowMP3Pass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowMP3Pass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow aac pass.
-        /// </summary>
-        public bool AudioAllowAACPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowAACPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowAACPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowAACPass);
-            }
-        }
-
-        public bool AudioAllowOpusPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowOpusPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowOpusPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowOpusPass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow ac3 pass.
-        /// </summary>
-        public bool AudioAllowAC3Pass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowAC3Pass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow eac3 pass.
-        /// </summary>
-        public bool AudioAllowEAC3Pass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowEAC3Pass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowEAC3Pass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowEAC3Pass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow dts pass.
-        /// </summary>
-        public bool AudioAllowDTSPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowDTSPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowDTSPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowDTSPass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow dtshd pass.
-        /// </summary>
-        public bool AudioAllowDTSHDPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowDTSHDPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowDTSHDPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowDTSHDPass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow true hd pass.
-        /// </summary>
-        public bool AudioAllowTrueHDPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowTrueHDPass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether audio allow flac pass.
-        /// </summary>
-        public bool AudioAllowFlacPass
-        {
-            get
-            {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioAllowFlacPass;
-            }
-
-            set
-            {
-                this.audioBehaviours.AllowedPassthruOptions.AudioAllowFlacPass = value;
-                this.NotifyOfPropertyChange(() => this.AudioAllowFlacPass);
-            }
-        }
+        public BindingList<AudioFallbackWrapper> PassthruEncoders { get; private set; }
 
         /// <summary>
         /// Gets or sets the audio encoder fallback.
         /// </summary>
-        public AudioEncoder AudioEncoderFallback
+        public HBAudioEncoder AudioEncoderFallback
         {
             get
             {
-                return this.audioBehaviours.AllowedPassthruOptions.AudioEncoderFallback;
+                return this.audioBehaviours.AudioFallbackEncoder;
             }
 
             set
             {
-                if (value == this.audioBehaviours.AllowedPassthruOptions.AudioEncoderFallback)
+                if (value == this.audioBehaviours.AudioFallbackEncoder)
                 {
                     return;
                 }
@@ -308,7 +151,7 @@ namespace HandBrakeWPF.ViewModels
                     item.SetFallbackEncoder(value);
                 }
 
-                this.audioBehaviours.AllowedPassthruOptions.AudioEncoderFallback = value;
+                this.audioBehaviours.AudioFallbackEncoder = value;
                 this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
             }
         }
@@ -359,7 +202,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AudioEncoders.
         /// </summary>
-        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+        public IEnumerable<HBAudioEncoder> AudioEncoders { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.
@@ -477,7 +320,16 @@ namespace HandBrakeWPF.ViewModels
                 this.AudioBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
                 this.AudioBehaviours.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
                 this.audioBehaviours.AllowedPassthruOptions = behaviours.AllowedPassthruOptions;
-             
+
+                foreach (var encoder in this.PassthruEncoders)
+                {
+                    encoder.IsEnabled = false;
+                    if (behaviours.AllowedPassthruOptions.Contains(encoder.Encoder))
+                    {
+                        encoder.IsEnabled = true;
+                    }
+                }
+                
                 foreach (AudioBehaviourTrack item in behaviours.BehaviourTracks)
                 {
                     this.BehaviourTracks.Add(new AudioBehaviourTrack(item));
@@ -494,16 +346,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.CorrectAudioEncoders(this.OutputFormat);
 
-            this.NotifyOfPropertyChange(() => this.AudioAllowMP2Pass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowMP3Pass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowAACPass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowOpusPass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowAC3Pass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowEAC3Pass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowDTSPass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowDTSHDPass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowTrueHDPass);
-            this.NotifyOfPropertyChange(() => this.AudioAllowFlacPass);
+            this.NotifyOfPropertyChange(() => this.PassthruEncoders);
             this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
         }
 
@@ -540,38 +383,37 @@ namespace HandBrakeWPF.ViewModels
 
         public void Save()
         {
+            this.audioBehaviours.AllowedPassthruOptions =
+                this.PassthruEncoders.Where(s => s.IsEnabled).Select(s => s.Encoder).ToList();
             this.IsApplied = true;
             this.TryCloseAsync(false);
         }
 
-
         private void CorrectAudioEncoders(OutputFormat outputFormat)
         {
-            if (outputFormat == OutputFormat.Mp4 &&
-                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
+            if (outputFormat == OutputFormat.Mp4 && this.AudioEncoderFallback != null && !this.AudioEncoderFallback.SupportsMP4)
             {
-                this.AudioEncoderFallback = AudioEncoder.ffaac;
+                this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
             }
 
-            if (outputFormat == OutputFormat.WebM &&
-                (this.AudioEncoderFallback != AudioEncoder.Opus && this.AudioEncoderFallback != AudioEncoder.Vorbis))
+            if (outputFormat == OutputFormat.WebM && this.AudioEncoderFallback != null && !this.AudioEncoderFallback.SupportsWebM)
             {
-                this.AudioEncoderFallback = AudioEncoder.Vorbis;
+                this.AudioEncoderFallback = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
             }
 
             if (outputFormat == OutputFormat.Mp4)
             {
-                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.ffflac24 || track.Encoder == AudioEncoder.Opus || track.Encoder == AudioEncoder.Vorbis))
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsMP4))
                 {
-                    track.Encoder = AudioEncoder.ffaac;
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
                 }
             }
 
             if (outputFormat == OutputFormat.WebM)
             {
-                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                foreach (AudioBehaviourTrack track in this.BehaviourTracks.Where(track => !track.Encoder.SupportsWebM))
                 {
-                    track.Encoder = AudioEncoder.Vorbis;
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
                 }
             }
         }

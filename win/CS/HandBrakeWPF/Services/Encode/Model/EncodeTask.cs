@@ -11,24 +11,20 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Threading;
 
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
-    using AllowedPassthru = Models.AllowedPassthru;
     using AudioTrack = Models.AudioTrack;
     using ChapterMarker = Models.ChapterMarker;
-    using DenoisePreset = Models.DenoisePreset;
-    using DenoiseTune = Models.DenoiseTune;
     using FramerateMode = Models.FramerateMode;
     using OutputFormat = Models.OutputFormat;
     using PointToPointMode = Models.PointToPointMode;
     using SubtitleTrack = Models.SubtitleTrack;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Models.Video.VideoLevel;
     using VideoPreset = Models.Video.VideoPreset;
@@ -43,7 +39,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
-            this.AudioPassthruOptions = new AllowedPassthru();
+            this.AudioPassthruOptions = new ObservableCollection<HBAudioEncoder>();
             this.MetaData = new MetaData();
             this.Padding = new PaddingFilter();
             this.VideoTunes = new List<VideoTune>();
@@ -60,7 +56,13 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.PointToPointMode = task.PointToPointMode;
 
             /* Audio */
-            this.AudioPassthruOptions = new AllowedPassthru(task.AudioPassthruOptions);
+            this.AudioFallbackEncoder = task.AudioFallbackEncoder;
+            this.AudioPassthruOptions = new ObservableCollection<HBAudioEncoder>();
+            foreach (var allowed in task.AudioPassthruOptions)
+            {
+                this.AudioPassthruOptions.Add(allowed);
+            }
+            
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             foreach (AudioTrack track in task.AudioTracks)
             {
@@ -228,9 +230,9 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public Denoise Denoise { get; set; }
 
-        public DenoisePreset DenoisePreset { get; set; }
+        public HBPresetTune DenoisePreset { get; set; }
 
-        public DenoiseTune DenoiseTune { get; set; }
+        public HBPresetTune DenoiseTune { get; set; }
 
         public string CustomDenoise { get; set; }
 
@@ -270,7 +272,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public VideoEncodeRateType VideoEncodeRateType { get; set; }
 
-        public VideoEncoder VideoEncoder { get; set; }
+        public HBVideoEncoder VideoEncoder { get; set; }
 
         public VideoProfile VideoProfile { get; set; }
 
@@ -299,7 +301,10 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public ObservableCollection<AudioTrack> AudioTracks { get; set; }
 
-        public AllowedPassthru AudioPassthruOptions { get; set; }
+        public IList<HBAudioEncoder> AudioPassthruOptions { get; set; }
+
+        public HBAudioEncoder AudioFallbackEncoder { get; set; }
+
 
         /* Subtitles */
 

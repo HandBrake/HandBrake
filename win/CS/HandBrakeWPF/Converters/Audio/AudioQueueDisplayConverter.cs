@@ -15,13 +15,9 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Text;
     using System.Windows.Data;
 
-    using HandBrake.App.Core.Utilities;
-
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
 
-    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = Services.Encode.Model.Models.AudioTrack;
 
     /// <summary>
@@ -63,7 +59,7 @@ namespace HandBrakeWPF.Converters.Audio
                         namedTrack = string.Format(" - \"{0}\"", track.TrackName);
                     }
 
-                    audioTracks.Append(string.Format("{0}{1}, {2} {3}{4}", trackName, namedTrack, quality, EnumHelper<AudioEncoder>.GetDisplay(track.Encoder), Environment.NewLine)); 
+                    audioTracks.Append(string.Format("{0}{1}, {2} {3}{4}", trackName, namedTrack, quality, track.Encoder.DisplayName, Environment.NewLine)); 
                 }
             }
 

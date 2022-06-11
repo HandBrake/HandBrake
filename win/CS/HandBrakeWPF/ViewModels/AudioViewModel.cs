@@ -16,7 +16,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
@@ -29,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using AudioEncoder = Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = Services.Encode.Model.Models.AudioTrack;
     using EncodeTask = Services.Encode.Model.EncodeTask;
     using OutputFormat = Services.Encode.Model.Models.OutputFormat;
@@ -63,7 +61,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SampleRates.Add(item.Name);
             }
 
-            this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
+            this.AudioEncoders = HandBrakeEncoderHelpers.AudioEncoders.ToList();
             this.SourceTracks = new List<Audio>();
         }
 
@@ -83,7 +81,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AudioEncoders.
         /// </summary>
-        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+        public IEnumerable<HBAudioEncoder> AudioEncoders { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.
@@ -173,17 +171,23 @@ namespace HandBrakeWPF.ViewModels
 
             if (format == OutputFormat.Mp4)
             {
-                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.Vorbis))
+                foreach (AudioTrack track in this.Task.AudioTracks)
                 {
-                    track.Encoder = AudioEncoder.ffaac;
+                    if (!track.Encoder.SupportsMP4)
+                    {
+                        track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.AvAac);
+                    }
                 }
             }
 
             if (format == OutputFormat.WebM)
             {
-                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                foreach (AudioTrack track in this.Task.AudioTracks)
                 {
-                    track.Encoder = AudioEncoder.Vorbis;
+                    if (!track.Encoder.SupportsWebM)
+                    {
+                        track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(HBAudioEncoder.Vorbis);
+                    }
                 }
             }
 
@@ -242,7 +246,8 @@ namespace HandBrakeWPF.ViewModels
             // Audio Behaviours
             this.AudioDefaultsViewModel.Setup(preset.AudioTrackBehaviours, preset.Task.OutputFormat);
             this.AudioBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
-
+            this.Task.AudioPassthruOptions = this.AudioBehaviours.AllowedPassthruOptions;
+            
             if (preset.Task != null)
             {
                 this.SetupTracks();
@@ -286,57 +291,25 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP2Pass != this.Task.AudioPassthruOptions.AudioAllowMP2Pass)
+            // Check if we have missing fallback options.
+            foreach (HBAudioEncoder encoder in this.Task.AudioPassthruOptions)
             {
-                return false;
+                if (!preset.AudioTrackBehaviours.AllowedPassthruOptions.Contains(encoder))
+                {
+                    return false;
+                }
             }
 
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP3Pass != this.Task.AudioPassthruOptions.AudioAllowMP3Pass)
+            // Other direction
+            foreach (HBAudioEncoder encoder in preset.AudioTrackBehaviours.AllowedPassthruOptions)
             {
-                return false;
+                if (!this.Task.AudioPassthruOptions.Contains(encoder))
+                {
+                    return false;
+                }
             }
 
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAACPass != this.Task.AudioPassthruOptions.AudioAllowAACPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowOpusPass != this.Task.AudioPassthruOptions.AudioAllowOpusPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass != this.Task.AudioPassthruOptions.AudioAllowAC3Pass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowEAC3Pass != this.Task.AudioPassthruOptions.AudioAllowEAC3Pass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSPass != this.Task.AudioPassthruOptions.AudioAllowDTSPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSHDPass != this.Task.AudioPassthruOptions.AudioAllowDTSHDPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass != this.Task.AudioPassthruOptions.AudioAllowTrueHDPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowFlacPass != this.Task.AudioPassthruOptions.AudioAllowFlacPass)
-            {
-                return false;
-            }
-
-            if (preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioEncoderFallback != this.Task.AudioPassthruOptions.AudioEncoderFallback)
+            if (preset.AudioTrackBehaviours.AudioFallbackEncoder != this.Task.AudioFallbackEncoder)
             {
                 return false;
             }
@@ -435,17 +408,17 @@ namespace HandBrakeWPF.ViewModels
                     {
                         case AudioTrackDefaultsMode.FirstTrack:
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
-                            if (this.CanAddTrack(template, track, this.AudioBehaviours.AllowedPassthruOptions.AudioEncoderFallback))
+                            if (this.CanAddTrack(template, track, this.AudioBehaviours.AudioFallbackEncoder))
                             {
-                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.AudioBehaviours.AllowedPassthruOptions, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
+                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.AudioBehaviours.AllowedPassthruOptions, this.AudioBehaviours.AudioFallbackEncoder, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
                             }
                             break;
                         case AudioTrackDefaultsMode.AllTracks:
                             foreach (AudioBehaviourTrack tmpl in this.AudioBehaviours.BehaviourTracks)
                             {
-                                if (this.CanAddTrack(tmpl, track, this.AudioBehaviours.AllowedPassthruOptions.AudioEncoderFallback))
+                                if (this.CanAddTrack(tmpl, track, this.AudioBehaviours.AudioFallbackEncoder))
                                 {
-                                    this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.AudioBehaviours.AllowedPassthruOptions, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
+                                    this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.AudioBehaviours.AllowedPassthruOptions, this.AudioBehaviours.AudioFallbackEncoder, this.Task.OutputFormat) : new AudioTrack { ScannedTrack = track });
                                 }
                             }
 
@@ -455,12 +428,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
+        private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, HBAudioEncoder fallback)
         {
-            if (fallback == AudioEncoder.None && track != null)
+            if (fallback == HBAudioEncoder.None && track != null)
             {
-                HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
-                if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
+                if (track.IsPassthru && (sourceTrack.Codec & track.Encoder.Id) == 0)
                 {
                     return false;
                 }
@@ -495,9 +467,9 @@ namespace HandBrakeWPF.ViewModels
             foreach (AudioBehaviourTrack track in this.AudioBehaviours.BehaviourTracks)
             {
                 Audio sourceTrack = this.GetPreferredAudioTrack();
-                if (this.CanAddTrack(track, sourceTrack, this.AudioBehaviours.AllowedPassthruOptions.AudioEncoderFallback))
+                if (this.CanAddTrack(track, sourceTrack, this.AudioBehaviours.AudioFallbackEncoder))
                 {
-                    this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.AudioBehaviours.AllowedPassthruOptions, this.Task.OutputFormat));
+                    this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.AudioBehaviours.AllowedPassthruOptions, this.AudioBehaviours.AudioFallbackEncoder, this.Task.OutputFormat));
                 }
             }
            

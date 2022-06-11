@@ -20,22 +20,18 @@ namespace HandBrakeWPF.Services.Presets
 
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
     using HandBrake.Interop.Interop.Json.Presets;
     using HandBrake.Interop.Utilities;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
 
     using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
 
     public class PresetService : IPresetService
     {
@@ -880,24 +876,22 @@ namespace HandBrakeWPF.Services.Presets
             bool isNvencEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
             bool isVcnEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
 
-            HBVideoEncoder foundEncoder = HandBrakeEncoderHelpers.GetVideoEncoder(EnumHelper<VideoEncoder>.GetShortName(preset.Task.VideoEncoder));
-
-            if (foundEncoder == null)
+            if (preset.Task.VideoEncoder == null)
             {
                 return true;
             }
 
-            if (VideoEncoderHelpers.IsQuickSync(preset.Task.VideoEncoder) && !isQsvEnabled)
+            if (preset.Task.VideoEncoder.IsQuickSync && !isQsvEnabled)
             {
                 return true;
             }
 
-            if (VideoEncoderHelpers.IsNVEnc(preset.Task.VideoEncoder) && !isNvencEnabled)
+            if (preset.Task.VideoEncoder.IsNVEnc && !isNvencEnabled)
             {
                 return true;
             }
 
-            if (VideoEncoderHelpers.IsVCN(preset.Task.VideoEncoder) && !isVcnEnabled)
+            if (preset.Task.VideoEncoder.IsVCN && !isVcnEnabled)
             {
                 return true;
             }

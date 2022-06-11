@@ -14,12 +14,10 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// The audio mixdown converter.
@@ -39,15 +37,12 @@ namespace HandBrakeWPF.Converters.Audio
             AudioTrack track = value as AudioTrack;
             if (track != null && track.ScannedTrack != null)
             {
-                HBAudioEncoder encoder =
-                    HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
-                           
                 BindingList<HBMixdown> mixdowns = new BindingList<HBMixdown>();
                 foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
                 {
                     if (HandBrakeEncoderHelpers.MixdownIsSupported(
                         mixdown,
-                        encoder,
+                        track.Encoder,
                         track.ScannedTrack.ChannelLayout))
                     {
                         mixdowns.Add(mixdown);

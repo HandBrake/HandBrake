@@ -23,7 +23,7 @@ SELF="${0}"
 SELF_NAME=$(basename "${SELF}")
 HELP="\
 usage: ${SELF_NAME} [-h]
-       ${SELF_NAME} username application [application2 ...]
+       ${SELF_NAME} username teamid application [application2 ...]
 where:
    -h  display this help text
 "
@@ -69,11 +69,19 @@ if [[ "${USERNAME}" == "" ]]; then
 fi
 shift 1
 
+TEAMID="${1:-}"
+if [[ "${TEAMID}" == "" ]]; then
+    exit_with_error 1 "${SELF_NAME}: TeamID not specified" true
+fi
+shift 1
+
 if [[ ${#@} -eq 0 ]]; then
     exit_with_error 1 "${SELF_NAME}: application not specified" true
 fi
 
 echo "Username: ${USERNAME}"
+echo "TeamID: ${TEAMID}"
+
 echo -n "Password: "
 read -s PASSWORD
 echo
@@ -81,7 +89,7 @@ if [[ "${PASSWORD}" == "" ]]; then
     exit_with_error 1 "${SELF_NAME}: password not specified" true
 fi
 
-CREDENTIALS="--username ${USERNAME} --password ${PASSWORD}"
+CREDENTIALS="--apple-id=${USERNAME} --password=${PASSWORD} --team-id=${TEAMID}"
 
 for TARGET in "${@}"; do
 
@@ -101,7 +109,7 @@ for TARGET in "${@}"; do
 
     echo "  Uploading app to notary service"
 
-    uuid=$(xcrun altool --notarize-app --primary-bundle-id "fr.handbrake.HandBrake" ${CREDENTIALS} --file "${ARCHIVE}" 2>&1 | grep 'RequestUUID' | awk '{ print $3 }')
+    uuid=$(xcrun notarytool submit "${ARCHIVE}" ${CREDENTIALS} 2>&1 | grep -m 1 'id:' | awk '{ print $2 }')
 
     echo "  Upload successful"
     echo "  Identifier = ${uuid}"
@@ -111,9 +119,9 @@ for TARGET in "${@}"; do
 
     while :
         do
-        notaryStatus=$(xcrun altool --notarization-info "${uuid}" ${CREDENTIALS} 2>&1)
-        status=$(echo "$notaryStatus" | grep 'Status\:' | awk '{ print $2 }')
-        if [ "${status}" = "success" ]; then
+        notaryStatus=$(xcrun notarytool info "${uuid}" ${CREDENTIALS} 2>&1)
+        status=$(echo "$notaryStatus" | grep 'status:' | awk '{ print $2 }')
+        if [ "${status}" = "Accepted" ]; then
             # It's not possible to staple a command line exec
             if [[ "${EXTENSION}" !=  "${TARGET}" ]]; then
                 xcrun stapler staple "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Failed to staple the app. More info may be available in ${LOG}"
@@ -123,7 +131,7 @@ for TARGET in "${@}"; do
                 echo "    Success"
             fi
             break
-        elif [ "$status" = "in" ]; then
+        elif [ "$status" = "In" ]; then
             echo "    In progress"
             sleep 20
         else

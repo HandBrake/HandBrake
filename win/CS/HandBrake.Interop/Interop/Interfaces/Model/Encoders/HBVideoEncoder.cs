@@ -9,6 +9,7 @@
 
 namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
 {
+    using System;
     using System.Collections.Generic;
 
     using HandBrake.Interop.Interop.HbLib;
@@ -111,5 +112,20 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
 
         public bool SupportsWebM => (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) == NativeConstants.HB_MUX_MASK_WEBM
                                     || (this.CompatibleContainers & NativeConstants.HB_MUX_AV_WEBM) == NativeConstants.HB_MUX_AV_WEBM;
+
+        public bool SupportsTwoPass => HandBrakeEncoderHelpers.VideoEncoderSupportsTwoPass(this.ShortName);
+
+        // TODO check if there is a nicer way of doing this.
+        public bool IsSVTAV1 => this.ShortName.Contains("svt_av1");
+        public bool IsX264 => this.ShortName.Contains("x264");
+        public bool IsX265 => this.ShortName.Contains("x265");
+        public bool IsH264 => this.ShortName.Contains("264");
+        public bool IsQuickSync => this.ShortName.Contains("qsv");
+        public bool IsQuickSyncH265 => this.ShortName.Contains("qsv_h265");
+        public bool IsQuickSyncAV1 => this.ShortName.Contains("qsv_av1");
+        public bool IsNVEnc => this.ShortName.Contains("nvenc");
+        public bool IsVCN => this.ShortName.Contains("vce") || this.ShortName.Contains("vcn");
+        public bool IsMediaFoundation => this.ShortName.Contains("mf");
+        public bool IsVP9 => this.ShortName.Contains("VP9", StringComparison.InvariantCultureIgnoreCase);
     }
 }

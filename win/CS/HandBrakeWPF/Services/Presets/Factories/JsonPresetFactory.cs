@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Interop.Interfaces.Model.Filters;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
     using HandBrake.Interop.Interop.Interfaces.Model.Presets;
@@ -29,16 +30,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
 
-    using AudioEncoder = Encode.Model.Models.AudioEncoder;
     using AudioTrack = Encode.Model.Models.AudioTrack;
-    using DenoisePreset = Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = Encode.Model.Models.DenoiseTune;
     using EncodeTask = Encode.Model.EncodeTask;
     using FramerateMode = Encode.Model.Models.FramerateMode;
     using OutputFormat = Encode.Model.Models.OutputFormat;
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
     using VideoEncodeRateType = HandBrakeWPF.Model.Video.VideoEncodeRateType;
     using VideoLevel = Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = Encode.Model.Models.Video.VideoPreset;
@@ -248,12 +244,15 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
+            int denoiseFilterId = 0;
             switch (importedPreset.PictureDenoiseFilter)
             {
                 case "nlmeans":
+                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_NLMEANS;
                     preset.Task.Denoise = Denoise.NLMeans;
                     break;
                 case "hqdn3d":
+                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_HQDN3D;
                     preset.Task.Denoise = Denoise.hqdn3d;
                     break;
                 default:
@@ -261,54 +260,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
-            switch (importedPreset.PictureDenoisePreset)
-            {
-                case "custom":
-                    preset.Task.DenoisePreset = DenoisePreset.Custom;
-                    break;
-                case "light":
-                    preset.Task.DenoisePreset = DenoisePreset.Light;
-                    break;
-                case "medium":
-                    preset.Task.DenoisePreset = DenoisePreset.Medium;
-                    break;
-                case "strong":
-                    preset.Task.DenoisePreset = DenoisePreset.Strong;
-                    break;
-                case "ultralight":
-                    preset.Task.DenoisePreset = DenoisePreset.Ultralight;
-                    break;
-                case "weak":
-                    preset.Task.DenoisePreset = DenoisePreset.Weak;
-                    break;
-            }
-
-            switch (importedPreset.PictureDenoiseTune)
-            {
-                case "animation":
-                    preset.Task.DenoiseTune = DenoiseTune.Animation;
-                    break;
-                case "film":
-                    preset.Task.DenoiseTune = DenoiseTune.Film;
-                    break;
-                case "grain":
-                    preset.Task.DenoiseTune = DenoiseTune.Grain;
-                    break;
-                case "highmotion":
-                    preset.Task.DenoiseTune = DenoiseTune.HighMotion;
-                    break;
-                case "tape":
-                    preset.Task.DenoiseTune = DenoiseTune.Tape;
-                    break;
-                case "sprite":
-                    preset.Task.DenoiseTune = DenoiseTune.Sprite;
-                    break;
-
-                default:
-                    preset.Task.DenoiseTune = DenoiseTune.None;
-                    break;
-            }
-
+            preset.Task.DenoisePreset = HandBrakeFilterHelpers.GetPreset(denoiseFilterId, importedPreset.PictureDenoisePreset);
+            preset.Task.DenoiseTune = HandBrakeFilterHelpers.GetTune(denoiseFilterId, importedPreset.PictureDenoiseTune);
+            
             // Rotation and Flip
             if (!string.IsNullOrEmpty(importedPreset.PictureRotate))
             {
@@ -325,7 +279,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             /* Video Settings */
-            preset.Task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(importedPreset.VideoEncoder);
+            preset.Task.VideoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
             preset.Task.TwoPass = importedPreset.VideoTwoPass;
             preset.Task.TurboFirstPass = importedPreset.VideoTurboTwoPass;
@@ -374,7 +328,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Audio Settings */
             preset.AudioTrackBehaviours = new AudioBehaviours();
-            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
+            preset.AudioTrackBehaviours.AudioFallbackEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(importedPreset.AudioEncoderFallback);
             preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
                                                                      ? AudioBehaviourModes.AllMatching
                                                                      : AudioBehaviourModes.FirstMatch;
@@ -383,43 +337,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (importedPreset.AudioCopyMask != null)
             {
-                preset.AudioTrackBehaviours.AllowedPassthruOptions.SetFalse();
+                preset.AudioTrackBehaviours.AllowedPassthruOptions.Clear();
                 foreach (var item in importedPreset.AudioCopyMask)
                 {
-                    AudioEncoder encoder = EnumHelper<AudioEncoder>.GetValue(item);
-                    switch (encoder)
-                    {
-                        case AudioEncoder.AacPassthru:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAACPass = true;
-                            break;
-                        case AudioEncoder.Ac3Passthrough:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowAC3Pass = true;
-                            break;
-                        case AudioEncoder.EAc3Passthrough:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowEAC3Pass = true;
-                            break;
-                        case AudioEncoder.DtsHDPassthrough:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSHDPass = true;
-                            break;
-                        case AudioEncoder.DtsPassthrough:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowDTSPass = true;
-                            break;
-                        case AudioEncoder.FlacPassthru:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowFlacPass = true;
-                            break;
-                        case AudioEncoder.Mp2Passthru:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP2Pass = true;
-                            break;
-                        case AudioEncoder.Mp3Passthru:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowMP3Pass = true;
-                            break;
-                        case AudioEncoder.TrueHDPassthrough:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowTrueHDPass = true;
-                            break;
-                        case AudioEncoder.OpusPassthru:
-                            preset.AudioTrackBehaviours.AllowedPassthruOptions.AudioAllowOpusPass = true;
-                            break;
-                    }
+                    preset.AudioTrackBehaviours.AllowedPassthruOptions.Add(HandBrakeEncoderHelpers.GetAudioEncoder(item));
                 }
             }
 
@@ -438,16 +359,16 @@ namespace HandBrakeWPF.Services.Presets.Factories
             {
                 foreach (var audioTrack in importedPreset.AudioList)
                 {
-                    AudioBehaviourTrack track = new AudioBehaviourTrack(EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback));
+                    AudioBehaviourTrack track = new AudioBehaviourTrack(HandBrakeEncoderHelpers.GetAudioEncoder(importedPreset.AudioEncoderFallback));
                     
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
                     if (audioTrack.AudioEncoder == "ca_aac")
                     {
-                        audioTrack.AudioEncoder = "av_aac"; // No Core Audio support on windows.
+                        audioTrack.AudioEncoder = HBAudioEncoder.AvAac; // No Core Audio support on windows.
                     }
 
-                    track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
+                    track.Encoder = HandBrakeEncoderHelpers.GetAudioEncoder(audioTrack.AudioEncoder);
                     track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
                     track.Bitrate = audioTrack.AudioBitrate;
 
@@ -577,8 +498,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Default = export.IsDefault;
 
             // Audio
-            preset.AudioCopyMask = export.AudioTrackBehaviours.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
-            preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.AudioTrackBehaviours.AllowedPassthruOptions.AudioEncoderFallback);
+            preset.AudioCopyMask = export.AudioTrackBehaviours.AllowedPassthruOptions.Select(s => s.ShortName).ToList();
+            preset.AudioEncoderFallback = export.AudioTrackBehaviours.AudioFallbackEncoder.ShortName;
             preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLanguages);
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
             preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // 1 = First Track, 0 = All
@@ -589,8 +510,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 {
                     AudioBitrate = item.Bitrate,
                     AudioCompressionLevel = 0, // TODO
-                    AudioDitherMethod = null,  // TODO
-                    AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
+                    AudioDitherMethod = null, // TODO
+                    AudioEncoder = item.Encoder.ShortName,
                     AudioMixdown = item.MixDown != null ? item.MixDown.ShortName : "dpl2",
                     AudioNormalizeMixLevel = false, // TODO
                     AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(CultureInfo.InvariantCulture),  // TODO check formatting.
@@ -671,8 +592,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
-            preset.PictureDenoisePreset = EnumHelper<DenoisePreset>.GetShortName(export.Task.DenoisePreset);
-            preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
+            preset.PictureDenoisePreset = export.Task.DenoisePreset?.ShortName;
+            preset.PictureDenoiseTune = export.Task.DenoiseTune?.ShortName;
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
 
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
@@ -690,7 +611,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureChromaSmoothCustom = export.Task.CustomChromaSmooth;
             
             // Video
-            preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);
+            preset.VideoEncoder = export.Task.VideoEncoder?.ShortName;
             preset.VideoFramerate = export.Task.Framerate.HasValue ? export.Task.Framerate.ToString() : null;
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
             preset.VideoGrayScale = export.Task.Grayscale;

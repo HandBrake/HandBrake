@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Windows;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     public class AudioControlVisibilityConverter : IMultiValueConverter
     {
@@ -24,7 +24,7 @@ namespace HandBrakeWPF.Converters.Audio
             {
                 bool isVisible = (bool)values[0];
                 bool isPassthru = (bool)values[1];
-                AudioEncoder fallbackEncoder = (AudioEncoder)values[2];
+                HBAudioEncoder fallbackEncoder = (HBAudioEncoder)values[2];
 
                 if (!isVisible)
                 {
@@ -32,7 +32,7 @@ namespace HandBrakeWPF.Converters.Audio
                 }
 
                 // When the Fallback Encoder is "None" and we have a passthru encoder selected on the track, we don't have any encoder options to override so don't show them.
-                if (isPassthru && fallbackEncoder == AudioEncoder.None)
+                if (isPassthru && fallbackEncoder == HBAudioEncoder.None)
                 {
                     return Visibility.Collapsed;
                 }
@@ -41,10 +41,10 @@ namespace HandBrakeWPF.Converters.Audio
             if (values.Length == 2)
             {
                 bool isPassthru = (bool)values[0];
-                AudioEncoder fallbackEncoder = (AudioEncoder)values[1];
+                HBAudioEncoder fallbackEncoder = (HBAudioEncoder)values[1];
 
                 // When the Fallback Encoder is "None" and we have a passthru encoder selected on the track, we don't have any encoder options to override so don't show them.
-                if (isPassthru && fallbackEncoder == AudioEncoder.None)
+                if (isPassthru && fallbackEncoder == HBAudioEncoder.None)
                 {
                     return Visibility.Collapsed;
                 }

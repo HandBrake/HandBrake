@@ -37,11 +37,26 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static List<HBPresetTune> GetFilterPresets(int filter)
         {
+            if (filter == 0)
+            {
+                return new List<HBPresetTune>();
+            }
+
             IntPtr ptr = HBFunctions.hb_filter_get_presets_json(filter);
+            if (ptr == new IntPtr(0))
+            {
+                return new List<HBPresetTune>();
+            }
+
             string result = Marshal.PtrToStringAnsi(ptr);
             List<PresetTune> list = JsonSerializer.Deserialize<List<PresetTune>>(result, JsonSettings.Options);
 
             return list.Select(item => new HBPresetTune(item.Name, item.Short_Name)).ToList();
+        }
+
+        public static HBPresetTune GetPreset(int filter, string shortName)
+        {
+            return GetFilterPresets(filter).FirstOrDefault(s => s.ShortName.Equals(shortName));
         }
 
         /// <summary>
@@ -55,11 +70,26 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static List<HBPresetTune> GetFilterTunes(int filter)
         {
+            if (filter == 0)
+            {
+                return new List<HBPresetTune>();
+            }
+
             IntPtr ptr = HBFunctions.hb_filter_get_tunes_json(filter);
+            if (ptr == new IntPtr(0))
+            {
+                return new List<HBPresetTune>();
+            }
+
             string result = Marshal.PtrToStringAnsi(ptr);
             List<PresetTune> list = JsonSerializer.Deserialize<List<PresetTune>>(result, JsonSettings.Options);
 
             return list.Select(item => new HBPresetTune(item.Name, item.Short_Name)).ToList();
+        }
+
+        public static HBPresetTune GetTune(int filter, string shortName)
+        {
+            return GetFilterTunes(filter).FirstOrDefault(s => s.ShortName.Equals(shortName));
         }
 
         /// <summary>

@@ -16,12 +16,8 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Windows.Data;
 
     using HandBrake.App.Core.Utilities;
-    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
-
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
-
+    
     using AudioEncoderRateType = Services.Encode.Model.Models.AudioEncoderRateType;
 
     public class AudioRateTypeForDefaultsConverter : IMultiValueConverter
@@ -40,16 +36,12 @@ namespace HandBrakeWPF.Converters.Audio
                 types.Add(EnumHelper<AudioEncoderRateType>.GetDisplay(item));
             }
 
-
-            AudioEncoder audioEncoder = values[0] is AudioEncoder ? (AudioEncoder)values[0] : AudioEncoder.None;
-            AudioEncoder fallbackEncoder = values[1] is AudioEncoder ? (AudioEncoder)values[1] : AudioEncoder.None;
+            HBAudioEncoder audioEncoder = values[0] is HBAudioEncoder ? (HBAudioEncoder)values[0] : HBAudioEncoder.None;
+            HBAudioEncoder fallbackEncoder = values[1] is HBAudioEncoder ? (HBAudioEncoder)values[1] : HBAudioEncoder.None;
             
-            HBAudioEncoder selectedEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(audioEncoder));
-            HBAudioEncoder selectedFallbackEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(fallbackEncoder));
-
-            if (selectedEncoder != null && selectedEncoder.IsPassthrough)
+            if (audioEncoder != null && audioEncoder.IsPassthrough)
             {
-                if (selectedFallbackEncoder != null && !selectedFallbackEncoder.SupportsQuality)
+                if (fallbackEncoder != null && !fallbackEncoder.SupportsQuality)
                 {
                     types.Remove(EnumHelper<AudioEncoderRateType>.GetDisplay(AudioEncoderRateType.Quality));
                 }

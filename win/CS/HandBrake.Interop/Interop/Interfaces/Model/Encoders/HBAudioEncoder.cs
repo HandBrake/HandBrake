@@ -11,38 +11,14 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
 {
     using HandBrake.Interop.Interop.HbLib;
 
-    /// <summary>
-    /// The hb audio encoder.
-    /// </summary>
     public class HBAudioEncoder
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HBAudioEncoder"/> class.
-        /// </summary>
-        /// <param name="compatibleContainers">
-        /// The compatible containers.
-        /// </param>
-        /// <param name="compressionLimits">
-        /// The compression limits.
-        /// </param>
-        /// <param name="defaultCompression">
-        /// The default compression.
-        /// </param>
-        /// <param name="defaultQuality">
-        /// The default quality.
-        /// </param>
-        /// <param name="displayName">
-        /// The display name.
-        /// </param>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="qualityLimits">
-        /// The quality limits.
-        /// </param>
-        /// <param name="shortName">
-        /// The short name.
-        /// </param>
+        public const string AvAac = "av_aac";
+        public const string Vorbis = "vorbis";
+        public const string Passthru = "copy";
+
+        public static HBAudioEncoder None = new HBAudioEncoder(-1, null, 1, 1, "None", -1, null, "none");
+
         public HBAudioEncoder(int compatibleContainers, RangeLimits compressionLimits, float defaultCompression, float defaultQuality, string displayName, int id, RangeLimits qualityLimits, string shortName)
         {
             this.CompatibleContainers = compatibleContainers;
@@ -80,6 +56,15 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         /// </summary>
         public string DisplayName { get; private set; }
 
+        public string CodecName
+        {
+            get
+            {
+                // The name of the codec without "passthru"
+                return this.DisplayName.Replace("Passthru", string.Empty).Trim();
+            }
+        }
+
         /// <summary>
         /// Gets the id.
         /// </summary>
@@ -93,6 +78,30 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
             get
             {
                 return (this.Id & NativeConstants.HB_ACODEC_PASS_FLAG) > 0;
+            }
+        }
+
+        public bool IsAutoPassthru
+        {
+            get
+            {
+                return this.ShortName.Equals("copy");
+            }
+        }
+
+        public bool SupportsMP4
+        {
+            get
+            {
+                return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_MP4) > 0 || this.CompatibleContainers == -1;
+            }
+        }
+
+        public bool SupportsWebM
+        {
+            get
+            {
+                return (this.CompatibleContainers & NativeConstants.HB_MUX_MASK_WEBM) > 0 || this.CompatibleContainers == -1;
             }
         }
 
@@ -113,7 +122,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         {
             get
             {
-                return this.CompressionLimits.High >= 0;
+                return this.CompressionLimits != null && this.CompressionLimits.High >= 0;
             }
         }
 
@@ -124,7 +133,15 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Encoders
         {
             get
             {
-                return this.QualityLimits.High >= 0;
+                return this.QualityLimits != null && this.QualityLimits.High >= 0;
+            }
+        }
+
+        public bool IsLosslessEncoder
+        {
+            get
+            {
+                return this.ShortName.Contains("flac"); // TODO Find a better way to do this. 
             }
         }
     }

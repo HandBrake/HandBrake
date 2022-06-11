@@ -15,6 +15,16 @@ SVT-AV1.CONFIGURE.static      =
 SVT-AV1.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
 SVT-AV1.CONFIGURE.extra       = -DBUILD_DEC=OFF
 
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
+else
+    ifneq (none,$(SVT-AV1.GCC.g))
+        SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
+endif
+
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
         SVT-AV1.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON

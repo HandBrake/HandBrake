@@ -36,8 +36,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using VideoEncoder = HandBrakeWPF.Model.Video.VideoEncoder;
-
     public class SummaryViewModel : ViewModelBase, ISummaryViewModel
     {
         private readonly IScan scanService;
@@ -262,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
                     return false;
                 }
 
-                return this.SelectedOutputFormat == OutputFormat.Mp4 && VideoEncoderHelpers.IsH264(this.task.VideoEncoder);
+                return this.SelectedOutputFormat == OutputFormat.Mp4 && this.task.VideoEncoder != null && this.task.VideoEncoder.IsH264;
             }
         }
 
@@ -514,7 +512,7 @@ namespace HandBrakeWPF.ViewModels
                 this.AlignAVStart = false;
             }
 
-            if (!VideoEncoderHelpers.IsH264(this.task.VideoEncoder))
+            if (this.task.VideoEncoder == null || !this.task.VideoEncoder.IsH264)
             {
                 this.IPod5GSupport = false;
             }
@@ -542,8 +540,8 @@ namespace HandBrakeWPF.ViewModels
 
             // Dimension Section
             this.VideoTrackInfo = this.Task.Framerate == null 
-                                      ? string.Format("{0}, {1} FPS {2}", EnumHelper<VideoEncoder>.GetDisplay(this.Task.VideoEncoder), Resources.SummaryView_SameAsSource, this.Task.FramerateMode) 
-                                      : string.Format("{0}, {1} FPS {2}", EnumHelper<VideoEncoder>.GetDisplay(this.Task.VideoEncoder), this.Task.Framerate, this.Task.FramerateMode);
+                                      ? string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder?.DisplayName, Resources.SummaryView_SameAsSource, this.Task.FramerateMode) 
+                                      : string.Format("{0}, {1} FPS {2}", this.Task.VideoEncoder?.DisplayName, this.Task.Framerate, this.Task.FramerateMode);
             
             this.NotifyOfPropertyChange(() => this.VideoTrackInfo);
 
@@ -646,7 +644,7 @@ namespace HandBrakeWPF.ViewModels
                 AudioTrack track1 = this.Task.AudioTracks[0];
                 HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track1.MixDown);
                 string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
-                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track1.Encoder), mixdown));
+                desc.AppendLine(string.Format("{0}{1}", track1.Encoder.DisplayName, mixdown));
             }
 
             if (this.Task.AudioTracks.Count >= 2)
@@ -654,7 +652,7 @@ namespace HandBrakeWPF.ViewModels
                 AudioTrack track2 = this.Task.AudioTracks[1];
                 HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track2.MixDown);
                 string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
-                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track2.Encoder), mixdown));
+                desc.AppendLine(string.Format("{0}{1}", track2.Encoder.DisplayName, mixdown));
             }
 
             if (this.Task.AudioTracks.Count > 2)
