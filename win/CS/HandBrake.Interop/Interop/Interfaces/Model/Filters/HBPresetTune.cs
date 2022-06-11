@@ -11,6 +11,9 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Filters
 {
     public class HBPresetTune
     {
+        public static string Custom = "custom";
+        public static string None = "none";
+
         public HBPresetTune()
         {
         }

@@ -32,8 +32,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrakeWPF.Services.Presets.Model;
 
     using AudioTrack = Encode.Model.Models.AudioTrack;
-    using DenoisePreset = Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = Encode.Model.Models.DenoiseTune;
     using EncodeTask = Encode.Model.EncodeTask;
     using FramerateMode = Encode.Model.Models.FramerateMode;
     using OutputFormat = Encode.Model.Models.OutputFormat;
@@ -246,12 +244,15 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
+            int denoiseFilterId = 0;
             switch (importedPreset.PictureDenoiseFilter)
             {
                 case "nlmeans":
+                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_NLMEANS;
                     preset.Task.Denoise = Denoise.NLMeans;
                     break;
                 case "hqdn3d":
+                    denoiseFilterId = (int)hb_filter_ids.HB_FILTER_HQDN3D;
                     preset.Task.Denoise = Denoise.hqdn3d;
                     break;
                 default:
@@ -259,54 +260,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
-            switch (importedPreset.PictureDenoisePreset)
-            {
-                case "custom":
-                    preset.Task.DenoisePreset = DenoisePreset.Custom;
-                    break;
-                case "light":
-                    preset.Task.DenoisePreset = DenoisePreset.Light;
-                    break;
-                case "medium":
-                    preset.Task.DenoisePreset = DenoisePreset.Medium;
-                    break;
-                case "strong":
-                    preset.Task.DenoisePreset = DenoisePreset.Strong;
-                    break;
-                case "ultralight":
-                    preset.Task.DenoisePreset = DenoisePreset.Ultralight;
-                    break;
-                case "weak":
-                    preset.Task.DenoisePreset = DenoisePreset.Weak;
-                    break;
-            }
-
-            switch (importedPreset.PictureDenoiseTune)
-            {
-                case "animation":
-                    preset.Task.DenoiseTune = DenoiseTune.Animation;
-                    break;
-                case "film":
-                    preset.Task.DenoiseTune = DenoiseTune.Film;
-                    break;
-                case "grain":
-                    preset.Task.DenoiseTune = DenoiseTune.Grain;
-                    break;
-                case "highmotion":
-                    preset.Task.DenoiseTune = DenoiseTune.HighMotion;
-                    break;
-                case "tape":
-                    preset.Task.DenoiseTune = DenoiseTune.Tape;
-                    break;
-                case "sprite":
-                    preset.Task.DenoiseTune = DenoiseTune.Sprite;
-                    break;
-
-                default:
-                    preset.Task.DenoiseTune = DenoiseTune.None;
-                    break;
-            }
-
+            preset.Task.DenoisePreset = HandBrakeFilterHelpers.GetPreset(denoiseFilterId, importedPreset.PictureDenoisePreset);
+            preset.Task.DenoiseTune = HandBrakeFilterHelpers.GetTune(denoiseFilterId, importedPreset.PictureDenoiseTune);
+            
             // Rotation and Flip
             if (!string.IsNullOrEmpty(importedPreset.PictureRotate))
             {
@@ -636,8 +592,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
-            preset.PictureDenoisePreset = EnumHelper<DenoisePreset>.GetShortName(export.Task.DenoisePreset);
-            preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
+            preset.PictureDenoisePreset = export.Task.DenoisePreset?.ShortName;
+            preset.PictureDenoiseTune = export.Task.DenoiseTune?.ShortName;
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
 
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;

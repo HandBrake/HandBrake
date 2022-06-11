@@ -11,7 +11,6 @@
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
-        <filters:DenoisePresetConverter x:Key="DenoisePresetConverter" />
         <filters:SharpenPresetConverter x:Key="SharpenPresetConverter" />
         <filters:SharpenTuneConverter x:Key="SharpenTuneConverter" />
     </UserControl.Resources>
@@ -87,20 +86,14 @@
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" Margin="10,0,5,0" Visibility="{Binding DenoiseFilter.ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
 
             <TextBlock Text="{x:Static Properties:Resources.FiltersView_Preset}" Margin="0,0,5,0"  VerticalAlignment="Center" />
-            <ComboBox SelectedItem="{Binding DenoiseFilter.SelectedDenoisePreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoisePreset}"
+            <ComboBox SelectedItem="{Binding DenoiseFilter.SelectedDenoisePreset}" DisplayMemberPath="Name" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoisePreset}"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DenoisePresetAuto}"
-                              MinWidth="120"  HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <ComboBox.ItemsSource>
-                    <MultiBinding Converter="{StaticResource DenoisePresetConverter}">
-                        <Binding Path="DenoiseFilter.DenoisePresets" />
-                        <Binding Path="DenoiseFilter.SelectedDenoise" />
-                    </MultiBinding>
-                </ComboBox.ItemsSource>
-            </ComboBox>
+                              MinWidth="120"  HorizontalAlignment="Center" VerticalAlignment="Center"
+                              ItemsSource="{Binding DenoiseFilter.DenoisePresets}"/>
 
             <StackPanel Orientation="Horizontal" Visibility="{Binding DenoiseFilter.ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" >
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" Margin="5,0,5,0" />
-                <ComboBox ItemsSource="{Binding DenoiseFilter.DenoiseTunes}" SelectedItem="{Binding DenoiseFilter.SelectedDenoiseTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoiseTune}"
+                <ComboBox ItemsSource="{Binding DenoiseFilter.DenoiseTunes}" SelectedItem="{Binding DenoiseFilter.SelectedDenoiseTune}" DisplayMemberPath="Name"  MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoiseTune}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DenoiseTuneAuto}"
                                   Visibility="{Binding DenoiseFilter.ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
             </StackPanel>

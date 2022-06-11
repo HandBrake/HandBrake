@@ -21,8 +21,6 @@ namespace HandBrakeWPF.Services.Encode.Model
 
     using AudioTrack = Models.AudioTrack;
     using ChapterMarker = Models.ChapterMarker;
-    using DenoisePreset = Models.DenoisePreset;
-    using DenoiseTune = Models.DenoiseTune;
     using FramerateMode = Models.FramerateMode;
     using OutputFormat = Models.OutputFormat;
     using PointToPointMode = Models.PointToPointMode;
@@ -232,9 +230,9 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public Denoise Denoise { get; set; }
 
-        public DenoisePreset DenoisePreset { get; set; }
+        public HBPresetTune DenoisePreset { get; set; }
 
-        public DenoiseTune DenoiseTune { get; set; }
+        public HBPresetTune DenoiseTune { get; set; }
 
         public string CustomDenoise { get; set; }
 

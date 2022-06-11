@@ -415,7 +415,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     ? hb_filter_ids.HB_FILTER_HQDN3D
                     : hb_filter_ids.HB_FILTER_NLMEANS;
 
-                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)id, job.DenoisePreset.ToString().ToLower().Replace(" ", string.Empty), job.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty), job.CustomDenoise);
+                string unparsedJson = HandBrakeFilterHelpers.GenerateFilterSettingJson((int)id, job.DenoisePreset?.ShortName, job.DenoiseTune?.ShortName, job.CustomDenoise);
 
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {

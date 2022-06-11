@@ -1428,6 +1428,10 @@ char * hb_filter_get_presets_json(int filter_id)
     hb_filter_param_t * table;
 
     table = filter_param_get_presets_internal(filter_id, NULL);
+    
+    if (table == NULL){
+        return NULL;
+    }
 
     for (count = 0; table[count].name != NULL; count++);
     for (ii = 0; ii < count; ii++)

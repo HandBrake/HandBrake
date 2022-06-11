@@ -10,23 +10,26 @@
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Caliburn.Micro;
 
     using HandBrake.App.Core.Utilities;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Interfaces.Model.Filters;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
 
     using Action = System.Action;
 
     public class DenoiseItem : PropertyChangedBase
     {
         private readonly Action triggerTabChanged;
+        private int currentFilterId;
 
         public DenoiseItem(EncodeTask currentTask, Action triggerTabChanged)
         {
@@ -48,18 +51,29 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 this.CurrentTask.Denoise = value;
                 this.NotifyOfPropertyChange(() => this.SelectedDenoise);
 
+                this.currentFilterId = this.CurrentTask.Denoise switch
+                {
+                    Denoise.NLMeans => (int)hb_filter_ids.HB_FILTER_NLMEANS,
+                    Denoise.hqdn3d => (int)hb_filter_ids.HB_FILTER_HQDN3D,
+                    Denoise.Off => 0
+                };
+
                 // Show / Hide the Custom Control
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
 
-                this.SelectedDenoisePreset = this.CurrentTask.Denoise == Denoise.hqdn3d ? DenoisePreset.Weak : DenoisePreset.Ultralight; // Default so we don't have an invalid preset.
-
+                this.NotifyOfPropertyChange(() => this.DenoisePresets);
+                this.NotifyOfPropertyChange(() => this.DenoiseTunes);
+                
+                this.SelectedDenoisePreset = this.DenoisePresets.FirstOrDefault(s => s.ShortName != HBPresetTune.Custom); // Default so we don't have an invalid preset.
+                this.SelectedDenoiseTune = this.DenoiseTunes?.FirstOrDefault(s => s.ShortName == HBPresetTune.None); // Default so we don't have an invalid tune.
+                    
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
                 this.triggerTabChanged();
             }
         }
 
-        public DenoiseTune SelectedDenoiseTune
+        public HBPresetTune SelectedDenoiseTune
         {
             get
             {
@@ -74,7 +88,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             }
         }
 
-        public DenoisePreset SelectedDenoisePreset
+        public HBPresetTune SelectedDenoisePreset
         {
             get
             {
@@ -87,7 +101,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
 
                 // Show / Hide the Custom Control
-                if (value != DenoisePreset.Custom) this.CustomDenoise = string.Empty;
+                if (value?.ShortName != HBPresetTune.Custom) this.CustomDenoise = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
@@ -110,17 +124,17 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             }
         }
 
-        public IEnumerable<DenoisePreset> DenoisePresets => EnumHelper<DenoisePreset>.GetEnumList();
+        public IEnumerable<HBPresetTune> DenoisePresets => HandBrakeFilterHelpers.GetFilterPresets(currentFilterId);
 
-        public IEnumerable<DenoiseTune> DenoiseTunes => EnumHelper<DenoiseTune>.GetEnumList();
+        public IEnumerable<HBPresetTune> DenoiseTunes => HandBrakeFilterHelpers.GetFilterTunes(currentFilterId);
 
         public IEnumerable<Denoise> DenoiseOptions => EnumHelper<Denoise>.GetEnumList();
 
         public bool ShowDenoiseOptions => this.SelectedDenoise != Denoise.Off;
 
-        public bool ShowDenoiseTune => this.SelectedDenoise == Denoise.NLMeans && this.SelectedDenoisePreset != DenoisePreset.Custom;
+        public bool ShowDenoiseTune => this.SelectedDenoise == Denoise.NLMeans && this.SelectedDenoisePreset?.ShortName != HBPresetTune.Custom;
 
-        public bool ShowDenoiseCustom => this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+        public bool ShowDenoiseCustom => this.CurrentTask.DenoisePreset?.ShortName == HBPresetTune.Custom;
 
         public void SetPreset(Preset preset, EncodeTask task)
         {
@@ -163,12 +177,12 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 return false;
             }
 
-            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoisePreset != this.SelectedDenoisePreset)
+            if (this.SelectedDenoise != Denoise.Off && !Equals(preset.Task.DenoisePreset, this.SelectedDenoisePreset))
             {
                 return false;
             }
 
-            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoiseTune != this.SelectedDenoiseTune)
+            if (this.SelectedDenoise != Denoise.Off && !Equals(preset.Task.DenoiseTune, this.SelectedDenoiseTune))
             {
                 return false;
             }
