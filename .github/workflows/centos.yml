@@ -1,0 +1,22 @@
+name: Linux Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on Ubuntu
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build HandBrake Linux
+      run: |
+        cd .github/workflows/
+        docker build . -t hb
+        docker run -v /root/db/build_hb:/build_hb hb
+
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v3
+      with:
+        name: HandBrakeCLI
+        path: ./build_hb/build/
