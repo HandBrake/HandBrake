@@ -4,17 +4,21 @@
 # Notes:
 # - Rename this file to portable.ini to activate feature.
 #
-# - storage.dir => Stores Presets, Settings and Log Files.
-# - tmp.dir => temporary files only. (i.e Preview images)
-# - update.check =>  true | false   (false disables the update check preference and disables update checking completely. true enables user-choice.)
-# - hardware.enabled => true | false (Enables the hardware encoders such as QSV, NVENC or VCE)
-# - process.isolation.enabled => true | false 
-#	(Process Isolation uses an HTTP server on 127.0.0.1 port 8037 or within +100 if in use. This is 'HandBrake.worker.exe' and it is designed to protect the user interface and queue should one job cause an application crash.)
-#   (Disabled by default for portable mode, but recommended to turn it on.) 
-# - software.render => true | false  (Only set to true if you are experiencing UI corruption or glitches)
+# - storage.dir =>                Stores Presets, Settings and Log Files. (See Note 1)
+# - tmp.dir =>                    Temporary files only. i.e Preview images (See Note 1)
+# - update.check =>               true | false (false disables the update check preference and disables update checking completely. true enables user-choice.)
+# - hardware.enabled =>           true | false (Enables the hardware encoders such as QSV, NVENC or VCE)
+# - process.isolation.enabled =>  true | false (See Note 2)
+# - software.render =>            true | false (Only set to true if you are experiencing UI corruption or glitches)
+# - theme.enabled =>              true | false (default true, false disables dark and light themes and uses stock framework appearence.)
 #
-# Set to 'cwd' to use the current applications directory. It will automatically create "storage" and "tmp" folders in this instance.
-# Leave blank to use the system "TMP" directory and the "AppData" user profile folder.
+# Note 1:
+#   Set to 'cwd' to use the current applications directory. It will automatically create "storage" and "tmp" folders in this instance.
+#   Leave blank to use the system "TMP" directory and the "AppData" user profile folder.
+# Note 2:
+#	Process Isolation uses an HTTP server on 127.0.0.1 port 8037 or within +100 if in use. 
+#   This is 'HandBrake.worker.exe' and it is designed to protect the user interface and queue should one job cause an application crash.
+#   Disabled by default for portable mode, but recommended to turn it on.
 #################################
 
 storage.dir = cwd
@@ -23,3 +27,4 @@ update.check = false
 hardware.enabled = true
 process.isolation.enabled = false
 software.rendering = false
+theme.enabled = true

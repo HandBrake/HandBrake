@@ -21,9 +21,6 @@ namespace HandBrake.App.Core.Utilities
         private static readonly string portableFile = Path.Combine(Environment.CurrentDirectory, "portable.ini");
         private static Dictionary<string, string> keyPairs = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Portable"/> class.
-        /// </summary>
         public static int Initialise()
         {
             if (!IsPortable())
@@ -98,12 +95,6 @@ namespace HandBrake.App.Core.Utilities
             return 0;
         }
 
-        /// <summary>
-        /// The is portable.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public static bool IsPortable()
         {
             if (!File.Exists(portableFile))
@@ -114,12 +105,6 @@ namespace HandBrake.App.Core.Utilities
             return true;
         }
 
-        /// <summary>
-        /// The get config directory.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public static string GetStorageDirectory()
         {
             // Default to App Data
@@ -147,66 +132,27 @@ namespace HandBrake.App.Core.Utilities
 
         public static bool IsUpdateCheckEnabled()
         {
-            if (keyPairs.ContainsKey("update.check"))
-            {
-                string updateCheckEnabled = keyPairs["update.check"];
-                if (!string.IsNullOrEmpty(updateCheckEnabled) && updateCheckEnabled.Trim() == "true")
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return true;
+            return GetBooleanValue("update.check", true);
         }
 
         public static bool IsHardwareEnabled()
         {
-            if (keyPairs.ContainsKey("hardware.enabled"))
-            {
-                string hardwareEnabled = keyPairs["hardware.enabled"];
-                if (!string.IsNullOrEmpty(hardwareEnabled) && hardwareEnabled.Trim() == "true")
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return true; // Default to On.
+            return GetBooleanValue("hardware.enabled", true);
         }
 
         public static bool IsProcessIsolationEnabled()
-        {
-            if (keyPairs.ContainsKey("process.isolation.enabled"))
-            {
-                string enabled = keyPairs["process.isolation.enabled"];
-                if (!string.IsNullOrEmpty(enabled) && enabled.Trim() == "true")
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return true; // Default to On.
+        { 
+            return GetBooleanValue("process.isolation.enabled", true);
         }
         
         public static bool IsForcingSoftwareRendering()
         {
-            if (keyPairs.ContainsKey("software.rendering"))
-            {
-                string enabled = keyPairs["software.rendering"];
-                if (!string.IsNullOrEmpty(enabled) && enabled.Trim() == "true")
-                {
-                    return true;
-                }
+            return GetBooleanValue("software.rendering", false);
+        }
 
-                return false;
-            }
-
-            return false; // Default to Off.
+        public static bool IsThemeEnabled()
+        {
+            return GetBooleanValue("theme.enabled", true);
         }
 
         /// <summary>
@@ -234,6 +180,22 @@ namespace HandBrake.App.Core.Utilities
             }
 
             return null;
+        }
+
+        private static bool GetBooleanValue(string key, bool defaultValue)
+        {
+            if (keyPairs.ContainsKey(key))
+            {
+                string value = keyPairs[key];
+                if (!string.IsNullOrEmpty(value) && value.Trim() == "true")
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return defaultValue;
         }
     }
 }

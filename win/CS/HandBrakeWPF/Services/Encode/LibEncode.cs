@@ -83,7 +83,12 @@ namespace HandBrakeWPF.Services.Encode
                 this.currentTask = task;
                 this.isPreviewInstance = task.IsPreviewEncode;
 
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
+                if (task.IsPreviewEncode)
+                {
+                    this.encodeLogService = this.logInstanceManager.ApplicationLogInstance;
+                    this.encodeLogService.Reset();
+                }
+                else if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ProcessIsolationEnabled) && Portable.IsProcessIsolationEnabled())
                 {
                     this.InitRemoteLogging(task.Destination);
                 }
@@ -120,7 +125,7 @@ namespace HandBrakeWPF.Services.Encode
                 // Prevent port stealing if multiple jobs start at the same time.
                 lock (this.portLock) 
                 {
-                    this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(verbosity, this.userSettingService) : HandBrakeInstanceManager.GetEncodeInstance(verbosity, this.encodeLogService, this.userSettingService, this.portService);
+                    this.instance = HandBrakeInstanceManager.GetEncodeInstance(verbosity, this.encodeLogService, this.userSettingService, this.portService);
 
                     this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                     this.instance.EncodeProgress += this.InstanceEncodeProgress;
