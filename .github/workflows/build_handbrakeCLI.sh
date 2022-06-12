@@ -1,4 +1,3 @@
-yum update
 yum groupinstall -y "Development Tools" "Additional Development"
 yum install -y fribidi-devel git jansson-devel libogg-devel libsamplerate-devel libtheora-devel libvorbis-devel opus-devel speex-devel xz-devel
 yum install -y epel-release
@@ -8,6 +7,8 @@ curl -L 'https://nasm.us/nasm.repo' -o /etc/yum.repos.d/nasm.repo
 yum install -y nasm
 yum localinstall -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
 yum install -y lame-devel x264-devel
+
+export PYTHONHTTPSVERIFY=0
 
 git clone -b 1.2.x https://github.com/HandBrake/HandBrake
 cd HandBrake
