@@ -13,7 +13,7 @@ jobs:
       run: |
         cd .github/workflows/
         docker build . -t hb
-        docker run -v /root/db/build_hb:/build_hb hb
+        docker run -v `pwd`/build_hb:/build_hb hb
 
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v3
