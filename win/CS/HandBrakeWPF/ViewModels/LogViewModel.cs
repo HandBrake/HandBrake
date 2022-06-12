@@ -29,7 +29,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
@@ -47,7 +46,6 @@ namespace HandBrakeWPF.ViewModels
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
         private LogFile selectedLogFile;
-        private readonly object lockObject = new object();
 
         public LogViewModel(IErrorService errorService, ILogInstanceManager logInstanceManager, IQueueService queueService)
         {

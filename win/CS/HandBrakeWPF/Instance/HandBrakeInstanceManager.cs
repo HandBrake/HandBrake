@@ -16,12 +16,10 @@ namespace HandBrakeWPF.Instance
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
-    using HandBrake.Interop.Interop.Interfaces.Model;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// The HandBrake Instance manager.
@@ -32,21 +30,13 @@ namespace HandBrakeWPF.Instance
         private static readonly object ProcessingLock = new object();
         private static IEncodeInstance encodeInstance;
         private static HandBrakeInstance scanInstance;
-        private static HandBrakeInstance previewInstance;
         private static bool noHardware;
        
         public static void Init(bool noHardwareMode, IUserSettingService userSettingService)
         {
             Thread thread = new Thread(() =>
             {
-                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport))
-                {
-                    noHardware = true;
-                }
-                else
-                {
-                    noHardware = noHardwareMode;
-                }
+                noHardware = userSettingService.GetUserSetting<bool>(UserSettingConstants.ForceDisableHardwareSupport) || noHardwareMode;
 
                 HandBrakeUtils.RegisterLogger();
                 HandBrakeUtils.EnsureGlobalInit(noHardware);
@@ -122,40 +112,6 @@ namespace HandBrakeWPF.Instance
             scanInstance = newInstance;
 
             return scanInstance;
-        }
-
-        /// <summary>
-        /// The get encode instance.
-        /// </summary>
-        /// <param name="verbosity">
-        /// The verbosity.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IHandBrakeInstance"/>.
-        /// </returns>
-        public static IHandBrakeInstance GetPreviewInstance(int verbosity, IUserSettingService userSettingService)
-        {
-            if (!HandBrakeUtils.IsInitialised())
-            {
-                throw new Exception("Please call Init before Using!");
-            }
-
-            if (previewInstance != null)
-            {
-                previewInstance.Dispose();
-                previewInstance = null;
-            }
-
-            HandBrakeInstance newInstance = new HandBrakeInstance();
-            newInstance.Initialize(verbosity, noHardware);
-            previewInstance = newInstance;
-
-            HandBrakeUtils.SetDvdNav(!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
-
-            return previewInstance;
         }
     }
 }
