@@ -14,6 +14,7 @@ SVT-AV1.CONFIGURE.deps        =
 SVT-AV1.CONFIGURE.static      =
 SVT-AV1.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
 SVT-AV1.CONFIGURE.extra       = -DBUILD_DEC=OFF
+SVT-AV1.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
     SVT-AV1.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
