@@ -60,6 +60,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.App.Core\HandBrake.App.Core.csproj" />
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
+    <ProjectReference Include="..\HandBrake.Worker\HandBrake.Worker.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -182,9 +183,4 @@
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy ..\HandBrake.Worker\bin\$(ConfigurationName)\*.*  bin\$(ConfigurationName)" />
-  </Target>
-  
 </Project>
