@@ -20,6 +20,9 @@ endif
 ifndef GCC.O
     GCC.O       = none
 endif
+ifndef GCC.cpu
+    GCC.cpu     = none
+endif
 GCC.D       =
 GCC.I       =
 GCC.muldefs = 0
@@ -64,6 +67,11 @@ GCC.args.O.none            = -O0
 GCC.args.O.size            = -Os
 GCC.args.O.size-aggressive = -Oz
 GCC.args.O.speed           = -O3
+GCC.args.cpu.none          =
+GCC.args.cpu.native        =
+ifeq ($(HOST.machine),$(filter $(HOST.machine),i686 x86_64))
+    GCC.args.cpu.native   += -march=native
+endif
 GCC.args.D                 = -D$(1)
 GCC.args.I                 = -I$(1)
 GCC.args.muldefs           = -Wl,--allow-multiple-definition
@@ -116,6 +124,7 @@ define import.GCC
     $(1).GCC.pic     = $$(GCC.pic)
     $(1).GCC.g       = $$(GCC.g)
     $(1).GCC.O       = $$(GCC.O)
+    $(1).GCC.cpu     = $$(GCC.cpu)
     $(1).GCC.D       = $$(GCC.D)
     $(1).GCC.I       = $$(GCC.I)
     $(1).GCC.muldefs = $$(GCC.muldefs)
@@ -157,6 +166,8 @@ define import.GCC
     $(1).GCC.args.O.none    = $$(GCC.args.O.none)
     $(1).GCC.args.O.size    = $$(GCC.args.O.size)
     $(1).GCC.args.O.speed   = $$(GCC.args.O.speed)
+    $(1).GCC.args.cpu.none  = $$(GCC.args.cpu.none)
+    $(1).GCC.args.cpu.native = $$(GCC.args.cpu.native)
     $(1).GCC.args.D         = $$(GCC.args.D)
     $(1).GCC.args.I         = $$(GCC.args.I)
     $(1).GCC.args.muldefs   = $$(GCC.args.muldefs)
@@ -183,19 +194,19 @@ define import.GCC
     $(1).GCC.o = -o $$(3)
 
     # FUNCTION: C precompiled headers
-    $(1).GCC.H_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
+    $(1).GCC.H_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.h_o .cpu *D *I !c !o
     $(1).GCC.H_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.H_O.args),$$(1),$$(2))
 
     # FUNCTION: C compile source
-    $(1).GCC.C_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
+    $(1).GCC.C_O.args = !gcc ?c_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.c_o .cpu *D *I !c !o
     $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ precompile headers
-    $(1).GCC.HPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
+    $(1).GCC.HPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.hpp_o .cpu *D *I !c !o
     $(1).GCC.HPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.HPP_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ compile source
-    $(1).GCC.CPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
+    $(1).GCC.CPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.cpp_o .cpu *D *I !c !o
     $(1).GCC.CPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.CPP_O.args),$$(1),$$(2))
 
     ###########################################################################

@@ -1373,6 +1373,7 @@ def createCLI( cross = None ):
     debugMode.cli_add_argument( grp, '--debug' )
     optimizeMode.cli_add_argument( grp, '--optimize' )
     arch.mode.cli_add_argument( grp, '--arch' )
+    cpuMode.cli_add_argument( grp, '--cpu' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
     cli.add_argument_group( grp )
@@ -1700,6 +1701,8 @@ try:
         optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), ('size-aggressive','size-aggressive'), default='speed' )
     else:
         optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
+
+    cpuMode = SelectMode( 'cpu', ('none','none'), ('native','native') )
 
     # run host tuple and arch actions
     host_tuple = HostTupleAction(cross,arch_gcc,xcode_opts)
@@ -2106,10 +2109,11 @@ int main()
             doc.add( 'HAS.strerror_r', 1 )
 
     doc.addMake( '' )
-    doc.addMake( '## define debug mode and optimize before other includes' )
-    doc.addMake( '## since it is tested in some module.defs' )
+    doc.addMake( '## define these before other includes' )
+    doc.addMake( '## since they are tested in some module.defs' )
     doc.add( 'GCC.g', debugMode.mode )
     doc.add( 'GCC.O', optimizeMode.mode )
+    doc.add( 'GCC.cpu', cpuMode.mode )
     doc.addBlank()
     doc.addMake( '## include definitions' )
     doc.addMake( 'include $(SRC/)make/include/main.defs' )
