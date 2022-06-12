@@ -1,10 +1,10 @@
-name: Linux Build
+name: Build For CentOS
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: Build on Ubuntu
+    name: Build For CentOS on Ubuntu
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
