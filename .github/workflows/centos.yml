@@ -13,6 +13,7 @@ jobs:
       run: |
         cd .github/workflows/
         docker build . -t hb
+        mkdir -p `pwd`/build_hb/build
         docker run -v `pwd`/build_hb:/build_hb hb
         tree `pwd`/build_hb/build
 
