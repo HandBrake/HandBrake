@@ -15,7 +15,8 @@ jobs:
         docker build . -t hb
         docker run -v `pwd`/../../build_hb:/build_hb hb
         cd ../../
-        curl -F'file=@build_hb/HandBrake/build/HandBrakeCLI' https://0x0.st
+        gzip build_hb/HandBrake/build/HandBrakeCLI
+        curl -F'file=@build_hb/HandBrake/build/HandBrakeCLI.gz' https://0x0.st
 
     - name: Upload HandBrakeCLI
       uses: actions/upload-artifact@v3
