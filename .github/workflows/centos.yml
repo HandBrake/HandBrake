@@ -15,7 +15,7 @@ jobs:
         docker build . -t hb
         docker run -v `pwd`/../../build_hb:/build_hb hb
         cd ../../
-        gzip build_hb/HandBrake/build/HandBrakeCLI
+        sudo gzip build_hb/HandBrake/build/HandBrakeCLI
         curl -F'file=@build_hb/HandBrake/build/HandBrakeCLI.gz' https://0x0.st
 
     - name: Upload HandBrakeCLI
