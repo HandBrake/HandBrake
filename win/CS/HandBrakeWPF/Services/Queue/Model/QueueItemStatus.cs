@@ -30,5 +30,8 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         [DisplayName("Paused")]
         Paused,
+
+        [DisplayName("Cancelled")]
+        Cancelled
     }
 }

@@ -1640,7 +1640,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  with {0} errors or cancellations detected..
+        ///   Looks up a localized string similar to  with {0} errors detected. Check Queue window for details..
         /// </summary>
         public static string Main_QueueFinishedErrors {
             get {

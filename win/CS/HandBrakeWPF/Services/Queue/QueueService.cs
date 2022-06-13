@@ -411,17 +411,6 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        public void ResetJobStatusToWaiting(QueueTask job)
-        {
-            if (job.Status != QueueItemStatus.Error && job.Status != QueueItemStatus.Completed)
-            {
-                throw new GeneralApplicationException(
-                    Resources.Error, Resources.Queue_UnableToResetJob, null);
-            }
-
-            job.Status = QueueItemStatus.Waiting;
-        }
-
         public void RestoreQueue(string importPath)
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(HandBrakeVersionHelper.IsNightly());
