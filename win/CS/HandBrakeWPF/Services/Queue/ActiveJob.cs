@@ -101,7 +101,19 @@ namespace HandBrakeWPF.Services.Queue
             this.IsEncoding = false;
             this.IsPaused = false;
 
-            this.job.Status = !e.Successful ? QueueItemStatus.Error : QueueItemStatus.Completed;
+            if (e.Successful)
+            {
+                this.job.Status = QueueItemStatus.Completed;
+            }
+            else if (e.ErrorCode == 1)
+            {
+                this.job.Status = QueueItemStatus.Cancelled;
+            }
+            else
+            {
+                this.job.Status = QueueItemStatus.Error;
+            }
+
             this.job?.JobProgress.Update(e);
    
             this.job.Statistics.UpdateStats(e, this.job);

@@ -159,7 +159,7 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 if (this.SelectedTask != null &&
-                    (this.selectedTask.Status == QueueItemStatus.Completed || this.selectedTask.Status == QueueItemStatus.Error || this.selectedTask.Status == QueueItemStatus.InProgress))
+                    (this.selectedTask.Status == QueueItemStatus.Completed || this.selectedTask.Status == QueueItemStatus.Error || this.selectedTask.Status == QueueItemStatus.Cancelled || this.selectedTask.Status == QueueItemStatus.InProgress))
                 {
                     return true;
                 }
@@ -473,7 +473,7 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (var task in this.SelectedItems)
             {
-                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error)
+                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error || task.Status == QueueItemStatus.Cancelled)
                 {
                     this.RetryJob(task);
                 }
@@ -484,7 +484,7 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (var task in this.QueueTasks)
             {
-                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error)
+                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error || task.Status == QueueItemStatus.Cancelled)
                 {
                     this.RetryJob(task);
                 }
