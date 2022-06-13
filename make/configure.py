@@ -1374,6 +1374,7 @@ def createCLI( cross = None ):
     optimizeMode.cli_add_argument( grp, '--optimize' )
     arch.mode.cli_add_argument( grp, '--arch' )
     cpuMode.cli_add_argument( grp, '--cpu' )
+    ltoMode.cli_add_argument( grp, '--lto' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
     cli.add_argument_group( grp )
@@ -1703,6 +1704,7 @@ try:
         optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
 
     cpuMode = SelectMode( 'cpu', ('none','none'), ('native','native') )
+    ltoMode = SelectMode( 'lto', ('none','none'), ('off','off'), ('on','on'), ('thin','thin') )
 
     # run host tuple and arch actions
     host_tuple = HostTupleAction(cross,arch_gcc,xcode_opts)
@@ -2114,6 +2116,7 @@ int main()
     doc.add( 'GCC.g', debugMode.mode )
     doc.add( 'GCC.O', optimizeMode.mode )
     doc.add( 'GCC.cpu', cpuMode.mode )
+    doc.add( 'GCC.lto', ltoMode.mode )
     doc.addBlank()
     doc.addMake( '## include definitions' )
     doc.addMake( 'include $(SRC/)make/include/main.defs' )

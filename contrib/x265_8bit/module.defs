@@ -35,6 +35,14 @@ else
     endif
 endif
 
+ifeq (on,$(GCC.lto))
+    X265_8.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE
+else ifeq (thin,$(GCC.lto))
+    X265_8.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE -DCMAKE_LTO_THIN=TRUE
+else ifeq (off,$(GCC.lto))
+    X265_8.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=FALSE
+endif
+
 X265_8.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.host)"
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))

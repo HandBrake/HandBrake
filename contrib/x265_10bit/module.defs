@@ -38,6 +38,13 @@ else
     endif
 endif
 
+ifeq (on,$(GCC.lto))
+    X265_10.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE
+else ifeq (thin,$(GCC.lto))
+    X265_10.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE -DCMAKE_LTO_THIN=TRUE
+else ifeq (off,$(GCC.lto))
+    X265_10.CONFIGURE.extra += -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=FALSE
+endif
 
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))

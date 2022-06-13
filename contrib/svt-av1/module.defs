@@ -26,6 +26,12 @@ else
     endif
 endif
 
+ifeq (on,$(GCC.lto))
+    SVT-AV1.CONFIGURE.extra += -DSVT_AV1_LTO=ON
+else ifeq (off,$(GCC.lto))
+    SVT-AV1.CONFIGURE.extra += -DSVT_AV1_LTO=OFF
+endif
+
 ifeq (1,$(HOST.cross))
     ifeq (mingw,$(HOST.system))
         SVT-AV1.CONFIGURE.extra += -DWIN32=ON -DMINGW=ON

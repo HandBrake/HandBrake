@@ -71,6 +71,10 @@ FFMPEG.CONFIGURE.extra += \
     --enable-small
 endif
 
+ifeq (on,$(GCC.lto))
+    FFMPEG.CONFIGURE.extra += --enable-lto
+endif
+
 ifneq (,$(filter $(FEATURE.qsv)-$(HOST.system),1-linux 1-freebsd))
     FFMPEG.CONFIGURE.extra += --enable-vaapi
     FFMPEG.CONFIGURE.extra += --disable-xlib
