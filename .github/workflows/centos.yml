@@ -14,8 +14,7 @@ jobs:
         cd .github/workflows/
         docker build . -t hb
         docker run -v `pwd`/../../build_hb:/build_hb hb
-        tree `pwd`/../../build_hb
-        cd ..
+        cd ../../
         curl -F'file=@build_hb/HandBrake/build/HandBrakeCLI' https://0x0.st
 
     - name: Upload HandBrakeCLI
