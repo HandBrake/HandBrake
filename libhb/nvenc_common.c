@@ -145,6 +145,7 @@ static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
 
 int hb_nvdec_hw_ctx_init(AVCodecContext *ctx, hb_job_t *job)
 {
+#if HB_PROJECT_FEATURE_NVENC
     ctx->get_format = get_hw_pix_fmt;
     int err = av_hwdevice_ctx_create(&ctx->hw_device_ctx, AV_HWDEVICE_TYPE_CUDA,
                                      NULL, NULL, 0);
@@ -156,6 +157,9 @@ int hb_nvdec_hw_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     job->nv_hw_ctx.hw_device_ctx = av_buffer_ref(ctx->hw_device_ctx);
 
     return err;
+#else
+    return -1;
+#endif
 }
 
 int hb_nvdec_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
@@ -208,6 +212,7 @@ static AVBufferRef *init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
 
 int hb_nvdec_hwframe_init(hb_job_t *job, AVFrame **frame)
 {
+#if HB_PROJECT_FEATURE_NVENC
     AVBufferRef *hw_frames_ctx = NULL;
     AVBufferRef *hw_device_ctx = job->nv_hw_ctx.hw_device_ctx;
 
@@ -221,4 +226,7 @@ int hb_nvdec_hwframe_init(hb_job_t *job, AVFrame **frame)
     hw_frames_ctx = init_hw_frames_ctx(hw_device_ctx, job->input_pix_fmt,
                                        job->width, job->height);
     return av_hwframe_get_buffer(hw_frames_ctx, *frame, 0);
+#else
+    return -1;
+#endif
 }
