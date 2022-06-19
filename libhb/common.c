@@ -6185,6 +6185,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             return 0;
         }
     } 
+#if HB_PROJECT_FEATURE_NVENC
     else if (hb_nvdec_is_enabled(job))
     {
         if (pix_fmt != AV_PIX_FMT_YUV420P10LE &&
@@ -6193,6 +6194,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
             return 0;
         }
     }
+#endif
     else
     {
         // Allow biplanar formats only if
