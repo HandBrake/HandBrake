@@ -1252,9 +1252,9 @@ skip_preview:
             
             if (less_than_median_crop_threshold == 0) {
                 // It's not uncommon to see 2~12 px variance in cropping.
-                // Defaulting to 10 to account for that variance before switching to loose.
+                // Defaulting to 9 to account for that variance before switching to loose.
                 // This accounts for variance that is unlikely to be caused by mixed AR. 
-                less_than_median_crop_threshold = 12;
+                less_than_median_crop_threshold = 9;
             }
 
             // Count the number of frames "substantially" less than the median.
