@@ -593,9 +593,19 @@ namespace HandBrakeWPF.Model.Audio
             BindingList<HBMixdown> mixdownList = new BindingList<HBMixdown>();
             foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
             {
-                if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder) || this.IsPassthru) // Show only supported, or all for passthru.
+                if (this.IsPassthru)
                 {
-                    mixdownList.Add(mixdown);
+                    if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, this.fallbackEncoder)) 
+                    {
+                        mixdownList.Add(mixdown);
+                    }
+                }
+                else
+                {
+                    if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder)) // Show only supported, or all for passthru.
+                    {
+                        mixdownList.Add(mixdown);
+                    }
                 }
             }
 
