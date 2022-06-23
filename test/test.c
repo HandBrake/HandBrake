@@ -1652,7 +1652,7 @@ static void ShowHelp()
 "       --crop-threshold-pixels <number>\n"
 "                           Number of pixels difference before we consider the frame\n"
 "                           to be a different aspect ratio\n" 
-"                           (default: 12)\n"
+"                           (default: 9)\n"
 "       --crop-threshold-frames <number>\n"
 "                           Disable preset 'loose-crop'\n"
 "                           (default: 4, 6 or 8 scaling with preview count)\n"
