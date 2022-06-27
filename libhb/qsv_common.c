@@ -1378,7 +1378,7 @@ static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list
                         query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_hevc, MFX_CODINGOPTION_OFF);
                     }
                     details->qsv_hardware_info_hevc.implementation = hw_impl | hw_preference;
-                    if ((details->type == MFX_MEDIA_DISCRETE) && (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) > QSV_G8))
+                    if (hb_qsv_hardware_generation(hb_qsv_get_platform(details->index)) > QSV_G8)
                     {
                         query_capabilities(session, details->index, details->qsv_hardware_version, &details->qsv_hardware_info_av1, MFX_CODINGOPTION_ON);
                         details->qsv_hardware_info_av1.implementation = hw_impl | hw_preference;
