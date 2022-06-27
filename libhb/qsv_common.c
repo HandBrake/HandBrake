@@ -338,7 +338,10 @@ int hb_qsv_hardware_generation(int cpu_platform)
         case HB_CPU_PLATFORM_INTEL_ICL:
             return QSV_G7;
         case HB_CPU_PLATFORM_INTEL_TGL:
+        case HB_CPU_PLATFORM_INTEL_ADL:
             return QSV_G8;
+        case HB_CPU_PLATFORM_INTEL_DG2:
+            return QSV_G9;
         default:
             return QSV_FU;
     }
@@ -3492,15 +3495,22 @@ int qsv_map_mfx_platform_codename(int mfx_platform_codename)
         platform = HB_CPU_PLATFORM_INTEL_ICL;
         break;
 #endif
-#if (MFX_VERSION >= 1031)
     case MFX_PLATFORM_ELKHARTLAKE:
     case MFX_PLATFORM_JASPERLAKE:
     case MFX_PLATFORM_TIGERLAKE:
     case MFX_PLATFORM_ROCKETLAKE:
-    case MFX_PLATFORM_ALDERLAKE_S:
         platform = HB_CPU_PLATFORM_INTEL_TGL;
         break;
-#endif
+    case MFX_PLATFORM_ALDERLAKE_S:
+    case MFX_PLATFORM_ALDERLAKE_P:
+        platform = HB_CPU_PLATFORM_INTEL_ADL;
+        break;
+    case MFX_PLATFORM_ARCTICSOUND_P:
+    case MFX_PLATFORM_DG2:
+    case MFX_PLATFORM_ALDERLAKE_N:
+    case MFX_PLATFORM_KEEMBAY:
+        platform = HB_CPU_PLATFORM_INTEL_DG2;
+        break;
     default:
         platform = HB_CPU_PLATFORM_UNSPECIFIED;
     }

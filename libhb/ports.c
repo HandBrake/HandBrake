@@ -289,6 +289,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Ice Lake";
         case HB_CPU_PLATFORM_INTEL_TGL:
             return "Intel microarchitecture Tiger Lake";
+        case HB_CPU_PLATFORM_INTEL_ADL:
+            return "Intel microarchitecture Alder Lake performance hybrid architecture";
         default:
             return NULL;
     }
@@ -327,7 +329,7 @@ static void init_cpu_info()
         family = ((eax >> 8) & 0xf) + ((eax >> 20) & 0xff);
         model  = ((eax >> 4) & 0xf) + ((eax >> 12) & 0xf0);
 
-        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 4/January 2019
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 4/April 2022
         // Table 2-1. CPUID Signature Values of DisplayFamily_DisplayModel
         switch (family)
         {
@@ -390,6 +392,10 @@ static void init_cpu_info()
                     case 0x8C:
                     case 0x8D:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_TGL;
+                        break;
+                    case 0x97:
+                    case 0x9A:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_ADL;
                         break;
                     default:
                         break;
