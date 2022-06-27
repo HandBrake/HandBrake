@@ -290,7 +290,7 @@ int hb_qsv_decode_h264_is_supported(int adapter_index);
 int hb_qsv_decode_h265_is_supported(int adapter_index);
 int hb_qsv_decode_h265_10_bit_is_supported(int adapter_index);
 int hb_qsv_decode_av1_is_supported(int adapter_index);
-int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt);
+int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt, int width, int height);
 
 #endif // __LIBHB__
 #endif // HB_PROJECT_FEATURE_QSV

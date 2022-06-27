@@ -1779,11 +1779,15 @@ int hb_qsv_decode_av1_is_supported(int adapter_index)
     return hb_qsv_hardware_generation(hb_qsv_get_platform(adapter_index)) >= QSV_G8;
 }
 
-int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt)
+int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param, int pix_fmt, int width, int height)
 {
     switch (video_codec_param)
     {
         case AV_CODEC_ID_H264:
+            // QSV decode for AVC does not support higher video resolutions
+            if (width > HB_QSV_AVC_DECODER_WIDTH_MAX || height > HB_QSV_AVC_DECODER_HEIGHT_MAX)
+                return 0;
+
             if (pix_fmt == AV_PIX_FMT_NV12     ||
                 pix_fmt == AV_PIX_FMT_YUV420P  ||
                 pix_fmt == AV_PIX_FMT_YUVJ420P)
@@ -1844,7 +1848,7 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
     return ((job != NULL && job->qsv.decode) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
             hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(),
-            job->title->video_codec_param, job->input_pix_fmt);
+            job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
 }
 
 static int hb_dxva2_device_check();
