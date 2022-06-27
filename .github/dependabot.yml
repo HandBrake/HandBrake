@@ -6,10 +6,3 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 4
-  
-  # Maintain dependencies for Windows GUI nuget
-  - package-ecosystem: "nuget"
-    directory: "win/CS"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 4
