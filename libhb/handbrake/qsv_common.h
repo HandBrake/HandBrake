@@ -154,6 +154,7 @@ enum
     QSV_G6, // Kaby Lake or equivalent
     QSV_G7, // Ice Lake or equivalent
     QSV_G8, // Tiger Lake or equivalent
+    QSV_G9, // DG2 or equivalent
     QSV_FU, // always last (future processors)
 };
 
