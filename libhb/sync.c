@@ -2594,7 +2594,7 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
         }
         // Text subtitles are SSA internally.  Use SSA newline code
         // and force style reset at beginning of new line.
-        len = sprintf((char*)buf->data, "%s\\N{\\r}%s", a->data, text);
+        len = snprintf((char*)buf->data, buf->size, "%s\\N{\\r}%s", a->data, text);
         if (len >= 0)
             buf->size = len + 1;
     }

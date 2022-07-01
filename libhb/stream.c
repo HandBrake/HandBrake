@@ -5971,7 +5971,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 else
                 {
                     char chapter_title[80];
-                    sprintf( chapter_title, "Chapter %d", chapter->index );
+                    snprintf( chapter_title, sizeof(chapter_title), "Chapter %d", chapter->index );
                     hb_chapter_set_title( chapter, chapter_title );
                 }
 

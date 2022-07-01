@@ -5889,18 +5889,18 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
     {
         if( ( ii & 0x0f ) == 0x0f )
         {
-            p += sprintf( p, "%02x", data[ii] );
+            p += snprintf( p, sizeof(line), "%02x", data[ii] );
             hb_deep_log( level, "    %-50s%20s", line, ascii );
             memset(&ascii[1], '.', 16);
             p = line;
         }
         else if( ( ii & 0x07 ) == 0x07 )
         {
-            p += sprintf( p, "%02x  ", data[ii] );
+            p += snprintf( p, sizeof(line), "%02x  ", data[ii] );
         }
         else
         {
-            p += sprintf( p, "%02x ", data[ii] );
+            p += snprintf( p, sizeof(line), "%02x ", data[ii] );
         }
         if( isgraph( data[ii] ) )
             ascii[(ii & 0x0f) + 1] = data[ii];
