@@ -2483,14 +2483,15 @@ static int ParseOptions( int argc, char ** argv )
                     if( device_is_dvd( devName ))
                     {
                         free( input );
-                        input = malloc( strlen( "/dev/" ) + strlen( devName ) + 1 );
+                        size_t size = strlen( "/dev/" ) + strlen( devName ) + 1;
+                        input = malloc( size );
                         if( input == NULL )
                         {
                             fprintf( stderr, "ERROR: malloc() failed while attempting to set device path.\n" );
                             free( devName );
                             return -1;
                         }
-                        sprintf( input, "/dev/%s", devName );
+                        snprintf( input, size, "/dev/%s", devName );
                     }
                     free( devName );
                 }

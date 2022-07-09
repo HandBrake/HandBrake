@@ -1631,7 +1631,7 @@ void hb_qsv_info_print()
             {
                 char value_str[256];
                 int *value = hb_list_item(g_qsv_adapters_list, i);
-                sprintf(value_str, "%d", *value);
+                snprintf(value_str, sizeof(value_str), "%d", *value);
                 if (i > 0)
                     strcat(gpu_list_str, ", ");
                 strcat(gpu_list_str, value_str);
@@ -3572,7 +3572,7 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
                     return -1;
                 }
             }
-            sprintf(job->qsv.ctx->qsv_device, "%u", info->Number);
+            snprintf(job->qsv.ctx->qsv_device, 32, "%u", info->Number);
             job->qsv.ctx->dx_index = info->Number;
             hb_log("qsv: %s qsv adapter with index %s has been selected", hb_qsv_get_adapter_type(info), job->qsv.ctx->qsv_device);
             hb_qsv_set_adapter_index(info->Number);

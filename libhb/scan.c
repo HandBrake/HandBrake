@@ -54,9 +54,9 @@ static const char *aspect_to_string(hb_rational_t *dar)
     }
     static char arstr[32];
     if (aspect >= 1)
-        sprintf(arstr, "%.2f:1", aspect);
+        snprintf(arstr, sizeof(arstr), "%.2f:1", aspect);
     else
-        sprintf(arstr, "1:%.2f", 1. / aspect );
+        snprintf(arstr, sizeof(arstr), "1:%.2f", 1. / aspect );
     return arstr;
 }
 
@@ -1542,7 +1542,8 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
         int channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
         char *desc   = audio->config.lang.description +
                         strlen(audio->config.lang.description);
-        sprintf(desc, " (%d.%d ch)", channels - lfes, lfes);
+        size_t size = sizeof(audio->config.lang.description) - strlen(audio->config.lang.description);
+        snprintf(desc, size, " (%d.%d ch)", channels - lfes, lfes);
 
         // describe the matrix encoding mode, if any
         switch (audio->config.in.matrix_encoding)

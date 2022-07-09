@@ -664,7 +664,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
 
         /* remember the on-disc chapter number */
         chapter->index = i + 1;
-        sprintf( chapter_title, "Chapter %d", chapter->index );
+        snprintf( chapter_title, sizeof(chapter_title), "Chapter %d", chapter->index );
         hb_chapter_set_title( chapter, chapter_title );
 
         pgc_id = vts->vts_ptt_srpt->title[title_ttn-1].ptt[i].pgcn;

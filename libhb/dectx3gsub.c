@@ -162,7 +162,7 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     int charIndex = 0;
     int styleIndex = 0;
 
-    sprintf((char*)dst, "%d,,Default,,0,0,0,,", pv->line);
+    snprintf((char*)dst, maxOutputSize, "%d,,Default,,0,0,0,,", pv->line);
     dst += strlen((char*)dst);
     start = dst;
     for (pos = text, end = text + textLength; pos < end; pos++)
