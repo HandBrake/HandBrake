@@ -2,8 +2,8 @@ __deps__ :=
 $(eval $(call import.MODULE.defs,X265_8,x265_8,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_8))
 
-X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220209-12707.tar.gz
-X265_8.FETCH.sha256  = ef09012449f535d2399ab489dfe094e91dc49fda3e847017f9830dd3233fc44f
+X265_8.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220709-12716.tar.gz
+X265_8.FETCH.sha256  = 19ef8b21301f13d795601184884859e9f4a2f87fcda83757bd7dcd588056e926
 
 X265_8.build_dir             = 8bit
 X265_8.CONFIGURE.exe         = cmake
