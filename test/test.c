@@ -159,9 +159,9 @@ static int     ssaburn                   = -1;
 static int      width                    = 0;
 static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
+static char *   crop_mode                = NULL;
 static int      crop_threshold_pixels    = 0;
 static int      crop_threshold_frames    = 0;
-static int      loose_crop               = -1;
 static char *   vrate                    = NULL;
 static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
 static int      vbitrate                 = 0;
@@ -1644,6 +1644,9 @@ static void ShowHelp()
 "\n"
 "   -w, --width  <number>   Set storage width in pixels\n"
 "   -l, --height <number>   Set storage height in pixels\n"
+"       --crop-mode <string> auto|conservative|none|custom\n"
+"                            Choose which crop mode to operate in.\n"
+"                            Default: auto unless --crop is set in which case custom \n"
 "       --crop   <top:bottom:left:right>\n"
 "                           Set picture cropping in pixels\n"
 "                           (default: automatically remove black bars)\n"
@@ -2212,6 +2215,7 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_BWDIF                  327
     #define CROP_THRESHOLD_PIXELS         328
     #define CROP_THRESHOLD_FRAMES         329
+    #define CROP_MODE                     330
     
     for( ;; )
     {
@@ -2330,8 +2334,7 @@ static int ParseOptions( int argc, char ** argv )
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
-            { "loose-crop",  optional_argument, &loose_crop, 1 },
-            { "no-loose-crop", no_argument,     &loose_crop, 0 },
+            { "crop-mode",   required_argument, NULL,     CROP_MODE },
             { "crop-threshold-pixels",  required_argument,  NULL, CROP_THRESHOLD_PIXELS },
             { "crop-threshold-frames",  required_argument,  NULL, CROP_THRESHOLD_FRAMES },
             
@@ -2954,7 +2957,11 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
-            
+            case CROP_MODE:
+            {
+                crop_mode  = strdup( optarg );
+                break;
+            }
             case CROP_THRESHOLD_PIXELS:
             {
                 crop_threshold_pixels  = atoi( optarg );
@@ -4332,35 +4339,43 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "PictureAllowUpscaling", hb_value_bool(1));
     }
     
-    if (loose_crop == 1) 
-    {
-        hb_dict_set(preset, "PictureCropMode",  hb_value_int(1)); // Loose
-    } 
-    else if (loose_crop == 0) 
-    {
-        hb_dict_set(preset, "PictureCropMode",  hb_value_int(0)); // Force Automatic
-    }
-
+    // --crop is treated as custom.
+    // otherwise use --crop-mode to set mode.
     if (crop[0] >= 0 || crop[1] >= 0 || crop[2] >= 0 || crop[3] >= 0)
     {
         hb_dict_set(preset, "PictureAutoCrop", hb_value_bool(0));
-        hb_dict_set(preset, "PictureCropMode", hb_value_int(3)); // Set to Custom
-    }
-    if (crop[0] >= 0)
+        hb_dict_set(preset, "PictureCropMode", hb_value_int(3));
+        
+        if (crop[0] >= 0)
+        {
+            hb_dict_set(preset, "PictureTopCrop", hb_value_int(crop[0]));
+        }
+        if (crop[1] >= 0)
+        {
+            hb_dict_set(preset, "PictureBottomCrop", hb_value_int(crop[1]));
+        }
+        if (crop[2] >= 0)
+        {
+            hb_dict_set(preset, "PictureLeftCrop", hb_value_int(crop[2]));
+        }
+        if (crop[3] >= 0)
+        {
+            hb_dict_set(preset, "PictureRightCrop", hb_value_int(crop[3]));
+        }
+    } 
+    else if (crop_mode != NULL && !strcmp(crop_mode, "auto")) 
     {
-        hb_dict_set(preset, "PictureTopCrop", hb_value_int(crop[0]));
-    }
-    if (crop[1] >= 0)
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(0)); 
+    } 
+    else if (crop_mode != NULL && !strcmp(crop_mode, "conservative")) 
     {
-        hb_dict_set(preset, "PictureBottomCrop", hb_value_int(crop[1]));
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(1)); 
     }
-    if (crop[2] >= 0)
+    else if (crop_mode != NULL && !strcmp(crop_mode, "none")) 
     {
-        hb_dict_set(preset, "PictureLeftCrop", hb_value_int(crop[2]));
-    }
-    if (crop[3] >= 0)
-    {
-        hb_dict_set(preset, "PictureRightCrop", hb_value_int(crop[3]));
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(2));
+    } else {
+        hb_dict_set(preset, "PictureCropMode",  hb_value_int(0)); // Automatic
     }
 
     if (display_width > 0)
