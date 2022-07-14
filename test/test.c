@@ -159,7 +159,7 @@ static int     ssaburn                   = -1;
 static int      width                    = 0;
 static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
-static int      crop_threshold_pixels = 0;
+static int      crop_threshold_pixels    = 0;
 static int      crop_threshold_frames    = 0;
 static int      loose_crop               = -1;
 static char *   vrate                    = NULL;
@@ -1654,7 +1654,8 @@ static void ShowHelp()
 "                           to be a different aspect ratio\n" 
 "                           (default: 9)\n"
 "       --crop-threshold-frames <number>\n"
-"                           Disable preset 'loose-crop'\n"
+"                           Number of frames that must be different to trigger\n"
+"                           smart crop \n"
 "                           (default: 4, 6 or 8 scaling with preview count)\n"
 "   -Y, --maxHeight <number>\n"
 "                           Set maximum height in pixels\n"

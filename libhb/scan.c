@@ -1275,7 +1275,7 @@ skip_preview:
              
             // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
             if (less_than_median_frame_count >= crop_switch_frame_count) {
-                hb_deep_log(2, "crop: switching to loose crop for this source. (%d)", crop_switch_frame_count);
+                hb_deep_log(2, "crop: switching to loose crop for this source. May be mixed aspect ratio. (%d)", crop_switch_frame_count);
                 i = 0;
             }
             

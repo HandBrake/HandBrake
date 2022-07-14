@@ -368,8 +368,9 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  * @param title_index Desired title to scan.  0 for all titles.
  * @param preview_count Number of preview images to generate.
  * @param store_previews Whether or not to write previews to disk.
- * @param crop_auto_switch_threshold_factor The number of frames to trigger smart crop
- * @param crop_median_threshold The frame cropping difference threshold
+ * @param min_duration Ignore titles below a given threshold
+ * @param crop_threshold_frames The number of frames to trigger smart crop
+ * @param crop_threshold_pixels The variance in pixels detected that are allowed for.
  */
 void hb_scan2( hb_handle_t * h, const char * path, int title_index,
               int preview_count, int store_previews, uint64_t min_duration,
