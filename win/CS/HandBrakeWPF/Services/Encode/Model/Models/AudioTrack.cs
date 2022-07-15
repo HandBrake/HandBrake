@@ -16,14 +16,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.Linq;
     using System.Text.Json.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     public class AudioTrack : PropertyChangedBase
     {
@@ -299,7 +298,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             {
                 if (value == this.trackName) return;
                 this.trackName = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.TrackName);
             }
         }
 

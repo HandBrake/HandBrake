@@ -16,8 +16,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
 
     using HandBrakeWPF.Model.Audio;
@@ -27,7 +25,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;

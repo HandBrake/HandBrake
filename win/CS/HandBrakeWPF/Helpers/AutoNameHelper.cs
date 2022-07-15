@@ -13,8 +13,6 @@ namespace HandBrakeWPF.Helpers
     using System.IO;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Extensions;
 
     using HandBrakeWPF.Model.Options;
@@ -37,7 +35,7 @@ namespace HandBrakeWPF.Helpers
         /// </summary>
         public static string AutoName(EncodeTask task, string titleName, string sourceDisplayName, Preset presetName)
         {
-            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
             if (task.Destination == null)
             {
                 task.Destination = string.Empty;
@@ -90,7 +88,7 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         public static bool IsAutonamingEnabled()
         {
-            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
 
             if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
             {

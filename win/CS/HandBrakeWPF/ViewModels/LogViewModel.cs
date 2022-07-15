@@ -18,10 +18,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Logging;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -236,7 +235,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.lastReadIndex < e.Log.MessageIndex)
             {
-                Execute.BeginOnUIThread(() =>
+                ThreadHelper.OnUIThread(() =>
                         {
                             this.lastReadIndex = e.Log.MessageIndex;
                             this.log.AppendLine(e.Log.Content);

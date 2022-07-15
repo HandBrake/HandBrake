@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Helpers
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
+    using HandBrakeWPF.Services.Interfaces;
 
     public class WindowHelper
     {
@@ -31,7 +31,7 @@ namespace HandBrakeWPF.Helpers
             }
             else
             {
-                T logvm = IoC.Get<T>();
+                T logvm = IoCHelper.Get<T>();
                 windowManager.ShowWindowAsync(logvm);
             }
         }

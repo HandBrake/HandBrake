@@ -22,8 +22,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Model;
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
@@ -60,7 +58,6 @@ namespace HandBrakeWPF.ViewModels
     using Application = System.Windows.Application;
     using DataFormats = System.Windows.DataFormats;
     using DragEventArgs = System.Windows.DragEventArgs;
-    using Execute = Caliburn.Micro.Execute;
     using ILog = Services.Logging.Interfaces.ILog;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -137,7 +134,7 @@ namespace HandBrakeWPF.ViewModels
             this.notificationService = notificationService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
-            this.queueProcessor = IoC.Get<IQueueService>();
+            this.queueProcessor = IoCHelper.Get<IQueueService>();
 
             this.SummaryViewModel = summaryViewModel;
             this.PictureSettingsViewModel = pictureSettingsViewModel;
@@ -1210,7 +1207,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
-            IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
+            IQueueSelectionViewModel viewModel = IoCHelper.Get<IQueueSelectionViewModel>();
 
             viewModel.Setup(
                 this.ScannedSource,
@@ -1629,7 +1626,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void PresetAdd()
         {
-            IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
+            IAddPresetViewModel presetViewModel = IoCHelper.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
             Task<bool?> result = this.windowManager.ShowDialogAsync(presetViewModel);
 
@@ -1678,7 +1675,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
+            IManagePresetViewModel presetViewModel = IoCHelper.Get<IManagePresetViewModel>();
             presetViewModel.Setup(this.selectedPreset);
             this.windowManager.ShowDialogAsync(presetViewModel);
             Preset preset = presetViewModel.Preset;
@@ -1893,7 +1890,7 @@ namespace HandBrakeWPF.ViewModels
             bool value = !this.ShowAddAllToQueue;
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, value);
 
-            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+            var optionsViewModel = IoCHelper.Get<IOptionsViewModel>();
             optionsViewModel.UpdateSettings();
         }
 
@@ -1902,7 +1899,7 @@ namespace HandBrakeWPF.ViewModels
             bool value = !this.ShowAddSelectionToQueue;
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, value);
 
-            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+            var optionsViewModel = IoCHelper.Get<IOptionsViewModel>();
             optionsViewModel.UpdateSettings();
         }
 
@@ -1919,7 +1916,7 @@ namespace HandBrakeWPF.ViewModels
         private void QueueEditAction(bool successful, Source scannedSource)
         {
             /* TODO Fix this. */
-            Execute.OnUIThread(() =>
+            ThreadHelper.OnUIThread(() =>
             {
                 if (this.queueEditTask != null && !string.IsNullOrEmpty(this.queueEditTask.SelectedPresetKey) && this.selectedPreset.Name != this.queueEditTask.SelectedPresetKey)
                 {
@@ -2146,7 +2143,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ScannedSource = null;
             }
 
-            Execute.OnUIThread(() =>
+            ThreadHelper.OnUIThread(() =>
             {
                 if (e.Successful && this.ScannedSource != null)
                 {
@@ -2180,7 +2177,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void ScanStared(object sender, EventArgs e)
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     this.StatusLabel = Resources.Main_ScanningPleaseWait;
@@ -2190,7 +2187,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                () =>
                {
                    this.ProgramStatusLabel = Resources.Main_PreparingToEncode;
@@ -2203,7 +2200,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsEncoding);
             this.NotifyOfPropertyChange(() => this.StartLabel);
 
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     string errorDesc = string.Empty;
@@ -2221,7 +2218,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void QueueChanged(object sender, EventArgs e)
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
               () =>
               {
                   if (!this.queueProcessor.IsEncoding)
@@ -2244,7 +2241,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void QueueProcessor_QueuePaused(object sender, EventArgs e)
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     this.ProgramStatusLabel = Resources.Main_QueuePaused;
@@ -2267,7 +2264,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     if (queueJobStatuses.Count == 1)

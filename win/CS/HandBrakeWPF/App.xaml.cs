@@ -25,6 +25,7 @@ namespace HandBrakeWPF
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -34,6 +35,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
+    using IWindowManager = Services.Interfaces.IWindowManager;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -136,7 +138,7 @@ namespace HandBrakeWPF
             }
 
             // Setup the UI Language
-            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
             string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
             if (!string.IsNullOrEmpty(culture))
             {
@@ -234,7 +236,7 @@ namespace HandBrakeWPF
             string[] args = e.Args;
             if (args.Any() && (File.Exists(args[0]) || Directory.Exists(args[0])))
             {
-                IMainViewModel mvm = IoC.Get<IMainViewModel>();
+                IMainViewModel mvm = IoCHelper.Get<IMainViewModel>();
                 mvm.StartScan(args[0], 0);
             }
         }
@@ -328,8 +330,8 @@ namespace HandBrakeWPF
         {
             try
             {
-                IWindowManager windowManager = IoC.Get<IWindowManager>();
-                IErrorService errorService = IoC.Get<IErrorService>();
+                IWindowManager windowManager = IoCHelper.Get<IWindowManager>();
+                IErrorService errorService = IoCHelper.Get<IErrorService>();
                 if (windowManager != null)
                 {
                     ErrorViewModel errorView = new ErrorViewModel(errorService);

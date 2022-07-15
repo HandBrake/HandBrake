@@ -20,11 +20,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Media;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Video;
@@ -39,7 +37,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Ookii.Dialogs.Wpf;
 
-    using Execute = Caliburn.Micro.Execute;
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
 
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
@@ -1075,7 +1072,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Save();
 
-            IShellViewModel shellViewModel = IoC.Get<IShellViewModel>();
+            IShellViewModel shellViewModel = IoCHelper.Get<IShellViewModel>();
             shellViewModel.DisplayWindow(ShellWindow.MainWindow);
         }
 
@@ -1600,7 +1597,7 @@ namespace HandBrakeWPF.ViewModels
                                 };
 
                     installer.Start();
-                    Execute.OnUIThread(() => Application.Current.Shutdown());
+                    ThreadHelper.OnUIThread(() => Application.Current.Shutdown());
                 }
                 catch (Exception exc)
                 {

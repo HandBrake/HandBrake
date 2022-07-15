@@ -12,11 +12,10 @@ namespace HandBrakeWPF.Services.Queue.Model
     using System;
     using System.Text.Json.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModels;
 
     using EncodeTask = Encode.Model.EncodeTask;
 

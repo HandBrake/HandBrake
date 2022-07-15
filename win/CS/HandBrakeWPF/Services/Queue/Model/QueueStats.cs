@@ -12,12 +12,10 @@ namespace HandBrakeWPF.Services.Queue.Model
     using System;
     using System.IO;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.EventArgs;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     public class QueueStats : PropertyChangedBase
     {

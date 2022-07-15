@@ -16,8 +16,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
 
     using HandBrakeWPF.EventArgs;

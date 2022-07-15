@@ -9,11 +9,10 @@
 
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     using Action = System.Action;
 

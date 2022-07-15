@@ -14,8 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;

@@ -17,9 +17,8 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Controls;
     using System.Windows.Data;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -36,7 +35,7 @@ namespace HandBrakeWPF.Converters
         
         public PresetsMenuConverter()
         {
-            this.userSettingService = IoC.Get<IUserSettingService>();
+            this.userSettingService = IoCHelper.Get<IUserSettingService>();
         }
 
         /// <summary>Converts a value. </summary>

@@ -16,8 +16,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Picture;
@@ -26,9 +24,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;

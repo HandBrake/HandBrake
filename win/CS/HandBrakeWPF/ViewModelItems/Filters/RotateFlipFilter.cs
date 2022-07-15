@@ -12,12 +12,11 @@ namespace HandBrakeWPF.ViewModelItems.Filters
     using System;
     using System.ComponentModel;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     public class RotateFlipFilter : PropertyChangedBase
     {

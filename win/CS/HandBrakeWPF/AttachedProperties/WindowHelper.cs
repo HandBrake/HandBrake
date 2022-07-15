@@ -15,10 +15,9 @@ namespace HandBrakeWPF.AttachedProperties
     using System.Text.Json;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
 
     public class WindowHelper
@@ -26,7 +25,7 @@ namespace HandBrakeWPF.AttachedProperties
         public static readonly DependencyProperty SaveProperty = DependencyProperty.RegisterAttached("SaveState", typeof(bool), typeof(WindowHelper), new FrameworkPropertyMetadata(SaveState));
 
         private readonly Window appWindow;
-        private readonly IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+        private readonly IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
 
         public WindowHelper(Window appWindow)
         {

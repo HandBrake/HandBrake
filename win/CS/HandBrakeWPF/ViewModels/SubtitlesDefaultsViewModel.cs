@@ -14,15 +14,13 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

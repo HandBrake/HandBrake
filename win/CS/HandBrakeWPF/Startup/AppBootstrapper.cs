@@ -28,6 +28,7 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using IEncode = Services.Encode.Interfaces.IEncode;
+    using IWindowManager = Services.Interfaces.IWindowManager;
     using LibEncode = Services.Encode.LibEncode;
 
     /// <summary>
@@ -52,7 +53,7 @@ namespace HandBrakeWPF.Startup
         {
             this.container = new SimpleContainer();
 
-            this.container.Singleton<IWindowManager, WindowManager>();
+            this.container.Singleton<Caliburn.Micro.IWindowManager, Caliburn.Micro.WindowManager >();
             this.container.Singleton<IEventAggregator, EventAggregator>();
 
             // Services
@@ -64,6 +65,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IPresetService, PresetService>();
             this.container.Singleton<IQueueService, QueueService>();
             this.container.Singleton<Services.Logging.Interfaces.ILog, LogService>();
+            this.container.Singleton<IWindowManager, Services.WindowManager>();
 
             // Commands
 

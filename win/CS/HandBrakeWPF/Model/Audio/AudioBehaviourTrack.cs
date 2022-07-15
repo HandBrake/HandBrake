@@ -15,14 +15,13 @@ namespace HandBrakeWPF.Model.Audio
     using System.Linq;
     using System.Text.Json.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
+    using HandBrakeWPF.ViewModels;
+
     using Services.Encode.Model.Models;
-    using Utilities;
 
     /// <summary>
     /// Model of a HandBrake Audio Track and it's associated behaviours.

@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Model.Subtitles
     using System.ComponentModel;
     using System.Linq;
 
-    using Caliburn.Micro;
+    using HandBrakeWPF.ViewModels;
 
     public class SubtitleBehaviours : PropertyChangedBase
     {

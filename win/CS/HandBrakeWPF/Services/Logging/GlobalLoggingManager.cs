@@ -11,12 +11,11 @@ namespace HandBrakeWPF.Services.Logging
 {
     using System.IO;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.EventArgs;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Utilities;
 
@@ -28,13 +27,13 @@ namespace HandBrakeWPF.Services.Logging
 
         public static void Init()
         {
-            generalAppLogger = IoC.Get<ILog>();
+            generalAppLogger = IoCHelper.Get<ILog>();
             string logDir = DirectoryUtilities.GetLogDirectory();
             string filename = string.Format("activity_log_main.{0}.txt", GeneralUtilities.ProcessId);
             string logFile = Path.Combine(logDir, filename);
             generalAppLogger.ConfigureLogging(filename, logFile);
 
-            IoC.Get<ILogInstanceManager>().Register(filename, generalAppLogger, true);
+            IoCHelper.Get<ILogInstanceManager>().Register(filename, generalAppLogger, true);
 
             HandBrakeUtils.MessageLogged += HandBrakeUtils_MessageLogged;
             HandBrakeUtils.ErrorLogged += HandBrakeUtils_ErrorLogged;

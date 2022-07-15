@@ -19,9 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
-
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -499,7 +497,7 @@ namespace HandBrakeWPF.ViewModels
                         }
                         catch (Win32Exception exc)
                         {
-                            Execute.OnUIThread(
+                            ThreadHelper.OnUIThread(
                                 () => this.errorService.ShowError(
                                     exc.Message,
                                     Resources.QueueViewModel_PlayFileErrorSolution,

@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System;
 
-    using Caliburn.Micro;
+    using HandBrakeWPF.ViewModels;
 
     public class ChapterMarker : PropertyChangedBase
     {

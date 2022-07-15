@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
@@ -27,8 +25,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using MahApps.Metro.Controls;
 
     using Microsoft.Win32;
 

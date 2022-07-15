@@ -12,8 +12,7 @@ namespace HandBrakeWPF.Commands
     using System;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -49,8 +48,8 @@ namespace HandBrakeWPF.Commands
         /// </param>
         public void Execute(object parameter)
         {
-            var shellViewModel = IoC.Get<IShellViewModel>();
-            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+            var shellViewModel = IoCHelper.Get<IShellViewModel>();
+            var optionsViewModel = IoCHelper.Get<IOptionsViewModel>();
 
             shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
 

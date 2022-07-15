@@ -15,8 +15,7 @@ namespace HandBrakeWPF.Converters
     using System.Windows;
     using System.Windows.Data;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
 
@@ -28,7 +27,7 @@ namespace HandBrakeWPF.Converters
 
         public ThemeImageConverter()
         {
-            this.userSettingService = IoC.Get<IUserSettingService>();
+            this.userSettingService = IoCHelper.Get<IUserSettingService>();
             DarkThemeMode mode = (DarkThemeMode)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DarkThemeMode);
 
             if (SystemParameters.HighContrast)

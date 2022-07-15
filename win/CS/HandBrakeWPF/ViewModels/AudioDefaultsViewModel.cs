@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
@@ -26,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

@@ -11,8 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Windows;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -189,7 +188,7 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         public bool CanClose()
         {
-            IQueueService processor = IoC.Get<IQueueService>();
+            IQueueService processor = IoCHelper.Get<IQueueService>();
             if (processor != null && processor.IsEncoding)
             {
                 MessageBoxResult result =

@@ -9,9 +9,8 @@
 
 namespace HandBrakeWPF.Model
 {
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     /// <summary>
     /// A model for the multiple selection window for adding to the queue.

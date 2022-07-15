@@ -10,9 +10,8 @@ namespace HandBrakeWPF.Services
     using System.Windows.Forms;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
@@ -61,7 +60,7 @@ namespace HandBrakeWPF.Services
             contextMenuStrip.Items.Add(Resources.MainView_OpenHandBrake, null, (sender, args) => this.RunAction()); // Open Log Window
             contextMenuStrip.Items.Add(new ToolStripSeparator());
 
-            var queueService = IoC.Get<IQueueService>();
+            var queueService = IoCHelper.Get<IQueueService>();
             if (queueService.IsEncoding)
             {
                 contextMenuStrip.Items.Add(Resources.MainView_Pause, null, (sender, args) => this.PauseEncode());
@@ -109,19 +108,19 @@ namespace HandBrakeWPF.Services
 
         private void StopEncode()
         {
-            var vm = IoC.Get<IMainViewModel>();
+            var vm = IoCHelper.Get<IMainViewModel>();
             vm.StopEncode();
         }
 
         private void PauseEncode()
         {
-            var vm = IoC.Get<IMainViewModel>();
+            var vm = IoCHelper.Get<IMainViewModel>();
             vm.PauseEncode();
         }
 
         private void RestartEncode()
         {
-            var vm = IoC.Get<IMainViewModel>();
+            var vm = IoCHelper.Get<IMainViewModel>();
             vm.StartEncode();
         }
     }

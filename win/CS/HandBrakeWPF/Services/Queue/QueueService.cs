@@ -36,9 +36,8 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Queue.JobEventArgs;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
-    
+
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
-    using Execute = Caliburn.Micro.Execute;
     using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using ILog = Logging.Interfaces.ILog;
     using QueueCompletedEventArgs = EventArgs.QueueCompletedEventArgs;
@@ -328,7 +327,7 @@ namespace HandBrakeWPF.Services.Queue
 
         public void ClearCompleted()
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     List<QueueTask> deleteList =
@@ -777,7 +776,7 @@ namespace HandBrakeWPF.Services.Queue
                 this.StopJobPolling();
 
                 // Remove the Breakpoint
-                Execute.OnUIThread(() => this.queue.Remove(task));
+                ThreadHelper.OnUIThread(() => this.queue.Remove(task));
 
                 this.IsProcessing = false;
                 this.IsPaused = false;
