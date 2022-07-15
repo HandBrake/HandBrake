@@ -155,7 +155,9 @@ FFMPEG.CONFIGURE.extra += \
      --enable-encoder=h264_nvenc \
      --enable-encoder=hevc_nvenc \
      --enable-hwaccels \
-     --enable-nvdec
+     --enable-nvdec \
+     --enable-cuda-llvm \
+     --enable-cuda
 endif
 
 ifeq (1,$(FEATURE.mf))

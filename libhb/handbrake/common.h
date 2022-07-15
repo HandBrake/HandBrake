@@ -780,7 +780,7 @@ struct hb_job_s
             int is_init_done;
         } enc_info;
     } qsv;
-    
+
     int hw_decode;
 
 #ifdef __LIBHB__
@@ -1375,6 +1375,12 @@ typedef struct hb_filter_init_s
     int             cfr;
     int             grayscale;
     hb_rational_t   time_base;
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_frames_ctx;
+    } nv_hw_ctx;
+#endif
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s

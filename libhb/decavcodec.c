@@ -1160,12 +1160,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVPixelFormat pix_fmt;
     enum AVColorRange  color_range;
 
-#if HB_PROJECT_FEATURE_NVENC
-    if ( pv->frame->hw_frames_ctx)
-    {
-        return 0;
-    }
-#endif
+    memset((void*)&filter_init, 0, sizeof(filter_init));
 
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
@@ -1251,6 +1246,18 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_avfilter_append_dict(filters, "scale_qsv", settings);
+        }
+        else
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+        if (pv->frame->hw_frames_ctx)
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_dict_set(settings, "interp_algo", hb_value_string("lanczos"));
+            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+            hb_avfilter_append_dict(filters, "scale_cuda", settings);
+            filter_init.nv_hw_ctx.hw_frames_ctx = pv->frame->hw_frames_ctx;
         }
         else
 #endif
@@ -1550,18 +1557,18 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
      ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
      ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
      */
-     int use_hw_dec = 0;
-     if (hb_nvdec_is_enabled(job)){
+    int use_hw_dec = 0;
+    if (hb_nvdec_is_enabled(job))
+    {
         const int main_dec_loop = (NULL != pv->job);
         const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
         const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
-        
+
         if (main_dec_loop && no_video_filters && nvenc_is_used)
         {
             use_hw_dec = hb_nvdec_available(w->codec_param);
         }
     }
-    
 #endif
 
     pv->context = avcodec_alloc_context3( pv->codec );
