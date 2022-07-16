@@ -13,8 +13,9 @@ namespace HandBrakeWPF.Converters.Picture
     using System.Linq;
     using System.Windows.Data;
 
+    using HandBrake.App.Core.Utilities;
+
     using HandBrakeWPF.Model.Picture;
-    using HandBrakeWPF.Utilities;
 
     public class CropModeConverter : IValueConverter
     {
