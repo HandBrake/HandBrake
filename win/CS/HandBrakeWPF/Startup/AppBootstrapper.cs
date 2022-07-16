@@ -117,7 +117,7 @@ namespace HandBrakeWPF.Startup
         /// </param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            DisplayRootViewFor<IShellViewModel>();
+            this.DisplayRootViewForAsync<IShellViewModel>();
         }
 
         /// <summary>
