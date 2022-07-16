@@ -6,6 +6,8 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
+
+#include "libavutil/avutil.h"
 #include "handbrake/handbrake.h"
 
 static int  reader_init( hb_work_object_t * w, hb_job_t * job );

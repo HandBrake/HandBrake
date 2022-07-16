@@ -11,6 +11,7 @@
 
 #if HB_PROJECT_FEATURE_X265
 
+#include "libavutil/avutil.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/h265_common.h"

@@ -12,6 +12,7 @@
 #include <string.h>
 #include <iconv.h>
 #include <errno.h>
+#include "libavutil/avutil.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/colormap.h"
 #include "handbrake/decavsub.h"
