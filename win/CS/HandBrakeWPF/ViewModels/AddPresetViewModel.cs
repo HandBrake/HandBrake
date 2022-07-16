@@ -115,7 +115,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.canAddNewPresetCategory = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.CanAddNewPresetCategory);
             }
         }
 

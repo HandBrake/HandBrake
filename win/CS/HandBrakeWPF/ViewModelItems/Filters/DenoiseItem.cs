@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModelItems.Filters
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -54,7 +55,8 @@ namespace HandBrakeWPF.ViewModelItems.Filters
                 {
                     Denoise.NLMeans => (int)hb_filter_ids.HB_FILTER_NLMEANS,
                     Denoise.hqdn3d => (int)hb_filter_ids.HB_FILTER_HQDN3D,
-                    Denoise.Off => 0
+                    Denoise.Off => 0,
+                    _ => throw new ArgumentOutOfRangeException()
                 };
 
                 // Show / Hide the Custom Control

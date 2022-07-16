@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NSIS Installer", "NSIS Inst
 		HandBrake.Nsis.Installer\MakeNightly64.nsi = HandBrake.Nsis.Installer\MakeNightly64.nsi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.App.Core", "HandBrake.App.Core\HandBrake.App.Core.csproj", "{F3D54128-F034-4241-BB73-AA7BBE9A47C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.App.Core", "HandBrake.App.Core\HandBrake.App.Core.csproj", "{F3D54128-F034-4241-BB73-AA7BBE9A47C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +58,8 @@ Global
 		{CC58646B-D0A4-469E-B947-A00C5D271103} = {5CB7BC74-449C-4E95-98AB-E1E4387E514B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_TaskErrorCategory = Message
+		RESX_Rules = {"EnabledRules":["StringFormat"]}
 		SolutionGuid = {F2A9851D-E91D-41D4-9C3C-636A61503FCB}
 	EndGlobalSection
 EndGlobal

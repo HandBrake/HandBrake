@@ -317,7 +317,6 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreviewImage = this.SelectedPreviewImage - 1;
         }
 
-        [HandleProcessCorruptedStateExceptions]
         public void UpdatePreviewFrame()
         {
             if (this.Task.Width < 32 || this.Task.Height < 32)

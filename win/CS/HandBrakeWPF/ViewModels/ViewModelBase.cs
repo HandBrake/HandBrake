@@ -52,7 +52,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.title = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.Title);
             }
         }
 

@@ -169,7 +169,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Stops an ongoing scan.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public void StopScan()
         {
             this.scanPollTimer.Stop();
@@ -191,7 +190,6 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        [HandleProcessCorruptedStateExceptions]
         public RawPreviewData GetPreview(JsonEncodeObject settings, int previewNumber)
         {
             // Fetch the image data from LibHb
@@ -236,7 +234,6 @@ namespace HandBrake.Interop.Interop
         /// <param name="encodeObject">
         /// The encode Object.
         /// </param>
-        [HandleProcessCorruptedStateExceptions]
         public void StartEncode(JsonEncodeObject encodeObject)
         {
             string encode = JsonSerializer.Serialize(encodeObject, JsonSettings.Options);
@@ -247,7 +244,6 @@ namespace HandBrake.Interop.Interop
         /// Starts an encode with the given job JSON.
         /// </summary>
         /// <param name="encodeJson">The JSON for the job to start.</param>
-        [HandleProcessCorruptedStateExceptions]
         public void StartEncode(string encodeJson)
         {
             HBFunctions.hb_add_json(this.Handle, InteropUtilities.ToUtf8PtrFromString(encodeJson));
@@ -273,7 +269,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Pauses the current encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public void PauseEncode()
         {
             HBFunctions.hb_pause(this.Handle);
@@ -282,7 +277,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Resumes a paused encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public void ResumeEncode()
         {
             HBFunctions.hb_resume(this.Handle);
@@ -291,7 +285,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Stops the current encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         public void StopEncode()
         {
             HBFunctions.hb_stop(this.Handle);
@@ -317,7 +310,6 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// The <see cref="JsonState"/>.
         /// </returns>
-        [HandleProcessCorruptedStateExceptions]
         public JsonState GetEncodeProgress()
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
@@ -377,7 +369,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing scan.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         private void PollScanProgress()
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
@@ -423,7 +414,6 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Checks the status of the ongoing encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions]
         private void PollEncodeProgress()
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.Handle);

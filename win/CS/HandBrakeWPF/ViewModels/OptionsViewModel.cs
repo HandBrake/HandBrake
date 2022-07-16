@@ -675,7 +675,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPriority = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.SelectedPriority);
                 this.SetProcessPriority(value);
             }
         }

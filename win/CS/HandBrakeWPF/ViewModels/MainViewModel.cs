@@ -317,7 +317,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.isModifiedPreset = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.IsModifiedPreset);
             }
         }
 

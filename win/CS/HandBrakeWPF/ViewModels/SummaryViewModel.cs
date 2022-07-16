@@ -720,7 +720,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
         }
 
-        [HandleProcessCorruptedStateExceptions]
         private void UpdatePreviewFrame()
         {
             // Don't preview for small images.
