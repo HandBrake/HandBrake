@@ -15,14 +15,11 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
    
-    using Caliburn.Micro;
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Factories;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
