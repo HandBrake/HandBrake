@@ -61,7 +61,7 @@
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_Framerate}" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
                     <StackPanel Orientation="Vertical">
                         <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"
-                                  AutomationProperties.Name="{x:Static Properties:Resources.VideoView_Framerate}" />
+                                  AutomationProperties.Name="{x:Static Properties:Resources.VideoView_Framerate}" HorizontalAlignment="Left" />
 
                         <StackPanel Orientation="Vertical" >
                             <RadioButton Content="{x:Static Properties:Resources.VideoView_ConstantFramerate}" IsChecked="{Binding IsConstantFramerate}" Margin="0,5,0,0"

@@ -53,7 +53,7 @@
 
     <Grid Margin="0,0,0,10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="180" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -72,33 +72,30 @@
             <TextBlock Text="{x:Static Properties:Resources.Preferences}" Style="{StaticResource windowTitle}" Margin="10,10,10,10" Grid.Row="0" />
         </Grid>
 
-        <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
+        <Grid Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-         
-                <StackPanel Orientation="Vertical" Margin="11,0,-1,0">
+            <StackPanel Orientation="Vertical" Margin="11,0,-1,0">
 
-                    <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
+                <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
                             HorizontalAlignment="Left" Padding="12,2" Margin="0,0,0,10" />
 
-                    <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
-                                 BorderThickness="0" Background="Transparent">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource tabNameConverter}}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                <ListBox x:Name="optionCategories" ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
+                                 BorderThickness="0" Background="Transparent" ItemContainerStyle="{StaticResource ModernListBoxItemStyle}" Width="150">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource tabNameConverter}}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-                </StackPanel>
-            </Grid>
-        </Border>
-     
-        <ScrollViewer Grid.Column="1" Grid.Row="1">
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="0,10,0,0">
             <StackPanel Orientation="Vertical">
 
                 <StackPanel Name="General" Orientation="Vertical" Margin="10,5,0,0"
@@ -600,7 +597,7 @@
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotificationRemovalText}" />
                         <Button Content="{x:Static Properties:Resources.OptionsView_UninstallToast}" HorizontalAlignment="Left" Margin="0,5,0,5" 
                                 cal:Message.Attach="[Event Click] = [Action UninstallNotifications]" />
-                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotificationRemovalSubText}" FontStyle="Italic" />
+                        <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotificationRemovalSubText}" FontStyle="Italic" TextWrapping="Wrap" />
                     </StackPanel>
 
                 </StackPanel>

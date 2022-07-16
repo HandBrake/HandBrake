@@ -9,6 +9,8 @@
     <SolidColorBrush x:Key="Ui.ToolbarHover" />
     <SolidColorBrush x:Key="Ui.ContrastLight" />
     <SolidColorBrush x:Key="Ui.UltraLight2" />
+    <SolidColorBrush x:Key="Ui.ListBoxSelect" />
+    <SolidColorBrush x:Key="Ui.Arrow" />
 
     <!-- TextBlock -->
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">

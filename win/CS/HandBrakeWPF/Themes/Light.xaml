@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:HandBrakeWPF.Converters">
 
     <SolidColorBrush x:Key="Ui.Dark" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="Ui.ToolbarHover" Color="#D8D8D8" />
@@ -7,7 +8,8 @@
     <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
     <SolidColorBrush x:Key="Ui.UltraLight2" Color="AliceBlue" />
     <SolidColorBrush x:Key="Ui.Arrow" Color="#252525" />
-
+    <SolidColorBrush x:Key="Ui.ListBoxSelect" Color="#D8D8D8" />
+    
     <!-- StatusBar -->
     <Style TargetType="StatusBar">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
@@ -17,7 +19,6 @@
     <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-
 
     <!-- Glyph -->
     <SolidColorBrush x:Key="ButtonGlyphBrush" Color="#444"/>
