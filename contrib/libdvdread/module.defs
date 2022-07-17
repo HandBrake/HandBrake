@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdread-6.1.1.tar.bz2
-LIBDVDREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2
-LIBDVDREAD.FETCH.sha256  = 3e357309a17c5be3731385b9eabda6b7e3fa010f46022a06f104553bf8e21796
+LIBDVDREAD.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libdvdread-6.1.3.tar.bz2
+LIBDVDREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdread/6.1.3/libdvdread-6.1.3.tar.bz2
+LIBDVDREAD.FETCH.sha256  = ce35454997a208cbe50e91232f0e73fb1ac3471965813a13b8730a8f18a15369
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
