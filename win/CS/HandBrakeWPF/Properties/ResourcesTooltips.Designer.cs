@@ -720,6 +720,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you import an image sequence, there is no way to determine the intended framerate.
+        ///You should set the source framerate here so the footage is interpreted correctly..
+        /// </summary>
+        public static string SourceSelection_SequenceFramerate {
+            get {
+                return ResourceManager.GetString("SourceSelection_SequenceFramerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some Sources may contain more than one video clip, or a collection of Titles. Blu-ray and DVD Sources often have multiple Titles.
         ///
         ///If you know the specific title you wish to encode you can enter it here and HandBrake will scan only that title rather than every title in the source file. Otherwise, leave the field blank..

@@ -38,5 +38,10 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets whether input is an image sequence.
         /// </summary>
         public bool ImageSequence { get; set; }
+
+        /// <summary>
+        /// Gets or sets the framerate for an image sequence.
+        /// </summary>
+        public string SequenceFramerate { get; set; }
     }
 }

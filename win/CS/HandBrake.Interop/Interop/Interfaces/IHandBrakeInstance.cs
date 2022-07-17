@@ -93,7 +93,7 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="titleIndex">
         /// The title Index.
         /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+        void StartScan(string path, int previewCount, bool imageSequence, string sequenceFramerate, TimeSpan minDuration, int titleIndex);
 
         /// <summary>
         /// Stop any running scans

@@ -73,10 +73,16 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <param name="title">
         /// int title number. 0 for scan all
         /// </param>
+        /// <param name="imageSequence">
+        /// scan as image sequence
+        /// </param>
+        /// <param name="sequenceFramerate">
+        /// framerate to use for image sequence
+        /// </param>
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        void Scan(string sourcePath, int title, Action<bool, Source> postAction);
+        void Scan(string sourcePath, int title, bool imageSequence, string sequenceFramerate, Action<bool, Source> postAction);
 
         /// <summary>
         /// Cancel the current scan.

@@ -145,13 +145,13 @@ namespace HandBrake.Interop.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, bool image_sequence, string sequence_framerate, TimeSpan minDuration, int titleIndex)
+        public void StartScan(string path, int previewCount, bool imageSequence, string sequenceFramerate, TimeSpan minDuration, int titleIndex)
         {
             this.PreviewCount = previewCount;
 
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            IntPtr sRatePtr = InteropUtilities.ToUtf8PtrFromString(sequence_framerate);
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, (image_sequence ? 1 : 0), sRatePtr, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+            IntPtr sRatePtr = InteropUtilities.ToUtf8PtrFromString(sequenceFramerate);
+            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, (imageSequence ? 1 : 0), sRatePtr, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
             this.scanPollTimer = new Timer();

@@ -6172,6 +6172,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set the framerate to use:.
+        /// </summary>
+        public static string SourceSelection_ChooseFramerate {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseFramerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the first image of the sequence to open..
+        /// </summary>
+        public static string SourceSelection_ChooseSequence {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseSequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optionally choose a specific title: .
         /// </summary>
         public static string SourceSelection_ChooseSpecificTitle {
@@ -6262,6 +6280,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open a sequence of images..
+        /// </summary>
+        public static string SourceSelection_OpenSequence {
+            get {
+                return ResourceManager.GetString("SourceSelection_OpenSequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recover Queue Files.
         /// </summary>
         public static string SourceSelection_QueueArchiveRecovery {
@@ -6276,6 +6303,15 @@ namespace HandBrakeWPF.Properties {
         public static string SourceSelection_QueueArchiveRecoveryDesc {
             get {
                 return ResourceManager.GetString("SourceSelection_QueueArchiveRecoveryDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Sequence.
+        /// </summary>
+        public static string SourceSelection_Sequence {
+            get {
+                return ResourceManager.GetString("SourceSelection_Sequence", resourceCulture);
             }
         }
         

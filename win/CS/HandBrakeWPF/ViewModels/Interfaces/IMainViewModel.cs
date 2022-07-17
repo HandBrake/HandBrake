@@ -81,6 +81,11 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void FolderScan();
 
         /// <summary>
+        /// Folder Scan
+        /// </summary>
+        void SequenceScan();
+
+        /// <summary>
         /// Stop an Encode.
         /// </summary>
         void StopEncode();
@@ -96,7 +101,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void StartEncode();
 
         /// <summary>
-        /// The start scan.
+        /// Start a scan
         /// </summary>
         /// <param name="filename">
         /// The filename.
@@ -104,7 +109,13 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="title">
         /// The title.
         /// </param>
-        void StartScan(string filename, int title);
+        /// <param name="imageSequence">
+        /// Whether to scan for an image sequence.
+        /// </param>
+        /// <param name="sequenceFramerate">
+        /// Framerate to set for image sequence.
+        /// </param>
+        void StartScan(string filename, int title, bool imageSequence, string sequenceFramerate);
 
         /// <summary>
         /// Edit a Queue Task

@@ -25,6 +25,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -90,7 +92,30 @@
                 </Grid>
             </Button>
 
-            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
+            <!--Image sequence-->
+            <Button Grid.Row="4"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseSequence}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action SequenceScan]"
+                    Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left"  Margin="0">
+                    <Grid MinWidth="220">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Queue.png'}" Width="32" Height="32" Grid.Column="0" />
+                        <StackPanel Grid.Row="1" Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="{x:Static Properties:Resources.SourceSelection_Sequence}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenSequence}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_ChooseFramerate}" TextWrapping="Wrap" />
+                        <TextBox Width="60" Height="24" Margin="10,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.SourceSelection_SequenceFramerate}" Text="{Binding SequenceFramerate, Mode=TwoWay}" />
+                    </WrapPanel>
+                </StackPanel>
+            </Button>
+            <!-- Sequence framerate -->
+
+            <ListBox Grid.Row="8" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
@@ -109,7 +134,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Row="7" Margin="20,10,0,10" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Grid.Row="9" Margin="20,10,0,10" Orientation="Horizontal" HorizontalAlignment="Stretch" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <Image Source="../Views/Images/information.png" Width="24" />
                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0">           
@@ -120,7 +145,7 @@
             </StackPanel>
 
 
-            <Grid Grid.Row="7" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid Grid.Row="9" Margin="20,10,0,10" HorizontalAlignment="Stretch" Visibility="{Binding IsOldNightly, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -140,11 +165,11 @@
        
 
             <!-- Cancel Window -->
-            <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+            <StackPanel Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="{x:Static Properties:Resources.Generic_Cancel}" IsCancel="True"  Padding="8,2" />
             </StackPanel>
 
-            <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+            <StackPanel Grid.Row="11" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <TextBlock>           
                     <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" ><TextBlock Text="{x:Static Properties:Resources.Preferences}"/></Hyperlink>
                 </TextBlock>

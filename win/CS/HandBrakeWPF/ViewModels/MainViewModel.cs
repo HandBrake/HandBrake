@@ -84,6 +84,7 @@ namespace HandBrakeWPF.ViewModels
         private string programStatusLabel;
         private Source scannedSource;
         private Title selectedTitle;
+        private string sequenceFramerate;
         private string duration;
         private bool showStatusWindow;
         private Preset selectedPreset;
@@ -334,6 +335,20 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public int TitleSpecificScan { get; set; }
+
+        public string SequenceFramerate
+        {
+            get => string.IsNullOrEmpty(this.sequenceFramerate) ? "29.97" : this.sequenceFramerate;
+
+            set
+            {
+                if (!Equals(this.sequenceFramerate, value))
+                {
+                    this.sequenceFramerate = value;
+                    this.NotifyOfPropertyChange(() => SequenceFramerate);
+                }
+            }
+        }
 
         public string SourceLabel
         {
@@ -1258,11 +1273,13 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
+                this.StartScan(dialog.SelectedPath, this.TitleSpecificScan, false, "0");
             }
         }
 
-        public void FileScan()
+        public void FileScan() => FileScan(false);
+
+        public void FileScan(bool imageSequence)
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
 
@@ -1288,13 +1305,18 @@ namespace HandBrakeWPF.ViewModels
                 this.logService.LogMessage("Attempted to recover from an error fro the File Scan FileDialog: " + e);
                 return;
             }
-            
+
             if (dialogResult.HasValue && dialogResult.Value)
             {
                 this.SetMru(Constants.FileScanMru, Path.GetDirectoryName(dialog.FileName));
 
-                this.StartScan(dialog.FileName, this.TitleSpecificScan);
+                this.StartScan(dialog.FileName, this.TitleSpecificScan, imageSequence, SequenceFramerate);
             }
+        }
+
+        public void SequenceScan()
+        {
+            FileScan(true);
         }
 
         public void CancelScan()
@@ -1349,7 +1371,7 @@ namespace HandBrakeWPF.ViewModels
             EncodeTask task = queueTask.Task;
 
             this.queueEditTask = queueTask;
-            this.scanService.Scan(task.Source, task.Title, QueueEditAction);
+            this.scanService.Scan(task.Source, task.Title, task.ImageSequence, task.SequenceFramerate, QueueEditAction);
         }
 
         public void PauseEncode()
@@ -1473,7 +1495,7 @@ namespace HandBrakeWPF.ViewModels
                     string videoContent = fileNames.FirstOrDefault(f => Path.GetExtension(f)?.ToLower() != ".srt" && Path.GetExtension(f)?.ToLower() != ".ssa");
                     if (!string.IsNullOrEmpty(videoContent))
                     {
-                        this.StartScan(videoContent, 0);
+                        this.StartScan(videoContent, 0, false, "0");
                         return;
                     }
 
@@ -1825,12 +1847,12 @@ namespace HandBrakeWPF.ViewModels
             return false;
         }
 
-        public void StartScan(string filename, int title)
+        public void StartScan(string filename, int title, bool imageSequence, string sequenceFramerate)
         {
             if (!string.IsNullOrEmpty(filename))
             {
                 ShowSourceSelection = false;
-                this.scanService.Scan(filename, title, null);
+                this.scanService.Scan(filename, title, imageSequence, sequenceFramerate, null);
             }
         }
 
@@ -1840,14 +1862,14 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (item.GetType() == typeof(DriveInformation))
                 {
-                    this.StartScan(((DriveInformation)item).RootDirectory, 0);
+                    this.StartScan(((DriveInformation)item).RootDirectory, 0, false, "0");
                 }
                 else if (item.GetType() == typeof(SourceMenuItem))
                 {
                     DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
                     if (driveInfo != null)
                     {
-                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
+                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan, false, "0");
                     }
 
                     this.ShowSourceSelection = false;

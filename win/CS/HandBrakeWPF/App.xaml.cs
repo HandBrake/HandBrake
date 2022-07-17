@@ -213,7 +213,7 @@ namespace HandBrakeWPF
             if (args.Any() && (File.Exists(args[0]) || Directory.Exists(args[0])))
             {
                 IMainViewModel mvm = IoC.Get<IMainViewModel>();
-                mvm.StartScan(args[0], 0);
+                mvm.StartScan(args[0], 0, false, "0");
             }
         }
 

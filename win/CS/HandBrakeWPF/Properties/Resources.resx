@@ -2628,4 +2628,16 @@ Only queue files from the current version are supported.</value>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
     <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
   </data>
+  <data name="SourceSelection_ChooseFramerate" xml:space="preserve">
+    <value>Set the framerate to use:</value>
+  </data>
+  <data name="SourceSelection_ChooseSequence" xml:space="preserve">
+    <value>Choose the first image of the sequence to open.</value>
+  </data>
+  <data name="SourceSelection_OpenSequence" xml:space="preserve">
+    <value>Open a sequence of images.</value>
+  </data>
+  <data name="SourceSelection_Sequence" xml:space="preserve">
+    <value>Image Sequence</value>
+  </data>
 </root>

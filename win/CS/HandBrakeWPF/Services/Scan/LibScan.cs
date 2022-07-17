@@ -74,10 +74,16 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="title">
         /// int title number. 0 for scan all
         /// </param>
+        /// <param name="imageSequence">
+        /// scan as image sequence
+        /// </param>
+        /// <param name="sequenceFramerate">
+        /// framerate to use for image sequence
+        /// </param>
         /// <param name="postAction">
         /// The post Action.
         /// </param>
-        public void Scan(string sourcePath, int title, Action<bool, Source> postAction)
+        public void Scan(string sourcePath, int title, bool imageSequence, string sequenceFramerate, Action<bool, Source> postAction)
         {
             if (this.IsScanning)
             {
@@ -111,7 +117,7 @@ namespace HandBrakeWPF.Services.Scan
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 
             // Start the scan on a back
-            this.ScanSource(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+            this.ScanSource(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount), imageSequence, sequenceFramerate);
         }
 
         /// <summary>
@@ -213,7 +219,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        private void ScanSource(object sourcePath, int title, int previewCount)
+        private void ScanSource(object sourcePath, int title, int previewCount, bool imageSequence, string sequenceFramerate)
         {
             try
             {
@@ -228,7 +234,7 @@ namespace HandBrakeWPF.Services.Scan
                 HandBrakeUtils.SetDvdNav(!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav));
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
+                this.instance.StartScan(sourcePath.ToString(), previewCount, imageSequence, sequenceFramerate, minDuration, title != 0 ? title : 0);
 
                 this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }
