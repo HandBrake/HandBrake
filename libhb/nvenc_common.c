@@ -36,6 +36,7 @@ int hb_check_nvenc_available()
 
         int loadErr = nvenc_load_functions(&nvenc_dl, context);
         if (loadErr < 0) {
+            is_nvenc_available = 0;
             return 0;
         }
 
