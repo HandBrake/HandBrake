@@ -18,7 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Text.Json;
     using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
 
@@ -965,12 +964,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void OpenLogWindow()
         {
-            WindowHelper.SpawnWindow<ILogViewModel, LogView>(this.windowManager);
+            WindowHelper.ShowWindow<ILogViewModel, LogView>(this.windowManager);
         }
 
         public void OpenQueueWindow()
         {
-            WindowHelper.SpawnWindow<IQueueViewModel, QueueView>(this.windowManager);
+            WindowHelper.ShowWindow<IQueueViewModel, QueueView>(this.windowManager);
         }
 
         public void OpenPreviewWindow()
@@ -983,7 +982,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else if (this.StaticPreviewViewModel.IsOpen)
             {
-                WindowHelper.SpawnWindow<IPresetManagerViewModel, StaticPreviewView>(this.windowManager);
+                WindowHelper.ShowWindow<IPresetManagerViewModel, StaticPreviewView>(this.windowManager);
             }
         }
 
@@ -997,7 +996,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else if (this.PresetManagerViewModel.IsOpen)
             {
-                WindowHelper.SpawnWindow<IPresetManagerViewModel, PresetManagerView>(this.windowManager);
+                WindowHelper.ShowWindow<IPresetManagerViewModel, PresetManagerView>(this.windowManager);
             }
         }
 
