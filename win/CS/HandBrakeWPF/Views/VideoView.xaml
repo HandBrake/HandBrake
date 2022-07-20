@@ -6,7 +6,6 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Video="clr-namespace:HandBrakeWPF.Converters.Video"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" >
 
     <UserControl.Resources>

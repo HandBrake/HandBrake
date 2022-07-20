@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Views.AboutView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             TextOptions.TextFormattingMode="Display">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        TextOptions.TextFormattingMode="Display">
 
     <Grid>
         <Grid.RowDefinitions>

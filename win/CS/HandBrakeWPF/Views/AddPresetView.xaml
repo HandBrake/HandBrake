@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.AddPresetView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,13 +17,7 @@
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-        <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <picture:ResolutionLimitConverter x:Key="resolutionLimitConverter" />
-
-        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
-            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
-            <Setter Property="Margin" Value="0,2,0,2" />
-        </Style>
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"

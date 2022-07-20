@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -27,7 +26,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public AboutViewModel()
         {
-            this.Title = "About HandBrake";
         }
 
         /// <summary>

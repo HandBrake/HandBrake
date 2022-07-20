@@ -14,7 +14,7 @@
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
-        xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main" xmlns:Converters1="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+        xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         Title="{Binding Title}"
         Width="975"
         Height="550"
@@ -22,8 +22,7 @@
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
-        mc:Ignorable="d"
-        x:Name="queueView">
+        mc:Ignorable="d">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />

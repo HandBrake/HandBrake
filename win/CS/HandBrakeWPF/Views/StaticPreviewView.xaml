@@ -6,7 +6,6 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:standalone="clr-namespace:HandBrakeWPF.Views.Standalone"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
@@ -17,8 +16,6 @@
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
-        <converters:BooleanConverter x:Key="boolConverter" />
-
     </Window.Resources>
     <Grid>
 

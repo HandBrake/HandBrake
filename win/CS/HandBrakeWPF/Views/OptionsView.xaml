@@ -1,5 +1,5 @@
 ﻿<UserControl  x:Class="HandBrakeWPF.Views.OptionsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
               xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" xmlns:local="clr-namespace:HandBrakeWPF.Model"
               xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
