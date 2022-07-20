@@ -180,7 +180,7 @@
                              Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,5,5,2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" >
                         <TextBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Copy Full Query" cal:Message.Attach="[Event Click] = [Action CopyQuery]"  />
+                                <MenuItem Header="Copy Full Query" Command="{Binding RelayCommand}" CommandParameter="CopyQuery"  />
                                 <Separator />
                                 <MenuItem Command="ApplicationCommands.Cut" />
                                 <MenuItem Command="ApplicationCommands.Copy" />

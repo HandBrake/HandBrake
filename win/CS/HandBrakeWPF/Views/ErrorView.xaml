@@ -59,7 +59,7 @@
 
             <Button Grid.Column="1"
                     Margin="5"
-                    cal:Message.Attach="[Event Click] = [Action Copy]"
+                    Command="{Binding RelayCommand}" CommandParameter="Copy"
                     Padding="8,2">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,7 +75,7 @@
                 </Grid>
             </Button>
 
-            <Button Grid.Column="2" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" Content="{x:Static Properties:Resources.Generic_Close}"/>
+            <Button Grid.Column="2" IsDefault="True" Command="{Binding RelayCommand}" CommandParameter="Close" Content="{x:Static Properties:Resources.Generic_Close}"/>
         </Grid>
     </Grid>
 </Window>

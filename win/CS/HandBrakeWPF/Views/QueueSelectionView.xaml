@@ -61,12 +61,12 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Select All" cal:Message.Attach="[Event Click] = [Action SelectAll]" />
-                    <MenuItem Header="Deselect All" cal:Message.Attach="[Event Click] = [Action UnSelectAll]" />
+                    <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
+                    <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
                     <Separator />
-                    <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" cal:Message.Attach="[Event Click] = [Action OrderByTitle]" />
-                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" cal:Message.Attach="[Event Click] = [Action OrderByDuration]" />
-                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" cal:Message.Attach="[Event Click] = [Action OrderByName]" />
+                    <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
+                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
+                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -121,13 +121,13 @@
 
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Cancel]"
+                    Command="{Binding RelayCommand}" CommandParameter="Cancel"
                     Content="{x:Static Properties:Resources.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Add]"
+                    Command="{Binding RelayCommand}" CommandParameter="Add"
                     Content="{x:Static Properties:Resources.Generic_Add}"
                     IsDefault="True"
                     Padding="8,2" />

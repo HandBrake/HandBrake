@@ -58,8 +58,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action CancelEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
+                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="Play" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
+                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="CancelEncode" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
 
                     <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
                     <ComboBox Width="60"

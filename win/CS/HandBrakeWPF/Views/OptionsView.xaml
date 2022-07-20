@@ -80,7 +80,7 @@
 
             <StackPanel Orientation="Vertical" Margin="11,0,-1,0">
 
-                <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
+                <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" Command="{Binding RelayCommand}" CommandParameter="Close" 
                             HorizontalAlignment="Left" Padding="12,2" Margin="0,0,0,10" />
 
                 <ListBox x:Name="optionCategories" ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
@@ -167,7 +167,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Path}" />
                                 <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
-                                <Button Content="{x:Static Properties:Resources.Browse}" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseVlcPath" Margin="5,0,0,0" />
                             </StackPanel>
                             <TextBlock Margin="35,0,0,0" Text="{x:Static Properties:Resources.Options_VideoPreviewPath}" />
 
@@ -207,7 +207,7 @@
 
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" HorizontalAlignment="Left" />
-                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" HorizontalAlignment="Left" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" Command="{Binding RelayCommand}" CommandParameter="BrowseAutoNamePath" HorizontalAlignment="Left" />
                                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_PathOptions}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource subText}" TextWrapping="Wrap" />
                                 <CheckBox IsChecked="{Binding AlwaysUseDefaultPath}" Content="{x:Static Properties:Resources.OptionsView_AlwaysUseDefaultPath}" ToolTip="{x:Static Properties:ResourcesTooltips.OptionsView_AlwaysUseDefaultPath}" Grid.Row="2" Grid.Column="1" />
 
@@ -293,7 +293,7 @@
                                     </StackPanel>
                                 </CheckBox>
 
-                                <Button Content="{x:Static Properties:Resources.Browse}" cal:Message.Attach="[Event Click] = [Action BrowseSendFileTo]" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseSendFileTo" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -312,9 +312,9 @@
                                           VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PlaySoundWhenQueueDone}" Margin="0,5,0,0" />
                                 <StackPanel Orientation="Horizontal" Margin="25,2,0,0">
                                     <TextBlock Text="{Binding WhenDoneAudioFile}" VerticalAlignment="Center" Margin="5,2,5,0"  />
-                                    <Button Content="{x:Static Properties:Resources.Browse}" cal:Message.Attach="[Event Click] = [Action BrowseWhenDoneAudioFile]" />
+                                    <Button Content="{x:Static Properties:Resources.Browse}" Command="{Binding RelayCommand}" CommandParameter="BrowseWhenDoneAudioFile" />
 
-                                    <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action PlayWhenDoneFile]" Background="Transparent" BorderThickness="0" >
+                                    <Button Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="PlayWhenDoneFile" Background="Transparent" BorderThickness="0" >
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Images/Play_small.png" VerticalAlignment="Center" />
@@ -362,7 +362,7 @@
                         <Image Source="Images/ErrorX.png" Width="32" Height="32" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="0" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_HardwareDetectFailed}" TextWrapping="Wrap" Grid.Column="1" />
 
-                        <Button Content="{x:Static Properties:Resources.OptionsView_ResetSafeMode}" cal:Message.Attach="[Event Click] = [Action ResetAutomaticSafeMode]"
+                        <Button Content="{x:Static Properties:Resources.OptionsView_ResetSafeMode}" Command="{Binding RelayCommand}" CommandParameter="ResetAutomaticSafeMode"
                                 Visibility="{Binding IsAutomaticSafeMode, Converter={StaticResource boolToVisConverter}}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
                                 Margin="0,10,0,0" />
                     </Grid>
@@ -517,11 +517,11 @@
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:Resources.Options_LogPath}" VerticalAlignment="Center" />
                                 <TextBox Width="380" Text="{Binding LogDirectory}" />
-                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseLogPath]" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Command="{Binding RelayCommand}" CommandParameter="BrowseLogPath" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                <Button Content="{x:Static Properties:Resources.Options_ViewLogDirectory}" cal:Message.Attach="[Event Click] = [Action ViewLogDirectory]" Margin="0,0,5,0" />
-                                <Button Content="{x:Static Properties:Resources.Options_ClearLogs}" cal:Message.Attach="[Event Click] = [Action ClearLogHistory]" />
+                                <Button Content="{x:Static Properties:Resources.Options_ViewLogDirectory}" Command="{Binding RelayCommand}" CommandParameter="ViewLogDirectory" Margin="0,0,5,0" />
+                                <Button Content="{x:Static Properties:Resources.Options_ClearLogs}" Command="{Binding RelayCommand}" CommandParameter="ClearLogHistory" />
                             </StackPanel>
 
                             <CheckBox Content="{x:Static Properties:Resources.Options_7DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldLogs}" />
@@ -553,8 +553,8 @@
                     <TextBlock Text="{x:Static Properties:Resources.Options_Updates}" Style="{StaticResource subHeader}" Margin="0,10,0,10"/>
 
                     <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
-                        <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
-                        <Button Content="{x:Static Properties:Resources.Options_DownloadUpdates}" Width="120" cal:Message.Attach="[Event Click] = [Action DownloadUpdate]" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
+                        <Button Content="{x:Static Properties:Resources.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" Command="{Binding RelayCommand}" CommandParameter="PerformUpdateCheck" />
+                        <Button Content="{x:Static Properties:Resources.Options_DownloadUpdates}" Width="120" Command="{Binding RelayCommand}" CommandParameter="DownloadUpdate" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
                     </StackPanel>
 
                     <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
@@ -578,14 +578,14 @@
 
                     <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetSettingsToDefaults}" />
-                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetHandBrake]" />
+                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" Command="{Binding RelayCommand}" CommandParameter="ResetHandBrake" />
                     </StackPanel>
 
                     <TextBlock Text="{x:Static Properties:Resources.Options_BuiltInPresets}" Style="{StaticResource subHeader}"  Margin="0,10,0,10"/>
 
                     <StackPanel Orientation="Horizontal"  Margin="20,0,0,20">
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresets}" />
-                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" cal:Message.Attach="[Event Click] = [Action ResetBuiltInPresets]" />
+                        <Button Content="{x:Static Properties:Resources.Options_Reset}" HorizontalAlignment="Left" Command="{Binding RelayCommand}" CommandParameter="ResetBuiltInPresets" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_ResetBuildInPresetsNotice}" Margin="10,0,0,0" Style="{StaticResource subText}" />
 
                     </StackPanel>
@@ -596,7 +596,7 @@
                     <StackPanel Orientation="Vertical"  Margin="20,0,0,20">
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotificationRemovalText}" />
                         <Button Content="{x:Static Properties:Resources.OptionsView_UninstallToast}" HorizontalAlignment="Left" Margin="0,5,0,5" 
-                                cal:Message.Attach="[Event Click] = [Action UninstallNotifications]" />
+                                Command="{Binding RelayCommand}" CommandParameter="UninstallNotifications" />
                         <TextBlock Text="{x:Static Properties:Resources.OptionsView_NotificationRemovalSubText}" FontStyle="Italic" TextWrapping="Wrap" />
                     </StackPanel>
 

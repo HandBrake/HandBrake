@@ -18,10 +18,10 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,10,5" HorizontalAlignment="Right">
             <Button Content="{x:Static Properties:Resources.CountdownAlterView_Proceed}"  HorizontalAlignment="Right"
-                cal:Message.Attach="[Event Click] = [Action Proceed]" Padding="8,2" Margin="0,10,10,5"/>
+                Command="{Binding RelayCommand}" CommandParameter="Proceed" Padding="8,2" Margin="0,10,10,5"/>
 
             <Button Content="{x:Static Properties:Resources.CountdownAlterView_CancelAction}"  HorizontalAlignment="Right" Margin="0,10,10,5"
-                cal:Message.Attach="[Event Click] = [Action Cancel]" Padding="8,2" IsDefault="True" />
+                Command="{Binding RelayCommand}" CommandParameter="Cancel" Padding="8,2" IsDefault="True" />
         </StackPanel>
 
     </Grid>

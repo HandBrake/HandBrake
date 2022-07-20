@@ -58,12 +58,12 @@
 
                 <Button.ContextMenu>
                     <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action AddUser]" />
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingUser]" />
-                        <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddRemainingCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptionsUser]" />
-                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguagesUser]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="AddUser" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingUser" />
+                        <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddRemainingCC}" Command="{Binding RelayCommand}" CommandParameter="AddAllClosedCaptionsUser" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingForSelectedLanguagesUser" />
                         <Separator/>
-                        <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}" cal:Message.Attach="[Event Click] = [Action Import]" />
+                        <MenuItem Header="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}" Command="{Binding RelayCommand}" CommandParameter="Import" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
@@ -71,19 +71,19 @@
 
             <Button MinWidth="65" Grid.Column="2" FontWeight="Bold"
                     Margin="10,0,5,0"
-                    cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
+                    Command="{Binding RelayCommand}" CommandParameter="ShowSubtitleDefaultsPanel"
                     Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}"
                     ToolTip="{x:Static Properties:ResourcesTooltips.SubtitleView_SubtitleDefaults}"
                     />
 
             <Button MinWidth="65" Grid.Column="3"
-                    cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                    Command="{Binding RelayCommand}" CommandParameter="ReloadDefaults"
                     ToolTip="{x:Static Properties:ResourcesTooltips.BehavioursReload}"
                     Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
 
             <Button MinWidth="65" Grid.Column="5"
                     Margin="0,0,0,0"
-                    cal:Message.Attach="[Event Click] = [Action Clear]"
+                    Command="{Binding RelayCommand}" CommandParameter="Clear"
                     Content="{x:Static Properties:Resources.Generic_Clear}" />
         </Grid>
 
@@ -110,14 +110,14 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action AddUser]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingUser]" />
-                    <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptionsUser]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguagesUser]" />    
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="AddUser" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingUser" />
+                    <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddAllCC}" Command="{Binding RelayCommand}" CommandParameter="AddAllClosedCaptionsUser" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingForSelectedLanguagesUser" />    
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" Command="{Binding RelayCommand}" CommandParameter="Clear" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_ConfigureDefaultBehaviours}" Command="{Binding RelayCommand}" CommandParameter="ShowSubtitleDefaultsPanel" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 

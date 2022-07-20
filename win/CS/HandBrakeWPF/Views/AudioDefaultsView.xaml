@@ -104,9 +104,9 @@
 
                     <DockPanel Grid.Column="1" Margin="10,0,10,0">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                            <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                            <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                            <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveRight" MaxWidth="90" />
+                            <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveLeft" MaxWidth="90" />
+                            <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageClearAll" Width="80"/>
                         </StackPanel>
                     </DockPanel>
 
@@ -212,7 +212,7 @@
 
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" Command="{Binding RelayCommand}" CommandParameter="ClearTracks" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
 
@@ -373,8 +373,8 @@
             </ListBox>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="{x:Static Properties:Resources.AudioDefaultsView_AddTrack}" cal:Message.Attach="[Event Click] = [Action AddTrack]" Margin="0,0,10,0" Padding="8,2"/>
-                <Button Content="{x:Static Properties:Resources.AudioDefaultsView_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
+                <Button Content="{x:Static Properties:Resources.AudioDefaultsView_AddTrack}" Command="{Binding RelayCommand}" CommandParameter="AddTrack" Margin="0,0,10,0" Padding="8,2"/>
+                <Button Content="{x:Static Properties:Resources.AudioDefaultsView_Clear}" Command="{Binding RelayCommand}" CommandParameter="ClearTracks" Padding="8,2"/>
 
                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="15,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
                 <ComboBox Name="audioTrackBehaviorMode" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
@@ -392,21 +392,21 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Column="0" HorizontalAlignment="Left" Padding="0,2">
+                <Button Command="{Binding RelayCommand}" CommandParameter="LaunchHelp" Background="Transparent" BorderThickness="0" Grid.Column="0" HorizontalAlignment="Left" Padding="0,2">
                     <Button.Content>
                         <Image Source="/Views/Images/question.png" Width="16" />
                     </Button.Content>
                 </Button>
 
                 <Button Grid.Column="1"
-                        cal:Message.Attach="[Event Click] = [Action Cancel]"
+                        Command="{Binding RelayCommand}" CommandParameter="Cancel"
                         Content="{x:Static Properties:Resources.Generic_Cancel}"
                         IsCancel="True"
                         Padding="8,2"
                         Margin="0,0,5,0"/>
 
                 <Button Grid.Column="2"
-                        cal:Message.Attach="[Event Click] = [Action Save]"
+                        Command="{Binding RelayCommand}" CommandParameter="Save"
                         Content="{x:Static Properties:Resources.Generic_Save}"
                         IsDefault="True"
                         Padding="8,2" />
