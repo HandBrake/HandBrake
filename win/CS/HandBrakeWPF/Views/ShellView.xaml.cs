@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Views
     using System;
     using System.ComponentModel;
     using System.Drawing;
-    using System.Globalization;
     using System.IO;
     using System.Windows;
     using System.Windows.Controls;
@@ -22,7 +21,6 @@ namespace HandBrakeWPF.Views
     using Caliburn.Micro;
 
     using HandBrakeWPF.Commands;
-    using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;

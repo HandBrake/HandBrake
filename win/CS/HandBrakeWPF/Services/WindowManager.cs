@@ -9,33 +9,70 @@
 
 namespace HandBrakeWPF.Services
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.Linq;
+    using System.Windows;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     public class WindowManager : IWindowManager
     {
-        private Caliburn.Micro.IWindowManager windowManager;
-        public WindowManager()
+        public bool? ShowDialog<W>(object viewModel) where W : Window, new()
         {
-            windowManager = IoCHelper.Get<Caliburn.Micro.IWindowManager>();
+            Window newWindow = new W();
+            newWindow.DataContext = viewModel;
+
+            IViewModelBase viewModelBase = viewModel as IViewModelBase;
+            if (viewModelBase != null)
+            {
+                viewModelBase.Activate();
+            }
+
+            newWindow.Closing += NewWindow_Closing;
+            return newWindow.ShowDialog();
         }
 
-        public Task<bool?> ShowDialogAsync(object rootModel, object context = null, IDictionary<string, object> settings = null)
+        public void ShowWindow<W>(object viewModelInstance) where W : Window, new()
         {
-            return windowManager.ShowDialogAsync(rootModel, context, settings);
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(W));
+
+            if (window != null)
+            {
+                if (window.WindowState == WindowState.Minimized)
+                {
+                    window.WindowState = WindowState.Normal;
+                }
+                window.Activate();
+            }
+            else
+            {
+                Window newWindow = new W();
+                newWindow.DataContext = viewModelInstance;
+
+                IViewModelBase viewModelBase = viewModelInstance as IViewModelBase;
+                if (viewModelBase != null)
+                {
+                    viewModelBase.Activate();
+                }
+
+                newWindow.Show();
+                newWindow.Closing += NewWindow_Closing;
+            }
         }
 
-        public Task ShowWindowAsync(object rootModel, object context = null, IDictionary<string, object> settings = null)
+        private static void NewWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            return windowManager.ShowWindowAsync(rootModel, context, settings);
-        }
-
-        public Task ShowPopupAsync(object rootModel, object context = null, IDictionary<string, object> settings = null)
-        {
-            return windowManager.ShowPopupAsync(rootModel, context, settings);
+            // Make sure we call deactivate on the view model to allow it to cleanup resources.
+            Window window = sender as Window;
+            if (window != null)
+            {
+                window.Closing -= NewWindow_Closing;
+                IViewModelBase viewModelBase = window.DataContext as IViewModelBase;
+                if (viewModelBase != null)
+                {
+                    viewModelBase.Deactivate();
+                }
+            }
         }
     }
 }

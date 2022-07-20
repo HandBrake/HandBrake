@@ -759,7 +759,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                if (this.SelectedVideoEncoder.Tunes.Any())
+                if (this.SelectedVideoEncoder.Tunes != null && this.SelectedVideoEncoder.Tunes.Any())
                 {
                     foreach (VideoTune taskVideoTune in preset.Task.VideoTunes)
                     {
@@ -783,7 +783,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                if (this.SelectedVideoEncoder.Profiles.Any())
+                if (this.SelectedVideoEncoder.Profiles != null && this.SelectedVideoEncoder.Profiles.Any())
                 {
                     if (!Equals(preset.Task.VideoProfile, this.Task.VideoProfile))
                     {
@@ -791,7 +791,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                if (this.SelectedVideoEncoder.Levels.Any())
+                if (this.SelectedVideoEncoder.Levels != null && this.SelectedVideoEncoder.Levels.Any())
                 {
                     if (!Equals(preset.Task.VideoLevel, this.Task.VideoLevel))
                     {

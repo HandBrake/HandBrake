@@ -26,6 +26,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     /// <summary>
     /// The Audio View Model
@@ -370,7 +371,7 @@ namespace HandBrakeWPF.ViewModels
         public bool ShowWindow()
         {
             this.IsApplied = false;
-            this.windowManager.ShowDialogAsync(this);
+            this.windowManager.ShowDialog<AudioDefaultsView>(this);
 
             return this.IsApplied;
         }
@@ -385,7 +386,7 @@ namespace HandBrakeWPF.ViewModels
             this.audioBehaviours.AllowedPassthruOptions =
                 this.PassthruEncoders.Where(s => s.IsEnabled).Select(s => s.Encoder).ToList();
             this.IsApplied = true;
-            this.TryCloseAsync(false);
+            this.TryClose(true);
         }
 
         private void CorrectAudioEncoders(OutputFormat outputFormat)

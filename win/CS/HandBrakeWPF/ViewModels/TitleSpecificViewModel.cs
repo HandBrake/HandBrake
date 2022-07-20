@@ -66,7 +66,7 @@ namespace HandBrakeWPF.ViewModels
         public void Cancel()
         {
             this.selectedTitle = null;
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Open()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         #endregion

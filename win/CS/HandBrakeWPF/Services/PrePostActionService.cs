@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
     using ILog = Logging.Interfaces.ILog;
@@ -161,7 +162,7 @@ namespace HandBrakeWPF.Services
                     () =>
                     {
                         titleSpecificView.SetAction((WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction));
-                        this.windowManager.ShowDialogAsync(titleSpecificView);
+                        this.windowManager.ShowDialog<CountdownAlertView>(titleSpecificView);
                         isCancelled = titleSpecificView.IsCancelled;
                     });
             }

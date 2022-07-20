@@ -14,7 +14,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Countdown Alert View Model Interface
     /// </summary>
-    public interface ICountdownAlertViewModel
+    public interface ICountdownAlertViewModel : IViewModelBase
     {
         /// <summary>
         /// Gets a value indicating whether is cancelled.

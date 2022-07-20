@@ -228,7 +228,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         private void SetSelectedPictureSettingsResLimitMode()

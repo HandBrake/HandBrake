@@ -56,7 +56,6 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.SelectedItems = new BindingList<QueueTask>();
             this.SelectedItems.ListChanged += this.SelectedItems_ListChanged;
-            this.DisplayName = "Queue";
             this.IsQueueRunning = false;
             this.SelectedTabIndex = 0;
 
@@ -201,7 +200,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         public override void OnLoad()
@@ -547,17 +546,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.MoveToBottom(this.SelectedItems);
         }
 
-        public void Activate()
-        {
-           this.OnActivateAsync(CancellationToken.None);
-        }
-
-        public void Deactivate()
-        {
-           this.OnDeactivateAsync(false, CancellationToken.None);
-        }
-
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        public override void Activate()
         {
             this.Load();
 
@@ -568,18 +557,18 @@ namespace HandBrakeWPF.ViewModels
 
             this.IsQueueRunning = this.queueProcessor.IsProcessing;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            
-            return base.OnActivateAsync(cancellationToken);
+
+            base.Activate();
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        public override void Deactivate()
         {
             this.queueProcessor.QueueCompleted -= this.QueueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
 
-            return base.OnDeactivateAsync(close, cancellationToken);
+            base.Deactivate();
         }
 
         private void OpenDirectory(string directory)

@@ -98,7 +98,7 @@ namespace HandBrakeWPF.ViewModels
             this.IsCancelled = true;
             timer.Stop();
             this.Ticks = 0;
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace HandBrakeWPF.ViewModels
             this.IsCancelled = false;
             timer.Stop();
             this.Ticks = 0;
-            this.TryCloseAsync();
+            this.TryClose(true);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 timer.Stop();
                 this.Ticks = 0;
-                this.TryCloseAsync();
+                this.TryClose();
             }
         }
 

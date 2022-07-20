@@ -291,8 +291,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
             this.UpdatePreviewFrame();
-            this.DisplayName = Resources.StaticPreviewViewModel_Title;
-            this.Title = Resources.Preview;
+            this.Title = Resources.StaticPreviewViewModel_Title;
             this.ScannedSource = scannedSource;
         }
 

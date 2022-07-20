@@ -45,13 +45,5 @@ namespace HandBrakeWPF.ViewModels
         {
             get => string.Format("{0}{1}{1}{2}", Resources.About_Copyright, Environment.NewLine, Resources.About_GPL);
         }
-
-        /// <summary>
-        /// Close this window.
-        /// </summary>
-        public void Close()
-        {
-            this.TryCloseAsync();
-        }
     }
 }

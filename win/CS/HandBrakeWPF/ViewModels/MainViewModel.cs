@@ -965,12 +965,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void OpenLogWindow()
         {
-            WindowHelper.SpawnWindow<ILogViewModel>(this.windowManager, typeof(LogView));
+            WindowHelper.SpawnWindow<ILogViewModel, LogView>(this.windowManager);
         }
 
         public void OpenQueueWindow()
         {
-            WindowHelper.SpawnWindow<IQueueViewModel>(this.windowManager, typeof(QueueView));
+            WindowHelper.SpawnWindow<IQueueViewModel, QueueView>(this.windowManager);
         }
 
         public void OpenPreviewWindow()
@@ -979,11 +979,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.StaticPreviewViewModel.IsOpen = true;
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource);
-                this.windowManager.ShowWindowAsync(this.StaticPreviewViewModel);
+                this.windowManager.ShowWindow<StaticPreviewView>(this.StaticPreviewViewModel);
             }
             else if (this.StaticPreviewViewModel.IsOpen)
             {
-                WindowHelper.SpawnWindow<IPresetManagerViewModel>(this.windowManager, typeof(StaticPreviewView));
+                WindowHelper.SpawnWindow<IPresetManagerViewModel, StaticPreviewView>(this.windowManager);
             }
         }
 
@@ -993,11 +993,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PresetManagerViewModel.IsOpen = true;
                 this.PresetManagerViewModel.SetupWindow(this.HandleManagePresetChanges);
-                this.windowManager.ShowWindowAsync(this.PresetManagerViewModel);
+                this.windowManager.ShowWindow<PresetManagerView>(this.PresetManagerViewModel);
             }
             else if (this.PresetManagerViewModel.IsOpen)
             {
-                WindowHelper.SpawnWindow<IPresetManagerViewModel>(this.windowManager, typeof(PresetManagerView));
+                WindowHelper.SpawnWindow<IPresetManagerViewModel, PresetManagerView>(this.windowManager);
             }
         }
 
@@ -1236,7 +1236,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.windowManager.ShowWindowAsync(viewModel);
+                this.windowManager.ShowWindow<QueueSelectionView>(viewModel);
             }
         }
 
@@ -1628,9 +1628,9 @@ namespace HandBrakeWPF.ViewModels
         {
             IAddPresetViewModel presetViewModel = IoCHelper.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
-            Task<bool?> result = this.windowManager.ShowDialogAsync(presetViewModel);
+            bool? result = this.windowManager.ShowDialog<AddPresetView>(presetViewModel);
 
-            if (result.Result.HasValue && result.Result.Value)
+            if (result.HasValue && result.Value)
             {
                 this.NotifyOfPropertyChange(() => this.PresetsCategories);
                 this.SelectedPreset = this.presetService.GetPreset(presetViewModel.PresetName);
@@ -1677,7 +1677,7 @@ namespace HandBrakeWPF.ViewModels
 
             IManagePresetViewModel presetViewModel = IoCHelper.Get<IManagePresetViewModel>();
             presetViewModel.Setup(this.selectedPreset);
-            this.windowManager.ShowDialogAsync(presetViewModel);
+            this.windowManager.ShowDialog<ManagePresetView>(presetViewModel);
             Preset preset = presetViewModel.Preset;
 
             this.NotifyOfPropertyChange(() => this.PresetsCategories);

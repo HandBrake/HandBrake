@@ -1444,12 +1444,6 @@ namespace HandBrakeWPF.ViewModels
             this.errorService.ShowMessageBox(Resources.OptionsView_UninstallMessageBoxText, Resources.OptionsView_UninstallMessageBoxHeader, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            this.OnLoad();
-            return base.OnActivateAsync(cancellationToken);
-        }
-
         private void Save()
         {
             /* General */

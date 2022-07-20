@@ -11,8 +11,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     /// <summary>
     /// The Error View Model Interface
-    /// </summary>
-    public interface IErrorViewModel
+    /// </summary> 
+    public interface IErrorViewModel : IViewModelBase
     {
         /// <summary>
         /// Sets Details.

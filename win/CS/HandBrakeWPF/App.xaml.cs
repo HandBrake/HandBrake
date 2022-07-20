@@ -33,6 +33,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using GeneralApplicationException = HandBrake.App.Core.Exceptions.GeneralApplicationException;
     using IWindowManager = Services.Interfaces.IWindowManager;
@@ -361,7 +362,7 @@ namespace HandBrakeWPF
 
                     try
                     {
-                        windowManager.ShowDialogAsync(errorView);
+                        windowManager.ShowDialog<ErrorView>(errorView);
                     }
                     catch (Exception)
                     {

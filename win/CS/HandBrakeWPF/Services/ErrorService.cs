@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Services
     using System.Windows;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Views;
 
     using Interfaces;
     using ViewModels.Interfaces;
@@ -44,7 +45,7 @@ namespace HandBrakeWPF.Services
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = details;
-                windowManager.ShowDialogAsync(errorViewModel);
+                windowManager.ShowDialog<ErrorView>(errorViewModel);
             }
         }
 
@@ -70,7 +71,7 @@ namespace HandBrakeWPF.Services
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = exception.ToString();
-                windowManager.ShowDialogAsync(errorViewModel);
+                windowManager.ShowDialog<ErrorView>(errorViewModel);
             }
         }
 

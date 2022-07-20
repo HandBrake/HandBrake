@@ -6,24 +6,12 @@
 
 namespace HandBrakeWPF.Services.Interfaces
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
+    using System.Windows;
+    
     public interface IWindowManager
     {
-        Task<bool?> ShowDialogAsync(
-            object rootModel,
-            object context = null,
-            IDictionary<string, object> settings = null);
+        bool? ShowDialog<W>(object viewModel) where W : Window, new();
 
-        Task ShowWindowAsync(
-            object rootModel,
-            object context = null,
-            IDictionary<string, object> settings = null);
-
-        Task ShowPopupAsync(
-            object rootModel,
-            object context = null,
-            IDictionary<string, object> settings = null);
+        void ShowWindow<W>(object viewModelInstance) where W : Window, new();
     }
 }

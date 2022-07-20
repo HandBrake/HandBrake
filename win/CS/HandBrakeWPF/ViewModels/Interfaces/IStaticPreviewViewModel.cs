@@ -18,7 +18,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Static Preview View Model Interface
     /// </summary>
-    public interface IStaticPreviewViewModel
+    public interface IStaticPreviewViewModel : IViewModelBase
     {
         bool IsOpen { get; set; }
 
