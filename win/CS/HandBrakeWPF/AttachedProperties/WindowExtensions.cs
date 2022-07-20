@@ -20,14 +20,14 @@ namespace HandBrakeWPF.AttachedProperties
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
 
-    public class WindowHelper
+    public class WindowExtensions
     {
-        public static readonly DependencyProperty SaveProperty = DependencyProperty.RegisterAttached("SaveState", typeof(bool), typeof(WindowHelper), new FrameworkPropertyMetadata(SaveState));
+        public static readonly DependencyProperty SaveProperty = DependencyProperty.RegisterAttached("SaveState", typeof(bool), typeof(WindowExtensions), new FrameworkPropertyMetadata(SaveState));
 
         private readonly Window appWindow;
         private readonly IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
 
-        public WindowHelper(Window appWindow)
+        public WindowExtensions(Window appWindow)
         {
             this.appWindow = appWindow;
         }
@@ -43,7 +43,7 @@ namespace HandBrakeWPF.AttachedProperties
             {
                 if ((bool)eventArgs.NewValue)
                 {
-                    var settings = new WindowHelper(window);
+                    var settings = new WindowExtensions(window);
                     settings.Attach();
                 }
             }

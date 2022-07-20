@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Helpers
 
     public class WindowHelper
     {
-        public static void SpawnWindow<T, W>(IWindowManager windowManager) where W : Window, new()
+        public static void ShowWindow<T, W>(IWindowManager windowManager) where W : Window, new()
         {
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(W));
 
