@@ -386,7 +386,12 @@ int hb_qsv_available()
 int hb_qsv_video_encoder_is_enabled(int adapter_index, int encoder)
 {
     hb_qsv_adapter_details_t* details = hb_qsv_get_adapters_details_by_index(adapter_index);
-
+    
+    if (hb_qsv_hardware_generation(hb_qsv_get_platform(adapter_index)) < QSV_G5)
+    {
+        return 0;
+    }
+    
     if (details)
     {
         switch (encoder)
