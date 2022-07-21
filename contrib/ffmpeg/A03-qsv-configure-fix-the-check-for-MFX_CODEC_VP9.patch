@@ -1,7 +1,7 @@
-From 870c9e8f98cd5f88f0d95e4d16e78a2a5b11b457 Mon Sep 17 00:00:00 2001
+From 3b8979dad2c63a14bf6d8e7e4d4b5b377bb3bdd0 Mon Sep 17 00:00:00 2001
 From: Haihao Xiang <haihao.xiang@intel.com>
 Date: Fri, 19 Feb 2021 08:51:35 +0800
-Subject: [PATCH 68/88] configure: fix the check for MFX_CODEC_VP9
+Subject: [PATCH 02/77] configure: fix the check for MFX_CODEC_VP9
 
 The data structures for VP9 in mfxvp9.h is wrapped by
 MFX_VERSION_NEXT, which means those data structures have never been used
@@ -18,11 +18,11 @@ from oneVPL [1]
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configure b/configure
-index f2b39afa73..6deb39b123 100755
+index 9f0c2eabc0..959526ec8f 100755
 --- a/configure
 +++ b/configure
-@@ -6556,7 +6556,7 @@ enabled libmfx            && { { check_pkg_config libmfx "libmfx < 2.0" "mfx/mfx
-                                     "multi-frame encode, user plugins and LA_EXT rate control mode are enabled"; }
+@@ -6581,7 +6581,7 @@ enabled libmfx            && { { check_pkg_config libmfx "libmfx >= 1.28 libmfx
+                                    "multi-frame encode, user plugins and LA_EXT rate control mode are enabled"; }
  
  if enabled libmfx; then
 -   check_cc MFX_CODEC_VP9 "mfx/mfxvp9.h mfx/mfxstructures.h" "MFX_CODEC_VP9"
