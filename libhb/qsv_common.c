@@ -209,27 +209,15 @@ static hb_triplet_t hb_qsv_av1_levels[] =
     { NULL,                            },
 };
 
-#if defined(_WIN32) || defined(__MINGW32__)
 static const enum AVPixelFormat hb_qsv_pix_fmts[] =
 {
-    AV_PIX_FMT_NV12, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
 static const enum AVPixelFormat hb_qsv_10bit_pix_fmts[] =
 {
-    AV_PIX_FMT_P010LE, AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
+    AV_PIX_FMT_P010LE, AV_PIX_FMT_NONE
 };
-#else
-static const enum AVPixelFormat hb_qsv_pix_fmts[] =
-{
-    AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
-};
-
-static const enum AVPixelFormat hb_qsv_10bit_pix_fmts[] =
-{
-    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE
-};
-#endif
 
 #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
 
@@ -2781,17 +2769,17 @@ const int* hb_qsv_get_pix_fmts(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_QSV_H265:
-        case HB_VCODEC_QSV_AV1:
-            return hb_qsv_pix_fmts;
-        case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_QSV_AV1_10BIT:
-            return hb_qsv_10bit_pix_fmts;
+    case HB_VCODEC_QSV_H264:
+    case HB_VCODEC_QSV_H265:
+    case HB_VCODEC_QSV_AV1:
+        return hb_qsv_pix_fmts;
+    case HB_VCODEC_QSV_H265_10BIT:
+    case HB_VCODEC_QSV_AV1_10BIT:
+        return hb_qsv_10bit_pix_fmts;
 
-         default:
-             return hb_qsv_pix_fmts;
-     }
+    default:
+        return hb_qsv_pix_fmts;
+    }
 }
 
 const char* hb_qsv_video_quality_get_name(uint32_t codec)

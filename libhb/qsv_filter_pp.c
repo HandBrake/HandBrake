@@ -917,7 +917,7 @@ int process_filter(qsv_filter_task_t* task, void* params){
 
     if(task->pv->post.in)
     {
-    qsv_yuv420_to_nv12(task->pv->sws_context_to_nv12, task->out, task->pv->post.in);
+        qsv_convert_yuv_to_nv12(task->pv->sws_context_to_nv12, task->out, task->pv->post.in);
     }
 
     // signal: output is prepared, converted from internal buffer into pipeline

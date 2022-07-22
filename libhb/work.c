@@ -1362,20 +1362,6 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         if (hb_qsv_is_enabled(job))
         {
             hb_qsv_sanitize_filter_list(job);
-            // In case of video memory need to set formats after satitize filters 
-            // to ensure that full QSV pipeline supported
-            if (hb_qsv_full_path_is_enabled(job))
-            {
-                // Formats supported in QSV pipeline via video memory
-                if (job->input_pix_fmt == AV_PIX_FMT_YUV420P10)
-                {
-                    job->input_pix_fmt = AV_PIX_FMT_P010LE;
-                }
-                else if (job->input_pix_fmt == AV_PIX_FMT_YUV420P)
-                {
-                    job->input_pix_fmt = AV_PIX_FMT_NV12;
-                }
-            }
         }
 #endif
 
@@ -1403,26 +1389,18 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (job->vcodec == HB_VCODEC_QSV_MASK)
+        if (hb_qsv_full_path_is_enabled(job))
         {
-            if (!hb_qsv_full_path_is_enabled(job))
-            {
-                // Formats supported by QSV pipeline via system memory
-                if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
-                    encoder_pix_fmt != AV_PIX_FMT_YUV420P)
-                {
-                    // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
-                    encoder_pix_fmts++;
-                    encoder_pix_fmt = *encoder_pix_fmts;
-                }
-            }
+            job->input_pix_fmt = encoder_pix_fmt;
         }
+        else
 #endif
-
-        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
-        char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
-        hb_add_filter(job, filter, settings);
-        free(settings);
+        {
+            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+            char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
+            hb_add_filter(job, filter, settings);
+            free(settings);
+        }
     }
 }
 
