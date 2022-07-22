@@ -1852,7 +1852,7 @@ static int hb_d3d11va_device_check();
 
 int hb_qsv_hw_filters_are_enabled(hb_job_t *job)
 {
-    return job && job->qsv.ctx && job->qsv.ctx->qsv_filters_are_enabled;
+    return job && job->qsv.ctx && job->qsv.ctx->qsv_hw_filters_are_enabled;
 }
 
 int hb_qsv_is_enabled(hb_job_t *job)
@@ -1910,7 +1910,7 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 
     qsv_full_path_is_enabled = (hb_qsv_decode_is_enabled(job) &&
         info && hb_qsv_implementation_is_hardware(info->implementation) &&
-        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_cpu_filters);
+        device_check_succeeded && job->qsv.ctx && !job->qsv.ctx->num_sw_filters);
     return qsv_full_path_is_enabled;
 }
 
@@ -4830,7 +4830,7 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
     if (job->vcodec & HB_VCODEC_QSV_MASK)
     {
         int i = 0;
-        int num_cpu_filters = 0;
+        int num_sw_filters = 0;
         if (job->list_filter != NULL && hb_list_count(job->list_filter) > 0)
         {
             for (i = 0; i < hb_list_count(job->list_filter); i++)
@@ -4847,17 +4847,17 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
                     case HB_FILTER_ROTATE:
                     case HB_FILTER_RENDER_SUB:
                     case HB_FILTER_AVFILTER:
-                        num_cpu_filters++;
+                        num_sw_filters++;
                         break;
                     default:
-                        num_cpu_filters++;
+                        num_sw_filters++;
                         break;
                 }
             }
         }
-        job->qsv.ctx->num_cpu_filters = num_cpu_filters;
-        job->qsv.ctx->qsv_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
-        if (job->qsv.ctx->qsv_filters_are_enabled)
+        job->qsv.ctx->num_sw_filters = num_sw_filters;
+        job->qsv.ctx->qsv_hw_filters_are_enabled = ((hb_list_count(job->list_filter) == 1) && hb_qsv_full_path_is_enabled(job)) ? 1 : 0;
+        if (job->qsv.ctx->qsv_hw_filters_are_enabled)
         {
             job->qsv.ctx->hb_vpp_qsv_frames_ctx = av_mallocz(sizeof(HBQSVFramesContext));
             if (!job->qsv.ctx->hb_vpp_qsv_frames_ctx)
