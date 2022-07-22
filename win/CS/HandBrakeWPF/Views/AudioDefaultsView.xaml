@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -354,9 +353,7 @@
                                 <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
-                                            <cal:ActionMessage MethodName="RemoveTrack">
-                                                <cal:Parameter Value="{Binding}" />
-                                            </cal:ActionMessage>
+                                            <i:InvokeCommandAction Command="{Binding DataContext.RemoveTrackCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Image>
@@ -372,8 +369,8 @@
                 <Button Content="{x:Static Properties:Resources.AudioDefaultsView_AddTrack}" Command="{Binding RelayCommand}" CommandParameter="AddTrack" Margin="0,0,10,0" Padding="8,2"/>
                 <Button Content="{x:Static Properties:Resources.AudioDefaultsView_Clear}" Command="{Binding RelayCommand}" CommandParameter="ClearTracks" Padding="8,2"/>
 
-                <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="15,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
-                <ComboBox Name="audioTrackBehaviorMode" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackSettingDefaultBehaviour}" Margin="15,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                <ComboBox Name="audioTrackBehaviorMode" HorizontalAlignment="Left"
                           ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
                           SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
             </StackPanel>

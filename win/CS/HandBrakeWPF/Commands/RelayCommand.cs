@@ -14,6 +14,8 @@ namespace HandBrakeWPF.Commands
     using System.Reflection;
     using System.Windows.Input;
 
+    using HandBrake.App.Core.Exceptions;
+
     public class RelayCommand : ICommand
     {
         private readonly Type type;
@@ -46,28 +48,40 @@ namespace HandBrakeWPF.Commands
                 MethodInfo info = type.GetMethod(action);
                 if (info != null)
                 {
-                    if (info.GetParameters().Length == 0)
+                    try
                     {
-                        info.Invoke(viewModel, null);
-                    }
-                    else
-                    {
-                        // Limited to 1 parameter as present. 
-                        ParameterInfo[] parameters = info.GetParameters();
-                        List<object> invokeParams = new List<object>();
-
-                        ParameterInfo firstParam = parameters.FirstOrDefault();
-
-                        if (firstParam?.ParameterType == typeof(int))
+                        if (info.GetParameters().Length == 0)
                         {
-                            int keyValue;
-                            if (int.TryParse(parameterData, out keyValue))
+                            info.Invoke(viewModel, null);
+                        }
+                        else
+                        {
+                            // Limited to 1 parameter as present. 
+                            ParameterInfo[] parameters = info.GetParameters();
+                            List<object> invokeParams = new List<object>();
+
+                            ParameterInfo firstParam = parameters.FirstOrDefault();
+
+                            if (firstParam?.ParameterType == typeof(int))
                             {
-                                invokeParams.Add(keyValue);
+                                int keyValue;
+                                if (int.TryParse(parameterData, out keyValue))
+                                {
+                                    invokeParams.Add(keyValue);
+                                }
                             }
+
+                            info.Invoke(viewModel, invokeParams.ToArray());
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.InnerException != null && e.InnerException.GetType() == typeof(GeneralApplicationException))
+                        {
+                            throw e.InnerException;
                         }
 
-                        info.Invoke(viewModel, invokeParams.ToArray());
+                        throw e;
                     }
                 }
             }

@@ -20,8 +20,6 @@ namespace HandBrakeWPF
     using System.Windows.Interop;
     using System.Windows.Media;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
@@ -270,7 +268,7 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Execute.BeginOnUIThread(
+            ThreadHelper.OnUIThread(
                 () => 
             {
                 if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))

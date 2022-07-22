@@ -64,7 +64,16 @@ namespace HandBrakeWPF.ViewModels
 
             this.foreignAudioSearchTrack = new Subtitle { IsFakeForeignAudioScanTrack = true, Language = Resources.SubtitleViewModel_ForeignAudioSearch };
             this.SourceTracks = new List<Subtitle> { this.foreignAudioSearchTrack };
+
+
+            this.SetBurnedToFalseForAllExceptCommand = new SimpleRelayCommand<SubtitleTrack>(this.SetBurnedToFalseForAllExcept);
+            this.SelectDefaultTrackCommand = new SimpleRelayCommand<SubtitleTrack>(this.SelectDefaultTrack);
+            this.RemoveTrackCommand = new SimpleRelayCommand<SubtitleTrack>(this.Remove);
         }
+
+        public SimpleRelayCommand<SubtitleTrack> SetBurnedToFalseForAllExceptCommand { get; }
+        public SimpleRelayCommand<SubtitleTrack> SelectDefaultTrackCommand { get; }
+        public SimpleRelayCommand<SubtitleTrack> RemoveTrackCommand { get; }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -237,7 +246,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Import an SRT File.
         /// </summary>
-        public void Import()
+        public void ImportSubtitle()
         {
             OpenFileDialog dialog = new OpenFileDialog
             {

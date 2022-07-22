@@ -365,18 +365,15 @@ namespace HandBrakeWPF.ViewModels
             return height;
         }
 
-        public void Close()
+        public override void Deactivate()
         {
             this.IsOpen = false;
+            base.Deactivate();
         }
 
         public void SetPictureSettingsInstance(IPictureSettingsViewModel pictureSettingsViewModel)
         {
             this.PictureSettingsViewModel = pictureSettingsViewModel;
-        }
-
-        public override void OnLoad()
-        {
         }
 
         public void Play()

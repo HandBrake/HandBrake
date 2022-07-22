@@ -18,12 +18,12 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Resources;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
 
-            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();
             bool minimiseToTray = userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
 
             if (minimiseToTray)
@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Views
                 {
                     Stream iconStream = streamResourceInfo.Stream;
 
-                    notifyIconService = IoC.Get<INotifyIconService>();
+                    notifyIconService = IoCHelper.Get<INotifyIconService>();
                     notifyIconService.Setup(new Icon(iconStream));
                     this.notifyIconService.SetClickCallback(() => this.NotifyIconClick());
                 }
@@ -159,6 +159,11 @@ namespace HandBrakeWPF.Views
                 this.notifyIconService?.SetVisibility(false);
                 this.ShowInTaskbar = true;
             }
+        }
+
+        private void ShellView_OnDrop(object sender, DragEventArgs e)
+        {
+            ((ShellViewModel)this.DataContext).FilesDroppedOnWindow(e);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
@@ -58,7 +59,15 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedTabIndex = 0;
 
             this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
+
+            this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
+            this.RetryCommand = new SimpleRelayCommand<QueueTask>(this.RetryJob);
+            this.EditCommand = new SimpleRelayCommand<QueueTask>(this.EditJob);
         }
+
+        public SimpleRelayCommand<QueueTask> EditCommand { get; set; }
+        public SimpleRelayCommand<QueueTask> RetryCommand { get; set; }
+        public SimpleRelayCommand<int> WhenDoneCommand { get; }
 
         public ICommand QueueExtractResultDataCommand => new QueueExtractResultDataCommand(this, this.errorService);
 

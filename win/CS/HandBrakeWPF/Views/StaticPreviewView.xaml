@@ -3,14 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:standalone="clr-namespace:HandBrakeWPF.Views.Standalone"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
-             cal:Message.Attach="[Event Closing] = [Action Close]"
              Title="{Binding Title}"
              MinHeight="550">
 

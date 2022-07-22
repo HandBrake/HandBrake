@@ -258,6 +258,7 @@ namespace HandBrakeWPF.ViewModels
         public void Cancel()
         {
             this.IsApplied = false;
+            this.TryClose();
         }
 
         public void Save()

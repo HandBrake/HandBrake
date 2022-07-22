@@ -70,6 +70,8 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.PassthruEncoders = data;
+
+            this.RemoveTrackCommand = new SimpleRelayCommand<AudioBehaviourTrack>(this.RemoveTrack, null);
         }
 
         #region Properties
@@ -155,6 +157,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
             }
         }
+
+        public SimpleRelayCommand<AudioBehaviourTrack> RemoveTrackCommand { get; }
 
         #endregion
 
@@ -379,6 +383,7 @@ namespace HandBrakeWPF.ViewModels
         public void Cancel()
         {
             this.IsApplied = false;
+            this.TryClose();
         }
 
         public void Save()

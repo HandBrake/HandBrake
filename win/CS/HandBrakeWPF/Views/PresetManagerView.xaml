@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.PresetManagerView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
@@ -146,14 +145,9 @@
                     </ContextMenu>
                 </TreeView.ContextMenu>
 
-                <i:Interaction.Triggers>
-                    <commands:InputBindingTrigger>
-                        <commands:InputBindingTrigger.InputBinding>
-                            <KeyBinding Key="Delete"/>
-                        </commands:InputBindingTrigger.InputBinding>
-                        <cal:ActionMessage MethodName="DeletePreset" />
-                    </commands:InputBindingTrigger>
-                </i:Interaction.Triggers>
+                <TreeView.CommandBindings>
+                    <CommandBinding Command="Delete" Executed="Delete_Execute" />
+                </TreeView.CommandBindings>
 
             </TreeView>
         </Grid>

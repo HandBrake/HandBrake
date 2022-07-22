@@ -61,7 +61,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.AudioEncoders = HandBrakeEncoderHelpers.AudioEncoders.ToList();
             this.SourceTracks = new List<Audio>();
+            this.RemoveCommand = new SimpleRelayCommand<AudioTrack>(this.Remove);
         }
+
+        public SimpleRelayCommand<AudioTrack> RemoveCommand { get; set; }
 
         #endregion
 

@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:cal="http://www.caliburnproject.org"
         Title="{Data:Binding Path=MainViewModel.WindowTitle}"
         Width="1018"
         Height="660"
@@ -14,19 +12,12 @@
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
         WindowStartupLocation="CenterScreen"
-        TextOptions.TextFormattingMode="Display">
+        TextOptions.TextFormattingMode="Display"
+        Drop="ShellView_OnDrop">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Drop">
-            <cal:ActionMessage MethodName="FilesDroppedOnWindow">
-                <cal:Parameter Value="$eventArgs" />
-            </cal:ActionMessage>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <Grid>
         <ContentControl x:Name="MainViewModel"  Panel.ZIndex="0"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"

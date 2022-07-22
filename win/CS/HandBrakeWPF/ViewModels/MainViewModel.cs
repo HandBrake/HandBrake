@@ -194,11 +194,16 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
+            this.ProcessDriveCommand = new SimpleRelayCommand<object>(this.ProcessDrive);
+            this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
 
             // Monitor the system.
             systemService.Start();
+
+            this.Load();
         }
 
+        public SimpleRelayCommand<int> WhenDoneCommand { get; set; }
 
         /* View Model Properties */
 
@@ -228,7 +233,7 @@ namespace HandBrakeWPF.ViewModels
 
         /* Commands */
         public ICommand AddToQueueQualitySweepCommand => new AddToQueueQualitySweepCommand(this, this.VideoViewModel, this.userSettingService, this.errorService);
-
+        public SimpleRelayCommand<object> ProcessDriveCommand { get; set; }
 
         /* Properties */
 
