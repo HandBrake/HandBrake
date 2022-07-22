@@ -338,9 +338,9 @@ typedef struct hb_qsv_context {
 
     void *qsv_config;
 
-    int num_cpu_filters;
+    int num_sw_filters;
     int la_is_enabled;
-    int qsv_filters_are_enabled;
+    int qsv_hw_filters_are_enabled;
     int full_path_is_enabled;
     char *vpp_scale_mode;
     char *vpp_interpolation_method;
