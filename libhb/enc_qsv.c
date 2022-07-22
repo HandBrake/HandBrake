@@ -102,7 +102,6 @@ struct hb_work_private_s
     // if encode-only, system memory used
     int                  is_sys_mem;
     mfxSession           mfx_session;
-    struct SwsContext  * sws_context_to_nv12;
 
     // whether to expect input from VPP or from QSV decode
     int                  is_vpp_present;
@@ -1071,29 +1070,6 @@ int qsv_enc_init(hb_work_private_t *pv)
             return 2;
         }
     }
-    else
-    {
-        if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10 || (job->vcodec == HB_VCODEC_QSV_AV1_10BIT))
-        {
-            pv->sws_context_to_nv12 = hb_sws_get_context(
-                                        job->width, job->height,
-                                        job->output_pix_fmt, job->color_range,
-                                        job->width, job->height,
-                                        AV_PIX_FMT_P010LE, job->color_range,
-                                        SWS_LANCZOS|SWS_ACCURATE_RND,
-                                        SWS_CS_DEFAULT);
-        }
-        else
-        {
-            pv->sws_context_to_nv12 = hb_sws_get_context(
-                                        job->width, job->height,
-                                        job->output_pix_fmt, job->color_range,
-                                        job->width, job->height,
-                                        AV_PIX_FMT_NV12, job->color_range,
-                                        SWS_LANCZOS|SWS_ACCURATE_RND,
-                                        SWS_CS_DEFAULT);
-        }
-    }
 
     // allocate tasks
     qsv_encode->p_buf_max_size = pv->max_buffer_size * 1000 * ( 0 == pv->param.videoParam->mfx.BRCParamMultiplier ? 1 : pv->param.videoParam->mfx.BRCParamMultiplier);
@@ -1982,10 +1958,6 @@ void encqsvClose(hb_work_object_t *w)
             /* the list is already empty */
             hb_list_close(&pv->delayed_processing);
         }
-        if (pv->sws_context_to_nv12 != NULL)
-        {
-            sws_freeContext(pv->sws_context_to_nv12);
-        }
         if (pv->list_dts != NULL)
         {
             int64_t *item;
@@ -2403,7 +2375,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         }
 
         surface = qsv_enc_space->p_surfaces[surface_index];
-        qsv_yuv420_to_nv12(pv->sws_context_to_nv12, surface, in);
+        qsv_copy_buffer_to_surface(surface, in);
     }
     else
     {

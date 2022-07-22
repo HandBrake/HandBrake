@@ -104,7 +104,8 @@ int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrame
 }
 #endif
 
-int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_buffer_t* src){
+int qsv_convert_yuv_to_nv12(struct SwsContext *sws_context, mfxFrameSurface1 *dst, hb_buffer_t *src)
+{
     int ret = 0;
 
     int h = src->plane[0].height;
@@ -125,4 +126,15 @@ int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_
     return ret;
 }
 
+int qsv_copy_buffer_to_surface(mfxFrameSurface1* dst, hb_buffer_t* src)
+{
+    uint8_t* out_luma = dst->Data.Y;
+    uint8_t* out_chroma = dst->Data.VU;
+
+    // p010 and nv12
+    memcpy(out_luma, src->plane[0].data, src->plane[0].height * src->plane[0].stride);
+    memcpy(out_chroma, src->plane[1].data, src->plane[1].height * src->plane[1].stride);
+
+    return 0;
+}
 #endif // HB_PROJECT_FEATURE_QSV
