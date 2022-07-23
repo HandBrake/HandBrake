@@ -202,6 +202,9 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     hb_ff_set_sample_fmt(pv->context, codec, AV_SAMPLE_FMT_FLT);
 
+    // Set decoder opts...
+    AVDictionary *av_opts = NULL;
+
     /* Downmixing & sample_fmt conversion */
     if (!(w->audio->config.out.codec & HB_ACODEC_PASS_FLAG))
     {
@@ -231,7 +234,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         {
             case AV_CODEC_ID_AC3:
             case AV_CODEC_ID_EAC3:
-                avcodec_downmix = w->audio->config.out.normalize_mix_level != 0;
+                avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
                 break;
             case AV_CODEC_ID_DTS:
                 avcodec_downmix = w->audio->config.out.normalize_mix_level == 0;
@@ -252,13 +255,21 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
                 // request 5.1 before downmixing to dpl1/dpl2
                 case HB_AMIXDOWN_DOLBY:
                 case HB_AMIXDOWN_DOLBYPLII:
-                    pv->context->request_channel_layout = AV_CH_LAYOUT_5POINT1;
+                {
+                    av_dict_set(&av_opts, "downmix", "5.1(side)", 0);
                     break;
+                }
                 // request the layout corresponding to the selected mixdown
                 default:
-                    pv->context->request_channel_layout =
-                        hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL);
+                {
+                    char description[256];
+                    AVChannelLayout ch_layout = {0};
+                    av_channel_layout_from_mask(&ch_layout, hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL));
+                    av_channel_layout_describe(&ch_layout, description, sizeof(description));
+                    av_channel_layout_uninit(&ch_layout);
+                    av_dict_set(&av_opts, "downmix", description, 0);
                     break;
+                }
             }
         }
     }
@@ -268,11 +279,8 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
         w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
     {
-        pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
+        av_dict_set(&av_opts, "downmix", "stereo", 0);
     }
-
-    // Set decoder opts...
-    AVDictionary * av_opts = NULL;
 
     // Dynamic Range Compression
     if (w->audio->config.out.dynamic_range_compression >= 0.0f &&
@@ -318,6 +326,14 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context->pkt_timebase.num = pv->audio->config.in.timebase.num;
     pv->context->pkt_timebase.den = pv->audio->config.in.timebase.den;
+
+    // libavcodec can't decode TrueHD Mono (bug #356)
+    // work around it by requesting Stereo and downmixing
+    if (w->codec_param                     == AV_CODEC_ID_TRUEHD &&
+        w->audio->config.in.channel_layout == AV_CH_LAYOUT_MONO)
+    {
+        pv->context->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
+    }
 
     // avcodec_open populates av_opts with the things it didn't recognize.
     AVDictionaryEntry *t = NULL;
@@ -731,14 +747,12 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             // libavcodec can't decode TrueHD Mono (bug #356)
             // work around it by requesting Stereo before decoding
             if (context->codec_id == AV_CODEC_ID_TRUEHD &&
-                context->channel_layout == AV_CH_LAYOUT_MONO)
+                context->ch_layout.u.mask == AV_CH_LAYOUT_MONO)
             {
                 truehd_mono                     = 1;
-                context->request_channel_layout = AV_CH_LAYOUT_STEREO;
-            }
-            else
-            {
-                context->request_channel_layout = 0;
+                AVChannelLayout ch_layout = AV_CHANNEL_LAYOUT_STEREO;
+                av_opt_set_chlayout(context, "downmix", &ch_layout, AV_OPT_SEARCH_CHILDREN);
+                context->ch_layout = ch_layout;
             }
 
             AVPacket *avp = av_packet_alloc();
@@ -778,16 +792,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     info->sample_bit_depth  = context->bits_per_raw_sample;
 
                     int bps = av_get_bits_per_sample(context->codec_id);
-                    int channels;
-                    if (frame->channel_layout != 0)
-                    {
-                        channels = av_get_channel_layout_nb_channels(
-                                                        frame->channel_layout);
-                    }
-                    else
-                    {
-                        channels = frame->channels;
-                    }
+                    int channels = frame->ch_layout.nb_channels;
 
                     info->bitrate = bps * channels * info->rate.num;
                     if (info->bitrate <= 0)
@@ -827,15 +832,17 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         }
                         else
                         {
-                            info->channel_layout = frame->channel_layout;
+                            info->channel_layout = frame->ch_layout.u.mask;
                         }
                     }
                     if (info->channel_layout == 0)
                     {
                         // Channel layout was not set.  Guess a layout based
                         // on number of channels.
-                        info->channel_layout = av_get_default_channel_layout(
-                                                            frame->channels);
+                        AVChannelLayout channel_layout;
+                        av_channel_layout_default(&channel_layout, frame->ch_layout.nb_channels);
+                        info->channel_layout = channel_layout.u.mask;
+                        av_channel_layout_uninit(&channel_layout);
                     }
                     if (context->codec_id == AV_CODEC_ID_AC3 ||
                         context->codec_id == AV_CODEC_ID_EAC3)
@@ -2227,7 +2234,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         else
         {
             AVFrameSideData *side_data;
-            uint64_t         channel_layout;
+            AVChannelLayout  channel_layout;
             if ((side_data =
                  av_frame_get_side_data(pv->frame,
                                 AV_FRAME_DATA_DOWNMIX_INFO)) != NULL)
@@ -2252,13 +2259,15 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                                                  center_mix_level,
                                                  downmix_info->lfe_mix_level);
             }
-            channel_layout = pv->frame->channel_layout;
-            if (channel_layout == 0)
+            channel_layout = pv->frame->ch_layout;
+            if (channel_layout.order != AV_CHANNEL_ORDER_NATIVE || channel_layout.u.mask == 0)
             {
-                channel_layout = av_get_default_channel_layout(
-                                                        pv->frame->channels);
+                hb_log("decavcodec: unsupported channel layout order, guessing one.");
+                AVChannelLayout default_ch_layout;
+                av_channel_layout_default(&default_ch_layout, pv->frame->ch_layout.nb_channels);
+                channel_layout = default_ch_layout;
             }
-            hb_audio_resample_set_channel_layout(pv->resample, channel_layout);
+            hb_audio_resample_set_channel_layout(pv->resample, channel_layout.u.mask);
             hb_audio_resample_set_sample_fmt(pv->resample,
                                              pv->frame->format);
             hb_audio_resample_set_sample_rate(pv->resample,
