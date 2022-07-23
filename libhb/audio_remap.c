@@ -258,7 +258,7 @@ void hb_audio_remap_set_channel_layout(hb_audio_remap_t *remap,
         {
             channel_layout = AV_CH_LAYOUT_STEREO;
         }
-        remap->nchannels = av_get_channel_layout_nb_channels(channel_layout);
+        remap->nchannels = hb_layout_get_discrete_channel_count(channel_layout);
 
         // in some cases, remapping is not necessary and/or supported
         if (remap->nchannels > HB_AUDIO_REMAP_MAX_CHANNELS)
@@ -317,7 +317,7 @@ void hb_audio_remap_build_table(hb_chan_map_t *channel_map_out,
         // Dolby Surround is Stereo when it comes to remapping
         channel_layout = AV_CH_LAYOUT_STEREO;
     }
-    nchannels = av_get_channel_layout_nb_channels(channel_layout);
+    nchannels = hb_layout_get_discrete_channel_count(channel_layout);
 
     // clear remap table before (re-)building it
     memset(remap_table, 0, nchannels * sizeof(int));

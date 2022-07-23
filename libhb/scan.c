@@ -1539,7 +1539,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     {
         int lfes     = (!!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY) +
                         !!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY_2));
-        int channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
+        int channels = hb_layout_get_discrete_channel_count(audio->config.in.channel_layout);
         char *desc   = audio->config.lang.description +
                         strlen(audio->config.lang.description);
         size_t size = sizeof(audio->config.lang.description) - strlen(audio->config.lang.description);

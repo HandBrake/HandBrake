@@ -802,19 +802,21 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->sample_rate = audio->config.out.samplerate;
         if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
-            track->st->codecpar->channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
-            track->st->codecpar->channel_layout = audio->config.in.channel_layout;
+            AVChannelLayout ch_layout = {0};
+            av_channel_layout_from_mask(&ch_layout, audio->config.in.channel_layout);
+            track->st->codecpar->ch_layout = ch_layout;
         }
         else
         {
-            track->st->codecpar->channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
-            track->st->codecpar->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+            AVChannelLayout ch_layout = {0};
+            av_channel_layout_from_mask(&ch_layout, hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL));
+            track->st->codecpar->ch_layout = ch_layout;
         }
 
         const char *name;
         if (audio->config.out.name == NULL)
         {
-            switch (track->st->codecpar->channels)
+            switch (track->st->codecpar->ch_layout.nb_channels)
             {
                 case 1:
                     name = "Mono";
