@@ -162,7 +162,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added a stop breakpoint to the queue, set when stop after job is selected and may be reordered (#2572)
 - Added support for Windows 10/11 notifications, enable in Preferences > When Done
 - Added support for Right to Left UI rendering for languages that require it. This can be set in preferences
-- Added Traditional Chinese (正體中文) translation
+- Added Traditional Chinese (正體中文) and Polish (Polski) translations
 - Updated translations
   - Simplified Chinese (简体中文) - includes fix for access keys in menus
   - Corsican (Corsu)
