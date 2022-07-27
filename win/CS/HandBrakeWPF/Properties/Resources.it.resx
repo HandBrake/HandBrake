@@ -201,9 +201,9 @@ Boston, MA 02110-1301, USA.</value>
     <value>HandBrake sta già convertendo.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
- 
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+    <value>Ci sono già processi in coda con lo stesso percorso di destinazione. Si prega di scegliere un percorso diverso per questo processo.
+
+Puoi modificare le opzioni per creare il nome dei file in automatico su "Strumenti -&gt; Preferenze -&gt; File di Output"
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -564,7 +564,7 @@ Sei sicuro di voler chiudere HandBrake?</value>
 Il vecchio file delle preimpostazioni è stato salvato in:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>con {0} errori o annullamenti rilevati.</value>
+    <value>con {0} errori rilevati. Controlla la finestra della Coda per ulteriori dettagli.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Spazio insufficiente</value>
@@ -1249,13 +1249,13 @@ Vuoi sovrascriverlo?</value>
     <value>Num. di immagini di anteprima da scansione:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Work Priority Level:</value>
+    <value>Livello di Priorità del Lavoro:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+    <value>Preferisci l'uso di Intel QuickSync per la decodifica video se è in uso la codifica QuickSync e l'hardware è disponibile.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Also use QuickSync decoding when not using a QuickSync encoder. (i.e. x265) </value>
+    <value>Usa la decodifica QuickSync se non è in uso il Codificatore QuickSync (es. x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Rimuovi la punteggiatura comune </value>
@@ -1673,7 +1673,7 @@ Sono supportati VLC e MPC-HC. Altri riproduttori multimediali potrebbero funzion
     <value>Opzioni avanzate:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>Codifica Veloce</value>
+    <value>Decodifica Veloce</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
     <value>Frequenza Fotogrammi (FPS):</value>
@@ -1862,10 +1862,10 @@ Tempo rimanente: {5}, Trascorso: {6} {7}</value>
     <value>Elimina selezionati</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+    <value>Modalità Portatile: Impossibile creare la cartella TMP. Controllare che il percorso sia corretto e si abbiano i permessi di scrittura.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+    <value>Modalità Portatile: Impossibile creare la cartella di Archiviazione. Controllare che il percorso sia corretto e si abbiano i permessi di scrittura.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Modalità Portatile: Impossibile leggere il file portable.ini. Potrebbe esserci un errore in questo file. Riprova usando portable.ini.template come riferimento.</value>
@@ -2144,7 +2144,7 @@ Se supportata, ogni preimpostazione dell'utente verrà importata.</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>È disponibile una nuova versione di HandBrake!</value>
+    <value>È disponibile una nuova versione!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
@@ -2332,7 +2332,7 @@ Scegliere una preimpostazione differente.</value>
     <value>Livello al quale viene mostrato l'avviso di spazio su disco in esaurimento:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Nota: questo è il numero massimo di processi simultanei. Limitazioni hardware potrebbero ridurre il numero effettivo di processi simultanei durante la codifica.</value>
+    <value>Nota: questo è il numero massimo di processi simultanei. Limitazioni hardware potrebbero ridurre il numero effettivo di processi simultanei durante la codifica. L'impostazione sarà applicata solo dalla prossima coda o al riavvio del programma.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Non Disponibile)</value>
@@ -2619,40 +2619,54 @@ Sono supportati solo file della coda della versione corrente.</value>
     <value>Scarica Versioni Ancora in Sviluppo (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>Enable QuickSync Deep Link Hyper Encode</value>
+    <value>Abilita Codifica QuickSync Deep Link</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+    <value>Usa molteplici sistemi di codifica per velocizzare una codifica singola, se supportato. Disabilitarlo permette di bilanciare il carico in parallelo tra vari sistemi di codifica.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>Open HandBrake</value>
+    <value>Avvia HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
-- Please try restarting HandBrake. 
-- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+    <value>Il supporto alla codifica via hardware è stato disabilitato in quanto causa comune di problemi all'avvio.
+- Prova a riavviare HandBrake.
+- Se il problema persiste, la causa potrebbe essere dovuta ad un driver della scheda grafica (sia integrata che discreta) obsoleto.
 
-Hardware encoding support can be re-enabled in preferences. </value>
+La codifica via hardware può essere riabilitata nelle Preferenze.</value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
-    <value>HandBrake was unable to start.</value>
+    <value>Impossibile avviare HandBrake.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>Reset Safe Mode</value>
+    <value>Reimposta Modalità Sicura</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
-    <value>Please restart HandBrake.</value>
+    <value>Si prega di riavviare HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>Esporta Statistiche della Coda (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>Export Done!</value>
+    <value>Esportazione Completata!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>You must first scan a source and have an initial destination directory set</value>
+    <value>É necessario scansionare prima una sorgente avendo già impostato un percorso di destinazione</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>Solo se il file esiste già sul disco.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Non sono state aggiunte tracce dei sottotitoli.
+
+La causa potrebbe essere dovuta al tipo di file contenitore selezionato. Consigliamo di leggere la nostra documentazione riguardo ai sottotitoli (in inglese) per ulteriori informazioni.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Nessuna</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Aggiorna Ora!</value>
   </data>
 </root>

@@ -118,2136 +118,2138 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>인코더 파라미터의 전체 목록: 
+    <value>Pełna lista parametrów enkodera:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>디코더  CPU 사용량을 줄이십시오.
+    <value>Zmniejsz zużycie procesora dekodera.
 
-만약 사용자의 device가 결과를 출력하는데 문제가 있다면 이와 같이 설정하십시오. (예를 들어, 손실된 프레임들)</value>
+Ustaw to, jeśli twoje urządzenie ma problemy z odtworzeniem wyjścia. (tj. porzucone klatki)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>경고: RF 0은 무손실입니다!</value>
+    <value>Ostrzeżenie: RF 0 jest bezstratny!</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>원본 파일이 또한 손실되지 않는 한, 0의 값은 무손실을 의미하고 
-이 값은 원본보다 큰 파일 사이즈가 될 수 있습니다.
+    <value>Wartość 0 oznacza bezstratność i spowoduje, że rozmiar pliku będzie większy niż oryginalne źródło,
+chyba że źródło było również bezstratne.
 
-x264와 x265의 규모는 대수이며 더 낮은 값은 더 높은 품질에 해당합니다.
+Skala x264 i x265 jest logarytmiczna i niższe wartości odpowiadają wyższej jakości.
 
-그래서 작은 값의 증가들은 결과 파일 크기를 점진적으로 더 크게 증가하도록 초래할 것입니다.</value>
+Tak mały wzrost wartości spowoduje progresywnie większy wzrost rozmiaru wynikowego pliku.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>프리셋된 사진 설정 값들로 마음대로 저장할 수 있습니다. 3가지 모드들이 있습니다:
+    <value>Za pomocą tego ustawienia wstępnego można opcjonalnie zapisać ustawienia obrazu. Dostępne są 3 tryby:
 
-없음: 사진 설정 값들이 프리셋에 저장되어 있지 않습니다. 원본을 불러올 때, 사진 설정들은 원본 해상도의 범위 안에 그대로 남아있을 것입니다. 이것은 또한 Anamorphic, 계수, 자르기 등에 영향을 미칩니다.
+Brak: ustawienia obrazu nie są zapisywane w ustawieniach wstępnych. Podczas ładowania źródła pozostaną one bez zmian w granicach rozdzielczości źródłowej. Wpływa to również na anamorficzny, moduł, kadrowanie itp.
 
-사용자 설정: 사용자가 마음껏 최대 너비와 높이를 설정할 수 있습니다. 이 작업을 수행할 때 인코딩은 이러한 값들보다 작거나 같을 것입니다. Keep Aspect Ratio가 자동적으로 켜질 것입니다.
+Niestandardowe: opcjonalnie możesz ustawić maksymalną szerokość i wysokość. Kiedy to zrobisz, kodowanie będzie mniejsze lub równe tym wartościom. Zachowaj proporcje zostaną automatycznie włączone.
 
-Source Maximum: 가능한 경우 항상 원본 해상도로 인코딩하십시오.</value>
+Maksimum źródła: Zawsze koduj z rozdzielczością źródła, jeśli to możliwe.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>이 프로그램은 자유 소프트웨어입니다; FSF에 의해 출시된
-GNU GPL, GPLv2, 그 이후의 버전(사용자 옵션에 따라)에
-따라서 재배포와 변경이 가능합니다.
+    <value>Ten program jest wolnym oprogramowaniem; możesz go redystrybuować 
+i/lub modyfikować go zgodnie z warunkami Powszechnej Licencji Publicznej 
+GNU opublikowane przez Free Software Foundation; albo wersja 2
+Licencji lub (według Twojego wyboru) dowolnej późniejszej wersji.
 
-이 프로그램은 사용자의 유용성을 위해 배포되었지만,
-어떠한 보증 또는 묵시적인 보증 없이 특정한 목적에 대한
-프로그램 사용 적합성에 대해서 재배포할 수 없습니다.
-GNU GPL을 자세히 살펴보십시오.
+Ten program jest rozpowszechniany z nadzieją, że będzie przydatny,
+ale BEZ ŻADNEJ GWARANCJI; nawet bez dorozumianej gwarancji
+SPRZEDAWALNOŚĆ lub PRZYDATNOŚĆ DO OKREŚLONEGO CELU. Zobacz
+GNU General Public License, aby uzyskać więcej informacji.
 
-이 프로그램과 함께 GNU GPL의 복사본을 받게 될 것입니다;
-그러지 않았다면, Free Software Foundation,
-Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으십시오.</value>
+Powinieneś otrzymać kopię Powszechnej Licencji Publicznej GNU
+wraz z tym programem; jeśli nie, napisz do Wolnego Oprogramowania
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>경고: 자동 파일 이름 설정이 켜져있지 않습니다. 옵션에서 해당 설정을 가능하게 해주십시오.</value>
+    <value>OSTRZEŻENIE: Nie masz włączonej funkcji automatycznego nazywania plików. Włącz to w opcjach.</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>경고: 현재 자동 오디오 및 자막 트랙 선택 설정이 없습니다. 옵션에서 기본 트랙 선택 방식을 설정할 수 있습니다.</value>
+    <value>OSTRZEŻENIE: Obecnie nie masz automatycznej konfiguracji wyboru ścieżki audio i napisów. Możesz ustawić domyślne zachowanie wyboru ścieżki w opcjach.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>내장된 프리셋들이 재설정되었습니다.</value>
+    <value>Wbudowane ustawienia wstępne zostały zresetowane.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>재설정 완료</value>
+    <value>Resetowanie zakończone</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>더 높은 화질 |</value>
+    <value>Wyższa jakość |</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| 더 낮은 화질</value>
+    <value>| Niższa jakość</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>플라시보 화질 |</value>
+    <value>Jakość placebo |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>에러</value>
+    <value>Błąd</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본설정에서 기본 경로를 설정해야 합니다.</value>
+    <value>Przed dodaniem do kolejki musisz włączyć automatyczne nazywanie plików ORAZ ustawić domyślną ścieżkę w preferencjach.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>경고</value>
+    <value>Ostrzeżenie</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>확실합니까?</value>
+    <value>Jesteś pewny?</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 인코딩 중 입니다.</value>
+    <value>HandBrake już koduje.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>대상 경로가 동일한 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.
+    <value>W kolejce znajdują się zadania o tej samej ścieżce docelowej. Wybierz inną ścieżkę dla tego zadania.
 
-"도구 메뉴 -&gt; 기본설정 -&gt; 출력 파일"에서 자동 파일 이름 지정 옵션을 구성할 수 있습니다.
+Możesz skonfigurować opcje automatycznego nazywania plików w "Menu Narzędzia -&gt; Preferencje -&gt; Pliki wyjściowe"
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>보류된 작업 {0}</value>
+    <value>Zadania oczekujące {0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>새로운 기본 프리셋 세트: {0}</value>
+    <value>Nowy domyślny zestaw ustawień: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>새로운 업데이트가 가능합니다. Tools Menu &gt; Options to Install로 이동하십시오</value>
+    <value>Dostępna jest nowa aktualizacja. Przejdź do menu Narzędzia &gt; Opcje instalacji</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>프리셋이 설정되지 않았습니다.</value>
+    <value>Nie wybrano ustawień wstępnych.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>내장된 프리셋을 변경할 수 없습니다. 자신만의 프리셋 중 하나를 선택하십시오.</value>
+    <value>Nie można modyfikować wbudowanych ustawień wstępnych. Wybierz jedno z własnych ustawień wstępnych.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>폴더를 선택하십시오.</value>
+    <value>Wybierz folder.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>인코딩을 준비 중입니다 ...</value>
+    <value>Przygotowuję się do kodowania...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>내장된 프리셋과 같은 이름을 가진 프리셋을 추가할 수 없습니다.</value>
+    <value>Nie można zaimportować ustawienia wstępnego o tej samej nazwie, co wbudowane ustawienie wstępne.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>프리셋 "{0}" 이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>Ustawienie wstępne "{0}" już istnieje. Czy chcesz to nadpisać?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>프리셋</value>
+    <value>Presety</value>
   </data>
   <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
-    <value>선택한 프리셋을 업데이트하시겠습니까?</value>
+    <value>Czy na pewno chcesz zaktualizować wybrane ustawienie presetu?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>해당 프리셋이 현재 설정들에 업데이트되었습니다.</value>
+    <value>Preset został teraz zaktualizowany o twoje obecne ustawienia.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.
-사용자의 내장 프리셋이 오래되었습니다. 이러한 프리셋들은 지금 업데이트되어야 합니다.사용자 지정 프리셋들은 업데이트되지 않았으므로 사용자가 프리셋을 삭제하고 다시 추가하여 프리셋을 다시 만들어야 합니다.
-이전 user_presets.xml 파일은 백업됩니다.</value>
+    <value>HandBrake ustalił, że wbudowane ustawienia wstępne są nieaktualne... Te ustawienia zostaną teraz zaktualizowane.
+Twoje niestandardowe ustawienia wstępne nie zostały zaktualizowane, więc może być konieczne odtworzenie ich przez usunięcie i ponowne dodanie.
+Utworzono kopię zapasową poprzedniego pliku user_presets.xml.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>대기열 종료됨</value>
+    <value>Kolejka zakończona</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>스캔이 취소되었습니다.</value>
+    <value>Skanowanie anulowane.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>스캔 완료</value>
+    <value>Skanowanie zakończone</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>스캔 실패:</value>
+    <value>Skanowanie nie powiodło się:</value>
   </data>
   <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
-    <value>스캔에 실패하였습니다... 자세한 내용은 Activity Log를 참고하십시오.</value>
+    <value>Skanowanie nie powiodło się... Szczegółowe informacje można znaleźć w dzienniku aktywności.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>파일을 스캔하고 있습니다. 잠시만 기다리십시오...</value>
+    <value>Skanowanie źródła, proszę czekać...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>{1}개 중 {0}개 스캔 중 ({2}%)</value>
+    <value>Tytuł skanowania {0} z {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>인코딩을 시작하기 전에, 먼저 파일을 스캔하고 작업을 설정하십시오. 계속하기 위해서 도구모음에 있는 '파일' 버튼을 클릭하십시오.</value>
+    <value>Musisz najpierw zeskanować źródło i skonfigurować zadanie przed rozpoczęciem kodowania. Kliknij przycisk „Źródło” na pasku narzędzi, aby kontynuować.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>자신의 프리셋 중 하나를 선택했는지 확인하십시오. 내장된 프리셋을 내보낼 수 없다는 것에 유의하십시오.</value>
+    <value>Upewnij się, że wybrałeś jedno z własnych ustawień wstępnych. Należy pamiętać, że nie można eksportować wbudowanych ustawień wstępnych.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>업데이트를 위해 프리셋을 선택하십시오.</value>
+    <value>Wybierz ustawienie wstępne do aktualizacji.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>계속하기 위해서 '파일'을 선택하십시오.</value>
+    <value>Wybierz „Źródło”, aby kontynuować</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0}보류된 작업</value>
+    <value>{0}Zadania oczekujące</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>Ogłoszenie</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>덮어쓰기?</value>
+    <value>Przepisać?</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>질문</value>
+    <value>Pytanie</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>준비</value>
+    <value>Gotowy</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>업데이트가 완료되었습니다.</value>
+    <value>Zaktualizowano</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>프리셋 버전</value>
+    <value>Wstępnie ustawiona wersja</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>가지고 오려고 하는 프리셋은 현재 HandBrake와는 다른 버전입니다.
-해당 프리셋에서 모든 값들을 가지고 오는 것은 불가능할 것입니다.
+    <value>Ustawienie wstępne, które próbujesz zaimportować, pochodzi z innej wersji HandBrake.
 
-계속 진행하시겠습니까?</value>
+Może nie być możliwe zaimportowanie wszystkich wartości z tego ustawienia wstępnego.
+
+Czy chcesz kontynuować?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>프리셋을 가지고 올 수 없습니다!</value>
+    <value>Nie można zaimportować ustawień wstępnych!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>프리셋에 문제가 있거나 HandBrake와 상이한 버전이기 떄문에 해당 프리셋을 가지고 올 수 없습니다.</value>
+    <value>Nie można zaimportować ustawienia wstępnego, ponieważ wygląda na uszkodzone lub ze starszej wersji HandBrake</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>대기열에 추가하기 전에 출력 결과 파일에 대한 저장 경로를 설정하십시오.</value>
+    <value>Przed dodaniem do kolejki należy najpierw ustawić ścieżkę docelową pliku wyjściowego.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>입력된 저장 경로가 적합하지 않은 문자를 포함하고 있고 저장 경로가 변경될 수 없습니다.</value>
+    <value>Wprowadzona ścieżka docelowa zawierała niedozwolone znaki i nie zostanie zaktualizowana.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>미리보기 {0}</value>
+    <value>Zapowiedź {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>미리보기(화면에 맞춰서)</value>
+    <value>Podgląd (skalowany)</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>출력 결과: {0}</value>
+    <value>Wyjście: {0}</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>이용 가능한 추가 옵션: {source_path} 또는 {source_folder_name} 또는 {source}</value>
+    <value>Dostępne dodatkowe opcje: {source_path} lub {source_folder_name} lub {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>원본 파일과 경로 및 파일 이름이 같은 파일에는 인코딩할 수 없습니다. 원본 파일과 일치하지 않도록 대상 파일 이름을 업데이트하십시오.</value>
+    <value>Nie można kodować do pliku o tej samej ścieżce i nazwie pliku co plik źródłowy. Zaktualizuj nazwę pliku docelowego, aby nie była zgodna z plikiem źródłowym.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>시스템이 HandBrake의 웹 브라우저 실행을 막고 있습니다.</value>
+    <value>Twój system uniemożliwił HandBrake uruchomienie przeglądarki internetowej.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>여전히 웹사이트 https://handbrake.fr 에 직접 방문하여 도움말 페이지에 접속할 수 있습니다.</value>
+    <value>Nadal możesz uzyskać dostęp do stron pomocy, odwiedzając witrynę bezpośrednio pod adresem: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>선택된 프리셋으로 설정할 수 없습니다.</value>
+    <value>Nie można zaimportować wybranego ustawienia wstępnego.</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>프리셋이 잘못되었거나 HandBrake가 지원하지 않는 오래된 버전입니다.
-오래된 프리셋은 반드시 현재 버전으로 다시 만들어져야 합니다.</value>
+    <value>Ustawienie wstępne może być uszkodzone lub pochodzić ze starszej wersji hamulca ręcznego, która nie jest obsługiwana. 
+Presety ze starszych wersji muszą zostać odtworzone w bieżącej wersji.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>비디오 인코더에 전달될 수 있는 추가적인 고급 인자.</value>
+    <value>Dodatkowe zaawansowane argumenty, które można przekazać do kodera wideo.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>없음 - 컨테이너가 해당 형식을 지원하지 않는 트랙만 굽습니다.
-외부 오디오 트랙 - 사용할 수 있다면 외부 오디오 트랙을 굽습니다.
-첫 번째 트랙 - 첫 번째 트랙을 굽습니다.
-외부 오디오 우선, 외부 오디오가 없을 경우 첫 번째 트랙 - 외부 오디오 트랙이 존재할 경우, 외부 오디오 트랙이 구워질 것이고, 그렇지 않은 경우 첫 번째 트랙이 선택될 것입니다.</value>
+    <value>Brak — zostaną nagrane tylko utwory, w których kontener nie obsługuje formatu.
+Zagraniczna ścieżka audio — zagraniczna ścieżka audio zostanie nagrana, jeśli jest dostępna.
+
+Pierwszy utwór — zostanie wypalony pierwszy utwór.
+Preferowana obca ścieżka dźwiękowa, w przeciwnym razie pierwsza — jeśli istnieje obca ścieżka dźwiękowa, zostanie ona nagrana, w przeciwnym razie zostanie wybrana pierwsza ścieżka.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM 자막 호환성</value>
+    <value>Zgodność napisów WebM</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>HandBrake의 WebM은 구워진 자막만을 지원합니다.
+    <value>WebM w HandBrake obsługuje tylko nagrane napisy.
 
-자막 선택을 변경해야 합니다.
+Powinieneś zmienić wybór napisów.
 
-변경하지 않을 경우, 굽지 않은 자막들은 없어질 것입니다.</value>
+Jeśli będziesz kontynuować, Twoje niespalone napisy zostaną utracone.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>올바른 원본 또는 제목을 찾을 수 없습니다.</value>
+    <value>Nie znaleziono prawidłowego źródła ani tytułów.</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake는 인코딩할 제목을 가진 올바른 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나가 원인일 수 있습니다.
+    <value>HandBrake nie będzie mógł zakodować wybranego źródła, ponieważ nie znalazł prawidłowego źródła z tytułami do zakodowania. Może to wynikać z jednego z następujących powodów:
 
-- 각 소스 제목의 재생 시간은 '기본설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
-- 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
-- 파일에 대한 읽기 권한이 없거나 다른 응용 프로그램에서 파일을 잠글 수 있습니다.
-- 소스가 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
+- Czas trwania każdego tytułu źródłowego jest poniżej opcji progowej „Minimalny czas trwania tytułu” w „Preferencje &gt; Zaawansowane”.
+- Plik źródłowy nie jest prawidłowym plikiem wideo lub jest w formacie, którego HandBrake nie obsługuje.
+- Możesz nie mieć dostępu do odczytu pliku lub inna aplikacja może mieć blokadę pliku.
+- Źródło może być zabezpieczone przed kopiowaniem lub zawierać DRM. Należy pamiętać, że HandBrake nie obsługuje usuwania zabezpieczeń przed kopiowaniem.
 
-활동 로그에 추가 정보가 있을 수 있습니다.</value>
+Dziennik aktywności może zawierać dodatkowe informacje.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>대기열{0}</value>
+    <value>Kolejka {0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>인코딩 시작</value>
+    <value>Rozpocznij kodowanie</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>Uruchom kolejkę</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>기본 프리셋을 삭제할 수 없습니다. 먼저 다른 프리셋을 기본 값으로 설정하십시오.</value>
+    <value>Nie można usunąć domyślnego ustawienia wstępnego. Najpierw ustaw inne ustawienie wstępne jako domyślne.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>프리셋을 삭제하시겠습니까:</value>
+    <value>Czy na pewno chcesz usunąć ustawienie wstępne:</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}, Time Remaining: {5}, Elapsed: {6} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>프리셋은 이름이 필요합니다. 프리셋 이름 칸을 채워주십시오.</value>
+    <value>Preset musi mieć nazwę. Proszę wypełnić pole Preset Name.</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>같은 이름의 프리셋이 이미 존재합니다. 덮어쓰시겠습니까?</value>
+    <value>Preset o tej nazwie już istnieje. Czy chcesz to nadpisać?</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>'파일 최댓값' 옵션을 이용하려면 먼저 원본 파일을 스캔해야 합니다.</value>
+    <value>Aby skorzystać z opcji „Maksymalne źródło”, musisz najpierw zeskanować źródło.</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>사용자 정의 너비 또는 높이는 '사용자 정의' 옵션에 입력해야 합니다.</value>
+    <value>W przypadku opcji „Niestandardowa” należy wypełnić pola Niestandardowa szerokość lub Wysokość.</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>프리셋을 추가할 수 없습니다.</value>
+    <value>Nie można dodać ustawień wstępnych</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류</value>
+    <value>Nieznany błąd</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>기본 오디오</value>
+    <value>Domyślne ustawienia dźwięku</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>오디오 트랙</value>
+    <value>Ścieżki audio</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택 ...</value>
+    <value>Zachowanie wyboru ...</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>Przełącz się z powrotem na utwory</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>챕터 표시 파일을 저장할 수 없습니다!</value>
+    <value>Nie można zapisać pliku znaczników rozdziałów!</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>챕터 표시 이름이 인코드에 저장되지 않을 것입니다.</value>
+    <value>Nazwy znaczników rozdziałów NIE zostaną zapisane w twoim kodowaniu.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>{0}을 수행할 시에, {1}가 실행됩니다.</value>
+    <value>Następujące działanie "{0}" nastąpi w {1}sekund.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>문제가 지속되면 HandBrake를 다시 시작해 보십시오.</value>
+    <value>Jeśli problem będzie się powtarzał, spróbuj ponownie uruchomić HandBrake.</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>해당 오류에 대한 추가 정보가 없습니다.</value>
+    <value>Nie ma dalszych informacji na temat tego błędu.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>알 수 없는 오류가 발생했습니다.</value>
+    <value>Wystąpił nieznany błąd.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>새 업데이트가 가능합니다! 웹 사이트에서 출시 정보를 확인하십시오.</value>
+    <value>Dostępna jest nowa aktualizacja! Sprawdź na stronie internetowej informacje o wersji.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>사용자의 시스템은 64비트 버전의 HandBrake!를 지원합니다! 이것은 이 32비트 버전에 비해 성능과 안정성이 향상되었습니다.
-    릴리스 정보는 웹사이트를 확인하십시오.</value>
+    <value>Twój system obsługuje 64-bitową wersję HandBrake! Zapewnia to poprawę wydajności i stabilności w porównaniu z tą 32-bitową wersją.
+Sprawdź na stronie internetowej informacje o wersji.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>현재 새로운 업데이트가 없습니다.</value>
+    <value>W tej chwili nie ma nowych aktualizacji.</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>업데이트 다운로드 완료</value>
+    <value>Pobrano aktualizację</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>업데이트 서비스가 이용 불가합니다. https://handbrake.fr 에서 업데이트를 다운로드 받을 수 있습니다.</value>
+    <value>Usługa aktualizacji jest niedostępna. Możesz spróbować pobrać aktualizację z https://handbrake.fr</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>업데이트에 실패하였습니다. https://handbrake.fr 에서 업데이트를 다운로드 할 수 있습니다.</value>
+    <value>Aktualizacja nieudana. Możesz spróbować pobrać aktualizację z https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>저장 크기: {0}x{1}</value>
+    <value>Rozmiar przechowywania: {0}x{1}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>Dodać do kolejki</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>보류된 인코드 없음</value>
+    <value>Brak oczekujących kodowań</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>현재 인코딩 작업이 없습니다.</value>
+    <value>Obecnie nie ma kodowanych zadań</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>대기열</value>
+    <value>Kolejka</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
-    <value>대기열을 지우시겠습니까?</value>
+    <value>Czy na pewno chcesz wyczyścić kolejkę?</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>확인</value>
+    <value>Potwierdzać</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0}보류된 작업</value>
+    <value>{0}oczekujące zadania</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>Kolejka wstrzymana</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>선택된 작업을 삭제하시겠습니까?</value>
+    <value>Czy na pewno chcesz usunąć wybrane oferty pracy?</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>해당 인코딩은 현재 진행 중입니다. 만약 삭제할 경우, 인코딩은 중단될 것입니다. 계속하시겠습니까?</value>
+    <value>To kodowanie jest obecnie w toku. Jeśli go usuniesz, kodowanie zostanie zatrzymane. Jesteś pewien, że chcesz kontynuować?</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>보류된 작업이 없습니다.</value>
+    <value>Brak oczekujących zadań.</value>
   </data>
   <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
-    <value>해당 작업을 수정하시겠습니까? 해당 작업이 대기열에서 제거될 것이며 메인 화면으로 전송될 것입니다.</value>
+    <value>Czy na pewno chcesz edytować tę ofertę pracy? Zostanie usunięty z kolejki i przesłany do głównego okna.</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>대기열 준비됨</value>
+    <value>Kolejka gotowa</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>대기열 실행 안 함</value>
+    <value>Kolejka nie działa</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료</value>
+    <value>Kolejka zakończona</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>마지막으로 대기 중인 작업 완료</value>
+    <value>Ostatnie zadanie w kolejce zakończone</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>Kolejka uruchomiona</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%. FPS: {3:000.0}, 평균 FPS: {4:000.0}, 남은 시간: {5}, 경과 시간: {6:d\:hh\:mm\:ss} </value>
+    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}, Time Remaining: {5}, Elapsed: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>인코딩이 현재 진행 중입니다. HandBrake를 종료할 경우 인코딩이 중단됩니다.
-HandBrake를 종료하시겠습니까?</value>
+    <value>Kodowanie jest aktualnie uruchomione. Wyjście z HandBrake zatrzyma to kodowanie.</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>사진 미리보기</value>
+    <value>Podgląd obrazu</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>이전 미리보기 파일을 삭제할 수 없습니다. 미디어 플레이어에서 여전히 미리보기가 열려 있을 수 있습니다. 닫아주세요.</value>
+    <value>Nie można usunąć poprzedniego pliku podglądu. Nadal możesz mieć otwarty podgląd w swoim odtwarzaczu multimedialnym. Zamknij to.</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>미리보기를 만들기 전에 먼저 파일을 스캔하고 인코딩을 설정하십시오.</value>
+    <value>Musisz najpierw zeskanować źródło i skonfigurować kodowanie przed utworzeniem podglądu.</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>미리보기 파일을 찾을 수 없습니다. 파일이 삭제되었거나 인코딩에 실패하였습니다. 자세한 내용은 액티비티 로그를 확인하십시오.</value>
+    <value>Nie można znaleźć pliku podglądu. Albo plik został usunięty, albo kodowanie nie powiodło się. Sprawdź dziennik aktywności, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 비디오를 인코딩하고 있습니다! 한 번에 하나의 파일만 인코딩할 수 있습니다.</value>
+    <value>HandBrake już koduje wideo! Jednocześnie można zakodować tylko jeden plik.</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>기본 자막</value>
+    <value>Domyślne napisy</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>Ścieżki napisów</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>트랙으로 되돌아가기</value>
+    <value>Przełącz się z powrotem na utwory</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>동작 선택 ...</value>
+    <value>Zachowanie wyboru ...</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>보관 파일:</value>
+    <value>Zarchiwizowany plik:</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>프리셋을 불러올 수 없습니다.</value>
+    <value>Nie można wczytać ustawień wstępnych.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake는 프리셋 파일을 불러올 수 없습니다. 해당 파일이 HandBrake가 지원하지 않는 오래된 버전의 파일이거나 손상되었을 가능성이 높습니다.
+    <value>HandBrake nie mógł załadować pliku ustawień wstępnych. Może pochodzić ze starszej, nieobsługiwanej wersji HandBrake lub być uszkodzona.
 
-해당 프리셋 파일은 다음 경로에 보관되어 있습니다:</value>
+Twój stary plik ustawień wstępnych został zarchiwizowany do:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0}개의 오류가 감지되었습니다. 자세한 내용은 대기열 창을 확인하십시오.</value>
+    <value>z {0} wykryto błędy. Sprawdź okno kolejki, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>디스크 공간 부족</value>
+    <value>Mało miejsca na dysku</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>경고, 디스크 공간이 부족합니다. 디스크 공간 부족한 경우, HandBrake는 인코딩을 완료할 수 없습니다.</value>
+    <value>Ostrzeżenie, kończy Ci się miejsce na dysku. HandBrake nie będzie w stanie ukończyć tego kodowania, jeśli zabraknie miejsca.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value> {0} 라인이 잘못되었습니다. 가져올 항목이 없습니다.</value>
+    <value>Linia {0} jest nieważny. Nic nie zostanie zaimportowane.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>챕터 파일을 가지고 올 수 없습니다</value>
+    <value>Nie można zaimportować pliku rozdziału</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>챕터 파일의 모든 라인에는 적어도 2개의 데이터 열이 있어야 합니다.</value>
+    <value>Wszystkie wiersze w pliku rozdziałów muszą mieć co najmniej 2 kolumny danych</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>챕터 파일의 첫 번째 열에는 영(0)보다 큰 정수 값만 포함해야 합니다.</value>
+    <value>Pierwsza kolumna w pliku rozdziałów może zawierać tylko liczbę całkowitą większą od zera (0)</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>'{0}' 형식의 챕터 파일은 현재 지원되지 않습니다.</value>
+    <value>Pliki rozdziałów typu "{0}" nie są obecnie obsługiwane.</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>지원되지 않는 챕터 파일 형식</value>
+    <value>Nieobsługiwany typ pliku rozdziału</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>원본 미디어에 대한 유효하지 않은 챕터 정보</value>
+    <value>Nieprawidłowe informacje o rozdziale dla nośnika źródłowego</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>원본 미디어의 챕터 수와
-입력 파일의 챕터 수가 일치하지 않습니다. ({0} vs {1})
+    <value>Liczba rozdziałów na nośnikach źródłowych 
+a liczba rozdziałów w pliku wejściowym nie zgadza się ({0} vs {1}).
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+Czy nadal chcesz importować nazwy rozdziałów?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>원본 미디어의 챕터 수와
-입력 파일의 챕터 수가 일치하지 않습니다. ({0} vs {1})
+    <value>Liczba rozdziałów na nośnikach źródłowych 
+a liczba rozdziałów w pliku wejściowym nie zgadza się ({0} vs {1}).
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+Czy nadal chcesz importować nazwy rozdziałów?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간에 챕터 수가 맞지 않습니다.</value>
+    <value>Liczba rozdziałów nie zgadza się między plikiem źródłowym i wejściowym</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>원본 미디어에 대한 챕터의 보고된 지속 시간
-과 입력 파일에 대한 챕터의 지속 시간이 차이가 매우 많습니다.
+    <value>Podawany czas trwania rozdziałów na nośnikach źródłowych
+a czas trwania rozdziałów w pliku wejściowym znacznie się różni.
 
-이 챕터 파일은 다른 파일 매체에서 만들어졌을 가능성이 매우 높습니다.
+Jest bardzo prawdopodobne, że ten plik rozdziału został utworzony z innego nośnika źródłowego.
 
-챕터 이름을 계속 가져오시겠습니까?</value>
+Czy na pewno chcesz zaimportować nazwy rozdziałów?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>원본 파일과 입력 파일 간 챕터 지속 시간이 맞지 않습니다.</value>
+    <value>Czas trwania rozdziału nie pasuje do pliku źródłowego i wejściowego</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>스캔을 중지하여 오류가 발생하였습니다. HandBrake를 다시 시작하십시오.</value>
+    <value>Wystąpił błąd podczas próby zatrzymania skanowania. Uruchom ponownie HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake는 새로운 버전 형식으로 사용자 프리셋 파일을 업그레이드 할 수 없습니다.
-프리셋 파일은 보관될 것이며 새 파일이 생성될 것입니다.  사용자만의 프리셋 파일을 다시 생성해야 합니다.</value>
+    <value>HandBrake nie może uaktualnić pliku ustawień wstępnych do nowego formatu wersji.
+Twój plik ustawień zostanie zarchiwizowany i utworzony zostanie nowy. Będziesz musiał ponownie utworzyć własne ustawienia wstępne.</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
+    <value>Wszelkie zmienione ustawienia mogą wymagać zresetowania przy następnym uruchomieniu HandBrake.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>사용자의 기본설정을 저장하는 동안 문제가 발생했습니다.</value>
+    <value>Wystąpił problem podczas próby zapisania preferencji.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>경고, 설정이 재설정되었습니다!</value>
+    <value>Uwaga, Twoje ustawienia zostały zresetowane!</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>사용자 설정 파일이 손상되었거나 접근할 수 없습니다. 설정이 기본 설정으로 재설정되었습니다.</value>
+    <value>Twój plik ustawień użytkownika był uszkodzony lub niedostępny. Ustawienia zostały zresetowane do wartości domyślnych.</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>사용자 설정 파일을 가져올 수 없습니다: {0}</value>
+    <value>Nie można załadować pliku ustawień użytkownika: {0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>사용자 설정 파일이 접근할 수 없거나 손상된 것 같습니다. 파일을 삭제하거나 HandBrake에서 새로운 파일을 생성할 수 있습니다.</value>
+    <value>Wygląda na to, że plik ustawień użytkownika jest niedostępny lub uszkodzony. Być może będziesz musiał usunąć plik i pozwolić HandBrake wygenerować nowy.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>사용자가 고른 출력 디렉터리는 존재하지 않거나, 해당 디렉터리에 파일을 쓸 수 있는 권한이 없습니다.</value>
+    <value>Wybrany katalog wyjściowy albo nie istnieje, albo nie masz uprawnień do zapisywania w nim plików.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>폴더를 생성하시겠습니까?</value>
+    <value>Utworzyć folder?</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>해당 폴더가 존재하지 않습니다. HandBrake에서 다음 폴더를 생성하시겠습니까?
+    <value>Folder, do którego próbujesz pisać, nie istnieje. Czy chcesz, aby HandBrake utworzył następujący folder?
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>대상 디렉터리를 시작할 수 없습니다.</value>
+    <value>Nie można uruchomić katalogu docelowego.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>올바른 대상 디렉터리가 있는지 확인하십시오.</value>
+    <value>Sprawdź, czy masz prawidłowy katalog docelowy.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
+    <value>Processing Pass {0} of {1}, (Subtitle Scan) {2:00.00}%, Scan Time Remaining: {3}, Elapsed: {4}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>추가적인 정보 없음</value>
+    <value>Brak dodatkowych informacji</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1}%, {3}의 {2} 통과)</value>
+    <value>{0} - ({1}%, Pass {2} of {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1} %, {3}의 {2} 통과 
-남은 시간: {4}</value>
+    <value>{1}%, Pass {2}z {3}
+Pozostały czas: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 기본설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
+    <value>Kolejka wstrzymana. Ostrzeżenie, dysk, na którym kodujesz, ma mało miejsca na dysku. Zwolnij trochę miejsca i naciśnij Start, aby kontynuować. Możesz także dostosować minimalny poziom przestrzeni w preferencjach.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>Kolejka wstrzymana</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>대기열 일시중지됨</value>
+    <value>Kolejka wstrzymana</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>경로 디렉터리의 디스크 공간이 부족합니다.
+    <value>W katalogu docelowym jest mało miejsca na dysku.
 
-이 경고가 기본설정에 표시되는 수준을 구성할 수 있습니다.
+Możesz skonfigurować poziom, na którym pojawia się ten alert w preferencjach.
 
-계속하시겠습니까?</value>
+Czy chcesz kontynuować?</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>오류나 완료 상태가 아니므로 작업 상태를 재설정할 수 없습니다</value>
+    <value>Nie można zresetować statusu zadania, ponieważ nie jest to stan błędu lub ukończony</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>대기열 파일을 복원할 수 없습니다.</value>
+    <value>Nie można przywrócić pliku kolejki.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>파일이 손상되었거나 HandBrake의 호환되지 않는 이전 버전입니다.</value>
+    <value>Plik może być uszkodzony lub pochodzić ze starszej, niezgodnej wersji HandBrake</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake는 이미 파일을 인코딩 중 입니다.</value>
+    <value>HandBrake już koduje plik.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>현재 진행 중인 인코딩을 멈추십시오. 문제가 계속되는 경우, HandBrake를 다시 시작하십시오.</value>
+    <value>Proszę zatrzymać bieżące kodowanie. Jeśli problem będzie się powtarzał, uruchom ponownie HandBrake.</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>미리보기 (실제 사이즈 {0}%)</value>
+    <value>Zapowiedź ({0}% % rzeczywisty rozmiar)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake를 실행하려면 64비트 버전의 Windows 10 이상이 필요합니다.</value>
+    <value>HandBrake wymaga do działania 64-bitowej wersji systemu Windows 10 lub nowszej.</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake를 실행하려면 Windows 10 이상이 필요합니다. 버전 0.9.9(XP), 0.10.5(Vista), 1.3.3(7 및 8.x)은 이러한 이전 운영 체제를 지원하는 마지막 버전입니다.</value>
+    <value>HandBrake wymaga do działania systemu Windows 10 lub nowszego. Wersja 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 i 8.x) to ostatnie wersje obsługujące te starsze systemy operacyjne.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>나머지를 추가하려고 계속하시겠습니까?</value>
+    <value>Czy chcesz kontynuować, próbując dodać resztę?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>'{0}' 파일은 이미 존재합니다!
-덮어쓰시겠습니까?</value>
+    <value>Plik „{0}” już istnieje!
+Czy chcesz to nadpisać?</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>시스템 클립보드는 현재 사용할 수 없습니다.</value>
+    <value>Schowek systemowy jest obecnie niedostępny.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>다른 응용 프로그램을 모니터링하거나 클립 보드를 자체적으로 잠그기 때문일 수 있습니다. 잠금을 해제하기 전까지는 클립보드를 사용할 수 없습니다.</value>
+    <value>Może to być spowodowane monitorowaniem innej aplikacji lub zablokowaniem schowka na własny użytek. Nie będziesz mógł korzystać ze schowka, dopóki nie zostanie odblokowany.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>라이선스:</value>
+    <value>Licencja:</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>버전:</value>
+    <value>Wersja:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- 새 범주 추가 --</value>
+    <value>-- Dodaj nową kategorię --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>프리셋 추가</value>
+    <value>Dodaj Preset</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>범주:</value>
+    <value>Kategoria:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>Opis:</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>이름:</value>
+    <value>Nazwa:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>면적:</value>
+    <value>Wymiary:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>원본 파일 트랙 선택</value>
+    <value>Wybór ścieżki źródłowej</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>다음 경로 경유 허용:</value>
+    <value>Zezwól na przekazywanie:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 때 오디오 트랙을 자동으로 선택하고 구성하는 방법을 설정합니다.</value>
+    <value>Skonfiguruj sposób automatycznego wybierania i konfiguracji ścieżek audio po wybraniu nowego tytułu lub źródła wideo.</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>'자동 경유' 동작:</value>
+    <value>Zachowanie „Auto Passthru”:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>비트전송률</value>
+    <value>Bitrate</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>코덱</value>
+    <value>Kodek</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>게인</value>
+    <value>Gain</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>Ukrywać</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>믹스다운</value>
+    <value>Mieszanie</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>대체 인코더:</value>
+    <value>Koder awaryjny:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>Przeładować</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>견본 비율</value>
+    <value>Próbna stawka</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>표시</value>
+    <value>Pokaż</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>트랙 이름</value>
+    <value>Nazwa utworu</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 동작</value>
+    <value>Zachowanie wyboru ścieżki:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>추가적인 트랙에 대해:</value>
+    <value>Dodatkowe utwory:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>오디오 코덱으로 '자동 경유' 를 선택한 경우</value>
+    <value>Gdy jako kodek audio wybrano „Auto Passthru”.</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>Znaczniki rozdziałów</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>챕터 이름</value>
+    <value>Nazwa rozdziału</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>챕터 수</value>
+    <value>Numer rozdziału</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>챕터 표시 생성</value>
+    <value>Utwórz znaczniki rozdziałów</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>지속 시간</value>
+    <value>Czas trwania</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>내보내기</value>
+    <value>Eksport</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>가져오기</value>
+    <value>Import</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>이름 내보내기</value>
+    <value>Eksportuj nazwy</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>이름 가져오기</value>
+    <value>Import Nazw</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>챕터 이름 재설정</value>
+    <value>Zresetuj nazwy rozdziałów</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>취소 작업</value>
+    <value>Anuluj akcję</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>진행</value>
+    <value>Przystępować</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>작업 완료 시</value>
+    <value>Po zakończeniu działania</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>오류 세부 정보:</value>
+    <value>Szczegóły błędu:</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>사용자 설정:</value>
+    <value>Własne:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>블록 제거</value>
+    <value>Odblokuj:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>인터레이스 해제</value>
+    <value>Usuwanie przeplotu:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>Preset:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>인터레이스 해제 프리셋</value>
+    <value>Wstępne ustawienie usuwania przeplotu</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>노이즈 제거:</value>
+    <value>Odszumianie:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>노이즈 제거 프리셋</value>
+    <value>Ustawienie odszumiania</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>노이즈 제거</value>
+    <value>Odszumianie melodii</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>텔레시네 해제:</value>
+    <value>Detelecine:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>필터</value>
+    <value>Filtry</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>가로 방향</value>
+    <value>Horyzontalne</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>그레이스케일</value>
+    <value>Skala szarości</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace 감지:</value>
+    <value>Wykrywanie przeplotu:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>Preset:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>회전:</value>
+    <value>Obrót:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>선명도:</value>
+    <value>Wyostrzyć:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>선명도 프리셋</value>
+    <value>Wyostrz ustawienie wstępne</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>선명도 조정</value>
+    <value>Wyostrz melodię</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>조정:</value>
+    <value>Melodia:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>추가</value>
+    <value>Dodaj</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>취소</value>
+    <value>Anuluj</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>파일 내용 지우기</value>
+    <value>Clear</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>종료</value>
+    <value>Zamknij</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>Kopiuj do Schowka</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>왼쪽으로 이동</value>
+    <value>Przesuń w lewo</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>오른쪽으로 이동</value>
+    <value>Ruch w prawo</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>저장</value>
+    <value>Zapisz</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>클립보드에 복사</value>
+    <value>Kopiuj do schowka</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>인코딩 로그</value>
+    <value>Zakoduj dziennik</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>활동 로그 디렉터리 열기</value>
+    <value>Otwórz katalog dzienników</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>스캔 로그</value>
+    <value>Dziennik skanowania</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>활동 로그</value>
+    <value>Log aktywności</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>전부 추가</value>
+    <value>Dodać wszystko</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>현재 추가</value>
+    <value>Dodaj bieżący</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>선택 추가</value>
+    <value>Dodaj zaznaczenie</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>Dodać do kolejki</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>고급</value>
+    <value>Zaawansowany</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>A/V 정렬 시작</value>
+    <value>Wyrównywać A/V Start</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>각도:</value>
+    <value>Kąt:</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>오디오</value>
+    <value>Audio</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>오디오 트랙들</value>
+    <value>Ścieżki audio</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>Przeglądaj</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>챕터</value>
+    <value>Rozdziały</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>컨테이너</value>
+    <value>Pojemnik</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>대상</value>
+    <value>Miejsce docelowe</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>Czas trwania:</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>다른 이름으로 저장:</value>
+    <value>Zapisz jako:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>필터</value>
+    <value>Filtry</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>형식:</value>
+    <value>Format:</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>Pomoc</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G 지원</value>
+    <value>Obsługa iPoda 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(수정됨)</value>
+    <value>(Zmodyfikowane)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>다중화: 시간이 다소 소요될 수 있습니다...</value>
+    <value>Muxing: może to chwilę potrwać...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>Opcje</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>출력 설정</value>
+    <value>Ustawienia wyjściowe</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>Pause</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>면적</value>
+    <value>Wymiary</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>사전 설정 편집</value>
+    <value>Edytuj Preset</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>프리셋 옵션 컨텍스트 메뉴</value>
+    <value>Menu kontekstowe opcji ustawień wstępnych</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>프리셋 삭제</value>
+    <value>Usuń ustawienie wstępne</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>프리셋</value>
+    <value>Presety</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>Zapowiedź</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>인코딩: {0}, {1:00.00}%, 남은 시간: {2}, {3}</value>
+    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>범위:</value>
+    <value>Zakres:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>Przeładować</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>제거</value>
+    <value>Usunąć</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>내장된 프리셋 재설정</value>
+    <value>Zresetuj wbudowane ustawienia wstępne</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>새로운 프리셋 저장</value>
+    <value>Zapisz nowe ustawienie wstępne</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>시작 시간 검색</value>
+    <value>Wyszukiwanie godziny rozpoczęcia</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>기본값 설정</value>
+    <value>Ustaw domyślne</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>Zapowiedź</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>대기열</value>
+    <value>Kolejka</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>Źródło:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>파일 열기</value>
+    <value>Otwarte źródło</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>인코딩을 시작합니다.</value>
+    <value>Rozpocznij kodowanie</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>Uruchom kolejkę</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>Stop</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>인코딩 멈춤</value>
+    <value>Zatrzymaj kodowanie</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>작업 중인 인코딩을 멈추시겠습니까?</value>
+    <value>Czy na pewno chcesz zatrzymać to kodowanie?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>자막 파일을 가져 오기 전에 인코딩할 원본 파일을 선택하십시오.</value>
+    <value>Wybierz źródło do kodowania przed próbą zaimportowania pliku z napisami.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>자막</value>
+    <value>Napisy</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>자막 트랙</value>
+    <value>Ścieżki napisów</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>개요</value>
+    <value>Summary</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
-    <value> - </value>
+    <value>-</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>제목:</value>
+    <value>Tytuł:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>현재 프리셋 업데이트</value>
+    <value>Zaktualizuj aktualne ustawienie wstępne</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>비디오</value>
+    <value>Wideo</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>웹 최적화</value>
+    <value>Optymalizacja Web</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>프리셋 관리</value>
+    <value>Zarządzaj Presetami</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>메타데이터</value>
+    <value>Metadata</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Nvidia NVENC 인코더 사용 가능</value>
+    <value>Zezwól na korzystanie z enkoderów Nvidia NVENC</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Intel QuickSync 인코더 사용 가능</value>
+    <value>Zezwalaj na używanie koderów Intel QuickSync</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>AMD VCE 인코더 사용 가능</value>
+    <value>Zezwalaj na korzystanie z enkoderów AMD VCE</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>입력한 파일 형식에 잘못된 문자가 포함되어 있습니다. 제거되었습니다.</value>
+    <value>Wprowadzony format pliku zawierał nieprawidłowe znaki. Zostały one usunięte.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>인코딩을 완료할 때마다 소리 내기</value>
+    <value>Odtwórz dźwięk po zakończeniu każdego kodowania</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>대기열이 완료되면 소리 재생</value>
+    <value>Odtwórz dźwięk, gdy kolejka się zakończy</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>개요 탭에 미리보기를 표시합니다.</value>
+    <value>Pokaż podglądy na karcie podsumowania.</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>응용프로그램 제목 표시줄에 인코딩 상태를 표시합니다.</value>
+    <value>Pokaż stan kodowania na pasku tytułu aplikacji.</value>
   </data>
   <data name="Options_7DayLogClear" xml:space="preserve">
-    <value>7일보다 오래된 로그 파일 지우기</value>
+    <value>Wyczyść pliki dziennika starsze niż 7 dni</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>O HandBrake</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>고급</value>
+    <value>Zaawansowany</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>고급 옵션</value>
+    <value>Zaawansowane opcje</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>인수:</value>
+    <value>Argumenty:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>파일 이름 자동 설정</value>
+    <value>Automatyczne nazywanie plików</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>출력 파일 자동 이름 지정</value>
+    <value>Automatycznie nazwij pliki wyjściowe</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>Sprawdź aktualizacje</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>인코딩이 완료된 후 완료된 대기열 항목 항상 지우기</value>
+    <value>Zawsze usuwaj zakończone elementy kolejki po zakończeniu kodowania</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>로그 기록 지우기</value>
+    <value>Wyczyść historię dziennika</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>특정 위치에 각각의 인코딩 로그 복사본 배치:</value>
+    <value>Umieść kopię poszczególnych dzienników kodowania w określonej lokalizacji:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>인코딩된 비디오와 같은 위치에 각각의 인코딩 로그 복사본 배치</value>
+    <value>Umieść kopię poszczególnych dzienników kodowania w tej samej lokalizacji, co zakodowane wideo</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>현재 버전</value>
+    <value>Obecna wersja</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>디코딩</value>
+    <value>Decoding</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>기본 경로:</value>
+    <value>Domyślna ścieżka:</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>업데이트 다운로드</value>
+    <value>Pobierz aktualizację</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD 읽기</value>
+    <value>DVD Czytanie</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav을 사용 안 함. (대신 libdvdread가 사용 됨)</value>
+    <value>Wyłącz LibDVDNav. (zamiast tego zostanie użyty libdvdread)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>인코딩</value>
+    <value>Kodowanie</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>파일 형식:</value>
+    <value>Format pliku:</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>일반</value>
+    <value>Ogólny</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Logging</value>
+    <value>Logowanie</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>로그 상세 수준:</value>
+    <value>Poziom szczegółowości dziennika:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>로그 경로: </value>
+    <value>Ścieżka dziennika:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>디스크 공간이 부족한 경우 대기열 일시중지</value>
+    <value>Wstrzymaj kolejkę, jeśli jest mało miejsca na dysku</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>시스템 트레이 최소화 (재시작 필요)</value>
+    <value>Minimalizuj do zasobnika systemowego (wymaga ponownego uruchomienia)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>최소 DVD 와 Blu-ray 제목 초 단위 지속 시간. 짧은 제목 건너뛰기:</value>
+    <value>Minimalny czas trwania tytułu DVD i Blu-ray w sekundach. Krótsze tytuły zostaną pominięte:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4 파일 확장자:</value>
+    <value>MP4 Rozszerzenie pliku:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>시작할 때</value>
+    <value>Na starcie</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>Pliki wyjściowe</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>경로: </value>
+    <value>Ścieżka:</value>
   </data>
   <data name="Options_PathToMediaPlayer" xml:space="preserve">
-    <value>미디어 플레이어 경로</value>
+    <value>Ścieżka do odtwarzacza multimedialnego</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>인코딩 중 시스템 절전 방지</value>
+    <value>Zapobiegaj uśpieniu systemu podczas kodowania</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>스캔할 사진 미리보기 개수:</value>
+    <value>Liczba podglądów zdjęć do zeskanowania:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>작업 우선순위 수준:</value>
+    <value>Poziom priorytetu pracy:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>QuickSync 인코더를 사용하고 하드웨어를 사용할 수 있는 경우 비디오 디코딩에 Intel QuickSync를 사용하는 것이 좋습니다.</value>
+    <value>Preferuj używanie Intel QuickSync do dekodowania wideo podczas korzystania z kodera QuickSync, a sprzęt jest dostępny do użytku.</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>QuickSync 인코더를 사용하지 않을 때도 QuickSync 디코딩을 사용합니다. (즉, x265)</value>
+    <value>Używaj również dekodowania QuickSync, gdy nie używasz kodera QuickSync. (tj. x265)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>공통 구두점 제거</value>
+    <value>Usuń popularną interpunkcję</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>밑줄을 공백으로 교체</value>
+    <value>Zastąp podkreślenia spacją</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>프로그램이 재시작되면 '아무것도 하지 않음'으로 재설정합니다.</value>
+    <value>Zresetuj do „Nic nie rób”, gdy aplikacja zostanie ponownie uruchomiona.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>스케일러 선택:</value>
+    <value>Wybierz skaler:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>크기 조정</value>
+    <value>skalowanie</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>다음 경로로 파일 전송:</value>
+    <value>Wyślij plik do:</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>케이스를 제목 케이스로 변경</value>
+    <value>Zmień wielkość liter na wielkość liter</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>업데이트</value>
+    <value>Aktualizacje</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>사용자 인터페이스</value>
+    <value>Interfejs użytkownika</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>버전: </value>
+    <value>Wersja:</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>비디오</value>
+    <value>Wideo</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>이 경로는 비디오 미리보기 기능에만 사용됩니다.
-VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있지만 검증되지 않았습니다.</value>
+    <value>Ta ścieżka jest używana tylko do funkcji podglądu wideo.
+Obsługiwane przez VLC i MPC-HC. Inni gracze również mogą działać, ale nie są zweryfikowani.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>로그 디렉터리 보기</value>
+    <value>Wyświetl katalog dzienników</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>완료 시</value>
+    <value>Po zakończeniu</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5 설정</value>
+    <value>x264/5 Ustawienia</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>일정 품질 부분 제어:</value>
+    <value>Ziarnistość frakcyjna o stałej jakości:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽:</value>
+    <value>Anamorficzny:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>자동</value>
+    <value>Automatyczny</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>맨 아래</value>
+    <value>Spód</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>자르기:</value>
+    <value>Uprawa:</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Zwyczaj</value>
   </data>
   <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
-    <value>화면 크기:</value>
+    <value>Rozmiar ekranu:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>높이:</value>
+    <value>Wzrost:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>자동</value>
+    <value>Automatyczny</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>왼쪽</value>
+    <value>Lewo</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>최종 치수:</value>
+    <value>Wymiary końcowe:</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>가로세로 픽셀:</value>
+    <value>Aspekt pikseli:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>오른쪽</value>
+    <value>Right</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>크기</value>
+    <value>Rozmiar</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>위</value>
+    <value>Top</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>스케일링된 크기:</value>
+    <value>Skalowany rozmiar:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Zwyczaj</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>파일로 내보내기</value>
+    <value>Eksportuj do pliku</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>파일에서 가져오기</value>
+    <value>Importuj z pliku</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>공식</value>
+    <value>Urzędnik</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>제목 선택:</value>
+    <value>Wybierz tytuły:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>대기열에 추가</value>
+    <value>Dodać do kolejki</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>"{0}" 프리셋을 이용해서 선택된 제목을 추가합니다.</value>
+    <value>Wybrane tytuły zostaną dodane za pomocą "{0}" preset.</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>비디오 옵션:</value>
+    <value>Opcje wideo:</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>오디오:</value>
+    <value>Audio:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>모두 지우기</value>
+    <value>Wyczyść wszystko</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>지우기 완료됨</value>
+    <value>Czyszczenie zakończone</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>대기열 지우기</value>
+    <value>Wyczyść kolejkę</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>선택 항목 지우기</value>
+    <value>Wyczyść zaznaczone</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>삭제</value>
+    <value>Usun</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>대상:</value>
+    <value>Miejsce docelowe:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>아무것도 안 함</value>
+    <value>Nic nie rób</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>인코딩 지속시간:</value>
+    <value>Czas trwania kodowania:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>수정</value>
+    <value>Edytuj</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>종료 시간:</value>
+    <value>Koniec czasu:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>대기열로 내보내기</value>
+    <value>Eksportuj kolejkę</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>출력 파일크기:</value>
+    <value>Rozmiar pliku wyjściowego:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>최대 절전 모드</value>
+    <value>Hibernować</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>시스템 잠금</value>
+    <value>System blokady</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료되면 로그가 제공될 것입니다.</value>
+    <value>Dziennik będzie dostępny po zakończeniu kodowania.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>로그 오프</value>
+    <value>Wyloguj</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>대상 디렉터리 열기</value>
+    <value>Otwórz katalog docelowy</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>원본 파일 디렉터리 열기</value>
+    <value>Katalog Open Source</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>옵션</value>
+    <value>Opcje</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>중단</value>
+    <value>Pause</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>중단 지속 시간:</value>
+    <value>Wstrzymany czas trwania:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>사진 설정:</value>
+    <value>Ustawienia obrazu:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake 종료</value>
+    <value>Zamknij HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>모든 작업 재시도</value>
+    <value>Spróbuj ponownie wszystkie zadania</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>실패 항목 재시도</value>
+    <value>Ponowna próba nie powiodła się</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>선택 작업 재설정</value>
+    <value>Zresetuj wybrane zadania</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>재설정</value>
+    <value>Reset</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>컴퓨터 종료</value>
+    <value>Zamknąć</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>원본 파일:</value>
+    <value>Źródło:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>대기열 시작</value>
+    <value>Uruchom kolejkę</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>시작 시간:</value>
+    <value>Czas rozpoczęcia:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>통계</value>
+    <value>Statystyka</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>인코딩이 완료된 후 통계가 제공될 것입니다.</value>
+    <value>Statystyki będą dostępne po zakończeniu kodowania.</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>자막:</value>
+    <value>Napisy:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>개요</value>
+    <value>Summary</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>절전</value>
+    <value>Sen</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>비디오:</value>
+    <value>Wideo:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>Po zakończeniu:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>남아있는 선택된 모든 언어 추가</value>
+    <value>Dodaj wszystkie pozostałe wybrane języki</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>남아있는 모든 트랙 추가</value>
+    <value>Dodaj wszystkie pozostałe utwory</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>새로운 트랙 추가</value>
+    <value>Dodaj nowy utwór</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>트랙</value>
+    <value>Utwory</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>이용가능한 언어</value>
+    <value>Dostępne języki:</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>언어 선택</value>
+    <value>Wybierz języki:</value>
   </data>
   <data name="Shared_ChosenLanguages" xml:space="preserve">
-    <value>선택한 언어</value>
+    <value>Wybrane języki:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>기본 동작 구성하기</value>
+    <value>Skonfiguruj domyślne zachowania</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>다시 불러오기</value>
+    <value>Przeładować</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>스캔할 디스크를 선택하십시오</value>
+    <value>Wybierz dysk do skanowania</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>스캔할 파일을 선택하십시오</value>
+    <value>Wybierz plik do skanowania</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>스캔할 폴더를 선택하십시오</value>
+    <value>Wybierz folder do skanowania</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>마음대로 특정 제목 선택:</value>
+    <value>Opcjonalnie wybierz konkretny tytuł:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>인코딩하고자 하는 비디오(들)를 고르시오:</value>
+    <value>Następnie wybierz film(y), które chcesz zakodować:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>파일</value>
+    <value>Plik</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>폴더 (묶음 스캔)</value>
+    <value>Folder (skanowanie wsadowe)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>이 DVD 또는 Bluray Drive를 여십시오</value>
+    <value>Otwórz ten napęd DVD lub Bluray</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>하나 이상의 파일이 있는 폴더를 여십시오.</value>
+    <value>Otwórz folder z co najmniej jednym plikiem.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>대기열에 있는 파일들 복구</value>
+    <value>Odzyskaj pliki kolejki</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>이전 대기열 보관 파일을 사용할 수 있습니다.</value>
+    <value>Dostępne jest poprzednie archiwum kolejek.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>단일 비디오 파일을 엽니다.</value>
+    <value>Otwórz pojedynczy plik wideo.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>원본 파일 선택</value>
+    <value>Wybór źródła</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>지속 시간:</value>
+    <value>Czas trwania:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>실시간 미리보기</value>
+    <value>Podgląd na żywo</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>미리보기 이미지 선택</value>
+    <value>Wybierz obraz podglądu</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>시스템 기본 비디오 재생기 사용</value>
+    <value>Preferuj domyślny systemowy odtwarzacz wideo</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>사용 가능할 경우 내장 자막 추가</value>
+    <value>Dodaj napisy kodowane, jeśli są dostępne</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>'외부 오디오 스캔' 추가</value>
+    <value>Dodaj „Skanowanie obcego dźwięku”</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>굽기 작업:</value>
+    <value>Zachowanie wypalania:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>자막 가져오기</value>
+    <value>Importuj napisy</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>트랙 선택 작업:</value>
+    <value>Zachowanie wyboru ścieżki:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>Dodaj wszystkie pozostałe napisy kodowane</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>새 제목 또는 원본 비디오를 선택할 때 자막 트랙이 자동으로 선택 및 구성되는 방법을 설정합니다.</value>
+    <value>Skonfiguruj sposób automatycznego wybierania i konfiguracji ścieżek napisów po wybraniu nowego tytułu lub źródła wideo.</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>추가 오디오 트랙</value>
+    <value>Dodatkowe ścieżki audio</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>추가 자막 트랙</value>
+    <value>Dodatkowe ścieżki napisów</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>복제 완료됨</value>
+    <value>Spalony</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>챕터 표시</value>
+    <value>Znaczniki rozdziałów</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>블록 분리</value>
+    <value>Odblokuj</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>텔레시네 해제</value>
+    <value>Detelecine</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>디스플레이</value>
+    <value>wyświetlacz</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>그레이스케일</value>
+    <value>Skala szarości</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>오디오 트랙 없음</value>
+    <value>Brak ścieżek audio</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>챕터 표시 없음</value>
+    <value>Brak znaczników rozdziałów</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>필터 없음</value>
+    <value>Bez filtrów</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>원본 파일 없음</value>
+    <value>Brak źródła</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>자막 트랙 없음</value>
+    <value>Brak ścieżek napisów</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>트랙 없음</value>
+    <value>Brak utworów</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>{1}개 중 {0}개 미리보기</value>
+    <value>Zapowiedź {0} z {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>회전</value>
+    <value>Obrót</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>저장소</value>
+    <value>storage</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>2-Pass 인코딩</value>
+    <value>Kodowanie 2-przebiegowe</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>평균 비트전송률 (kbps):</value>
+    <value>Średnia szybkość transmisji (kb/s):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>비디오 인코더:</value>
+    <value>Koder wideo:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>일정한 프레임률</value>
+    <value>Stała liczba klatek na sekundę</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>일정한 품질:</value>
+    <value>Stała jakość:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>인코더 수준:</value>
+    <value>Poziom enkodera:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>인코더 프리셋:</value>
+    <value>Ustawienie kodera:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>인코더 프로필:</value>
+    <value>Profil enkodera:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>인코더 조정:</value>
+    <value>Strojenie enkodera:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>고급 옵션:</value>
+    <value>Zaawansowane Opcje:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>빠른 디코딩</value>
+    <value>Szybkie dekodowanie</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>프레임률 (FPS):</value>
+    <value>Framerate (FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>인코더 옵션:</value>
+    <value>Opcje enkodera:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>최고 프레임률</value>
+    <value>Szczytowa FPS</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>화질: </value>
+    <value>Jakość:</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>터보 우선 통과</value>
+    <value>Pierwsze przejście turbo</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>변화하는 프레임률</value>
+    <value>Zmienna liczba klatek</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>비디오: </value>
+    <value>Wideo:</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>언어:</value>
+    <value>Język:</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>시스템 언어 사용</value>
+    <value>Użyj języka systemu</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>HandBrake에 대해서</value>
+    <value>O HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>파일이나 폴더를 여기에 드롭하십시오...</value>
+    <value>Lub upuść plik lub folder tutaj ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>도움말</value>
+    <value>Pomoc</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>기본설정</value>
+    <value>Preferencje</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>트랙 추가</value>
+    <value>Dodaj utwór</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>선택된 트랙에 대한 오디오 인코더 설정:</value>
+    <value>Ustawienia kodera audio dla każdej wybranej ścieżki:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>지우기</value>
+    <value>Clear</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>굽기</value>
+    <value>Palić w</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>Domyślnie</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>강제로</value>
+    <value>Tylko wymuszony</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>소개(_A)...</value>
+    <value>_O...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>작업 로그(_A)</value>
+    <value>_Dziennik aktywności</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>업데이트 확인(_C)</value>
+    <value>_Sprawdź aktualizacje</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>종료(_E)</value>
+    <value>_Wyjscie</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>파일로 내보내기(_E)</value>
+    <value>_Eksportuj do pliku</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>파일(_F)</value>
+    <value>_Plik</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake 문서 (HTTPS)</value>
+    <value>_Dokumentacja HandBrake (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>도움말(_H)</value>
+    <value>_Pomoc</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>파일에서 가져오기(_I)</value>
+    <value>_Importuj z pliku</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>기본설정(_P)</value>
+    <value>_Preferencje</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>프리셋(_P)</value>
+    <value>_Presety</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>대기열(_Q)</value>
+    <value>_Kolejka</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>기본 제공된 프리셋 초기화(_R)</value>
+    <value>_Zresetuj wbudowane ustawienia wstępne</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>현재값을 기본값으로 설정(_S)</value>
+    <value>_Ustaw bieżący jako domyślny</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>프리셋 패널 표시(_H)</value>
+    <value>Pokaż panel Presetu</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>대기열 표시(_S)</value>
+    <value>_Pokaż kolejkę</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>도구(_T)</value>
+    <value>_Narzędzia</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>업데이트 확인 ...</value>
+    <value>Sprawdzanie aktualizacji ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>로그 파일 디렉터리를 지우시겠습니까?</value>
+    <value>Czy na pewno chcesz wyczyścić katalog plików dziennika?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>로그 지우기</value>
+    <value>Wyczyść dzienniki</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>다운로드 중...</value>
+    <value>Ściąganie...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>HandBrake의 로그 파일 디렉터리가 지워졌습니다!</value>
+    <value>Katalog plików dziennika HandBrake został wyczyszczony!</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>알림</value>
+    <value>Ogłoszenie</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>업데이트 준비 ...</value>
+    <value>Przygotowanie do aktualizacji...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>폴더를 선택하세요.</value>
+    <value>Wybierz folder.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>기본 위치 설정을 위해 '찾아보기'를 클릭하세요</value>
+    <value>Kliknij „Przeglądaj”, aby ustawić domyślną lokalizację</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>숨기기</value>
+    <value>Ukrywać</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>표시</value>
+    <value>Pokaż</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>대기열에 '모두 추가'</value>
+    <value>„Dodaj wszystko” do kolejki</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>대기열에 '선택 추가'</value>
+    <value>„Dodaj zaznaczenie” do kolejki</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>파일 재생</value>
+    <value>Odtwórz plik</value>
   </data>
   <data name="Options_ApplicationToolbar" xml:space="preserve">
-    <value>응용프로그램 도구모음</value>
+    <value>Pasek narzędzi aplikacji</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>도구모음에 '대기열에 모두 추가' 표시</value>
+    <value>Pokaż „Dodaj wszystko do kolejki” na pasku narzędzi</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>도구모음에 '대기열에 선택 추가' 표시</value>
+    <value>Pokaż „Dodaj zaznaczenie do kolejki” na pasku narzędzi</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>하드웨어 인코딩 지원이 현재 비활성화되어 있습니다. "--no-hardware" 옵션을 사용하여 HandBrake를 시작하지 않은 경우 이 시스템의 모든 그래픽 어댑터에 대해 최신 드라이버를 실행하고 있는지 확인하십시오.
+    <value>Obsługa kodowania sprzętowego jest obecnie wyłączona. Jeśli nie uruchomiłeś HandBrake z opcją "--no-hardware", upewnij się, że masz aktualne sterowniki dla wszystkich kart graficznych w tym systemie.
 
-이 문제는 소프트웨어 인코더에 영향을 미치지 않습니다.</value>
+Nie wpłynie to na żaden z koderów programowych.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>계속하기 전에 자막 설정을 수정하십시오.</value>
+    <value>Przed kontynuowaniem popraw ustawienia napisów.</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>적용</value>
+    <value>Zastosuj</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>인코딩 다시 시작하기</value>
+    <value>Wznów kodowanie</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>동작</value>
+    <value>działania</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>대기열 가져오기</value>
+    <value>Importuj kolejkę</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>인코딩: {1}개 중 {0}개 완료, {2:00.00}%, FPS: {3:000.0}, 평균 FPS: {4:000.0}
-남은 시간: {5}, 경과 시간: {6}{7}</value>
+    <value>Encoding: Pass {0} of {1}, {2:00.00}%, FPS: {3:000.0}, Avg FPS: {4:000.0}
+Time Remaining: {5}, Elapsed: {6} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>선택한 항목 삭제</value>
+    <value>Usuń zaznaczone</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>포터블 모드: TMP 디렉터리를 만들 수 없습니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.</value>
+    <value>Tryb przenośny: nie można utworzyć katalogu TMP. Sprawdź, czy ścieżka jest poprawna i czy można do niej zapisywać.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>포터블 모드: 저장소 디렉터리를 만들 수 없습니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.</value>
+    <value>Tryb przenośny: nie można utworzyć katalogu pamięci. Sprawdź, czy ścieżka jest poprawna i czy można do niej zapisywać.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>포터블 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
+    <value>Tryb przenośny: nie można odczytać pliku portable.ini. W tym pliku może być błąd. Spróbuj ponownie, używając pliku portable.ini.template jako przewodnika.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>대체 자리표시자: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
+    <value>Wymienne symbole zastępcze:  {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>대체 자리표시자: {source_path} {source_folder_name} {source}</value>
+    <value>Zastępcze symbole zastępcze: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>파일 덮어쓰기 요청</value>
+    <value>Poproś o nadpisanie pliku</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>자동 파일 이름 바꾸기를 시도하십시오</value>
+    <value>Spróbuj automatycznie zmienić nazwę pliku</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>파일 덮어쓰기</value>
+    <value>Zastąp plik</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>사용자 인터페이스 동작</value>
+    <value>Zachowanie interfejsu użytkownika</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>파일 덮어쓰기 동작:</value>
+    <value>Zachowanie nadpisywania plików:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>인코딩 완료</value>
+    <value>Kodowanie zakończone</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>소리 알림</value>
+    <value>Powiadomienia dźwiękowe</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>대기열 완료됨</value>
+    <value>Kolejka zakończona</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>완료 시:</value>
+    <value>Po zakończeniu:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>파일 이름 충돌 시 동작:</value>
+    <value>Zachowanie kolizji nazw plików:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>접두사</value>
+    <value>Przyrostek</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>접미사</value>
+    <value>Prefiks</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>숫자 첨부</value>
+    <value>Dołącz numer</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>FiltersView_DeblockPreset</value>
+    <value>FiltryView_DeblockPreset</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock  조정</value>
+    <value>Odblokuj melodię</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>인코더 선택은 '비디오' 탭에서 이용 가능합니다.</value>
+    <value>Wybór kodera zostanie udostępniony na karcie „Wideo”.</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake가 여러 개의 미완료 대기열 파일을 발견하였습니다. 이는 HandBrake가 실행 중인 여러 인스턴스에서 발생하였습니다. 모든 미완료 작업들을 복구하시겠습니까?</value>
+    <value>HandBrake wykrył wiele niedokończonych plików kolejki. Będą one pochodzić z wielu uruchomień HandBrake. Czy chciałbyś odzyskać wszystkie niedokończone prace?</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake가 대기열에서 마지막으로 프로그램이 실행된 시점부터 미완료된 항목을 발견하였습니다. 해당 항목들을 복구하시겠습니까?</value>
+    <value>HandBrake wykrył niedokończone elementy w kolejce od ostatniego uruchomienia aplikacji. Czy chcesz je odzyskać?</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>대기열 복구 가능</value>
+    <value>Możliwe odzyskanie kolejki</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>사용자 프리셋 파일은 내장된 프리셋을 포함합니다. 가져오기 기능은 프리셋 가져오기를 지원하고 있지 않습니다. '프리셋 메뉴 -&gt; 내장된 프리셋 재설정' 을 이용해서 기본 프리셋을 복원하십시오.
+    <value>Twój plik ustawień zawierał wbudowane ustawienia wstępne. Funkcja importu nie obsługuje ich importowania. Proszę użyć 'Presets Menu -&gt; Reset Built In-Presets', aby przywrócić standardowe ustawienia.
 
-지원되는 경우, 모든 사용자 환경 프리셋을 가져옵니다.</value>
+Tam, gdzie jest to obsługiwane, zostaną zaimportowane dowolne ustawienia użytkownika.</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>작업을 즉시 수행합니다. (이 경우 60초 확인 다이얼로그가 비활성화됩니다.)</value>
+    <value>Wykonaj akcję natychmiast. (Spowoduje to wyłączenie 60-sekundowego okna dialogowego potwierdzenia)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>찾아보기</value>
+    <value>Przeglądaj</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>설정된 오디오 파일이 없습니다.  '찾아보기'를 클릭하여 재생 하고자 하는 wav나 mp3 파일을 선택하십시오. </value>
+    <value>Nie ustawiono pliku audio. Kliknij „Przeglądaj”, aby wybrać plik wav lub mp3 do odtwarzania.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>재생하기</value>
+    <value>Play</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>대기열 내보내기 (CLI  전용)</value>
+    <value>Kolejka eksportu (tylko CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>다크 테마를 사용하십시오. (Windows 10일 경우 재시작하십시오)</value>
+    <value>Użyj ciemnego motywu. (Wymaga restart, tylko Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>이용 불가</value>
+    <value>Niedostępne</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>AC Mains 파워가 감지되었습니다. 인코더를 다시 시작하는 중... ({0} %)</value>
+    <value>Wykryto zasilanie sieciowe AC. Wznawiam kodowanie...({0}%)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %)</value>
+    <value>Krytyczna bateria systemowa! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>시스템 배터리가 부족합니다! ({0} %). 인코딩이 중단됩니다.</value>
+    <value>System Niskiej Baterii ({0} %). Twoje kodowanie zostało wstrzymane.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>대상 드라이브의 남은 디스크 크기가 {0} GB로 떨어졌습니다. 인코딩 중단 중...</value>
+    <value>Pozostała pamięć na dysku spadła poniżej {0} GB na dysku docelowym. Wstrzymuję kodowanie...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 오디오 선택</value>
+    <value>Automatyczne wybory audio</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>자동 자막 선택</value>
+    <value>Automatyczny wybór napisów</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>시스템</value>
+    <value>System</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>배우:</value>
+    <value>Aktorzy:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>코멘트:</value>
+    <value>Uwagi:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>설명:</value>
+    <value>Opis:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>감독:</value>
+    <value>Dyrektor:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>장르:</value>
+    <value>Gatunek:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>줄거리:</value>
+    <value>Wątek:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>출시일:</value>
+    <value>Data wydania:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>제목: </value>
+    <value>Tytuł:</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>로그 뷰어</value>
+    <value>Przegląd Logów</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>양상:</value>
+    <value>Aspekt:</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>필터:</value>
+    <value>Filtry:</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>크기: </value>
+    <value>Rozmiar:</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>트랙:</value>
+    <value>Utwory:</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>일반</value>
+    <value>Ogólny</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>새 업데이트 버전을 확인하기 위해 '업데이트 확인'을 클릭하십시오.</value>
+    <value>Kliknij „Sprawdź aktualizacje”, aby sprawdzić dostępność nowych wersji</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt; 뒤로</value>
+    <value>&lt; Wstecz</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>현재 일시 중지됨</value>
+    <value>Obecnie wstrzymane</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>출력 파일</value>
+    <value>Pliki wyjściowe</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>챕터</value>
+    <value>Rozdziały</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>프레임</value>
+    <value>Frames</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>미리보기</value>
+    <value>Zapowiedź</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>초</value>
+    <value>Sekundy</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>일치하는 모든 선택된 언어</value>
+    <value>Wszystkie pasujące wybrane języki</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>일치하는 첫 번째 선택된 언어</value>
+    <value>Pierwszy pasujący wybrany język</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>첫 번째 트랙</value>
+    <value>Pierwszy utwór</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>외부 오디오 선호, 없을 경우 첫 번째 오디오 선택</value>
+    <value>Preferowany dźwięk zagraniczny, w przeciwnym razie najpierw</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>외부 오디오 트랙</value>
+    <value>Zagraniczny utwór audio</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>외부 오디오 검색</value>
+    <value>Wyszukiwanie zagranicznego dźwięku</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>외부 오디오 스캔</value>
+    <value>Skanowanie obcego dźwięku</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>일치하는 모든 선택된 언어</value>
+    <value>Wszystkie pasujące wybrane języki</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>모든 트랙을 템플릿으로 사용</value>
+    <value>Użyj wszystkich ścieżek jako szablonów</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>일치하는 첫 번째 선택된 언어</value>
+    <value>Pierwszy pasujący wybrany język</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>템플릿으로 첫 번째 트랙 사용</value>
+    <value>Użyj pierwszej ścieżki jako szablonu</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>오디오 없음</value>
+    <value>Bez dźwięku</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>챕터 {0}</value>
+    <value>Rozdział {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>자동</value>
+    <value>Automatyczny</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>항상 M4V를 사용</value>
+    <value>Zawsze używaj M4V</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>항상 MP4를 사용</value>
+    <value>Zawsze używaj MP4</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Zwyczaj</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>항상 원본 해상도 사용하기</value>
+    <value>Zawsze używaj rozdzielczości źródła</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>보통 이상</value>
+    <value>Ponad normę</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>보통 이하</value>
+    <value>Poniżej średniej</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>높음</value>
+    <value>Wysoki</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>낮음</value>
+    <value>Niski</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>보통</value>
+    <value>Normal</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>매 월</value>
+    <value>Miesięczny</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>매 주</value>
+    <value>Tygodniowo</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>각 생성된 새로운 이름에 항상 기본 경로를 사용합니다.</value>
+    <value>Zawsze używaj domyślnej ścieżki dla każdej nowej generowanej nazwy.</value>
   </data>
   <data name="OptionsView_RemotePortLimit" xml:space="preserve">
-    <value>포트 범위는 5000에서 32767 사이만 허용됩니다.</value>
+    <value>Zakres portów musi wynosić od 5000 do 32767</value>
   </data>
   <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
-    <value>대체 자리표시자: {source} {destination} {exit_code}</value>
+    <value>Wymienne symbole zastępcze: {source} {destination} {exit_code}</value>
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>새 버전을 사용할 수 있습니다!</value>
+    <value>Dostępna jest nowa wersja!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
   </data>
   <data name="Options_LowBatteryLevel" xml:space="preserve">
-    <value>저전력 단계:</value>
+    <value>Niski poziom baterii:</value>
   </data>
   <data name="Options_PauseOnLowBattery" xml:space="preserve">
-    <value>배터리가 부족할 경우 진행 중인 작업을 중지하시오.</value>
+    <value>Wstrzymaj wszystkie uruchomione zadania, gdy bateria się wyczerpie.</value>
   </data>
   <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
-    <value>모든 남아있는 내장 자막 추가</value>
+    <value>Dodaj wszystkie pozostałe napisy kodowane</value>
   </data>
   <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
-    <value>가져오려고 하는 대기열 파일에서 중복된 작업이 있습니다. 기존 작업 기록을 덮어쓰기 하시겠습니까?
-이는 또한 기존의 모든 실행 중인 작업을 중단시키게 됩니다.</value>
+    <value>W pliku kolejki, który próbujesz zaimportować, wykryto zduplikowane zadania. Czy chcesz nadpisać istniejące rekordy?
+Spowoduje to również zatrzymanie wszelkich istniejących uruchomionych zadań.</value>
   </data>
   <data name="QueueService_DuplicatesTitle" xml:space="preserve">
-    <value>중복 감지</value>
+    <value>Wykryto duplikaty</value>
   </data>
   <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
-    <value>저전력 QuickSync 하드웨어를 활성화합니다(지원되는 경우).</value>
+    <value>Włącz sprzęt QuickSync o niskim poborze mocy (jeśli jest obsługiwany).</value>
   </data>
   <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
-    <value>개요 정보를 보려면 단일 작업을 선택하십시오.</value>
+    <value>Wybierz jedno zadanie, aby wyświetlić informacje podsumowujące.</value>
   </data>
   <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
-    <value>대기 중인 각 작업을 별도의 작업자 프로세스에서 실행합니다.</value>
+    <value>Uruchom każde zadanie w kolejce w osobnym procesie roboczym.</value>
   </data>
   <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
-    <value>작업자를 위한 기본 네트워크 포트:</value>
+    <value>Domyślny port sieciowy dla pracownika:</value>
   </data>
   <data name="Presets_NotAvailableForUse" xml:space="preserve">
-    <value>선택한 프리셋은 이 시스템에서 사용할 수 없습니다.
+    <value>Wybrane ustawienie wstępne nie jest dostępne do użytku w tym systemie.
 
-이것은 일반적으로 시스템이 이 하드웨어를 사용하는 데 필요한 하드웨어를 지원하지 않음을 나타냅니다.
+Zazwyczaj oznacza to, że Twój system nie obsługuje sprzętu wymaganego do korzystania z niego.
 
-다른 프리셋을 선택하십시오.</value>
+Wybierz inne ustawienie wstępne.</value>
   </data>
   <data name="OptionsView_ProcessIsolation" xml:space="preserve">
-    <value>프로세스 격리</value>
+    <value>Izolacja procesu</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
-    <value>이 기능을 사용하면 명시된 포트에서 127.0.0.1로 바인딩된 HTTP 서버가 시작됩니다.</value>
+    <value>Należy pamiętać, że użycie tej funkcji spowoduje uruchomienie serwera HTTP powiązanego z 127.0.0.1 na podanym porcie.</value>
   </data>
   <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
-    <value>설정된 포트가 사용 중이면 정의된 포트에서 +100 이내의 첫 번째 빈 포트를 찾습니다.</value>
+    <value>Jeśli ustawiony port jest używany, znajdzie pierwszy wolny port w promieniu +100 od zdefiniowanego portu.</value>
   </data>
   <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
-    <value>최대 동시 인코딩 수:</value>
+    <value>Maksymalna liczba jednoczesnych kodowań:</value>
   </data>
   <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
-    <value>취소</value>
+    <value>Anuluj</value>
   </data>
   <data name="MainView_SelectedPresets" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>Preset:</value>
   </data>
   <data name="SummaryView_SameAsSource" xml:space="preserve">
-    <value>원본과 동일</value>
+    <value>Taki sam jak źródło</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
-    <value>설정 초기화</value>
+    <value>Resetowanie ustawień</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
-    <value>HandBrake를 기본 설정으로 초기화하시겠습니까?</value>
+    <value>Czy na pewno chcesz zresetować HandBrake do ustawień domyślnych?</value>
   </data>
   <data name="PaddingMode_Custom" xml:space="preserve">
-    <value>사용자 지정 (제한되지 않음)</value>
+    <value>Niestandardowy (nieograniczony)</value>
   </data>
   <data name="PaddingMode_Fill" xml:space="preserve">
-    <value>채우기 (서라운드)</value>
+    <value>Wypełnienie (Surround)</value>
   </data>
   <data name="PaddingMode_Height" xml:space="preserve">
-    <value>높이 (필러박스)</value>
+    <value>Wysokość (skrzynka na słupek)</value>
   </data>
   <data name="PaddingMode_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="PaddingMode_Width" xml:space="preserve">
-    <value>너비 (레터박스)</value>
+    <value>Szerokość (skrzynka na listy)</value>
   </data>
   <data name="PictureSettingsView_Padding" xml:space="preserve">
-    <value>채우기:</value>
+    <value>Wypełnić:</value>
   </data>
   <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
-    <value>색상:</value>
+    <value>Kolor:</value>
   </data>
   <data name="PictureSettingsView_Borders" xml:space="preserve">
-    <value>테두리:</value>
+    <value>Granice:</value>
   </data>
   <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
-    <value>해상도 및 크기 조정:</value>
+    <value>Rozdzielczość i skalowanie:</value>
   </data>
   <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
-    <value>방향 및 자르기:</value>
+    <value>Orientacja i kadrowanie:</value>
   </data>
   <data name="QueueView_FilterSettings" xml:space="preserve">
-    <value>필터:</value>
+    <value>Filtry:</value>
   </data>
   <data name="SummaryView_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>Domyślnie</value>
   </data>
   <data name="SummaryView_Forced" xml:space="preserve">
-    <value>강제 표시</value>
+    <value>Wymuszony</value>
   </data>
   <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
     <value>1080p HD</value>
@@ -2268,404 +2270,402 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>4320p 8K Ultra HD</value>
   </data>
   <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Zwyczaj</value>
   </data>
   <data name="PictureSettingsView_MaxSize" xml:space="preserve">
-    <value>최대 크기:</value>
+    <value>Największy rozmiar:</value>
   </data>
   <data name="PictureSettingsView_ResLimit" xml:space="preserve">
-    <value>해상도 제한:</value>
+    <value>Limit rozdzielczości:</value>
   </data>
   <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="PresetManger_Title" xml:space="preserve">
-    <value>프리셋 관리</value>
+    <value>Zarządzaj Presetami</value>
   </data>
   <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
-    <value>기본 제공된 프리셋 삭제</value>
+    <value>Usuń wbudowane ustawienia Presetu</value>
   </data>
   <data name="ManagePresetView_Export" xml:space="preserve">
-    <value>선택한 프리셋 내보내기</value>
+    <value>Eksportuj wybrane ustawienie wstępne</value>
   </data>
   <data name="ManagePresetView_Import" xml:space="preserve">
-    <value>파일에서 프리셋 가져오기</value>
+    <value>Importuj ustawienia presetu(ow) z pliku</value>
   </data>
   <data name="ManagePresetView_PresetInfo" xml:space="preserve">
-    <value>프리셋 정보:</value>
+    <value>Informacje o ustawieniach:</value>
   </data>
   <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
-    <value>기본 제공된 프리셋은 수정할 수 없습니다.</value>
+    <value>Wbudowanych ustawień presetu nie można modyfikować.</value>
   </data>
   <data name="ManagePresetView_SetDefault" xml:space="preserve">
-    <value>선택한 프리셋을 기본값으로 지정</value>
+    <value>Ustaw wybrane ustawienie jako domyślne</value>
   </data>
   <data name="PresetManagerView_Delete" xml:space="preserve">
-    <value>프리셋 삭제</value>
+    <value>Usuń ustawienie wstępne</value>
   </data>
   <data name="OptionsView_NotSupported" xml:space="preserve">
-    <value>(이 시스템에서는 지원되지 않음)</value>
+    <value>(Nieobsługiwane w tym systemie)</value>
   </data>
   <data name="QueueView_Stop" xml:space="preserve">
-    <value>멈춤</value>
+    <value>Stop</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value />
   </data>
   <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
-    <value>입력한 범주 이름이 이미 있습니다. 다른 이름을 선택하십시오.</value>
+    <value>Wprowadzona nazwa kategorii już istnieje. Wybierz inną nazwę.</value>
   </data>
   <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
-    <value>범주 이름이 비어 있습니다. 이름을 입력하십시오.</value>
+    <value>Nazwa kategorii była pusta. Podaj nazwę.</value>
   </data>
   <data name="TextEntryView_EnterName" xml:space="preserve">
-    <value>이름 입력:</value>
+    <value>Wpisz imię:</value>
   </data>
   <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
-    <value>프리셋이 선택되지 않았습니다.</value>
+    <value>Nie wybrano ustawienia wstępnego.</value>
   </data>
   <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
-    <value>모든 사용자 프리셋 내보내기</value>
+    <value>Eksportuj wszystkie ustawienia użytkownika</value>
   </data>
   <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
-    <value>디스크 공간 부족 경고가 표시하는 수준:</value>
+    <value>Poziom, na którym wyświetlane są alerty o małej ilości miejsca na dysku:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>주의: 이 값은 동시 작업의 상한입니다. 인코딩 중 실제 동시 작업 수를 줄이는 하드웨어 제한이 적용될 수 있습니다. 설정은 다음 대기열 일괄 처리 또는 앱 재시작 시에만 적용됩니다.</value>
+    <value>Uwaga: Jest to górna granica jednoczesnych zadań. Mogą obowiązywać ograniczenia sprzętowe, które zmniejszają rzeczywistą liczbę jednoczesnych zadań podczas kodowania. Ustawienie będzie miało wpływ tylko na następną partię kolejki lub ponowne uruchomienie aplikacji.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
-    <value>(사용할 수 없음)</value>
+    <value>(Niedostępne)</value>
   </data>
   <data name="AddPresetView_IsDefault" xml:space="preserve">
-    <value>기본값:</value>
+    <value>Jest domyślny:</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>아니오</value>
+    <value>Nie</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>예</value>
+    <value>Tak</value>
   </data>
   <data name="StaticPreviewView_FineTuning" xml:space="preserve">
-    <value>미세 조정 사진 설정</value>
+    <value>Dostosuj ustawienia obrazu</value>
   </data>
   <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
-    <value>자르기 조정 컨트롤을 표시합니다.</value>
+    <value>Pokaż kontrolki regulacji przycinania.</value>
   </data>
   <data name="DarkTheme_dark" xml:space="preserve">
-    <value>어둡게 사용</value>
+    <value>Użyj ciemnego</value>
   </data>
   <data name="DarkTheme_light" xml:space="preserve">
-    <value>밝게 사용</value>
+    <value>Użyj światła</value>
   </data>
   <data name="DarkTheme_system" xml:space="preserve">
-    <value>시스템 일치</value>
+    <value>System meczowy</value>
   </data>
   <data name="OptionsView_DarkThemeMode" xml:space="preserve">
-    <value>테마:</value>
+    <value>Motyw:</value>
   </data>
   <data name="OptionsView_RequiresRestart" xml:space="preserve">
-    <value>(다시 시작 필요)</value>
+    <value>(Wymaga Restart)</value>
   </data>
   <data name="FiltersView_ChromaSmooth" xml:space="preserve">
-    <value>Chroma Smooth:</value>
+    <value>Gładkość chrominancji:</value>
   </data>
   <data name="FiltersView_ColourSpace" xml:space="preserve">
-    <value>Colourspace:</value>
+    <value>Przestrzeń kolorów:</value>
   </data>
   <data name="SummaryView_Colourspace" xml:space="preserve">
-    <value>Colourspace</value>
+    <value>Przestrzeń kolorów:</value>
   </data>
   <data name="PictureSettingsView_SeePreview" xml:space="preserve">
-    <value>미리보기 열기</value>
+    <value>Otwórz podgląd</value>
   </data>
   <data name="SummaryView_SourcePreview" xml:space="preserve">
-    <value>원본 미리보기:</value>
+    <value>Podgląd źródła:</value>
   </data>
   <data name="QueueView_JobStatus" xml:space="preserve">
-    <value>작업 상태:</value>
+    <value>Status pracy:</value>
   </data>
   <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
-    <value>취소됨</value>
+    <value>Anulowano</value>
   </data>
   <data name="QueueView_JobStatus_Complete" xml:space="preserve">
-    <value>완료</value>
+    <value>Kompletny</value>
   </data>
   <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
-    <value>잘못된 설정입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>Nieprawidłowe ustawienia. Sprawdź dziennik, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
-    <value>잘못된 입력입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>Nieprawidłowe dane wejściowe. Sprawdź dziennik, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
-    <value>상태를 알 수 없습니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>Status nieznany. Sprawdź dziennik, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
-    <value>원본을 읽는 동안 오류가 발생했습니다.</value>
+    <value>Wykryto błędy podczas próby odczytania źródła.</value>
   </data>
   <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
-    <value>알 수 없는 오류입니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>Nieznana awaria. Sprawdź dziennik, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
-    <value>작업자가 충돌했습니다. 자세한 내용은 로그를 확인하십시오.</value>
+    <value>Pracownik rozbił się. Sprawdź dziennik, aby uzyskać szczegółowe informacje.</value>
   </data>
   <data name="Startup_HbDllMissing" xml:space="preserve">
-    <value>"hb.dll" 파일이 없습니다. 다시 설치하십시오.</value>
+    <value>Brakujący plik „hb.dll”. Prosze zainstalować ponownie.</value>
   </data>
   <data name="OptionsView_SafeMode" xml:space="preserve">
-    <value>경고: 이 모드는 하드웨어 인코더에 대한 지원이 포함되지 않은 HandBrake의 "안전 모드" 빌드입니다. 하드웨어 인코더 지원을 사용하려면 웹 사이트에서 "안전 모드"가 아닌 빌드를 다운로드하십시오.</value>
+    <value>Ostrzeżenie: Należy pamiętać, że jest to kompilacja HandBrake w trybie awaryjnym, która nie obejmuje obsługi koderów sprzętowych. Jeśli chcesz korzystać z obsługi kodera sprzętowego, pobierz z witryny kompilację niebędącą „Trybem awaryjnym”.</value>
   </data>
   <data name="PadColour_Black" xml:space="preserve">
-    <value>검은색</value>
+    <value>Czarny</value>
   </data>
   <data name="PadColour_Custom" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Zwyczaj</value>
   </data>
   <data name="PadColour_White" xml:space="preserve">
-    <value>흰색</value>
+    <value>Biały</value>
   </data>
   <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
-    <value>RGB 값:</value>
+    <value>Wartość RGB:</value>
   </data>
   <data name="SummaryView_Padded" xml:space="preserve">
-    <value>(채워짐)</value>
+    <value>(watowany)</value>
   </data>
   <data name="FiltersView_Flip" xml:space="preserve">
-    <value>뒤집기:</value>
+    <value>Flip:</value>
   </data>
   <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
-    <value>원본 치수:</value>
+    <value>Wymiary źródła:</value>
   </data>
   <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
-    <value>저장 크기: {0}x{1}        화면 크기: {2}x{3}         종횡비: {4}</value>
+    <value>Rozmiar Storage: {0}x{1}   Rozmiar ekran: {2}x{3}    Współczynnik proporcji: {4}</value>
   </data>
   <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
-    <value>파일 검색기 대화 상자에서 오류가 감지되었습니다.
+    <value>Wykryto błąd w oknie dialogowym przeglądarki plików.
 
-- 긴 파일 경로는 완전히 지원되지 않습니다. 파일 경로를 255자 미만으로 유지하십시오.
-- 다음에 파일을 검색하려고 할 때 오류가 발생하지 않도록 이 창에 마지막으로 사용된 디렉터리가 재설정되었습니다.</value>
+- Należy pamiętać, że długie ścieżki plików nie są w pełni obsługiwane. Proszę zachować ścieżki plików krótsze niż 255 znaków.
+- Ostatnio używany katalog w tym oknie został zresetowany, aby zapobiec błędom przy następnej próbie skanowania pliku.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
-    <value>최대 높이:</value>
+    <value>Maksymalna wysokość:</value>
   </data>
   <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
-    <value>최대 너비:</value>
+    <value>Max szerokość:</value>
   </data>
   <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
-    <value>종횡비: {0}</value>
+    <value>Współczynnik proporcji: {0}</value>
   </data>
   <data name="SummaryView_MetadataPassthru" xml:space="preserve">
-    <value>Passthru 공통 메타데이터</value>
+    <value>Wspólne metadane Passthru</value>
   </data>
   <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
-    <value>기본 자동 이름 경로가 잘못되었습니다. {0}은(는) {1} 앞에 있으면 안됩니다</value>
+    <value>Domyślna ścieżka automatycznej nazwy była nieprawidłowa. {0} nie może być wcześniej {1}</value>
   </data>
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
-    <value>HandBrake가 업데이트를 자동으로 확인하도록 하시겠습니까?
-
-기본설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
+    <value>Czy chcesz zezwolić HandBrake na automatyczne sprawdzanie aktualizacji?</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
-    <value>업데이트를 확인하시겠습니까?</value>
+    <value>Sprawdź aktualizacje?</value>
   </data>
   <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
-    <value>업데이트 전:
-- 대기열에 보류 중인 인코딩이 없는지 확인하십시오.
-- 최신 버전과 완전히 호환되지 않을 수 있으므로 생성한 사용자 지정 프리셋을 백업하거나 기록해 두십시오.</value>
+    <value>Przed aktualizacją:
+- Upewnij się, że w kolejce nie ma oczekujących kodowań.
+- Utwórz kopię zapasową lub zanotuj wszelkie niestandardowe ustawienia, które utworzyłeś, ponieważ mogą nie być w pełni kompatybilne z nowszymi wersjami.</value>
   </data>
   <data name="Preset_Default" xml:space="preserve">
-    <value>(기본값)</value>
+    <value>(Domyślnie)</value>
   </data>
   <data name="PresetDisplayMode_Category" xml:space="preserve">
-    <value>범주</value>
+    <value>Kategorie</value>
   </data>
   <data name="PresetDisplayMode_Flat" xml:space="preserve">
-    <value>플랫</value>
+    <value>Płaski</value>
   </data>
   <data name="PresetDisplayMode_Partial" xml:space="preserve">
-    <value>부분적으로 플랫</value>
+    <value>Częściowo płaski</value>
   </data>
   <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
-    <value>메뉴에 프리셋이 표시되는 방식을 선택합니다:</value>
+    <value>Wybierz sposób wyświetlania ustawień wstępnych w menu:</value>
   </data>
   <data name="QueueView_SelectedPresets" xml:space="preserve">
-    <value>프리셋:</value>
+    <value>Preset:</value>
   </data>
   <data name="LogViewModel_Complete" xml:space="preserve">
-    <value>[완료됨]</value>
+    <value>[Skończone]</value>
   </data>
   <data name="QueueViewModel_EditJob" xml:space="preserve">
-    <value>작업을 편집하시겠습니까?</value>
+    <value>Edytuj zadanie?</value>
   </data>
   <data name="QueueView_Length" xml:space="preserve">
-    <value>출력 길이:</value>
+    <value>Długość wyjściowa:</value>
   </data>
   <data name="QueueView_MoveToBottom" xml:space="preserve">
-    <value>맨 아래로 이동</value>
+    <value>Przejdź na dół</value>
   </data>
   <data name="QueueView_MoveToTop" xml:space="preserve">
-    <value>맨 위로 이동</value>
+    <value>Przenieś na górę</value>
   </data>
   <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
-    <value>출력 비트전송률:</value>
+    <value>Wyjsciowy Bitrate:</value>
   </data>
   <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
-    <value>평균 인코딩 속도:</value>
+    <value>Średnia prędkość kodowania:</value>
   </data>
   <data name="QueueViewModel_DifferenceText" xml:space="preserve">
-    <value>(소스 파일)</value>
+    <value>pliku źródłowego</value>
   </data>
   <data name="QueueViewModel_NotAvailable" xml:space="preserve">
-    <value>이용 불가</value>
+    <value>Niedostępne</value>
   </data>
   <data name="QueueView_SourceLength" xml:space="preserve">
-    <value>원본 길이:</value>
+    <value>Długość źródła:</value>
   </data>
   <data name="Options_Reset" xml:space="preserve">
-    <value>재설정</value>
+    <value>Reset</value>
   </data>
   <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
-    <value>모든 기본 제공 프리셋을 재설정하시겠습니까?</value>
+    <value>Czy na pewno chcesz zresetować wszystkie wbudowane ustawienia wstępne?</value>
   </data>
   <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
-    <value>모든 기본 제공 프리셋을 HandBrake 기본값으로 재설정:</value>
+    <value>Zresetuj wszystkie wbudowane ustawienia wstępne do wartości domyślnych HandBrake:</value>
   </data>
   <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
-    <value>(사용자 프리셋은 재설정되지 않습니다)</value>
+    <value>(Wstępne ustawienia użytkownika nie zostaną zresetowane)</value>
   </data>
   <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
-    <value>모든 HandBrake 설정을 기본값으로 재설정:</value>
+    <value>Zresetuj wszystkie ustawienia HandBrake do wartości domyślnych:</value>
   </data>
   <data name="Options_BuiltInPresets" xml:space="preserve">
-    <value>기본 제공 프리셋</value>
+    <value>Wbudowane ustawienia presetu</value>
   </data>
   <data name="Options_UserSettings" xml:space="preserve">
-    <value>사용자 설정</value>
+    <value>Ustawienia użytkownika</value>
   </data>
   <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
-    <value>플로팅 트리보기</value>
+    <value>Pływający widok drzewa</value>
   </data>
   <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
-    <value>지원되는 비디오 재생기로 이 파일을 열 수 있도록 Windows에 적절한 파일 연결 설정이 있는지 확인하십시오.</value>
+    <value>Upewnij się, że masz skonfigurowane odpowiednie skojarzenia plików w systemie Windows, aby umożliwić otwarcie tego pliku za pomocą obsługiwanego odtwarzacza wideo</value>
   </data>
   <data name="QueueViewModel_ImportFail" xml:space="preserve">
-    <value>대기열 파일을 읽을 수 없습니다.</value>
+    <value>Nie można odczytać pliku kolejki.</value>
   </data>
   <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
-    <value>파일이 손상되었거나 이전 버전의 HandBrake에서 가져온 것일 수 있습니다.
-현재 버전의 대기열 파일만 지원됩니다.</value>
+    <value>Plik może być uszkodzony lub pochodzić z wcześniejszej wersji HandBrake.
+Obsługiwane są tylko pliki kolejek z bieżącej wersji.</value>
   </data>
   <data name="Notifications_EncodeDone" xml:space="preserve">
-    <value>HandBrake 인코딩이 완료되었습니다!</value>
+    <value>Twoje kodowanie HandBrake jest gotowe!</value>
   </data>
   <data name="Notifications_QueueDone" xml:space="preserve">
-    <value>HandBrake 작업 대기열이 완료되었습니다! </value>
+    <value>Twoja kolejka HandBrake jest gotowa!</value>
   </data>
   <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
-    <value>이렇게 하면 '완료 시' 탭에서 창 표시 작업 표시줄 알림 옵션도 비활성화됩니다. 이 기능을 다시 활성화하려면 다시 활성화하십시오.</value>
+    <value>Spowoduje to również wyłączenie opcji wyświetlania powiadomień paska zadań systemu Windows na karcie „Po zakończeniu”. Włącz je ponownie, jeśli chcesz ponownie aktywować tę funkcję.</value>
   </data>
   <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
-    <value>Windows 알림 제어 창에서 HandBrake 제거하기</value>
+    <value>Usuń HandBrake z panelu sterowania powiadomień systemu Windows.</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
-    <value>미설치</value>
+    <value>Odinstalowany</value>
   </data>
   <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
-    <value>알림 설정이 제거되었습니다.</value>
+    <value>Ustawienia powiadomień zostały usunięte.</value>
   </data>
   <data name="OptionsView_UninstallToast" xml:space="preserve">
-    <value>삭제 &amp; 제거</value>
+    <value>Wyczyść i odinstaluj</value>
   </data>
   <data name="OptionsView_WindowsNotification" xml:space="preserve">
-    <value>Windows 작업 표시줄에 알림을 보냅니다.</value>
+    <value>Wyślij powiadomienie do paska zadań systemu Windows.</value>
   </data>
   <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
-    <value>윈도우 알림</value>
+    <value>Powiadomienia systemu Windows</value>
   </data>
   <data name="Main_QueueMultiJobStatus" xml:space="preserve">
-    <value>{0} 작업이 완료되었습니다. {1}처리 대기 중인 {3}로 {2} 작업에 대해 작업 중입니다.</value>
+    <value>{0} zadania ukończone. {1}Pracować nad {2} praca z {3} czeka na przetworzenie.</value>
   </data>
   <data name="MainView_AutonameRegenerate" xml:space="preserve">
-    <value>다시 만들기 (자동 이름 생성)</value>
+    <value>Regeneruj (auto nazwa)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
-    <value>해당 디렉터리 열기</value>
+    <value>Otwórz ten katalog</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
-    <value>모두 닫기</value>
+    <value>Zwinąć wszystkie</value>
   </data>
   <data name="Shared_ExpandAll" xml:space="preserve">
-    <value>모두 펼치기</value>
+    <value>Rozwiń wszystkie</value>
   </data>
   <data name="OptionsView_RightToleftMode" xml:space="preserve">
-    <value>오른쪽에서 왼쪽으로 표시 모드:</value>
+    <value>Tryb wyświetlania od prawej do lewej:</value>
   </data>
   <data name="RightToLeft_Off" xml:space="preserve">
-    <value>끄기</value>
+    <value>Off</value>
   </data>
   <data name="RightToLeft_TextOnly" xml:space="preserve">
-    <value>텍스트만</value>
+    <value>Tylko tekst</value>
   </data>
   <data name="RightToLeft_WholeInterface" xml:space="preserve">
-    <value>전체 사용자 인터페이스</value>
+    <value>Cały interfejs użytkownika</value>
   </data>
   <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
-    <value>현재 실행 중인 개발 빌드가 오래되었습니다. 업데이트할 수 있습니다!</value>
+    <value>Bieżąca kompilacja rozwojowa, której używasz, jest już przestarzała. Możesz zaktualizować!</value>
   </data>
   <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
-    <value>Github를 통해 다운로드</value>
+    <value>Pobierz przez Github</value>
   </data>
   <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
-    <value>개발 빌드 다운로드(HTTPS)</value>
+    <value>Pobierz kompilacje programistyczne (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>QuickSync Deep Link Hyper Encode 활성화</value>
+    <value>Włącz Hyper Encode QuickSync Deep Link</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>지원되는 경우 단일 인코딩 속도를 높이기 위해 여러 미디어 엔진을 사용하는 것을 선호합니다. 미디어 엔진에서 여러 병렬 인코딩의 로드 밸런싱을 허용하려면 비활성화합니다.</value>
+    <value>Preferuje korzystanie z wielu silników multimedialnych w celu przyspieszenia pojedynczego kodowania, jeśli jest obsługiwane. Wyłącz, aby zezwolić na równoważenie obciążenia wielu równoległych kodowań w silnikach multimediów.</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>HandBrake 열기</value>
+    <value>Otwórz HandBrake</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>하드웨어 인코딩 지원은 시작 문제의 일반적인 원인이므로 비활성화되었습니다.
-- HandBrake를 다시 시작하십시오.
-- 문제가 지속되면 문제를 일으키는 오래된 그래픽 카드 드라이버(온보드 또는 개별 부품)일 수 있습니다.
+    <value>Obsługa kodowania sprzętowego została wyłączona, ponieważ jest to częsta przyczyna problemów z uruchamianiem.
+- Spróbuj ponownie uruchomić HandBrake
+- Jeśli problem będzie się powtarzał, przyczyną problemu może być nieaktualny sterownik karty graficznej (wbudowany lub dyskretny).
 
-하드웨어 인코딩 지원은 환경 설정에서 다시 활성화할 수 있습니다.</value>
+W preferencjach można ponownie włączyć obsługę kodowania sprzętowego.</value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
-    <value>HandBrake를 시작할 수 없습니다.</value>
+    <value>HandBrake  nie mógł rozpocząć.</value>
   </data>
   <data name="OptionsView_ResetSafeMode" xml:space="preserve">
-    <value>안전 모드 재설정</value>
+    <value>Zresetuj tryb awaryjny</value>
   </data>
   <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
-    <value>HandBrake를 다시 시작하십시오.</value>
+    <value>Proszę uruchomić ponownie HandBrake.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>대기열 통계 데이터 내보내기 (csv)</value>
+    <value>Eksportuj dane statystyczne kolejki (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>내보내기 완료!</value>
+    <value>Eksportuj gotowe!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>먼저 소스를 검색하고 초기 대상 디렉터리를 설정해야 합니다</value>
+    <value>Musisz najpierw zeskanować źródło i mieć ustawiony początkowy katalog docelowy</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>파일이 디스크에 이미 있는 경우에만 해당됩니다.</value>
+    <value>Tylko wtedy, gdy plik już istnieje na dysku.</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>정보</value>
+    <value>Info</value>
   </data>
   <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
-    <value>자막 트랙이 추가되지 않았습니다.
+    <value>Nie dodano żadnych ścieżek napisów.
 
-선택한 파일 컨테이너의 제한 때문일 수 있습니다. 자세한 내용은 자막 도움말 문서를 참조하십시오.</value>
+Może to wynikać z ograniczeń wybranego kontenera plików. Więcej informacji można znaleźć w naszej dokumentacji pomocy dotyczącej napisów.</value>
   </data>
   <data name="DarkTheme_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Nic</value>
   </data>
   <data name="SourceSelection_UpdateNow" xml:space="preserve">
-    <value>지금 업데이트하세요!</value>
+    <value>Aktualizuj teraz!</value>
   </data>
 </root>

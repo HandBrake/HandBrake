@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock redukuje blokowe artefakty spowodowane kompresją wideo o niskiej jakości.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Wybierz opcje filtrowania dekombinacji lub usuwania przeplotu.
+
+Filtr dekombinacji selektywnie usuwa przeplot klatek, które wydają się być z przeplotem.
+Pozwoli to zachować jakość w klatkach bez przeplotu.
+
+Do wszystkich klatek stosowany jest klasyczny filtr usuwania przeplotu.
+Klatki, które nie są przeplatane, ulegną pewnemu pogorszeniu jakości.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Odszumianie zmniejsza lub usuwa szum i ziarnistość. Może to poprawić wydajność kompresji i tworzyć wideo o wyższej jakości przy mniejszych rozmiarach plików.
+Zbyt silne ustawienia Odszumiania mogą pogorszyć jakość obrazu poprzez odrzucenie szczegółów.
+
+NLMeans to wysokiej jakości filtr odszumiający, który jest bardzo kosztowny. Używaj, gdy jakość jest ważniejsza niż szybkość.
+
+HQDN3D to adaptacyjny filtr dolnoprzepustowy, szybszy niż NLMeans, ale mniej skuteczny w zachowywaniu drobnych szczegółów.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine usuwa artefakty grzebieniowe, które są wynikiem telecine, procesu konwersji szybkości klatek filmu na szybkość klatek telewizji.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Skala szarości usuwa składnik koloru wideo. Często określany jako wideo czarno-białe.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Ścieżka docelowa, w tym katalog i nazwa pliku. W tym miejscu zostanie utworzony nowy film i jak będzie się nazywać.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Dodaj specjalny znacznik MP4, aby umożliwić odtwarzanie na starych urządzeniach iPod 5. generacji około 2006 roku. Inne ustawienia mogą mieć wpływ na zgodność.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Format kontenera. Wideo, audio i inne ścieżki są łączone w jeden plik tego typu. Wpływa na kompatybilność.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Zoptymalizuj MP4 do stopniowego pobierania. Po zakodowaniu dane są reorganizowane i ponownie zapisywane, aby umożliwić natychmiastowe odtwarzanie w sieci, bez konieczności pobierania całego pliku.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Wybór zakresu źródła. Domyślnie wybrane są wszystkie rozdziały i kodowane jest całe źródło.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Tytuł lub klip wideo do zakodowania.
+Źródła Blu-ray i DVD często mają wiele tytułów, z których najdłuższy jest zwykle główną cechą</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorficzny pozwala na dowolne wymiary przechowywania, zachowując oryginalny wygląd podczas odtwarzania.
+
+Brak wyłącza anamorficzny. Wymiary miejsca do przechowywania wideo i wymiary wyświetlacza będą identyczne. Przydatne tylko ze względu na zgodność z niektórymi starszymi urządzeniami.
+
+Automatycznie maksymalizuje rozdzielczość przechowywania, zachowując oryginalne proporcje ekranu. Zalecana.
+
+Loose jest podobny do Auto, ale próbuje zachować proporcje pamięci. Może to spowodować niewielką utratę rozdzielczości pamięci w porównaniu z trybem Auto.
+
+Custom umożliwia ręczne ustawienie wszystkich parametrów. Przydatne do korygowania nieprawidłowego aspektu wyświetlania źródła oraz dla profesjonalistów potrzebujących zaawansowanej kontroli w postprodukcji.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Automatycznie przycinaj czarne obramowania wokół krawędzi wideo.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Przytnij wideo od dołu.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Przytnij wideo z lewej strony.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Przytnij wideo z prawej strony.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Przytnij wideo od góry.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Jest to wysokość, na której będzie przechowywane wideo.
+Rzeczywiste wymiary wyświetlacza będą się różnić, jeśli proporcje pikseli nie będą wynosić 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Ręcznie przytnij wideo.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Dopasuj wymiary pamięci do wielokrotności tej wartości.
+
+To ustawienie jest konieczne tylko dla zgodności z niektórymi urządzeniami.
+Powinieneś użyć 2, chyba że wystąpią problemy ze zgodnością.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Aspekt pikseli określa kształt pikseli.
+Proporcja 1:1 definiuje piksel kwadratowy. Inne wartości definiują kształty prostokątne.
+Gracze będą skalować obraz, aby osiągnąć określony aspekt.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Jest to szerokość, na której będzie przechowywane wideo.
+Rzeczywiste wymiary wyświetlacza będą się różnić, jeśli proporcje pikseli nie będą wynosić 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Usuń zadanie z kolejki.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Zresetuj status zadania do Oczekiwanie.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Wyślij zadanie z powrotem do głównego okna do edycji.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Ustaw średnią szybkość transmisji.
+
+Chwilowa szybkość transmisji bitów może być w dowolnym momencie znacznie wyższa lub niższa.
+Ale średnia z długiego czasu będzie wartością ustawioną tutaj. Jeśli potrzebujesz
+aby ograniczyć chwilowy bitrate, spójrz na ustawienia vbv-bufsize i vbv-maxrate x264.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Włącza stałą liczbę klatek na sekundę.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Dostępne kodery wideo.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Dostosuj ustawienia w celu optymalizacji pod kątem typowych scenariuszy.
+
+Może to poprawić wydajność dla określonych cech źródła lub zestawu
+charakterystyka pliku wyjściowego. Zmiany zostaną zastosowane po
+ustawione, ale przed wszystkimi innymi parametrami.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Dodatkowe ustawienia kodera.
+
+Lista rozdzielonych dwukropkami opcji kodera.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Zmniejsz zużycie procesora dekodera.
+
+Ustaw to, jeśli Twoje urządzenie ma problemy z odtwarzaniem danych wyjściowych (porzuconych klatek).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Wyjściowa liczba klatek na sekundę.
+
+Zalecane jest „taki sam jak źródło”. Jeśli źródłowy film ma zmienną liczbę klatek na sekundę, opcja „Taki sam jak źródło” ją zachowa.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Ustawia i zapewnia zgodność z określonym poziomem.
+
+Zastępuje wszystkie inne ustawienia.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Włącza wyjście ze zmienną liczbą klatek na sekundę ze szczytową liczbą klatek określoną przez ustawienie liczby klatek na sekundę.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Dostosowuje ustawienia kodera w celu kompromisu między wydajnością kompresji a szybkością kodowania.
+
+To określa domyślne ustawienia kodera.
+Do tego zostaną zastosowane melodie, profile, poziomy i zaawansowane ciągi opcji.
+Generalnie powinieneś ustawić tę opcję na najwolniejszą, jaką możesz znieść, ponieważ wolniej
+ustawienia spowodują lepszą jakość lub mniejsze pliki.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Ustawia i zapewnia zgodność z określonym profilem.
+
+Zastępuje wszystkie inne ustawienia.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Ustaw żądany współczynnik jakości.
+Koder ma na celu określoną jakość.
+Skala używana przez każdy koder wideo jest inna.
+
+Skala x264 jest logarytmiczna, a niższe wartości odpowiadają wyższej jakości.
+Tak małe spadki wartości spowodują coraz większe wzrosty
+w wynikowym rozmiarze pliku. Wartość 0 oznacza bezstratność i wynik
+w rozmiarze pliku większym niż oryginalne źródło, chyba że źródło
+był również bezstratny.
+Sugerowane wartości to: 18 do 20 dla źródeł o standardowej rozdzielczości i 20 do 23 dla źródeł o wysokiej rozdzielczości.
+
+Skala FFMpega i Theory jest bardziej liniowa.
+Te kodery nie mają trybu bezstratnego.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>Podczas pierwszego przebiegu 2-przebiegowego kodowania użyj ustawień, które przyspieszają działanie.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Wykonaj 2 przebiegowe kodowanie
+
+Opcja „Bitrate” jest warunkiem wstępnym. Podczas 1st przejazdu
+ statystyki dotyczące filmy są gromadzone. Następnie w drugim przejściu
+ wykorzystywane są te statystyki podejmować decyzje dotyczące alokacji
+ przepływności.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Włącza wyjście ze zmienną liczbą klatek na sekundę.
+
+VFR nie jest kompatybilny z niektórymi odtwarzaczami.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Gdy HandBrake zakończy bieżącą kolejkę lub zakoduje, wykona tę akcję.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Przeglądaj, aby wybrać nową ścieżkę docelową i nazwę pliku do kodowania.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Kąt wideo do zakodowania. Dotyczy tylko płyt DVD i Blu-ray pod różnymi kątami.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Dodaj nowe ustawienie wstępne.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Dodatkowe opcje ustawień wstępnych.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Presety to grupy ustawień kodowania dostosowane do określonych scenariuszy. Wybierz ten, który najbardziej odpowiada Twoim zamiarom.
+
+Zastępuje wszystkie ustawienia kodowania. Ustawienia można dalej dostosowywać po wybraniu ustawienia wstępnego.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Usuń wybrane ustawienie wstępne.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Niektóre źródła mogą zawierać więcej niż jeden klip wideo lub zbiór tytułów. Źródła Blu-ray i DVD często mają wiele tytułów.
+
+Jeśli znasz konkretny tytuł, który chcesz zakodować, możesz go tutaj wprowadzić, a HandBrake zeskanuje tylko ten tytuł, a nie każdy tytuł w pliku źródłowym. W przeciwnym razie pozostaw to pole puste.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Niestandardowe parametry odszumiania.
+
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Wstępne ustawienie filtra odszumiania. Ustawia siłę filtra.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Odszumiona melodia. Dalsze dostosowywanie ustawienia Odszumianie w celu optymalizacji ustawień pod kątem określonych scenariuszy.
+
+-Brak używa domyślnych ustawień wstępnych.
+
+- Film poprawia ustawienia do użytku z większością treści akcji na żywo.
+
+- Ziarno przetwarza tylko kanały kolorów. Przydatne do zachowania filmowego wyglądu ziarna luminancji przy jednoczesnym zmniejszeniu lub usunięciu szumu koloru
+
+- Tryb High Motion redukuje rozmazanie kolorów w scenach o dużym ruchu, unikając czasowego przetwarzania kanałów kolorów. Przydatne w przypadku filmów sportowych i akcji.
+
+- Animacja jest przydatna do animacji cel, takich jak anime i kreskówki.
+
+- Taśma jest przydatna w przypadku źródeł taśm analogowych o małej szczegółowości, takich jak VHS, gdzie film nie daje pożądanych rezultatów.
+
+- Sprite jest przydatny w 1-/4-/8-/16-2bitowych grach dwuwymiarowych. Sprite nie jest przeznaczony do wideo w wysokiej rozdzielczości.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace usuwa artefakty grzebieniowe z obrazu.
+
+Bwdif i Yadif to dwa popularne i szybkie narzędzia do usuwania przeplotu.
+
+Decomb przełącza między wieloma algorytmami interpolacji dla szybkości i jakości.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Niestandardowe parametry usuwania przeplotu.
+
+Bwdif and Yadif syntax: mode=m:parity=p
+
+Bwdif and Yadif default: mode=3
+
+Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Domyślne rozszyfrowywanie: tryb=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Ustawienie filtra usuwania przeplotu
+
+Domyślnie jest dobrze wyważony pod względem szybkości i jakości.
+
+Pomiń kontrolę przestrzenną pozwala Yadifowi pominąć korygowanie pewnych artefaktów, których można uniknąć w celu uzyskania lekkiego zwiększenia prędkości
+
+EEDI2  używa wolniejszego algorytmu interpolacji o wyższej jakości dla funkcji Decomb. Przydatne dla najtrudniejszych źródeł.
+
+Bob stara się lepiej zachować ruch za niewielką karę w postrzeganej rozdzielczości.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Odwraca (lustrzane odbicie) obraz na osi poziomej.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Wykrywanie przeplotu, gdy jest włączone, umożliwia filtrowi Usuwanie przeplotu przetwarzanie tylko klatek wideo z przeplotem.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Niestandardowe parametry wykrywania przeplotu.
+
+Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Obracaj obraz zgodnie z ruchem wskazówek zegara co 90 stopni.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Czas trwania wybranego zakresu źródła w godzinach:minuty:sekundy</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Zachowaj współczynnik proporcji zachowuje oryginalne proporcje wyświetlania źródła. Wyłączenie tego może spowodować rozciągnięcie lub ściśnięcie obrazu.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Niestandardowe parametry wyostrzania.
+
+Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Wyostrzanie poprawia wygląd szczegółów, zwłaszcza krawędzi. Zbyt silne ustawienia wyostrzania mogą pogorszyć jakość obrazu, tworząc artefakty dzwonienia i wzmacniając szum, co może zmniejszyć wydajność kompresji.
+
+Unsharp to filtr maskujący ogólnego przeznaczenia. Wyostrza się, rozmywając, a następnie obliczając różnicę między zamazanym obrazem a oryginałem.
+
+Lapsharp wyostrza przy użyciu jąder splotu zbliżonych do filtrów brzegowych Laplace'a, czasami dając wyniki lepszej jakości niż maskowanie nieostre.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Wyostrz ustawienia filtra. Ustawia siłę filtra.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Wyostrz melodię. Dalsze dostosowywanie ustawienia wstępnego Wyostrzanie w celu optymalizacji ustawień pod kątem określonych scenariuszy.
+
+Żaden nie używa domyślnych ustawień wstępnych.
+
+Unsharp można dostroić do wyostrzania Ultrafine, Fine, Medium, Coarse lub Very Coarse. Wybierz jeden w oparciu o rozdzielczość wyjściowego obrazu i szczegółowość, którą chcesz poprawić.
+
+Filmowa melodia Lapsharp udoskonala ustawienia do użytku z większością treści akcji na żywo. Film wykorzystuje izotropowe jądro Laplace'a do podobnego wyostrzania wszystkich krawędzi, a informacje o luminancji (jasności) są wyostrzane bardziej niż informacje o chrominancji (kolorze).
+
+Melodia Lapsharp's Grain jest podobna do filmu Film, ale wykorzystuje izotropowy Laplacian jądra Gaussa, aby zmniejszyć wpływ na hałas i ziarno. Przydatny do konserwacji ziarna i jako ogólna alternatywa dla melodii Film.
+
+Melodia Lapsharp's Animation przydaje się do animacji cel, takich jak anime i kreskówki. Animacja jest taka sama jak Film, ale ogólna siła jest zmniejszona, aby uniknąć tworzenia artefaktów.
+
+Melodia Sprite firmy Lapsharp jest przydatna w 1-/4-/8-/16-bit grach 2-wymiarowych. Sprite używa 4-sąsiedzkiego jądra Laplace'a, które uwydatnia pionowe i poziome krawędzie bardziej niż krawędzie ukośne.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Wyrównuje początkowe znaczniki czasu wszystkich strumieni audio i wideo przez wstawianie pustych ramek lub upuszczanie ramek. Może poprawić synchronizację audio/wideo dla uszkodzonych odtwarzaczy, które nie honorują list edycji MP4.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Opcje sterowania ustawieniami wstępnymi.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Punkt końcowy dla tego zakresu.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Punkt początkowy dla tego zakresu.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Po włączeniu system automatycznej nazwy zawsze będzie używał domyślnej ścieżki.
+Po wyłączeniu użyje ścieżki w polu docelowym w głównym oknie, jeśli zostanie wypełnione, w przeciwnym razie użyje domyślnej ścieżki.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Filtr przestrzeni kolorów.</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Wygładzany filtr chromatyczny</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>To pole może akceptować wartości RGB, takie jak: „0xFF0000” lub nazwy kolorów, takie jak „czerwony”. Pełną listę nazwanych kolorów można znaleźć w dokumentacji filtra dopełniającego.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Nagraj napisy do strumienia wideo.
+
+Uwaga, zostanie to wybrane automatycznie, jeśli format ścieżki źródłowej napisów nie jest obsługiwany w typie pliku wyjściowego.
+
+Na przykład, napisy PGS nie są obsługiwane w MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Płaski — Presety są wyświetlane jako płaska lista.
+Częściowo płaskie — ostatnie 8 ustawień użytkownika jest wyświetlanych jako płaska lista, po której wyświetlane są wszystkie ustawienia wstępne na liście kategorii.
+Kategorie — wszystkie ustawienia wstępne są wyświetlane w podmenu według kategorii.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Zachowania konfiguracji, które określają, w jaki sposób ta karta automatycznie dodaje ścieżki audio po wybraniu nowego źródła lub tytułu.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Odśwież poniższą listę na podstawie skonfigurowanych zachowań.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Zachowania konfiguracji, które określają, w jaki sposób ta karta automatycznie dodaje ścieżki napisów podczas wybierania nowego źródła lub tytułu.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Zawsze ustawiane są następujące zmienne środowiskowe:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Możliwe kody wyjścia są następujące:
+0 : Udane
+2: Błąd argumentów wejściowych
+3: Nie udało się zainicjować
+4: Nieznany błąd
+5: Błąd odczytu pliku źródłowego
+
+Pamiętaj, że kody błędów nie zawsze mogą być dokładne.
+Zaleca się sprawdzenie poprawności pliku wyjściowego przed wykonaniem na nim działań.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Format pliku wyjściowego. Oprócz dowolnego obsługiwanego znaku systemu plików można użyć dowolnego symbolu zastępczego, który zostanie zastąpiony po zmianie tytułu, zeskanowaniu źródła lub zaktualizowaniu niektórych ustawień.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>W przypadku języków pisanych od prawej do lewej możesz włączyć jeden z dwóch trybów. „Tylko tekst” wyrenderuje tekst tylko w stylu od prawej do lewej. „Cały interfejs użytkownika” wyrenderuje wszystkie elementy sterujące od prawej do lewej.
+
+Należy pamiętać, że podczas korzystania z tych trybów w układzie interfejsu użytkownika mogą występować niedoskonałości. W zależności od języka warto wypróbować oba tryby, aby znaleźć najlepsze dopasowanie.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Ustaw określony poziom jakości dźwięku.
+1 to najniższa jakość, a 5 to najwyższa jakość.
+
+Bitrate będzie się różnić od źródła do źródła.</value>
+  </data>
+</root>

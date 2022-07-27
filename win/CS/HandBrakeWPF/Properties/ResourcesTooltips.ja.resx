@@ -363,11 +363,11 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 - Spriteは 1-/4-/8-/16-bitの2次元ゲームに有効です。Spriteは高精細度映像向けには作られていません。</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>インターレース解除は画像からくし状のノイズを除去します。
 
-Bwdif and Yadif are two popular and fast deinterlacers.
+BwdifとYadifは人気で速い解除フィルターです。
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Decombは品質と速度に応じて複数の補完法を切り替えることができます。</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>インターレース解除のカスタムパラメーターです。
@@ -520,9 +520,9 @@ HB_EXIT_CODE
 これらを使うとUIレイアウトがおかしくなる可能性には留意してください。言語により、両方を試して合うものを探すのが好ましいです。</value>
   </data>
   <data name="AudioView_Quality" xml:space="preserve">
-    <value>Target a specific quality level for audio.
-1 is lowest quality and 5 is highest quality.
+    <value>オーディオのターゲット品質レベルを設定します。
+1が最も低品質で5が高品質です。
 
-Bitrate will vary source to source.</value>
+ビットレートはソースに依存します。</value>
   </data>
 </root>

@@ -566,7 +566,7 @@ Soll HandBrake wirklich beendet werden?</value>
 Die alten Voreinstellungen wurden archiviert unter:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>mit {0} Fehlern oder Abbrüchen erkannt.</value>
+    <value>mit {0} erkannten Fehlern. Prüfe das Fenster Warteschlange für Details.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Geringer Speicherplatz</value>
@@ -2145,7 +2145,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>Eine neue Version von HandBrake ist verfügbar!</value>
+    <value>Eine neue Version ist verfügbar!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
@@ -2333,7 +2333,7 @@ Bitte eine andere Voreinstellung auswählen.</value>
     <value>Level ab der Warnungen wegen geringem Speicherplatz erscheinen:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>Bemerkung: Dies ist das obere Limit gleichzeitiger Enkodierungen. Möglicherweise treten Hardware-Beschränkungen in Kraft, die die tatsächliche Anzahl gleichzeitiger Aufgaben während der Kodierung verringern.</value>
+    <value>Hinweis: Dies ist die Obergrenze für gleichzeitige Aufträge. Es können Hardwarebeschränkungen wirksam werden, die die tatsächliche Anzahl der gleichzeitigen Aufträge während der Codierung verringern. Die Einstellung wird erst beim nächsten Warteschlangenstapel oder Neustart der Anwendung wirksam.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(Nicht verfügbar)</value>
@@ -2655,5 +2655,19 @@ Die Unterstützung der Hardware-Kodierung kann in den Einstellungen wieder aktiv
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
     <value>Nur wenn die Datei bereits auf dem Speichermedium vorhanden ist.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Es wurden keine Untertitelspuren hinzugefügt.
+
+Dies kann auf Einschränkungen des von Ihnen gewählten Datei-Containers zurückzuführen sein. Weitere Informationen finden Sie in der Hilfe-Dokumentation zu Untertiteln.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Jetzt aktualisieren!</value>
   </data>
 </root>
