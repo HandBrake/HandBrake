@@ -624,13 +624,13 @@
                             </StackPanel>
                         </MenuItem.Header>
 
-                        <MenuItem x:Name="doNothing" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="0" Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
-                        <MenuItem x:Name="shutdown" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="1" Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
-                        <MenuItem x:Name="suspend" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="2" Header="{x:Static Properties:Resources.WhenDone_Suspend}" />
-                        <MenuItem x:Name="hibernate" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="3" Header="{x:Static Properties:Resources.WhenDone_Hibernate}"/>
-                        <MenuItem x:Name="lock" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="4" Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
-                        <MenuItem x:Name="logoff" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="5" Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
-                        <MenuItem x:Name="quit" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="6" Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}"/>
+                        <MenuItem x:Name="doNothing" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="0" Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
+                        <MenuItem x:Name="shutdown" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="1" Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
+                        <MenuItem x:Name="suspend" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="2" Header="{x:Static Properties:Resources.WhenDone_Suspend}" />
+                        <MenuItem x:Name="hibernate" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="3" Header="{x:Static Properties:Resources.WhenDone_Hibernate}"/>
+                        <MenuItem x:Name="lock" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="4" Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
+                        <MenuItem x:Name="logoff" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="5" Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
+                        <MenuItem x:Name="quit" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="6" Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}"/>
                     </MenuItem>
                 </Menu>
             </StatusBarItem>

@@ -198,14 +198,9 @@
                              BorderThickness="1"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
 
-                    <i:Interaction.Triggers>
-                        <commands:InputBindingTrigger>
-                            <commands:InputBindingTrigger.InputBinding>
-                                <KeyBinding Key="Delete"/>
-                            </commands:InputBindingTrigger.InputBinding>
-                            <i:InvokeCommandAction Command="{Binding DataContext.RelayCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="RemoveSelectedJobs}" />
-                        </commands:InputBindingTrigger>
-                    </i:Interaction.Triggers>
+                    <ListBox.CommandBindings>
+                        <CommandBinding Command="Delete" Executed="DeleteItem_OnClick" />
+                    </ListBox.CommandBindings>
 
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="ContextMenu_OnOpened">
