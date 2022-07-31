@@ -153,8 +153,8 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     {
         hb_dict_set_int(avsettings, "width", width);
         hb_dict_set_int(avsettings, "height", height);
-        hb_dict_set_string(avsettings, "flags", "lanczos+accurate_rnd");
-        hb_dict_set(avfilter, "scale", avsettings);
+        hb_dict_set_string(avsettings, "filter", "lanczos");
+        hb_dict_set(avfilter, "zscale", avsettings);
     }
     
     hb_value_array_append(avfilters, avfilter);
