@@ -477,7 +477,7 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <Button Content="{x:Static Properties:Resources.MainView_Reload}" Command="{Binding RelayCommand}" CommandParameter="PresetSelect"  Margin="15,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:Resources.MainView_Reload}" Command="{Binding RelayCommand}" CommandParameter="PresetReSelect"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd"  Margin="5,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>

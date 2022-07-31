@@ -1803,7 +1803,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public void PresetSelect()
+        public void PresetReSelect()
         {
             this.PresetSelect(this.SelectedPreset);
         }
