@@ -28,6 +28,7 @@ endif
 
 ifeq (darwin,$(HOST.system))
     LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
 endif
 
 ifeq (1,$(HOST.cross))
@@ -44,7 +45,6 @@ ifeq (1,$(HOST.cross))
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
-        LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_OSX_ARCHITECTURES="$(HOST.machine)"
     else
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(LIBJPEGTURBO.CONFIGURE.host)"
     endif
