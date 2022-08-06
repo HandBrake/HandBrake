@@ -13,7 +13,7 @@ SVT-AV1.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(SVT-AV1.CONFIGURE.pref
 SVT-AV1.CONFIGURE.deps        =
 SVT-AV1.CONFIGURE.static      =
 SVT-AV1.CONFIGURE.shared      = -DBUILD_SHARED_LIBS=OFF
-SVT-AV1.CONFIGURE.extra       = -DBUILD_DEC=OFF
+SVT-AV1.CONFIGURE.extra       = -DBUILD_DEC=OFF -DBUILD_APPS=OFF
 SVT-AV1.CONFIGURE.extra      += -DCMAKE_INSTALL_LIBDIR=lib
 
 ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
@@ -40,6 +40,7 @@ ifeq (1,$(HOST.cross))
 
         SVT-AV1.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(SVT-AV1.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
+        SVT-AV1.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Darwin
         SVT-AV1.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(SVT-AV1.CONFIGURE.host)"
     else
         SVT-AV1.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(SVT-AV1.CONFIGURE.host)"
@@ -50,6 +51,7 @@ else
 endif
 
 ifeq ($(HOST.system),darwin)
+    SVT-AV1.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
     SVT-AV1.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
 endif
 
