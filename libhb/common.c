@@ -5265,6 +5265,9 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
     // Free any pre-existing extradata
     free(subtitle->extradata);
 
+    float shadow_size = fs / 36.0;
+    float outline_size = fs / 30.0;
+
     // SRT subtitles are represented internally as SSA
     // Create an SSA header
     const char * ssa_header =
@@ -5279,9 +5282,9 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
         "\r\n"
         "[V4+ Styles]\r\n"
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,1,1,2,20,20,20,0\r\n";
+        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,%.2f,%.2f,2,20,20,20,0\r\n";
 
-    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs);
+    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs, outline_size, shadow_size);
     if (subtitle->extradata == NULL)
     {
         hb_error("hb_subtitle_add_ssa_header: malloc failed");
