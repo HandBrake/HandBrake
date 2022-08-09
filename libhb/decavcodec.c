@@ -2261,7 +2261,6 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             channel_layout = pv->frame->ch_layout;
             if (channel_layout.order != AV_CHANNEL_ORDER_NATIVE || channel_layout.u.mask == 0)
             {
-                hb_log("decavcodec: unsupported channel layout order, guessing one.");
                 AVChannelLayout default_ch_layout;
                 av_channel_layout_default(&default_ch_layout, pv->frame->ch_layout.nb_channels);
                 channel_layout = default_ch_layout;
