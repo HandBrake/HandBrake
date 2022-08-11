@@ -2016,7 +2016,8 @@ int hb_preset_apply_dimensions(hb_handle_t *h, int title_index,
         hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
     }
     
-    switch(hb_dict_get_int(preset, "PictureCropMode")) {
+    switch(hb_dict_get_int(preset, "PictureCropMode")) 
+    {
         case 0: // Automatic
           memcpy(geo.crop, srcGeo.crop, sizeof(geo.crop));
           break;

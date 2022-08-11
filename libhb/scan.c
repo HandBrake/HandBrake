@@ -1236,7 +1236,8 @@ skip_preview:
             int crop_switch_frame_count = data->crop_threshold_frames;
             int less_than_median_crop_threshold = data->crop_threshold_pixels;
             
-            if (crop_switch_frame_count == 0) {
+            if (crop_switch_frame_count == 0) 
+            {
                 // Values seem like sensible defaults.
                 // Have observed that the optimal value does not always linearly increase with preview count.
                  crop_switch_frame_count = 4;
@@ -1250,7 +1251,8 @@ skip_preview:
                 }
             }
             
-            if (less_than_median_crop_threshold == 0) {
+            if (less_than_median_crop_threshold == 0) 
+            {
                 // It's not uncommon to see 2~12 px variance in cropping.
                 // Defaulting to 9 to account for that variance before switching to loose.
                 // This accounts for variance that is unlikely to be caused by mixed AR. 
@@ -1259,7 +1261,8 @@ skip_preview:
 
             // Count the number of frames "substantially" less than the median.
             int less_than_median_frame_count = 0;
-            for (int x = 0; x < crops->n; x++){
+            for (int x = 0; x < crops->n; x++)
+            {
                 
                 if (crops->t[x] < (crops->t[i] - less_than_median_crop_threshold) ||
                     crops->b[x] < (crops->b[i] - less_than_median_crop_threshold) ||
@@ -1274,7 +1277,8 @@ skip_preview:
             hb_deep_log(2, "crop: less_than_median_frame_count: %d,", less_than_median_frame_count);
              
             // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
-            if (less_than_median_frame_count >= crop_switch_frame_count) {
+            if (less_than_median_frame_count >= crop_switch_frame_count) 
+            {
                 hb_deep_log(2, "crop: switching to loose crop for this source. May be mixed aspect ratio. (%d)", crop_switch_frame_count);
                 i = 0;
             }
