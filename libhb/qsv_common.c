@@ -64,7 +64,8 @@ static int qsv_init_result = -2;
 static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 {
     adapter_details->index                                 = 0;
-    adapter_details->platform.MediaAdapterType             = MFX_MEDIA_INTEGRATED;
+    adapter_details->platform.CodeName                     = MFX_PLATFORM_UNKNOWN;
+    adapter_details->platform.MediaAdapterType             = MFX_MEDIA_UNKNOWN;
     // QSV info for each codec
     adapter_details->hb_qsv_info_avc                       = NULL;
     adapter_details->hb_qsv_info_hevc                      = NULL;
@@ -510,6 +511,7 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
     int default_adapter       = 0;
     mfxVariant var            = {};
     var.Version.Version       = MFX_VARIANT_VERSION;
+    mfxStatus err             = MFX_ERR_NONE;
 
     var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = MFX_IMPL_TYPE_HARDWARE;
@@ -525,12 +527,46 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
                                                   (mfxHDL *)(&idesc)))
     {
         mfxSession session = NULL;
-        if (MFX_ERR_NONE == MFXCreateSession(loader, i, &session))
+        err = MFXCreateSession(loader, i, &session);
+        if (err == MFX_ERR_NONE)
         {
-            mfxPlatform platform = { 0 };
-            if (MFX_ERR_NONE == MFXVideoCORE_QueryPlatform(session, &platform))
+            hb_qsv_adapter_details_t *adapter_details = av_mallocz(sizeof(hb_qsv_adapter_details_t));
+            if (!adapter_details)
             {
-                mfxHDL impl_path = NULL;
+                hb_error("hb_qsv_make_adapters_list: adapter_details allocation failed");
+                return -1;
+            }
+            int *adapter_index = av_mallocz(sizeof(int));
+            if (!adapter_index)
+            {
+                hb_error("hb_qsv_make_adapters_list: adapter_index allocation failed");
+                return -1;
+            }
+            init_adapter_details(adapter_details);
+            adapter_details->index = idesc->VendorImplID;
+            adapter_details->impl_name = strdup( (const char *)idesc->ImplName);
+            *adapter_index = idesc->VendorImplID;
+            mfxHDL impl_path = NULL;
+            err = MFXEnumImplementations(loader, i, MFX_IMPLCAPS_IMPLPATH, &impl_path);
+            if (err == MFX_ERR_NONE)
+            {
+                if (impl_path)
+                {
+                    adapter_details->impl_path = strdup( (const char *)impl_path);
+                    MFXDispReleaseImplDescription(loader, impl_path);
+                }
+            }
+            else
+            {
+                hb_error("hb_qsv_make_adapters_list: MFXEnumImplementations MFX_IMPLCAPS_IMPLPATH failed impl=%d err=%d", i, err);
+            }
+            hb_list_add(list, (void*)adapter_index);
+            hb_list_add(list2, (void*)adapter_details);
+
+            mfxPlatform platform = { 0 };
+            err = MFXVideoCORE_QueryPlatform(session, &platform);
+            if (MFX_ERR_NONE == err)
+            {
                 int generation = hb_qsv_hardware_generation(qsv_map_mfx_platform_codename(platform.CodeName));
                 // select default QSV adapter
                 if (generation > max_generation)
@@ -538,42 +574,16 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
                     max_generation = generation;
                     default_adapter = idesc->VendorImplID;
                 }
-                hb_qsv_adapter_details_t *adapter_details = av_mallocz(sizeof(hb_qsv_adapter_details_t));
-                if (!adapter_details)
-                {
-                    hb_error("hb_qsv_make_adapters_list: adapter_details allocation failed");
-                    return -1;
-                }
-                int *adapter_index = av_mallocz(sizeof(int));
-                if (!adapter_index)
-                {
-                    hb_error("hb_qsv_make_adapters_list: adapter_index allocation failed");
-                    return -1;
-                }
-                init_adapter_details(adapter_details);
-                adapter_details->index = idesc->VendorImplID;
                 adapter_details->platform = platform;
-                adapter_details->impl_name = strdup( (const char *)idesc->ImplName);
-                if (MFX_ERR_NONE == MFXEnumImplementations(loader, i, MFX_IMPLCAPS_IMPLPATH, &impl_path))
-                {
-                    if (impl_path)
-                    {
-                        adapter_details->impl_path = strdup( (const char *)impl_path);
-                        MFXDispReleaseImplDescription(loader, impl_path);
-                    }
-                }
-                *adapter_index = idesc->VendorImplID;
-                hb_list_add(list, (void*)adapter_index);
-                hb_list_add(list2, (void*)adapter_details);
             }
             else
             {
-                hb_log("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed %d", i);
+                hb_error("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed impl=%d err=%d", i, err);
             }
         }
         else
         {
-            hb_log("hb_qsv_make_adapters_list: MFXCreateSession failed %d", i);
+            hb_error("hb_qsv_make_adapters_list: MFXCreateSession failed impl=%d err=%d", i, err);
         }
         MFXDispReleaseImplDescription(loader, idesc);
         i++;
