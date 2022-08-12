@@ -1111,7 +1111,6 @@ struct hb_metadata_s
     hb_list_t * list_coverart;
 };
 
-// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_title_s.cs when changing this struct
 struct hb_title_s
 {
     enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
@@ -1147,6 +1146,8 @@ struct hb_title_s
     hb_content_light_metadata_t     coll;
     hb_rational_t   vrate;
     int             crop[4];
+    int             loose_crop[4];
+
     enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
     int             detected_interlacing;
     int             pcr_pid;                /* PCR PID for TS streams */

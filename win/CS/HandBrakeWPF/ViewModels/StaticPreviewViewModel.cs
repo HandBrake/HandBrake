@@ -18,7 +18,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
+   
     using HandBrakeWPF.Helpers;
+
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;

@@ -99,6 +99,8 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// </summary>
         public Cropping AutoCropDimensions { get; set; }
 
+        public Cropping LooseCropDimensions { get; set; }
+
         /// <summary>
         /// Gets or sets the FPS of the source.
         /// </summary>

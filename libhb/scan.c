@@ -28,6 +28,9 @@ typedef struct
     int            store_previews;
 
     uint64_t       min_title_duration;
+    
+    int            crop_threshold_frames;
+    int            crop_threshold_pixels;
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (200)
@@ -185,7 +188,8 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration )
+                            int store_previews, uint64_t min_duration,
+                            int crop_threshold_frames, int crop_threshold_pixels)
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -198,7 +202,10 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
-
+    
+    data->crop_threshold_frames = crop_threshold_frames;
+    data->crop_threshold_pixels = crop_threshold_pixels;
+    
     // Initialize scan state
     hb_state_t state;
     hb_get_state2(handle, &state);
@@ -1213,17 +1220,81 @@ skip_preview:
         if ( crops->n > 2 )
         {
             sort_crops( crops );
-            // The next line selects median cropping - at least
+
+            // Available crop modes:
+            // - Median: Selects median cropping - at least
             // 50% of the frames will have their borders removed.
-            // Other possible choices are loose cropping (i = 0) where
+            // - Loose cropping (i = 0) where
             // no non-black pixels will be cropped from any frame and a
-            // tight cropping (i = crops->n - (crops->n >> 2)) where at
+            // - Tight cropping (i = crops->n - (crops->n >> 2)) where at
             // least 75% of the frames will have their borders removed.
-            i = crops->n >> 1;
+            // - Smart: A blend between Median and Loose depending on whether 
+            // mixed AR content is found.
+            
+            i = crops->n >> 1; // Median
+
+            int crop_switch_frame_count = data->crop_threshold_frames;
+            int less_than_median_crop_threshold = data->crop_threshold_pixels;
+            
+            if (crop_switch_frame_count == 0) 
+            {
+                // Values seem like sensible defaults.
+                // Have observed that the optimal value does not always linearly increase with preview count.
+                 crop_switch_frame_count = 4;
+                
+                if (data->preview_count >= 30){
+                    crop_switch_frame_count = 6;
+                }
+                
+                if (data->preview_count > 40){
+                    crop_switch_frame_count = 8;
+                }
+            }
+            
+            if (less_than_median_crop_threshold == 0) 
+            {
+                // It's not uncommon to see 2~12 px variance in cropping.
+                // Defaulting to 9 to account for that variance before switching to loose.
+                // This accounts for variance that is unlikely to be caused by mixed AR. 
+                less_than_median_crop_threshold = 9;
+            }
+
+            // Count the number of frames "substantially" less than the median.
+            int less_than_median_frame_count = 0;
+            for (int x = 0; x < crops->n; x++)
+            {
+                
+                if (crops->t[x] < (crops->t[i] - less_than_median_crop_threshold) ||
+                    crops->b[x] < (crops->b[i] - less_than_median_crop_threshold) ||
+                    crops->l[x] < (crops->l[i] - less_than_median_crop_threshold) ||
+                    crops->r[x] < (crops->r[i] - less_than_median_crop_threshold)){
+                    less_than_median_frame_count = less_than_median_frame_count +1;
+                }
+                               
+                 hb_deep_log(2, "crop: [%d] %d/%d/%d/%d", x, crops->t[x], crops->b[x],  crops->l[x], crops->r[x]);
+            }
+            
+            hb_deep_log(2, "crop: less_than_median_frame_count: %d,", less_than_median_frame_count);
+             
+            // If we have a reasonable number of samples and it appears we have mixed aspect ratio, switch to loose crop.
+            if (less_than_median_frame_count >= crop_switch_frame_count) 
+            {
+                hb_deep_log(2, "crop: switching to loose crop for this source. May be mixed aspect ratio. (%d)", crop_switch_frame_count);
+                i = 0;
+            }
+            
+            // Automatic "Smart" Crop.
             title->crop[0] = EVEN( crops->t[i] );
             title->crop[1] = EVEN( crops->b[i] );
             title->crop[2] = EVEN( crops->l[i] );
             title->crop[3] = EVEN( crops->r[i] );
+            
+            // Loose / Conservative  (i = 0)
+            i = 0;
+            title->loose_crop[0] = EVEN( crops->t[i] );
+            title->loose_crop[1] = EVEN( crops->b[i] );
+            title->loose_crop[2] = EVEN( crops->l[i] );
+            title->loose_crop[3] = EVEN( crops->r[i] );
         }
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "

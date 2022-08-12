@@ -235,6 +235,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "s:{s:o, s:o, s:{s:o, s:o}},"
         // Crop[Top, Bottom, Left, Right]}
         "s:[oooo],"
+        // LooseCrop[Top, Bottom, Left, Right]}
+        "s:[oooo],"
         // Color {Format, Range, Primary, Transfer, Matrix, ChromaLocation}
         "s:{s:o, s:o, s:o, s:o, s:o, s:o},"
         // FrameRate {Num, Den}
@@ -265,6 +267,10 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
                             hb_value_int(title->crop[1]),
                             hb_value_int(title->crop[2]),
                             hb_value_int(title->crop[3]),
+    "LooseCrop",            hb_value_int(title->loose_crop[0]),
+                            hb_value_int(title->loose_crop[1]),
+                            hb_value_int(title->loose_crop[2]),
+                            hb_value_int(title->loose_crop[3]),
     "Color",
         "Format",           hb_value_int(title->pix_fmt),
         "Range",            hb_value_int(title->color_range),
