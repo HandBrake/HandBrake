@@ -2783,6 +2783,31 @@ static void und_to_any(hb_value_array_t * list)
     }
 }
 
+static void import_pic_settings_47_0_0(hb_value_t *preset)
+{
+    int auto_crop = hb_dict_get_bool(preset, "PictureAutoCrop");
+    int ct = hb_dict_get_int(preset, "PictureTopCrop");
+    int cb = hb_dict_get_int(preset, "PictureBottomCrop");
+    int cl = hb_dict_get_int(preset, "PictureLeftCrop");
+    int cr = hb_dict_get_int(preset, "PictureRightCrop");
+
+    if (auto_crop)
+    {
+        hb_dict_set_int(preset, "PictureCropMode", 0);
+    }
+    else
+    {
+        if (ct == 0 && cb == 0 && cl == 0 && cr == 0)
+        {
+            hb_dict_set_int(preset, "PictureCropMode", 2);
+        }
+        else
+        {
+            hb_dict_set_int(preset, "PictureCropMode", 3);
+        }
+    }
+}
+
 static void import_pic_settings_44_0_0(hb_value_t *preset)
 {
     int uses_pic = hb_dict_get_int(preset, "UsesPictureSettings");
@@ -3454,9 +3479,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_47_0_0(hb_value_t *preset)
+{
+    import_pic_settings_47_0_0(preset);
+}
+
 static void import_44_0_0(hb_value_t *preset)
 {
     import_pic_settings_44_0_0(preset);
+
+    import_47_0_0(preset);
 }
 
 static void import_40_0_0(hb_value_t *preset)
@@ -3598,6 +3630,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 44, 0, 0) <= 0)
         {
             import_44_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 47, 0, 0) <= 0)
+        {
+            import_47_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);
