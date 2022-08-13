@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -320,15 +320,18 @@
                                             <rect key="frame" x="60" y="0.0" width="158" height="84"/>
                                             <subviews>
                                                 <popUpButton toolTip="How to apply crop settings" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vfx-ON-9ys">
-                                                    <rect key="frame" x="-4" y="64" width="86" height="22"/>
+                                                    <rect key="frame" x="-4" y="64" width="101" height="22"/>
                                                     <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fau-iA-M1E" id="aLo-pd-S8D">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <menu key="menu" id="lAz-Mg-cB2">
                                                             <items>
                                                                 <menuItem title="None" state="on" id="fau-iA-M1E"/>
-                                                                <menuItem title="Automatic" tag="1" id="7rG-Qv-khx"/>
-                                                                <menuItem title="Custom" tag="2" id="LQm-LK-6tr"/>
+                                                                <menuItem title="Conservative" tag="1" id="1Pn-6x-bhx">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                </menuItem>
+                                                                <menuItem title="Automatic" tag="2" id="Kay-sv-ssX"/>
+                                                                <menuItem title="Custom" tag="3" id="LQm-LK-6tr"/>
                                                             </items>
                                                         </menu>
                                                     </popUpButtonCell>
@@ -449,12 +452,12 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="v1c-lQ-Iil"/>
                                                                 <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="NJi-37-m7W">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="v1c-lQ-Iil"/>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
@@ -474,12 +477,12 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="5Zy-md-B3T"/>
                                                                 <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="mA8-MT-U6L">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="5Zy-md-B3T"/>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
@@ -499,12 +502,12 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kYV-av-Iau"/>
                                                                 <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="d5o-v4-Wdb">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="kYV-av-Iau"/>
                                                             </connections>
                                                         </stepper>
                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
@@ -524,12 +527,12 @@
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="wAQ-9J-HFt"/>
                                                                 <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="S7N-Uj-ONm">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="-2" name="enabled" keyPath="self.picture.customCropEnabled" id="wAQ-9J-HFt"/>
                                                             </connections>
                                                         </stepper>
                                                         <textField toolTip="Top edge cropping amount in pixels" verticalHuggingPriority="750" preferredMaxLayoutWidth="36" textCompletion="NO" id="41c-48-2XJ">
@@ -1725,6 +1728,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                                                             </dictionary>
                                                         </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="TE4-wJ-dSs">
+                                                            <dictionary key="options">
+                                                                <bool key="NSValidatesImmediately" value="YES"/>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="-2" name="enabled2" keyPath="self.picture.keepAspectRatio" previousBinding="eX0-Np-IVz" id="2fr-Fd-Ywe">
                                                             <dictionary key="options">
                                                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -1732,11 +1740,6 @@ Players will scale the image in order to achieve the specified aspect.</string>
                                                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                                 <integer key="NSNullPlaceholder" value="-1"/>
                                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="TE4-wJ-dSs">
-                                                            <dictionary key="options">
-                                                                <bool key="NSValidatesImmediately" value="YES"/>
                                                             </dictionary>
                                                         </binding>
                                                     </connections>
@@ -1889,7 +1892,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
             <connections>
                 <outlet property="nextKeyView" destination="9oG-zm-Y0W" id="qo2-0g-l82"/>
             </connections>
-            <point key="canvasLocation" x="-358" y="-237.5"/>
+            <point key="canvasLocation" x="-660" y="-304"/>
         </customView>
     </objects>
 </document>

@@ -27,6 +27,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 @property (nonatomic, readonly) int autoCropLeft;
 @property (nonatomic, readonly) int autoCropRight;
 
+@property (nonatomic, readonly) int looseAutoCropTop;
+@property (nonatomic, readonly) int looseAutoCropBottom;
+@property (nonatomic, readonly) int looseAutoCropLeft;
+@property (nonatomic, readonly) int looseAutoCropRight;
+
 @property (nonatomic, readwrite) int storageWidth;
 @property (nonatomic, readwrite) int storageHeight;
 
@@ -82,6 +87,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _autoCropBottom = title.autoCropBottom;
         _autoCropLeft   = title.autoCropLeft;
         _autoCropRight  = title.autoCropRight;
+
+        _looseAutoCropTop    = title.looseAutoCropTop;
+        _looseAutoCropBottom = title.looseAutoCropBottom;
+        _looseAutoCropLeft   = title.looseAutoCropLeft;
+        _looseAutoCropRight  = title.looseAutoCropRight;
 
         [self updatePictureSettings:0];
 
@@ -565,14 +575,25 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         if (!(self.undo.isUndoing || self.undo.isRedoing))
         {
             self.updating = YES;
-            if (cropMode == HBPictureCropModeAutomatic)
+            if (cropMode == HBPictureCropModeAutomatic ||
+                cropMode == HBPictureCropModeConservative)
             {
                 // Reset the crop values to those determined right after scan
                 hb_geometry_crop_t geo = {0,};
-                geo.crop[0] = self.autoCropTop;
-                geo.crop[1] = self.autoCropBottom;
-                geo.crop[2] = self.autoCropLeft;
-                geo.crop[3] = self.autoCropRight;
+                if (cropMode == HBPictureCropModeAutomatic)
+                {
+                    geo.crop[0] = self.autoCropTop;
+                    geo.crop[1] = self.autoCropBottom;
+                    geo.crop[2] = self.autoCropLeft;
+                    geo.crop[3] = self.autoCropRight;
+                }
+                else
+                {
+                    geo.crop[0] = self.looseAutoCropTop;
+                    geo.crop[1] = self.looseAutoCropBottom;
+                    geo.crop[2] = self.looseAutoCropLeft;
+                    geo.crop[3] = self.looseAutoCropRight;
+                }
                 hb_rotate_geometry(&geo, &geo, self.angle, self.flip);
                 self.cropTop    = geo.crop[0];
                 self.cropBottom = geo.crop[1];
@@ -1396,7 +1417,21 @@ fail:
     preset[@"PictureDARWidth"] = @(self.displayWidth);
 
     // Set crop settings
-    preset[@"PictureAutoCrop"] = @((BOOL)(self.cropMode == HBPictureCropModeAutomatic));
+    switch (self.cropMode)
+    {
+        case HBPictureCropModeNone:
+            preset[@"PictureCropMode"] = @2;
+            break;
+        case HBPictureCropModeConservative:
+            preset[@"PictureCropMode"] = @1;
+            break;
+        case HBPictureCropModeAutomatic:
+            preset[@"PictureCropMode"] = @0;
+            break;
+        case HBPictureCropModeCustom:
+            preset[@"PictureCropMode"] = @3;
+            break;
+    }
 
     preset[@"PictureTopCrop"]    = @(self.cropTop);
     preset[@"PictureBottomCrop"] = @(self.cropBottom);
@@ -1420,7 +1455,8 @@ fail:
         preset[@"PicturePadRight"]  = @0;
     }
 
-    switch (self.padColorMode) {
+    switch (self.padColorMode)
+    {
         case HBPicturePadColorModeBlack:
             preset[@"PicturePadColor"] = @"black";
             break;
@@ -1479,20 +1515,24 @@ fail:
     int cl = [cropScale[@"crop-left"] intValue];
     int cr = [cropScale[@"crop-right"] intValue];
 
-    if ([preset[@"PictureAutoCrop"] boolValue])
+    int cropMode = [preset[@"PictureCropMode"] intValue];
+    switch (cropMode)
     {
-        self.cropMode = HBPictureCropModeAutomatic;
-    }
-    else
-    {
-        if (ct == 0 && cb == 0 && cl == 0 && cr == 0)
-        {
+        case 0:
+            self.cropMode = HBPictureCropModeAutomatic;
+            break;
+        case 1:
+            self.cropMode = HBPictureCropModeConservative;
+            break;
+        case 2:
             self.cropMode = HBPictureCropModeNone;
-        }
-        else
-        {
+            break;
+        case 3:
             self.cropMode = HBPictureCropModeCustom;
-        }
+            break;
+        default:
+            self.cropMode = HBPictureCropModeAutomatic;
+            break;
     }
 
     self.cropTop    = ct;
