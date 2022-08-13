@@ -1650,8 +1650,6 @@ static void ShowHelp()
 "       --crop   <top:bottom:left:right>\n"
 "                           Set picture cropping in pixels\n"
 "                           (default: automatically remove black bars)\n"
-"       --loose-crop        Automatic Cropping but using conservative algorithm. \n"
-"       --no-loose-crop     Disable preset 'loose-crop'\n"
 "       --crop-threshold-pixels <number>\n"
 "                           Number of pixels difference before we consider the frame\n"
 "                           to be a different aspect ratio\n" 
