@@ -1200,6 +1200,11 @@ static const char * padModeToString(HBPicturePadMode padMode)
         copy->_autoCropLeft = _autoCropLeft;
         copy->_autoCropRight = _autoCropRight;
 
+        copy->_looseAutoCropTop = _looseAutoCropTop;
+        copy->_looseAutoCropBottom = _looseAutoCropBottom;
+        copy->_looseAutoCropLeft = _looseAutoCropLeft;
+        copy->_looseAutoCropRight = _looseAutoCropRight;
+
         copy->_angle = _angle;
         copy->_flip = _flip;
 
@@ -1250,7 +1255,7 @@ static const char * padModeToString(HBPicturePadMode padMode)
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:3 forKey:@"HBPictureVersion"];
+    [coder encodeInt:4 forKey:@"HBPictureVersion"];
 
     encodeInt(_sourceWidth);
     encodeInt(_sourceHeight);
@@ -1261,6 +1266,11 @@ static const char * padModeToString(HBPicturePadMode padMode)
     encodeInt(_autoCropBottom);
     encodeInt(_autoCropLeft);
     encodeInt(_autoCropRight);
+
+    encodeInt(_looseAutoCropTop);
+    encodeInt(_looseAutoCropBottom);
+    encodeInt(_looseAutoCropLeft);
+    encodeInt(_looseAutoCropRight);
 
     encodeInt(_angle);
     encodeBool(_flip);
@@ -1311,6 +1321,11 @@ static const char * padModeToString(HBPicturePadMode padMode)
     decodeInt(_autoCropBottom); if (_autoCropBottom < 0 || _autoCropBottom > _sourceHeight) { goto fail; }
     decodeInt(_autoCropLeft); if (_autoCropLeft < 0 || _autoCropLeft > _sourceWidth) { goto fail; }
     decodeInt(_autoCropRight); if (_autoCropRight < 0 || _autoCropLeft > _sourceWidth) { goto fail; }
+
+    decodeInt(_looseAutoCropTop); if (_looseAutoCropTop < 0 || _looseAutoCropTop > _sourceHeight) { goto fail; }
+    decodeInt(_looseAutoCropBottom); if (_looseAutoCropBottom < 0 || _looseAutoCropBottom > _sourceHeight) { goto fail; }
+    decodeInt(_looseAutoCropLeft); if (_looseAutoCropLeft < 0 || _looseAutoCropLeft > _sourceWidth) { goto fail; }
+    decodeInt(_looseAutoCropRight); if (_looseAutoCropRight < 0 || _looseAutoCropRight > _sourceWidth) { goto fail; }
 
     decodeInt(_angle); if (_angle != 0 && _angle != 90 && _angle != 180 && _angle != 270) { goto fail; }
     decodeBool(_flip);
