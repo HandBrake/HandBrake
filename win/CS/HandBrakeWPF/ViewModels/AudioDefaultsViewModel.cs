@@ -323,7 +323,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AudioBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
                 this.AudioBehaviours.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
-                this.audioBehaviours.AllowedPassthruOptions = behaviours.AllowedPassthruOptions;
+                this.AudioBehaviours.AllowedPassthruOptions = behaviours.AllowedPassthruOptions;
+                this.AudioBehaviours.AudioFallbackEncoder = behaviours.AudioFallbackEncoder;
 
                 foreach (var encoder in this.PassthruEncoders)
                 {
