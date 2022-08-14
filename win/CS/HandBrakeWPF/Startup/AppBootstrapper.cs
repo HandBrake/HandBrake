@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Startup
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
@@ -80,6 +81,8 @@ namespace HandBrakeWPF.Startup
             builder.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("ViewModel")).AsImplementedInterfaces().SingleInstance();
 
             container = builder.Build();
+
+            IoCHelper.Setup(container);
 
             base.Configure();
         }

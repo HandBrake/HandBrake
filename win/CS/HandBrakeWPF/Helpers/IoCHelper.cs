@@ -9,13 +9,19 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using Caliburn.Micro;
+    using Autofac;
 
     public class IoCHelper
     {
+        private static IContainer container;
         public static T Get<T>()
         {
-           return IoC.Get<T>();
+            return container.Resolve<T>();
+        }
+
+        public static void Setup(IContainer autofacContainer)
+        {
+            container = autofacContainer;
         }
     }
 }
