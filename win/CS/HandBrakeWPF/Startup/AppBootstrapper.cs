@@ -11,6 +11,9 @@ namespace HandBrakeWPF.Startup
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
+
+    using Autofac;
 
     using Caliburn.Micro;
 
@@ -24,7 +27,6 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Scan;
     using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using IEncode = Services.Encode.Interfaces.IEncode;
@@ -36,7 +38,7 @@ namespace HandBrakeWPF.Startup
     /// </summary>
     public class AppBootstrapper : BootstrapperBase
     {
-        private SimpleContainer container;
+        private IContainer container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppBootstrapper"/> class.
@@ -47,61 +49,37 @@ namespace HandBrakeWPF.Startup
         }
 
         /// <summary>
-        /// Configure Castle Windsor
+        /// Configure AutoFac
         /// </summary>
         protected override void Configure()
         {
-            this.container = new SimpleContainer();
+            ContainerBuilder builder = new ContainerBuilder();
 
-            this.container.Singleton<Caliburn.Micro.IWindowManager, Caliburn.Micro.WindowManager >();
-            this.container.Singleton<IEventAggregator, EventAggregator>();
+            builder.RegisterType<Caliburn.Micro.WindowManager>().As<Caliburn.Micro.IWindowManager>();
+            builder.RegisterInstance(new EventAggregator()).As<IEventAggregator>();
 
             // Services
-            this.container.Singleton<IUpdateService, UpdateService>();
-            this.container.Singleton<IScan, LibScan>();
-            this.container.Singleton<IEncode, LibEncode>();
-            this.container.Singleton<IPrePostActionService, PrePostActionService>();
-            this.container.Singleton<IUserSettingService, UserSettingService>();
-            this.container.Singleton<IPresetService, PresetService>();
-            this.container.Singleton<IQueueService, QueueService>();
-            this.container.Singleton<Services.Logging.Interfaces.ILog, LogService>();
-            this.container.Singleton<IWindowManager, Services.WindowManager>();
+            builder.RegisterType<UpdateService>().As<IUpdateService>().SingleInstance();
+            builder.RegisterType<LibScan>().As<IScan>().SingleInstance();
+            builder.RegisterType<LibEncode>().As<IEncode>().SingleInstance();
+            builder.RegisterType<PrePostActionService>().As<IPrePostActionService>().SingleInstance();
+            builder.RegisterType<UserSettingService>().As<IUserSettingService>().SingleInstance();
+            builder.RegisterType<PresetService>().As<IPresetService>().SingleInstance();
+            builder.RegisterType<QueueService>().As<IQueueService>().SingleInstance();
+            builder.RegisterType<LogService>().As<Services.Logging.Interfaces.ILog>().SingleInstance();
+            builder.RegisterType<Services.WindowManager>().As<IWindowManager>().SingleInstance();
+            builder.RegisterType<NotifyIconService>().As<INotifyIconService>().SingleInstance();
+            builder.RegisterType<ErrorService>().As<IErrorService>().SingleInstance();
+            builder.RegisterType<SystemService>().As<ISystemService>().SingleInstance();
+            builder.RegisterType<LogInstanceManager>().As<ILogInstanceManager>().SingleInstance();
+            builder.RegisterType<PortService>().As<IPortService>().SingleInstance();
+            builder.RegisterType<NotificationService>().As<INotificationService>().SingleInstance();
 
-            // Commands
+            // ViewModels
+            Assembly assembly = typeof(AppBootstrapper).Assembly;
+            builder.RegisterAssemblyTypes(assembly).Where(t => t.Name.EndsWith("ViewModel")).AsImplementedInterfaces().SingleInstance();
 
-            // Services and Shell Components
-            this.container.Singleton<IErrorService, ErrorService>();
-            this.container.Singleton<IErrorViewModel, ErrorViewModel>();
-            this.container.Singleton<IMainViewModel, MainViewModel>();
-            this.container.Singleton<IQueueViewModel, QueueViewModel>();
-            this.container.PerRequest<IAddPresetViewModel, AddPresetViewModel>();
-            this.container.PerRequest<IManagePresetViewModel, ManagePresetViewModel>();
-            this.container.Singleton<ILogViewModel, LogViewModel>();
-            this.container.Singleton<IAboutViewModel, AboutViewModel>();
-            this.container.Singleton<IOptionsViewModel, OptionsViewModel>();
-            this.container.Singleton<ITitleSpecificViewModel, TitleSpecificViewModel>();
-            this.container.Singleton<IQueueSelectionViewModel, QueueSelectionViewModel>();
-            this.container.Singleton<ICountdownAlertViewModel, CountdownAlertViewModel>();
-            this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
-            this.container.Singleton<ISystemService, SystemService>();
-            this.container.Singleton<ILogInstanceManager, LogInstanceManager>();
-            this.container.Singleton<IPortService, PortService>();
-            this.container.Singleton<INotificationService, NotificationService>();
-            
-            // Tab Components
-            this.container.Singleton<IAudioViewModel, AudioViewModel>();
-            this.container.Singleton<IPictureSettingsViewModel, PictureSettingsViewModel>();
-            this.container.Singleton<IChaptersViewModel, ChaptersViewModel>();
-            this.container.Singleton<ISubtitlesViewModel, SubtitlesViewModel>();
-            this.container.Singleton<IFiltersViewModel, FiltersViewModel>();
-            this.container.Singleton<IVideoViewModel, VideoViewModel>();
-            this.container.Singleton<IMetaDataViewModel, MetaDataViewModel>();
-            this.container.Singleton<ISummaryViewModel, SummaryViewModel>();
-            this.container.Singleton<IPresetManagerViewModel, PresetManagerViewModel>();
-            
-            // Shell
-            this.container.Singleton<IShellViewModel, ShellViewModel>();
-            this.container.Singleton<INotifyIconService, NotifyIconService>();
+            container = builder.Build();
 
             base.Configure();
         }
@@ -134,10 +112,14 @@ namespace HandBrakeWPF.Startup
         /// </returns>
         protected override object GetInstance(Type service, string key)
         {
-            var instance = container.GetInstance(service, key);
-            if (instance != null)
+            if (string.IsNullOrEmpty(key) && container.IsRegistered(service))
             {
-                return instance;
+                return container.Resolve(service);
+            }
+
+            if (!string.IsNullOrEmpty(key) && container.IsRegisteredWithKey(key, service))
+            {
+                return container.ResolveKeyed(key, service);
             }
 
             throw new InvalidOperationException("Could not locate any instances.");
@@ -154,7 +136,7 @@ namespace HandBrakeWPF.Startup
         /// </returns>
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return container.GetAllInstances(service);
+            return this.container.Resolve(typeof(IEnumerable<>).MakeGenericType(service)) as IEnumerable<object>;
         }
 
         /// <summary>
@@ -165,7 +147,7 @@ namespace HandBrakeWPF.Startup
         /// </param>
         protected override void BuildUp(object instance)
         {
-            this.container.BuildUp(instance);
+            this.container.InjectProperties(instance);
         }
     }
 }
