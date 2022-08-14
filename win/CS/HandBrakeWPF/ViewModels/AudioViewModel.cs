@@ -168,8 +168,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void RefreshTask(OutputFormat format)
         {
-            this.NotifyOfPropertyChange(() => this.Task); // Trigger UI Refresh
-
             if (format == OutputFormat.Mp4)
             {
                 foreach (AudioTrack track in this.Task.AudioTracks)
@@ -191,6 +189,8 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
             }
+
+            this.NotifyOfPropertyChange(() => this.Task); // Trigger UI Refresh
 
             this.AudioDefaultsViewModel.RefreshTask(format);
         }
