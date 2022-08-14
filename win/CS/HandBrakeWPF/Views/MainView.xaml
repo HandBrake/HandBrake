@@ -7,6 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
+             xmlns:views="clr-namespace:HandBrakeWPF.Views"
              AllowDrop="True"
              FontSize="11"
              SnapsToDevicePixels="True"
@@ -490,25 +491,25 @@
                         VerticalAlignment="Stretch"
                         SelectionChanged="TabControl_OnSelectionChanged">
                 <TabItem Name="summaryTab" Header="{x:Static Properties:Resources.MainView_SummaryTab}">
-                    <ContentControl x:Name="SummaryViewModel" />
+                    <views:SummaryView DataContext="{Binding SummaryViewModel}"  />
                 </TabItem>
                 <TabItem Name="pictureTab" Header="{x:Static Properties:Resources.MainView_PictureTab}">
-                    <ContentControl x:Name="PictureSettingsViewModel" />
+                    <views:PictureSettingsView DataContext="{Binding PictureSettingsViewModel}" />
                 </TabItem>
                 <TabItem Name="filtersTab" Header="{x:Static Properties:Resources.MainView_FiltersTab}">
-                    <ContentControl x:Name="FiltersViewModel" />
+                    <views:FiltersView  DataContext="{Binding FiltersViewModel}" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="{x:Static Properties:Resources.MainView_VideoTab}">
-                    <ContentControl x:Name="VideoViewModel" VerticalAlignment="Stretch" />
+                    <views:VideoView VerticalAlignment="Stretch" DataContext="{Binding VideoViewModel}" />
                 </TabItem>
                 <TabItem Name="audioTab" Header="{x:Static Properties:Resources.MainView_AudioTab}">
-                    <ContentControl x:Name="AudioViewModel" />
+                    <views:AudioView DataContext="{Binding AudioViewModel}" />
                 </TabItem>
                 <TabItem Name="subtitlesTab" Header="{x:Static Properties:Resources.MainView_SubtitlesTab}">
-                    <ContentControl x:Name="SubtitleViewModel" />
+                    <views:SubtitlesView DataContext="{Binding SubtitleViewModel}" />
                 </TabItem>
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:Resources.MainView_ChaptersTab}">
-                    <ContentControl x:Name="ChaptersViewModel" />
+                    <views:ChaptersView DataContext="{Binding ChaptersViewModel}"  />
                 </TabItem>
             </TabControl>
 

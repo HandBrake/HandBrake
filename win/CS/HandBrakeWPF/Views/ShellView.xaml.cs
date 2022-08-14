@@ -41,6 +41,8 @@ namespace HandBrakeWPF.Views
         /// </summary>
         public ShellView()
         {
+            this.DataContext = IoCHelper.Get<IShellViewModel>();
+
             this.InitializeComponent();
 
             IUserSettingService userSettingService = IoCHelper.Get<IUserSettingService>();

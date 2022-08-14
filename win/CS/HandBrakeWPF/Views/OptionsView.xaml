@@ -2,7 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
               xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" xmlns:local="clr-namespace:HandBrakeWPF.Model"
-              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
+              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+              xmlns:views="clr-namespace:HandBrakeWPF.Views">
 
     <UserControl.Resources>
 
@@ -607,7 +608,7 @@
 
                     <TextBlock Text="{x:Static Properties:Resources.Options_About}" Style="{StaticResource pageHeader}"  />
 
-                    <ContentControl x:Name="AboutViewModel" />
+                    <views:AboutView x:Name="AboutViewModel" DataContext="{Binding AboutViewModel}" />
 
                 </StackPanel>
             </StackPanel>

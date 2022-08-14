@@ -9,13 +9,9 @@
 
 namespace HandBrakeWPF.Startup
 {
-    using System;
-    using System.Collections.Generic;
     using System.Reflection;
 
     using Autofac;
-
-    using Caliburn.Micro;
 
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services;
@@ -28,36 +24,23 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Scan;
     using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
 
     using IEncode = Services.Encode.Interfaces.IEncode;
     using IWindowManager = Services.Interfaces.IWindowManager;
     using LibEncode = Services.Encode.LibEncode;
 
-    /// <summary>
-    /// The Castle Bootstrapper
-    /// </summary>
-    public class AppBootstrapper : BootstrapperBase
+    public class AppBootstrapper
     {
         private IContainer container;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AppBootstrapper"/> class.
-        /// </summary>
         public AppBootstrapper()
         {
-            this.Initialize();
+            this.Configure();
         }
 
-        /// <summary>
-        /// Configure AutoFac
-        /// </summary>
-        protected override void Configure()
+        protected void Configure()
         {
             ContainerBuilder builder = new ContainerBuilder();
-
-            builder.RegisterType<Caliburn.Micro.WindowManager>().As<Caliburn.Micro.IWindowManager>();
-            builder.RegisterInstance(new EventAggregator()).As<IEventAggregator>();
 
             // Services
             builder.RegisterType<UpdateService>().As<IUpdateService>().SingleInstance();
@@ -67,8 +50,8 @@ namespace HandBrakeWPF.Startup
             builder.RegisterType<UserSettingService>().As<IUserSettingService>().SingleInstance();
             builder.RegisterType<PresetService>().As<IPresetService>().SingleInstance();
             builder.RegisterType<QueueService>().As<IQueueService>().SingleInstance();
-            builder.RegisterType<LogService>().As<Services.Logging.Interfaces.ILog>().SingleInstance();
-            builder.RegisterType<Services.WindowManager>().As<IWindowManager>().SingleInstance();
+            builder.RegisterType<LogService>().As<ILog>().SingleInstance();
+            builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
             builder.RegisterType<NotifyIconService>().As<INotifyIconService>().SingleInstance();
             builder.RegisterType<ErrorService>().As<IErrorService>().SingleInstance();
             builder.RegisterType<SystemService>().As<ISystemService>().SingleInstance();
@@ -83,74 +66,6 @@ namespace HandBrakeWPF.Startup
             container = builder.Build();
 
             IoCHelper.Setup(container);
-
-            base.Configure();
-        }
-
-        /// <summary>
-        /// The on startup.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
-        {
-            this.DisplayRootViewForAsync<IShellViewModel>();
-        }
-
-        /// <summary>
-        /// Get an Instance of a service
-        /// </summary>
-        /// <param name="service">
-        /// The service.
-        /// </param>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The Service Requested
-        /// </returns>
-        protected override object GetInstance(Type service, string key)
-        {
-            if (string.IsNullOrEmpty(key) && container.IsRegistered(service))
-            {
-                return container.Resolve(service);
-            }
-
-            if (!string.IsNullOrEmpty(key) && container.IsRegisteredWithKey(key, service))
-            {
-                return container.ResolveKeyed(key, service);
-            }
-
-            throw new InvalidOperationException("Could not locate any instances.");
-        }
-
-        /// <summary>
-        /// Get all instances of a service
-        /// </summary>
-        /// <param name="service">
-        /// The service.
-        /// </param>
-        /// <returns>
-        /// A collection of instances of the requested service type.
-        /// </returns>
-        protected override IEnumerable<object> GetAllInstances(Type service)
-        {
-            return this.container.Resolve(typeof(IEnumerable<>).MakeGenericType(service)) as IEnumerable<object>;
-        }
-
-        /// <summary>
-        /// Build Up
-        /// </summary>
-        /// <param name="instance">
-        /// The instance.
-        /// </param>
-        protected override void BuildUp(object instance)
-        {
-            this.container.InjectProperties(instance);
         }
     }
 }
