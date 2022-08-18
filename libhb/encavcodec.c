@@ -1475,6 +1475,12 @@ static int apply_svt_av1_options(hb_job_t *job, AVCodecContext *context, AVDicti
         }
     }
 
+    if (hb_dict_get(opts, "compressed-ten-bit-format"))
+    {
+        hb_log("apply_svt_av1_options [warning]: compressed-ten-bit-format is not supported, disabling");
+        hb_dict_remove(opts, "compressed-ten-bit-format");
+    }
+
     char *param_str = hb_value_get_string_xform(opts);
     av_dict_set(av_opts, "svtav1-params", param_str, 0);
     free(param_str);
