@@ -59,7 +59,8 @@ static hb_list_t *g_qsv_adapters_list         = NULL;
 static hb_list_t *g_qsv_adapters_details_list = NULL;
 static int g_adapter_index = 0;
 static int g_default_adapter_index = 0;
-static int qsv_init_result = -2;
+static int qsv_init_done = 0;
+static int qsv_init_result = 0;
 
 static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 {
@@ -441,19 +442,20 @@ int hb_qsv_info_init()
 {
     int result;
     result = hb_qsv_make_adapters_list(&g_qsv_adapters_list, &g_qsv_adapters_details_list);
-    if (result)
+    if (result != 0)
     {
         hb_error("hb_qsv_info_init: hb_qsv_make_adapters_list failed");
         return result;
     }
     result = hb_qsv_collect_adapters_details(g_qsv_adapters_details_list);
-    if (result)
+    if (result != 0)
     {
         hb_error("hb_qsv_info_init: hb_qsv_collect_adapters_details failed");
         return result;
     }
     if (hb_list_count(g_qsv_adapters_details_list) == 0)
     {
+        hb_error("hb_qsv_info_init: g_qsv_adapters_details_list has no adapters");
         return -1;
     }
     return 0;
@@ -515,17 +517,31 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
 
     var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = MFX_IMPL_TYPE_HARDWARE;
-    MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.Impl", var);
+    err = MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.Impl", var);
+    if (err != MFX_ERR_NONE)
+        hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.Impl error=%d", err);
 
     var.Type     = MFX_VARIANT_TYPE_U32;
     var.Data.U32 = 0x8086;
     MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.VendorID", var);
+    if (err != MFX_ERR_NONE)
+        hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.VendorID error=%d", err);
 
-    while (MFX_ERR_NONE == MFXEnumImplementations(loader,
-                                                  i,
-                                                  MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
-                                                  (mfxHDL *)(&idesc)))
+    while (1)
     {
+        err = MFXEnumImplementations(loader,
+                                     i,
+                                     MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
+                                     (mfxHDL *)(&idesc));
+        if (err != MFX_ERR_NONE)
+        {
+            if (err != MFX_ERR_NOT_FOUND)
+            {
+                hb_error("hb_qsv_make_adapters_list: MFXEnumImplementations returns %d", err);
+            }
+            break;
+        }
+
         mfxSession session = NULL;
         err = MFXCreateSession(loader, i, &session);
         if (err == MFX_ERR_NONE)
@@ -596,23 +612,31 @@ static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **
     return 0;
 }
 
+/**
+ * Check the actual availability of QSV implementations on the system
+ * and collect GPU adapters capabilities.
+ *
+ * @returns encoder codec mask supported by QSV implemenation,
+ *      0 if QSV is not avalable, -1 if HB_PROJECT_FEATURE_QSV is not enabled
+ */
 int hb_qsv_available()
 {
     if (is_hardware_disabled())
     {
         return 0;
     }
-    
-    if (qsv_init_result >= 0){
+
+    if (qsv_init_done != 0) {
         // This method gets called a lot. Don't probe hardware each time.
         return qsv_init_result; 
     }
 
+    qsv_init_done = 1;
     int result = hb_qsv_info_init();
     if (result != 0)
     {
         hb_log("qsv: not available on this system");
-        qsv_init_result = -1;
+        qsv_init_result = 0;
         return qsv_init_result;
     }
 
