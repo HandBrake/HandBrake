@@ -330,7 +330,7 @@ msgstr "Durée de pause :"
 
 #: src/ghb3.ui:1236
 msgid "Encode Time:"
-msgstr "Heure d'encodage :"
+msgstr "Durée d'encodage :"
 
 #: src/ghb3.ui:1272
 msgid "File Size:"
