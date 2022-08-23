@@ -507,13 +507,12 @@ unsupported:
     pv->param.codingOption2.BRefType = MFX_B_REF_OFF;
 }
 
-static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
+static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const mfxVideoParam *videoParam)
 {
     size_t len;
     int ret = 0;
     uint8_t *buf, *end;
     mfxBitstream bitstream;
-    hb_buffer_t *bitstream_buf;
     mfxStatus status;
     mfxSyncPoint syncPoint;
     mfxFrameSurface1 frameSurface1;
@@ -523,26 +522,25 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     memset(&syncPoint,     0, sizeof(mfxSyncPoint));
     memset(&frameSurface1, 0, sizeof(mfxFrameSurface1));
 
-    /* The bitstream buffer should be able to hold any encoded frame */
-    bitstream_buf = hb_video_buffer_init(pv->job->width, pv->job->height);
-    if (bitstream_buf == NULL)
+    if (videoParam == NULL)
     {
-        hb_log("qsv_hevc_make_header: hb_buffer_init failed");
+        hb_log("qsv_hevc_make_header: videoParam is NULL");
+        ret = -1;
+        goto end;
+    }
+    /* The bitstream buffer should be able to hold any encoded frame */
+    size_t buf_max_size = videoParam->mfx.BufferSizeInKB * 1000 * ( 0 == videoParam->mfx.BRCParamMultiplier ? 1 : videoParam->mfx.BRCParamMultiplier);
+    bitstream.Data      = av_mallocz(sizeof(uint8_t) * buf_max_size);
+    bitstream.MaxLength = buf_max_size;
+    if (bitstream.Data == NULL)
+    {
+        hb_log("qsv_hevc_make_header: bitstream.Data allocation failed");
         ret = -1;
         goto end;
     }
 
-    /* need more space for 10bits */
-    if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010 ||
-        (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC || pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1))
-    {
-         hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
-    }
-    int bpp12 = (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010) ? 6 : 3;
-    bitstream.Data      = bitstream_buf->data;
-    bitstream.MaxLength = bitstream_buf->alloc;
-
     /* We only need to encode one frame, so we only need one surface */
+    int bpp12                = (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010) ? 6 : 3;
     mfxU16 Height            = pv->param.videoParam->mfx.FrameInfo.Height;
     mfxU16 Width             = pv->param.videoParam->mfx.FrameInfo.Width;
     frameSurface1.Info       = pv->param.videoParam->mfx.FrameInfo;
@@ -678,7 +676,8 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     }
 
 end:
-    hb_buffer_close(&bitstream_buf);
+    if (bitstream.Data)
+        av_free(bitstream.Data);
     av_free(frameSurface1.Data.Y);
     return ret;
 }
@@ -1806,7 +1805,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else if (videoParam.mfx.CodecId == MFX_CODEC_HEVC)
     {
-        if (qsv_hevc_make_header(w, session) < 0)
+        if (qsv_hevc_make_header(w, session, &videoParam) < 0)
         {
             hb_error("encqsvInit: qsv_hevc_make_header failed");
 #if !HB_QSV_ONEVPL
