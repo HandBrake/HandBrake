@@ -35,7 +35,9 @@ typedef struct hb_qsv_adapter_details
 {
     // DirectX index
     int index;
-    int type;
+    mfxPlatform platform;
+    char *impl_name;
+    char *impl_path;
     // QSV info for each codec
     hb_qsv_info_t *hb_qsv_info_avc;
     hb_qsv_info_t *hb_qsv_info_hevc;
@@ -53,22 +55,18 @@ typedef struct hb_qsv_adapter_details
     hb_qsv_info_t qsv_hardware_info_av1;
 } hb_qsv_adapter_details_t;
 
-// QSV info about adapters
-#if defined(_WIN32) || defined(__MINGW32__)
-static mfxAdaptersInfo g_qsv_adapters_info;
-static const char* hb_qsv_get_adapter_type(const mfxAdapterInfo* info);
-#endif
-int hb_qsv_get_platform(int adapter_index);
 static hb_list_t *g_qsv_adapters_list         = NULL;
 static hb_list_t *g_qsv_adapters_details_list = NULL;
 static int g_adapter_index = 0;
 static int g_default_adapter_index = 0;
-static int qsv_init_result = -2;
+static int qsv_init_done = 0;
+static int qsv_init_result = 0;
 
 static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
 {
     adapter_details->index                                 = 0;
-    adapter_details->type                                  = MFX_MEDIA_INTEGRATED;
+    adapter_details->platform.CodeName                     = MFX_PLATFORM_UNKNOWN;
+    adapter_details->platform.MediaAdapterType             = MFX_MEDIA_UNKNOWN;
     // QSV info for each codec
     adapter_details->hb_qsv_info_avc                       = NULL;
     adapter_details->hb_qsv_info_hevc                      = NULL;
@@ -98,6 +96,12 @@ static void init_adapter_details(hb_qsv_adapter_details_t *adapter_details)
     adapter_details->qsv_hardware_info_av1.codec_id       = MFX_CODEC_AV1;
     adapter_details->qsv_hardware_info_av1.implementation = MFX_IMPL_HARDWARE_ANY|MFX_IMPL_VIA_ANY;
 }
+
+// QSV info about adapters
+static const char* hb_qsv_get_adapter_type(const hb_qsv_adapter_details_t *details);
+int hb_qsv_get_platform(int adapter_index);
+static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list);
+static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_list);
 
 // QSV-supported profile and level lists (not all exposed to the user)
 static hb_triplet_t hb_qsv_h264_profiles[] =
@@ -259,6 +263,24 @@ static hb_qsv_adapter_details_t* hb_qsv_get_adapters_details_by_index(int adapte
     return NULL;
 }
 
+int hb_qsv_set_adapter_index(int adapter_index)
+{
+    if (g_adapter_index == adapter_index)
+        return 0;
+
+    for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
+    {
+        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
+        if (details && (details->index == adapter_index))
+        {
+            g_adapter_index = adapter_index;
+            return 0;
+        }
+    }
+    hb_error("hb_qsv_set_adapter_index: incorrect qsv device index %d", adapter_index);
+    return -1;
+}
+
 static int qsv_impl_set_preferred(hb_qsv_adapter_details_t *details, const char *name)
 {
     if (name == NULL || details == NULL)
@@ -335,6 +357,79 @@ int hb_qsv_hardware_generation(int cpu_platform)
     }
 }
 
+int qsv_map_mfx_platform_codename(int mfx_platform_codename)
+{
+    int platform = HB_CPU_PLATFORM_UNSPECIFIED;
+
+    switch (mfx_platform_codename)
+    {
+    case MFX_PLATFORM_SANDYBRIDGE:
+        platform = HB_CPU_PLATFORM_INTEL_SNB;
+        break;
+    case MFX_PLATFORM_IVYBRIDGE:
+        platform = HB_CPU_PLATFORM_INTEL_IVB;
+        break;
+    case MFX_PLATFORM_HASWELL:
+        platform = HB_CPU_PLATFORM_INTEL_HSW;
+        break;
+    case MFX_PLATFORM_BAYTRAIL:
+    case MFX_PLATFORM_BROADWELL:
+        platform = HB_CPU_PLATFORM_INTEL_BDW;
+        break;
+    case MFX_PLATFORM_CHERRYTRAIL:
+        platform = HB_CPU_PLATFORM_INTEL_CHT;
+        break;
+    case MFX_PLATFORM_SKYLAKE:
+        platform = HB_CPU_PLATFORM_INTEL_SKL;
+        break;
+    case MFX_PLATFORM_APOLLOLAKE:
+    case MFX_PLATFORM_KABYLAKE:
+        platform = HB_CPU_PLATFORM_INTEL_KBL;
+        break;
+#if (MFX_VERSION >= 1025)
+    case MFX_PLATFORM_GEMINILAKE:
+    case MFX_PLATFORM_COFFEELAKE:
+    case MFX_PLATFORM_CANNONLAKE:
+        platform = HB_CPU_PLATFORM_INTEL_KBL;
+        break;
+#endif
+#if (MFX_VERSION >= 1027)
+    case MFX_PLATFORM_ICELAKE:
+        platform = HB_CPU_PLATFORM_INTEL_ICL;
+        break;
+#endif
+    case MFX_PLATFORM_ELKHARTLAKE:
+    case MFX_PLATFORM_JASPERLAKE:
+    case MFX_PLATFORM_TIGERLAKE:
+    case MFX_PLATFORM_ROCKETLAKE:
+        platform = HB_CPU_PLATFORM_INTEL_TGL;
+        break;
+    case MFX_PLATFORM_ALDERLAKE_S:
+    case MFX_PLATFORM_ALDERLAKE_P:
+        platform = HB_CPU_PLATFORM_INTEL_ADL;
+        break;
+    case MFX_PLATFORM_ARCTICSOUND_P:
+    case MFX_PLATFORM_DG2:
+    case MFX_PLATFORM_ALDERLAKE_N:
+    case MFX_PLATFORM_KEEMBAY:
+        platform = HB_CPU_PLATFORM_INTEL_DG2;
+        break;
+    default:
+        platform = HB_CPU_PLATFORM_UNSPECIFIED;
+    }
+    return platform;
+}
+
+static const char* hb_qsv_get_adapter_type(const hb_qsv_adapter_details_t *details)
+{
+    if (details)
+    {
+        return (details->platform.MediaAdapterType == MFX_MEDIA_INTEGRATED) ? "integrated" :
+        (details->platform.MediaAdapterType == MFX_MEDIA_DISCRETE) ? "discrete" : "unknown";
+    }
+    return NULL;
+}
+
 /*
  * Determine whether a given mfxIMPL is hardware-accelerated.
  */
@@ -343,23 +438,205 @@ int hb_qsv_implementation_is_hardware(mfxIMPL implementation)
     return MFX_IMPL_BASETYPE(implementation) != MFX_IMPL_SOFTWARE;
 }
 
+int hb_qsv_info_init()
+{
+    int result;
+    result = hb_qsv_make_adapters_list(&g_qsv_adapters_list, &g_qsv_adapters_details_list);
+    if (result != 0)
+    {
+        hb_error("hb_qsv_info_init: hb_qsv_make_adapters_list failed");
+        return result;
+    }
+    result = hb_qsv_collect_adapters_details(g_qsv_adapters_details_list);
+    if (result != 0)
+    {
+        hb_error("hb_qsv_info_init: hb_qsv_collect_adapters_details failed");
+        return result;
+    }
+    if (hb_list_count(g_qsv_adapters_details_list) == 0)
+    {
+        hb_error("hb_qsv_info_init: g_qsv_adapters_details_list has no adapters");
+        return -1;
+    }
+    return 0;
+}
+
+static int hb_qsv_make_adapters_list(hb_list_t **qsv_adapters_list, hb_list_t **qsv_adapters_details_list)
+{
+    if (!qsv_adapters_list)
+    {
+        hb_error("hb_qsv_make_adapters_list: qsv_adapters_list destination pointer is NULL");
+        return -1;
+    }
+    if (*qsv_adapters_list)
+    {
+        hb_error("hb_qsv_make_adapters_list: qsv_adapters_list is allocated already");
+        return -1;
+    }
+
+    if (!qsv_adapters_details_list)
+    {
+        hb_error("hb_qsv_make_adapters_list: qsv_adapters_details_list destination pointer is NULL");
+        return -1;
+    }
+
+    if (*qsv_adapters_details_list)
+    {
+        hb_error("hb_qsv_make_adapters_list: qsv_adapter_details_list is allocated already");
+        return -1;
+    }
+
+    hb_list_t *list = hb_list_init();
+    if (list == NULL)
+    {
+        hb_error("hb_qsv_make_adapters_list: hb_list_init() failed");
+        return -1;
+    }
+    hb_list_t *list2 = hb_list_init();
+    if (list == NULL)
+    {
+        hb_error("hb_qsv_make_adapters_list: hb_list_init() failed");
+        return -1;
+    }
+
+    mfxLoader loader = MFXLoad();
+    if (loader == NULL)
+    {
+        hb_error("hb_qsv_make_adapters_list: Error - MFXLoad() returned null - no libraries found\n");
+        return -1;
+    }
+
+    mfxConfig config          = MFXCreateConfig(loader);
+    int i                     = 0;
+    mfxImplDescription *idesc = NULL;
+    int max_generation        = QSV_G0;
+    int default_adapter       = 0;
+    mfxVariant var            = {};
+    var.Version.Version       = MFX_VARIANT_VERSION;
+    mfxStatus err             = MFX_ERR_NONE;
+
+    var.Type     = MFX_VARIANT_TYPE_U32;
+    var.Data.U32 = MFX_IMPL_TYPE_HARDWARE;
+    err = MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.Impl", var);
+    if (err != MFX_ERR_NONE)
+        hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.Impl error=%d", err);
+
+    var.Type     = MFX_VARIANT_TYPE_U32;
+    var.Data.U32 = 0x8086;
+    MFXSetConfigFilterProperty(config, (const mfxU8 *)"mfxImplDescription.VendorID", var);
+    if (err != MFX_ERR_NONE)
+        hb_error("hb_qsv_make_adapters_list: MFXSetConfigFilterProperty mfxImplDescription.VendorID error=%d", err);
+
+    while (1)
+    {
+        err = MFXEnumImplementations(loader,
+                                     i,
+                                     MFX_IMPLCAPS_IMPLDESCSTRUCTURE,
+                                     (mfxHDL *)(&idesc));
+        if (err != MFX_ERR_NONE)
+        {
+            if (err != MFX_ERR_NOT_FOUND)
+            {
+                hb_error("hb_qsv_make_adapters_list: MFXEnumImplementations returns %d", err);
+            }
+            break;
+        }
+
+        mfxSession session = NULL;
+        err = MFXCreateSession(loader, i, &session);
+        if (err == MFX_ERR_NONE)
+        {
+            hb_qsv_adapter_details_t *adapter_details = av_mallocz(sizeof(hb_qsv_adapter_details_t));
+            if (!adapter_details)
+            {
+                hb_error("hb_qsv_make_adapters_list: adapter_details allocation failed");
+                return -1;
+            }
+            int *adapter_index = av_mallocz(sizeof(int));
+            if (!adapter_index)
+            {
+                hb_error("hb_qsv_make_adapters_list: adapter_index allocation failed");
+                return -1;
+            }
+            init_adapter_details(adapter_details);
+            adapter_details->index = idesc->VendorImplID;
+            adapter_details->impl_name = strdup( (const char *)idesc->ImplName);
+            *adapter_index = idesc->VendorImplID;
+            mfxHDL impl_path = NULL;
+            err = MFXEnumImplementations(loader, i, MFX_IMPLCAPS_IMPLPATH, &impl_path);
+            if (err == MFX_ERR_NONE)
+            {
+                if (impl_path)
+                {
+                    adapter_details->impl_path = strdup( (const char *)impl_path);
+                    MFXDispReleaseImplDescription(loader, impl_path);
+                }
+            }
+            else
+            {
+                hb_error("hb_qsv_make_adapters_list: MFXEnumImplementations MFX_IMPLCAPS_IMPLPATH failed impl=%d err=%d", i, err);
+            }
+            hb_list_add(list, (void*)adapter_index);
+            hb_list_add(list2, (void*)adapter_details);
+
+            mfxPlatform platform = { 0 };
+            err = MFXVideoCORE_QueryPlatform(session, &platform);
+            if (MFX_ERR_NONE == err)
+            {
+                int generation = hb_qsv_hardware_generation(qsv_map_mfx_platform_codename(platform.CodeName));
+                // select default QSV adapter
+                if (generation > max_generation)
+                {
+                    max_generation = generation;
+                    default_adapter = idesc->VendorImplID;
+                }
+                adapter_details->platform = platform;
+            }
+            else
+            {
+                hb_error("hb_qsv_make_adapters_list: MFXVideoCORE_QueryPlatform failed impl=%d err=%d", i, err);
+            }
+        }
+        else
+        {
+            hb_error("hb_qsv_make_adapters_list: MFXCreateSession failed impl=%d err=%d", i, err);
+        }
+        MFXDispReleaseImplDescription(loader, idesc);
+        i++;
+    }
+    MFXUnload(loader);
+    *qsv_adapters_list = list;
+    *qsv_adapters_details_list = list2;
+    hb_qsv_set_default_adapter_index(default_adapter);
+    hb_qsv_set_adapter_index(default_adapter);
+    return 0;
+}
+
+/**
+ * Check the actual availability of QSV implementations on the system
+ * and collect GPU adapters capabilities.
+ *
+ * @returns encoder codec mask supported by QSV implemenation,
+ *      0 if QSV is not avalable, -1 if HB_PROJECT_FEATURE_QSV is not enabled
+ */
 int hb_qsv_available()
 {
     if (is_hardware_disabled())
     {
         return 0;
     }
-    
-    if (qsv_init_result >= 0){
+
+    if (qsv_init_done != 0) {
         // This method gets called a lot. Don't probe hardware each time.
         return qsv_init_result; 
     }
 
+    qsv_init_done = 1;
     int result = hb_qsv_info_init();
     if (result != 0)
     {
         hb_log("qsv: not available on this system");
-        qsv_init_result = -1;
+        qsv_init_result = 0;
         return qsv_init_result;
     }
 
@@ -1102,10 +1379,6 @@ hb_display_t * hb_qsv_display_init(void)
 }
 
 #if defined(_WIN32) || defined(__MINGW32__)
-static int hb_qsv_query_adapters(mfxAdaptersInfo* adapters_info);
-static int hb_qsv_make_adapters_list(const mfxAdaptersInfo* adapters_info, hb_list_t **qsv_adapters_list);
-static int hb_qsv_make_adapters_details_list(const mfxAdaptersInfo* adapters_info, hb_list_t **hb_qsv_adapter_details_list);
-
 mfxIMPL hb_qsv_dx_index_to_impl(int dx_index)
 {
     mfxIMPL impl;
@@ -1288,7 +1561,7 @@ fail:
     return AVERROR_UNKNOWN;
 }
 
-static int hb_qsv_collect_adapters_details(hb_list_t *qsv_adapters_list, hb_list_t *hb_qsv_adapter_details_list)
+static int hb_qsv_collect_adapters_details(hb_list_t *hb_qsv_adapter_details_list)
 {
     for (int i = 0; i < hb_list_count(hb_qsv_adapter_details_list); i++)
     {
@@ -1640,10 +1913,8 @@ void hb_qsv_info_print()
         for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
         {
             const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
-#if defined(_WIN32) || defined(__MINGW32__)
-            mfxAdapterInfo* info = &g_qsv_adapters_info.Adapters[i];
-            hb_log("Intel Quick Sync Video %s adapter with index %d", hb_qsv_get_adapter_type(info), details->index);
-#endif
+            hb_log("Intel Quick Sync Video %s adapter with index %d", hb_qsv_get_adapter_type(details), details->index);
+            hb_log("Impl %s library path: %s", details->impl_name, details->impl_path);
             hb_qsv_adapter_info_print(details);
         }
     }
@@ -3412,136 +3683,28 @@ typedef IDirect3D9* WINAPI pDirect3DCreate9(UINT);
 typedef HRESULT WINAPI pDirect3DCreate9Ex(UINT, IDirect3D9Ex **);
 typedef HRESULT(WINAPI *HB_PFN_CREATE_DXGI_FACTORY)(REFIID riid, void **ppFactory);
 
-int hb_qsv_info_init()
-{
-    // Collect the information about qsv adapters
-    g_qsv_adapters_info.Adapters = NULL;
-    g_qsv_adapters_info.NumAlloc = 0;
-    g_qsv_adapters_info.NumActual = 0;
-    int err = hb_qsv_query_adapters(&g_qsv_adapters_info);
-    if (err)
-    {
-        return -1;
-    }
-    hb_qsv_make_adapters_list(&g_qsv_adapters_info, &g_qsv_adapters_list);
-    hb_qsv_make_adapters_details_list(&g_qsv_adapters_info, &g_qsv_adapters_details_list);
-    hb_qsv_collect_adapters_details(g_qsv_adapters_list, g_qsv_adapters_details_list);
-    return 0;
-}
-
-int hb_qsv_set_adapter_index(int adapter_index)
-{
-    if (g_adapter_index == adapter_index)
-        return 0;
-
-    for (int i = 0; i < g_qsv_adapters_info.NumActual; i++)
-    {
-        mfxAdapterInfo* info = &g_qsv_adapters_info.Adapters[i];
-        if (info && (info->Number == adapter_index))
-        {
-            g_adapter_index = adapter_index;
-            return 0;
-        }
-    }
-    hb_error("hb_qsv_set_adapter_index: incorrect qsv device index %d", adapter_index);
-    return -1;
-}
-
-int qsv_map_mfx_platform_codename(int mfx_platform_codename)
-{
-    int platform = HB_CPU_PLATFORM_UNSPECIFIED;
-
-    switch (mfx_platform_codename)
-    {
-    case MFX_PLATFORM_SANDYBRIDGE:
-        platform = HB_CPU_PLATFORM_INTEL_SNB;
-        break;
-    case MFX_PLATFORM_IVYBRIDGE:
-        platform = HB_CPU_PLATFORM_INTEL_IVB;
-        break;
-    case MFX_PLATFORM_HASWELL:
-        platform = HB_CPU_PLATFORM_INTEL_HSW;
-        break;
-    case MFX_PLATFORM_BAYTRAIL:
-    case MFX_PLATFORM_BROADWELL:
-        platform = HB_CPU_PLATFORM_INTEL_BDW;
-        break;
-    case MFX_PLATFORM_CHERRYTRAIL:
-        platform = HB_CPU_PLATFORM_INTEL_CHT;
-        break;
-    case MFX_PLATFORM_SKYLAKE:
-        platform = HB_CPU_PLATFORM_INTEL_SKL;
-        break;
-    case MFX_PLATFORM_APOLLOLAKE:
-    case MFX_PLATFORM_KABYLAKE:
-        platform = HB_CPU_PLATFORM_INTEL_KBL;
-        break;
-#if (MFX_VERSION >= 1025)
-    case MFX_PLATFORM_GEMINILAKE:
-    case MFX_PLATFORM_COFFEELAKE:
-    case MFX_PLATFORM_CANNONLAKE:
-        platform = HB_CPU_PLATFORM_INTEL_KBL;
-        break;
-#endif
-#if (MFX_VERSION >= 1027)
-    case MFX_PLATFORM_ICELAKE:
-        platform = HB_CPU_PLATFORM_INTEL_ICL;
-        break;
-#endif
-    case MFX_PLATFORM_ELKHARTLAKE:
-    case MFX_PLATFORM_JASPERLAKE:
-    case MFX_PLATFORM_TIGERLAKE:
-    case MFX_PLATFORM_ROCKETLAKE:
-        platform = HB_CPU_PLATFORM_INTEL_TGL;
-        break;
-    case MFX_PLATFORM_ALDERLAKE_S:
-    case MFX_PLATFORM_ALDERLAKE_P:
-        platform = HB_CPU_PLATFORM_INTEL_ADL;
-        break;
-    case MFX_PLATFORM_ARCTICSOUND_P:
-    case MFX_PLATFORM_DG2:
-    case MFX_PLATFORM_ALDERLAKE_N:
-    case MFX_PLATFORM_KEEMBAY:
-        platform = HB_CPU_PLATFORM_INTEL_DG2;
-        break;
-    default:
-        platform = HB_CPU_PLATFORM_UNSPECIFIED;
-    }
-    return platform;
-}
-
 static void hb_qsv_free_adapters_details()
 {
     for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
         hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
-        if (details->index)
+        if (details)
         {
             av_free(details);
         }
     }
 }
 
-static const char* hb_qsv_get_adapter_type(const mfxAdapterInfo* info)
-{
-    if (info)
-    {
-        return (info->Platform.MediaAdapterType == MFX_MEDIA_INTEGRATED) ? "integrated" :
-        (info->Platform.MediaAdapterType == MFX_MEDIA_DISCRETE) ? "discrete" : "unknown";
-    }
-    return NULL;
-}
-
 int hb_qsv_get_platform(int adapter_index)
 {
-    for (int i = 0; i < g_qsv_adapters_info.NumActual; i++)
+    for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
-        mfxAdapterInfo* info = &g_qsv_adapters_info.Adapters[i];
+        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         // find DirectX adapter with given index in list of QSV adapters
         // if -1 use first adapter with highest priority
-        if (info && ((info->Number == adapter_index) || (adapter_index == -1)))
+        if (details && ((details->index == adapter_index) || (adapter_index == -1)))
         {
-            return qsv_map_mfx_platform_codename(info->Platform.CodeName);
+            return qsv_map_mfx_platform_codename(details->platform.CodeName);
         }
     }
     return HB_CPU_PLATFORM_UNSPECIFIED;
@@ -3549,12 +3712,12 @@ int hb_qsv_get_platform(int adapter_index)
 
 int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
 {
-    for (int i = 0; i < g_qsv_adapters_info.NumActual; i++)
+    for (int i = 0; i < hb_list_count(g_qsv_adapters_details_list); i++)
     {
-        mfxAdapterInfo* info = &g_qsv_adapters_info.Adapters[i];
+        const hb_qsv_adapter_details_t *details = hb_list_item(g_qsv_adapters_details_list, i);
         // find DirectX adapter with given index in list of QSV adapters
         // if -1 use first adapter with highest priority
-        if (info && ((info->Number == dx_index) || (dx_index == -1)))
+        if (details && ((details->index == dx_index) || (dx_index == -1)))
         {
             if (job->qsv.ctx && !job->qsv.ctx->qsv_device)
             {
@@ -3565,10 +3728,10 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
                     return -1;
                 }
             }
-            snprintf(job->qsv.ctx->qsv_device, 32, "%u", info->Number);
-            job->qsv.ctx->dx_index = info->Number;
-            hb_log("qsv: %s qsv adapter with index %s has been selected", hb_qsv_get_adapter_type(info), job->qsv.ctx->qsv_device);
-            hb_qsv_set_adapter_index(info->Number);
+            snprintf(job->qsv.ctx->qsv_device, 32, "%u", details->index);
+            job->qsv.ctx->dx_index = details->index;
+            hb_log("qsv: %s qsv adapter with index %s has been selected", hb_qsv_get_adapter_type(details), job->qsv.ctx->qsv_device);
+            hb_qsv_set_adapter_index(details->index);
             return 0;
         }
     }
@@ -4012,112 +4175,6 @@ static int hb_qsv_get_dx_device(hb_job_t *job)
                 ID3D11Device_GetImmediateContext(device, (ID3D11DeviceContext *)&job->qsv.ctx->device_context);
                 if (!job->qsv.ctx->device_context)
                     return -1;
-            }
-        }
-    }
-    return 0;
-}
-
-static int hb_qsv_make_adapters_list(const mfxAdaptersInfo* adapters_info, hb_list_t **qsv_adapters_list)
-{
-    int max_generation = QSV_G0;
-    int default_adapter = 0;
-
-    if (!qsv_adapters_list)
-    {
-        hb_error("hb_qsv_make_adapters_list: destination pointer is NULL");
-        return -1;
-    }
-    if (*qsv_adapters_list)
-    {
-        hb_error("hb_qsv_make_adapters_list: qsv_adapters_list is allocated already");
-        return -1;
-    }
-    hb_list_t *list = hb_list_init();
-    if (list == NULL)
-    {
-        hb_error("hb_qsv_make_adapters_list: hb_list_init() failed");
-        return -1;
-    }
-    for (int i = 0; i < adapters_info->NumActual; i++)
-    {
-        mfxAdapterInfo* info = &adapters_info->Adapters[i];
-        if (info)
-        {
-            int generation = hb_qsv_hardware_generation(qsv_map_mfx_platform_codename(info->Platform.CodeName));
-            // select default QSV adapter
-            if (generation > max_generation || info->Platform.MediaAdapterType == MFX_MEDIA_DISCRETE)
-            {
-                max_generation = generation;
-                default_adapter = info->Number;
-            }
-            hb_list_add(list, (void*)&info->Number);
-        }
-    }
-    hb_qsv_set_default_adapter_index(default_adapter);
-    hb_qsv_set_adapter_index(default_adapter);
-    *qsv_adapters_list = list;
-    return 0;
-}
-
-static int hb_qsv_make_adapters_details_list(const mfxAdaptersInfo* adapters_info, hb_list_t **hb_qsv_adapters_details_list)
-{
-    if (*hb_qsv_adapters_details_list)
-    {
-        hb_error("hb_qsv_make_adapters_details_list: hb_qsv_adapter_details_list is allocated already");
-        return -1;
-    }
-    hb_list_t *list = hb_list_init();
-    if (list == NULL)
-    {
-        hb_error("hb_qsv_make_adapters_details_list: hb_list_init() failed");
-        return -1;
-    }
-    for (int i = 0; i < adapters_info->NumActual; i++)
-    {
-        mfxAdapterInfo* info = &adapters_info->Adapters[i];
-        if (info)
-        {
-            hb_qsv_adapter_details_t* adapter_details = av_mallocz(sizeof(hb_qsv_adapter_details_t));
-            if (!adapter_details)
-            {
-                hb_error("hb_qsv_make_adapters_details_list: adapter_details allocation failed");
-                return -1;
-            }
-            init_adapter_details(adapter_details);
-            adapter_details->index = info->Number;
-            adapter_details->type = info->Platform.MediaAdapterType;
-            hb_list_add(list, (void*)adapter_details);
-        }
-    }
-    *hb_qsv_adapters_details_list = list;
-    return 0;
-}
-
-static int hb_qsv_query_adapters(mfxAdaptersInfo* adapters_info)
-{
-    // Get number of Intel graphics adapters
-    mfxU32 num_adapters_available = 0;
-    mfxStatus sts = MFXQueryAdaptersNumber(&num_adapters_available);
-    if (sts != MFX_ERR_NONE)
-    {
-        hb_error("hb_qsv_query_adapters: failed to get number of Intel graphics adapters %d", sts);
-        return -1;
-    }
-
-    if (num_adapters_available > 0)
-    {
-        adapters_info->Adapters = av_mallocz_array(num_adapters_available, sizeof(*adapters_info->Adapters));
-        if (adapters_info->Adapters)
-        {
-            adapters_info->NumActual = 0;
-            adapters_info->NumAlloc = num_adapters_available;
-            // Collect information about Intel graphics adapters
-            sts = MFXQueryAdapters(NULL, adapters_info);
-            if (sts != MFX_ERR_NONE)
-            {
-                hb_error("hb_qsv_query_adapters: failed to collect information about Intel graphics adapters %d", sts);
-                return -1;
             }
         }
     }
@@ -4875,39 +4932,6 @@ int hb_qsv_sanitize_filter_list(hb_job_t *job)
 int hb_qsv_get_platform(int adapter_index)
 {
     return hb_get_cpu_platform();
-}
-
-int hb_qsv_info_init()
-{
-    if (g_qsv_adapters_list)
-    {
-        hb_error("hb_qsv_info_init: qsv_adapters_list is allocated already");
-        return -1;
-    }
-    g_qsv_adapters_list = hb_list_init();
-    if (g_qsv_adapters_list == NULL)
-    {
-        hb_error("hb_qsv_info_init: g_qsv_adapters_list allocation failed");
-        return -1;
-    }
-    if (g_qsv_adapters_details_list)
-    {
-        hb_error("hb_qsv_info_init: g_qsv_adapters_details_list is allocated already");
-        return -1;
-    }
-    g_qsv_adapters_details_list = hb_list_init();
-    if (g_qsv_adapters_details_list == NULL)
-    {
-        hb_error("hb_qsv_info_init: g_qsv_adapters_details_list allocation failed");
-        return -1;
-    }
-    static int adapter_index = 0;
-    static hb_qsv_adapter_details_t adapter_details;
-    init_adapter_details(&adapter_details);
-    hb_list_add(g_qsv_adapters_list, (void*)&adapter_index);
-    hb_list_add(g_qsv_adapters_details_list, (void*)&adapter_details);
-    hb_qsv_collect_adapters_details(g_qsv_adapters_list, g_qsv_adapters_details_list);
-    return 0;
 }
 
 int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum AVPixelFormat sw_pix_fmt, int pool_size, int extra_hw_frames, AVBufferRef **out_hw_frames_ctx)
