@@ -186,7 +186,6 @@
 - (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
     [self.mainController openURL:urls.firstObject];
-    //[NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
