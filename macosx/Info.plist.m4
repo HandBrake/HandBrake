@@ -70,6 +70,8 @@ GPLv2 license.</string>
 	<string>__HB_url_appcast</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>SUPublicEDKey</key>
+	<string>aeDqvDkdHhSaNiWXf13dD72+hwWhLz6jD4sdHGP+Vbg=</string>
 	<key>SUAllowsAutomaticUpdates</key>
 	<false/>
 	<key>SUEnableDownloaderService</key>
