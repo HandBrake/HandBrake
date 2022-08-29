@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21223" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21223"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,9 +28,18 @@
                                 <font key="font" metaFont="smallSystem"/>
                                 <menu key="menu" id="Q04-FI-Vi6">
                                     <items>
-                                        <menuItem title="None" state="on" id="Pqk-fS-pyy"/>
-                                        <menuItem title="Automatic" tag="1" id="sUG-Cw-nQU"/>
-                                        <menuItem title="Custom" tag="2" id="dD5-og-dxx"/>
+                                        <menuItem title="None" state="on" id="Pqk-fS-pyy">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Conservative" tag="1" id="8Vn-fL-hvM">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Automatic" tag="2" id="sUG-Cw-nQU">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Custom" tag="3" id="dD5-og-dxx">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </popUpButtonCell>
@@ -204,7 +213,7 @@
                 <constraint firstItem="RXb-dd-41D" firstAttribute="leading" secondItem="G0m-eh-cUI" secondAttribute="leading" constant="20" symbolic="YES" id="Y0r-vG-Ppl"/>
                 <constraint firstAttribute="trailing" secondItem="RXb-dd-41D" secondAttribute="trailing" constant="20" symbolic="YES" id="lql-tL-Lc3"/>
             </constraints>
-            <point key="canvasLocation" x="-641" y="28"/>
+            <point key="canvasLocation" x="-788" y="-257"/>
         </view>
     </objects>
 </document>
