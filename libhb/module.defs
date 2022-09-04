@@ -53,7 +53,7 @@ ifeq (1,$(FEATURE.qsv))
     endif
 endif
 
-ifneq (,$(filter $(HOST.system),freebsd netbsd))
+ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     LIBHB.GCC.I += $(LOCALBASE)/include
     LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
 else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
@@ -83,6 +83,8 @@ else ifeq ($(HOST.system),freebsd)
     LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),netbsd)
     LIBHB.GCC.D += SYS_NETBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(HOST.system),openbsd)
+    LIBHB.GCC.D += SYS_OPENBSD
 else ifeq ($(HOST.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
 ifneq ($(HAS.pthread),1)

@@ -43,7 +43,7 @@
 #include <gudev/gudev.h>
 #endif
 
-#if defined( __FreeBSD__ )
+#if defined( __FreeBSD__ ) || defined(__OpenBSD__)
 #include <sys/socket.h>
 #endif
 #include <netinet/in.h>
