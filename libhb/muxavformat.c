@@ -374,6 +374,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
             track->st->codecpar->codec_id = AV_CODEC_ID_VP9;
             priv_data                  = NULL;
             priv_size                  = 0;

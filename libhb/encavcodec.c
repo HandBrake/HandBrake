@@ -141,6 +141,10 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 {
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
+static const enum AVPixelFormat vp9_10bit_pix_fmts[] =
+{
+    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NONE
+};
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
@@ -1602,6 +1606,14 @@ static int apply_vp9_preset(AVDictionary ** av_opts, const char * preset)
     return apply_vpx_preset(av_opts, preset);
 }
 
+static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
+{
+    av_dict_set(av_opts, "row-mt", "1", 0);
+    av_dict_set(av_opts, "bit-depth", "10", 0);  
+    av_dict_set(av_opts, "profile", "2", 0);
+    return apply_vpx_preset(av_opts, preset);
+}
+
 static int apply_av1_preset(AVDictionary ** av_opts, const char * preset)
 {
     if (preset == NULL)
@@ -1625,6 +1637,8 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
             return apply_vp8_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_VP9:
             return apply_vp9_preset(av_opts, preset);
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return apply_vp9_10bit_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_SVT_AV1:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return apply_av1_preset(av_opts, preset);
@@ -1650,6 +1664,7 @@ const char* const* hb_av_preset_get_names(int encoder)
     {
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
             return vpx_preset_names;
 
         case HB_VCODEC_FFMPEG_VCE_H264:
@@ -1718,6 +1733,7 @@ const int* hb_av_get_pix_fmts(int encoder)
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_pix_fmts;
 
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return standard_10bit_pix_fmts;
 
