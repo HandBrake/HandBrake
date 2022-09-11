@@ -141,10 +141,6 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
 {
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
-static const enum AVPixelFormat vp9_10bit_pix_fmts[] =
-{
-    AV_PIX_FMT_YUV420P10, AV_PIX_FMT_NONE
-};
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
