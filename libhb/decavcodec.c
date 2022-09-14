@@ -1598,7 +1598,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
             config->device_type == type)
         {
-            pv->job->title->video_decode_support = HB_DECODE_SUPPORT_NVDEC;
             break;
         }
     }
@@ -1618,8 +1617,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             hb_log("failed to initialize hw context");
         }
         pv->job->nv_hw_ctx.hw_device_ctx = av_buffer_ref(pv->context->hw_device_ctx);
-        pv->job->input_pix_fmt = AV_PIX_FMT_NV12;
-        pv->job->output_pix_fmt = AV_PIX_FMT_NV12;
     }
 #endif
 

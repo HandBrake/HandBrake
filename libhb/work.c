@@ -147,6 +147,12 @@ static void work_func( void * _work )
             hb_qsv_setup_job(job);
         }
 #endif
+
+#if HB_PROJECT_FEATURE_NVENC
+        if (hb_nvdec_available(job->title->video_codec_param))
+            job->title->video_decode_support = HB_DECODE_SUPPORT_NVDEC;
+#endif
+
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
 
