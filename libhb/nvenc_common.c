@@ -251,6 +251,6 @@ char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
 
 int hb_nvdec_is_enabled(hb_job_t *job)
 {
-    return ((job != NULL && job->hw_decode == 1) &&
+    return ((job != NULL && job->hw_decode == 4) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC));
 }

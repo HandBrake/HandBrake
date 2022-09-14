@@ -3193,7 +3193,7 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     if( !strcmp( optarg, "nvdec" ) ) {
-                        hw_decode = 1;
+                        hw_decode = 4;
                     }
                     else
                     {

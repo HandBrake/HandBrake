@@ -267,6 +267,11 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport))
+            {
+                video.HardwareDecode = (int)NativeConstants.HB_DECODE_SUPPORT_NVDEC;
+            }
+
             return video;
         }
 
