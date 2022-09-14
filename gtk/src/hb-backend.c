@@ -4468,11 +4468,11 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
         v_unsup = TRUE;
     }
     else if ((mux->format & HB_MUX_MASK_WEBM) &&
-             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9))
+             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9 && vcodec != HB_VCODEC_FFMPEG_VP9_10BIT && vcodec != HB_VCODEC_FFMPEG_SVT_AV1 && vcodec != HB_VCODEC_FFMPEG_SVT_AV1_10BIT))
     {
-        // webm only supports vp8 and vp9.
+        // webm only supports vp8, vp9 and av1.
         message = g_strdup_printf(
-                    _("Only VP8 or VP9 is supported in the WebM container.\n\n"
+                    _("Only VP8, VP9 and AV1 is supported in the WebM container.\n\n"
                     "You should choose a different video codec or container.\n"
                     "If you continue, one will be chosen for you."));
         v_unsup = TRUE;
