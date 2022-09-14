@@ -1,6 +1,7 @@
 /* hb.c
 
    Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1131,6 +1132,12 @@ fail:
  */
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
+#if HB_PROJECT_FEATURE_NVENC
+    if(buf->hw_ctx.frames_ctx) {
+        return 0;
+    }
+#endif
+
     int j, k, n, off, cc_1, cc_2, cc[3];
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;

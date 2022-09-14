@@ -1,6 +1,7 @@
 /* decavcodec.c
 
    Copyright (c) 2003-2020 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1159,6 +1160,12 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVPixelFormat pix_fmt;
     enum AVColorRange  color_range;
 
+#if HB_PROJECT_FEATURE_NVENC
+    if (pv->frame->hw_frames_ctx) {
+      return 0;
+    }
+#endif
+
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
@@ -1432,6 +1439,61 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     return got_picture;
 }
 
+#if HB_PROJECT_FEATURE_NVENC
+static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
+                                         const enum AVPixelFormat *pix_fmts) {
+  const enum AVPixelFormat *p;
+
+  for (p = pix_fmts; *p != -1; p++) {
+    if (*p == AV_PIX_FMT_CUDA) {
+      return *p;
+    }
+  }
+
+  hb_error("Failed to get HW surface format.\n");
+  return AV_PIX_FMT_NONE;
+}
+
+static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
+                            const enum AVHWDeviceType type) {
+  int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
+  if (err < 0) {
+    hb_error("Failed to create specified HW device.\n");
+    return err;
+  }
+
+  ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
+  return err;
+}
+
+static const char *find_cuvid_codec_by_name(enum AVCodecID id) {
+  switch (id) {
+  case AV_CODEC_ID_AV1:
+    return "av1_cuvid";
+  case AV_CODEC_ID_HEVC:
+    return "hevc_cuvid";
+  case AV_CODEC_ID_H264:
+    return "h264_cuvid";
+  case AV_CODEC_ID_MJPEG:
+    return "mjpeg_cuvid";
+  case AV_CODEC_ID_MPEG1VIDEO:
+    return "mpeg1_cuvid";
+  case AV_CODEC_ID_MPEG2VIDEO:
+    return "mpeg2_cuvid";
+  case AV_CODEC_ID_MPEG4:
+    return "mpeg4_cuvid";
+  case AV_CODEC_ID_VP8:
+    return "vp8_cuvid";
+  case AV_CODEC_ID_VP9:
+    return "vp9_cuvid";
+  case AV_CODEC_ID_VC1:
+    return "vc1_cuvid";
+  default:
+    return (const char *)NULL;
+  }
+}
+#endif
+
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1513,7 +1575,16 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     else
 #endif
     {
+#if HB_PROJECT_FEATURE_NVENC
+      const char *codec_name = find_cuvid_codec_by_name(w->codec_param);
+      if (codec_name) {
+        pv->codec = avcodec_find_decoder_by_name(codec_name);
+      } else {
         pv->codec = avcodec_find_decoder(w->codec_param);
+      }
+#else
+      pv->codec = avcodec_find_decoder(w->codec_param);
+#endif
     }
     if ( pv->codec == NULL )
     {
@@ -1521,10 +1592,36 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
+#if HB_PROJECT_FEATURE_NVENC
+    AVBufferRef *hw_device_ctx = NULL;
+    enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
+
+    for (int i = 0;; i++) {
+      const AVCodecHWConfig *config = avcodec_get_hw_config(pv->codec, i);
+      if (!config) {
+        hb_log("Decoder %s does not support device type %s.\n", pv->codec->name,
+               av_hwdevice_get_type_name(type));
+        break;
+      }
+      if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
+          config->device_type == type) {
+        break;
+      }
+    }
+#endif
+
     pv->context = avcodec_alloc_context3( pv->codec );
     pv->context->workaround_bugs = FF_BUG_AUTODETECT;
     pv->context->err_recognition = AV_EF_CRCCHECK;
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (AV_HWDEVICE_TYPE_CUDA == type) {
+      pv->context->get_format = get_hw_pix_fmt;
+      if (cuda_hw_ctx_init(pv->context, hw_device_ctx, type) < 0)
+        hb_log("failed to initialize hw context");
+    }
+#endif
 
     if ( pv->title->opaque_priv )
     {

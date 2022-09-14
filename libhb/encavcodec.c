@@ -1,6 +1,7 @@
 /* encavcodec.c
 
    Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -142,6 +143,34 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
+#if HB_PROJECT_FEATURE_NVENC
+static enum AVPixelFormat get_hw_pix_fmt(AVCodecContext *ctx,
+                                         const enum AVPixelFormat *pix_fmts) {
+  const enum AVPixelFormat *p;
+
+  for (p = pix_fmts; *p != -1; p++) {
+    if (*p == AV_PIX_FMT_CUDA) {
+      return *p;
+    }
+  }
+
+  hb_error("Failed to get HW surface format.\n");
+  return AV_PIX_FMT_NONE;
+}
+
+static int cuda_hw_ctx_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx,
+                            const enum AVHWDeviceType type) {
+  int err = av_hwdevice_ctx_create(&hw_device_ctx, type, NULL, NULL, 0);
+  if (err < 0) {
+    hb_error("Failed to create specified HW device.\n");
+    return err;
+  }
+
+  ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
+  return err;
+}
+#endif
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -252,7 +281,34 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         ret = 1;
         goto done;
     }
-    context = avcodec_alloc_context3( codec );
+
+#if HB_PROJECT_FEATURE_NVENC
+    AVBufferRef *hw_device_ctx = NULL;
+
+    enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
+    for (int i = 0;; i++) {
+      const AVCodecHWConfig *config = avcodec_get_hw_config(codec, i);
+      if (!config) {
+        hb_log("Encoder %s does not support device type %s.\n", codec->name,
+               av_hwdevice_get_type_name(type));
+        break;
+      }
+      if (config->methods & AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX &&
+          config->device_type == type) {
+        break;
+      }
+    }
+#endif
+
+    context = avcodec_alloc_context3(codec);
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (AV_HWDEVICE_TYPE_CUDA == type) {
+      context->get_format = get_hw_pix_fmt;
+      if (cuda_hw_ctx_init(context, hw_device_ctx, type) < 0)
+        hb_log("failed to initialize hw context");
+    }
+#endif
 
     // Set things in context that we will allow the user to
     // override with advanced settings.
@@ -358,7 +414,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "multipass", "fullres", 0 );
             hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, Bitrate %d", job->vbitrate );
         }
-        
+
         if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
@@ -847,7 +903,26 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
+#if HB_PROJECT_FEATURE_NVENC
+    /*
+     * TODO (rarzumanyan): reference hw_frames_ctx from decoder.
+     * Don't re-initialize.
+     */
+    context->pix_fmt = AV_PIX_FMT_CUDA;
+    context->hw_frames_ctx = av_hwframe_ctx_alloc(context->hw_device_ctx);
+    AVHWFramesContext *frames_ctx =
+        (AVHWFramesContext *)context->hw_frames_ctx->data;
+    frames_ctx->format = AV_PIX_FMT_CUDA;
+    frames_ctx->sw_format = AV_PIX_FMT_NV12;
+    frames_ctx->width = context->width;
+    frames_ctx->height = context->height;
+    ret = av_hwframe_ctx_init(context->hw_frames_ctx);
+    if (0 != ret) {
+      hb_error("failed to initialize hw frames context");
+    }
+#else
     context->pix_fmt   = job->output_pix_fmt;
+#endif
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
@@ -1329,7 +1404,16 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.pts = pv->frameno_in++;
 
     // Encode
+#if HB_PROJECT_FEATURE_NVENC
+    if (in->hw_ctx.frame) {
+      ret = avcodec_send_frame(pv->context, (AVFrame *)in->hw_ctx.frame);
+      av_frame_unref((AVFrame *)in->hw_ctx.frame);
+    } else {
+      ret = avcodec_send_frame(pv->context, &frame);
+    }
+#else
     ret = avcodec_send_frame(pv->context, &frame);
+#endif
     if (ret < 0)
     {
         hb_log("encavcodec: avcodec_send_frame failed");
