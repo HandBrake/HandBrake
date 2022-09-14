@@ -4179,6 +4179,10 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
+
+
+    // job->hw_decode                 = !!(title->video_decode_support &
+                                        // HB_DECODE_SUPPORT_NVDEC);
 }
 
 int hb_output_color_prim(hb_job_t * job)
@@ -6180,8 +6184,8 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         {
             return 0;
         }
-    }
-    if (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC)
+    } 
+    else if (hb_nvdec_is_enabled(job))
     {
         if (pix_fmt != AV_PIX_FMT_YUV420P10LE &&
             pix_fmt != AV_PIX_FMT_NV12)

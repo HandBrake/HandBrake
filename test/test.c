@@ -208,6 +208,7 @@ static int      qsv_async_depth    = -1;
 static int      qsv_adapter        = -1;
 static int      qsv_decode         = -1;
 #endif
+static int      hw_decode          = -1;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -1483,6 +1484,12 @@ static void ShowHelp()
 "                           timing if it's below that rate.\n"
 "                           If none of these flags are given, the default\n"
 "                           is --pfr when -r is given and --vfr otherwise\n"
+"   --enable-hw-decoding <string>                                        \n"
+"                           Use 'nvdec' to enable NVDec                  \n"
+"   --disable-hw-decoding   Disable hardware decoding of the video track,\n"
+"                           forcing software decoding instead\n"
+
+
 "\n"
 "\n"
 "Audio Options ----------------------------------------------------------------\n"
@@ -2205,7 +2212,6 @@ static int ParseOptions( int argc, char ** argv )
     #define SSA_LANG             320
     #define SSA_DEFAULT          321
     #define SSA_BURN             322
-
     #define FILTER_CHROMA_SMOOTH          323
     #define FILTER_CHROMA_SMOOTH_TUNE     324
     #define FILTER_DEBLOCK_TUNE           325
@@ -2214,6 +2220,7 @@ static int ParseOptions( int argc, char ** argv )
     #define CROP_THRESHOLD_PIXELS         328
     #define CROP_THRESHOLD_FRAMES         329
     #define CROP_MODE                     330
+    #define HW_DECODE                     331
     
     for( ;; )
     {
@@ -2233,6 +2240,8 @@ static int ParseOptions( int argc, char ** argv )
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,                  },
             { "enable-qsv-decoding",  no_argument,       &qsv_decode, 1,                  },
 #endif
+            { "disable-hw-decoding", no_argument,        &hw_decode,  0, },
+            { "enable-hw-decoding",  required_argument,  NULL,  HW_DECODE, },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -3180,6 +3189,17 @@ static int ParseOptions( int argc, char ** argv )
                 hb_qsv_impl_set_preferred(optarg);
                 break;
 #endif
+            case HW_DECODE:
+                if( optarg != NULL )
+                {
+                    if( !strcmp( optarg, "nvdec" ) ) {
+                        hw_decode = 1;
+                    }
+                    else
+                    {
+                        hw_decode = 0;
+                    }
+                } break;
             case ':':
                 fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
                 return -1;
@@ -4316,6 +4336,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
     }
 #endif
+    if (hw_decode != -1)
+    {
+        hb_dict_set(preset, "VideoHWDecode", hb_value_int(hw_decode));
+    }
     if (maxWidth > 0)
     {
         hb_dict_set(preset, "PictureWidth", hb_value_int(maxWidth));

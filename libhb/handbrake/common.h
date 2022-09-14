@@ -780,6 +780,8 @@ struct hb_job_s
             int is_init_done;
         } enc_info;
     } qsv;
+    
+    int hw_decode;
 
 #ifdef __LIBHB__
     /* Internal data */

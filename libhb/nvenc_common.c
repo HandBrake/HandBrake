@@ -230,3 +230,27 @@ int hb_nvdec_hwframe_init(hb_job_t *job, AVFrame **frame)
     return -1;
 #endif
 }
+
+char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
+{
+    switch (codec_id)
+    {
+        case AV_CODEC_ID_H264:
+            return "h264_nvdec";
+
+        case AV_CODEC_ID_HEVC:
+            return "hevc_nvdec";
+
+        case AV_CODEC_ID_AV1:
+            return "av1_nvdec";
+
+        default:
+            return NULL;
+    }
+}
+
+int hb_nvdec_is_enabled(hb_job_t *job)
+{
+    return ((job != NULL && job->hw_decode == 1) &&
+            (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC));
+}

@@ -850,7 +850,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->width     = job->width;
     context->height    = job->height;
 #if HB_PROJECT_FEATURE_NVENC
-    if (HB_DECODE_SUPPORT_NVDEC == pv->job->title->video_decode_support)
+    if (hb_nvdec_is_enabled(pv->job))
     {
         context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
         hb_nvdec_hwframes_ctx_init(context, job);

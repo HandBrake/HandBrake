@@ -419,7 +419,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
         hb_buffer_list_append(&list, buf);
 
 #if HB_PROJECT_FEATURE_NVENC
-        if (HB_DECODE_SUPPORT_NVDEC == stream->common->job->title->video_decode_support)
+        if (hb_nvdec_is_enabled(stream->common->job))
         {
             AVFrame frame = {{0}};
             hb_video_buffer_to_avframe(&frame, buf);

@@ -1161,7 +1161,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVColorRange  color_range;
 
 #if HB_PROJECT_FEATURE_NVENC
-    if (pv->frame->hw_frames_ctx)
+    if ( pv->frame->hw_frames_ctx)
     {
         return 0;
     }
@@ -1550,15 +1550,18 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
      ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
      ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
      */
-    const int main_dec_loop = (NULL != pv->job);
-    const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
-    const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
-    int use_hw_dec = 0;
-
-    if (main_dec_loop && no_video_filters && nvenc_is_used)
-    {
-        use_hw_dec = hb_nvdec_available(w->codec_param);
+     int use_hw_dec = 0;
+     if (hb_nvdec_is_enabled(job)){
+        const int main_dec_loop = (NULL != pv->job);
+        const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
+        const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
+        
+        if (main_dec_loop && no_video_filters && nvenc_is_used)
+        {
+            use_hw_dec = hb_nvdec_available(w->codec_param);
+        }
     }
+    
 #endif
 
     pv->context = avcodec_alloc_context3( pv->codec );
@@ -2154,8 +2157,16 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
-        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
+        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height)) 
+        {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+        }
+    }
+#endif
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_check_nvenc_available() && hb_nvdec_available(w->title->video_codec_param)){
+        info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
     }
 #endif
 
