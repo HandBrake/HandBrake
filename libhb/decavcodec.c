@@ -1553,9 +1553,19 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         }
 
 #if HB_PROJECT_FEATURE_QSV
-        if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
+        if (pv->qsv.decode)
         {
-            av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+            if (pv->context->codec_id == AV_CODEC_ID_HEVC)
+                av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+#if defined(_WIN32) || defined(__MINGW32__)
+            if (!hb_qsv_full_path_is_enabled(job))
+            {
+                hb_qsv_device_init(job);
+                pv->context->hw_device_ctx = av_buffer_ref(job->qsv.ctx->hb_hw_device_ctx);
+                pv->context->get_format = hb_qsv_get_format;
+                pv->context->opaque = pv->job;
+            }
+#endif
         }
 #endif
 

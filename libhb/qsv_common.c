@@ -2094,11 +2094,16 @@ int hb_qsv_decode_codec_supported_codec(int adapter_index, int video_codec_param
 int hb_qsv_setup_job(hb_job_t *job)
 {
 #if defined(_WIN32) || defined(__MINGW32__)
+    // parse the json parameter
     if (job->qsv.ctx && job->qsv.ctx->dx_index >= 0)
     {
         hb_qsv_param_parse_dx_index(job, job->qsv.ctx->dx_index);
     }
+    // parse the advanced options parameter
     hb_qsv_parse_adapter_index(job);
+    // use default if no options passed
+    if (!job->qsv.ctx->qsv_device)
+        hb_qsv_param_parse_dx_index(job, hb_qsv_get_adapter_index());
 #endif
     int async_depth_default = hb_qsv_param_default_async_depth();
     if (job->qsv.async_depth <= 0 || job->qsv.async_depth > async_depth_default)
@@ -4595,27 +4600,41 @@ void hb_qsv_uninit_enc(hb_job_t *job)
     job->qsv.ctx->device_manager_handle = NULL;
 }
 
-static int qsv_device_init(hb_job_t *job)
+static int hb_qsv_ffmpeg_set_options(hb_job_t *job, AVDictionary** dict)
 {
     int err;
-    AVDictionary *dict = NULL;
+    AVDictionary* out_dict = *dict;
 
     if (job->qsv.ctx && job->qsv.ctx->qsv_device)
     {
-        err = av_dict_set(&dict, "child_device", job->qsv.ctx->qsv_device, 0);
+        err = av_dict_set(&out_dict, "child_device", job->qsv.ctx->qsv_device, 0);
         if (err < 0)
             return err;
     }
     else
     {
-        av_dict_set(&dict, "vendor", "0x8086", 0);
+        av_dict_set(&out_dict, "vendor", "0x8086", 0);
     }
-    av_dict_set(&dict, "child_device_type", "d3d11va", 0);
+    av_dict_set(&out_dict, "child_device_type", "d3d11va", 0);
+
+    *dict = out_dict;
+    return 0;
+}
+
+int hb_qsv_device_init(hb_job_t *job)
+{
+    int err;
+    AVDictionary *dict = NULL;
+
+    err = hb_qsv_ffmpeg_set_options(job, &dict);
+
+    if (err < 0)
+        return err;
 
     err = av_hwdevice_ctx_create(&job->qsv.ctx->hb_hw_device_ctx, AV_HWDEVICE_TYPE_QSV,
                                  0, dict, 0);
     if (err < 0) {
-        hb_error("qsv_device_init: error creating a QSV device %d", err);
+        hb_error("hb_qsv_device_init: error creating a QSV device %d", err);
         goto err_out;
     }
 
@@ -4722,7 +4741,7 @@ int hb_create_ffmpeg_pool(hb_job_t *job, int coded_width, int coded_height, enum
         if (!job->qsv.ctx->qsv_device)
             hb_qsv_param_parse_dx_index(job, hb_qsv_get_adapter_index());
 
-        ret = qsv_device_init(job);
+        ret = hb_qsv_device_init(job);
         if (ret < 0)
             return ret;
     }
@@ -4819,6 +4838,15 @@ int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
 
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)
 {
+    int n;
+    hb_job_t *job = s->opaque;
+
+    // Find end of list.
+    for (n = 0; pix_fmts[n] != AV_PIX_FMT_NONE; n++);
+    // if not full path, take the system format, it must be the last entry
+    if (!hb_qsv_full_path_is_enabled(job))
+        return pix_fmts[n - 1];
+
     while (*pix_fmts != AV_PIX_FMT_NONE) {
         if (*pix_fmts == AV_PIX_FMT_QSV) {
             int ret = hb_qsv_hw_frames_init(s);
