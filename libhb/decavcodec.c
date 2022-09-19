@@ -1561,12 +1561,17 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     if (hb_nvdec_is_enabled(job))
     {
         const int main_dec_loop = (NULL != pv->job);
-        const int no_video_filters = main_dec_loop && (0 == hb_list_count(pv->job->list_filter));
+        const int supported_filters = main_dec_loop && hb_nvdec_are_filters_supported(pv->job->list_filter);
         const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
 
-        if (main_dec_loop && no_video_filters && nvenc_is_used)
+        if (main_dec_loop && supported_filters && nvenc_is_used)
         {
             use_hw_dec = hb_nvdec_available(w->codec_param);
+        }
+        else
+        {
+            hb_nvdec_disable(job);
+            hb_log("Fallback to CPU-based decoder");
         }
     }
 #endif
@@ -2164,7 +2169,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 #if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_available())
     {
-        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height)) 
+        if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
         {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
         }

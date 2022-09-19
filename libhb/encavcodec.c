@@ -1631,7 +1631,7 @@ static int apply_vp9_preset(AVDictionary ** av_opts, const char * preset)
 
 static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
 {
-    av_dict_set(av_opts, "row-mt", "1", 0); 
+    av_dict_set(av_opts, "row-mt", "1", 0);
     av_dict_set(av_opts, "profile", "2", 0);
     return apply_vpx_preset(av_opts, preset);
 }

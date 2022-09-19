@@ -254,3 +254,25 @@ int hb_nvdec_is_enabled(hb_job_t *job)
     return ((job != NULL && job->hw_decode == 4) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC));
 }
+
+void hb_nvdec_disable(hb_job_t *job)
+{
+    if (job)
+    {
+        job->hw_decode = HB_DECODE_SUPPORT_SW;
+    }
+}
+
+int hb_nvdec_are_filters_supported(hb_list_t *filters)
+{
+    int ret = 1;
+
+    for (int i = 0; i < hb_list_count(filters); i++)
+    {
+        hb_filter_object_t *filter = hb_list_item(filters, i);
+        hb_log("%s isn't yet supported for CUDA video frames", filter->name);
+        ret = 0;
+    }
+
+    return ret;
+}
