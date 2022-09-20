@@ -489,7 +489,7 @@ namespace HandBrakeWPF.ViewModels
 
                         try
                         {
-                            Process.Start(args);
+                            Process.Start("explorer.exe", args);
                         }
                         catch (Win32Exception exc)
                         {
@@ -514,7 +514,7 @@ namespace HandBrakeWPF.ViewModels
                         {
                             // Fallback to the System Default
                             this.logService.LogMessage(string.Format("# Video Preview: Falling back to system media player. ({0})", args));
-                            Process.Start(args);
+                            Process.Start("explorer.exe", args);
                         }
                     }
                 }
