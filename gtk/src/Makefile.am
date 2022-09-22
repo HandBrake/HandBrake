@@ -179,7 +179,7 @@ fr.handbrake.ghb.metainfo.xml: fr.handbrake.ghb.metainfo.xml.in
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 fr.handbrake.ghb.metainfo.xml.in: fr.handbrake.ghb.metainfo.template.xml
-	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
+	sed -e 's^RELEASE_TAG^<release version=1.6.0PR date="$(word 1,$(HB.repo.date))" />^' $< > $@
 
 $(srcdir)/marshalers.h: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal $(srcdir)/marshalers.list --header > $(srcdir)/marshalers.h
