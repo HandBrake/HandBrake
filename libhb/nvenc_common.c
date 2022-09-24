@@ -249,17 +249,16 @@ char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
     }
 }
 
-int hb_nvdec_is_enabled(hb_job_t *job)
+static int is_nvenc_used(int codec_id)
 {
-    return ((job != NULL && job->hw_decode == 4) &&
-            (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC));
-}
-
-void hb_nvdec_disable(hb_job_t *job)
-{
-    if (job)
+    switch (codec_id)
     {
-        job->hw_decode = HB_DECODE_SUPPORT_SW;
+    case HB_VCODEC_FFMPEG_NVENC_H264:
+    case HB_VCODEC_FFMPEG_NVENC_H265:
+    case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        return 1;
+    default:
+        return 0;
     }
 }
 
@@ -270,9 +269,47 @@ int hb_nvdec_are_filters_supported(hb_list_t *filters)
     for (int i = 0; i < hb_list_count(filters); i++)
     {
         hb_filter_object_t *filter = hb_list_item(filters, i);
-        hb_log("%s isn't yet supported for CUDA video frames", filter->name);
+        // hb_log("NVDec: %s isn't yet supported for CUDA video frames", filter->name);
         ret = 0;
     }
 
     return ret;
 }
+
+int hb_nvdec_is_usable(hb_job_t *job)
+{
+    /* When to use HW decoding:
+     ** Within main decoding loop (not during the scan).
+     ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
+     ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
+     */
+     
+    const int main_dec_loop = (NULL != job);
+    const int supported_filters = main_dec_loop && hb_nvdec_are_filters_supported(job->list_filter);
+    const int nvenc_is_used = main_dec_loop && is_nvenc_used(job->vcodec);
+
+    if (main_dec_loop && supported_filters && nvenc_is_used)
+    {
+         return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int hb_nvdec_is_enabled(hb_job_t *job)
+{
+    return ((job != NULL && job->hw_decode == 4) && hb_nvdec_is_usable(job) &&
+            (job->title->video_decode_support & HB_DECODE_SUPPORT_NVDEC));
+}
+
+void hb_nvdec_disable(hb_job_t *job)
+{
+    if (job)
+    {
+        job->hw_decode = HB_DECODE_SUPPORT_SW;
+        job->title->video_decode_support = HB_DECODE_SUPPORT_SW;
+    }
+}
+
