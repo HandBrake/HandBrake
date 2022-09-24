@@ -781,6 +781,8 @@ struct hb_job_s
         } enc_info;
     } qsv;
 
+    int hw_decode;
+
 #ifdef __LIBHB__
     /* Internal data */
     hb_handle_t   * h;
@@ -805,6 +807,12 @@ struct hb_job_s
     int64_t         reader_pts_offset; // Reader can discard some video.
                                        // Other pipeline stages need to know
                                        // this.  E.g. sync and decsrtsub
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_device_ctx;
+    } nv_hw_ctx;
 #endif
 };
 
@@ -1166,6 +1174,7 @@ struct hb_title_s
     int           video_decode_support;
 #define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
 #define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_NVDEC 0x04 // Nvidia Nvdec
 
     hb_metadata_t * metadata;
 
@@ -1366,6 +1375,12 @@ typedef struct hb_filter_init_s
     int             cfr;
     int             grayscale;
     hb_rational_t   time_base;
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_frames_ctx;
+    } nv_hw_ctx;
+#endif
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s

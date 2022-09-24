@@ -1,6 +1,7 @@
 /* encavcodec.c
 
    Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -252,7 +253,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         ret = 1;
         goto done;
     }
-    context = avcodec_alloc_context3( codec );
+
+    context = avcodec_alloc_context3(codec);
 
     // Set things in context that we will allow the user to
     // override with advanced settings.
@@ -358,7 +360,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "multipass", "fullres", 0 );
             hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, Bitrate %d", job->vbitrate );
         }
-        
+
         if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
@@ -847,7 +849,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->pix_fmt   = job->output_pix_fmt;
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_nvdec_is_enabled(pv->job))
+    {
+        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
+        hb_nvdec_hwframes_ctx_init(context, job);
+    }
+    else
+    {
+        context->pix_fmt = job->output_pix_fmt;
+    }
+#else
+    context->pix_fmt = job->output_pix_fmt;
+#endif
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
@@ -1329,7 +1343,20 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.pts = pv->frameno_in++;
 
     // Encode
+#if HB_PROJECT_FEATURE_NVENC
+    if (in->hw_ctx.frame)
+    {
+        AVFrame *p_frame = in->hw_ctx.frame;
+        av_frame_copy_props(p_frame, &frame);
+        ret = avcodec_send_frame(pv->context, p_frame);
+    }
+    else
+    {
+        ret = avcodec_send_frame(pv->context, &frame);
+    }
+#else
     ret = avcodec_send_frame(pv->context, &frame);
+#endif
     if (ret < 0)
     {
         hb_log("encavcodec: avcodec_send_frame failed");
@@ -1604,7 +1631,7 @@ static int apply_vp9_preset(AVDictionary ** av_opts, const char * preset)
 
 static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
 {
-    av_dict_set(av_opts, "row-mt", "1", 0); 
+    av_dict_set(av_opts, "row-mt", "1", 0);
     av_dict_set(av_opts, "profile", "2", 0);
     return apply_vpx_preset(av_opts, preset);
 }

@@ -1814,6 +1814,11 @@ static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
      AV_PIX_FMT_P010, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat nvenc_pix_formats[] =
+{
+     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+};
+
 const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
 #if HB_PROJECT_FEATURE_QSV
@@ -1826,6 +1831,12 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
     if (encoder & HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
     {
         return nvenc_pix_formats_10bit;
+    }
+
+    if ((encoder & HB_VCODEC_FFMPEG_NVENC_H264) ||
+        (encoder & HB_VCODEC_FFMPEG_NVENC_H265))
+    {
+        return nvenc_pix_formats;
     }
 
     if (encoder & HB_VCODEC_FFMPEG_MASK)
@@ -1920,7 +1931,7 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         case HB_VCODEC_VT_H265_10BIT:
             return hb_vt_get_pix_fmts(encoder);
 #endif
-            
+
         default:
             return standard_pix_fmts;
     }
@@ -4168,6 +4179,10 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
+
+
+    // job->hw_decode                 = !!(title->video_decode_support &
+                                        // HB_DECODE_SUPPORT_NVDEC);
 }
 
 int hb_output_color_prim(hb_job_t * job)
@@ -6169,7 +6184,17 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         {
             return 0;
         }
+    } 
+#if HB_PROJECT_FEATURE_NVENC
+    else if (hb_nvdec_is_enabled(job))
+    {
+        if (pix_fmt != AV_PIX_FMT_YUV420P10LE &&
+            pix_fmt != AV_PIX_FMT_NV12)
+        {
+            return 0;
+        }
     }
+#endif
     else
     {
         // Allow biplanar formats only if

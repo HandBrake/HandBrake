@@ -162,6 +162,13 @@ struct hb_buffer_s
     } qsv_details;
 #endif
 
+#if HB_PROJECT_FEATURE_NVENC
+    struct hw_ctx
+    {
+        void *frame;
+    } hw_ctx;
+#endif
+
     // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;

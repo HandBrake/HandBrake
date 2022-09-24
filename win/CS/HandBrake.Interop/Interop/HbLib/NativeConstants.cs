@@ -10,7 +10,7 @@
 
 namespace HandBrake.Interop.Interop.HbLib
 {
-    internal class NativeConstants
+    public class NativeConstants
     {
         // Audio encoders
         public const uint HB_ACODEC_AC3 = 0x00000800;
@@ -40,7 +40,7 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_ACODEC_MP2_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_MP2);
         public const uint HB_ACODEC_OPUS_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_OPUS);
 
-        // VideoEncoders
+        // Video Encoders
         public const uint HB_VCODEC_QSV_H264 = 0x0000100;
         public const uint HB_VCODEC_QSV_H265 = 0x0000200;
         public const uint HB_VCODEC_QSV_H265_10BIT = 0x0000400;
@@ -56,5 +56,10 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_MUX_AV_MP4 = 0x020000;
         public const uint HB_MUX_AV_MKV = 0x200000;
         public const uint HB_MUX_AV_WEBM = 0x400000;
+
+        // Video Decoders
+        public const uint HB_DECODE_SUPPORT_SW = 0x01;
+        public const uint HB_DECODE_SUPPORT_QSV = 0x02;
+        public const uint HB_DECODE_SUPPORT_NVDEC = 0x04;
     }
 }

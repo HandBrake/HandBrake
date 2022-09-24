@@ -1,3 +1,13 @@
+/* hbffmpeg.c
+
+   Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
+   This file is part of the HandBrake source code
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 
@@ -109,6 +119,11 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         uint8_t * dst = buf->plane[pp].data;
         uint8_t * src = frame->data[pp];
 
+#if HB_PROJECT_FEATURE_NVENC
+        if (frame->hw_frames_ctx)
+            continue;
+#endif
+
         for (yy = 0; yy < height; yy++)
         {
             memcpy(dst, src, size);
@@ -116,6 +131,25 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
             src += linesize;
         }
     }
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (frame->hw_frames_ctx)
+    {
+        int ret = av_hwframe_get_buffer(frame->hw_frames_ctx, buf->hw_ctx.frame, 0);
+        if (ret)
+        {
+            hb_buffer_close(&buf);
+            return NULL;
+        }
+
+        ret = av_hwframe_transfer_data(buf->hw_ctx.frame, frame, 0);
+        if (ret)
+        {
+            hb_buffer_close(&buf);
+            return NULL;
+        }
+    }
+#endif
 
     return buf;
 }

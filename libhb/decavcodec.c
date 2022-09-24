@@ -1,6 +1,7 @@
 /* decavcodec.c
 
    Copyright (c) 2003-2020 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1159,6 +1160,8 @@ int reinit_video_filters(hb_work_private_t * pv)
     enum AVPixelFormat pix_fmt;
     enum AVColorRange  color_range;
 
+    memset((void*)&filter_init, 0, sizeof(filter_init));
+
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
@@ -1243,6 +1246,18 @@ int reinit_video_filters(hb_work_private_t * pv)
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
             hb_avfilter_append_dict(filters, "scale_qsv", settings);
+        }
+        else
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+        if (pv->frame->hw_frames_ctx)
+        {
+            hb_dict_set(settings, "w", hb_value_int(orig_width));
+            hb_dict_set(settings, "h", hb_value_int(orig_height));
+            hb_dict_set(settings, "interp_algo", hb_value_string("lanczos"));
+            hb_dict_set(settings, "format", hb_value_string(av_get_pix_fmt_name(pix_fmt)));
+            hb_avfilter_append_dict(filters, "scale_cuda", settings);
+            filter_init.nv_hw_ctx.hw_frames_ctx = pv->frame->hw_frames_ctx;
         }
         else
 #endif
@@ -1432,6 +1447,21 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
     return got_picture;
 }
 
+#if HB_PROJECT_FEATURE_NVENC
+static int is_nvenc_used(int codec_id)
+{
+    switch (codec_id)
+    {
+    case HB_VCODEC_FFMPEG_NVENC_H264:
+    case HB_VCODEC_FFMPEG_NVENC_H265:
+    case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+        return 1;
+    default:
+        return 0;
+    }
+}
+#endif
+
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1521,10 +1551,42 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
+#if HB_PROJECT_FEATURE_NVENC
+    /* When to use HW decoding:
+     ** Within main decoding loop (not during the scan).
+     ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
+     ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
+     */
+    int use_hw_dec = 0;
+    if (hb_nvdec_is_enabled(job))
+    {
+        const int main_dec_loop = (NULL != pv->job);
+        const int supported_filters = main_dec_loop && hb_nvdec_are_filters_supported(pv->job->list_filter);
+        const int nvenc_is_used = main_dec_loop && is_nvenc_used(pv->job->vcodec);
+
+        if (main_dec_loop && supported_filters && nvenc_is_used)
+        {
+            use_hw_dec = hb_nvdec_available(w->codec_param);
+        }
+        else
+        {
+            hb_nvdec_disable(job);
+            hb_log("Fallback to CPU-based decoder");
+        }
+    }
+#endif
+
     pv->context = avcodec_alloc_context3( pv->codec );
     pv->context->workaround_bugs = FF_BUG_AUTODETECT;
     pv->context->err_recognition = AV_EF_CRCCHECK;
     pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (use_hw_dec)
+    {
+        hb_nvdec_hw_ctx_init(pv->context, pv->job);
+    }
+#endif
 
     if ( pv->title->opaque_priv )
     {
@@ -2118,7 +2180,15 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     if (hb_qsv_available())
     {
         if (hb_qsv_decode_codec_supported_codec(hb_qsv_get_adapter_index(), pv->context->codec_id, pv->context->pix_fmt, pv->context->width, pv->context->height))
+        {
             info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+        }
+    }
+#endif
+
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_check_nvenc_available() && hb_nvdec_available(w->title->video_codec_param)){
+        info->video_decode_support |= HB_DECODE_SUPPORT_NVDEC;
     }
 #endif
 

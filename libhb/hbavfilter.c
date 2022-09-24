@@ -151,6 +151,22 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     else
 #endif
     {
+#if HB_PROJECT_FEATURE_NVENC
+        if (init->nv_hw_ctx.hw_frames_ctx)
+        {
+            par = av_buffersrc_parameters_alloc();
+            par->format = init->pix_fmt;
+            par->frame_rate.num = init->geometry.par.num;
+            par->frame_rate.den = init->time_base.den;
+            par->height = init->geometry.height;
+            par->hw_frames_ctx = av_buffer_ref(init->nv_hw_ctx.hw_frames_ctx);
+            par->sample_aspect_ratio.num = init->geometry.par.num;
+            par->sample_aspect_ratio.den = init->geometry.par.den;
+            par->time_base.num = init->time_base.num;
+            par->time_base.den = init->time_base.den;
+            par->width = init->geometry.width;
+        }
+#endif
         filter_args = hb_strdup_printf(
                     "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
                     "time_base=%d/%d:frame_rate=%d/%d",

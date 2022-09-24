@@ -147,6 +147,7 @@ static void work_func( void * _work )
             hb_qsv_setup_job(job);
         }
 #endif
+
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
 
@@ -451,8 +452,14 @@ void hb_display_job_info(hb_job_t *job)
     {
         hb_log("   + decoder: %s %d-bit (%s)",
                hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
-    }
-    else
+    } else
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_nvdec_is_enabled(job))
+    {
+    //    hb_log("   + decoder: %s %d-bit (%s)",
+    //           hb_nvdec_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
+    } else
 #endif
     {
         hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
