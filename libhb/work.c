@@ -17,6 +17,10 @@
 #include "handbrake/qsv_filter_pp.h"
 #endif
 
+#if HB_PROJECT_FEATURE_NVENC
+#include "handbrake/nvenc_common.h"
+#endif
+
 typedef struct
 {
     hb_list_t * jobs;

@@ -14,21 +14,21 @@
 
 int            hb_nvenc_h264_available();
 int            hb_nvenc_h265_available();
-char *         hb_map_nvenc_preset_name (const char * preset);
+int            hb_check_nvenc_available();
+
+char*          hb_map_nvenc_preset_name (const char * preset);
 
 int            hb_nvdec_available(int codec_id);
 int            hb_nvdec_hw_ctx_init(struct AVCodecContext *ctx,
-                                    struct hb_job_t *job);
+                                    hb_job_t *job);
 int            hb_nvdec_hwframes_ctx_init(struct AVCodecContext *ctx,
-                                          struct hb_job_t *job);
-int            hb_nvdec_hwframe_init(struct hb_job_t *job, struct AVFrame **frame);
+                                          hb_job_t *job);
+int            hb_nvdec_hwframe_init(hb_job_t *job, struct AVFrame **frame);
 
-char*          hb_nvdec_get_codec_name(enum AVCodecID codec_id);
+const char*    hb_nvdec_get_codec_name(enum AVCodecID codec_id);
 
-int            hb_nvdec_is_enabled(struct hb_job_t *job);
+int            hb_nvdec_is_enabled(hb_job_t *job);
 
-int            hb_nvdec_are_filters_supported(struct hb_list_t *filters);
-
-void           hb_nvdec_disable(struct hb_job_t *job);
+int            hb_nvdec_are_filters_supported(hb_list_t *filters);
 
 #endif // HANDBRAKE_NVENC_COMMON_H

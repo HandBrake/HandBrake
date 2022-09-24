@@ -17,6 +17,10 @@
 #include "handbrake/qsv_common.h"
 #endif
 
+#if HB_PROJECT_FEATURE_NVENC
+#include "handbrake/nvenc_common.h"
+#endif
+
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
 #define SYNC_MIN_VIDEO_QUEUE_LEN    20
 

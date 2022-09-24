@@ -4180,9 +4180,6 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
                                         HB_DECODE_SUPPORT_QSV);
 #endif
 
-
-    // job->hw_decode                 = !!(title->video_decode_support &
-                                        // HB_DECODE_SUPPORT_NVDEC);
 }
 
 int hb_output_color_prim(hb_job_t * job)

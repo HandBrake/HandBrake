@@ -107,7 +107,7 @@ int hb_nvdec_available(int codec_id)
         return 0;
     }
 
-    AVCodec *codec = avcodec_find_decoder(codec_id);
+    const AVCodec *codec = avcodec_find_decoder(codec_id);
     enum AVHWDeviceType type = av_hwdevice_find_type_by_name("cuda");
     for (int i = 0; codec; i++)
     {
@@ -231,7 +231,7 @@ int hb_nvdec_hwframe_init(hb_job_t *job, AVFrame **frame)
 #endif
 }
 
-char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
+const char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
 {
     switch (codec_id)
     {
@@ -245,7 +245,7 @@ char* hb_nvdec_get_codec_name(enum AVCodecID codec_id)
             return "av1_nvdec";
 
         default:
-            return NULL;
+            return "nvdec";
     }
 }
 
