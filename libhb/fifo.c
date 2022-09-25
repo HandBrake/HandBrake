@@ -768,7 +768,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
 #if HB_PROJECT_FEATURE_NVENC
         if (b->hw_ctx.frame)
-            av_frame_free(&b->hw_ctx.frame);
+            av_frame_free((AVFrame**)&b->hw_ctx.frame);
 #endif
 
         hb_buffer_t * next = b->next;

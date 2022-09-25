@@ -174,7 +174,7 @@ int hb_nvdec_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     ctx->pix_fmt = AV_PIX_FMT_CUDA;
     ctx->hw_frames_ctx = av_hwframe_ctx_alloc(ctx->hw_device_ctx);
 
-    AVHWFramesContext *frames_ctx = ctx->hw_frames_ctx->data;
+    AVHWFramesContext *frames_ctx = (AVHWFramesContext*)ctx->hw_frames_ctx->data;
     frames_ctx->format = AV_PIX_FMT_CUDA;
     frames_ctx->sw_format = job->output_pix_fmt;
     frames_ctx->width = ctx->width;
@@ -195,7 +195,7 @@ static AVBufferRef *init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
                                        int height)
 {
     AVBufferRef *hw_frames_ctx = av_hwframe_ctx_alloc(hw_device_ctx);
-    AVHWFramesContext *frames_ctx = hw_frames_ctx->data;
+    AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hw_frames_ctx->data;
     frames_ctx->format = AV_PIX_FMT_CUDA;
     frames_ctx->sw_format = sw_fmt;
     frames_ctx->width = width;
@@ -283,7 +283,7 @@ int hb_nvdec_is_usable(hb_job_t *job)
      ** When video filters aren't opted-in (vRAM > RAM memcpy will occur).
      ** When Nvenc is used to encode (otherwise vRAM > RAM memcpy will occur).
      */
-     
+
     const int main_dec_loop = (NULL != job);
     const int supported_filters = main_dec_loop && hb_nvdec_are_filters_supported(job->list_filter);
     const int nvenc_is_used = main_dec_loop && is_nvenc_used(job->vcodec);
