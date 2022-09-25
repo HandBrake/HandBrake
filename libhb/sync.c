@@ -430,7 +430,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
 
             if (!buf->hw_ctx.frame)
             {
-                hb_nvdec_hwframe_init(stream->common->job, &buf->hw_ctx.frame);
+                hb_nvdec_hwframe_init(stream->common->job, (AVFrame**)&buf->hw_ctx.frame);
             }
 
             av_frame_copy_props(buf->hw_ctx.frame, &frame);
