@@ -1773,7 +1773,15 @@ static int decodePacket( hb_work_object_t * w )
         }
 
 #if HB_PROJECT_FEATURE_NVENC
-        int use_hw_dec = (NULL != pv->context->hw_device_ctx);
+        AVBufferRef *hw_device_ctx = NULL;
+        if (pv->context->hw_device_ctx)
+        {
+            int ret = av_buffer_replace(&hw_device_ctx, pv->context->hw_device_ctx);
+            if (ret < 0)
+            {
+                return HB_WORK_ERROR;
+            }
+        }
 #endif
 
         hb_avcodec_free_context(&pv->context);
@@ -1784,9 +1792,14 @@ static int decodePacket( hb_work_object_t * w )
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 #if HB_PROJECT_FEATURE_NVENC
-        if (use_hw_dec)
+        if (hw_device_ctx)
         {
-            hb_nvdec_hw_ctx_init(pv->context, pv->job);
+            int ret = av_buffer_replace(&pv->context->hw_device_ctx, hw_device_ctx);
+            av_buffer_unref(&hw_device_ctx);
+            if (ret < 0)
+            {
+                return HB_WORK_ERROR;
+            }
         }
 #endif
 
