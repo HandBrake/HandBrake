@@ -1772,6 +1772,10 @@ static int decodePacket( hb_work_object_t * w )
             return HB_WORK_OK;
         }
 
+#if HB_PROJECT_FEATURE_NVENC
+        int use_hw_dec = (NULL != pv->context->hw_device_ctx);
+#endif
+
         hb_avcodec_free_context(&pv->context);
         pv->context = context;
 
@@ -1779,6 +1783,12 @@ static int decodePacket( hb_work_object_t * w )
         pv->context->err_recognition   = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
+#if HB_PROJECT_FEATURE_NVENC
+        if (use_hw_dec)
+        {
+            hb_nvdec_hw_ctx_init(pv->context, pv->job);
+        }
+#endif
 
 #if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
