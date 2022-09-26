@@ -938,7 +938,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsUseQsvDecAvailable => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
 
-        public bool IsNvdecAvailable => this.IsNvencAvailable && this.EnableNvencEncoder;
+        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable && this.EnableNvencEncoder;
 
         public bool UseQSVDecodeForNonQSVEnc
         {

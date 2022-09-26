@@ -11,6 +11,7 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Dynamic;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
@@ -235,6 +236,27 @@ namespace HandBrake.Interop.Interop
                     }
 
                     return isNvencH265Available.Value;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsNVDecAvailable
+        {
+            get
+            {
+                try
+                {
+                    if (!IsNVEncH264Available)
+                    {
+                        return false;
+                    }
+
+                    return HBFunctions.hb_check_nvdec_available() > 0;
                 }
                 catch (Exception)
                 {

@@ -15,6 +15,8 @@
 int            hb_nvenc_h264_available();
 int            hb_nvenc_h265_available();
 int            hb_check_nvenc_available();
+int            hb_check_nvdec_available();
+
 
 char*          hb_map_nvenc_preset_name (const char * preset);
 

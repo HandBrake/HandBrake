@@ -21,6 +21,6 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
-        ./configure --disable-gtk-update-checks --enable-qsv
+        ./configure --disable-gtk-update-checks --enable-qsv --enable-vce --enable-nvenc --enable-nvdec
         cd build
         make -j 3

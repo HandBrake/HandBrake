@@ -74,6 +74,15 @@ int hb_nvenc_h265_available()
     #endif
 }
 
+int hb_check_nvdec_available()
+{
+    #if HB_PROJECT_FEATURE_NVDEC
+        return 1;
+    #else
+        return 0;
+    #endif
+}
+
 char * hb_map_nvenc_preset_name (const char * preset){
 
     if (preset == NULL)
@@ -269,7 +278,7 @@ int hb_nvdec_are_filters_supported(hb_list_t *filters)
     for (int i = 0; i < hb_list_count(filters); i++)
     {
         hb_filter_object_t *filter = hb_list_item(filters, i);
-        // hb_log("NVDec: %s isn't yet supported for CUDA video frames", filter->name);
+        hb_deep_log( 2, "nvdec: %s isn't yet supported for CUDA video frames", filter->name);
         ret = 0;
     }
 
