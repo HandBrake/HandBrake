@@ -455,7 +455,7 @@ int hb_qsv_info_init()
     }
     if (hb_list_count(g_qsv_adapters_details_list) == 0)
     {
-        hb_error("hb_qsv_info_init: g_qsv_adapters_details_list has no adapters");
+        hb_deep_log(1, "hb_qsv_info_init: g_qsv_adapters_details_list has no adapters");
         return -1;
     }
     return 0;
