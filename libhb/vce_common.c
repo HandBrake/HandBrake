@@ -8,6 +8,7 @@
  */
 
 #include "handbrake/project.h"
+#include "handbrake/handbrake.h"
 
 static int is_vcn_available = -1;
 static int is_vcn_hevc_available = -1;
@@ -16,7 +17,6 @@ static int is_vcn_hevc_available = -1;
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
-#include "handbrake/handbrake.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {
