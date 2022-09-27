@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,XZ,xz))
 $(eval $(call import.CONTRIB.defs,XZ))
 
-XZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/xz-5.2.5.tar.bz2
-XZ.FETCH.url    += https://tukaani.org/xz/xz-5.2.5.tar.bz2
-XZ.FETCH.sha256  = 5117f930900b341493827d63aa910ff5e011e0b994197c3b71c08a20228a42df
+XZ.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/xz-5.2.6.tar.bz2
+XZ.FETCH.url    += https://tukaani.org/xz/xz-5.2.6.tar.bz2
+XZ.FETCH.sha256  = 13e3402e301b6018f6a71ef0e497f714c6d11e214ae82dab156b81c2a64acb25
 
 XZ.CONFIGURE.extra = \
     --disable-xz \
