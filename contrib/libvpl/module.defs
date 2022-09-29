@@ -3,7 +3,7 @@ $(eval $(call import.CONTRIB.defs,LIBVPL))
 
 LIBVPL.FETCH.url       = https://github.com/oneapi-src/oneVPL/archive/refs/tags/v2022.2.4.tar.gz
 LIBVPL.FETCH.url      += https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/oneVPL-2022.2.4.tar.gz
-LIBVPL.FETCH.sha256    = 8ff93be017273eefa83dc6cd7f5d82facb168e38eafabafa2e9613a4e742016f
+LIBVPL.FETCH.sha256    = b8af78b0a59623d8a1dd556f5efd5b3ad395426615bec043289c34e729769d36
 LIBVPL.FETCH.basename  = oneVPL-2022.2.4.tar.gz
 LIBVPL.EXTRACT.tarbase = oneVPL-2022.2.4
 
