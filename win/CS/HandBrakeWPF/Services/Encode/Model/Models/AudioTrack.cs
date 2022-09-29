@@ -104,8 +104,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 }
                 else
                 {
-                    HBAudioEncoder encoder =  HandBrakeEncoderHelpers.GetAudioEncoder(track.Encoder.Id);
-
                     validatedEncoder = HandBrakeEncoderHelpers.GetPassthruFallback(track.Encoder.Id);
 
                     if (validatedEncoder == null)
