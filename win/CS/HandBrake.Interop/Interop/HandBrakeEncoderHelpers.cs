@@ -218,6 +218,13 @@ namespace HandBrake.Interop.Interop
            return GetAudioEncoder(encoder);
         }
 
+        public static HBAudioEncoder GetPassthruFallback(int passthru)
+        {
+            int encoder = HBFunctions.hb_audio_encoder_get_fallback_for_passthru(passthru);
+
+            return GetAudioEncoder(encoder);
+        }
+
         /// <summary>
         /// Gets the video encoder with the specified short name.
         /// </summary>

@@ -98,10 +98,23 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 int format = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(container)).Id;
                 int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(passthruEncoders ?? new List<HBAudioEncoder>()));
 
-                validatedEncoder = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoder.Id, format);
+                if (track.IsAutoPassthru)
+                {
+                    validatedEncoder = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoder.Id, format);
+                }
+                else
+                {
+                    HBAudioEncoder encoder =  HandBrakeEncoderHelpers.GetAudioEncoder(track.Encoder.Id);
+
+                    validatedEncoder = HandBrakeEncoderHelpers.GetPassthruFallback(track.Encoder.Id);
+
+                    if (validatedEncoder == null)
+                    {
+                        validatedEncoder = fallbackEncoder; // Last Resort.
+                    }
+                }
             }
-
-
+            
             this.scannedTrack = sourceTrack;
             this.drc = track.DRC;
             this.encoder = validatedEncoder;
