@@ -2384,7 +2384,10 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
 
         if (out != NULL)
         {
-            out->s.scr_sequence = packet_info->scr_sequence;
+            if (packet_info != NULL)
+            {
+                out->s.scr_sequence = packet_info->scr_sequence;
+            }
             out->s.start        = pts;
             out->s.duration     = duration;
             if (out->s.start == AV_NOPTS_VALUE)
