@@ -342,6 +342,8 @@ namespace HandBrakeWPF.Model.Audio
             }
         }
 
+        public bool IsAutoPassthru => this.Encoder != null && this.Encoder.IsAutoPassthru;
+        
         /// <summary>
         /// Gets the bitrates.
         /// </summary>

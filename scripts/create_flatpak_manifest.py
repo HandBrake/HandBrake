@@ -45,7 +45,7 @@ class FlatpakPluginManifest:
             self.manifest["runtime-version"] = runtime
 
 class FlatpakManifest:
-    def __init__(self, source_list, runtime, qsv, template=None):
+    def __init__(self, source_list, runtime, qsv, nvenc, template=None):
         if template != None:
             with open(template, 'r') as fp:
                 self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
@@ -74,6 +74,12 @@ class FlatpakManifest:
 
         if qsv:
             self.hbconfig.append("--enable-qsv");
+        
+        if nvenc:
+            self.hbconfig.append("--enable-nvenc");
+            self.hbconfig.append("--enable-nvdec");
+            self.manifest["sdk-extensions"] = ['org.freedesktop.Sdk.Extension.llvm14'];
+            self.hbmodule["build-options"]  = {'append-path':'/usr/lib/sdk/llvm14/bin','prepend-ld-library-path':'/usr/lib/sdk/llvm14/lib'};
 
         handbrake_found = False
         for key, value in source_list.items():
@@ -111,14 +117,15 @@ def usage():
     print("     -t --template   - Flatpak manifest template")
     print("     -r --runtime    - Flatpak SDK runtime version")
     print("     -q --qsv        - Build with Intel QSV support")
+    print("     -e --nvenc      - Build with Nvidia HW Encoder support")
     print("     -p --plugin     - Manifest if for a HandBrake flatpak plugin")
     print("     -h --help       - Show this message")
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qph",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qeph",
             ["archive=", "contrib=", "sha265=",
-             "template=", "runtime=", "qsv", "plugin", "help"])
+             "template=", "runtime=", "qsv", "nvenc", "plugin", "help"])
     except getopt.GetoptError:
         print("Error: Invalid option")
         usage()
@@ -133,6 +140,10 @@ if __name__ == "__main__":
     runtime = None
     plugin = 0
     qsv = 0
+    nvenc = 1
+    print("ARGS ",args)
+    print("OPT ",opts)
+    # exit()
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
@@ -158,6 +169,10 @@ if __name__ == "__main__":
             runtime = arg
         elif opt in ("-q", "--qsv"):
             qsv = 1;
+
+        elif opt in ("-e", "--nvenc"):
+            print("NVENC ON")
+            nvenc = 1; 
         elif opt in ("-p", "--plugin"):
             plugin = 1;
 
@@ -169,7 +184,7 @@ if __name__ == "__main__":
     if plugin:
         manifest = FlatpakPluginManifest(runtime, template)
     else:
-        manifest = FlatpakManifest(source_list, runtime, qsv, template)
+        manifest = FlatpakManifest(source_list, runtime, qsv, nvenc, template)
 
     if dst != None:
         with open(dst, 'w') as fp:
