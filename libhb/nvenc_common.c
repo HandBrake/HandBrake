@@ -199,6 +199,7 @@ int hb_nvdec_hwframes_ctx_init(AVCodecContext *ctx, hb_job_t *job)
     return 0;
 }
 
+#if HB_PROJECT_FEATURE_NVENC
 static AVBufferRef *init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
                                        enum AVPixelFormat sw_fmt,
                                        int width,
@@ -219,6 +220,7 @@ static AVBufferRef *init_hw_frames_ctx(AVBufferRef *hw_device_ctx,
 
     return hw_frames_ctx;
 }
+#endif
 
 int hb_nvdec_hwframe_init(hb_job_t *job, AVFrame **frame)
 {
