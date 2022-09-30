@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -59,7 +59,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hRX-N0-lCu">
-                                                        <rect key="frame" x="521" y="36" width="16" height="16"/>
+                                                        <rect key="frame" x="521" y="35" width="16" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="16" id="3lG-7h-l6p"/>
                                                             <constraint firstAttribute="height" constant="16" id="R7j-DY-bWX"/>
@@ -96,7 +96,7 @@
                                                     <constraint firstItem="ar9-Uk-6sM" firstAttribute="top" secondItem="XcX-ea-XWm" secondAttribute="top" constant="2" id="T9f-ov-BLW"/>
                                                     <constraint firstItem="xAK-4F-cCr" firstAttribute="top" secondItem="ar9-Uk-6sM" secondAttribute="bottom" id="Ujw-UU-Sqh"/>
                                                     <constraint firstItem="hRX-N0-lCu" firstAttribute="leading" secondItem="fxw-eD-SmJ" secondAttribute="trailing" constant="8" id="Vl3-R0-TIy"/>
-                                                    <constraint firstItem="hRX-N0-lCu" firstAttribute="top" secondItem="XcX-ea-XWm" secondAttribute="top" constant="2" id="Wv0-tz-Hlh"/>
+                                                    <constraint firstItem="hRX-N0-lCu" firstAttribute="top" secondItem="XcX-ea-XWm" secondAttribute="top" constant="3" id="Wv0-tz-Hlh"/>
                                                     <constraint firstItem="xAK-4F-cCr" firstAttribute="leading" secondItem="ar9-Uk-6sM" secondAttribute="leading" id="ZIf-yJ-gev"/>
                                                     <constraint firstItem="xAK-4F-cCr" firstAttribute="width" secondItem="ar9-Uk-6sM" secondAttribute="width" id="aRZ-jw-Ekv"/>
                                                     <constraint firstItem="hRX-N0-lCu" firstAttribute="leading" secondItem="ar9-Uk-6sM" secondAttribute="trailing" constant="8" id="dxl-4e-TfR"/>
@@ -129,7 +129,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CSU-Pb-Uaw">
-                                                        <rect key="frame" x="521" y="4" width="16" height="16"/>
+                                                        <rect key="frame" x="521" y="3" width="16" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="16" id="NiA-3H-N2G"/>
                                                             <constraint firstAttribute="width" constant="16" id="cei-uT-jX0"/>
@@ -153,7 +153,7 @@
                                                     <constraint firstItem="kNw-fy-iYB" firstAttribute="leading" secondItem="Til-BP-Zag" secondAttribute="leading" constant="3" id="LIY-lT-8dm"/>
                                                     <constraint firstAttribute="trailing" secondItem="CSU-Pb-Uaw" secondAttribute="trailing" constant="3" id="dIt-QV-ws7"/>
                                                     <constraint firstItem="Ns0-GA-WCh" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="2" id="emx-1Y-YDk"/>
-                                                    <constraint firstItem="CSU-Pb-Uaw" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="2" id="g9F-L6-mfh"/>
+                                                    <constraint firstItem="CSU-Pb-Uaw" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="3" id="g9F-L6-mfh"/>
                                                     <constraint firstItem="CSU-Pb-Uaw" firstAttribute="leading" secondItem="Ns0-GA-WCh" secondAttribute="trailing" constant="8" id="nds-NF-PaH"/>
                                                     <constraint firstItem="kNw-fy-iYB" firstAttribute="top" secondItem="Til-BP-Zag" secondAttribute="top" constant="3" id="r8c-Vs-yih"/>
                                                 </constraints>
