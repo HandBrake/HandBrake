@@ -161,7 +161,13 @@ FFMPEG.CONFIGURE.extra += \
      --enable-hwaccels \
      --enable-nvdec \
      --enable-cuda-llvm \
-     --enable-cuda
+     --enable-cuda \
+     --enable-nonfree \
+     --enable-cuda-nvcc \
+     --enable-libnpp \
+     --extra-cflags=-I/usr/local/cuda/include \
+     --extra-ldflags=-L/usr/local/cuda/lib64 \
+     --disable-static
 endif
 
 ifeq (1,$(FEATURE.mf))
