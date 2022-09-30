@@ -611,7 +611,7 @@ struct hb_job_s
 #define HB_VCODEC_QSV_H265          HB_VCODEC_QSV_H265_8BIT
 
 #define HB_VCODEC_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
-#define HB_VCODEC_QSV_AV1_10BIT     (0x08000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
 #define HB_VCODEC_QSV_AV1           HB_VCODEC_QSV_AV1_8BIT
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
