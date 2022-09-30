@@ -641,7 +641,7 @@ void hb_common_global_init(int disable_hardware)
     {
         if (!hb_video_encoders[i].enabled)
         {
-            if ((hb_video_encoders[i].item.codec & HB_VCODEC_MASK) &&
+            if ((hb_video_encoders[i].item.codec) &&
                 (hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec, disable_hardware)))
             {
                 // we have a specific fallback and it's enabled
@@ -1809,16 +1809,6 @@ static const enum AVPixelFormat standard_444_12bit_pix_fmts[] =
     AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
 };
 
-static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
-{
-     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
-};
-
-static const enum AVPixelFormat nvenc_pix_formats[] =
-{
-     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
-};
-
 const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
 #if HB_PROJECT_FEATURE_QSV
@@ -1827,17 +1817,6 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
         return hb_qsv_get_pix_fmts(encoder);
     }
 #endif
-
-    if (encoder & HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
-    {
-        return nvenc_pix_formats_10bit;
-    }
-
-    if ((encoder & HB_VCODEC_FFMPEG_NVENC_H264) ||
-        (encoder & HB_VCODEC_FFMPEG_NVENC_H265))
-    {
-        return nvenc_pix_formats;
-    }
 
     if (encoder & HB_VCODEC_FFMPEG_MASK)
     {
@@ -2569,9 +2548,6 @@ fail:
 
 const char* hb_video_encoder_get_name(int encoder)
 {
-    if (!(encoder & HB_VCODEC_MASK))
-        goto fail;
-
     int i;
     for (i = 0; i < hb_video_encoders_count; i++)
     {
@@ -2581,15 +2557,11 @@ const char* hb_video_encoder_get_name(int encoder)
         }
     }
 
-fail:
     return NULL;
 }
 
 const char* hb_video_encoder_get_short_name(int encoder)
 {
-    if (!(encoder & HB_VCODEC_MASK))
-        goto fail;
-
     int i;
     for (i = 0; i < hb_video_encoders_count; i++)
     {
@@ -2599,15 +2571,11 @@ const char* hb_video_encoder_get_short_name(int encoder)
         }
     }
 
-fail:
     return NULL;
 }
 
 const char* hb_video_encoder_get_long_name(int encoder)
 {
-    if (!(encoder & HB_VCODEC_MASK))
-        goto fail;
-
     int i;
     for (i = 0; i < hb_video_encoders_count; i++)
     {
@@ -2617,7 +2585,6 @@ const char* hb_video_encoder_get_long_name(int encoder)
         }
     }
 
-fail:
     return NULL;
 }
 

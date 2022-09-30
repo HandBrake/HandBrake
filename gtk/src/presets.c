@@ -1785,7 +1785,7 @@ ghb_settings_to_preset(GhbValue *settings)
         sep = ",";
     }
     int encoder = ghb_get_video_encoder(settings);
-    if (encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_FFMPEG_SVT_AV1_MASK))
+    if (encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_SVT_AV1_MASK))
     {
         if (ghb_dict_get_bool(preset, "x264FastDecode"))
         {
