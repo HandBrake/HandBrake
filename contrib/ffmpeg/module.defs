@@ -167,7 +167,8 @@ FFMPEG.CONFIGURE.extra += \
      --enable-libnpp \
      --extra-cflags=-I/usr/local/cuda/include \
      --extra-ldflags=-L/usr/local/cuda/lib64 \
-     --disable-static
+     --disable-static \
+     --enable-shared
 endif
 
 ifeq (1,$(FEATURE.mf))
