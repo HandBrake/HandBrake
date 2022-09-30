@@ -1,6 +1,5 @@
 # List of source files containing translatable strings.
 src/ghb3.ui
-src/ghb4.ui
 src/fr.handbrake.ghb.metainfo.template.xml
 src/audiohandler.c
 src/callbacks.c
