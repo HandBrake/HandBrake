@@ -143,6 +143,16 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
+{
+     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat nvenc_pix_formats[] =
+{
+     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+};
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -1754,6 +1764,13 @@ const int* hb_av_get_pix_fmts(int encoder)
         case HB_VCODEC_FFMPEG_MF_H264:
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_pix_fmts;
+
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+            return nvenc_pix_formats;
+
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+            return nvenc_pix_formats_10bit;
 
         case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
