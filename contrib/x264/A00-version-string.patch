@@ -23,8 +23,8 @@ index d685efbd..7f270c4b 100644
 +#undef  X264_POINTVER
 +#endif
 +#define X264_BUILD    164
-+#define X264_VERSION " r3065 ae03d92"
-+#define X264_POINTVER "0.164.3065 ae03d92"
++#define X264_VERSION " r3100 ed0f7a6"
++#define X264_POINTVER "0.164.3100 ed0f7a6"
  
  #ifdef _WIN32
  #   define X264_DLL_IMPORT __declspec(dllimport)
