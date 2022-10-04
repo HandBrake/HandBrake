@@ -14,11 +14,12 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 - Added AV1 encoder using SVT-AV1
 - Added support for H.264 levels 6, 6.1 and 6.2
-- Added support for 4:2:2/4:4:4 profiles in x264 and x265 encoders.
+- Added support for 4:2:2/4:4:4 profiles in x264 and x265 encoders
+- Added support for 10-bit VP9 encoder
 
 #### Filters
-- Switched to zscale(zimg) for video scaling with automatic fallback to swscale when required. Should improve performace for ARM based systems.
-- Improved Autocrop algorithm which will improve accuracy with mixed aspect ratio content.
+- Switched to zscale(zimg) for video scaling with automatic fallback to swscale when required. Should improve performace for ARM based systems
+- Improved Autocrop algorithm which will improve accuracy with mixed aspect ratio content
 - Small performance improvement on high core count systems for comb detect, decomb and nlmeans
 - The following filters have been upgraded to support higher than 8-bit content and 4:2:2/4:4:4 chroma subsampling
   - Detelecine
@@ -40,40 +41,50 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added support for QuickSync AV1 Encoder
 - Added support for QuickSync HyperEncode
 - Removed support for Intel CPUs. Minimum Requirement is now 6th generation (Skylake) when using Intel QuickSync. 
-- Added support for NVEnc 10-bit HEVC NVEnc encoder.
+- Added support for NVEnc 10-bit HEVC encoder.
+- Added support for AMD VCE 10-bit HEVC encoder.
 - Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
 - Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
+
+#### Build system
+
+- Added support for OpenBSD (must compile from source)
+
 
 #### Third-party libraries
 
 - Updated libraries
-  - FFmpeg 5.0.1 (decoding and filters)
+  - AMF 1.4.24 (AMD VCN encoding)
+  - FFmpeg 5.1.2 (decoding and filters)
   - FreeType 2.12.1 (subtitles)
   - Fribidi 1.0.12 (subtitles)
   - HarfBuzz 4.4.1 (subtitles)
   - libass 0.16.0 (subtitles)
-  - libbluray 1.3.1 (Blu-ray decoding)
+  - libbluray 1.3.3 (Blu-ray decoding)
   - libdav1d 1.0.0 (AV1 decoding)
   - libdvdread 6.1.3 (DVD decoding)
-  - libjpeg-turbo 2.1.3 (preview image compression)
+  - liblzma (xz) 5.2.6 (LZMA video decoding, e.g. TIFF)
+  - libjpeg-turbo 2.1.4 (preview image compression)
   - libspeex 1.2.1  (Speex audio decoding)
   - libvpx 1.12.0  (VP8/VP9 video encoding)
   - oneVPL 2022.1.2 (Intel QuickSync Support)
-  - liblzma (xz) 5.2.5 (LZMA video decoding, e.g. TIFF)
+  - x264 164 r3100 (H.264/AVC video encoding)
   - zimg 3.0.4 (color conversion)
+- New libraries
+  - SVT-AV1 1.2.1 (AV1 encoding)
 
 ### Linux
 - Miscellaneous bug fixes and improvements
 - Updated translations
 
 ### Mac
+- QuickLook support in the Queue
 - Miscellaneous bug fixes and improvements
 - Updated translations
 
 ### Windows
 - Miscellaneous bug fixes and improvements
 - Updated translations
-
 
 
 ## HandBrake 1.5.0
