@@ -256,24 +256,25 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     ghb_dict_set(settings, "scale_width", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureWidth")));
 
-    if (ghb_dict_get_bool(settings, "PictureAutoCrop"))
+    int crop_mode = ghb_dict_get_int(settings, "PictureCropMode");
+
+    switch (crop_mode)
     {
-        ghb_dict_set_string(settings, "crop_mode", "auto");
-    }
-    else
-    {
-        int ct = ghb_dict_get_int(settings, "PictureTopCrop");
-        int cb = ghb_dict_get_int(settings, "PictureBottomCrop");
-        int cl = ghb_dict_get_int(settings, "PictureLeftCrop");
-        int cr = ghb_dict_get_int(settings, "PictureRightCrop");
-        if (ct == 0 && cb == 0 && cl == 0 && cr == 0)
-        {
+        case 0:
+            ghb_dict_set_string(settings, "crop_mode", "auto");
+            break;
+        case 1:
+            ghb_dict_set_string(settings, "crop_mode", "conservative");
+            break;
+        case 2:
             ghb_dict_set_string(settings, "crop_mode", "none");
-        }
-        else
-        {
+            break;
+        case 3:
             ghb_dict_set_string(settings, "crop_mode", "custom");
-        }
+            break;
+        default:
+            ghb_dict_set_string(settings, "crop_mode", "auto");
+            break;
     }
 
     int width, height;
@@ -1728,9 +1729,30 @@ ghb_settings_to_preset(GhbValue *settings)
     g_free(rot_flip);
 
     const gchar * crop_mode;
+    int autocrop, conservativecrop, customcrop;
 
     crop_mode = ghb_dict_get_string(settings, "crop_mode");
-    ghb_dict_set_bool(preset, "PictureAutoCrop", !strcmp(crop_mode, "auto"));
+
+    autocrop         = !strcmp(crop_mode, "auto");
+    conservativecrop = !strcmp(crop_mode, "conservative");
+    customcrop       = !strcmp(crop_mode, "custom");
+
+    if (autocrop)
+    {
+        ghb_dict_set_int(preset, "PictureCropMode", 0);
+    }
+    else if (conservativecrop)
+    {
+        ghb_dict_set_int(preset, "PictureCropMode", 1);
+    }
+    else if (customcrop)
+    {
+        ghb_dict_set_int(preset, "PictureCropMode", 3);
+    }
+    else
+    {
+        ghb_dict_set_int(preset, "PictureCropMode", 2);
+    }
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
