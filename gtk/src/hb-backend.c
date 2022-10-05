@@ -234,9 +234,10 @@ combo_opts_t sharpen_opts =
 
 static options_map_t d_crop_opts[] =
 {
-    {N_("Automatic"), "auto",   0},
-    {N_("None"),      "none",   1},
-    {N_("Custom"),    "custom", 2},
+    {N_("None"),         "none",         0},
+    {N_("Conservative"), "conservative", 1},
+    {N_("Automatic"),    "auto",         2},
+    {N_("Custom"),       "custom",       3},
 };
 combo_opts_t crop_opts =
 {
@@ -3936,23 +3937,31 @@ ghb_apply_pad(GhbValue *settings,
 }
 
 void
-ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo)
+ghb_apply_crop(GhbValue *settings, const hb_geometry_crop_t * geo, const hb_title_t * title)
 {
-    gboolean autocrop, customcrop;
+    gboolean autocrop, conservativecrop, customcrop;
     gint crop[4] = {0,};
 
     const gchar * crop_mode;
 
     crop_mode  = ghb_dict_get_string(settings, "crop_mode");
-    autocrop   = !strcmp(crop_mode, "auto");
-    customcrop = !strcmp(crop_mode, "custom");
+    autocrop         = !strcmp(crop_mode, "auto");
+    conservativecrop = !strcmp(crop_mode, "conservative");
+    customcrop       = !strcmp(crop_mode, "custom");
 
-    if (autocrop)
+    if (title && autocrop)
     {
-        crop[0] = geo->crop[0];
-        crop[1] = geo->crop[1];
-        crop[2] = geo->crop[2];
-        crop[3] = geo->crop[3];
+        crop[0] = title->crop[0];
+        crop[1] = title->crop[1];
+        crop[2] = title->crop[2];
+        crop[3] = title->crop[3];
+    }
+    else if (title && conservativecrop)
+    {
+        crop[0] = title->loose_crop[0];
+        crop[1] = title->loose_crop[1];
+        crop[2] = title->loose_crop[2];
+        crop[3] = title->loose_crop[3];
     }
     else if (customcrop)
     {
@@ -4040,7 +4049,7 @@ ghb_set_scale_settings(signal_user_data_t * ud, GhbValue *settings, gint mode)
     hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
 
     // Apply crop mode to current settings and sanitize crop values
-    ghb_apply_crop(settings, &srcGeo);
+    ghb_apply_crop(settings, &srcGeo, title);
 
     memset(&uiGeo, 0, sizeof(uiGeo));
 

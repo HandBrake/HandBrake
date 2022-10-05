@@ -2664,7 +2664,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         angle = ghb_dict_get_int(settings, "rotate");
         hflip = ghb_dict_get_int(settings, "hflip");
         hb_rotate_geometry(&srcGeo, &srcGeo, angle, hflip);
-        ghb_apply_crop(settings, &srcGeo);
+        ghb_apply_crop(settings, &srcGeo, title);
 
         int crop[4];
 
