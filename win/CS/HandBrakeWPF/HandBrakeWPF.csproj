@@ -183,4 +183,12 @@
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<ItemGroup>
+			<HostFxr Include="C:\Program Files\dotnet\host\fxr\6.0.9\hostfxr.dll" />
+			<Shared Include="C:\Program Files\dotnet\shared\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(HostFxr)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(Shared)" DestinationFolder="$(PublishDir)\shared\%(RecursiveDir)" SkipUnchangedFiles="true" />
+	</Target>
 </Project>
