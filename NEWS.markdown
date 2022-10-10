@@ -40,7 +40,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Hardware Encoding
 - Added support for QuickSync AV1 Encoder
 - Added support for QuickSync HyperEncode
-- Removed support for Intel CPUs. Minimum Requirement is now 6th generation (Skylake) when using Intel QuickSync. 
+- Removed support for older Intel CPUs. The minimum requirement is now at least 6th generation (Skylake) when using Intel QuickSync. 
 - Added support for NVEnc 10-bit HEVC encoder.
 - Added support for AMD VCE 10-bit HEVC encoder.
 - Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
