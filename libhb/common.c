@@ -1817,12 +1817,6 @@ static const enum AVPixelFormat standard_444_12bit_pix_fmts[] =
     AV_PIX_FMT_YUV444P12, AV_PIX_FMT_YUV444P10, AV_PIX_FMT_YUV444P, AV_PIX_FMT_NONE
 };
 
-static const enum AVPixelFormat vce_pix_formats_10bit[] =
-{
-     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
-};
-
-
 const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
 {
 #if HB_PROJECT_FEATURE_QSV
@@ -1832,11 +1826,6 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
     }
 #endif
 
-    }
-
-    if (encoder & HB_VCODEC_FFMPEG_VCE_H265_10BIT)
-    {
-        return vce_pix_formats_10bit;
     if (encoder & HB_VCODEC_FFMPEG_MASK)
     {
         return hb_av_get_pix_fmts(encoder);
@@ -6167,7 +6156,7 @@ static int pix_fmt_is_supported(hb_job_t *job, int pix_fmt)
         {
             return 0;
         }
-    } 
+    }
 #if HB_PROJECT_FEATURE_NVENC
     else if (hb_nvdec_is_enabled(job))
     {
