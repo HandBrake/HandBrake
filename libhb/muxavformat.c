@@ -498,6 +498,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
         case HB_VCODEC_FFMPEG_MF_H265:
