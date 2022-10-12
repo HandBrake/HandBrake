@@ -153,6 +153,12 @@ static const enum AVPixelFormat nvenc_pix_formats[] =
      AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat vce_pix_formats_10bit[] =
+{
+     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+};
+
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -228,6 +234,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     codec_name = "hevc_nvenc";
                     break;
                 case HB_VCODEC_FFMPEG_VCE_H265:
+                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
                     codec_name = "hevc_amf";
                     break;
@@ -323,7 +330,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->framerate     = fps;
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
-    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265))
+    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT))
     {
         // Set encoder preset
         context->profile = FF_PROFILE_UNKNOWN;
@@ -371,7 +378,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, Bitrate %d", job->vbitrate );
         }
 
-        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
         {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
 
@@ -380,7 +387,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->gop_size = (int)(FFMIN(av_q2d(fps) * 2, 120));
 
             //Work around an ffmpeg issue mentioned in issue #3447
-            if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+            if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
             {
                av_dict_set( &av_opts, "qmin",  "0", 0 );
                av_dict_set( &av_opts, "qmax", "51", 0 );
@@ -489,7 +496,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "qp_b", qualityB, 0 );
             hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
         }
-        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
         {
             char  *vce_h265_max_au_size_char,
                    vce_h265_q_char[4];
@@ -931,7 +938,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
         // Set profile and level
         context->profile = FF_PROFILE_UNKNOWN;
@@ -986,7 +993,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
-    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
         av_dict_set(&av_opts, "gops_per_idr", "1", 0);
     }
@@ -1701,6 +1708,7 @@ const char* const* hb_av_preset_get_names(int encoder)
 
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
             return hb_vce_preset_names;
 
         case HB_VCODEC_FFMPEG_NVENC_H264:
@@ -1771,6 +1779,9 @@ const int* hb_av_get_pix_fmts(int encoder)
 
         case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
             return nvenc_pix_formats_10bit;
+
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
+            return vce_pix_formats_10bit;
 
         case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
