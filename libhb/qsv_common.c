@@ -2175,8 +2175,8 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
         return 0;
     }
 
-    // scale_qsv filter can't convert from full to limited range
-    if (job->title->color_range == AVCOL_RANGE_JPEG && job->color_range == AVCOL_RANGE_MPEG)
+    // vpp_qsv filter can't convert from full to limited range, fallback to sw filters until unsupported
+    if (job->title->color_range == AVCOL_RANGE_JPEG)
     {
         return 0;
     }
