@@ -8,6 +8,7 @@
  */
 
 #include "handbrake/hbffmpeg.h"
+#include "handbrake/nvenc_common.h"
 #include "handbrake/handbrake.h"
 
 #if HB_PROJECT_FEATURE_NVENC

@@ -2123,7 +2123,6 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
             job->title->video_codec_param, job->input_pix_fmt, job->title->geometry.width, job->title->geometry.height);
 }
 
-static int hb_dxva2_device_check();
 static int hb_d3d11va_device_check();
 
 int hb_qsv_hw_filters_are_enabled(hb_job_t *job)
@@ -3726,7 +3725,7 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
         {
             if (job->qsv.ctx && !job->qsv.ctx->qsv_device)
             {
-                job->qsv.ctx->qsv_device = av_mallocz_array(32, sizeof(*job->qsv.ctx->qsv_device));
+                job->qsv.ctx->qsv_device = av_calloc(32, sizeof(*job->qsv.ctx->qsv_device));
                 if (!job->qsv.ctx->qsv_device)
                 {
                     hb_error("hb_qsv_param_parse_dx_index: failed to allocate memory for qsv device");
@@ -3742,44 +3741,6 @@ int hb_qsv_param_parse_dx_index(hb_job_t *job, const int dx_index)
     }
     hb_error("qsv: hb_qsv_param_parse_dx_index incorrect qsv device index %d", dx_index);
     return -1;
-}
-
-static int hb_dxva2_device_create9(HMODULE d3dlib, UINT adapter, IDirect3D9 **d3d9_out)
-{
-    pDirect3DCreate9 *createD3D = (pDirect3DCreate9 *)hb_dlsym(d3dlib, "Direct3DCreate9");
-    if (!createD3D) {
-        hb_error("hb_dxva2_device_create9: failed to locate Direct3DCreate9");
-        return -1;
-    }
-
-    IDirect3D9 *d3d9 = createD3D(D3D_SDK_VERSION);
-    if (!d3d9) {
-        hb_error("hb_dxva2_device_create9: createD3D failed");
-        return -1;
-    }
-    *d3d9_out = d3d9;
-    return 0;
-}
-
-static int hb_dxva2_device_create9ex(HMODULE d3dlib, UINT adapter, IDirect3D9 **d3d9_out)
-{
-    IDirect3D9Ex *d3d9ex = NULL;
-    HRESULT hr;
-    pDirect3DCreate9Ex *createD3DEx = (pDirect3DCreate9Ex *)hb_dlsym(d3dlib, "Direct3DCreate9Ex");
-    if (!createD3DEx)
-    {
-        hb_error("hb_dxva2_device_create9ex: failed to locate Direct3DCreate9Ex");
-        return -1;
-    }
-
-    hr = createD3DEx(D3D_SDK_VERSION, &d3d9ex);
-    if (FAILED(hr))
-    {
-        hb_error("hb_dxva2_device_create9ex: createD3DEx failed %d", hr);
-        return -1;
-    }
-    *d3d9_out = (IDirect3D9 *)d3d9ex;
-    return 0;
 }
 
 static int hb_d3d11va_device_create(int adapter_id, ID3D11Device** d3d11_out)
@@ -3851,63 +3812,6 @@ static int hb_d3d11va_device_check()
 {
     ID3D11Device* d3d11 = NULL;
     return hb_d3d11va_device_create(-1, &d3d11);
-}
-
-static int hb_dxva2_device_check()
-{
-    HRESULT hr;
-    HMODULE d3dlib = NULL;
-    IDirect3D9 *d3d9 = NULL;
-    D3DADAPTER_IDENTIFIER9 identifier;
-    D3DADAPTER_IDENTIFIER9 *d3dai = &identifier;
-    UINT adapter = D3DADAPTER_DEFAULT;
-
-    d3dlib = hb_dlopen("d3d9.dll");
-    if (!d3dlib)
-    {
-        hb_error("hb_dxva2_device_check: failed to load d3d9 library");
-        return -1;
-    }
-
-    if (hb_dxva2_device_create9ex(d3dlib, adapter, &d3d9) < 0)
-    {
-        // Retry with "classic" d3d9
-        hr = hb_dxva2_device_create9(d3dlib, adapter, &d3d9);
-        if (hr < 0)
-        {
-            hr = -1;
-            goto clean_up;
-        }
-    }
-
-    hr = IDirect3D9_GetAdapterIdentifier(d3d9, D3DADAPTER_DEFAULT, 0, d3dai);
-    if (FAILED(hr))
-    {
-        hb_error("hb_dxva2_device_check: IDirect3D9_GetAdapterIdentifier failed");
-        hr = -1;
-        goto clean_up;
-    }
-
-    unsigned intel_id = 0x8086;
-    if(d3dai)
-    {
-        if(d3dai->VendorId != intel_id)
-        {
-            hb_error("hb_dxva2_device_check: adapter that was found does not support QSV. It is required for zero-copy QSV path");
-            hr = -1;
-            goto clean_up;
-        }
-    }
-    hr = 0;
-
-clean_up:
-    if (d3d9)
-        IDirect3D9_Release(d3d9);
-
-    if (d3dlib)
-        hb_dlclose(d3dlib);
-
-    return hr;
 }
 
 static HRESULT lock_device(
@@ -4386,8 +4290,7 @@ int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_
     out->qsv_details.frame->format         = in->qsv_details.frame->format;
     out->qsv_details.frame->width          = in->qsv_details.frame->width;
     out->qsv_details.frame->height         = in->qsv_details.frame->height;
-    out->qsv_details.frame->channels       = in->qsv_details.frame->channels;
-    out->qsv_details.frame->channel_layout = in->qsv_details.frame->channel_layout;
+    out->qsv_details.frame->ch_layout      = in->qsv_details.frame->ch_layout;
     out->qsv_details.frame->nb_samples     = in->qsv_details.frame->nb_samples;
 
     int ret = av_frame_copy_props(out->qsv_details.frame, in->qsv_details.frame);
@@ -4450,8 +4353,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
     out->qsv_details.frame->format         = frame->format;
     out->qsv_details.frame->width          = frame->width;
     out->qsv_details.frame->height         = frame->height;
-    out->qsv_details.frame->channels       = frame->channels;
-    out->qsv_details.frame->channel_layout = frame->channel_layout;
+    out->qsv_details.frame->ch_layout      = frame->ch_layout;
     out->qsv_details.frame->nb_samples     = frame->nb_samples;
 
     int ret = av_frame_copy_props(out->qsv_details.frame, frame);
@@ -4507,7 +4409,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
         if (ret < 0)
         {
             hb_error("hb_qsv_copy_avframe_to_video_buffer: hb_qsv_copy_surface() failed");
-            return -1;
+            return NULL;
         }
     }
     else if (job->qsv.ctx->device_manager_handle_type == MFX_HANDLE_D3D11_DEVICE)
@@ -4536,7 +4438,7 @@ hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, 
         if (ret < 0)
         {
             hb_error("hb_qsv_copy_avframe_to_video_buffer: hb_qsv_copy_surface() failed");
-            return -1;
+            return NULL;
         }
     }
     else
@@ -4982,7 +4884,7 @@ int hb_qsv_copy_video_buffer_to_video_buffer(hb_job_t *job, hb_buffer_t* in, hb_
     return -1;
 }
 
-hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, int is_vpp)
+hb_buffer_t* hb_qsv_copy_avframe_to_video_buffer(hb_job_t *job, AVFrame *frame, const int is_vpp)
 {
     return NULL;
 }
