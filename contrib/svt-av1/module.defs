@@ -3,9 +3,9 @@ __deps__ :=
 $(eval $(call import.MODULE.defs,SVT-AV1,svt-av1,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,SVT-AV1))
 
-SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/SVT-AV1-v1.2.1.tar.gz
-SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v1.2.1/SVT-AV1-v1.2.1.tar.gz
-SVT-AV1.FETCH.sha256  = 5c2466eb2990fa045b29c63b92a2b5f13d9cb841709df5e7206f96a59e119fdd
+SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/SVT-AV1-v1.3.0.tar.gz
+SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v1.3.0/SVT-AV1-v1.3.0.tar.gz
+SVT-AV1.FETCH.sha256  = 841408b92c7b09957340112775369ea6fa763eaf4a8c10974cfa48f33c47a122
 
 SVT-AV1.build_dir             = build
 SVT-AV1.CONFIGURE.exe         = cmake
