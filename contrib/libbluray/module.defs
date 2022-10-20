@@ -10,6 +10,7 @@ ifeq (none,$(LIBBLURAY.GCC.O))
 endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
+LIBBLURAY.CONFIGURE.extra += --without-external-libudfread
 
 ifeq (mingw,$(HOST.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
