@@ -97,7 +97,6 @@ struct hb_work_private_s
 
     int                  async_depth;
     int                  max_async_depth;
-    int                  max_buffer_size;
 
     // if encode-only, system memory used
     int                  is_sys_mem;
@@ -1071,7 +1070,7 @@ int qsv_enc_init(hb_work_private_t *pv)
     }
 
     // allocate tasks
-    qsv_encode->p_buf_max_size = pv->max_buffer_size * 1000 * ( 0 == pv->param.videoParam->mfx.BRCParamMultiplier ? 1 : pv->param.videoParam->mfx.BRCParamMultiplier);
+    qsv_encode->p_buf_max_size = pv->param.videoParam->mfx.BufferSizeInKB * 1000 * ( 0 == pv->param.videoParam->mfx.BRCParamMultiplier ? 1 : pv->param.videoParam->mfx.BRCParamMultiplier);
     qsv_encode->tasks          = hb_qsv_list_init(HAVE_THREADS);
     for (i = 0; i < pv->max_async_depth; i++)
     {
@@ -1705,7 +1704,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 #endif
-
+    /* MFXVideoENCODE_Init with desired encoding parameters */
     sts = MFXVideoENCODE_Init(session, pv->param.videoParam);
 // workaround for the early 15.33.x driver, should be removed later
 #define HB_DRIVER_FIX_33
@@ -1733,6 +1732,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         MFXClose(session);
         return -1;
     }
+    /* Prepare the structures for query */
     memset(&videoParam, 0, sizeof(mfxVideoParam));
     videoParam.ExtParam = extParamArray;
     videoParam.NumExtParam = 0;
@@ -1781,6 +1781,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     {
         videoParam.ExtParam[videoParam.NumExtParam++] = (mfxExtBuffer*)hyper_encode;
     }
+    /* Query actual encoding parameters after MFXVideoENCODE_Init, some of them could be overridden */
     sts = MFXVideoENCODE_GetVideoParam(session, &videoParam);
     if (sts != MFX_ERR_NONE)
     {
@@ -1871,7 +1872,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encqsvInit: log_encoder_params failed (%d)", err);
         return -1;
     }
-    pv->max_buffer_size = videoParam.mfx.BufferSizeInKB;
+    pv->param.videoParam->mfx = videoParam.mfx;
     // AsyncDepth has now been set and/or modified by Media SDK
     // fall back to default if zero
     pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
