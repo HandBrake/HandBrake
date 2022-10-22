@@ -13,15 +13,12 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    /// <summary>
-    /// A Base Class for the View Models which contains reusable code.
-    /// </summary>
-    public class ViewModelBase : Screen, IViewModelBase
+    public class ViewModelBase : PropertyChangedBase, IViewModelBase
     {
         private readonly IUserSettingService userSettingService;
 
@@ -30,18 +27,15 @@ namespace HandBrakeWPF.ViewModels
 
         public ViewModelBase()
         {
+            this.RelayCommand = new RelayCommand(this);
         }
 
         public ViewModelBase(IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
+            this.RelayCommand = new RelayCommand(this);
         }
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets Details.
-        /// </summary>
         public string Title
         {
             get
@@ -52,17 +46,12 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.title = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.Title);
             }
         }
 
-        #endregion
+        public RelayCommand RelayCommand { get; private set; }
 
-        #region Public Methods
-
-        /// <summary>
-        /// Perform any Initialisation for this ViewModelBase.
-        /// </summary>
         public void Load()
         {
             if (!this.hasLoaded)
@@ -74,12 +63,25 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Load Method for the ViewModel
-        /// </summary>
         public virtual void OnLoad()
         {
             // Implement in the ViewModel to perform viewmodel specific code.
+        }
+
+        public virtual void Activate()
+        {
+        }
+
+        public virtual void Deactivate()
+        {
+        }
+
+        public void TryClose(bool? dialogResult = null)
+        {
+            Type type = this.GetType().UnderlyingSystemType;
+            string className = type.Name;
+            string viewName = className.Replace("ViewModel", "View", StringComparison.InvariantCultureIgnoreCase);
+            WindowHelper.CloseWindow(dialogResult, viewName);
         }
 
         public string GetMru(string key)
@@ -130,7 +132,5 @@ namespace HandBrakeWPF.ViewModels
 
             this.userSettingService.SetUserSetting("mru" + key, value);
         }
-
-        #endregion
     }
 }

@@ -803,7 +803,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         chapter->index    = i + 1;
         chapter->duration = dvd_chapter->duration;
 
-        sprintf(chapter_title, "Chapter %d", chapter->index);
+        snprintf(chapter_title, sizeof(chapter_title), "Chapter %d", chapter->index);
         hb_chapter_set_title(chapter, chapter_title);
 
         hb_list_add( title->list_chapter, chapter );

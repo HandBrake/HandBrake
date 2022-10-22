@@ -18,7 +18,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
-    public interface IAddPresetViewModel
+    public interface IAddPresetViewModel : IViewModelBase
     {
         /// <summary>
         /// Gets the name of the newly created preset.

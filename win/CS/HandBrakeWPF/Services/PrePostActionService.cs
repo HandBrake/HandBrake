@@ -14,9 +14,8 @@ namespace HandBrakeWPF.Services
     using System.IO;
     using System.Windows.Media;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -24,6 +23,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using EncodeCompletedEventArgs = Encode.EventArgs.EncodeCompletedEventArgs;
     using ILog = Logging.Interfaces.ILog;
@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services
         private void QueueProcessor_QueuePaused(object sender, EventArgs e)
         {
             // Allow the system to sleep again.
-            Execute.OnUIThread(() =>
+            ThreadHelper.OnUIThread(() =>
             {
                 if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
                 {
@@ -138,7 +138,7 @@ namespace HandBrakeWPF.Services
             }
 
             // Allow the system to sleep again.
-            Execute.OnUIThread(() =>
+            ThreadHelper.OnUIThread(() =>
             {
                 if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
                 {
@@ -157,12 +157,12 @@ namespace HandBrakeWPF.Services
             bool isCancelled = false;
             if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.WhenDonePerformActionImmediately))
             {
-                ICountdownAlertViewModel titleSpecificView = IoC.Get<ICountdownAlertViewModel>();
-                Execute.OnUIThread(
+                ICountdownAlertViewModel titleSpecificView = IoCHelper.Get<ICountdownAlertViewModel>();
+                ThreadHelper.OnUIThread(
                     () =>
                     {
                         titleSpecificView.SetAction((WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction));
-                        this.windowManager.ShowDialogAsync(titleSpecificView);
+                        this.windowManager.ShowDialog<CountdownAlertView>(titleSpecificView);
                         isCancelled = titleSpecificView.IsCancelled;
                     });
             }
@@ -178,7 +178,7 @@ namespace HandBrakeWPF.Services
                         ProcessStartInfo shutdown = new ProcessStartInfo("Shutdown", "-s -t 60");
                         shutdown.UseShellExecute = false;
                         Process.Start(shutdown);
-                        Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
+                        ThreadHelper.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                     case WhenDone.LogOff:
                         this.scanService.Dispose();
@@ -194,7 +194,7 @@ namespace HandBrakeWPF.Services
                         Win32.LockWorkStation();
                         break;
                     case WhenDone.QuickHandBrake:
-                        Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
+                        ThreadHelper.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                 }
             }

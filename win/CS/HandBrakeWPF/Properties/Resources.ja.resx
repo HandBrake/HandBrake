@@ -198,9 +198,9 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>HandBrakeはすでにエンコード中です。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
- 
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+    <value>同じ出力先パスに別のジョブがキューにあります。このジョブは違うパスを選択してください。
+
+"ツール -&gt; 基本設定 -&gt; 出力ファイル"から自動ファイル命名を設定することもできます。
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -562,7 +562,7 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
 古いプリセットファイルはアーカイブされました:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0}個のエラーまたはキャンセルを検出。</value>
+    <value>{0}件のエラーを検出しました。詳細はキューウィンドウをみてください。</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>ディスクの空き容量がありません</value>
@@ -1250,7 +1250,7 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
     <value>処理優先度:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Prefer use of Intel QuickSync for decoding video when using the QuickSync encoder and the hardware is available for use.</value>
+    <value>ハードウェアが利用可能であれば、Intel QuickSyncエンコーダーを使用するときのデコードはQuickSyncを優先する</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
     <value>QuickSyncエンコーダーを使わないときのデコードにQuickSyncも使う。(例: x265) </value>
@@ -1860,10 +1860,10 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>選択を消去</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+    <value>ポータブルモード:TMPディレクトリを作れませんでした。パスが正しく、書き込めるかを確認してください。</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+    <value>ポータブルモード:ストレージにディレクトリを作れませんでした。パスが正しく、書き込めるかを確認してください。</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>ポータブルモード: portable.iniを読み込むことができませんでした。このファイルにエラーがある可能性があります。portable.ini.templateをガイドとして使用しやり直してください。</value>
@@ -2142,7 +2142,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>新しいバージョンのHandBrakeが利用できます！</value>
+    <value>新しいバージョンが利用できます！</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
@@ -2331,7 +2331,7 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>ディスク容量低下警告を表示するしきい値:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>注意: これは同時実行ジョブの最大数です。ハードウェアの制約により実際のエンコード同時実行可能ジョブ数は少ないことがあります。</value>
+    <value>注意: これは同時実行ジョブの最大数です。ハードウェアの制約により実際のエンコード同時実行可能ジョブ数は少ないことがあります。設定は次のキュー実行かアプリの再起動時にのみ適用されます。</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(利用不可)</value>
@@ -2618,20 +2618,20 @@ VLCとMPC-HCがサポートされています。他のプレイヤーではお�
     <value>開発用ビルドをダウンロード (HTTPS)</value>
   </data>
   <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
-    <value>Enable QuickSync Deep Link Hyper Encode</value>
+    <value>QuickSync Deep Link Hyper Encodeを有効にする</value>
   </data>
   <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
-    <value>Prefers the use of multiple media engines to speed up a single encode where supported. Disable to allow load balancing multiple parallel encodes across media engines.</value>
+    <value>サポートされていれば単一エンコードに複数メディアエンジンを使用することで速度向上させようとします。無効にするとメディアエンジン間の並列エンコードの負荷バランスを取ります。</value>
   </data>
   <data name="MainView_OpenHandBrake" xml:space="preserve">
-    <value>Open HandBrake</value>
+    <value>HandBrakeを開く</value>
   </data>
   <data name="Startup_UnableToStartInfo" xml:space="preserve">
-    <value>Hardware encoding support has been disabled as it is a common cause of start-up issues.
-- Please try restarting HandBrake. 
-- If the problem persists, it may be an out-of-date graphics card driver (onboard or discrete) that is causing the problem.
+    <value>ハードウェアエンコードサポートはスタートアップによく問題を起こすため無効化されました。
+- HandBrakeを再起動してください。
+- 問題が続くなら、古いグラフィックドライバー(オンボードまたは拡張)が問題を起こしていることがあります。
 
-Hardware encoding support can be re-enabled in preferences. </value>
+HandBrakeエンコードサポートは設定から最有効化できます。</value>
   </data>
   <data name="Startup_UnableToStart" xml:space="preserve">
     <value>HandBrakeを開始できませんでした。</value>
@@ -2643,15 +2643,29 @@ Hardware encoding support can be re-enabled in preferences. </value>
     <value>HandBrakeを再起動してください。</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>キュー統計データをエクスポート (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
     <value>エクスポート完了!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>You must first scan a source and have an initial destination directory set</value>
+    <value>最初にソースをスキャンし出力先を設定しておく必要があります</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>ディスク上にファイルが存在するときのみ。</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>字幕トラックが何も追加されていません。
+
+これは選択されたファイルコンテナの制限によるものである場合があります。詳しい情報は字幕ヘルプドキュメントを読んでください。</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>今すぐ更新！</value>
   </data>
 </root>

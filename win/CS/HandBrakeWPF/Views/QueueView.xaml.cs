@@ -170,5 +170,10 @@ namespace HandBrakeWPF.Views
                 ((QueueViewModel)this.DataContext).RemoveJob(task);
             }
         }
+
+        private void DeleteItem_OnClick(object sender, ExecutedRoutedEventArgs e)
+        {
+            ((QueueViewModel)this.DataContext).RemoveSelectedJobs();
+        }
     }
 }

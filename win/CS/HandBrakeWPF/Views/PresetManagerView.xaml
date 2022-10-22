@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.PresetManagerView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
@@ -44,7 +43,7 @@
 
             <TextBlock Text="{x:Static Properties:Resources.ManagePresetView_ManagePreset}" Style="{StaticResource windowTitle}" Margin="10,0,0,0" Grid.Row="0" />
 
-            <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,5,5,0" Padding="8,2">
+            <Button Command="{Binding RelayCommand}" CommandParameter="LaunchHelp" Background="Transparent" BorderThickness="0" Grid.Row="0" HorizontalAlignment="Right" Margin="0,5,5,0" Padding="8,2">
                 <Button.Content>
                     <Image Source="/Views/Images/question.png" Width="16" />
                 </Button.Content>
@@ -103,16 +102,16 @@
                         </StackPanel>
                     </MenuItem.Header>
 
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.ManagePresetView_Import}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.ManagePresetView_Export}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ExportUserPresets]" Header="{x:Static Properties:Resources.ManagePresetView_ExportUserPresets}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="Import" Header="{x:Static Properties:Resources.ManagePresetView_Import}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="Export" Header="{x:Static Properties:Resources.ManagePresetView_Export}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportUserPresets" Header="{x:Static Properties:Resources.ManagePresetView_ExportUserPresets}" />
                     <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action SetDefault]" Header="{x:Static Properties:Resources.ManagePresetView_SetDefault}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="SetDefault" Header="{x:Static Properties:Resources.ManagePresetView_SetDefault}" />
 
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action DeletePreset]" Header="{x:Static Properties:Resources.PresetManagerView_Delete}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="DeletePreset" Header="{x:Static Properties:Resources.PresetManagerView_Delete}" />
                     <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ResetBuiltInPresets]" Header="{x:Static Properties:Resources.MainView_ResetPresets}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action DeleteBuiltInPresets]" Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="ResetBuiltInPresets" Header="{x:Static Properties:Resources.MainView_ResetPresets}" />
+                    <MenuItem Command="{Binding RelayCommand}" CommandParameter="DeleteBuiltInPresets" Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" />
                 </MenuItem>
             </Menu>
 
@@ -140,20 +139,15 @@
 
                 <TreeView.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu">
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action SetDefault]" />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" Command="{Binding RelayCommand}" CommandParameter="SetDefault" />
                         <Separator />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action DeletePreset]" Header="{x:Static Properties:Resources.PresetManagerView_Delete}" />
+                        <MenuItem Command="{Binding RelayCommand}" CommandParameter="DeletePreset" Header="{x:Static Properties:Resources.PresetManagerView_Delete}" />
                     </ContextMenu>
                 </TreeView.ContextMenu>
 
-                <i:Interaction.Triggers>
-                    <commands:InputBindingTrigger>
-                        <commands:InputBindingTrigger.InputBinding>
-                            <KeyBinding Key="Delete"/>
-                        </commands:InputBindingTrigger.InputBinding>
-                        <cal:ActionMessage MethodName="DeletePreset" />
-                    </commands:InputBindingTrigger>
-                </i:Interaction.Triggers>
+                <TreeView.CommandBindings>
+                    <CommandBinding Command="Delete" Executed="Delete_Execute" />
+                </TreeView.CommandBindings>
 
             </TreeView>
         </Grid>
@@ -187,10 +181,10 @@
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,0,0" HorizontalAlignment="Stretch" >
 
                         <Button Content="Set Default" Margin="0,0,5,0" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
-                            cal:Message.Attach="[Event Click] = [Action SetCurrentPresetAsDefault]" />
+                            Command="{Binding RelayCommand}" CommandParameter="SetCurrentPresetAsDefault" />
 
                         <Button AutomationProperties.Name="{x:Static Properties:Resources.PresetManagerView_Delete}"  
-                            cal:Message.Attach="[Event Click] = [Action DeletePreset]" 
+                            Command="{Binding RelayCommand}" CommandParameter="DeletePreset" 
                             Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
@@ -241,7 +235,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBox HorizontalAlignment="Stretch" Text="{Binding PresetName, UpdateSourceTrigger=PropertyChanged}" KeyUp="PresetName_OnPreviewKeyDown" />
-                            <Button Content="{x:Static Properties:Resources.Generic_Save}" cal:Message.Attach="[Event Click] = [Action RenamePreset]" Margin="5,0,0,0" Grid.Column="1"  IsEnabled="{Binding IsPresetNameChanged}" />
+                            <Button Content="{x:Static Properties:Resources.Generic_Save}" Command="{Binding RelayCommand}" CommandParameter="RenamePreset" Margin="5,0,0,0" Grid.Column="1"  IsEnabled="{Binding IsPresetNameChanged}" />
                         </Grid>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static Properties:Resources.AddPresetView_IsDefault}"  Margin="0,10,0,0"  />
@@ -291,11 +285,11 @@
 
                         <TextBlock Text="Audio:" Grid.Row="6" VerticalAlignment="Center" Margin="0,15,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
                         <Button Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="8,2"
-                    cal:Message.Attach="[Event Click] = [Action EditAudioDefaults]"  Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
+                    Command="{Binding RelayCommand}" CommandParameter="EditAudioDefaults"  Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
 
                         <TextBlock Text="Subtitles:" Grid.Row="7" VerticalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         <Button Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
-                    cal:Message.Attach="[Event Click] = [Action EditSubtitleDefaults]" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    Command="{Binding RelayCommand}" CommandParameter="EditSubtitleDefaults" Visibility="{Binding IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
                     </Grid>
 

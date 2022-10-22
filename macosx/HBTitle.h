@@ -88,6 +88,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) int autoCropLeft;
 @property (nonatomic, readonly) int autoCropRight;
 
+@property (nonatomic, readonly) int looseAutoCropTop;
+@property (nonatomic, readonly) int looseAutoCropBottom;
+@property (nonatomic, readonly) int looseAutoCropLeft;
+@property (nonatomic, readonly) int looseAutoCropRight;
+
 @property (nonatomic, readonly) NSArray<HBTitleAudioTrack *> *audioTracks;
 @property (nonatomic, readonly) NSArray<HBTitleSubtitlesTrack *> *subtitlesTracks;
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapters;

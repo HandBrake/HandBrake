@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Controls.SourceSelection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
@@ -58,7 +57,8 @@
             <!-- Source Types -->
 
             <!-- Ctrl + R -->
-            <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+            <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                    Command="{Binding RelayCommand}" CommandParameter="FolderScan"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
                 <Grid MinWidth="240">
                     <Grid.ColumnDefinitions>
@@ -74,7 +74,7 @@
             </Button>
 
             <!--Ctrl + F-->
-            <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+            <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding RelayCommand}" CommandParameter="FileScan"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
                 <Grid MinWidth="240">
                     <Grid.ColumnDefinitions>
@@ -89,13 +89,53 @@
                 </Grid>
             </Button>
 
-            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,25,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}"
+            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,25,0,0"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="Padding" Value="0,0,0,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Bd" CornerRadius="3" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="true"/>
+                                                <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                        </MultiTrigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                </ListBox.Resources>
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
-                                cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
-                                Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                Command="{Binding DataContext.ProcessDriveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Tag}"
+                                Margin="2,0,0,10" Padding="8" HorizontalAlignment="Left" 
                                 Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseDisc}">
                             <StackPanel Orientation="Horizontal" MinWidth="240">
                                 <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Disc.png'}" Width="32" />
@@ -124,7 +164,8 @@
                                    TextAlignment="Center"
                                    Text="{x:Static Properties:Resources.SourceSelection_UpdateAvailable}" />
 
-                        <Button Content="{x:Static Properties:Resources.SourceSelection_UpdateNow}" Margin="0,5,0,0" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" HorizontalAlignment="Center" />
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_UpdateNow}" Margin="0,5,0,0" 
+                                Command="{Binding RelayCommand}" CommandParameter="CheckForUpdates" HorizontalAlignment="Center" />
                     </StackPanel>
                
                 </Grid>
@@ -145,14 +186,15 @@
                                    TextAlignment="Center"
                                    Text="{x:Static Properties:Resources.SourceSelection_NightlyUpdate}" />
 
-                        <Button Content="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" Margin="0,5,0,0" cal:Message.Attach="[Event Click] = [Action NightlyUpdate]" HorizontalAlignment="Center" />
+                        <Button Content="{x:Static Properties:Resources.SourceSelection_NightlyUpdateUrl}" Margin="0,5,0,0" 
+                                Command="{Binding RelayCommand}" CommandParameter="NightlyUpdate" HorizontalAlignment="Center" />
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
-                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="{x:Static Properties:Resources.Generic_Cancel}" IsCancel="True"  Padding="8,2" />
+                <Button  Command="{Binding RelayCommand}" CommandParameter="CloseSourceSelection" Content="{x:Static Properties:Resources.Generic_Cancel}" IsCancel="True"  Padding="8,2" />
             </StackPanel>
 
             <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">

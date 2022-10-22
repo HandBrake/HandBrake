@@ -9,11 +9,9 @@
 
 namespace HandBrake.Interop.Interop.Json.Presets
 {
+    using System;
     using System.Collections.Generic;
 
-    /// <summary>
-    ///     The preset.
-    /// </summary>
     public class HBPreset
     {
         public bool AlignAVStart { get; set; }
@@ -91,7 +89,13 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// <summary>
         /// Gets or sets a value indicating whether picture auto crop.
         /// </summary>
+        [Obsolete("Use PictureCropMode instead. Use only for parsing legacy presets.")]
         public bool PictureAutoCrop { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether picture loose crop.
+        /// </summary>
+        public int PictureCropMode { get; set; }
 
         /// <summary>
         /// Gets or sets the picture bottom crop.
@@ -206,11 +210,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// Gets or sets a value indicating whether picture keep ratio.
         /// </summary>
         public bool PictureKeepRatio { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether picture loose crop.
-        /// </summary>
-        public bool PictureLooseCrop { get; set; }
 
         /// <summary>
         /// Gets or sets the picture par.

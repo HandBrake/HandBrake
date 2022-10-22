@@ -16,25 +16,22 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
-
-    using Caliburn.Micro;
 
     using HandBrake.App.Core.Exceptions;
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.DebugTools;
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
@@ -58,12 +55,19 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.SelectedItems = new BindingList<QueueTask>();
             this.SelectedItems.ListChanged += this.SelectedItems_ListChanged;
-            this.DisplayName = "Queue";
             this.IsQueueRunning = false;
             this.SelectedTabIndex = 0;
 
             this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
+
+            this.WhenDoneCommand = new SimpleRelayCommand<int>(this.WhenDone);
+            this.RetryCommand = new SimpleRelayCommand<QueueTask>(this.RetryJob);
+            this.EditCommand = new SimpleRelayCommand<QueueTask>(this.EditJob);
         }
+
+        public SimpleRelayCommand<QueueTask> EditCommand { get; set; }
+        public SimpleRelayCommand<QueueTask> RetryCommand { get; set; }
+        public SimpleRelayCommand<int> WhenDoneCommand { get; }
 
         public ICommand QueueExtractResultDataCommand => new QueueExtractResultDataCommand(this, this.errorService);
 
@@ -182,7 +186,7 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, action);
             }
 
-            IOptionsViewModel ovm = IoC.Get<IOptionsViewModel>();
+            IOptionsViewModel ovm = IoCHelper.Get<IOptionsViewModel>();
             ovm.UpdateSettings();
         }
 
@@ -203,7 +207,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         public override void OnLoad()
@@ -329,6 +333,16 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void RetrySelectedJob()
+        {
+            if (!CanRetryJob)
+            {
+                return;
+            }
+
+            this.RetryJob(this.SelectedTask);
+        }
+
         public void RetryJob(QueueTask task)
         {
             this.queueProcessor.RetryJob(task);
@@ -422,6 +436,16 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void EditSelectedJob()
+        {
+            if (!CanEditJob)
+            {
+                return;
+            }
+
+            this.EditJob(this.SelectedTask);
+        }
+
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
@@ -439,7 +463,7 @@ namespace HandBrakeWPF.ViewModels
             this.RemoveJob(task);
 
             // Pass a copy of the job back to the Main Screen
-            IMainViewModel mvm = IoC.Get<IMainViewModel>();
+            IMainViewModel mvm = IoCHelper.Get<IMainViewModel>();
             mvm.EditQueueJob(task);
         }
 
@@ -529,17 +553,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.MoveToBottom(this.SelectedItems);
         }
 
-        public void Activate()
-        {
-           this.OnActivateAsync(CancellationToken.None);
-        }
-
-        public void Deactivate()
-        {
-           this.OnDeactivateAsync(false, CancellationToken.None);
-        }
-
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        public override void Activate()
         {
             this.Load();
 
@@ -550,18 +564,18 @@ namespace HandBrakeWPF.ViewModels
 
             this.IsQueueRunning = this.queueProcessor.IsProcessing;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            
-            return base.OnActivateAsync(cancellationToken);
+
+            base.Activate();
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        public override void Deactivate()
         {
             this.queueProcessor.QueueCompleted -= this.QueueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
 
-            return base.OnDeactivateAsync(close, cancellationToken);
+            base.Deactivate();
         }
 
         private void OpenDirectory(string directory)

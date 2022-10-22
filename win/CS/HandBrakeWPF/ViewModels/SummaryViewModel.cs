@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.ExceptionServices;
     using System.Text;
     using System.Windows.Media.Imaging;
 
@@ -720,7 +719,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
         }
 
-        [HandleProcessCorruptedStateExceptions]
         private void UpdatePreviewFrame()
         {
             // Don't preview for small images.

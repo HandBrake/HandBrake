@@ -11,8 +11,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
 
     using HandBrakeWPF.Model.Audio;
@@ -23,7 +21,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     public class ManagePresetViewModel : ViewModelBase, IManagePresetViewModel
@@ -231,7 +228,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void Close()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         private void SetSelectedPictureSettingsResLimitMode()

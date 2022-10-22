@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
@@ -26,7 +24,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     /// <summary>
     /// The Audio View Model
@@ -70,6 +70,8 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.PassthruEncoders = data;
+
+            this.RemoveTrackCommand = new SimpleRelayCommand<AudioBehaviourTrack>(this.RemoveTrack, null);
         }
 
         #region Properties
@@ -155,6 +157,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
             }
         }
+
+        public SimpleRelayCommand<AudioBehaviourTrack> RemoveTrackCommand { get; }
 
         #endregion
 
@@ -319,7 +323,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AudioBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
                 this.AudioBehaviours.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
-                this.audioBehaviours.AllowedPassthruOptions = behaviours.AllowedPassthruOptions;
+                this.AudioBehaviours.AllowedPassthruOptions = behaviours.AllowedPassthruOptions;
+                this.AudioBehaviours.AudioFallbackEncoder = behaviours.AudioFallbackEncoder;
 
                 foreach (var encoder in this.PassthruEncoders)
                 {
@@ -371,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
         public bool ShowWindow()
         {
             this.IsApplied = false;
-            this.windowManager.ShowDialogAsync(this);
+            this.windowManager.ShowDialog<AudioDefaultsView>(this);
 
             return this.IsApplied;
         }
@@ -379,6 +384,7 @@ namespace HandBrakeWPF.ViewModels
         public void Cancel()
         {
             this.IsApplied = false;
+            this.TryClose();
         }
 
         public void Save()
@@ -386,7 +392,7 @@ namespace HandBrakeWPF.ViewModels
             this.audioBehaviours.AllowedPassthruOptions =
                 this.PassthruEncoders.Where(s => s.IsEnabled).Select(s => s.Encoder).ToList();
             this.IsApplied = true;
-            this.TryCloseAsync(false);
+            this.TryClose(true);
         }
 
         private void CorrectAudioEncoders(OutputFormat outputFormat)

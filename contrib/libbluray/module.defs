@@ -1,22 +1,19 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libbluray-1.3.0.tar.bz2
-LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.3.0/libbluray-1.3.0.tar.bz2
-LIBBLURAY.FETCH.sha256  = e2dbaf99e84e0a9725f4985bcb85d41e52c2261cc651d8884b1b790b5ef016f9
+LIBBLURAY.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libbluray-1.3.3.tar.bz2
+LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.3.3/libbluray-1.3.3.tar.bz2
+LIBBLURAY.FETCH.sha256  = 58ff52cdcee64c55dcc3c777a1c39fb41abd951b927978e4d2b6811b9193a488
 
 ifeq (none,$(LIBBLURAY.GCC.O))
 	LIBBLURAY.CONFIGURE.extra += --disable-optimizations
 endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
+LIBBLURAY.CONFIGURE.extra += --without-external-libudfread
 
 ifeq (mingw,$(HOST.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
-endif
-
-ifeq (freebsd,$(HOST.system))
-    LIBBLURAY.GCC.D += _XOPEN_SOURCE=700
 endif
 
 ifneq (none,$(FFMPEG.GCC.g))

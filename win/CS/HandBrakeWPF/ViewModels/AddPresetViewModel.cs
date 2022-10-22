@@ -12,10 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Windows;
-
-    using Caliburn.Micro;
 
     using HandBrake.App.Core.Utilities;
 
@@ -28,9 +25,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-    using HandBrakeWPF.Views;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
@@ -120,7 +115,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.canAddNewPresetCategory = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.CanAddNewPresetCategory);
             }
         }
 
@@ -272,12 +267,12 @@ namespace HandBrakeWPF.ViewModels
 
         public void Cancel()
         {
-            this.TryCloseAsync(false);
+            this.TryClose();
         }
 
         private void Close()
         {
-            this.TryCloseAsync(true);
+            this.TryClose(true);
         }
 
         private void SetSelectedPictureSettingsResLimitMode()

@@ -554,51 +554,66 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x3FFFFFFF
-#define HB_VCODEC_INVALID      0x0000000
-#define HB_VCODEC_THEORA       0x0000002
-#define HB_VCODEC_FFMPEG_MPEG4 0x0000010
-#define HB_VCODEC_FFMPEG_MPEG2 0x0000020
-#define HB_VCODEC_FFMPEG_VP8   0x0000040
-#define HB_VCODEC_FFMPEG_VP9   0x0000080
-#define HB_VCODEC_FFMPEG_VCE_H264 0x00040000
-#define HB_VCODEC_FFMPEG_VCE_H265 0x00080000
-#define HB_VCODEC_FFMPEG_NVENC_H264 0x00100000
-#define HB_VCODEC_FFMPEG_NVENC_H265 0x00200000
-#define HB_VCODEC_FFMPEG_NVENC_H265_10BIT 0x0000004
-#define HB_VCODEC_VT_H264       0x00400000
-#define HB_VCODEC_VT_H265       0x00800000
-#define HB_VCODEC_VT_H265_10BIT 0x01000000
-#define HB_VCODEC_VT_MASK       0x01C00000
-#define HB_VCODEC_FFMPEG_MF_H264 0x02000000
-#define HB_VCODEC_FFMPEG_MF_H265 0x04000000
-#define HB_VCODEC_FFMPEG_MASK  (0x00000F0|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_MF_H264|HB_VCODEC_FFMPEG_MF_H265|HB_VCODEC_FFMPEG_NVENC_H265_10BIT|HB_VCODEC_FFMPEG_SVT_AV1|HB_VCODEC_FFMPEG_SVT_AV1_10BIT)
-#define HB_VCODEC_QSV_H264     0x0000100
-#define HB_VCODEC_QSV_H265_8BIT     0x0000200
-#define HB_VCODEC_QSV_H265_10BIT    0x0000400
-#define HB_VCODEC_QSV_H265_MASK     0x0000600
-#define HB_VCODEC_QSV_H265     HB_VCODEC_QSV_H265_8BIT
-#define HB_VCODEC_QSV_AV1_8BIT  0x0000800
-#define HB_VCODEC_QSV_AV1_10BIT 0x08000000
-#define HB_VCODEC_QSV_AV1      HB_VCODEC_QSV_AV1_8BIT
-#define HB_VCODEC_QSV_MASK     (0x8000F00)
-#define HB_VCODEC_X264_8BIT    0x0010000
-#define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
-#define HB_VCODEC_X264_10BIT   0x0020000
-#define HB_VCODEC_X264_MASK    0x0030000
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264|HB_VCODEC_FFMPEG_VCE_H264|HB_VCODEC_FFMPEG_NVENC_H264|HB_VCODEC_VT_H264|HB_VCODEC_FFMPEG_MF_H264)
-#define HB_VCODEC_X265_8BIT    0x0001000
-#define HB_VCODEC_X265         HB_VCODEC_X265_8BIT
-#define HB_VCODEC_X265_10BIT   0x0002000
-#define HB_VCODEC_X265_12BIT   0x0004000
-#define HB_VCODEC_X265_16BIT   0x0008000
-#define HB_VCODEC_X265_MASK    0x000F000
-#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK|HB_VCODEC_FFMPEG_VCE_H265|HB_VCODEC_FFMPEG_NVENC_H265|HB_VCODEC_FFMPEG_VT_H265|HB_VCODEC_FFMPEG_VT_H265_10BIT|HB_VCODEC_FFMPEG_MF_H265|HB_VCODEC_FFMPEG_NVENC_H265_10BIT)
-#define HB_VCODEC_FFMPEG_SVT_AV1_8BIT    0x10000000
-#define HB_VCODEC_FFMPEG_SVT_AV1        HB_VCODEC_FFMPEG_SVT_AV1_8BIT
-#define HB_VCODEC_FFMPEG_SVT_AV1_10BIT   0x20000000
-#define HB_VCODEC_FFMPEG_SVT_AV1_MASK    0x30000000
-#define HB_VCODEC_AV1_MASK    (HB_VCODEC_FFMPEG_SVT_AV1_MASK|HB_VCODEC_QSV_MASK)
+#define HB_VCODEC_INVALID            0x00000000
+
+#define HB_VCODEC_AV1_MASK           0x40000000
+#define HB_VCODEC_H264_MASK          0x20000000
+#define HB_VCODEC_H265_MASK          0x10000000
+
+#define HB_VCODEC_SVT_AV1_MASK      (0x00800000 | HB_VCODEC_AV1_MASK | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_X264_MASK         (0x00400000 | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_X265_MASK         (0x00200000 | HB_VCODEC_H265_MASK)
+
+#define HB_VCODEC_VT_MASK            0x00080000
+#define HB_VCODEC_QSV_MASK           0x00040000
+#define HB_VCODEC_FFMPEG_MASK        0x00010000
+
+#define HB_VCODEC_THEORA             0x00000001
+
+#define HB_VCODEC_X264_8BIT         (0x00000002 | HB_VCODEC_X264_MASK)
+#define HB_VCODEC_X264              HB_VCODEC_X264_8BIT
+#define HB_VCODEC_X264_10BIT        (0x00000003 | HB_VCODEC_X264_MASK)
+
+#define HB_VCODEC_X265_8BIT         (0x00000004 | HB_VCODEC_X265_MASK)
+#define HB_VCODEC_X265              HB_VCODEC_X265_8BIT
+#define HB_VCODEC_X265_10BIT        (0x00000005 | HB_VCODEC_X265_MASK)
+#define HB_VCODEC_X265_12BIT        (0x00000006 | HB_VCODEC_X265_MASK)
+#define HB_VCODEC_X265_16BIT        (0x00000007 | HB_VCODEC_X265_MASK)
+
+#define HB_VCODEC_FFMPEG_MPEG4      (0x00000008 | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_MPEG2      (0x00000009 | HB_VCODEC_FFMPEG_MASK)
+
+#define HB_VCODEC_FFMPEG_VP8        (0x0000000A | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_VP9        (0x0000000B | HB_VCODEC_FFMPEG_MASK)
+#define HB_VCODEC_FFMPEG_VP9_10BIT  (0x0000000C | HB_VCODEC_FFMPEG_MASK)
+
+#define HB_VCODEC_FFMPEG_VCE_H264           (0x0000000D | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_VCE_H265           (0x0000000E | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_VCE_H265_10BIT     (0x0000000F | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+
+#define HB_VCODEC_FFMPEG_MF_H264    (0x00000020 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_MF_H265    (0x00000021 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+
+#define HB_VCODEC_FFMPEG_NVENC_H264         (0x00000030 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_FFMPEG_NVENC_H265         (0x00000031 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_FFMPEG_NVENC_H265_10BIT   (0x00000032 | HB_VCODEC_FFMPEG_MASK | HB_VCODEC_H265_MASK)
+
+#define HB_VCODEC_FFMPEG_SVT_AV1_8BIT       (0x00000041 | HB_VCODEC_SVT_AV1_MASK)
+#define HB_VCODEC_FFMPEG_SVT_AV1            HB_VCODEC_FFMPEG_SVT_AV1_8BIT
+#define HB_VCODEC_FFMPEG_SVT_AV1_10BIT      (0x00000042 | HB_VCODEC_SVT_AV1_MASK)
+
+#define HB_VCODEC_VT_H264           (0x00000050 | HB_VCODEC_VT_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_VT_H265           (0x00000051 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_VT_H265_10BIT     (0x00000052 | HB_VCODEC_VT_MASK | HB_VCODEC_H265_MASK)
+
+#define HB_VCODEC_QSV_H264          (0x00000060 | HB_VCODEC_QSV_MASK | HB_VCODEC_H264_MASK)
+#define HB_VCODEC_QSV_H265_8BIT     (0x00000061 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_QSV_H265_10BIT    (0x00000062 | HB_VCODEC_QSV_MASK | HB_VCODEC_H265_MASK)
+#define HB_VCODEC_QSV_H265          HB_VCODEC_QSV_H265_8BIT
+
+#define HB_VCODEC_QSV_AV1_8BIT      (0x00000070 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_QSV_AV1_10BIT     (0x00000071 | HB_VCODEC_QSV_MASK | HB_VCODEC_AV1_MASK)
+#define HB_VCODEC_QSV_AV1           HB_VCODEC_QSV_AV1_8BIT
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -780,6 +795,8 @@ struct hb_job_s
         } enc_info;
     } qsv;
 
+    int hw_decode;
+
 #ifdef __LIBHB__
     /* Internal data */
     hb_handle_t   * h;
@@ -804,6 +821,12 @@ struct hb_job_s
     int64_t         reader_pts_offset; // Reader can discard some video.
                                        // Other pipeline stages need to know
                                        // this.  E.g. sync and decsrtsub
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_device_ctx;
+    } nv_hw_ctx;
 #endif
 };
 
@@ -1111,7 +1134,6 @@ struct hb_metadata_s
     hb_list_t * list_coverart;
 };
 
-// Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_title_s.cs when changing this struct
 struct hb_title_s
 {
     enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
@@ -1147,6 +1169,8 @@ struct hb_title_s
     hb_content_light_metadata_t     coll;
     hb_rational_t   vrate;
     int             crop[4];
+    int             loose_crop[4];
+
     enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
     int             detected_interlacing;
     int             pcr_pid;                /* PCR PID for TS streams */
@@ -1164,6 +1188,7 @@ struct hb_title_s
     int           video_decode_support;
 #define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
 #define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_NVDEC 0x04 // Nvidia Nvdec
 
     hb_metadata_t * metadata;
 
@@ -1364,6 +1389,12 @@ typedef struct hb_filter_init_s
     int             cfr;
     int             grayscale;
     hb_rational_t   time_base;
+#if HB_PROJECT_FEATURE_NVENC
+    struct
+    {
+        void *hw_frames_ctx;
+    } nv_hw_ctx;
+#endif
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s

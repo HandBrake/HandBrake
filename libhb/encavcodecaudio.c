@@ -173,13 +173,16 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             return 1;
         }
     }
+
+    AVChannelLayout ch_layout = {0};
+    av_channel_layout_from_mask(&ch_layout, channel_layout);
+
     // allocate the context and apply the settings
     context                      = avcodec_alloc_context3(codec);
     hb_ff_set_sample_fmt(context, codec, sample_fmt);
     context->bits_per_raw_sample = bits_per_raw_sample;
     context->profile             = profile;
-    context->channel_layout      = channel_layout;
-    context->channels            = pv->out_discrete_channels;
+    context->ch_layout           = ch_layout;
     context->sample_rate         = audio->config.out.samplerate;
     context->time_base           = (AVRational){1, 90000};
 
@@ -231,7 +234,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     pv->context           = context;
     audio->config.out.samples_per_frame =
     pv->samples_per_frame = context->frame_size;
-    pv->input_samples     = context->frame_size * context->channels;
+    pv->input_samples     = context->frame_size * context->ch_layout.nb_channels;
     pv->input_buf         = malloc(pv->input_samples * sizeof(float));
     // Some encoders in libav (e.g. fdk-aac) fail if the output buffer
     // size is not some minimum value.  8K seems to be enough :(
@@ -254,9 +257,9 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         av_opt_set_int(pv->swresample, "out_sample_fmt",
                        context->sample_fmt, 0);
         av_opt_set_int(pv->swresample, "in_channel_layout",
-                       context->channel_layout, 0);
+                       context->ch_layout.u.mask, 0);
         av_opt_set_int(pv->swresample, "out_channel_layout",
-                       context->channel_layout, 0);
+                       context->ch_layout.u.mask, 0);
         av_opt_set_int(pv->swresample, "in_sample_rate",
                        context->sample_rate, 0);
         av_opt_set_int(pv->swresample, "out_sample_rate",
@@ -420,15 +423,15 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
         int     out_size;
         AVFrame frame = { .nb_samples = pv->samples_per_frame,
                           .format = pv->context->sample_fmt,
-                          .channels = pv->context->channels
+                          .ch_layout = pv->context->ch_layout
         };
 
         out_size = av_samples_get_buffer_size(NULL,
-                                              pv->context->channels,
+                                              pv->context->ch_layout.nb_channels,
                                               pv->samples_per_frame,
                                               pv->context->sample_fmt, 1);
         avcodec_fill_audio_frame(&frame,
-                                 pv->context->channels, pv->context->sample_fmt,
+                                 pv->context->ch_layout.nb_channels, pv->context->sample_fmt,
                                  pv->output_buf, out_size, 1);
         if (pv->swresample != NULL)
         {

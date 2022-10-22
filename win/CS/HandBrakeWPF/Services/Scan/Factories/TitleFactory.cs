@@ -38,6 +38,13 @@ namespace HandBrakeWPF.Services.Scan.Factories
                     Left = title.Crop[2],
                     Right = title.Crop[3]
                 },
+                LooseCropDimensions = new Cropping()
+                {
+                    Top = title.LooseCrop[0],
+                    Bottom = title.LooseCrop[1],
+                    Left = title.LooseCrop[2],
+                    Right = title.LooseCrop[3]
+                },
                 Fps = ((double)title.FrameRate.Num) / title.FrameRate.Den,
                 SourceName = title.Path,
                 MainTitle = mainFeature == title.Index,

@@ -1,0 +1,17 @@
+# LOCALBASE is where OpenBSD ports are installed. default is '/usr/local'.
+LOCALBASE  ?= /usr/local
+X11BASE    ?= /usr/X11R6
+
+TARGET.dylib.ext = .so
+
+GCC.args.dylib = -shared
+GCC.args.pic   = 1
+
+GCC.args.g.none = -g0
+GCC.args.g.min  = -g1
+GCC.args.g.std  = -g2
+GCC.args.g.max  = -g3
+
+GCC.MAJOR_VERSION = $(shell $(GCC.gcc) -dumpversion | cut -f 1 -d .)
+GCC.LDFLAGS =
+LDFLAGS += $(if $(findstring gcc, $(GCC.gcc)), $(GCC.LDFLAGS), )

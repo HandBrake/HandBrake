@@ -19,17 +19,19 @@
 
 static void FUNC(init_crop_table)(void **crop_table_out, const int max_value)
 {
-    const int max = max_value + 1;
-    pixel *crop_table = calloc((2048 + max), sizeof(pixel));
+    const int central_part_size = max_value + 1;
+    const int table_size = central_part_size + 2048;
 
-    for (int i = 0; i < max; i++)
+    pixel *crop_table = calloc(table_size, sizeof(pixel));
+
+    for (int i = 0; i < central_part_size; i++)
     {
         crop_table[i + 1024] = i;
     }
 
-    for (int i = max + 1024; i < max + 2048; i++)
+    for (int i = central_part_size + 1024; i < table_size; i++)
     {
-        crop_table[i] = max;
+        crop_table[i] = max_value;
     }
 
     *crop_table_out = crop_table;

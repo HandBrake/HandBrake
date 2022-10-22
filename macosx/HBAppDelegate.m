@@ -74,6 +74,11 @@
 
 #pragma mark - NSApplicationDelegate
 
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+    return YES;
+}
+
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
     if (!flag)
@@ -181,7 +186,6 @@
 - (void)application:(NSApplication *)sender openURLs:(nonnull NSArray<NSURL *> *)urls
 {
     [self.mainController openURL:urls.firstObject];
-    //[NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem

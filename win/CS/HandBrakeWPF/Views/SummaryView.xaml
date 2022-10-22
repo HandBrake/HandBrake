@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
-             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
 
@@ -138,23 +137,19 @@
                         <ColumnDefinition Width="42" />
                     </Grid.ColumnDefinitions>
                     
-                    <Border BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]"
+                    <Border x:Name="previous" BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" MouseDown="Previous_OnMouseDown"
                             Visibility="{Binding IsPreviousPreviewControlVisible,Converter={StaticResource boolToVisConverter}}"
                             Background="Black" Opacity="0.5" Margin="0,0,0,0" >
                         <TextBlock Text="&lt;" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="16,1" Margin="0,0,0,4" />
                     </Border>
 
-                    <Border BorderThickness="1,1,1,1" CornerRadius="0,4,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action NextPreview]"
+                    <Border x:Name="next" BorderThickness="1,1,1,1" CornerRadius="0,4,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" MouseDown="Next_OnMouseDown"
                             Background="Black" Opacity="0.5" Margin="0,0,0,0" 
                             Visibility="{Binding IsNextPreviewControlVisible,Converter={StaticResource boolToVisConverter}}" >
                         <TextBlock Text="&gt;" FontSize="16" Foreground="White" Padding="16,1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,4" />
                     </Border>
-
                 </Grid>
-
-
             </Grid>
         </Grid>
-
     </Grid>
 </UserControl>

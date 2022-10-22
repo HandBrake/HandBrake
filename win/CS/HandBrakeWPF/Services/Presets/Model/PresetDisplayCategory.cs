@@ -10,8 +10,8 @@
 namespace HandBrakeWPF.Services.Presets.Model
 {
     using System.ComponentModel;
-    using Caliburn.Micro;
     using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrakeWPF.ViewModels;
 
     public class PresetDisplayCategory : PropertyChangedBase, IPresetObject
     {

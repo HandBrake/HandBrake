@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.ManagePresetView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,7 +16,6 @@
         mc:Ignorable="d">
 
     <Window.Resources>
-        <Converters:ThemeImageConverter x:Key="themeConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <picture:ResolutionLimitConverter x:Key="resolutionLimitConverter" />
     </Window.Resources>
@@ -50,9 +48,9 @@
             <!--<StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,0,0" HorizontalAlignment="Stretch" >
 
                 <Button Content="Set Default" Margin="0,0,5,0" Visibility="{Binding Preset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
-                            cal:Message.Attach="[Event Click] = [Action SetCurrentPresetAsDefault]" />
+                            Command="{Binding RelayCommand}" CommandParameter="SetCurrentPresetAsDefault" />
 
-                <Button AutomationProperties.Name="{x:Static Properties:Resources.PresetManagerView_Delete}" cal:Message.Attach="[Event Click] = [Action DeletePreset]" 
+                <Button AutomationProperties.Name="{x:Static Properties:Resources.PresetManagerView_Delete}" Command="{Binding RelayCommand}" CommandParameter="DeletePreset" 
                             Visibility="{Binding Preset.IsDefault, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
@@ -148,11 +146,11 @@
 
                 <TextBlock Text="Audio:" Grid.Row="6" VerticalAlignment="Center" Margin="0,15,0,0" Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
                 <Button Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="8,2"
-                    cal:Message.Attach="[Event Click] = [Action EditAudioDefaults]"  Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
+                    Command="{Binding RelayCommand}" CommandParameter="EditAudioDefaults"  Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"  />
 
                 <TextBlock Text="Subtitles:" Grid.Row="7" VerticalAlignment="Center" Margin="0,5,0,0" Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                 <Button Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
-                    cal:Message.Attach="[Event Click] = [Action EditSubtitleDefaults]" Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    Command="{Binding RelayCommand}" CommandParameter="EditSubtitleDefaults" Visibility="{Binding Preset.IsBuildIn, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
             </Grid>
 
@@ -171,13 +169,13 @@
 
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Cancel]"
+                    Command="{Binding RelayCommand}" CommandParameter="Cancel"
                     Content="{x:Static Properties:Resources.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Save]"
+                    Command="{Binding RelayCommand}" CommandParameter="Save"
                     Content="{x:Static Properties:Resources.Generic_Save}"
                     IsDefault="True"
                     Padding="8,2" />

@@ -8,7 +8,7 @@
  */
 
 #include <stdarg.h>
-
+#include "libavutil/avutil.h"
 #include "handbrake/handbrake.h"
 #include "handbrake/hb_dict.h"
 #include "handbrake/encx264.h"

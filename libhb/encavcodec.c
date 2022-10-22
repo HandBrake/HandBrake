@@ -1,6 +1,7 @@
 /* encavcodec.c
 
    Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -142,6 +143,22 @@ static const enum AVPixelFormat h26x_mf_pix_fmts[] =
     AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
 };
 
+static const enum AVPixelFormat nvenc_pix_formats_10bit[] =
+{
+     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat nvenc_pix_formats[] =
+{
+     AV_PIX_FMT_YUV420P, AV_PIX_FMT_NV12, AV_PIX_FMT_NONE
+};
+
+static const enum AVPixelFormat vce_pix_formats_10bit[] =
+{
+     AV_PIX_FMT_P010, AV_PIX_FMT_NONE
+};
+
+
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
@@ -217,6 +234,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     codec_name = "hevc_nvenc";
                     break;
                 case HB_VCODEC_FFMPEG_VCE_H265:
+                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
                     codec_name = "hevc_amf";
                     break;
@@ -252,7 +270,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         ret = 1;
         goto done;
     }
-    context = avcodec_alloc_context3( codec );
+
+    context = avcodec_alloc_context3(codec);
 
     // Set things in context that we will allow the user to
     // override with advanced settings.
@@ -311,7 +330,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->framerate     = fps;
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
-    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265))
+    if ((job->vcodec == HB_VCODEC_FFMPEG_VCE_H264) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265) || (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT))
     {
         // Set encoder preset
         context->profile = FF_PROFILE_UNKNOWN;
@@ -358,8 +377,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "multipass", "fullres", 0 );
             hb_log( "encavcodec: encoding at rc=vbr, multipass=fullres, Bitrate %d", job->vbitrate );
         }
-        
-        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+
+        if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
         {
             av_dict_set( &av_opts, "rc", "vbr_peak", 0 );
 
@@ -368,7 +387,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->gop_size = (int)(FFMIN(av_q2d(fps) * 2, 120));
 
             //Work around an ffmpeg issue mentioned in issue #3447
-            if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+            if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
             {
                av_dict_set( &av_opts, "qmin",  "0", 0 );
                av_dict_set( &av_opts, "qmax", "51", 0 );
@@ -477,7 +496,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "qp_b", qualityB, 0 );
             hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
         }
-        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
         {
             char  *vce_h265_max_au_size_char,
                    vce_h265_q_char[4];
@@ -847,7 +866,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->pix_fmt   = job->output_pix_fmt;
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_nvdec_is_enabled(pv->job))
+    {
+        context->hw_device_ctx = pv->job->nv_hw_ctx.hw_device_ctx;
+        hb_nvdec_hwframes_ctx_init(context, job);
+    }
+    else
+    {
+        context->pix_fmt = job->output_pix_fmt;
+    }
+#else
+    context->pix_fmt = job->output_pix_fmt;
+#endif
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
@@ -907,7 +938,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
         // Set profile and level
         context->profile = FF_PROFILE_UNKNOWN;
@@ -962,7 +993,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     // Make VCE h.265 encoder emit an IDR for every GOP
-    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265_10BIT)
     {
         av_dict_set(&av_opts, "gops_per_idr", "1", 0);
     }
@@ -1329,7 +1360,20 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     frame.pts = pv->frameno_in++;
 
     // Encode
+#if HB_PROJECT_FEATURE_NVENC
+    if (in->hw_ctx.frame)
+    {
+        AVFrame *p_frame = in->hw_ctx.frame;
+        av_frame_copy_props(p_frame, &frame);
+        ret = avcodec_send_frame(pv->context, p_frame);
+    }
+    else
+    {
+        ret = avcodec_send_frame(pv->context, &frame);
+    }
+#else
     ret = avcodec_send_frame(pv->context, &frame);
+#endif
     if (ret < 0)
     {
         hb_log("encavcodec: avcodec_send_frame failed");
@@ -1475,6 +1519,12 @@ static int apply_svt_av1_options(hb_job_t *job, AVCodecContext *context, AVDicti
         }
     }
 
+    if (hb_dict_get(opts, "compressed-ten-bit-format"))
+    {
+        hb_log("apply_svt_av1_options [warning]: compressed-ten-bit-format is not supported, disabling");
+        hb_dict_remove(opts, "compressed-ten-bit-format");
+    }
+
     char *param_str = hb_value_get_string_xform(opts);
     av_dict_set(av_opts, "svtav1-params", param_str, 0);
     free(param_str);
@@ -1596,6 +1646,13 @@ static int apply_vp9_preset(AVDictionary ** av_opts, const char * preset)
     return apply_vpx_preset(av_opts, preset);
 }
 
+static int apply_vp9_10bit_preset(AVDictionary ** av_opts, const char * preset)
+{
+    av_dict_set(av_opts, "row-mt", "1", 0);
+    av_dict_set(av_opts, "profile", "2", 0);
+    return apply_vpx_preset(av_opts, preset);
+}
+
 static int apply_av1_preset(AVDictionary ** av_opts, const char * preset)
 {
     if (preset == NULL)
@@ -1619,6 +1676,8 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
             return apply_vp8_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_VP9:
             return apply_vp9_preset(av_opts, preset);
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
+            return apply_vp9_10bit_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_SVT_AV1:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return apply_av1_preset(av_opts, preset);
@@ -1644,10 +1703,12 @@ const char* const* hb_av_preset_get_names(int encoder)
     {
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
             return vpx_preset_names;
 
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
             return hb_vce_preset_names;
 
         case HB_VCODEC_FFMPEG_NVENC_H264:
@@ -1712,6 +1773,17 @@ const int* hb_av_get_pix_fmts(int encoder)
         case HB_VCODEC_FFMPEG_MF_H265:
             return h26x_mf_pix_fmts;
 
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+            return nvenc_pix_formats;
+
+        case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
+            return nvenc_pix_formats_10bit;
+
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
+            return vce_pix_formats_10bit;
+
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
         case HB_VCODEC_FFMPEG_SVT_AV1_10BIT:
             return standard_10bit_pix_fmts;
 

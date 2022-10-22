@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.CountdownAlertView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="When Done Action" MinHeight="130" MinWidth="400" WindowStartupLocation="CenterScreen" WindowStyle="None" Topmost="True"
         ShowActivated="True" ShowInTaskbar="True" SizeToContent="WidthAndHeight">
@@ -18,10 +17,10 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,10,5" HorizontalAlignment="Right">
             <Button Content="{x:Static Properties:Resources.CountdownAlterView_Proceed}"  HorizontalAlignment="Right"
-                cal:Message.Attach="[Event Click] = [Action Proceed]" Padding="8,2" Margin="0,10,10,5"/>
+                Command="{Binding RelayCommand}" CommandParameter="Proceed" Padding="8,2" Margin="0,10,10,5"/>
 
             <Button Content="{x:Static Properties:Resources.CountdownAlterView_CancelAction}"  HorizontalAlignment="Right" Margin="0,10,10,5"
-                cal:Message.Attach="[Event Click] = [Action Cancel]" Padding="8,2" IsDefault="True" />
+                Command="{Binding RelayCommand}" CommandParameter="Cancel" Padding="8,2" IsDefault="True" />
         </StackPanel>
 
     </Grid>

@@ -11,8 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;

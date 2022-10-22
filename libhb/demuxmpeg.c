@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "libavutil/avutil.h"
 #include "handbrake/handbrake.h"
 
 static inline int check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )

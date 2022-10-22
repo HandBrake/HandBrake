@@ -853,6 +853,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string CropMode_Auto {
+            get {
+                return ResourceManager.GetString("CropMode_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string CropMode_Custom {
+            get {
+                return ResourceManager.GetString("CropMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conservative.
+        /// </summary>
+        public static string CropMode_Loose {
+            get {
+                return ResourceManager.GetString("CropMode_Loose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string CropMode_None {
+            get {
+                return ResourceManager.GetString("CropMode_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Dark.
         /// </summary>
         public static string DarkTheme_dark {
@@ -3215,6 +3251,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hardware Support.
+        /// </summary>
+        public static string Options_Hardware {
+            get {
+                return ResourceManager.GetString("Options_Hardware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging.
         /// </summary>
         public static string Options_Logging {
@@ -3720,6 +3765,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prefer use of Nvidia NVDec for decoding video when using the NVEnc encoder and the hardware is available for use..
+        /// </summary>
+        public static string OptionsView_EnableNvDecSupport {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableNvDecSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow use of the Nvidia NVENC Encoders.
         /// </summary>
         public static string OptionsView_EnableNvencEncoding {
@@ -3756,7 +3810,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allow use of the AMD VCE Encoders.
+        ///   Looks up a localized string similar to Allow use of the AMD VCN Encoders.
         /// </summary>
         public static string OptionsView_EnableVceEncoding {
             get {

@@ -25,19 +25,13 @@
 #include <kernel/OS.h>
 #endif
 
-#if defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD)
+#if defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #if HB_PROJECT_FEATURE_QSV && defined(SYS_FREEBSD)
 #include <libdrm/drm.h>
 #include <fcntl.h>
 #endif
-#endif
-
-#ifdef SYS_OPENBSD
-#include <sys/param.h>
-#include <sys/sysctl.h>
-#include <machine/cpu.h>
 #endif
 
 #ifdef SYS_MINGW
@@ -79,10 +73,6 @@
 #if HB_PROJECT_FEATURE_QSV
 #include <libdrm/drm.h>
 #endif
-#elif defined( SYS_OPENBSD )
-#include <sys/dvdio.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
 #endif
 
 #ifdef __APPLE__
@@ -222,7 +212,8 @@ void hb_snooze( int delay )
     }
 #if defined( SYS_BEOS )
     snooze( 1000 * delay );
-#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || defined(SYS_NETBSD) || defined( SYS_SunOS )
+#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || \
+      defined(SYS_NETBSD) || defined(SYS_OPENBSD) || defined( SYS_SunOS )
     usleep( 1000 * delay );
 #elif defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     Sleep( delay );
@@ -289,6 +280,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Ice Lake";
         case HB_CPU_PLATFORM_INTEL_TGL:
             return "Intel microarchitecture Tiger Lake";
+        case HB_CPU_PLATFORM_INTEL_ADL:
+            return "Intel microarchitecture Alder Lake performance hybrid architecture";
         default:
             return NULL;
     }
@@ -327,7 +320,7 @@ static void init_cpu_info()
         family = ((eax >> 8) & 0xf) + ((eax >> 20) & 0xff);
         model  = ((eax >> 4) & 0xf) + ((eax >> 12) & 0xf0);
 
-        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 4/January 2019
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 4/April 2022
         // Table 2-1. CPUID Signature Values of DisplayFamily_DisplayModel
         switch (family)
         {
@@ -390,6 +383,10 @@ static void init_cpu_info()
                     case 0x8C:
                     case 0x8D:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_TGL;
+                        break;
+                    case 0x97:
+                    case 0x9A:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_ADL;
                         break;
                     default:
                         break;
@@ -464,7 +461,11 @@ static int init_cpu_count()
 #elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_NETBSD) || defined(SYS_OPENBSD)
     size_t length = sizeof( cpu_count );
 #if defined SYS_OPENBSD || defined(SYS_NETBSD)
+#ifdef HW_NCPUONLINE
+    int mib[2] = { CTL_HW, HW_NCPUONLINE };
+#else
     int mib[2] = { CTL_HW, HW_NCPU };
+#endif
     if( sysctl(mib, 2, &cpu_count, &length, NULL, 0) )
 #else
     if( sysctlbyname("hw.ncpu", &cpu_count, &length, NULL, 0) )
@@ -876,7 +877,9 @@ static void attribute_align_thread hb_thread_func( void * _t )
 {
     hb_thread_t * t = (hb_thread_t *) _t;
 
-#if (defined( SYS_DARWIN ) && !defined(__aarch64__)) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
+#if (defined( SYS_DARWIN ) && !defined(__aarch64__)) || defined( SYS_FREEBSD ) || \
+    defined ( __FreeBSD__ ) || defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || \
+    defined ( __OpenBSD__ )
     /* Set the thread priority
        Do not change priority on Darwin arm systems */
     struct sched_param param;
@@ -1024,7 +1027,8 @@ hb_lock_t * hb_lock_init()
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined(SYS_NETBSD)
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || \
+    defined(SYS_NETBSD) || defined( SYS_OPENBSD ) || defined ( __OpenBSD__ )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 

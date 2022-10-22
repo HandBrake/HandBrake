@@ -12,8 +12,7 @@ namespace HandBrakeWPF.Commands
     using System;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -47,7 +46,7 @@ namespace HandBrakeWPF.Commands
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(object parameter)
         {
-            IMainViewModel mvm = IoC.Get<IMainViewModel>();
+            IMainViewModel mvm = IoCHelper.Get<IMainViewModel>();
             mvm.PresetSelect(this.preset);
         }
 

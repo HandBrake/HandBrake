@@ -14,16 +14,15 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     /// <summary>
     /// The Subtitles View Model
@@ -120,7 +119,7 @@ namespace HandBrakeWPF.ViewModels
             private set
             {
                 this.availableLanguages = value;
-                this.NotifyOfPropertyChange("AvailableLanguages");
+                this.NotifyOfPropertyChange(() => this.AvailableLanguages);
             }
         }
 
@@ -251,7 +250,7 @@ namespace HandBrakeWPF.ViewModels
         public bool ShowWindow()
         {
             this.IsApplied = false;
-            this.windowManager.ShowDialogAsync(this);
+            this.windowManager.ShowDialog<SubtitlesDefaultsView>(this);
 
             return this.IsApplied;
         }
@@ -259,12 +258,13 @@ namespace HandBrakeWPF.ViewModels
         public void Cancel()
         {
             this.IsApplied = false;
+            this.TryClose();
         }
 
         public void Save()
         {
             this.IsApplied = true;
-            this.TryCloseAsync(false);
+            this.TryClose();
         }
     }
 }

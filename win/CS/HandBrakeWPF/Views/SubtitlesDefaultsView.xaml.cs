@@ -11,19 +11,11 @@ namespace HandBrakeWPF.Views
 {
     using System.Windows;
 
-    using HandBrakeWPF.ViewModels;
-
     public partial class SubtitlesDefaultsView : Window
     {
         public SubtitlesDefaultsView()
         {
             this.InitializeComponent();
-        }
-
-        private void Apply_OnClick(object sender, RoutedEventArgs e)
-        {
-            ((SubtitlesDefaultsViewModel)DataContext).IsApplied = true;
-            this.Close();
         }
     }
 }

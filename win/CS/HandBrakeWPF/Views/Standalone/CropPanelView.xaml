@@ -1,12 +1,12 @@
 ﻿ <UserControl x:Class="HandBrakeWPF.Views.Standalone.CropPanelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
+              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+              xmlns:picture="clr-namespace:HandBrakeWPF.Converters.Picture">
 
     <UserControl.Resources>
-        <Converters:BooleanConverter x:Key="boolConverter" />
+        <picture:CropModeConverter x:Key="cropModeConverter" />
         <Style TargetType="controls:NumberBox">
             <Setter Property="Height" Value="24" />
         </Style>
@@ -49,10 +49,9 @@
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White"  />
 
             <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" >
-                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}" Margin="0,0,0,0" Foreground="White" />
-                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,0,0,0"
-                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_ManualCrop}"  Foreground="White"  />
+                <ComboBox Width="110" ItemsSource="{Binding CropModes, Converter={StaticResource cropModeConverter}}" SelectedItem="{Binding SelectedCropMode, Converter={StaticResource cropModeConverter}}" HorizontalAlignment="Left" 
+                          ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}"
+                          AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Cropping}" />
             </StackPanel>
 
 

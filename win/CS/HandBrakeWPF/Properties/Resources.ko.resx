@@ -185,7 +185,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>에러</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본 설정에서 기본 경로를 설정해야 합니다.</value>
+    <value>대기열에 추가하기 전에 자동 파일 이름 지정을 켜고 기본설정에서 기본 경로를 설정해야 합니다.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>경고</value>
@@ -200,9 +200,9 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA라고 적으�
     <value>HandBrake는 이미 인코딩 중 입니다.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.
- 
-You may wish to configure the automatic file naming options in "Tools Menu -&gt; Preferences -&gt; Output Files"
+    <value>대상 경로가 동일한 작업이 대기열에 있습니다. 이 작업에 대해 다른 경로를 선택하십시오.
+
+"도구 메뉴 -&gt; 기본설정 -&gt; 출력 파일"에서 자동 파일 이름 지정 옵션을 구성할 수 있습니다.
 </value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
@@ -371,7 +371,7 @@ You may wish to configure the automatic file naming options in "Tools Menu -&gt;
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
     <value>HandBrake는 인코딩할 제목을 가진 올바른 소스를 찾지 못했기 때문에 선택한 소스를 인코딩할 수 없습니다. 다음 이유 중 하나가 원인일 수 있습니다.
 
-- 각 소스 제목의 재생 시간은 '기본 설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
+- 각 소스 제목의 재생 시간은 '기본설정 &gt; 고급'의 "최소 제목 재생 시간" 임계값 옵션보다 낮습니다.
 - 소스 파일이 유효한 비디오 파일이 아니거나 HandBrake가 지원하지 않는 형식입니다.
 - 파일에 대한 읽기 권한이 없거나 다른 응용 프로그램에서 파일을 잠글 수 있습니다.
 - 소스가 복사 방지되거나 DRM을 포함할 수 있습니다. HandBrake는 복사 방지 제거를 지원하지 않습니다.
@@ -563,7 +563,7 @@ HandBrake를 종료하시겠습니까?</value>
 해당 프리셋 파일은 다음 경로에 보관되어 있습니다:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>{0} 오류 또는 취소가 감지된 경우</value>
+    <value>{0}개의 오류가 감지되었습니다. 자세한 내용은 대기열 창을 확인하십시오.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>디스크 공간 부족</value>
@@ -629,7 +629,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>변경한 모든 설정은 다음 HandBrake를 시작할 때 재설정해야 적용할 수 있습니다.</value>
   </data>
   <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
-    <value>설정을 저장하려고 할 때 문제가 발생하였습니다.</value>
+    <value>사용자의 기본설정을 저장하는 동안 문제가 발생했습니다.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
     <value>경고, 설정이 재설정되었습니다!</value>
@@ -644,7 +644,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>사용자 설정 파일이 접근할 수 없거나 손상된 것 같습니다. 파일을 삭제하거나 HandBrake에서 새로운 파일을 생성할 수 있습니다.</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>사용자가 고른 출력 디렉토리는 존재하지 않거나, 해당 디렉토리에 파일을 쓸 수 있는 권한이 없습니다.</value>
+    <value>사용자가 고른 출력 디렉터리는 존재하지 않거나, 해당 디렉터리에 파일을 쓸 수 있는 권한이 없습니다.</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
     <value>폴더를 생성하시겠습니까?</value>
@@ -654,10 +654,10 @@ HandBrake를 종료하시겠습니까?</value>
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>대상 디렉토리를 시작할 수 없습니다.</value>
+    <value>대상 디렉터리를 시작할 수 없습니다.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>올바른 대상 디렉토리가 있는지 확인하십시오.</value>
+    <value>올바른 대상 디렉터리가 있는지 확인하십시오.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
     <value>{1}의 {0} 통과를 진행 중, (자막 스캔) {2:00.00}%, 남은 스캔 시간: {3}, 경과 시간: {4}</value>
@@ -673,7 +673,7 @@ HandBrake를 종료하시겠습니까?</value>
 남은 시간: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 기본 설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
+    <value>대기열이 일시중지되었습니다. 경고, 인코딩하는 드라이브의 디스크 공간이 부족합니다. 여유 공간을 확보한 후 시작을 눌러 계속하십시오. 또한 기본설정에서 최소 공간 수준을 조정할 수 있습니다.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>대기열 일시중지됨</value>
@@ -682,7 +682,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>대기열 일시중지됨</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>경로 디렉토리의 디스크 공간이 부족합니다.
+    <value>경로 디렉터리의 디스크 공간이 부족합니다.
 
 이 경고가 기본설정에 표시되는 수준을 구성할 수 있습니다.
 
@@ -936,7 +936,7 @@ HandBrake를 종료하시겠습니까?</value>
     <value>인코딩 로그</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>활동 로그 디렉토리 열기</value>
+    <value>활동 로그 디렉터리 열기</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
     <value>스캔 로그</value>
@@ -1294,7 +1294,7 @@ HandBrake를 종료하시겠습니까?</value>
 VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있지만 검증되지 않았습니다.</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>로그 디렉토리 보기</value>
+    <value>로그 디렉터리 보기</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
     <value>완료 시</value>
@@ -1426,10 +1426,10 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>로그 오프</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>대상 디렉토리 열기</value>
+    <value>대상 디렉터리 열기</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>원본 파일 디렉토리 열기</value>
+    <value>원본 파일 디렉터리 열기</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
     <value>옵션</value>
@@ -1711,7 +1711,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>도움말</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>기본 설정</value>
+    <value>기본설정</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>트랙 추가</value>
@@ -1759,7 +1759,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>파일에서 가져오기(_I)</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>기본 설정(_P)</value>
+    <value>기본설정(_P)</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
     <value>프리셋(_P)</value>
@@ -1786,7 +1786,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>업데이트 확인 ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>로그 파일 디렉토리를 지우시겠습니까?</value>
+    <value>로그 파일 디렉터리를 지우시겠습니까?</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
     <value>로그 지우기</value>
@@ -1861,13 +1861,13 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>선택한 항목 삭제</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.</value>
+    <value>포터블 모드: TMP 디렉터리를 만들 수 없습니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.</value>
+    <value>포터블 모드: 저장소 디렉터리를 만들 수 없습니다. 경로가 올바르고 쓰기 가능한지 확인하십시오.</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>휴대용 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
+    <value>포터블 모드: portable.ini 를 읽을 수 없습니다. 해당 파일에 오류가 있을 수 있습니다. portable.ini.template 를 이용하여 다시 시도하십시오.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>대체 자리표시자: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
@@ -2143,7 +2143,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
-    <value>새로운 버전의 HandBrake를 이용하실 수 있습니다!</value>
+    <value>새 버전을 사용할 수 있습니다!</value>
   </data>
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright (C) 2003-2022 The HandBrake Team</value>
@@ -2331,7 +2331,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>디스크 공간 부족 경고가 표시하는 수준:</value>
   </data>
   <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
-    <value>참고: 이것은 동시 작업의 상한입니다. 하드웨어 제한이 적용되어 인코딩 중에 실제 동시 작업 수가 감소할 수 있습니다.</value>
+    <value>주의: 이 값은 동시 작업의 상한입니다. 인코딩 중 실제 동시 작업 수를 줄이는 하드웨어 제한이 적용될 수 있습니다. 설정은 다음 대기열 일괄 처리 또는 앱 재시작 시에만 적용됩니다.</value>
   </data>
   <data name="Preset_NotAvailable" xml:space="preserve">
     <value>(사용할 수 없음)</value>
@@ -2442,7 +2442,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>파일 검색기 대화 상자에서 오류가 감지되었습니다.
 
 - 긴 파일 경로는 완전히 지원되지 않습니다. 파일 경로를 255자 미만으로 유지하십시오.
-- 다음에 파일을 검색하려고 할 때 오류가 발생하지 않도록 이 창에 마지막으로 사용된 디렉토리가 재설정되었습니다.</value>
+- 다음에 파일을 검색하려고 할 때 오류가 발생하지 않도록 이 창에 마지막으로 사용된 디렉터리가 재설정되었습니다.</value>
   </data>
   <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
     <value>최대 높이:</value>
@@ -2462,7 +2462,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
   <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
     <value>HandBrake가 업데이트를 자동으로 확인하도록 하시겠습니까?
 
-기본 설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
+기본설정 -&gt; 일반 -&gt; 업데이트 확인에서 옵션을 변경하여 언제든지 선택 사항을 변경할 수 있습니다.</value>
   </data>
   <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
     <value>업데이트를 확인하시겠습니까?</value>
@@ -2588,7 +2588,7 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>다시 만들기 (자동 이름 생성)</value>
   </data>
   <data name="MainView_OpenDirectory" xml:space="preserve">
-    <value>해당 디렉토리 열기</value>
+    <value>해당 디렉터리 열기</value>
   </data>
   <data name="Shared_CollapseAll" xml:space="preserve">
     <value>모두 닫기</value>
@@ -2643,15 +2643,29 @@ VLC 및 MPC-HC가 지원됩니다. 다른 재생기들도 작업을 할 수 있�
     <value>HandBrake를 다시 시작하십시오.</value>
   </data>
   <data name="Debug_QueueDataExport" xml:space="preserve">
-    <value>Export Queue Statistics Data (csv)</value>
+    <value>대기열 통계 데이터 내보내기 (csv)</value>
   </data>
   <data name="Debug_QueueExportDataDone" xml:space="preserve">
-    <value>Export Done!</value>
+    <value>내보내기 완료!</value>
   </data>
   <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
-    <value>You must first scan a source and have an initial destination directory set</value>
+    <value>먼저 소스를 검색하고 초기 대상 디렉터리를 설정해야 합니다</value>
   </data>
   <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
-    <value>Only when file already exists on disk.</value>
+    <value>파일이 디스크에 이미 있는 경우에만 해당됩니다.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>자막 트랙이 추가되지 않았습니다.
+
+선택한 파일 컨테이너의 제한 때문일 수 있습니다. 자세한 내용은 자막 도움말 문서를 참조하십시오.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>지금 업데이트하세요!</value>
   </data>
 </root>

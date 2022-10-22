@@ -16,14 +16,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.Linq;
     using System.Text.Json.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     public class AudioTrack : PropertyChangedBase
     {
@@ -93,34 +92,37 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, IList<HBAudioEncoder> passthruEncoders, HBAudioEncoder fallbackEncoder, OutputFormat container)
         {
-            HBAudioEncoder chosenEncoder = track.Encoder;
-            if (track.IsPassthru && (sourceTrack.Codec & chosenEncoder.Id) == 0)
+            HBAudioEncoder validatedEncoder = track.Encoder;
+            if (track.IsPassthru)
             {
-                chosenEncoder = fallbackEncoder;
-            }
+                int format = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(container)).Id;
+                int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(passthruEncoders ?? new List<HBAudioEncoder>()));
 
-            if (track.IsPassthru && chosenEncoder.ShortName == HBAudioEncoder.Passthru)
-            {
-                if (passthruEncoders != null)
+                if (track.IsAutoPassthru)
                 {
-                    int format = HandBrakeEncoderHelpers.GetContainer(EnumHelper<OutputFormat>.GetShortName(container)).Id;
-                    int copyMask = checked((int)HandBrakeEncoderHelpers.BuildCopyMask(passthruEncoders));
-              
-                    HBAudioEncoder autoPassthruEncoderOption = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoder.Id, format);
-                    chosenEncoder = autoPassthruEncoderOption;
+                    validatedEncoder = HandBrakeEncoderHelpers.GetAutoPassthruEncoder(sourceTrack.Codec, copyMask, fallbackEncoder.Id, format);
+                }
+                else
+                {
+                    validatedEncoder = HandBrakeEncoderHelpers.GetPassthruFallback(track.Encoder.Id);
+
+                    if (validatedEncoder == null)
+                    {
+                        validatedEncoder = fallbackEncoder; // Last Resort.
+                    }
                 }
             }
-
+            
             this.scannedTrack = sourceTrack;
             this.drc = track.DRC;
-            this.encoder = chosenEncoder;
+            this.encoder = validatedEncoder;
             this.gain = track.Gain;
             this.mixDown = track.MixDown != null ? track.MixDown.ShortName : "dpl2";
 
             // If the mixdown isn't supported, downgrade it.
-            if (track.IsPassthru && track.MixDown != null && chosenEncoder != null && !HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, chosenEncoder, sourceTrack.ChannelLayout))
+            if (track.IsPassthru && track.MixDown != null && validatedEncoder != null && !HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, validatedEncoder, sourceTrack.ChannelLayout))
             {
-                HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(chosenEncoder, (ulong)sourceTrack.ChannelLayout);
+                HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(validatedEncoder, (ulong)sourceTrack.ChannelLayout);
                 if (changedMixdown != null)
                 {
                     this.mixDown = changedMixdown.ShortName;
@@ -299,7 +301,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             {
                 if (value == this.trackName) return;
                 this.trackName = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.TrackName);
             }
         }
 

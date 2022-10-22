@@ -5,7 +5,7 @@
 
 Before updating HandBrake, please make sure there are no pending encodes in the queue, and be sure to make a backup of any custom presets and app preferences you have, as they may not be compatible with newer versions.
 
-Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
+Windows users, please make sure to install [Microsoft .NET Desktop Runtime version 6.0.x](https://dotnet.microsoft.com/en-us/download/dotnet/6.0). Read carefully: you need the **DESKTOP** runtime.
 
 ## HandBrake 1.6.0
 
@@ -14,20 +14,25 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Video
 - Added AV1 encoder using SVT-AV1
 - Added support for H.264 levels 6, 6.1 and 6.2
+- Added support for 4:2:2/4:4:4 profiles in x264 and x265 encoders
+- Added support for 10-bit VP9 encoder
 
 #### Filters
+- Switched to zscale(zimg) for video scaling with automatic fallback to swscale when required. Should improve performace for ARM based systems
+- Improved Autocrop algorithm which will improve accuracy with mixed aspect ratio content
 - Small performance improvement on high core count systems for comb detect, decomb and nlmeans
-- The following filters have been upgraded to support higher than 8-bit content
-  - Deinterlace
+- The following filters have been upgraded to support higher than 8-bit content and 4:2:2/4:4:4 chroma subsampling
+  - Detelecine
   - Comb Detect
   - Decomb
   - Grayscale
   - Denoise 
+    - NLMeans
     - hqdn3d
+  - Chroma Smooth
   - Sharpen
     - UnSharp
     - LapSharp
-  - Chroma Smooth
 - The following new filters were added:  
   - Deinterlace
     - Bwidf
@@ -35,30 +40,51 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 #### Hardware Encoding
 - Added support for QuickSync AV1 Encoder
 - Added support for QuickSync HyperEncode
-- Removed support for Intel CPU's older than 6th generation (Skylake) when using Intel QuickSync. 
-- Added support for NVEnc 10-bit HEVC NVEnc encoder.
+- Removed support for older Intel CPUs. The minimum requirement is now at least 6th generation (Skylake) when using Intel QuickSync. 
+- Added support for NVEnc 10-bit HEVC encoder.
+- Added support for AMD VCE 10-bit HEVC encoder.
+- Added support for VideoToolbox HEVC 4:2:2 profile on Apple Silicon.
 - Fixed a long standing issue with NVEnc slowest preset causing failed encodes. 
+
+#### Build system
+
+- Added support for OpenBSD (must compile from source)
+
 
 #### Third-party libraries
 
 - Updated libraries
-  - FFmpeg 5.0.1 (decoding and filters)
+  - AMF 1.4.24 (AMD VCN encoding)
+  - FFmpeg 5.1.2 (decoding and filters)
   - FreeType 2.12.1 (subtitles)
   - Fribidi 1.0.12 (subtitles)
-  - HarfBuzz 4.2.1 (subtitles)
+  - HarfBuzz 4.4.1 (subtitles)
   - libass 0.16.0 (subtitles)
-  - oneVPL 2022.1.2 (Intel QuickSync Support)
+  - libbluray 1.3.3 (Blu-ray decoding)
   - libdav1d 1.0.0 (AV1 decoding)
+  - libdvdread 6.1.3 (DVD decoding)
+  - liblzma (xz) 5.2.6 (LZMA video decoding, e.g. TIFF)
+  - libjpeg-turbo 2.1.4 (preview image compression)
+  - libspeex 1.2.1  (Speex audio decoding)
+  - libvpx 1.12.0  (VP8/VP9 video encoding)
+  - oneVPL 2022.1.2 (Intel QuickSync Support)
+  - x264 164 r3100 (H.264/AVC video encoding)
+  - zimg 3.0.4 (color conversion)
+- New libraries
+  - SVT-AV1 1.2.1 (AV1 encoding)
 
 ### Linux
 - Miscellaneous bug fixes and improvements
+- Updated translations
 
 ### Mac
+- QuickLook support in the Queue
 - Miscellaneous bug fixes and improvements
+- Updated translations
 
 ### Windows
 - Miscellaneous bug fixes and improvements
-
+- Updated translations
 
 
 ## HandBrake 1.5.0
@@ -152,7 +178,7 @@ Windows users, please make sure to install [Microsoft .NET Desktop Runtime versi
 - Added a stop breakpoint to the queue, set when stop after job is selected and may be reordered (#2572)
 - Added support for Windows 10/11 notifications, enable in Preferences > When Done
 - Added support for Right to Left UI rendering for languages that require it. This can be set in preferences
-- Added Traditional Chinese (正體中文) translation
+- Added Traditional Chinese (正體中文) and Polish (Polski) translations
 - Updated translations
   - Simplified Chinese (简体中文) - includes fix for access keys in menus
   - Corsican (Corsu)

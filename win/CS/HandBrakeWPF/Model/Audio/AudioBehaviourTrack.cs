@@ -15,14 +15,13 @@ namespace HandBrakeWPF.Model.Audio
     using System.Linq;
     using System.Text.Json.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
 
+    using HandBrakeWPF.ViewModels;
+
     using Services.Encode.Model.Models;
-    using Utilities;
 
     /// <summary>
     /// Model of a HandBrake Audio Track and it's associated behaviours.
@@ -343,6 +342,8 @@ namespace HandBrakeWPF.Model.Audio
             }
         }
 
+        public bool IsAutoPassthru => this.Encoder != null && this.Encoder.IsAutoPassthru;
+        
         /// <summary>
         /// Gets the bitrates.
         /// </summary>
@@ -593,9 +594,19 @@ namespace HandBrakeWPF.Model.Audio
             BindingList<HBMixdown> mixdownList = new BindingList<HBMixdown>();
             foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
             {
-                if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder) || this.IsPassthru) // Show only supported, or all for passthru.
+                if (this.IsPassthru)
                 {
-                    mixdownList.Add(mixdown);
+                    if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, this.fallbackEncoder)) 
+                    {
+                        mixdownList.Add(mixdown);
+                    }
+                }
+                else
+                {
+                    if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder)) // Show only supported, or all for passthru.
+                    {
+                        mixdownList.Add(mixdown);
+                    }
                 }
             }
 

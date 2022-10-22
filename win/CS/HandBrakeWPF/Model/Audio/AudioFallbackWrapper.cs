@@ -5,9 +5,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace HandBrakeWPF.Model.Audio
 {
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+
+    using HandBrakeWPF.ViewModels;
 
     public class AudioFallbackWrapper : PropertyChangedBase
     {

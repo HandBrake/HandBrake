@@ -13,10 +13,10 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
+
+    using HandBrakeWPF.ViewModels;
 
     public class AudioBehaviours : PropertyChangedBase
     {

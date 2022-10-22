@@ -13,8 +13,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
     using System.ComponentModel;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
@@ -24,7 +22,7 @@ namespace HandBrakeWPF.ViewModelItems.Filters
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModels;
 
     using Action = System.Action;
 
