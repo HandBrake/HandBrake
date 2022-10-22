@@ -14,8 +14,7 @@ namespace HandBrakeWPF.Controls
     using System.Windows.Input;
     using System.Windows.Media;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels;
@@ -26,7 +25,7 @@ namespace HandBrakeWPF.Controls
 
         static PresetPaneControl()
         {
-            presetService = IoC.Get<IPresetService>();
+            presetService = IoCHelper.Get<IPresetService>();
         }
 
         public PresetPaneControl()

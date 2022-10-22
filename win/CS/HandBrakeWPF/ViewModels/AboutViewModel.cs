@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -27,7 +26,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public AboutViewModel()
         {
-            this.Title = "About HandBrake";
         }
 
         /// <summary>
@@ -44,14 +42,6 @@ namespace HandBrakeWPF.ViewModels
         public string License
         {
             get => string.Format("{0}{1}{1}{2}", Resources.About_Copyright, Environment.NewLine, Resources.About_GPL);
-        }
-
-        /// <summary>
-        /// Close this window.
-        /// </summary>
-        public void Close()
-        {
-            this.TryCloseAsync();
         }
     }
 }

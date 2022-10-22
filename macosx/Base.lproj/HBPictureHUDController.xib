@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21223" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21223"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button toolTip="Encode and play a preview video using current settings." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
-                    <rect key="frame" x="15" y="10" width="73" height="16"/>
+                    <rect key="frame" x="14" y="10" width="73" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ir9-qd-gak"/>
                     </constraints>
@@ -38,7 +38,7 @@
                     </connections>
                 </button>
                 <button toolTip="Show cropping settings" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
-                    <rect key="frame" x="407" y="10" width="54" height="16"/>
+                    <rect key="frame" x="408" y="10" width="54" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="xea-W9-xGB"/>
                     </constraints>
@@ -51,7 +51,7 @@
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5T3-Vx-mC1">
-                    <rect key="frame" x="101" y="14" width="48" height="11"/>
+                    <rect key="frame" x="100" y="15" width="48" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="wtS-2b-Ijm"/>
                     </constraints>
@@ -62,7 +62,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vrm-He-CjP">
-                    <rect key="frame" x="203" y="14" width="21" height="11"/>
+                    <rect key="frame" x="202" y="15" width="21" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="17" id="88j-t5-f6t"/>
                     </constraints>
@@ -73,7 +73,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton toolTip="Duration to encode in seconds." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
-                    <rect key="frame" x="149" y="10" width="55" height="16"/>
+                    <rect key="frame" x="148" y="11" width="55" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="JLd-YP-qt1"/>
                     </constraints>
@@ -92,7 +92,7 @@
                     </connections>
                 </popUpButton>
                 <slider toolTip="Starting point for the preview encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wUk-SQ-GhS">
-                    <rect key="frame" x="12" y="34" width="452" height="17"/>
+                    <rect key="frame" x="14" y="34" width="448" height="17"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="9" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="dPk-jb-w9o">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
@@ -102,7 +102,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="426" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-KN-I1h">
-                    <rect key="frame" x="15" y="50" width="446" height="20"/>
+                    <rect key="frame" x="14" y="50" width="448" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Wqt-oa-eQj"/>
                     </constraints>
@@ -113,7 +113,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="7UR-Zz-7iX">
-                    <rect key="frame" x="15" y="72" width="446" height="12"/>
+                    <rect key="frame" x="14" y="72" width="448" height="12"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" id="CeL-Pu-NS6">
                         <font key="font" metaFont="miniSystemBold"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -121,7 +121,7 @@
                     </textFieldCell>
                 </textField>
                 <button toolTip="Scale preview to fill the display." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
-                    <rect key="frame" x="314" y="10" width="89" height="16"/>
+                    <rect key="frame" x="315" y="10" width="89" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="N0p-GD-cNh"/>
                     </constraints>
@@ -135,31 +135,34 @@
                 </button>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="7UR-Zz-7iX" secondAttribute="trailing" constant="16" id="0Wf-Fb-RTk"/>
                 <constraint firstItem="5T3-Vx-mC1" firstAttribute="firstBaseline" secondItem="16b-R9-bBU" secondAttribute="firstBaseline" id="1zX-eR-aGy"/>
-                <constraint firstAttribute="trailing" secondItem="MkW-KN-I1h" secondAttribute="trailing" constant="17" id="51b-ga-cex"/>
-                <constraint firstItem="16b-R9-bBU" firstAttribute="top" secondItem="wUk-SQ-GhS" secondAttribute="bottom" constant="11" id="GV8-xv-F3F"/>
-                <constraint firstItem="7UR-Zz-7iX" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="JPF-0p-EcT"/>
+                <constraint firstAttribute="bottom" secondItem="mV7-hU-tMt" secondAttribute="bottom" constant="12" id="3Aa-It-qOg"/>
+                <constraint firstItem="7UR-Zz-7iX" firstAttribute="top" secondItem="agq-EJ-miM" secondAttribute="top" constant="12" id="IeE-C6-C22"/>
                 <constraint firstItem="mV7-hU-tMt" firstAttribute="leading" secondItem="12K-c3-Z7A" secondAttribute="trailing" constant="8" symbolic="YES" id="Kuw-QY-Ctl"/>
                 <constraint firstItem="MkW-KN-I1h" firstAttribute="top" secondItem="7UR-Zz-7iX" secondAttribute="bottom" constant="2" id="LMS-rl-nxL"/>
-                <constraint firstAttribute="trailing" secondItem="wUk-SQ-GhS" secondAttribute="trailing" constant="17" id="Nwp-nu-Nm6"/>
+                <constraint firstItem="wUk-SQ-GhS" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="16" id="LsD-96-eM0"/>
                 <constraint firstItem="5T3-Vx-mC1" firstAttribute="leading" secondItem="16b-R9-bBU" secondAttribute="trailing" constant="17" id="NyV-CH-jxk"/>
+                <constraint firstItem="MkW-KN-I1h" firstAttribute="top" secondItem="7UR-Zz-7iX" secondAttribute="bottom" constant="2" id="OAk-1w-1so"/>
+                <constraint firstItem="7UR-Zz-7iX" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="16" id="PuS-mz-Pcg"/>
+                <constraint firstAttribute="trailing" secondItem="mV7-hU-tMt" secondAttribute="trailing" constant="16" id="QHQ-ca-Wiq"/>
                 <constraint firstItem="5T3-Vx-mC1" firstAttribute="firstBaseline" secondItem="ASA-X8-16P" secondAttribute="firstBaseline" id="VW0-yQ-ZHQ"/>
+                <constraint firstItem="MkW-KN-I1h" firstAttribute="top" secondItem="7UR-Zz-7iX" secondAttribute="bottom" constant="2" id="Vdz-nb-5GM"/>
                 <constraint firstItem="ASA-X8-16P" firstAttribute="firstBaseline" secondItem="Vrm-He-CjP" secondAttribute="firstBaseline" id="de5-l2-64W"/>
                 <constraint firstItem="Vrm-He-CjP" firstAttribute="leading" secondItem="ASA-X8-16P" secondAttribute="trailing" constant="4" id="efc-p5-b0P"/>
-                <constraint firstAttribute="trailing" secondItem="mV7-hU-tMt" secondAttribute="trailing" constant="17" id="fdl-Gj-YwQ"/>
-                <constraint firstAttribute="bottom" secondItem="16b-R9-bBU" secondAttribute="bottom" constant="12" id="j44-j4-IY0"/>
+                <constraint firstAttribute="bottom" secondItem="16b-R9-bBU" secondAttribute="bottom" constant="12" id="hKH-Co-ezT"/>
                 <constraint firstItem="12K-c3-Z7A" firstAttribute="firstBaseline" secondItem="mV7-hU-tMt" secondAttribute="firstBaseline" id="keF-Yc-6WX"/>
+                <constraint firstAttribute="trailing" secondItem="wUk-SQ-GhS" secondAttribute="trailing" constant="16" id="n9K-Or-fZr"/>
+                <constraint firstAttribute="trailing" secondItem="MkW-KN-I1h" secondAttribute="trailing" constant="16" id="nQP-nz-a64"/>
                 <constraint firstItem="Vrm-He-CjP" firstAttribute="firstBaseline" secondItem="12K-c3-Z7A" secondAttribute="firstBaseline" id="pXi-kt-bgj"/>
                 <constraint firstItem="ASA-X8-16P" firstAttribute="leading" secondItem="5T3-Vx-mC1" secondAttribute="trailing" constant="4" id="sa0-fe-7P6"/>
-                <constraint firstItem="wUk-SQ-GhS" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="uUN-j3-4DW"/>
-                <constraint firstItem="MkW-KN-I1h" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="uwg-uf-WcV"/>
-                <constraint firstAttribute="trailing" secondItem="7UR-Zz-7iX" secondAttribute="trailing" constant="17" id="uxH-la-pju"/>
                 <constraint firstItem="wUk-SQ-GhS" firstAttribute="top" secondItem="MkW-KN-I1h" secondAttribute="bottom" constant="1" id="vrZ-g3-L7M"/>
-                <constraint firstItem="7UR-Zz-7iX" firstAttribute="top" secondItem="agq-EJ-miM" secondAttribute="top" constant="12" id="xhY-i7-Q2v"/>
+                <constraint firstItem="MkW-KN-I1h" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="16" id="wet-qf-RQ4"/>
+                <constraint firstItem="wUk-SQ-GhS" firstAttribute="top" secondItem="MkW-KN-I1h" secondAttribute="bottom" constant="1" id="xe9-C6-vAB"/>
+                <constraint firstItem="16b-R9-bBU" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="16" id="y7S-h0-UcP"/>
                 <constraint firstItem="12K-c3-Z7A" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Vrm-He-CjP" secondAttribute="trailing" constant="8" symbolic="YES" id="ybz-88-aqy"/>
-                <constraint firstItem="16b-R9-bBU" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="zmJ-qN-Z7W"/>
             </constraints>
-            <point key="canvasLocation" x="15" y="106"/>
+            <point key="canvasLocation" x="182" y="47"/>
         </customView>
     </objects>
 </document>

@@ -14,8 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces.Model.Encoders;
     using HandBrake.Interop.Utilities;
@@ -63,7 +61,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.AudioEncoders = HandBrakeEncoderHelpers.AudioEncoders.ToList();
             this.SourceTracks = new List<Audio>();
+            this.RemoveCommand = new SimpleRelayCommand<AudioTrack>(this.Remove);
         }
+
+        public SimpleRelayCommand<AudioTrack> RemoveCommand { get; set; }
 
         #endregion
 
@@ -167,8 +168,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void RefreshTask(OutputFormat format)
         {
-            this.NotifyOfPropertyChange(() => this.Task); // Trigger UI Refresh
-
             if (format == OutputFormat.Mp4)
             {
                 foreach (AudioTrack track in this.Task.AudioTracks)
@@ -190,6 +189,8 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
             }
+
+            this.NotifyOfPropertyChange(() => this.Task); // Trigger UI Refresh
 
             this.AudioDefaultsViewModel.RefreshTask(format);
         }

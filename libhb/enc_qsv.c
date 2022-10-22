@@ -102,7 +102,6 @@ struct hb_work_private_s
     // if encode-only, system memory used
     int                  is_sys_mem;
     mfxSession           mfx_session;
-    struct SwsContext  * sws_context_to_nv12;
 
     // whether to expect input from VPP or from QSV decode
     int                  is_vpp_present;
@@ -508,13 +507,12 @@ unsupported:
     pv->param.codingOption2.BRefType = MFX_B_REF_OFF;
 }
 
-static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
+static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session, const mfxVideoParam *videoParam)
 {
     size_t len;
     int ret = 0;
     uint8_t *buf, *end;
     mfxBitstream bitstream;
-    hb_buffer_t *bitstream_buf;
     mfxStatus status;
     mfxSyncPoint syncPoint;
     mfxFrameSurface1 frameSurface1;
@@ -524,26 +522,25 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     memset(&syncPoint,     0, sizeof(mfxSyncPoint));
     memset(&frameSurface1, 0, sizeof(mfxFrameSurface1));
 
-    /* The bitstream buffer should be able to hold any encoded frame */
-    bitstream_buf = hb_video_buffer_init(pv->job->width, pv->job->height);
-    if (bitstream_buf == NULL)
+    if (videoParam == NULL)
     {
-        hb_log("qsv_hevc_make_header: hb_buffer_init failed");
+        hb_log("qsv_hevc_make_header: videoParam is NULL");
+        ret = -1;
+        goto end;
+    }
+    /* The bitstream buffer should be able to hold any encoded frame */
+    size_t buf_max_size = videoParam->mfx.BufferSizeInKB * 1000 * ( 0 == videoParam->mfx.BRCParamMultiplier ? 1 : videoParam->mfx.BRCParamMultiplier);
+    bitstream.Data      = av_mallocz(sizeof(uint8_t) * buf_max_size);
+    bitstream.MaxLength = buf_max_size;
+    if (bitstream.Data == NULL)
+    {
+        hb_log("qsv_hevc_make_header: bitstream.Data allocation failed");
         ret = -1;
         goto end;
     }
 
-    /* need more space for 10bits */
-    if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010 ||
-        (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC || pv->param.videoParam->mfx.CodecId == MFX_CODEC_AV1))
-    {
-         hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
-    }
-    int bpp12 = (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010) ? 6 : 3;
-    bitstream.Data      = bitstream_buf->data;
-    bitstream.MaxLength = bitstream_buf->alloc;
-
     /* We only need to encode one frame, so we only need one surface */
+    int bpp12                = (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010) ? 6 : 3;
     mfxU16 Height            = pv->param.videoParam->mfx.FrameInfo.Height;
     mfxU16 Width             = pv->param.videoParam->mfx.FrameInfo.Width;
     frameSurface1.Info       = pv->param.videoParam->mfx.FrameInfo;
@@ -679,7 +676,8 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     }
 
 end:
-    hb_buffer_close(&bitstream_buf);
+    if (bitstream.Data)
+        av_free(bitstream.Data);
     av_free(frameSurface1.Data.Y);
     return ret;
 }
@@ -715,7 +713,7 @@ AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref)
     if (!hw_frames_ref1)
         return NULL;
 
-    mids = av_mallocz_array(nb_surfaces, sizeof(*mids));
+    mids = av_calloc(nb_surfaces, sizeof(*mids));
     if (!mids) {
         av_buffer_unref(&hw_frames_ref1);
         return NULL;
@@ -750,7 +748,7 @@ static int qsv_setup_mids(mfxFrameAllocResponse *resp, AVBufferRef *hw_frames_re
     // the allocated size of the array is two larger than the number of
     // surfaces, we store the references to the frames context and the
     // QSVMid array there
-    resp->mids = av_mallocz_array(nb_surfaces + 2, sizeof(*resp->mids));
+    resp->mids = av_calloc(nb_surfaces + 2, sizeof(*resp->mids));
     if (!resp->mids)
         return AVERROR(ENOMEM);
 
@@ -1069,29 +1067,6 @@ int qsv_enc_init(hb_work_private_t *pv)
         if (dec_space == NULL || !dec_space->is_init_done)
         {
             return 2;
-        }
-    }
-    else
-    {
-        if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10 || (job->vcodec == HB_VCODEC_QSV_AV1_10BIT))
-        {
-            pv->sws_context_to_nv12 = hb_sws_get_context(
-                                        job->width, job->height,
-                                        job->output_pix_fmt, job->color_range,
-                                        job->width, job->height,
-                                        AV_PIX_FMT_P010LE, job->color_range,
-                                        SWS_LANCZOS|SWS_ACCURATE_RND,
-                                        SWS_CS_DEFAULT);
-        }
-        else
-        {
-            pv->sws_context_to_nv12 = hb_sws_get_context(
-                                        job->width, job->height,
-                                        job->output_pix_fmt, job->color_range,
-                                        job->width, job->height,
-                                        AV_PIX_FMT_NV12, job->color_range,
-                                        SWS_LANCZOS|SWS_ACCURATE_RND,
-                                        SWS_CS_DEFAULT);
         }
     }
 
@@ -1830,7 +1805,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else if (videoParam.mfx.CodecId == MFX_CODEC_HEVC)
     {
-        if (qsv_hevc_make_header(w, session) < 0)
+        if (qsv_hevc_make_header(w, session, &videoParam) < 0)
         {
             hb_error("encqsvInit: qsv_hevc_make_header failed");
 #if !HB_QSV_ONEVPL
@@ -1981,10 +1956,6 @@ void encqsvClose(hb_work_object_t *w)
         {
             /* the list is already empty */
             hb_list_close(&pv->delayed_processing);
-        }
-        if (pv->sws_context_to_nv12 != NULL)
-        {
-            sws_freeContext(pv->sws_context_to_nv12);
         }
         if (pv->list_dts != NULL)
         {
@@ -2403,7 +2374,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         }
 
         surface = qsv_enc_space->p_surfaces[surface_index];
-        qsv_yuv420_to_nv12(pv->sws_context_to_nv12, surface, in);
+        qsv_copy_buffer_to_surface(surface, in);
     }
     else
     {

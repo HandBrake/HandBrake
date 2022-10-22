@@ -15,16 +15,12 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Media;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
     using HandBrake.Interop.Interop;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Video;
@@ -39,7 +35,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Ookii.Dialogs.Wpf;
 
-    using Execute = Caliburn.Micro.Execute;
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
 
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
@@ -121,6 +116,8 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncLowPower;
         private int simultaneousEncodes;
         private bool enableQuickSyncHyperEncode;
+
+        private bool enableNvDecSupport;
 
         public OptionsViewModel(
             IUserSettingService userSettingService,
@@ -678,7 +675,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPriority = value;
-                this.NotifyOfPropertyChange();
+                this.NotifyOfPropertyChange(() => this.SelectedPriority);
                 this.SetProcessPriority(value);
             }
         }
@@ -879,6 +876,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.enableNvencEncoder = value;
                 this.NotifyOfPropertyChange(() => this.EnableNvencEncoder);
+                this.NotifyOfPropertyChange(() => this.IsNvdecAvailable);
             }
         }
 
@@ -938,10 +936,9 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsNvencAvailable { get; } = HandBrakeHardwareEncoderHelper.IsNVEncH264Available;
 
-        public bool IsUseQsvDecAvailable
-        {
-            get => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
-        }
+        public bool IsUseQsvDecAvailable => this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
+
+        public bool IsNvdecAvailable => HandBrakeHardwareEncoderHelper.IsNVDecAvailable && this.EnableNvencEncoder;
 
         public bool UseQSVDecodeForNonQSVEnc
         {
@@ -964,7 +961,18 @@ namespace HandBrakeWPF.ViewModels
         public bool IsHardwareOptionsVisible => !IsSafeMode && !IsHardwareFallbackMode;
 
         public bool IsAutomaticSafeMode { get; private set; }
-        
+
+        public bool EnableNvDecSupport
+        {
+            get => this.enableNvDecSupport;
+            set
+            {
+                if (value == this.enableNvDecSupport) return;
+                this.enableNvDecSupport = value;
+                this.NotifyOfPropertyChange(() => this.EnableNvDecSupport);
+            }
+        }
+
         /* About HandBrake */
 
         public string Version { get; } = string.Format("{0}", HandBrakeVersionHelper.GetVersion());
@@ -1075,7 +1083,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Save();
 
-            IShellViewModel shellViewModel = IoC.Get<IShellViewModel>();
+            IShellViewModel shellViewModel = IoCHelper.Get<IShellViewModel>();
             shellViewModel.DisplayWindow(ShellWindow.MainWindow);
         }
 
@@ -1311,6 +1319,7 @@ namespace HandBrakeWPF.ViewModels
             this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
             this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
             this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
+            this.EnableNvDecSupport = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvDecSupport);
 
             // #############################
             // Process
@@ -1447,12 +1456,6 @@ namespace HandBrakeWPF.ViewModels
             this.errorService.ShowMessageBox(Resources.OptionsView_UninstallMessageBoxText, Resources.OptionsView_UninstallMessageBoxHeader, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            this.OnLoad();
-            return base.OnActivateAsync(cancellationToken);
-        }
-
         private void Save()
         {
             /* General */
@@ -1505,6 +1508,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncEncoding, this.EnableQuickSyncEncoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvDecSupport, this.EnableNvDecSupport);
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncLowPower, this.EnableQuickSyncLowPower);
 
             /* System and Logging */
@@ -1600,7 +1604,7 @@ namespace HandBrakeWPF.ViewModels
                                 };
 
                     installer.Start();
-                    Execute.OnUIThread(() => Application.Current.Shutdown());
+                    ThreadHelper.OnUIThread(() => Application.Current.Shutdown());
                 }
                 catch (Exception exc)
                 {

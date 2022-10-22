@@ -10,6 +10,8 @@
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <picture:ResolutionLimitConverter x:Key="resolutionLimitConverter" />
+        <picture:CropModeConverter x:Key="cropModeConverter" />
+        
         <Style TargetType="controls:NumberBox">
             <Setter Property="Height" Value="24" />
         </Style>
@@ -69,13 +71,10 @@
             <TextBlock Text="{x:Static Properties:Resources.PictureSettingsView_Cropping}" Grid.Row="2" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" />
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,5,0,0">
 
-                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Automatic}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"
-                             IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}" />
-
-                <RadioButton Content="{x:Static Properties:Resources.PictureSettingsView_Custom}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,0,0"
-                             IsChecked="{Binding IsCustomCrop}"  ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_ManualCrop}"  />
+                <ComboBox Width="110" ItemsSource="{Binding CropModes, Converter={StaticResource cropModeConverter}}" SelectedItem="{Binding SelectedCropMode, Converter={StaticResource cropModeConverter}}" HorizontalAlignment="Left" 
+                          ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}"
+                          AutomationProperties.Name="{x:Static Properties:Resources.PictureSettingsView_Cropping}" />
             </StackPanel>
-
 
             <Grid Margin="0,10,0,0" Grid.Row="3" Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>

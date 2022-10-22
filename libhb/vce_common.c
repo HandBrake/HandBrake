@@ -8,12 +8,15 @@
  */
 
 #include "handbrake/project.h"
+#include "handbrake/handbrake.h"
+
+static int is_vcn_available = -1;
+static int is_vcn_hevc_available = -1;
 
 #if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
-#include "handbrake/handbrake.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {
@@ -126,8 +129,23 @@ int hb_vce_h264_available()
     {
         return 0;
     }
+    
+    if (is_vcn_available != -1)
+    {
+        return is_vcn_available;
+    }
 
-    return (check_component_available(AMFVideoEncoderVCE_AVC) == AMF_OK) ? 1 : 0;
+    is_vcn_available = (check_component_available(AMFVideoEncoderVCE_AVC) == AMF_OK) ? 1 : 0;
+    if (is_vcn_available == 1)
+    {
+        hb_log("vcn: is available");
+    } 
+    else 
+    {
+        hb_log("vcn: not available on this system");
+    }
+    
+    return is_vcn_available;
 }
 
 int hb_vce_h265_available()
@@ -136,19 +154,40 @@ int hb_vce_h265_available()
     {
         return 0;
     }
+    
+    if (is_vcn_hevc_available != -1)
+    {
+        return is_vcn_hevc_available;
+    }
 
-    return (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
+    is_vcn_hevc_available = (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
+    return is_vcn_hevc_available;
 }
 
 #else // !HB_PROJECT_FEATURE_VCE
 
 int hb_vce_h264_available()
 {
+    if (is_vcn_available != -1)
+    {
+        return is_vcn_available;
+    }
+    
+    is_vcn_available = -2;
+    hb_log("vcn: not compiled into this build.");
+    
     return -1;
 }
 
 int hb_vce_h265_available()
 {
+    if (is_vcn_hevc_available != -1)
+    {
+        return is_vcn_hevc_available;
+    }
+    
+    is_vcn_hevc_available = -2;
+    
     return -1; 
 }
 

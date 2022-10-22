@@ -67,6 +67,10 @@ ifeq (1,$(FEATURE.qsv))
     FPQSV = -q
 endif
 
+ifeq (1,$(FEATURE.nvenc))
+    FPNVENC = -e
+endif
+
 ifneq ($(FP_RUNTIME),)
     FPRUNTIME = -r $(FP_RUNTIME)
 endif

@@ -26,6 +26,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Filters;
+    using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Model.Video;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -64,8 +65,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Picture Settings */
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
-            preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
-            preset.Task.HasCropping = !importedPreset.PictureAutoCrop;
+            preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop, importedPreset.PictureCropMode);
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
             preset.Task.AllowUpscaling = importedPreset.PictureAllowUpscaling;
             preset.Task.OptimalSize = importedPreset.PictureUseMaximumSize;
@@ -424,6 +424,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public bool SubtitleBurnDVDSub { get; set; }
             // public bool PictureItuPAR { get; set; }
             // public bool PictureLooseCrop { get; set; }
+            // public int PicturePARWidth { get; set; }
+            // public int PicturePARHeight { get; set; }
             // public int PictureForceHeight { get; set; }
             // public int PictureForceWidth { get; set; }
             // public List<object> ChildrenArray { get; set; }
@@ -548,13 +550,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureForceWidth = 0; // TODO
             preset.PictureHeight = export.Task.MaxHeight;
             preset.PictureItuPAR = false; // TODO Not supported Yet
-            preset.PictureKeepRatio = export.Task.KeepDisplayAspect;
-            preset.PictureLeftCrop = export.Task.Cropping.Left;
-            preset.PictureLooseCrop = false; // TODO Not Supported Yet
             preset.PicturePAR = EnumHelper<Anamorphic>.GetShortName(export.Task.Anamorphic);
             preset.PicturePARHeight = export.Task.PixelAspectY;
             preset.PicturePARWidth = export.Task.PixelAspectX;
-            preset.PictureRightCrop = export.Task.Cropping.Right;
+            preset.PictureWidth = export.Task.MaxWidth;
+            preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
 
             preset.PicturePadMode = export.Task.Padding.Mode;
             preset.PicturePadTop = export.Task.Padding.Y;
@@ -563,18 +563,20 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PicturePadRight = export.Task.Padding.Right;
             preset.PicturePadColor = export.Task.Padding.Color;
             preset.PictureUseMaximumSize = export.Task.OptimalSize;
-            preset.PictureAllowUpscaling = export.Task.AllowUpscaling;
+            preset.PictureAllowUpscaling = export.Task.AllowUpscaling; 
+            preset.PictureKeepRatio = export.Task.KeepDisplayAspect;
 
             if (export.Task.Rotation != 0 || export.Task.FlipVideo)
             {
                 preset.PictureRotate = string.Format("{0}:{1}", export.Task.Rotation, export.Task.FlipVideo ? "1" : "0");
             }
 
+            preset.PictureCropMode = export.Task.Cropping.CropMode;
             preset.PictureTopCrop = export.Task.Cropping.Top;
-            preset.PictureWidth = export.Task.MaxWidth;
-            preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
-            preset.PictureAutoCrop = !export.Task.HasCropping;
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
+            preset.PictureLeftCrop = export.Task.Cropping.Left;
+            preset.PictureRightCrop = export.Task.Cropping.Right;
+            preset.PictureAutoCrop = (CropMode)export.Task.Cropping.CropMode == CropMode.Custom; // Obsolete. For compatibility only.
 
             // Filters
             preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;

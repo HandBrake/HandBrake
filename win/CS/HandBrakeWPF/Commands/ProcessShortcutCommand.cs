@@ -13,8 +13,7 @@ namespace HandBrakeWPF.Commands
     using System.Windows;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -46,7 +45,7 @@ namespace HandBrakeWPF.Commands
         {
             if (gesture != null)
             {
-                IMainViewModel mainViewModel = IoC.Get<IMainViewModel>();
+                IMainViewModel mainViewModel = IoCHelper.Get<IMainViewModel>();
                 
                 // Start Encode (Ctrl+E)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.E)

@@ -478,6 +478,26 @@ fail:
     return _hb_title->crop[3];
 }
 
+- (int)looseAutoCropTop
+{
+    return _hb_title->loose_crop[0];
+}
+
+- (int)looseAutoCropBottom
+{
+    return _hb_title->loose_crop[1];
+}
+
+- (int)looseAutoCropLeft
+{
+    return _hb_title->loose_crop[2];
+}
+
+- (int)looseAutoCropRight
+{
+    return _hb_title->loose_crop[3];
+}
+
 - (NSArray<HBTitleAudioTrack *> *)audioTracks
 {
     if (!_audioTracks)

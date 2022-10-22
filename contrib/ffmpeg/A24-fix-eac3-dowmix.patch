@@ -1,0 +1,115 @@
+From 3f33e226b36a0a186e070d743d2c5686c5995a0e Mon Sep 17 00:00:00 2001
+From: Paul B Mahol <onemda@gmail.com>
+Date: Tue, 20 Sep 2022 17:07:15 +0200
+Subject: [PATCH] avcodec/ac3dec: add downmix support for mono and stereo for
+ eac3 7.1
+
+Signed-off-by: Paul B Mahol <onemda@gmail.com>
+---
+ libavcodec/ac3dec.c | 55 ++++++++++++++++++++++++++-------------------
+ 1 file changed, 32 insertions(+), 23 deletions(-)
+
+diff --git a/libavcodec/ac3dec.c b/libavcodec/ac3dec.c
+index 5d0add40fe..f628eae33c 100644
+--- a/libavcodec/ac3dec.c
++++ b/libavcodec/ac3dec.c
+@@ -183,6 +183,33 @@ static av_cold void ac3_tables_init(void)
+ #endif
+ }
+ 
++static void ac3_downmix(AVCodecContext *avctx)
++{
++    AC3DecodeContext *s = avctx->priv_data;
++    const AVChannelLayout mono   = (AVChannelLayout)AV_CHANNEL_LAYOUT_MONO;
++    const AVChannelLayout stereo = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
++
++    /* allow downmixing to stereo or mono */
++#if FF_API_OLD_CHANNEL_LAYOUT
++FF_DISABLE_DEPRECATION_WARNINGS
++    if (avctx->request_channel_layout) {
++        av_channel_layout_uninit(&s->downmix_layout);
++        av_channel_layout_from_mask(&s->downmix_layout, avctx->request_channel_layout);
++    }
++FF_ENABLE_DEPRECATION_WARNINGS
++#endif
++    if (avctx->ch_layout.nb_channels > 1 &&
++        !av_channel_layout_compare(&s->downmix_layout, &mono)) {
++        av_channel_layout_uninit(&avctx->ch_layout);
++        avctx->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_MONO;
++    } else if (avctx->ch_layout.nb_channels > 2 &&
++             !av_channel_layout_compare(&s->downmix_layout, &stereo)) {
++        av_channel_layout_uninit(&avctx->ch_layout);
++        avctx->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
++    }
++    s->downmixed = 1;
++}
++
+ /**
+  * AVCodec initialization
+  */
+@@ -190,8 +217,6 @@ static av_cold int ac3_decode_init(AVCodecContext *avctx)
+ {
+     static AVOnce init_static_once = AV_ONCE_INIT;
+     AC3DecodeContext *s = avctx->priv_data;
+-    const AVChannelLayout mono   = (AVChannelLayout)AV_CHANNEL_LAYOUT_MONO;
+-    const AVChannelLayout stereo = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
+     int i, ret;
+ 
+     s->avctx = avctx;
+@@ -219,25 +244,7 @@ static av_cold int ac3_decode_init(AVCodecContext *avctx)
+     else
+         avctx->sample_fmt = AV_SAMPLE_FMT_FLTP;
+ 
+-    /* allow downmixing to stereo or mono */
+-#if FF_API_OLD_CHANNEL_LAYOUT
+-FF_DISABLE_DEPRECATION_WARNINGS
+-    if (avctx->request_channel_layout) {
+-        av_channel_layout_uninit(&s->downmix_layout);
+-        av_channel_layout_from_mask(&s->downmix_layout, avctx->request_channel_layout);
+-    }
+-FF_ENABLE_DEPRECATION_WARNINGS
+-#endif
+-    if (avctx->ch_layout.nb_channels > 1 &&
+-        !av_channel_layout_compare(&s->downmix_layout, &mono)) {
+-        av_channel_layout_uninit(&avctx->ch_layout);
+-        avctx->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_MONO;
+-    } else if (avctx->ch_layout.nb_channels > 2 &&
+-             !av_channel_layout_compare(&s->downmix_layout, &stereo)) {
+-        av_channel_layout_uninit(&avctx->ch_layout);
+-        avctx->ch_layout = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
+-    }
+-    s->downmixed = 1;
++    ac3_downmix(avctx);
+ 
+     for (i = 0; i < AC3_MAX_CHANNELS; i++) {
+         s->xcfptr[i] = s->transform_coeffs[i];
+@@ -1751,7 +1758,7 @@ skip:
+                     if (index < 0)
+                         return AVERROR_INVALIDDATA;
+                     if (extend >= channel_map_size)
+-                        return AVERROR_INVALIDDATA;
++                        break;
+ 
+                     extended_channel_map[index] = offset + channel_map[extend++];
+                 } else {
+@@ -1763,7 +1770,7 @@ skip:
+                             if (index < 0)
+                                 return AVERROR_INVALIDDATA;
+                             if (extend >= channel_map_size)
+-                                return AVERROR_INVALIDDATA;
++                                break;
+ 
+                             extended_channel_map[index] = offset + channel_map[extend++];
+                         }
+@@ -1771,6 +1778,8 @@ skip:
+                 }
+             }
+         }
++
++        ac3_downmix(avctx);
+     }
+ 
+     /* get output buffer */
+-- 
+2.37.2
+

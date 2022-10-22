@@ -1,6 +1,7 @@
 /* sync.c
 
    Copyright (c) 2003-2022 HandBrake Team
+   Copyright 2022 NVIDIA Corporation
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -14,6 +15,10 @@
 
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_common.h"
+#endif
+
+#if HB_PROJECT_FEATURE_NVENC
+#include "handbrake/nvenc_common.h"
 #endif
 
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
@@ -416,6 +421,22 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
         buf->s.duration  = frame_dur;
         duration        -= frame_dur;
         hb_buffer_list_append(&list, buf);
+
+#if HB_PROJECT_FEATURE_NVENC
+        if (hb_nvdec_is_enabled(stream->common->job))
+        {
+            AVFrame frame = {{0}};
+            hb_video_buffer_to_avframe(&frame, buf);
+
+            if (!buf->hw_ctx.frame)
+            {
+                hb_nvdec_hwframe_init(stream->common->job, (AVFrame**)&buf->hw_ctx.frame);
+            }
+
+            av_frame_copy_props(buf->hw_ctx.frame, &frame);
+            av_hwframe_transfer_data(buf->hw_ctx.frame, &frame, 0);
+        }
+#endif
     }
     if (buf != NULL)
     {
@@ -2594,7 +2615,7 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
         }
         // Text subtitles are SSA internally.  Use SSA newline code
         // and force style reset at beginning of new line.
-        len = sprintf((char*)buf->data, "%s\\N{\\r}%s", a->data, text);
+        len = snprintf((char*)buf->data, buf->size, "%s\\N{\\r}%s", a->data, text);
         if (len >= 0)
             buf->size = len + 1;
     }

@@ -3,14 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 
     <UserControl.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-
         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Margin" Value="0,5,0,0"></Setter>
         </Style>

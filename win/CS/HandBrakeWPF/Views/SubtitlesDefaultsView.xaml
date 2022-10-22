@@ -1,8 +1,6 @@
 <Window x:Class="HandBrakeWPF.Views.SubtitlesDefaultsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,10 +14,8 @@
              WindowStartupLocation="CenterScreen"
              TextOptions.TextFormattingMode="Display"
              mc:Ignorable="d"
-             Title="{Binding Title}"
-             x:Name="subTab">
+             Title="{Binding Title}">
     <Window.Resources>
-        <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
         <subtitles:SubtitleBehaviourConverter x:Key="subtitleBehaviourConverter" />
         <subtitles:SubtitleBurnInBehaviourConverter x:Key="subtitleBurnInBehaviourConverter" />
 
@@ -92,9 +88,9 @@
 
                         <DockPanel Grid.Column="1" Margin="10,0,10,0">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                                <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveRight" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageMoveLeft" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" Command="{Binding RelayCommand}" CommandParameter="LanguageClearAll" Width="80"/>
                             </StackPanel>
                         </DockPanel>
 
@@ -138,21 +134,21 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0" Grid.Column="0" HorizontalAlignment="Left" Padding="0,2">
+                <Button Command="{Binding RelayCommand}" CommandParameter="LaunchHelp" Background="Transparent" BorderThickness="0" Grid.Column="0" HorizontalAlignment="Left" Padding="0,2">
                     <Button.Content>
                         <Image Source="/Views/Images/question.png" Width="16" />
                     </Button.Content>
                 </Button>
 
                 <Button Grid.Column="1"
-                        cal:Message.Attach="[Event Click] = [Action Cancel]"
+                        Command="{Binding RelayCommand}" CommandParameter="Cancel"
                         Content="{x:Static Properties:Resources.Generic_Cancel}"
                         IsCancel="True"
                         Padding="8,2"
                         Margin="0,0,5,0"/>
 
                 <Button Grid.Column="2"
-                        cal:Message.Attach="[Event Click] = [Action Save]"
+                        Command="{Binding RelayCommand}" CommandParameter="Save"
                         Content="{x:Static Properties:Resources.Generic_Save}"
                         IsDefault="True"
                         Padding="8,2" />

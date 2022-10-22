@@ -81,5 +81,10 @@ namespace HandBrakeWPF.Views
         {
             ((PresetManagerViewModel)this.DataContext).SetPresetNameChanged();
         }
+
+        private void Delete_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ((PresetManagerViewModel)this.DataContext).DeletePreset();
+        }
     }
 }

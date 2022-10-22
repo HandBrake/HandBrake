@@ -14,12 +14,10 @@ namespace HandBrakeWPF.Views
     using System.Windows;
     using System.Windows.Controls;
 
-    using Caliburn.Micro;
-
     using HandBrake.App.Core.Utilities;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Logging.EventArgs;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
 
     public partial class LogView : Window
@@ -54,7 +52,7 @@ namespace HandBrakeWPF.Views
 
         private void Vm_LogResetEvent(object sender, EventArgs e)
         {
-            Execute.OnUIThread(
+            ThreadHelper.OnUIThread(
                 () =>
                 {
                     this.logText.Clear();
@@ -71,7 +69,7 @@ namespace HandBrakeWPF.Views
 
                 if (this.AutoScroll.IsChecked)
                 {
-                    delayProcessor.PerformTask(() => Execute.BeginOnUIThread(() => this.logText.ScrollToEnd()), 100);
+                    delayProcessor.PerformTask(() => ThreadHelper.OnUIThread(() => this.logText.ScrollToEnd()), 100);
                 }
             }
             catch (Exception exc)

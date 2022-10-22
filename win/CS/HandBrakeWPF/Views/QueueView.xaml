@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.QueueView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
@@ -14,7 +13,7 @@
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
-        xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main" xmlns:Converters1="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+        xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
         Title="{Binding Title}"
         Width="975"
         Height="550"
@@ -22,8 +21,7 @@
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
-        mc:Ignorable="d"
-        x:Name="queueView">
+        mc:Ignorable="d">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -128,7 +126,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="Start" AutomationProperties.Name="Start Queue" cal:Message.Attach="[Event Click] = [Action StartQueue]" Grid.Column="0"
+                    <Button Name="Start" AutomationProperties.Name="Start Queue" Command="{Binding RelayCommand}" CommandParameter="StartQueue" Grid.Column="0"
                                 IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                         <StackPanel Orientation="Horizontal">
@@ -138,7 +136,7 @@
                     </Button>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Pause}" cal:Message.Attach="[Event Click] = [Action PauseQueueToolbar]"
+                        <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Pause}" Command="{Binding RelayCommand}" CommandParameter="PauseQueueToolbar"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" Height="16" Margin="2,0,0,0" Source="Images/Pause.png" />
@@ -146,7 +144,7 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Stop}" cal:Message.Attach="[Event Click] = [Action StopQueue]"
+                        <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Stop}" Command="{Binding RelayCommand}" CommandParameter="StopQueue"
                                 Visibility="{Binding IsQueueRunning, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                                 Margin="5,0,0,0">
                             <StackPanel Orientation="Horizontal">
@@ -169,18 +167,18 @@
                                   Fill="{DynamicResource ButtonGlyphBrush}" />
                                 </StackPanel>
                             </MenuItem.Header>
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ResetFailed" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ResetSelectedJobs" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ResetAllJobs" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
                             <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ClearCompleted" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="Clear" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="RemoveSelectedJobs" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
                             <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.QueueView_Import}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="Import" Header="{x:Static Properties:Resources.QueueView_Import}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="Export" Header="{x:Static Properties:Resources.QueueView_Export}" />
                             <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
+                            <MenuItem Command="{Binding RelayCommand}" CommandParameter="ExportCli" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                             <Separator Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                             <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
                                 <MenuItem Header="{x:Static Properties:Resources.Debug_QueueDataExport}" Command="{Binding QueueExtractResultDataCommand}" />
@@ -200,21 +198,16 @@
                              BorderThickness="1"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
 
-                    <i:Interaction.Triggers>
-                        <commands:InputBindingTrigger>
-                            <commands:InputBindingTrigger.InputBinding>
-                                <KeyBinding Key="Delete"/>
-                            </commands:InputBindingTrigger.InputBinding>
-                            <cal:ActionMessage MethodName="RemoveSelectedJobs" />
-                        </commands:InputBindingTrigger>
-                    </i:Interaction.Triggers>
+                    <ListBox.CommandBindings>
+                        <CommandBinding Command="Delete" Executed="DeleteItem_OnClick" />
+                    </ListBox.CommandBindings>
 
                     <ListBox.ContextMenu>
-                        <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
+                        <ContextMenu Opened="ContextMenu_OnOpened">
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" />
                             <Separator />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" cal:Message.Attach="[Event Click] = [Action MoveToTop]" />
-                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" cal:Message.Attach="[Event Click] = [Action MoveToBottom]" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToTop}" x:Name="moveToTopMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToTop" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_MoveToBottom}" x:Name="moveToBottomMenuItem" Command="{Binding RelayCommand}" CommandParameter="MoveToBottom" />
                             <Separator />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_Reset}" x:Name="ResetMenuItem" Click="QueueItem_Retry" />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_Delete}" x:Name="DeleteMenuItem" Click="QueueItem_Delete" />
@@ -331,27 +324,13 @@
                                 </StackPanel>
                             </MenuItem.Header>
 
-                            <MenuItem x:Name="doNothing"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(0)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
-                            <MenuItem x:Name="shutdown"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(1)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
-                            <MenuItem x:Name="suspend"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(2)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_Suspend}" />
-                            <MenuItem x:Name="hibernate"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(3)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_Hibernate}"/>
-                            <MenuItem x:Name="lock"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(4)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
-                            <MenuItem x:Name="logoff"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(5)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
-                            <MenuItem x:Name="quit"
-                                      cal:Message.Attach="[Event Click] = [Action WhenDone(6)]"
-                                      Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}"/>
+                            <MenuItem x:Name="doNothing" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="0" Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
+                            <MenuItem x:Name="shutdown" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="1" Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
+                            <MenuItem x:Name="suspend" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="2" Header="{x:Static Properties:Resources.WhenDone_Suspend}" />
+                            <MenuItem x:Name="hibernate" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="3" Header="{x:Static Properties:Resources.WhenDone_Hibernate}"/>
+                            <MenuItem x:Name="lock" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="4" Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
+                            <MenuItem x:Name="logoff" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="5" Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
+                            <MenuItem x:Name="quit" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="6" Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}"/>
                         </MenuItem>
                     </Menu>
                 </Border>
@@ -387,9 +366,7 @@
                                         </Button.Content>
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
-                                                <cal:ActionMessage MethodName="RetryJob">
-                                                    <cal:Parameter Value="{Binding SelectedTask}" />
-                                                </cal:ActionMessage>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.RetryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </Button>
@@ -405,9 +382,7 @@
                                         </Button.Content>
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
-                                                <cal:ActionMessage MethodName="EditJob">
-                                                    <cal:Parameter Value="{Binding SelectedTask}" />
-                                                </cal:ActionMessage>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding SelectedTask}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </Button>
@@ -431,11 +406,11 @@
                                         </Button.Content>
 
                                         <Button.ContextMenu>
-                                            <ContextMenu cal:Action.TargetWithoutContext="{Binding DataContext, RelativeSource={RelativeSource Self}}">
-                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
+                                            <ContextMenu>
+                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" Command="{Binding RelayCommand}" CommandParameter="PlayFile" />
                                                 <Separator />
-                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" cal:Message.Attach="[Event Click] = [Action OpenSourceDir]" />
-                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" cal:Message.Attach="[Event Click] = [Action OpenDestDir]" />
+                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" Command="{Binding RelayCommand}" CommandParameter="OpenSourceDir" />
+                                                <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" Command="{Binding RelayCommand}" CommandParameter="OpenDestDir" />
                                             </ContextMenu>
                                         </Button.ContextMenu>
                                     </Button>
@@ -605,12 +580,12 @@
                     <TextBox ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding ActivityLog, Mode=OneWay}" TextWrapping="Wrap" x:Name="logText">
                         <TextBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="{x:Static Properties:Resources.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
+                                <MenuItem Header="{x:Static Properties:Resources.LogView_CopyClipboard}" Command="{Binding RelayCommand}" CommandParameter="CopyLog" >
                                     <MenuItem.Icon>
                                         <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Copy.png'}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Header="{x:Static Properties:Resources.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
+                                <MenuItem Header="{x:Static Properties:Resources.LogView_OpenLogDir}" Command="{Binding RelayCommand}" CommandParameter="OpenLogDirectory">
                                     <MenuItem.Icon>
                                         <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Folder.png'}" />
                                     </MenuItem.Icon>

@@ -86,5 +86,6 @@ namespace HandBrakeWPF
         public const string RightToLeftUi = "RightToLeftUi";
         public const string ForceDisableHardwareSupport = "ForceDisableHardwareSupport";
         public const string IsUpdateAvailableBuild = "IsUpdateAvailableBuild";
+        public const string EnableNvDecSupport = "EnableNvDecSupport";
     }
 }

@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-5.0.1.tar.bz2
-FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-5.0.1.tar.bz2
-FFMPEG.FETCH.sha256 = 28df33d400a1c1c1b20d07a99197809a3b88ef765f5f07dc1ff067fac64c59d6
+FFMPEG.FETCH.url    = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/ffmpeg-5.1.2.tar.bz2
+FFMPEG.FETCH.url   += https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.bz2
+FFMPEG.FETCH.sha256 = 39a0bcc8d98549f16c570624678246a6ac736c066cebdb409f9502e915b22f2b
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -22,7 +22,7 @@ FFMPEG.CONFIGURE.build =
 FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
-ifneq (,$(filter $(HOST.system),freebsd netbsd))
+ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
 	FFMPEG.CONFIGURE.env += CFLAGS=-I$(LOCALBASE)/include
 	FFMPEG.CONFIGURE.env += LDFLAGS=-L$(LOCALBASE)/lib
 endif
@@ -146,7 +146,7 @@ ifeq (1,$(FEATURE.qsv))
 endif
 
 ifeq (1,$(FEATURE.vce))
-  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf 
+  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf
 endif
 
 ifeq (1,$(FEATURE.nvenc))
@@ -154,6 +154,14 @@ FFMPEG.CONFIGURE.extra += \
      --enable-ffnvcodec \
      --enable-encoder=h264_nvenc \
      --enable-encoder=hevc_nvenc
+endif
+
+ifeq (1,$(FEATURE.nvdec))
+FFMPEG.CONFIGURE.extra += \
+     --enable-hwaccels \
+     --enable-nvdec \
+     --enable-cuda-llvm \
+     --enable-cuda
 endif
 
 ifeq (1,$(FEATURE.mf))

@@ -246,12 +246,12 @@ bind_audio_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_max_width(column, 400);
 
     column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), edit_cell, "icon-name", 3, NULL);
+                                    _(" "), edit_cell, "icon-name", 3, NULL);
     //gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), delete_cell, "icon-name", 4, NULL);
+                                    _(" "), delete_cell, "icon-name", 4, NULL);
     //gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
@@ -311,11 +311,11 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_max_width(column, 400);
 
     column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), edit_cell, "icon-name", 3, NULL);
+                                    _(" "), edit_cell, "icon-name", 3, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), delete_cell, "icon-name", 4, NULL);
+                                    _(" "), delete_cell, "icon-name", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
     g_signal_connect(selection, "changed", subtitle_list_selection_changed_cb, ud);

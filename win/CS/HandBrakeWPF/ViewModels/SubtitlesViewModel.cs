@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
@@ -27,8 +25,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using MahApps.Metro.Controls;
 
     using Microsoft.Win32;
 
@@ -68,7 +64,16 @@ namespace HandBrakeWPF.ViewModels
 
             this.foreignAudioSearchTrack = new Subtitle { IsFakeForeignAudioScanTrack = true, Language = Resources.SubtitleViewModel_ForeignAudioSearch };
             this.SourceTracks = new List<Subtitle> { this.foreignAudioSearchTrack };
+
+
+            this.SetBurnedToFalseForAllExceptCommand = new SimpleRelayCommand<SubtitleTrack>(this.SetBurnedToFalseForAllExcept);
+            this.SelectDefaultTrackCommand = new SimpleRelayCommand<SubtitleTrack>(this.SelectDefaultTrack);
+            this.RemoveTrackCommand = new SimpleRelayCommand<SubtitleTrack>(this.Remove);
         }
+
+        public SimpleRelayCommand<SubtitleTrack> SetBurnedToFalseForAllExceptCommand { get; }
+        public SimpleRelayCommand<SubtitleTrack> SelectDefaultTrackCommand { get; }
+        public SimpleRelayCommand<SubtitleTrack> RemoveTrackCommand { get; }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -241,7 +246,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Import an SRT File.
         /// </summary>
-        public void Import()
+        public void ImportSubtitle()
         {
             OpenFileDialog dialog = new OpenFileDialog
             {

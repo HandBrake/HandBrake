@@ -4,13 +4,12 @@
              xmlns:Controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              xmlns:main="clr-namespace:HandBrakeWPF.Converters.Main"
+             xmlns:views="clr-namespace:HandBrakeWPF.Views"
              AllowDrop="True"
              FontSize="11"
-             cal:Message.Attach="[Event Loaded] = [Action Load]"
              SnapsToDevicePixels="True"
              UseLayoutRounding="True"
              x:Name="mainView"
@@ -55,33 +54,33 @@
                     </Style>
                 </Menu.Resources>
                 <MenuItem Header="{x:Static Properties:Resources.MainView_FileMenu}">
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_SourceOpen}" Command="{Binding RelayCommand}" CommandParameter="SelectSourceWindow" InputGestureText="Alt + O" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_StartEncode}" cal:Message.Attach="[Event Click] = [Action StartEncode]" InputGestureText="Ctrl + E"
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_StartEncode}" Command="{Binding RelayCommand}" CommandParameter="StartEncode" InputGestureText="Ctrl + E"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=true}" />
 
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_Pause}" cal:Message.Attach="[Event Click] = [Action PauseEncode]" InputGestureText="Alt + P"
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Pause}" Command="{Binding RelayCommand}" CommandParameter="PauseEncode" InputGestureText="Alt + P"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
 
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_Stop}" cal:Message.Attach="[Event Click] = [Action StopEncode]" InputGestureText="Ctrl + K"
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Stop}" Command="{Binding RelayCommand}" CommandParameter="StopEncode" InputGestureText="Ctrl + K"
                               IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_Exit}" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Exit}" Command="{Binding RelayCommand}" CommandParameter="ExitApplication"  InputGestureText="Alt + F4" />
                 </MenuItem>
 
                 <MenuItem Header="{x:Static Properties:Resources.MainView_ToolsMenu}">
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueueMenu}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]" InputGestureText="Ctrl + Q">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueueMenu}" Command="{Binding RelayCommand}" CommandParameter="OpenQueueWindow" InputGestureText="Ctrl + Q">
                         <MenuItem.Icon>
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ActivityLogMenu}" cal:Message.Attach="[Event Click] = [Action OpenLogWindow]"  InputGestureText="Ctrl + L">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ActivityLogMenu}" Command="{Binding RelayCommand}" CommandParameter="OpenLogWindow"  InputGestureText="Ctrl + L">
                         <MenuItem.Icon>
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" Command="{Binding RelayCommand}" CommandParameter="OpenOptionsWindow">
                         <MenuItem.Icon>
                             <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Settings.png'}" />
                         </MenuItem.Icon>
@@ -92,47 +91,47 @@
 
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" cal:Message.Attach="[Event Click] = [Action OpenPresetWindow]" />
+                    <MenuItem Header="{x:Static Properties:Resources.PresetManger_Title}" Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.AddPresetView_AddPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
+                    <MenuItem Header="{x:Static Properties:Resources.AddPresetView_AddPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetUpdate" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" Command="{Binding RelayCommand}" CommandParameter="PresetRemove" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ResetPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
-                    <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" cal:Message.Attach="[Event Click] = [Action PresetDeleteBuildIn]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ResetPresets}" Command="{Binding RelayCommand}" CommandParameter="PresetReset" />
+                    <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
                 </MenuItem>
 
                 <MenuItem Header="{x:Static Properties:Resources.MainView_QueueMenu}" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueue}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]"  InputGestureText="Ctrl + Q" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueue}" Command="{Binding RelayCommand}" CommandParameter="OpenQueueWindow"  InputGestureText="Ctrl + Q" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddToQueue}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Alt + A" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" InputGestureText="Ctrl + Shift + A" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddToQueue}" Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue"  InputGestureText="Alt + A" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue" InputGestureText="Ctrl + Shift + A" />
                     <Separator />
-                    <MenuItem x:Name="queueRecoveryMenuItem" Header="{x:Static Properties:Resources.SourceSelection_QueueArchiveRecovery}" cal:Message.Attach="[Event Click] = [Action RecoverQueue]" />
+                    <MenuItem x:Name="queueRecoveryMenuItem" Header="{x:Static Properties:Resources.SourceSelection_QueueArchiveRecovery}" Command="{Binding RelayCommand}" CommandParameter="RecoverQueue" />
 
                 </MenuItem>
 
                 <MenuItem Header="{x:Static Properties:Resources.MainView_HelpMenu}">
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_HandBrakeDocs}" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_HandBrakeDocs}" Command="{Binding RelayCommand}" CommandParameter="LaunchHelp" InputGestureText="F1">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_NightlyBuildsUpdate}" cal:Message.Attach="[Event Click] = [Action NightlyUpdate]" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" Command="{Binding RelayCommand}" CommandParameter="CheckForUpdates" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_NightlyBuildsUpdate}" Command="{Binding RelayCommand}" CommandParameter="NightlyUpdate" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_About}" cal:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_About}" Command="{Binding RelayCommand}" CommandParameter="OpenAboutApplication" />
                 </MenuItem>
 
                 <MenuItem Header="Debug" Visibility="{Binding IsNightly, Converter={StaticResource boolToVisConverter}}">
-                    <MenuItem Header="Export Scan Data" cal:Message.Attach="[Event Click] = [Action ExportSourceData]" />
-                    <MenuItem Header="Import Scan Data" cal:Message.Attach="[Event Click] = [Action ImportSourceData]" />
+                    <MenuItem Header="Export Scan Data" Command="{Binding RelayCommand}" CommandParameter="ExportSourceData" />
+                    <MenuItem Header="Import Scan Data" Command="{Binding RelayCommand}" CommandParameter="ImportSourceData" />
                     <Separator/>
                     <MenuItem Header="Add to Queue - Quality Sweep" Command="{Binding AddToQueueQualitySweepCommand}" />
                 </MenuItem>
@@ -148,13 +147,13 @@
 
                 <ToolBar.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu">
-                        <MenuItem Header="{Binding ShowAddAllMenuName}" cal:Message.Attach="[Event Click] = [Action FlipAddAllToQueue]" />
-                        <MenuItem Header="{Binding ShowAddSelectionMenuName}" cal:Message.Attach="[Event Click] = [Action FlipAddSelectionToQueue]" />
+                        <MenuItem Header="{Binding ShowAddAllMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddAllToQueue" />
+                        <MenuItem Header="{Binding ShowAddSelectionMenuName}" Command="{Binding RelayCommand}" CommandParameter="FlipAddSelectionToQueue" />
                     </ContextMenu>
                 </ToolBar.ContextMenu>
 
                 <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:Resources.MainView_SourceOpen}"
-                        cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
+                        Command="{Binding RelayCommand}" CommandParameter="SelectSourceWindow">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -183,15 +182,15 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueueWithErrorHandling]" AutomationProperties.Name="Add Current" InputGestureText="Alt + A" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" InputGestureText="Ctrl + Alt + A" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" Command="{Binding RelayCommand}" CommandParameter="AddToQueueWithErrorHandling" AutomationProperties.Name="Add Current" InputGestureText="Alt + A" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue" AutomationProperties.Name="Add all to Queue" InputGestureText="Ctrl + Alt + A" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
 
                 <Button Name="AddSelectionToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddSelection}"
-                        cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]"
+                        Command="{Binding RelayCommand}" CommandParameter="AddSelectionToQueue"
                         Visibility="{Binding ShowAddSelectionToQueue,
                                              Converter={StaticResource boolToVisConverter}}">
                     <StackPanel Orientation="Horizontal">
@@ -205,7 +204,7 @@
                 </Button>
 
                 <Button Name="AddAllToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddAll}"
-                        cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"
+                        Command="{Binding RelayCommand}" CommandParameter="AddAllToQueue"
                         Visibility="{Binding ShowAddAllToQueue,
                                              Converter={StaticResource boolToVisConverter}}">
                     <StackPanel Orientation="Horizontal">
@@ -219,7 +218,7 @@
                 </Button>
 
                 <Button Name="Start" AutomationProperties.Name="{x:Static Properties:Resources.MainView_StartEncode}"
-                        cal:Message.Attach="[Event Click] = [Action StartEncode]"
+                        Command="{Binding RelayCommand}" CommandParameter="StartEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=true}">
@@ -234,7 +233,7 @@
                 </Button>
 
                 <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Stop}"
-                        cal:Message.Attach="[Event Click] = [Action StopEncode]"
+                        Command="{Binding RelayCommand}" CommandParameter="StopEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
@@ -250,7 +249,7 @@
                 </Button>
 
                 <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Pause}"
-                        cal:Message.Attach="[Event Click] = [Action PauseEncode]"
+                        Command="{Binding RelayCommand}" CommandParameter="PauseEncode"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
@@ -267,7 +266,7 @@
 
                 <Separator />
 
-                <Button Name="ShowQueue" AutomationProperties.Name="Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                <Button Name="ShowQueue" AutomationProperties.Name="Queue" Command="{Binding RelayCommand}" CommandParameter="OpenQueueWindow">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -283,7 +282,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="Preview" AutomationProperties.Name="{x:Static Properties:Resources.MainView_ShowPreview}" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]" >
+                <Button Name="Preview" AutomationProperties.Name="{x:Static Properties:Resources.MainView_ShowPreview}" Command="{Binding RelayCommand}" CommandParameter="OpenPreviewWindow" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -295,7 +294,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="ActivityWindow" AutomationProperties.Name="Activity Window" cal:Message.Attach="[Event Click] = [Action OpenLogWindow]">
+                <Button Name="ActivityWindow" AutomationProperties.Name="Activity Window" Command="{Binding RelayCommand}" CommandParameter="OpenLogWindow">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -479,8 +478,8 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <Button Content="{x:Static Properties:Resources.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
-                    <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:Resources.MainView_Reload}" Command="{Binding RelayCommand}" CommandParameter="PresetReSelect"  Margin="15,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" Command="{Binding RelayCommand}" CommandParameter="PresetAdd"  Margin="5,0,0,0" VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>
 
@@ -492,25 +491,25 @@
                         VerticalAlignment="Stretch"
                         SelectionChanged="TabControl_OnSelectionChanged">
                 <TabItem Name="summaryTab" Header="{x:Static Properties:Resources.MainView_SummaryTab}">
-                    <ContentControl x:Name="SummaryViewModel" />
+                    <views:SummaryView DataContext="{Binding SummaryViewModel}"  />
                 </TabItem>
                 <TabItem Name="pictureTab" Header="{x:Static Properties:Resources.MainView_PictureTab}">
-                    <ContentControl x:Name="PictureSettingsViewModel" />
+                    <views:PictureSettingsView DataContext="{Binding PictureSettingsViewModel}" />
                 </TabItem>
                 <TabItem Name="filtersTab" Header="{x:Static Properties:Resources.MainView_FiltersTab}">
-                    <ContentControl x:Name="FiltersViewModel" />
+                    <views:FiltersView  DataContext="{Binding FiltersViewModel}" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="{x:Static Properties:Resources.MainView_VideoTab}">
-                    <ContentControl x:Name="VideoViewModel" VerticalAlignment="Stretch" />
+                    <views:VideoView VerticalAlignment="Stretch" DataContext="{Binding VideoViewModel}" />
                 </TabItem>
                 <TabItem Name="audioTab" Header="{x:Static Properties:Resources.MainView_AudioTab}">
-                    <ContentControl x:Name="AudioViewModel" />
+                    <views:AudioView DataContext="{Binding AudioViewModel}" />
                 </TabItem>
                 <TabItem Name="subtitlesTab" Header="{x:Static Properties:Resources.MainView_SubtitlesTab}">
-                    <ContentControl x:Name="SubtitleViewModel" />
+                    <views:SubtitlesView DataContext="{Binding SubtitleViewModel}" />
                 </TabItem>
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:Resources.MainView_ChaptersTab}">
-                    <ContentControl x:Name="ChaptersViewModel" />
+                    <views:ChaptersView DataContext="{Binding ChaptersViewModel}"  />
                 </TabItem>
             </TabControl>
 
@@ -537,8 +536,8 @@
                         </i:Interaction.Behaviors>
                         <TextBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_OpenDirectory}" cal:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
-                                <MenuItem Header="{x:Static Properties:Resources.MainView_AutonameRegenerate}" cal:Message.Attach="[Event Click] = [Action ReGenerateAutoName]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_OpenDirectory}" Command="{Binding RelayCommand}" CommandParameter="OpenDestinationDirectory" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_AutonameRegenerate}" Command="{Binding RelayCommand}" CommandParameter="ReGenerateAutoName" />
                                 <Separator />
                                 <MenuItem Command="ApplicationCommands.Cut" />
                                 <MenuItem Command="ApplicationCommands.Copy" />
@@ -551,7 +550,7 @@
                             Margin="10,0,0,0" FontWeight="Bold"
                             Content="{x:Static Properties:Resources.Browse}" 
                             ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Browse}"
-                            cal:Message.Attach="[Event Click] = [Action BrowseDestination]"
+                            Command="{Binding RelayCommand}" CommandParameter="BrowseDestination"
                     />
                 </Grid>
             </StackPanel>
@@ -626,27 +625,13 @@
                             </StackPanel>
                         </MenuItem.Header>
 
-                        <MenuItem x:Name="doNothing"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(0)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
-                        <MenuItem x:Name="shutdownSystem"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(1)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
-                        <MenuItem x:Name="suspend"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(2)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_Suspend}"/>
-                        <MenuItem x:Name="hibernate"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(3)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_Hibernate}" />
-                        <MenuItem x:Name="lock"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(4)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
-                        <MenuItem x:Name="logoff"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(5)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
-                        <MenuItem x:Name="quit"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(6)]"
-                                  Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}" />
+                        <MenuItem x:Name="doNothing" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="0" Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
+                        <MenuItem x:Name="shutdown" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="1" Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
+                        <MenuItem x:Name="suspend" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="2" Header="{x:Static Properties:Resources.WhenDone_Suspend}" />
+                        <MenuItem x:Name="hibernate" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="3" Header="{x:Static Properties:Resources.WhenDone_Hibernate}"/>
+                        <MenuItem x:Name="lock" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="4" Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
+                        <MenuItem x:Name="logoff" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="5" Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
+                        <MenuItem x:Name="quit" Command="{Binding DataContext.WhenDoneCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}" CommandParameter="6" Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}"/>
                     </MenuItem>
                 </Menu>
             </StatusBarItem>

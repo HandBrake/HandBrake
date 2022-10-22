@@ -74,6 +74,10 @@ ifneq (,$(filter $(HOST.system),darwin))
     MODULES += contrib/xz
 endif
 
+ifneq (,$(filter $(HOST.machine),arm64 aarch64))
+    MODULES += contrib/sse2neon
+endif
+
 ifneq (,$(filter $(HOST.system),cygwin mingw))
 ifneq ($(HAS.iconv),1)
     MODULES += contrib/libiconv
@@ -133,6 +137,11 @@ endif
 
 ifeq (1-netbsd,$(FEATURE.gtk)-$(BUILD.system))
     ## build gtk when gtk+netbsd
+    MODULES += gtk
+endif
+
+ifeq (1-openbsd,$(FEATURE.gtk)-$(BUILD.system))
+    ## build gtk when gtk+openbsd
     MODULES += gtk
 endif
 

@@ -9,8 +9,7 @@ namespace HandBrakeWPF.Commands
     using System;
     using System.Windows.Input;
 
-    using Caliburn.Micro;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     public class AddPresetCommand : ICommand
@@ -25,7 +24,7 @@ namespace HandBrakeWPF.Commands
 
         public void Execute(object? parameter)
         {
-            IMainViewModel viewModel = IoC.Get<IMainViewModel>();
+            IMainViewModel viewModel = IoCHelper.Get<IMainViewModel>();
             viewModel.PresetAdd();
         }
 

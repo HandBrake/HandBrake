@@ -9,11 +9,10 @@
 
 namespace HandBrakeWPF.Services.Presets.Model
 {
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrakeWPF.ViewModels;
 
     using EncodeTask = Encode.Model.EncodeTask;
 

@@ -1,20 +1,20 @@
-From 0573d62b67fdc64531768e33150921f61cd098d9 Mon Sep 17 00:00:00 2001
+From fb799f825a14c3fdf36f13eec0b062664b8649d8 Mon Sep 17 00:00:00 2001
 From: Haihao Xiang <haihao.xiang@intel.com>
 Date: Tue, 18 Aug 2020 15:20:38 +0800
-Subject: [PATCH 70/88] qsv: load user plugin for MFX_VERSION < 2.0
+Subject: [PATCH 04/77] qsv: load user plugin for MFX_VERSION < 2.0
 
 User plugin isn't supported for MFX_VERSION >= 2.0[1][2]. This is in
 preparation for oneVPL Support
 
-[1]: https://spec.oneapi.io/versions/latest/elements/oneVPL/source/appendix/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
-[2]: https://github.com/oneapi-src/oneVPL
+[1] https://spec.oneapi.io/versions/latest/elements/oneVPL/source/VPL_intel_media_sdk.html#msdk-full-name-feature-removals
+[2] https://github.com/oneapi-src/oneVPL
 ---
  libavcodec/qsv.c          | 8 +++++++-
  libavcodec/qsv_internal.h | 2 ++
  2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
-index 940d2c46e6..f1a77b5099 100644
+index 25331ccce8..74fc8ff18e 100644
 --- a/libavcodec/qsv.c
 +++ b/libavcodec/qsv.c
 @@ -19,7 +19,6 @@
@@ -25,15 +25,13 @@ index 940d2c46e6..f1a77b5099 100644
  #include <mfxjpeg.h>
  
  #include <stdio.h>
-@@ -37,11 +36,16 @@
+@@ -37,9 +36,14 @@
  #include "qsv_internal.h"
  
  #define MFX_IMPL_VIA_MASK(impl) (0x0f00 & (impl))
 +#define QSV_HAVE_USER_PLUGIN    !QSV_ONEVPL
  
- #if QSV_VERSION_ATLEAST(1, 12)
  #include "mfxvp8.h"
- #endif
  
 +#if QSV_HAVE_USER_PLUGIN
 +#include <mfxplugin.h>
@@ -42,7 +40,7 @@ index 940d2c46e6..f1a77b5099 100644
  int ff_qsv_codec_id_to_mfx(enum AVCodecID codec_id)
  {
      switch (codec_id) {
-@@ -340,6 +344,7 @@ enum AVPictureType ff_qsv_map_pictype(int mfx_pic_type)
+@@ -323,6 +327,7 @@ enum AVPictureType ff_qsv_map_pictype(int mfx_pic_type)
  static int qsv_load_plugins(mfxSession session, const char *load_plugins,
                              void *logctx)
  {
@@ -50,7 +48,7 @@ index 940d2c46e6..f1a77b5099 100644
      if (!load_plugins || !*load_plugins)
          return 0;
  
-@@ -383,6 +388,7 @@ load_plugin_fail:
+@@ -366,6 +371,7 @@ load_plugin_fail:
          if (err < 0)
              return err;
      }
@@ -59,7 +57,7 @@ index 940d2c46e6..f1a77b5099 100644
      return 0;
  
 diff --git a/libavcodec/qsv_internal.h b/libavcodec/qsv_internal.h
-index d6f0c72a1b..47cf5da792 100644
+index cb1e55ae30..949955bda0 100644
 --- a/libavcodec/qsv_internal.h
 +++ b/libavcodec/qsv_internal.h
 @@ -65,6 +65,8 @@

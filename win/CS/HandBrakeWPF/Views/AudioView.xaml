@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
@@ -65,9 +64,9 @@
 
                     <Button.ContextMenu>
                         <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="Add" />
+                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemaining" />
+                            <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingForSelectedLanguages" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -75,18 +74,18 @@
     
                 <Button MinWidth="65" Grid.Column="1"
                     Margin="10,0,5,0" FontWeight="Bold"
-                    cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
+                    Command="{Binding RelayCommand}" CommandParameter="ShowAudioDefaults"
                     ToolTip="{x:Static Properties:ResourcesTooltips.AudioView_AudioDefaults}"
                     Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" />
 
                 <Button MinWidth="65" Grid.Column="2"
-                        cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                        Command="{Binding RelayCommand}" CommandParameter="ReloadDefaults"
                         ToolTip="{x:Static Properties:ResourcesTooltips.BehavioursReload}"
                         Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
 
                 <Button MinWidth="65" Grid.Column="4"
                         Margin="0,0,0,0"
-                        cal:Message.Attach="[Event Click] = [Action Clear]"
+                        Command="{Binding RelayCommand}" CommandParameter="Clear"
                         Content="{x:Static Properties:Resources.Generic_Clear}" />
             </Grid>
         </Grid>
@@ -113,16 +112,16 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" Command="{Binding RelayCommand}" CommandParameter="Add" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemaining" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" Command="{Binding RelayCommand}" CommandParameter="AddAllRemainingForSelectedLanguages" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" Command="{Binding RelayCommand}" CommandParameter="Clear" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_ConfigureDefaultBehaviours}" Command="{Binding RelayCommand}" CommandParameter="ShowAudioDefaults" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" cal:Message.Attach="[Event Click] = [Action ExpandAllTracks]"  />
-                    <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" cal:Message.Attach="[Event Click] = [Action CollapseAllTracks]"  />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_ExpandAll}" Command="{Binding RelayCommand}" CommandParameter="ExpandAllTracks"  />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_CollapseAll}" Command="{Binding RelayCommand}" CommandParameter="CollapseAllTracks"  />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -246,9 +245,7 @@
                             <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
-                                        <cal:ActionMessage MethodName="Remove">
-                                            <cal:Parameter Value="{Binding}" />
-                                        </cal:ActionMessage>
+                                        <i:InvokeCommandAction Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Image>
@@ -264,7 +261,6 @@
                                 <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
                                                     Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
-
        
                                 <TextBlock Text="{x:Static Properties:Resources.AudioView_TrackName}" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
                                 <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" />

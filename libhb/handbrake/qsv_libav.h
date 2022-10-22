@@ -173,6 +173,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HB_QSV_REPEAT_NUM_DEFAULT      100
 #define HB_QSV_ASYNC_DEPTH_DEFAULT     4
 
+#define HB_QSV_AVC_DECODER_WIDTH_MAX   4096
+#define HB_QSV_AVC_DECODER_HEIGHT_MAX  4096
+
 // version of MSDK/QSV API currently used
 #define HB_QSV_MSDK_VERSION_MAJOR  1
 #define HB_QSV_MSDK_VERSION_MINOR  3
@@ -335,9 +338,9 @@ typedef struct hb_qsv_context {
 
     void *qsv_config;
 
-    int num_cpu_filters;
+    int num_sw_filters;
     int la_is_enabled;
-    int qsv_filters_are_enabled;
+    int qsv_hw_filters_are_enabled;
     int full_path_is_enabled;
     char *vpp_scale_mode;
     char *vpp_interpolation_method;

@@ -141,7 +141,7 @@ HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az et
     <value>Detelecine, film kare hızlarını televizyon kare hızlarına dönüştürmek için bir işlem olan telesine ait tarak eserlerini ortadan kaldırır.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Gri tonlama, videonun renk bileşenini kaldırır. Genellikle Siyah ve Beyaz denir. Beyaz video.</value>
+    <value>Gri tonlama, videonun renk bileşenini kaldırır. Genellikle Siyah Beyaz video olarak anılır.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
     <value>Dizin ve dosya adı dahil olmak üzere hedef yolu. Yeni videonuzun yaratılacağı yer ve adı ne olacak.</value>
@@ -330,7 +330,9 @@ Tüm kodlama ayarlarını geçersiz kılar. Bir ön ayar seçildikten sonra ayar
     <value>Seçilen ön ayarı kaldırın.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Tüm başlıklar yerine yalnızca belirtilen başlığı tarayın.</value>
+    <value>Bazı Kaynaklar birden fazla video klip veya bir Başlık koleksiyonu içerebilir. Blu-ray ve DVD Kaynaklarında genellikle birden fazla Başlık bulunur.
+
+Kodlamak istediğiniz belirli başlığı biliyorsanız, buraya girebilirsiniz ve HandBrake kaynak dosyadaki her başlık yerine yalnızca o başlığı tarar. Aksi takdirde, alanı boş bırakın.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>Özel  Gürültüsüzlük parametreleri.
@@ -364,22 +366,22 @@ HQDN3D varsayılan: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-tempor
 - Hareketli, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, yüksek çözünürlüklü video için tasarlanmamıştır.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Ayırıcı, resimden karışmış kalıntıları kaldırır.
+    <value>Görüntü ayrıştırma, resimdeki tarak kalıntılarını kaldırır.
 
-Yadif popüler ve hızlı bir ayırıcıdır.
+Bwdif ve Yadif iki popüler ve hızlı görüntü ayrıştırıcıdır.
 
 Ayrıştırma, hız ve kalite için çoklu enterpolasyon algoritmaları arasında geçiş yapar.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Özel Ayırıcı parametreleri.
+    <value>Özel Görüntü Ayrıştırma parametreleri.
  
- Yadif sözdizimi: mode=m:parity=p
+ Bwdif ve Yadif sözdizimi: mode=m:parity=p
  
- Yadif varsayılan: mode=3
+ Bwdif ve Yadif varsayılanı: mode=3
  
- Ayırıcı sözdizimi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ Ayrıştırma sözdizimi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
  
- Ayırıcı varsayılan: mode=7</value>
+ Ayrıştırma varsayılanı: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Ayırma filtresi ön ayarı.
@@ -481,5 +483,49 @@ Devre dışı bırakıldığında, doldurulursa ana penceredeki hedef kutusundak
 Not, kaynak altyazı parçası biçimi çıktı dosyası türünde desteklenmiyorsa bu otomatik olarak seçilecektir.
 
 Örneğin, PGS altyazıları MP4'te desteklenmez.</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Düz - Ön ayarlar düz bir liste olarak görüntülenir.
+Kısmen Düz - Son 8 kullanıcı ön ayarı düz bir liste olarak görüntülenir ve ardından tüm ön ayarlar kategori listesinde gösterilir.
+Kategoriler - Tüm ön ayarlar kategori başına bir alt menü altında gösterilir.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Yeni bir kaynak veya başlık seçerken bu sekmenin otomatik olarak ses parçalarını nasıl eklediğini belirleyen kurulum davranışları.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Yapılandırılan davranışlara göre aşağıdaki listeyi yenileyin.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Yeni bir kaynak veya başlık seçerken bu sekmenin altyazı parçalarını nasıl otomatik olarak eklediğini belirleyen kurulum davranışları.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Aşağıdaki ortam değişkenleri her zaman ayarlanır:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Olası Çıkış Kodları aşağıdaki gibidir:
+0 : Başarılı
+2 : Giriş Bağımsız Değişkenleri Hatası
+3 : Başlatılamadı 
+4 : Bilinmeyen Hata
+5 : Kaynak dosyası okuma hatası.
+
+Lütfen unutmayın, hata kodları en iyi çabadır ve her zaman doğru olmayabilir.
+Çıktı dosyasının üzerinde işlem yapmadan önce doğrulanması önerilir.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Çıktı dosyasının biçimi. Desteklenen herhangi bir dosya sistemi karakterine ek olarak, başlığı değiştirdiğinizde veya bir kaynağı taradığınızda veya belirli ayarları güncellediğinizde değiştirilecek olan yer tutuculardan herhangi birini kullanabilirsiniz.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Sağdan sola doğru olan diller için iki moddan birini etkinleştirebilirsiniz. "Yalnızca Metin", metni yalnızca sağdan sola stilde işler. "Tüm Kullanıcı Arayüzü", tüm kontrolleri sağdan sola yapacaktır.
+
+Bu modları kullanırken Kullanıcı Arayüzü düzeninde kusurlar olabileceğini lütfen unutmayın. Dile bağlı olarak, en uygun olanı bulmak için her iki modu da denemeye değer olabilir.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Ses için belirli bir kalite düzeyini hedefleyin.
+1 en düşük kalite ve 5 en yüksek kalitedir.
+
+Bit hızı kaynaktan kaynağa değişecektir.</value>
   </data>
 </root>

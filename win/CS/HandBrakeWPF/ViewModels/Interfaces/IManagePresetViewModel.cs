@@ -14,7 +14,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
-    public interface IManagePresetViewModel
+    public interface IManagePresetViewModel : IViewModelBase
     {
         /// <summary>
         /// Prepare the Preset window 

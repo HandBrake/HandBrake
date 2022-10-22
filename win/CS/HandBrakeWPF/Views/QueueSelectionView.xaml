@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.QueueSelectionView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
@@ -16,12 +15,6 @@
         mc:Ignorable="d">
 
     <Window.Resources>
-
-        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
-            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
-            <Setter Property="Margin" Value="0,2,0,2" />
-        </Style>
-        
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
@@ -61,12 +54,12 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Select All" cal:Message.Attach="[Event Click] = [Action SelectAll]" />
-                    <MenuItem Header="Deselect All" cal:Message.Attach="[Event Click] = [Action UnSelectAll]" />
+                    <MenuItem Header="Select All" Command="{Binding RelayCommand}" CommandParameter="SelectAll" />
+                    <MenuItem Header="Deselect All" Command="{Binding RelayCommand}" CommandParameter="UnSelectAll" />
                     <Separator />
-                    <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" cal:Message.Attach="[Event Click] = [Action OrderByTitle]" />
-                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" cal:Message.Attach="[Event Click] = [Action OrderByDuration]" />
-                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" cal:Message.Attach="[Event Click] = [Action OrderByName]" />
+                    <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" Command="{Binding RelayCommand}" CommandParameter="OrderByTitle" />
+                    <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" Command="{Binding RelayCommand}" CommandParameter="OrderByDuration" />
+                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" Command="{Binding RelayCommand}" CommandParameter="OrderByName" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -121,13 +114,13 @@
 
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Cancel]"
+                    Command="{Binding RelayCommand}" CommandParameter="Cancel"
                     Content="{x:Static Properties:Resources.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
-                    cal:Message.Attach="[Event Click] = [Action Add]"
+                    Command="{Binding RelayCommand}" CommandParameter="Add"
                     Content="{x:Static Properties:Resources.Generic_Add}"
                     IsDefault="True"
                     Padding="8,2" />

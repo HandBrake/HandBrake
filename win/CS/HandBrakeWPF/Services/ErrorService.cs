@@ -11,7 +11,10 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Windows;
-    using Caliburn.Micro;
+
+    using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Views;
+
     using Interfaces;
     using ViewModels.Interfaces;
 
@@ -34,15 +37,15 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void ShowError(string message, string solution, string details)
         {
-            IWindowManager windowManager = IoC.Get<IWindowManager>();
-            IErrorViewModel errorViewModel = IoC.Get<IErrorViewModel>();
+            IWindowManager windowManager = IoCHelper.Get<IWindowManager>();
+            IErrorViewModel errorViewModel = IoCHelper.Get<IErrorViewModel>();
 
             if (windowManager != null && errorViewModel != null)
             {
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = details;
-                windowManager.ShowDialogAsync(errorViewModel);
+                windowManager.ShowDialog<ErrorView>(errorViewModel);
             }
         }
 
@@ -60,15 +63,15 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void ShowError(string message, string solution, Exception exception)
         {
-            IWindowManager windowManager = IoC.Get<IWindowManager>();
-            IErrorViewModel errorViewModel = IoC.Get<IErrorViewModel>();
+            IWindowManager windowManager = IoCHelper.Get<IWindowManager>();
+            IErrorViewModel errorViewModel = IoCHelper.Get<IErrorViewModel>();
 
             if (windowManager != null && errorViewModel != null)
             {
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = exception.ToString();
-                windowManager.ShowDialogAsync(errorViewModel);
+                windowManager.ShowDialog<ErrorView>(errorViewModel);
             }
         }
 

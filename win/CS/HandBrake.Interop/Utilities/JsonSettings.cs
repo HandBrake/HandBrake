@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.Utilities
 {
     using System.Text.Json;
+    using System.Text.Json.Serialization;
 
     public class JsonSettings
     {
@@ -18,7 +19,7 @@ namespace HandBrake.Interop.Utilities
         /// </summary>
         public static JsonSerializerOptions Options = new JsonSerializerOptions
                                                             {
-                                                                IgnoreNullValues = true,
+                                                                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                                                                 WriteIndented = true,
                                                                 PropertyNameCaseInsensitive = true
                                                             };

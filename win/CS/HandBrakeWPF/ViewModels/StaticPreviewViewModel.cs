@@ -15,12 +15,11 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
-
-    using Caliburn.Micro;
+   
+    using HandBrakeWPF.Helpers;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -293,8 +292,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
             this.UpdatePreviewFrame();
-            this.DisplayName = Resources.StaticPreviewViewModel_Title;
-            this.Title = Resources.Preview;
+            this.Title = Resources.StaticPreviewViewModel_Title;
             this.ScannedSource = scannedSource;
         }
 
@@ -319,7 +317,6 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreviewImage = this.SelectedPreviewImage - 1;
         }
 
-        [HandleProcessCorruptedStateExceptions]
         public void UpdatePreviewFrame()
         {
             if (this.Task.Width < 32 || this.Task.Height < 32)
@@ -370,18 +367,15 @@ namespace HandBrakeWPF.ViewModels
             return height;
         }
 
-        public void Close()
+        public override void Deactivate()
         {
             this.IsOpen = false;
+            base.Deactivate();
         }
 
         public void SetPictureSettingsInstance(IPictureSettingsViewModel pictureSettingsViewModel)
         {
             this.PictureSettingsViewModel = pictureSettingsViewModel;
-        }
-
-        public override void OnLoad()
-        {
         }
 
         public void Play()
@@ -495,11 +489,11 @@ namespace HandBrakeWPF.ViewModels
 
                         try
                         {
-                            Process.Start(args);
+                            Process.Start("explorer.exe", args);
                         }
                         catch (Win32Exception exc)
                         {
-                            Execute.OnUIThread(
+                            ThreadHelper.OnUIThread(
                                 () => this.errorService.ShowError(
                                     exc.Message,
                                     Resources.QueueViewModel_PlayFileErrorSolution,
@@ -520,7 +514,7 @@ namespace HandBrakeWPF.ViewModels
                         {
                             // Fallback to the System Default
                             this.logService.LogMessage(string.Format("# Video Preview: Falling back to system media player. ({0})", args));
-                            Process.Start(args);
+                            Process.Start("explorer.exe", args);
                         }
                     }
                 }

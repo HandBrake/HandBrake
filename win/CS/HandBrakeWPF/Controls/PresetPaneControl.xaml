@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
-             xmlns:cm="http://caliburnmicro.com"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="400">
@@ -62,7 +61,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button  cm:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" Height="29" 
+                <Button Command="{Binding RelayCommand}" CommandParameter="PresetAdd" AutomationProperties.Name="Add Preset" Height="29" 
                         ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
@@ -72,7 +71,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button cm:Message.Attach="[Event Click] = [Action OpenPresetWindow]" AutomationProperties.Name="Add Preset" Height="29" Grid.Column="2" >
+                <Button Command="{Binding RelayCommand}" CommandParameter="OpenPresetWindow" AutomationProperties.Name="Add Preset" Height="29" Grid.Column="2" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="18" Height="18" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" />
@@ -111,16 +110,16 @@
 
                 <TreeView.ContextMenu>
                     <ContextMenu AutomationProperties.Name="Presets List Context Menu" Opened="ContextMenu_OnOpened">
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cm:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" Command="{Binding RelayCommand}" CommandParameter="PresetSetDefault" />
                         <Separator />
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" x:Name="editPresetMenuItem" cm:Message.Attach="[Event Click] = [Action PresetManage]" />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" x:Name="editPresetMenuItem" Command="{Binding RelayCommand}" CommandParameter="PresetManage" />
                         <MenuItem Header="{x:Static Properties:Resources.PresetManagerView_Delete}" Click="Delete_OnClick" InputGestureText="Del" />
                         <Separator />
-                        <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cm:Message.Attach="[Event Click] = [Action PresetImport]" />
-                        <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cm:Message.Attach="[Event Click] = [Action PresetExport]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" Command="{Binding RelayCommand}" CommandParameter="PresetImport" />
+                        <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" Command="{Binding RelayCommand}" CommandParameter="PresetExport" />
                         <Separator />
-                        <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cm:Message.Attach="[Event Click] = [Action PresetReset]" />
-                        <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" cm:Message.Attach="[Event Click] = [Action PresetDeleteBuildIn]" />
+                        <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" Command="{Binding RelayCommand}" CommandParameter="PresetReset" />
+                        <MenuItem Header="{x:Static Properties:Resources.ManagePresetView_DeleteBuiltIn}" Command="{Binding RelayCommand}" CommandParameter="PresetDeleteBuildIn" />
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>

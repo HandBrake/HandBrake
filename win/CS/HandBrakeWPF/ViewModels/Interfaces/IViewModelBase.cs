@@ -14,5 +14,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IViewModelBase
     {
+        void Activate();
+
+        void Deactivate();
     }
 }

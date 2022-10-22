@@ -13,13 +13,15 @@ namespace HandBrakeWPF.Helpers
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
+
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     public class WindowHelper
     {
-        public static void SpawnWindow<T>(IWindowManager windowManager, Type viewType)
+        public static void ShowWindow<T, W>(IWindowManager windowManager) where W : Window, new()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == viewType);
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(W));
 
             if (window != null)
             {
@@ -31,8 +33,25 @@ namespace HandBrakeWPF.Helpers
             }
             else
             {
-                T logvm = IoC.Get<T>();
-                windowManager.ShowWindowAsync(logvm);
+                IViewModelBase viewModel = IoCHelper.Get<T>() as IViewModelBase;
+                windowManager.ShowWindow<W>(viewModel);
+            }
+        }
+
+        public static void CloseWindow(bool? dialogResult, string viewName)
+        {
+            Type windowType = Type.GetType("HandBrakeWPF.Views." + viewName);
+
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == windowType);
+
+            if (window != null)
+            {
+                if (dialogResult != null)
+                {
+                    window.DialogResult = dialogResult;
+                }
+
+                window.Close();
             }
         }
     }

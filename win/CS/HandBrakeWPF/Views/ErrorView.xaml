@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.ErrorView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         Title="{Binding Title}"
@@ -59,7 +58,7 @@
 
             <Button Grid.Column="1"
                     Margin="5"
-                    cal:Message.Attach="[Event Click] = [Action Copy]"
+                    Command="{Binding RelayCommand}" CommandParameter="Copy"
                     Padding="8,2">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,7 +74,7 @@
                 </Grid>
             </Button>
 
-            <Button Grid.Column="2" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" Content="{x:Static Properties:Resources.Generic_Close}"/>
+            <Button Grid.Column="2" IsDefault="True" Command="{Binding RelayCommand}" CommandParameter="Close" Content="{x:Static Properties:Resources.Generic_Close}"/>
         </Grid>
     </Grid>
 </Window>

@@ -34,6 +34,7 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
             this.Bottom = cropping.Bottom;
             this.Left = cropping.Left;
             this.Right = cropping.Right;
+            this.CropMode = cropping.CropMode;
         }
 
         /// <summary>
@@ -51,13 +52,16 @@ namespace HandBrake.Interop.Interop.Interfaces.Model.Picture
         /// <param name="right">
         /// The Right Value
         /// </param>
-        public Cropping(int top, int bottom, int left, int right)
+        public Cropping(int top, int bottom, int left, int right, int cropMode)
         {
             this.Top = top;
             this.Bottom = bottom;
             this.Left = left;
             this.Right = right;
+            this.CropMode = cropMode;
         }
+
+        public int CropMode { get; set; }
 
         /// <summary>
         /// Gets or sets Top.

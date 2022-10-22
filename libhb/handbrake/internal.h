@@ -162,6 +162,13 @@ struct hb_buffer_s
     } qsv_details;
 #endif
 
+#if HB_PROJECT_FEATURE_NVENC
+    struct hw_ctx
+    {
+        void *frame;
+    } hw_ctx;
+#endif
+
     // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;
@@ -275,7 +282,8 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             const char * path, int title_index,
                             hb_title_set_t * title_set, int preview_count,
-                            int store_previews, uint64_t min_duration );
+                            int store_previews, uint64_t min_duration,
+                            int crop_auto_switch_threshold, int crop_median_threshold );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );

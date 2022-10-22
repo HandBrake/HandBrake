@@ -71,8 +71,12 @@ ifeq (1, $(FEATURE.numa))
 endif
 else ifeq ($(HOST.system),kfreebsd)
     TEST.GCC.l += pthread dl m
-else ifneq (,$(filter $(HOST.system),freebsd netbsd))
+else ifneq (,$(filter $(HOST.system),freebsd netbsd openbsd))
     TEST.GCC.L += $(LOCALBASE)/lib
+ifneq (,$(filter $(HOST.system),openbsd))
+    TEST.GCC.L += $(X11BASE)/lib
+    TEST.GCC.l += iconv
+endif
     TEST.GCC.l += pthread m
 else ifeq ($(HOST.system),solaris)
     TEST.GCC.l += pthread nsl socket

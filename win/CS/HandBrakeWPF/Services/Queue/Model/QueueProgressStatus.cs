@@ -11,10 +11,9 @@ namespace HandBrakeWPF.Services.Queue.Model
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.EventArgs;
+    using HandBrakeWPF.ViewModels;
 
     public class QueueProgressStatus : PropertyChangedBase
     {

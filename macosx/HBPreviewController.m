@@ -491,12 +491,26 @@
 
 - (void)showCroppingSettings:(id)sender
 {
-    HBCroppingController *croppingController = [[HBCroppingController alloc] initWithPicture:self.picture];
-    self.croppingPopover = [[NSPopover alloc] init];
-    self.croppingPopover.behavior = NSPopoverBehaviorTransient;
-    self.croppingPopover.contentViewController = croppingController;
-    self.croppingPopover.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-    [self.croppingPopover showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxYEdge];
+    if (self.croppingPopover)
+    {
+        if (self.croppingPopover.isShown)
+        {
+            [self.croppingPopover close];
+        }
+        else
+        {
+            [self.croppingPopover showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxYEdge];
+        }
+    }
+    else
+    {
+        HBCroppingController *croppingController = [[HBCroppingController alloc] initWithPicture:self.picture];
+        self.croppingPopover = [[NSPopover alloc] init];
+        self.croppingPopover.behavior = NSPopoverBehaviorTransient;
+        self.croppingPopover.contentViewController = croppingController;
+        self.croppingPopover.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+        [self.croppingPopover showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxYEdge];
+    }
 }
 
 #pragma mark - Encoding mode

@@ -226,7 +226,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Close()
         {
-            this.TryCloseAsync();
+            this.TryClose();
         }
 
         /// <summary>

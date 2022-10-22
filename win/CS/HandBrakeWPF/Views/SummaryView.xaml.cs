@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Controls;
     using System.Windows.Input;
 
+    using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -34,6 +35,16 @@ namespace HandBrakeWPF.Views
             {
                 ((ISummaryViewModel)this.DataContext).PreviousPreview();
             }
+        }
+
+        private void Previous_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ((SummaryViewModel)this.DataContext).PreviousPreview();
+        }
+
+        private void Next_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ((SummaryViewModel)this.DataContext).NextPreview();
         }
     }
 }

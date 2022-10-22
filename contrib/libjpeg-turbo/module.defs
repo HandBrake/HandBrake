@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBJPEGTURBO,libjpeg-turbo))
 $(eval $(call import.CONTRIB.defs,LIBJPEGTURBO))
 
-LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libjpeg-turbo-2.1.2.tar.gz
-LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.2.tar.gz
-LIBJPEGTURBO.FETCH.sha256  = e7fdc8a255c45bc8fbd9aa11c1a49c23092fcd7379296aeaeb14d3343a3d1bed
+LIBJPEGTURBO.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/libjpeg-turbo-2.1.4.tar.gz
+LIBJPEGTURBO.FETCH.url    += https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.4.tar.gz
+LIBJPEGTURBO.FETCH.sha256  = a78b05c0d8427a90eb5b4eb08af25309770c8379592bb0b8a863373128e6143f
 
 LIBJPEGTURBO.build_dir             = build
 LIBJPEGTURBO.CONFIGURE.exe         = cmake
@@ -28,6 +28,7 @@ endif
 
 ifeq (darwin,$(HOST.system))
     LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_SYSTEM_PROCESSOR=$(HOST.machine)
+    LIBJPEGTURBO.CONFIGURE.extra += -DCMAKE_OSX_ARCHITECTURES=$(HOST.machine)
 endif
 
 ifeq (1,$(HOST.cross))
@@ -44,7 +45,6 @@ ifeq (1,$(HOST.cross))
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
     else ifeq ($(HOST.system),darwin)
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(LIBJPEGTURBO.CONFIGURE.host)"
-        LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_OSX_ARCHITECTURES="$(HOST.machine)"
     else
         LIBJPEGTURBO.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(LIBJPEGTURBO.CONFIGURE.host)"
     endif

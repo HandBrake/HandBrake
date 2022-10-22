@@ -368,7 +368,6 @@ namespace HandBrake.Interop.Interop
             return initNoHardware;
         }
 
-        [HandleProcessCorruptedStateExceptions]
         private static bool TryInit()
         {
             try

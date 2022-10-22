@@ -3,22 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:standalone="clr-namespace:HandBrakeWPF.Views.Standalone"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
-             cal:Message.Attach="[Event Closing] = [Action Close]"
              Title="{Binding Title}"
              MinHeight="550">
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
-        <converters:BooleanConverter x:Key="boolConverter" />
-
     </Window.Resources>
     <Grid>
 
@@ -58,8 +53,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
-                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action CancelEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
+                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="Play" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=true}" />
+                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_CancelPreview}" Padding="8,2" Command="{Binding RelayCommand}" CommandParameter="CancelEncode" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}, ConverterParameter=false}" />
 
                     <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
                     <ComboBox Width="60"

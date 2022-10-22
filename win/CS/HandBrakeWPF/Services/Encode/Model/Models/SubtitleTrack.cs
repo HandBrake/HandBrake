@@ -9,11 +9,10 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.ViewModels;
 
     public class SubtitleTrack : PropertyChangedBase
     {

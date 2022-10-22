@@ -20,7 +20,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
-    public interface IQueueSelectionViewModel
+    public interface IQueueSelectionViewModel : IViewModelBase
     {
         /// <summary>
         /// Gets the selected titles.

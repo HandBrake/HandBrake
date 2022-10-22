@@ -17,6 +17,10 @@
 #include "handbrake/qsv_filter_pp.h"
 #endif
 
+#if HB_PROJECT_FEATURE_NVENC
+#include "handbrake/nvenc_common.h"
+#endif
+
 typedef struct
 {
     hb_list_t * jobs;
@@ -147,6 +151,7 @@ static void work_func( void * _work )
             hb_qsv_setup_job(job);
         }
 #endif
+
         hb_job_setup_passes(job->h, job, passes);
         hb_job_close(&job);
 
@@ -250,6 +255,7 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w->codec_param = AV_CODEC_ID_VP8;
             break;
         case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_10BIT:
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_VP9;
             break;
@@ -281,6 +287,7 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w->codec_param = AV_CODEC_ID_H264;
             break;
         case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_HEVC;
             break;
@@ -450,8 +457,14 @@ void hb_display_job_info(hb_job_t *job)
     {
         hb_log("   + decoder: %s %d-bit (%s)",
                hb_qsv_decode_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
-    }
-    else
+    } else
+#endif
+#if HB_PROJECT_FEATURE_NVENC
+    if (hb_nvdec_is_enabled(job))
+    {
+        hb_log("   + decoder: %s %d-bit (%s)",
+               hb_nvdec_get_codec_name(title->video_codec_param), hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
+    } else
 #endif
     {
         hb_log("   + decoder: %s %d-bit (%s)", title->video_codec_name, hb_get_bit_depth(job->input_pix_fmt), av_get_pix_fmt_name(job->input_pix_fmt));
@@ -560,6 +573,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
+                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
@@ -591,6 +605,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_QSV_AV1_10BIT:
                 case HB_VCODEC_FFMPEG_VCE_H264:
                 case HB_VCODEC_FFMPEG_VCE_H265:
+                case HB_VCODEC_FFMPEG_VCE_H265_10BIT:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H265_10BIT:
@@ -1362,20 +1377,6 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         if (hb_qsv_is_enabled(job))
         {
             hb_qsv_sanitize_filter_list(job);
-            // In case of video memory need to set formats after satitize filters 
-            // to ensure that full QSV pipeline supported
-            if (hb_qsv_full_path_is_enabled(job))
-            {
-                // Formats supported in QSV pipeline via video memory
-                if (job->input_pix_fmt == AV_PIX_FMT_YUV420P10)
-                {
-                    job->input_pix_fmt = AV_PIX_FMT_P010LE;
-                }
-                else if (job->input_pix_fmt == AV_PIX_FMT_YUV420P)
-                {
-                    job->input_pix_fmt = AV_PIX_FMT_NV12;
-                }
-            }
         }
 #endif
 
@@ -1403,26 +1404,18 @@ static void sanitize_filter_list(hb_job_t *job, hb_geometry_t src_geo)
         }
 
 #if HB_PROJECT_FEATURE_QSV && (defined( _WIN32 ) || defined( __MINGW32__ ))
-        if (job->vcodec == HB_VCODEC_QSV_MASK)
+        if (hb_qsv_full_path_is_enabled(job))
         {
-            if (!hb_qsv_full_path_is_enabled(job))
-            {
-                // Formats supported by QSV pipeline via system memory
-                if (encoder_pix_fmt != AV_PIX_FMT_YUV420P10 &&
-                    encoder_pix_fmt != AV_PIX_FMT_YUV420P)
-                {
-                    // TODO: skip the first AV_PIX_FMT_NV12 or AV_PIX_FMT_P010LE formats, prefer second format for system memory
-                    encoder_pix_fmts++;
-                    encoder_pix_fmt = *encoder_pix_fmts;
-                }
-            }
+            job->input_pix_fmt = encoder_pix_fmt;
         }
+        else
 #endif
-
-        hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
-        char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
-        hb_add_filter(job, filter, settings);
-        free(settings);
+        {
+            hb_filter_object_t *filter = hb_filter_init(HB_FILTER_FORMAT);
+            char *settings = hb_strdup_printf("format=%s", av_get_pix_fmt_name(encoder_pix_fmt));
+            hb_add_filter(job, filter, settings);
+            free(settings);
+        }
     }
 }
 

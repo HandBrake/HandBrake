@@ -331,7 +331,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         self.level = levels.firstObject;
     }
 
-    if (!(self.encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_FFMPEG_SVT_AV1_MASK)))
+    if (!(self.encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_SVT_AV1_MASK)))
     {
         self.fastDecode = NO;
     }
@@ -393,7 +393,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     for (int i = 0; tunes != NULL && tunes[i] != NULL; i++)
     {
         // we filter out "fastdecode" as we have a dedicated checkbox for it
-        if (!(self.encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_FFMPEG_SVT_AV1_MASK))
+        if (!(self.encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_SVT_AV1_MASK))
             || strcasecmp(tunes[i], "fastdecode") != 0)
         {
             [temp addObject:@(tunes[i])];

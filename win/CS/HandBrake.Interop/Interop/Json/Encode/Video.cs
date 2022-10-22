@@ -81,5 +81,10 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the qsv.
         /// </summary>
         public QSV QSV { get; set; }
+
+        /// <summary>
+        /// HB_DECODE_SUPPORT constants in common.h
+        /// </summary>
+        public int HardwareDecode { get; set; }
     }
 }
