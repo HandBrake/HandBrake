@@ -2825,8 +2825,8 @@ static void import_pic_settings_44_0_0(hb_value_t *preset)
     }
     hb_dict_remove(preset, "UsesPictureSettings");
 
-    const char * pic_par = hb_dict_get_string(preset, "PicturePAR");
-    if (!strcasecmp(pic_par, "loose"))
+    const char *pic_par = hb_dict_get_string(preset, "PicturePAR");
+    if (pic_par == NULL || !strcasecmp(pic_par, "loose"))
     {
         hb_dict_set(preset, "PicturePAR", hb_value_string("auto"));
     }
