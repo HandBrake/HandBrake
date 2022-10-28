@@ -1,7 +1,7 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "42",
+    "runtime-version": "43",
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
