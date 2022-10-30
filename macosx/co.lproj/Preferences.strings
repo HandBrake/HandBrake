@@ -35,7 +35,7 @@
 "351.title" = "Ghjurnali d’attività :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
-"352.ibShadowedToolTip" = "Numeru di e fighjulate di fiura à analizà. Valori più alti ponu aummentà a precisione di a rifilatura autumatica à u preghjudiziu di u tempu d’analisa di u titulu.";
+"352.ibShadowedToolTip" = "Numeru di e fighjulate di fiura à analizà. Valori più alti ponu aumentà a precisione di a rifilatura autumatica à u preghjudiziu di u tempu d’analisa di u titulu.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
 "354.title" = "Altre viste";
@@ -50,7 +50,7 @@
 "357.title" = "20";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
-"359.ibShadowedToolTip" = "Numeru di e fighjulate di fiura à analizà. Valori più alti ponu aummentà a precisione di a rifilatura autumatica à u preghjudiziu di u tempu d’analisa di u titulu.";
+"359.ibShadowedToolTip" = "Numeru di e fighjulate di fiura à analizà. Valori più alti ponu aumentà a precisione di a rifilatura autumatica à u preghjudiziu di u tempu d’analisa di u titulu.";
 
 /* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
 "360.title" = "Numeru di e fighjulate di fiura à analizà :";
@@ -125,7 +125,7 @@
 "463.ibShadowedToolTip" = "Durata minima in seconde di i tituli DVD è Blu-ray. I tituli più corti seranu tralasciati.";
 
 /* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
-"464.title" = "Tralascià i tituli di DVD è Blu-ray più corti chì :";
+"464.title" = "Tralascià i tituli di DVD è Blu-ray più corti chè :";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
 "480.ibShadowedToolTip" = "Durata minima in seconde di u titulu. I tituli più corti seranu tralasciati.";

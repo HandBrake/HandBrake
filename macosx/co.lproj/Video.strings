@@ -59,7 +59,7 @@
 "gIJ-Xs-uVF.title" = "Altre viste";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "« Qualità custente » fà svarià u flussu binariu per assicurassi chì a qualità visuale stà guasi custente a video sana.\n\nAccumudà u cursore di qualità à manu diritta per aummentà a qualità o à manu manca per diminuiscela, in chjuchi passi di più o menu 1-2.\n\nI valori ricumandati per i cudificatori x264 è x265 sò RF 18-28. E preferenze di qualità più alte ponu pruduce schedarii assai vuluminosi.\n\nDefinita à RF 0, a cudificazione x264 hè senza perdita.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "« Qualità custente » fà svarià u flussu binariu per assicurassi chì a qualità visuale stà guasi custente a video sana.\n\nAccumudà u cursore di qualità à manu diritta per aumentà a qualità o à manu manca per diminuiscela, in chjuchi passi di più o menu 1-2.\n\nI valori ricumandati per i cudificatori x264 è x265 sò RF 18-28. E preferenze di qualità più alte ponu pruduce schedarii assai vuluminosi.\n\nDefinita à RF 0, a cudificazione x264 hè senza perdita.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Prufilu :";

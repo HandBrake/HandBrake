@@ -44,7 +44,7 @@
 "1192.title" = "Finestra";
 
 /* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
-"1198.title" = "Apre una fonte…";
+"1198.title" = "Apre a fonte…";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
 "1200.title" = "Schedariu";
@@ -155,7 +155,7 @@
 "1949.title" = "Prerigature";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "1950"; */
-"1950.title" = "Reinizià e prerigature officiale";
+"1950.title" = "Reinizià e prerigature ufficiale";
 
 /* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
 "1955.title" = "Nova prerigatura…";

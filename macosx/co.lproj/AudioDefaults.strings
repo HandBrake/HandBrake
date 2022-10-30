@@ -41,7 +41,7 @@
 "BaY-Lo-8xn.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "BaY-Lo-8xn"; */
-"BaY-Lo-8xn.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aummentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
+"BaY-Lo-8xn.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "BK7-c4-kkk"; */
 "BK7-c4-kkk.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu E-AC3. Què permette di selezziunà a ricopia E-AC3 quandu l’ozzione di ricopia autumatica hè attivata.";
@@ -53,13 +53,13 @@
 "DbI-6O-BzA.ibExternalAccessibilityDescription" = "Guadagnu";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "DbI-6O-BzA"; */
-"DbI-6O-BzA.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aummenteghja o diminuisce u vulume audio.";
+"DbI-6O-BzA.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aumenteghja o diminuisce u vulume audio.";
 
 /* Class = "NSSlider"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "DGi-Dl-5nh"; */
 "DGi-Dl-5nh.ibExternalAccessibilityDescription" = "DRC";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "DGi-Dl-5nh"; */
-"DGi-Dl-5nh.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aummentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
+"DGi-Dl-5nh.ibShadowedToolTip" = "Cumpressione di a stesa dinamica (DRC). Riduce a sfarenza di vulume trà i soni forti è muderati. S’appieca solu à e traccie AC-3 quandu a cudificazione hè fatta ver di un altru furmatu.\n\n0 : Ùn appiecà micca a cumpressione DRC.\n1 : Appiecà DRC secondu à e sugestioni di cumpressione incurpurate in a traccia di fonte.\n\nI valori superiore à 1 aumentanu u vulume di i soni muderati. I valori superiore à 2,5 ùn sò micca ricumandati perchè ponu cagiunà una disturzione chì si sente.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "dpw-He-8eZ"; */
 "dpw-He-8eZ.title" = "Cellula di testu";
@@ -169,6 +169,9 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "r80-yv-59n"; */
 "r80-yv-59n.ibShadowedToolTip" = "Frequenza di campiunariu audio in kilohertz (kHz). Autumaticu hè ricumandatu.";
 
+/* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports Opus. This permits Opus passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "Ry1-gA-ns4"; */
+"Ry1-gA-ns4.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu Opus. Què permette di selezziunà a ricopia Opus quandu l’ozzione di ricopia autumatica hè attivata.";
+
 /* Class = "NSTextFieldCell"; title = "Auto Passthru:"; ObjectID = "s6s-EH-5CB"; */
 "s6s-EH-5CB.title" = "Ricopia autumatica :";
 
@@ -196,6 +199,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "vUx-OV-W5T"; */
 "vUx-OV-W5T.ibShadowedToolTip" = "Attivà st’ozzione s’è u vostru apparechju di ripruduzzione accetta u furmatu MP3. Què permette di selezziunà a ricopia MP3 quandu l’ozzione di ricopia autumatica hè attivata.";
 
+/* Class = "NSButtonCell"; title = "Opus"; ObjectID = "wAh-LS-JzG"; */
+"wAh-LS-JzG.title" = "Opus";
+
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "XKL-2e-Dlv"; */
 "XKL-2e-Dlv.title" = "Cellula di vista di tavula";
 
@@ -203,7 +209,7 @@
 "xnA-03-Bul.ibExternalAccessibilityDescription" = "Guadagnu";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "xnA-03-Bul"; */
-"xnA-03-Bul.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aummenteghja o diminuisce u vulume audio.";
+"xnA-03-Bul.ibShadowedToolTip" = "Guadagnu audio in decibel (dB). Aumenteghja o diminuisce u vulume audio.";
 
 /* Class = "NSButtonCell"; title = "MP2"; ObjectID = "Z8O-AS-UdA"; */
 "Z8O-AS-UdA.title" = "MP2";

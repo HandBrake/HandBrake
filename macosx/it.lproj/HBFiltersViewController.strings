@@ -104,7 +104,7 @@
 "ipJ-z3-XnJ.ibShadowedToolTip" = "Parametri personalizzati detelecine.\n\nSintassi: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
-"IQG-Nn-HTb.ibShadowedToolTip" = "Rilevamento interlacciato, quando abilitato, consente dal filtro di deinterlacciamento di elaborare solo i fotogrammi video interlacciati.";
+"IQG-Nn-HTb.ibShadowedToolTip" = "Rilevamento interlacciato, quando abilitato, consente al filtro di deinterlacciamento di elaborare solo i fotogrammi video interlacciati.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Chroma Smooth Tune"; ObjectID = "jFk-Eg-o2W"; */
 "jFk-Eg-o2W.ibExternalAccessibilityDescription" = "Regolazione Chroma Smooth";
@@ -148,8 +148,8 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "r9i-tL-qtD"; */
 "r9i-tL-qtD.title" = "OtherViews";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nYadif syntax: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
-"r64-vI-ymx.ibShadowedToolTip" = "Parametri Deinterlace personalizzati.\n\nYadif sintassi: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb sintassi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7";
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nBwdif and Yadif syntax: mode=m:parity=p\n\nBwdif and Yadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
+"r64-vI-ymx.ibShadowedToolTip" = "Parametri Deinterlaccio personalizzati.\n\nSintassi Bwdif e Yadif: mode=m:parity=p\n\ndefault Bwdif e Yadif: mode=3\n\nDecomb sintassi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
 "rfp-ah-CVB.title" = "OtherViews";
@@ -181,8 +181,8 @@
 /* Class = "NSTextFieldCell"; title = "Detelecine:"; ObjectID = "vTS-MJ-8nt"; */
 "vTS-MJ-8nt.title" = "Detelecine:";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nYadif is a popular and fast deinterlacer.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
-"xct-UB-bKm.ibShadowedToolTip" = "Deinterlace rimuove gli artefatti da pettine dall'immagine.\n\nYadif è un deinterlacciatore popolare e veloce.\n\nDecomb alterna più algoritmi di interpolazione per velocità e qualità.";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace removes comb artifacts from the picture.\n\nBwdif and Yadif are two popular and fast deinterlacers.\n\nDecomb switches between multiple interpolation algorithms for speed and quality."; ObjectID = "xct-UB-bKm"; */
+"xct-UB-bKm.ibShadowedToolTip" = "Deinterlace rimuove gli artefatti da pettine dall'immagine.\n\nBwdif e Yadif sono due deinterlacciatori apprezzati e veloci.\n\nDecomb alterna più algoritmi di interpolazione per velocità e qualità.";
 
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "Rilevamento interlacciato:";
