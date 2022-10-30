@@ -130,10 +130,36 @@ int qsv_copy_buffer_to_surface(mfxFrameSurface1* dst, hb_buffer_t* src)
 {
     uint8_t* out_luma = dst->Data.Y;
     uint8_t* out_chroma = dst->Data.VU;
+    int      out_pitch = dst->Data.Pitch;
+    int      out_height = dst->Info.Height;
 
-    // p010 and nv12
-    memcpy(out_luma, src->plane[0].data, src->plane[0].height * src->plane[0].stride);
-    memcpy(out_chroma, src->plane[1].data, src->plane[1].height * src->plane[1].stride);
+    // input buffer alignment from FFmpeg for p010 and nv12 could be different from surface alignment
+    if (out_pitch == src->plane[0].stride)
+    {
+        int height = FFMIN(out_height, src->plane[0].height);
+        memcpy(out_luma, src->plane[0].data, height * src->plane[0].stride);
+        height = FFMIN(out_height, src->plane[1].height);
+        memcpy(out_chroma, src->plane[1].data, height * src->plane[1].stride);
+    }
+    else
+    {
+        int pitch = FFMIN(out_pitch, src->plane[0].stride);
+        int height = FFMIN(out_height, src->plane[0].height);
+        for (int i = 0; i < height; i++)
+        {
+            uint8_t *out_row = out_luma + (i * out_pitch);
+            uint8_t *in_row = src->plane[0].data + i * src->plane[0].stride;
+            memcpy(out_row, in_row, pitch);
+        }
+        pitch = FFMIN(out_pitch, src->plane[1].stride);
+        height = FFMIN(out_height / 2, src->plane[1].height);
+        for (int i = 0; i < height; i++)
+        {
+            uint8_t *out_row = out_chroma + (i * out_pitch);
+            uint8_t *in_row = src->plane[1].data + i * src->plane[1].stride;
+            memcpy(out_row, in_row, pitch);
+        }
+    }
 
     return 0;
 }

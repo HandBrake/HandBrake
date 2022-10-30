@@ -1249,7 +1249,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         {
             hb_dict_set(settings, "w", hb_value_int(orig_width));
             hb_dict_set(settings, "h", hb_value_int(orig_height));
-            hb_avfilter_append_dict(filters, "scale_qsv", settings);
+            hb_avfilter_append_dict(filters, "vpp_qsv", settings);
         }
         else
 #endif

@@ -1343,14 +1343,12 @@ static int query_capabilities(mfxSession session, int index, mfxVersion version,
                 info->capabilities |= HB_QSV_CAP_HYPERENCODE;
             }
         }
-        if (info->codec_id == MFX_CODEC_AV1)
+        if ((lowpower == MFX_CODINGOPTION_ON) && (info->codec_id == MFX_CODEC_AV1))
         {
             init_video_param(&videoParam);
             videoParam.mfx.CodecId = info->codec_id;
-            if (hb_qsv_implementation_is_hardware(info->implementation))
-            {
-                videoParam.mfx.LowPower = lowpower;
-            }
+            videoParam.mfx.LowPower = lowpower;
+
             init_ext_av1bitstream_option(&extAV1BitstreamParam);
             videoParam.ExtParam    = videoExtParam;
             videoParam.ExtParam[0] = (mfxExtBuffer*)&extAV1BitstreamParam;
@@ -2177,8 +2175,8 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
         return 0;
     }
 
-    // scale_qsv filter can't convert from full to limited range
-    if (job->title->color_range == AVCOL_RANGE_JPEG && job->color_range == AVCOL_RANGE_MPEG)
+    // vpp_qsv filter can't convert from full to limited range, fallback to sw filters until unsupported
+    if (job->title->color_range == AVCOL_RANGE_JPEG)
     {
         return 0;
     }
