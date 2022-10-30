@@ -78,16 +78,16 @@
 "Advanced" = "Espertu";
 
 /* HBLanguage -> Any language */
-"Any" = "Qualsisia";
+"Any" = "Qualsiasi";
 
 /* Delete preset alert -> message */
-"Are you sure you want to permanently delete the selected preset?" = "Site sicuru di vulè squassà a prerigatura selezziunata ?";
+"Are you sure you want to permanently delete the selected preset?" = "Da veru, vulete squassà a prerigatura selezziunata ?";
 
 /* Delete preset alert -> message */
-"Are you sure you want to permanently delete the selected presets?" = "Site sicuru di vulè squassà e prerigature selezziunate ?";
+"Are you sure you want to permanently delete the selected presets?" = "Da veru, vulete squassà e prerigature selezziunate ?";
 
 /* Quit Alert -> message */
-"Are you sure you want to quit HandBrake?" = "Site sicuru di vulè esce da HandBrake ?";
+"Are you sure you want to quit HandBrake?" = "Da veru, vulete esce da HandBrake ?";
 
 /* Copy Protection Alert -> first button */
 "Attempt Scan Anyway" = "Pruvà quantunque l’esplurazione";
@@ -263,7 +263,7 @@
 
 /* Toolbar Open/Cancel Item
    Touch bar */
-"Open Source" = "Fonte aperta";
+"Open Source" = "Apre a fonte";
 
 /* File already exists alert -> second button
    File already exists in queue alert -> second button */
@@ -294,7 +294,7 @@
 "Please enter a name." = "Stampittate un nome.";
 
 /* Copy Protection Alert -> informative text */
-"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Ci vole à sapè chì HandBrake ùn accetta micca di caccià a prutezzione contr’à a copia nant’à i dischi DVD. S’è vo vulete fà sta funzione, ci vulerà à impiegà un prugramma esternu. St’avertimentu serà affissatu solu una volta à ogni avviu d’HandBrake.";
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Sappiate chì HandBrake ùn permette micca di caccià e prutezzioni contr’à a copia nant’à i dischi DVD. Per ottene sta funzione, ci vulerà à impiegà un prugramma esternu. St’avertimentu serà affissatu solu una volta à ogni avviu d’HandBrake.";
 
 /* Queue Done Alert -> shut down second button
    Queue Done Alert -> sleep second button */

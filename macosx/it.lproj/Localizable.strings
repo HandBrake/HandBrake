@@ -230,6 +230,9 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "sposta lavori nella coda";
 
+/* Add preset window -> My Presets */
+"My Presets" = "Personalizzati";
+
 /* Queue status */
 "No encode pending" = "Nessuna conversione in sospeso";
 

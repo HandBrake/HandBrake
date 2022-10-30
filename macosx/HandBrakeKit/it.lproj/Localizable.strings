@@ -65,6 +65,9 @@
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Uscita: %2$dx%3$d, Anamorfico: %4$dx%5$d Personalizzato";
 
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Archiviazione, %3$dx%4$d Visualizzazione";
 
@@ -112,6 +115,9 @@
 
 /* Subtitles description */
 "Burned In" = "Sovraimpressi";
+
+/* HBFilters -> filter display name */
+"Bwdif" = "Bwdif";
 
 /* Title -> chapter name
    Title description */
@@ -221,6 +227,9 @@
 
 /* HBFilters -> filter display name */
 "HQDN3D" = "HQDN3D";
+
+/* HBFilters -> invalid Bwdif custom string description */
+"Invalid Bwdif custom settings." = "Impostazioni personalizzate Bwdif non valide.";
 
 /* HBFilters -> invalid chroma smooth custom string description */
 "Invalid chroma smooth custom settings." = "Impostazioni personalizzate Chroma Smooth non valide.";

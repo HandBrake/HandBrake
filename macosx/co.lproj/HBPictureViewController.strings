@@ -5,7 +5,10 @@
 "1AB-bM-qTs.title" = "Dimensione d’affissera :";
 
 /* Class = "NSMenuItem"; title = "Off"; ObjectID = "1O3-th-4M5"; */
-"1O3-th-4M5.title" = "Fermata";
+"1O3-th-4M5.title" = "Nò";
+
+/* Class = "NSMenuItem"; title = "Conservative"; ObjectID = "1Pn-6x-bhx"; */
+"1Pn-6x-bhx.title" = "Cunservatrice";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "1Z0-JT-vst"; */
 "1Z0-JT-vst.ibExternalAccessibilityDescription" = "Rifilà inghjò";
@@ -54,9 +57,6 @@
 
 /* Class = "NSStepper"; ibExternalAccessibilityDescription = "Crop bottom"; ObjectID = "6W6-RI-fBx"; */
 "6W6-RI-fBx.ibExternalAccessibilityDescription" = "Rifilà inghjò";
-
-/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "7rG-Qv-khx"; */
-"7rG-Qv-khx.title" = "Autumaticu";
 
 /* Class = "NSTextFieldCell"; title = "Anamorphic:"; ObjectID = "8vS-Mw-bny"; */
 "8vS-Mw-bny.title" = "Anamorficu :";
@@ -201,6 +201,9 @@
 
 /* Class = "NSMenuItem"; title = "Gray"; ObjectID = "K6n-ea-Zty"; */
 "K6n-ea-Zty.title" = "Grisgiu";
+
+/* Class = "NSMenuItem"; title = "Automatic"; ObjectID = "Kay-sv-ssX"; */
+"Kay-sv-ssX.title" = "Autumaticu";
 
 /* Class = "NSTextFieldCell"; title = "Storage Size:"; ObjectID = "kOg-k4-0N2"; */
 "kOg-k4-0N2.title" = "Dimensione d’allucamentu :";

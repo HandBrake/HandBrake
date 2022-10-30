@@ -65,6 +65,9 @@
 /* HBPicture -> short info */
 "%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Esciuta : %2$dx%3$d, Anamorficu : %4$dx%5$d Persunalizatu";
 
+/* HBPicture -> short non anamorphic info */
+"%dx%d" = "%1$dx%2$d";
+
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Allucamentu, %3$dx%4$d Affissera";
 
@@ -138,7 +141,7 @@
 "Colorspace" = "Spaziu culorimetricu";
 
 /* HBJob -> filters short description */
-"Comb Detect" = "Abbentata di pettinera";
+"Comb Detect" = "Avventata di pettinera";
 
 /* Video description */
 "Constant Quality: %.2f %s" = "Qualità custente : %1$.2f %2$s";
@@ -302,7 +305,7 @@
 
 /* HBFilters -> filter display name
    HBFilters -> off display name */
-"Off" = "Fermata";
+"Off" = "Nò";
 
 /* Video description */
 "Options: %@" = "Ozzioni : %@";
