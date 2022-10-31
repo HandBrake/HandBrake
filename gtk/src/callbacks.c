@@ -1368,6 +1368,8 @@ source_dialog_extra_widgets(
 {
     GtkComboBoxText *combo;
     GList *drives, *link;
+    GtkWidget *source_extra, *ok_button;
+    GtkStyleContext *ok_style;
 
     g_debug("source_dialog_extra_widgets ()");
     combo = GTK_COMBO_BOX_TEXT(GHB_WIDGET(ud->builder, "source_device"));
@@ -1386,6 +1388,12 @@ source_dialog_extra_widgets(
     }
     g_list_free(drives);
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
+
+    ok_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
+    ok_style = gtk_widget_get_style_context(ok_button);
+    gtk_style_context_add_class(ok_style, "suggested-action");
+    source_extra = GHB_WIDGET(ud->builder, "source_extra");
+    gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), source_extra);
 }
 
 void ghb_break_pts_duration(gint64 ptsDuration, gint *hh, gint *mm, gdouble *ss)
@@ -1828,7 +1836,7 @@ do_source_dialog(gboolean single, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     const gchar *sourcename;
-    gint    response;
+    gint response;
 
     g_debug("source_browse_clicked_cb ()");
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
@@ -1838,6 +1846,7 @@ do_source_dialog(gboolean single, signal_user_data_t *ud)
         gtk_widget_show(widget);
     else
         gtk_widget_hide(widget);
+
     dialog = GHB_WIDGET(ud->builder, "source_dialog");
     source_dialog_extra_widgets(ud, dialog);
 
@@ -1846,7 +1855,7 @@ do_source_dialog(gboolean single, signal_user_data_t *ud)
 
     response = gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_hide(dialog);
-    if (response == GTK_RESPONSE_NO)
+    if (response == GTK_RESPONSE_OK)
     {
         gchar *filename;
 
