@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.16"/>
   <object class="GtkFileFilter" id="SourceFilterAVI"/>
   <object class="GtkFileFilter" id="SourceFilterAll"/>
   <object class="GtkFileFilter" id="SourceFilterEVO"/>
@@ -7802,7 +7802,6 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <child type="action">
       <object class="GtkButton" id="pref_ok">
         <property name="label" translatable="yes">OK</property>
-        <property name="image">gtk-ok</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -9250,6 +9249,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
   <object class="GtkFileChooserDialog" id="source_dialog">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
+    <property name="title" translatable="yes">Open Source</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
@@ -9260,7 +9260,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <child type="action">
       <object class="GtkButton" id="source_cancel">
         <property name="label" translatable="yes">_Cancel</property>
-        <property name="image">gtk-cancel</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
@@ -9272,7 +9271,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <child type="action">
       <object class="GtkButton" id="source_ok">
         <property name="label" translatable="yes">_Open</property>
-        <property name="image">gtk-ok</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
@@ -9281,100 +9279,86 @@ Uncheck this if you want to allow changing each title's settings independently.<
         <property name="receives_default">True</property>
       </object>
     </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox9">
+    <action-widgets>
+      <action-widget response="-6">source_cancel</action-widget>
+      <action-widget response="-5">source_ok</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkBox" id="source_extra">
+    <property name="orientation">horizontal</property>
+    <property name="visible">True</property>
+    <property name="spacing">10</property>
+    <property name="expand">False</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkBox" id="single_title_box">
+        <property name="orientation">horizontal</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
-        <property name="margin_top">12</property>
-        <property name="margin_bottom">12</property>
+        <property name="spacing">4</property>
         <child>
-          <object class="GtkBox" id="source_extra">
-            <property name="orientation">vertical</property>
+          <object class="GtkLabel" id="label89">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkBox" id="single_title_box">
-                <property name="orientation">horizontal</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">4</property>
-                <child>
-                  <object class="GtkLabel" id="label89">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Title Number:</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="single_title">
-                    <property name="width-chars">5</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="adjustment">adjustment24</property>
-                    <property name="hexpand">True</property>
-                    <signal name="value-changed" handler="nonsetting_widget_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="hbox74">
-                <property name="orientation">horizontal</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">4</property>
-                <child>
-                  <object class="GtkLabel" id="label90">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Detected DVD devices:</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="source_device">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <signal name="changed" handler="dvd_device_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="label" translatable="yes">Title Number:</property>
           </object>
           <packing>
-            <property name="position">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="single_title">
+            <property name="width-chars">5</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="halign">start</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="adjustment">adjustment24</property>
+            <property name="hexpand">True</property>
+            <signal name="value-changed" handler="nonsetting_widget_changed_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="position">1</property>
+      </packing>
     </child>
-    <action-widgets>
-      <action-widget response="-6">source_cancel</action-widget>
-      <action-widget response="-9">source_ok</action-widget>
-    </action-widgets>
+    <child>
+      <object class="GtkBox" id="hbox74">
+        <property name="orientation">horizontal</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">4</property>
+        <child>
+          <object class="GtkLabel" id="label90">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Detected DVD devices:</property>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="source_device">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="dvd_device_changed_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="position">0</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkImage" id="gtk-cancel">
     <property name="visible">True</property>

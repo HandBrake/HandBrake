@@ -34,6 +34,7 @@ gtk/autom4te.cache
 gtk/compile
 gtk/config.*
 gtk/configure
+gtk/configure~
 gtk/depcomp
 gtk/install-sh
 gtk/ltmain.sh
