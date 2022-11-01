@@ -936,11 +936,7 @@ get_dvd_volume_name(gpointer gd)
         {
             camel_convert(label);
         }
-#if defined(_WIN32)
         result = g_strdup_printf("%s (%s)", label, drive);
-#else
-        result = g_strdup_printf("%s - %s", drive, label);
-#endif
         g_free(label);
     }
     else
@@ -1924,7 +1920,8 @@ single_title_action_cb(GSimpleAction *action, GVariant * param,
 }
 
 G_MODULE_EXPORT void
-dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
+dvd_source_activate_cb(GSimpleAction *action, GVariant *param,
+                       signal_user_data_t *ud)
 {
     const gchar *filename;
     const gchar *sourcename;
@@ -1933,7 +1930,7 @@ dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
     // be finished with sourcename before calling ghb_do_scan
     // since the memory it references will be freed
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
-    filename = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    filename = g_variant_get_string(param, NULL);
     if (strcmp(sourcename, filename) != 0)
     {
         ghb_dict_set_string(ud->prefs, "default_source", filename);
@@ -5084,67 +5081,50 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_pref_set(ud->prefs, name);
 
     gboolean hbfd = ghb_dict_get_bool(ud->prefs, "hbfd_feature");
+    GMenu *view_menu = G_MENU(gtk_builder_get_object(ud->builder, "view-menu"));
+    GMenuModel *hbfd_menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "hbfd-section"));
     if (hbfd)
     {
         const GhbValue *val;
         val = ghb_dict_get_value(ud->prefs, "hbfd");
         ghb_ui_settings_update(ud, ud->prefs, "hbfd", val);
+        GMenuItem *hbfd_item = g_menu_item_new_from_model(hbfd_menu, 0);
+        g_menu_prepend_item(view_menu, hbfd_item);
     }
-    widget = GHB_WIDGET(ud->builder, "hbfd");
-    gtk_widget_set_visible(widget, hbfd);
+    else
+    {
+        g_menu_remove(view_menu, 0);
+    }
 }
 
 gboolean
 ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
     GList *link, *drives;
-    static GList *dvd_items = NULL;
 
     g_debug("ghb_file_menu_add_dvd()");
-    GtkMenu *menu = GTK_MENU(GHB_WIDGET(ud->builder, "file_submenu"));
+    GMenu *dvd_menu = G_MENU(gtk_builder_get_object(ud->builder, "dvd-list"));
 
     // Clear previous dvd items from list
-    link = dvd_items;
-    while (link != NULL)
-    {
-        GtkWidget * widget = GTK_WIDGET(link->data);
-        // widget_destroy automatically removes widget from container.
-        gtk_widget_destroy(widget);
-        link = link->next;
-    }
-    g_list_free(dvd_items);
-    dvd_items = NULL;
+    g_menu_remove_all(dvd_menu);
 
-    int pos = 5;
     link = drives = dvd_device_list();
     if (drives != NULL)
     {
-        GtkWidget *widget = gtk_separator_menu_item_new();
-        dvd_items = g_list_append(dvd_items, (gpointer)widget);
-
-        gtk_menu_shell_insert(GTK_MENU_SHELL(menu), widget, pos++);
-        gtk_widget_set_visible(widget, TRUE);
+        GMenuModel *dvd_template = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "dvd"));
 
         while (link != NULL)
         {
-            GtkWidget *widget;
-            gchar *drive = get_dvd_device_name(link->data);
+            gchar *action = g_strdup_printf("app.dvd-open('%s')", get_dvd_device_name(link->data));
             gchar *name = get_dvd_volume_name(link->data);
 
-            widget = gtk_menu_item_new_with_label(name);
-            gtk_buildable_set_name(GTK_BUILDABLE(widget), drive);
-            gtk_widget_set_tooltip_text(widget, _("Scan this DVD source"));
+            GMenuItem *item = g_menu_item_new_from_model(dvd_template, 0);
+            g_menu_item_set_label(item, name);
+            g_menu_item_set_detailed_action(item, action);
+            g_menu_append_item(dvd_menu, item);
 
-            dvd_items = g_list_append(dvd_items, (gpointer)widget);
-            gtk_menu_shell_insert(GTK_MENU_SHELL(menu), widget, pos++);
-
-            gtk_widget_set_visible(widget, TRUE);
-
-            // Connect signal to action (menu item)
-            g_signal_connect(widget, "activate",
-                (GCallback)dvd_source_activate_cb, ud);
             g_free(name);
-            g_free(drive);
+            g_free(action);
             free_drive(link->data);
             link = link->next;
         }

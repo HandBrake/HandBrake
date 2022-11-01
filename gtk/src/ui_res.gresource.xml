@@ -2,5 +2,7 @@
 <gresources>
   <gresource prefix="/fr/handbrake/ghb/ui">
     <file>ghb.ui</file>
+    <file>menu.ui</file>
   </gresource>
 </gresources>
+
