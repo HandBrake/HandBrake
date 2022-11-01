@@ -1734,7 +1734,7 @@ void
 ghb_low_disk_check(signal_user_data_t *ud)
 {
     GtkWindow       *hb_window;
-    GtkWidget       *dialog;
+    GtkWidget       *dialog, *cancel;
     GtkResponseType  response;
     ghb_status_t     status;
     const char      *paused_msg = "";
@@ -1743,6 +1743,7 @@ ghb_low_disk_check(signal_user_data_t *ud)
     gint64           free_limit;
     GhbValue        *qDict;
     GhbValue        *settings;
+    GtkStyleContext *style;
 
     if (ghb_dict_get_bool(ud->globals, "SkipDiskFreeCheck") ||
         !ghb_dict_get_bool(ud->prefs, "DiskFreeCheck"))
@@ -1795,6 +1796,11 @@ ghb_low_disk_check(signal_user_data_t *ud)
                            _("Resume, Don't tell me again"), 2,
                            _("Cancel Current and Stop"), 3,
                            NULL);
+
+    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 3);
+    style = gtk_widget_get_style_context(cancel);
+    gtk_style_context_add_class(style, "destructive-action");
+
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
     switch ((int)response)
@@ -1896,7 +1902,7 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
                     "File already exists.\n"
                     "Do you want to overwrite?"),
                     dest);
-        if (!ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
+        if (!ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
                                 message, _("Cancel"), _("Overwrite")))
         {
             g_free(message);

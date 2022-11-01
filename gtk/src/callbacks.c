@@ -3696,20 +3696,12 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
 
     if (prefs_require_restart)
     {
-        GtkWidget * dialog;
-        GtkWindow * hb_window;
-
-        hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+        GtkWindow *hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
 
         // Toss up a warning dialog
-        dialog = gtk_message_dialog_new(hb_window,   GTK_DIALOG_MODAL,
-                                GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-                                "You must restart HandBrake now");
-        gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                               "Exit HandBrake", GTK_RESPONSE_YES, NULL);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-
+        ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
+						   "You must restart HandBrake now",
+						   "Exit HandBrake", NULL);
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
         g_application_quit(G_APPLICATION(ud->app));
@@ -3891,24 +3883,16 @@ ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
 void
 ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *cancel)
 {
-    GtkWidget *dialog;
-
-    // Toss up a warning dialog
-    dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
-                            type, GTK_BUTTONS_NONE,
-                            "%s", message);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                           cancel, GTK_RESPONSE_CANCEL, NULL);
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
+    ghb_message_dialog(parent, type, message, cancel, NULL);
 }
 
 void
 ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
 {
     GtkWindow *hb_window;
-    GtkWidget *dialog;
+    GtkWidget *dialog, *cancel;
     GtkResponseType response;
+    GtkStyleContext *style;
 
     if (extra_msg == NULL) extra_msg = "";
     // Toss up a warning dialog
@@ -3923,6 +3907,14 @@ ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
                            _("Finish Current, then Stop"), 3,
                            _("Continue Encoding"), 4,
                            NULL);
+
+    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
+    style = gtk_widget_get_style_context(cancel);
+    gtk_style_context_add_class(style, "destructive-action");
+    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 2);
+    style = gtk_widget_get_style_context(cancel);
+    gtk_style_context_add_class(style, "destructive-action");
+
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
     switch ((int)response)
@@ -3949,8 +3941,9 @@ gboolean
 ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
 {
     GtkWindow *hb_window;
-    GtkWidget *dialog;
+    GtkWidget *dialog, *cancel;
     GtkResponseType response;
+    GtkStyleContext *style;
 
     if (extra_msg == NULL) extra_msg = "";
     // Toss up a warning dialog
@@ -3963,6 +3956,11 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
                            _("Cancel Current and Stop"), 1,
                            _("Continue Encoding"), 4,
                            NULL);
+
+    cancel = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), 1);
+    style = gtk_widget_get_style_context(cancel);
+    gtk_style_context_add_class(style, "destructive-action");
+
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
     switch ((int)response)
