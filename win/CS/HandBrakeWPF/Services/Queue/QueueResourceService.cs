@@ -245,7 +245,7 @@ namespace HandBrakeWPF.Services.Queue
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncHyperEncode))
             {
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
-                                                  ? "hyperencode=adaptive" : string.Format("{0}:hyperencode=adaptive", task.ExtraAdvancedArguments);
+                                                  ? "hyperencode=adaptive" : string.Format("hyperencode=adaptive:{0}", task.ExtraAdvancedArguments);
                 return;
             }
 
@@ -282,14 +282,14 @@ namespace HandBrakeWPF.Services.Queue
                 // GPU List 1
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                                                   ? string.Format("gpu={0}", this.qsvGpus[1])
-                                                  : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[1]);
+                                                  : string.Format("gpu={1}:{0}", task.ExtraAdvancedArguments, this.qsvGpus[1]);
             }
             else
             {
                 // GPU List 0
                 task.ExtraAdvancedArguments = string.IsNullOrEmpty(task.ExtraAdvancedArguments)
                     ? string.Format("gpu={0}", this.qsvGpus[0])
-                    : string.Format("{0}:gpu={1}", task.ExtraAdvancedArguments, this.qsvGpus[0]);
+                    : string.Format("gpu={1}:{0}", task.ExtraAdvancedArguments, this.qsvGpus[0]);
             }
         }
     }
