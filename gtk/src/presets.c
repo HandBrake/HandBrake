@@ -2474,7 +2474,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
                         _("Cancel"),
                         _("Delete"));
     g_free(message);
-    if (response == GTK_RESPONSE_YES)
+    if (response)
     {
         int depth = path->depth;
 
