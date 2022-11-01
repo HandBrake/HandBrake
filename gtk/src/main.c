@@ -61,6 +61,7 @@
 #include "presets.h"
 #include "preview.h"
 #include "ui_res.h"
+#include "color-scheme.h"
 
 
 /*
@@ -961,6 +962,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     GtkCssProvider     * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, MyCSS, -1);
+	color_scheme_set(APP_PREFERS_LIGHT);
 
 #if GTK_CHECK_VERSION(3, 90, 0)
     GdkDisplay *dd = gdk_display_get_default();

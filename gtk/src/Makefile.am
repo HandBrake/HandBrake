@@ -113,7 +113,9 @@ ghb_SOURCES = \
 	ghb-dvd.c \
 	ghb-dvd.h \
 	marshalers.c \
-	marshalers.h
+	marshalers.h \
+	color-scheme.c \
+	color-scheme.h
 
 if MINGW
 ghb_LDFLAGS = \
