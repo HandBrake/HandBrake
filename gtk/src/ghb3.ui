@@ -152,7 +152,7 @@ conjunction with the "Forced" option.</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
           <object class="GtkMenuBar" id="presets_menu_bar">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="vexpand">False</property>
             <property name="valign">GTK_ALIGN_FILL</property>
@@ -216,43 +216,6 @@ conjunction with the "Forced" option.</property>
                         <property name="action-name">app.preset-remove</property>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="presets_window_sep2">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_window_import">
-                        <property name="label" translatable="yes">_Import</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-import</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_window_export">
-                        <property name="label" translatable="yes">_Export</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-export</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="presets_window_sep3">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_window_restore">
-                        <property name="label" translatable="yes">Reset _Built-in Presets</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.presets-reload</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -269,18 +232,13 @@ conjunction with the "Forced" option.</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
             <property name="vexpand">True</property>
             <property name="valign">GTK_ALIGN_FILL</property>
             <child>
               <object class="GtkScrolledWindow" id="presets_scroll">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="shadow_type">etched-in</property>
-                <property name="margin-top">6</property>
+                <property name="shadow_type">none</property>
                 <property name="min_content_width">200</property>
                 <child>
                   <object class="GtkTreeView" id="presets_list">
@@ -289,20 +247,12 @@ conjunction with the "Forced" option.</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="headers_visible">False</property>
+                    <signal name="button-press-event" handler="on_presets_list_press_cb"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection4"/>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label34">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">&lt;b&gt;Presets List&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
               </object>
             </child>
           </object>
@@ -7799,7 +7749,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="row-spacing">12</property>
+                        <property name="row-spacing">2</property>
                         <child>
                           <object class="GtkBox" id="CustomTmpBox">
                             <property name="orientation">vertical</property>
