@@ -160,10 +160,11 @@ UI_FILE=ghb3.ui
 endif
 endif
 
-ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI_FILE)
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI_FILE) $(srcdir)/menu.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
-ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI_FILE)
+ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI_FILE) $(srcdir)/menu.ui
+	cp $(srcdir)/menu.ui menu.ui
 	cp $(srcdir)/$(UI_FILE) ghb.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 

@@ -83,29 +83,25 @@
 GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
-    guint res = 0;
+	GtkWidget *dialog;
+	GtkBuilder *xml;
     GError *error = NULL;
-    const gchar *ghb_ui;
-    gsize data_size;
 
-    GResource *ui_res = ghb_ui_get_resource();
-    GBytes *gbytes = g_resource_lookup_data(ui_res,
-                                            "/fr/handbrake/ghb/ui/ghb.ui",
-                                            0, NULL);
-    ghb_ui = g_bytes_get_data(gbytes, &data_size);
+    g_debug("create_builder_or_die()\n");
+    xml = gtk_builder_new();
+	gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/ghb.ui", &error);
+	if (!error)
+	    gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/menu.ui", &error);
 
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
         "\n"
-        "Internal error. Could not parse UI description.\n"
+        "Internal error. Could not parse menu description.\n"
         "%s");
-    g_debug("create_builder_or_die()\n");
-    GtkBuilder *xml = gtk_builder_new();
-    if (xml != NULL)
-        res = gtk_builder_add_from_string(xml, ghb_ui, -1, &error);
-    if (!xml || !res)
+
+    if (error)
     {
-        GtkWidget *dialog = gtk_message_dialog_new_with_markup(NULL,
+        dialog = gtk_message_dialog_new_with_markup(NULL,
             GTK_DIALOG_MODAL,
             GTK_MESSAGE_ERROR,
             GTK_BUTTONS_CLOSE,
@@ -776,6 +772,8 @@ ghb_shutdown_cb(GApplication * app, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+dvd_source_activate_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 single_title_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -883,6 +881,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-export",          queue_export_action_cb          },
         { "queue-import",          queue_import_action_cb          },
         { "queue-edit",            queue_edit_action_cb            },
+		{ "dvd-open",              dvd_source_activate_cb, "s"     },
         { "hbfd",                  NULL,
           NULL, "false",           hbfd_action_cb                  },
         { "show-presets",          NULL,
@@ -1294,6 +1293,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
     window = GHB_WIDGET(ud->builder, "queue_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+
+	GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu"));
+    gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
 #if GTK_CHECK_VERSION(3, 90, 0)
     // GTK4 Event handling.

@@ -40,7 +40,6 @@
 #define GHB_THREAD_NEW(n, f, p) \
                 g_thread_create((GThreadFunc)(f), (p), TRUE, NULL)
 #endif
-
 void ghb_check_all_dependencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
