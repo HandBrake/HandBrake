@@ -1381,7 +1381,7 @@ ghb_queue_update_status_icon(signal_user_data_t *ud, int index)
              icon_name = "hb-start";
             break;
         case GHB_QUEUE_PENDING:
-             icon_name = "hb-source";
+             icon_name = "hb-source-symbolic";
             break;
         case GHB_QUEUE_FAIL:
         case GHB_QUEUE_CANCELED:
@@ -1391,7 +1391,7 @@ ghb_queue_update_status_icon(signal_user_data_t *ud, int index)
              icon_name = "hb-complete";
             break;
         default:
-             icon_name = "hb-source";
+             icon_name = "document-edit-symbolic";
             break;
     }
     GtkListBox    * lb;
@@ -1547,7 +1547,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     gtk_label_set_width_chars(GTK_LABEL(dest_label), 50);
     gtk_label_set_ellipsize(GTK_LABEL(dest_label), PANGO_ELLIPSIZE_END);
 
-    delete_button = ghb_button_new_from_icon_name("hb-remove");
+    delete_button = ghb_button_new_from_icon_name("edit-delete-symbolic");
     gtk_button_set_relief(GTK_BUTTON(delete_button), GTK_RELIEF_NONE);
     g_signal_connect(delete_button, "clicked",
                      (GCallback)queue_remove_clicked_cb, ud);
