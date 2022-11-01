@@ -4,37 +4,38 @@ icons =	\
 	hb-icon.svg fr.handbrake.ghb.svg
 
 icons_dep =	\
-	icons/24x24/apps/hb-remove.png \
-	icons/32x32/apps/hb-source.png \
-	icons/32x32/apps/hb-picture.png \
-	icons/32x32/apps/hb-add-queue.png \
-	icons/32x32/apps/hb-showqueue.png \
-	icons/32x32/apps/hb-activity.png \
+	icons/24x24/apps/hb-advanced.symbolic.png \
+	icons/32x32/apps/hb-source.symbolic.png \
+	icons/32x32/apps/hb-picture.symbolic.png \
+	icons/32x32/apps/hb-add-queue.symbolic.png \
+	icons/32x32/apps/hb-showqueue.symbolic.png \
+	icons/32x32/apps/hb-activity.symbolic.png \
+	icons/32x32/apps/hb-presets.symbolic.png \
 	icons/32x32/apps/hb-start.png \
 	icons/32x32/apps/hb-stop.png \
 	icons/32x32/apps/hb-pause.png \
-	icons/48x48/apps/hb-remove.png \
-	icons/64x64/apps/hb-source.png \
-	icons/64x64/apps/hb-picture.png \
-	icons/64x64/apps/hb-add-queue.png \
-	icons/64x64/apps/hb-showqueue.png \
-	icons/64x64/apps/hb-activity.png \
+	icons/48x48/apps/hb-advanced.symbolic.png \
+	icons/64x64/apps/hb-source.symbolic.png \
+	icons/64x64/apps/hb-picture.symbolic.png \
+	icons/64x64/apps/hb-add-queue.symbolic.png \
+	icons/64x64/apps/hb-showqueue.symbolic.png \
+	icons/64x64/apps/hb-activity.symbolic.png \
+	icons/64x64/apps/hb-presets.symbolic.png \
 	icons/64x64/apps/hb-start.png \
 	icons/64x64/apps/hb-stop.png \
 	icons/64x64/apps/hb-pause.png \
-	icons/scalable/apps/hb-source.svg \
-	icons/scalable/apps/hb-picture.svg \
-	icons/scalable/apps/hb-add-queue.svg \
-	icons/scalable/apps/hb-showqueue.svg \
-	icons/scalable/apps/hb-activity.svg \
+	icons/symbolic/apps/hb-source.svg \
+	icons/symbolic/apps/hb-activity.svg \
+	icons/symbolic/apps/hb-picture.svg \
+	icons/symbolic/apps/hb-add-queue.svg \
+	icons/symbolic/apps/hb-showqueue.svg \
+	icons/symbolic/apps/hb-presets.svg \
 	icons/scalable/apps/hb-start.svg \
 	icons/scalable/apps/hb-stop.svg \
 	icons/scalable/apps/hb-pause.svg \
-	icons/scalable/apps/hb-remove.svg \
 	icons/scalable/apps/hb-complete.svg \
-	icons/scalable/apps/hb-edit.svg \
 	icons/scalable/apps/hb-icon.svg \
-	icons/scalable/apps/hb-advanced.svg \
+	icons/symbolic/apps/hb-advanced.svg \
 	icons/scalable/apps/fr.handbrake.ghb.svg
 
 hb_menu = fr.handbrake.ghb.desktop

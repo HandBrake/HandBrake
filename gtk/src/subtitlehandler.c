@@ -130,8 +130,8 @@ subtitle_refresh_list_row_ui(
         0, info_src,
         1, "-->",
         2, info_dst,
-        3, "hb-edit",
-        4, "hb-remove",
+        3, "document-edit-symbolic",
+        4, "edit-delete-symbolic",
         5, 0.5,
         -1);
 

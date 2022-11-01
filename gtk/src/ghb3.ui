@@ -466,7 +466,7 @@ conjunction with the "Forced" option.</property>
                                   <object class="GtkImage" id="queue_options_menu_button_image">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="icon_name">hb-advanced</property>
+                                    <property name="icon_name">hb-advanced-symbolic</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -628,7 +628,7 @@ conjunction with the "Forced" option.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="is_important">True</property>
                                 <property name="label" translatable="yes">Reset</property>
-                                <property name="icon_name">view-refresh</property>
+                                <property name="icon_name">view-refresh-symbolic</property>
                                 <property name="tooltip_text" translatable="yes">Mark selected queue entry as pending.
 Resets the queue job to pending and ready to run again.</property>
                                 <property name="action-name">app.queue-reset</property>
@@ -645,7 +645,7 @@ Resets the queue job to pending and ready to run again.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="is_important">True</property>
                                 <property name="label" translatable="yes">Edit</property>
-                                <property name="icon_name">hb-edit</property>
+                                <property name="icon_name">document-edit-symbolic</property>
                                 <property name="action-name">app.queue-edit</property>
                               </object>
                               <packing>
@@ -678,7 +678,7 @@ Resets the queue job to pending and ready to run again.</property>
                                           <object class="GtkImage" id="queue_actions_menu_button_image">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="icon_name">hb-advanced</property>
+                                            <property name="icon_name">hb-advanced-symbolic</property>
                                           </object>
                                           <packing>
                                             <property name="position">0</property>
@@ -1985,7 +1985,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Open Source</property>
-                    <property name="icon_name">hb-source</property>
+                    <property name="icon_name">hb-source-symbolic</property>
                     <property name="action-name">app.source</property>
                   </object>
                   <packing>
@@ -2010,7 +2010,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Add to Queue</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Add To Queue</property>
-                    <property name="icon_name">hb-add-queue</property>
+                    <property name="icon_name">hb-add-queue-symbolic</property>
                     <property name="action-name">app.queue-add</property>
                   </object>
                   <packing>
@@ -2025,7 +2025,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Start Encoding</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Start</property>
-                    <property name="icon_name">hb-start</property>
+                    <property name="icon_name">hb-start-symbolic</property>
                     <property name="action-name">app.queue-start</property>
                   </object>
                   <packing>
@@ -2067,7 +2067,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Presets Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Presets</property>
-                    <property name="icon_name">hb-presets</property>
+                    <property name="icon_name">hb-presets-symbolic</property>
                     <property name="action-name">app.show-presets</property>
                   </object>
                   <packing>
@@ -2082,7 +2082,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Preview</property>
-                    <property name="icon_name">hb-picture</property>
+                    <property name="icon_name">hb-picture-symbolic</property>
                     <property name="action-name">app.show-preview</property>
                   </object>
                   <packing>
@@ -2097,7 +2097,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Queue</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Queue</property>
-                    <property name="icon_name">hb-showqueue</property>
+                    <property name="icon_name">hb-showqueue-symbolic</property>
                     <property name="action-name">app.show-queue</property>
                   </object>
                   <packing>
@@ -2112,7 +2112,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Activity</property>
-                    <property name="icon_name">hb-activity</property>
+                    <property name="icon_name">hb-activity-symbolic</property>
                     <property name="action-name">app.show-activity</property>
                   </object>
                   <packing>
@@ -5469,7 +5469,7 @@ Colon separated list of encoder options.</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="is_important">True</property>
                                         <property name="label" translatable="yes">Reload</property>
-                                        <property name="icon_name">emblem-default</property>
+                                        <property name="icon_name">view-refresh</property>
                                         <property name="tooltip_text" translatable="yes">Reload all audio settings from defaults</property>
                                         <signal name="clicked" handler="audio_reset_clicked_cb" swapped="no"/>
                                       </object>
@@ -6255,7 +6255,7 @@ segments of the audio that are in a foreign language.</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="is_important">True</property>
                                         <property name="label" translatable="yes">Reload</property>
-                                        <property name="icon_name">emblem-default</property>
+                                        <property name="icon_name">view-refresh-symbolic</property>
                                         <property name="tooltip_text" translatable="yes">Reload all subtitle settings from defaults</property>
                                         <signal name="clicked" handler="subtitle_reset_clicked_cb" swapped="no"/>
                                       </object>
