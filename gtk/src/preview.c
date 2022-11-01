@@ -523,7 +523,7 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
                             "Audio or Video may not play as expected\n\n%s"),
                             desc);
                 ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-                                   message, "Ok", NULL);
+                                   message, _("OK"), NULL);
                 g_free(message);
                 gst_element_set_state(ud->preview->play, GST_STATE_PLAYING);
             }

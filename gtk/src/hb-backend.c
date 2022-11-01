@@ -4489,7 +4489,7 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
 
     if (v_unsup)
     {
-        if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+        if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                 message, _("Cancel"), _("Continue")))
         {
             g_free(message);
@@ -4586,7 +4586,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
                 _("SRT file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
                     "If you continue, this subtitle will be ignored."));
-                if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING, message,
+                if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION, message,
                     _("Cancel"), _("Continue")))
                 {
                     g_free(message);
@@ -4647,7 +4647,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
                         _("The source does not support Pass-Thru.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."));
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                     message, _("Cancel"), _("Continue")))
             {
                 g_free(message);
@@ -4702,7 +4702,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
                         _("%s is not supported in the %s container.\n\n"
                         "You should choose a different audio codec.\n"
                         "If you continue, one will be chosen for you."), a_unsup, mux_s);
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_QUESTION,
                                     message, _("Cancel"), _("Continue")))
             {
                 g_free(message);

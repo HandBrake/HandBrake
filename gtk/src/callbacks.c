@@ -3836,18 +3836,41 @@ ghb_countdown_dialog(
 }
 
 gboolean
-ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *no, const gchar *yes)
+ghb_title_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *title,
+                         const gchar *message, const gchar *no, const gchar *yes)
 {
-    GtkWidget *dialog;
+    GtkWidget *dialog, *yes_button;
     GtkResponseType response;
+    GtkStyleContext *yes_style;
 
     // Toss up a warning dialog
     dialog = gtk_message_dialog_new(parent, GTK_DIALOG_MODAL,
                             type, GTK_BUTTONS_NONE,
-                            "%s", message);
-    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
+                            "%s", title);
+    if (message)
+        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), message);
+
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                            no, GTK_RESPONSE_NO,
                            yes, GTK_RESPONSE_YES, NULL);
+
+    yes_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+    yes_style = gtk_widget_get_style_context(yes_button);
+
+    // Use GTK_MESSAGE_QUESTION for a neutral dialog,
+    // GTK_MESSAGE_INFO for a blue 'suggested-action' confirm button, or
+    // GTK_MESSAGE_WARNING for a red 'destructive-action' confirm button.
+    switch (type)
+    {
+    case GTK_MESSAGE_INFO:
+        gtk_style_context_add_class(yes_style, "suggested-action");
+        break;
+    case GTK_MESSAGE_WARNING:
+    case GTK_MESSAGE_ERROR:
+        gtk_style_context_add_class(yes_style, "destructive-action");
+    default:
+        break;
+    }
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy (dialog);
     if (response == GTK_RESPONSE_NO)
@@ -3856,6 +3879,14 @@ ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
     }
     return TRUE;
 }
+
+gboolean
+ghb_message_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message,
+                   const gchar *no, const gchar *yes)
+{
+    return ghb_title_message_dialog(parent, type, message, NULL, no, yes);
+}
+
 
 void
 ghb_error_dialog(GtkWindow *parent, GtkMessageType type, const gchar *message, const gchar *cancel)
