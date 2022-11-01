@@ -2457,21 +2457,23 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
     }
 
     GtkWindow       * hb_window;
-    GtkWidget       * dialog;
     gboolean          is_folder;
     GtkResponseType   response;
     const char      * name;
+    char            * message;
 
     name  = ghb_dict_get_string(preset, "PresetName");
     is_folder = preset_is_folder(path);
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-                        _("Confirm deletion of %s:\n\n%s"),
-                        is_folder ? _("folder") : _("preset"),
-                        name);
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
+    message = g_strdup_printf(_("Confirm deletion of %s:\n\n%s"),
+                              is_folder ? _("folder") : _("preset"),
+                              name);
+    response = ghb_message_dialog(hb_window,
+                        GTK_MESSAGE_WARNING,
+                        message,
+                        _("Cancel"),
+                        _("Delete"));
+    g_free(message);
     if (response == GTK_RESPONSE_YES)
     {
         int depth = path->depth;

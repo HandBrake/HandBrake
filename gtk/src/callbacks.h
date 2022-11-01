@@ -50,6 +50,9 @@ void debug_log_handler(
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 gboolean ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_udev_init(void);
+gboolean ghb_title_message_dialog(
+    GtkWindow *parent, GtkMessageType type, const gchar *title,
+    const gchar *message, const gchar *no, const gchar *yes);
 gboolean ghb_message_dialog(
     GtkWindow *parent, GtkMessageType type, const gchar *message,
     const gchar *no, const gchar *yes);
