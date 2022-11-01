@@ -7793,24 +7793,27 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <property name="title" translatable="yes">Preferences</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
-    <property name="deletable">False</property>
     <property name="use-header-bar">1</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
-    <child type="action">
-      <object class="GtkButton" id="pref_ok">
-        <property name="label" translatable="yes">OK</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="halign">GTK_ALIGN_CENTER</property>
+        <property name="show-close-button">True</property>
+        <property name="title" translatable="yes">HandBrake Settings</property>
+        <property name="has-subtitle">False</property>
+        <child type="title">
+          <object class="GtkStackSwitcher" id="prefs_switcher">
+            <property name="visible">True</property>
+            <property name="homogeneous">True</property>
+            <property name="can-focus">False</property>
+            <property name="stack">prefs_stack</property>
+          </object>
+        </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="ok">pref_ok</action-widget>
-    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox6">
         <property name="visible">True</property>
@@ -7860,11 +7863,9 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
               </packing>
             </child>
             <child>
-              <object class="GtkNotebook" id="PrefsNotebook">
+              <object class="GtkStack" id="prefs_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="show_border">False</property>
-                <property name="margin-start">12</property>
                 <property name="hexpand">True</property>
                 <child>
                   <object class="GtkBox" id="vbox42">
@@ -8121,15 +8122,8 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                       </packing>
                     </child>
                   </object>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">General</property>
-                  </object>
                   <packing>
-                    <property name="tab_fill">False</property>
+                    <property name="title" translatable="yes">Settings</property>
                   </packing>
                 </child>
                 <child>
@@ -8575,17 +8569,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                   </object>
                   <packing>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label36">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Advanced</property>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                    <property name="tab_fill">False</property>
+                    <property name="title">Advanced</property>
                   </packing>
                 </child>
               </object>
