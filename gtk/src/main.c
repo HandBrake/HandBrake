@@ -1386,7 +1386,8 @@ main(int argc, char *argv[])
     ud->app = gtk_application_new("fr.handbrake.ghb",
                                   G_APPLICATION_NON_UNIQUE |
                                   G_APPLICATION_HANDLES_OPEN);
-	g_set_application_name("HandBrake");
+    g_set_prgname("fr.handbrake.ghb");
+    g_set_application_name("HandBrake");
     // Connect application signals
     g_signal_connect(ud->app, "activate", (GCallback)ghb_activate_cb, ud);
     g_signal_connect(ud->app, "open", (GCallback)ghb_open_file_cb, ud);
