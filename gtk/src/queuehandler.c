@@ -1528,7 +1528,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     ebox = gtk_event_box_new();
 #endif
 
-    status_icon = ghb_image_new_from_icon_name("hb-source",
+    status_icon = ghb_image_new_from_icon_name("hb-source-symbolic",
                                                GHB_ICON_SIZE_BUTTON);
 
     gtk_widget_set_name(status_icon, "queue_item_status");

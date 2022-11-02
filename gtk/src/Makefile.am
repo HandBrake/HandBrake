@@ -4,38 +4,38 @@ icons =	\
 	hb-icon.svg fr.handbrake.ghb.svg
 
 icons_dep =	\
-	icons/24x24/apps/hb-advanced.symbolic.png \
-	icons/32x32/apps/hb-source.symbolic.png \
-	icons/32x32/apps/hb-picture.symbolic.png \
-	icons/32x32/apps/hb-add-queue.symbolic.png \
-	icons/32x32/apps/hb-showqueue.symbolic.png \
-	icons/32x32/apps/hb-activity.symbolic.png \
-	icons/32x32/apps/hb-presets.symbolic.png \
+	icons/24x24/apps/hb-advanced-symbolic.symbolic.png \
+	icons/32x32/apps/hb-source-symbolic.symbolic.png \
+	icons/32x32/apps/hb-picture-symbolic.symbolic.png \
+	icons/32x32/apps/hb-add-queue-symbolic.symbolic.png \
+	icons/32x32/apps/hb-showqueue-symbolic.symbolic.png \
+	icons/32x32/apps/hb-activity-symbolic.symbolic.png \
+	icons/32x32/apps/hb-presets-symbolic.symbolic.png \
 	icons/32x32/apps/hb-start.png \
 	icons/32x32/apps/hb-stop.png \
 	icons/32x32/apps/hb-pause.png \
-	icons/48x48/apps/hb-advanced.symbolic.png \
-	icons/64x64/apps/hb-source.symbolic.png \
-	icons/64x64/apps/hb-picture.symbolic.png \
-	icons/64x64/apps/hb-add-queue.symbolic.png \
-	icons/64x64/apps/hb-showqueue.symbolic.png \
-	icons/64x64/apps/hb-activity.symbolic.png \
-	icons/64x64/apps/hb-presets.symbolic.png \
+	icons/48x48/apps/hb-advanced-symbolic.symbolic.png \
+	icons/64x64/apps/hb-source-symbolic.symbolic.png \
+	icons/64x64/apps/hb-picture-symbolic.symbolic.png \
+	icons/64x64/apps/hb-add-queue-symbolic.symbolic.png \
+	icons/64x64/apps/hb-showqueue-symbolic.symbolic.png \
+	icons/64x64/apps/hb-activity-symbolic.symbolic.png \
+	icons/64x64/apps/hb-presets-symbolic.symbolic.png \
 	icons/64x64/apps/hb-start.png \
 	icons/64x64/apps/hb-stop.png \
 	icons/64x64/apps/hb-pause.png \
-	icons/symbolic/apps/hb-source.svg \
-	icons/symbolic/apps/hb-activity.svg \
-	icons/symbolic/apps/hb-picture.svg \
-	icons/symbolic/apps/hb-add-queue.svg \
-	icons/symbolic/apps/hb-showqueue.svg \
-	icons/symbolic/apps/hb-presets.svg \
+	icons/scalable/apps/hb-advanced-symbolic.svg \
+	icons/scalable/apps/hb-source-symbolic.svg \
+	icons/scalable/apps/hb-picture-symbolic.svg \
+	icons/scalable/apps/hb-add-queue-symbolic.svg \
+	icons/scalable/apps/hb-showqueue-symbolic.svg \
+	icons/scalable/apps/hb-activity-symbolic.svg \
+	icons/scalable/apps/hb-presets-symbolic.svg \
 	icons/scalable/apps/hb-start.svg \
 	icons/scalable/apps/hb-stop.svg \
 	icons/scalable/apps/hb-pause.svg \
 	icons/scalable/apps/hb-complete.svg \
 	icons/scalable/apps/hb-icon.svg \
-	icons/symbolic/apps/hb-advanced.svg \
 	icons/scalable/apps/fr.handbrake.ghb.svg
 
 hb_menu = fr.handbrake.ghb.desktop

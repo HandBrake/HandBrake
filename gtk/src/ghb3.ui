@@ -624,6 +624,7 @@ Resets the queue job to pending and ready to run again.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="hexpand">False</property>
+                                        <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkImage" id="queue_actions_menu_button_image">
                                             <property name="visible">True</property>
