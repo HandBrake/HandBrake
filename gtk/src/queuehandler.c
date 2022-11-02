@@ -2318,6 +2318,8 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     GtkListBox       * lb;
     GtkListBoxRow    * row;
     gint               index, status = GHB_QUEUE_PENDING;
+    GMenu            * menu;
+    GMenuItem        * item;
 
     lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
     row = gtk_list_box_get_selected_row(lb);
@@ -2418,16 +2420,20 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
-    widget = GHB_WIDGET (ud->builder, "queue_start_menu");
+    menu = G_MENU(gtk_builder_get_object(ud->builder, "queue-encoding-actions"));
     if (show_stop)
     {
-        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("S_top Encoding"));
-        gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
+         item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 0);
+         g_menu_item_set_label(item, _("S_top Encoding"));
+         g_menu_remove(menu, 0);
+         g_menu_prepend_item(menu, item);
     }
     else
     {
-        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Start Encoding"));
-        gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
+		 item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 0);
+         g_menu_item_set_label(item, _("Start Encoding"));
+         g_menu_remove(menu, 0);
+         g_menu_prepend_item(menu, item);
     }
 
     widget = GHB_WIDGET (ud->builder, "queue_pause");
@@ -2456,16 +2462,19 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
     }
-    widget = GHB_WIDGET (ud->builder, "queue_pause_menu");
     if (paused)
     {
-        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Resume Encoding"));
-        gtk_widget_set_tooltip_text(widget, _("Resume Encoding"));
+         item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 1);
+         g_menu_item_set_label(item, _("Resume Encoding"));
+         g_menu_remove(menu, 1);
+         g_menu_append_item(menu, item);
     }
     else
     {
-        gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Pause Encoding"));
-        gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
+		 item = g_menu_item_new_from_model(G_MENU_MODEL(menu), 1);
+         g_menu_item_set_label(item, _("_Pause Encoding"));
+         g_menu_remove(menu, 1);
+         g_menu_append_item(menu, item);
     }
 }
 

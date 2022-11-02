@@ -387,8 +387,6 @@ bind_presets_tree_model(signal_user_data_t *ud)
     g_signal_connect(treeview, "row_expanded", presets_row_expanded_cb, ud);
     g_signal_connect(treeview, "row_collapsed", presets_row_expanded_cb, ud);
     g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
-    widget = GHB_WIDGET(ud->builder, "presets_remove");
-    gtk_widget_set_sensitive(widget, FALSE);
     g_debug("Done\n");
 }
 

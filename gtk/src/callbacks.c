@@ -4901,7 +4901,7 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 {
     GtkWidget *widget;
     g_debug("ghb_hbfd");
-    widget = GHB_WIDGET(ud->builder, "queue_pause");
+	widget = GHB_WIDGET(ud->builder, "queue_pause");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "queue_add");
     gtk_widget_set_visible(widget, !hbfd);
@@ -4910,15 +4910,9 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
     widget = GHB_WIDGET(ud->builder, "show_activity");
     gtk_widget_set_visible(widget, !hbfd);
 
-    widget = GHB_WIDGET(ud->builder, "container_box");
-    gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "SettingsStackSwitcher");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "SettingsStack");
-    gtk_widget_set_visible(widget, !hbfd);
-    widget = GHB_WIDGET(ud->builder, "presets_save");
-    gtk_widget_set_visible(widget, !hbfd);
-    widget = GHB_WIDGET(ud->builder, "presets_remove");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET (ud->builder, "hb_window");
     gtk_window_resize(GTK_WINDOW(widget), 16, 16);

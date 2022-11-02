@@ -50,7 +50,7 @@
           <attribute name="accel">&lt;shift&gt;&lt;alt&gt;A</attribute>
         </item>
       </section>
-      <section>
+      <section id="queue-encoding-actions">
         <item>
           <attribute name="action">app.queue-start</attribute>
           <attribute name="label" translatable="yes">_Start Encoding</attribute>
@@ -156,7 +156,7 @@
       </section>
     </submenu>
   </menu>
-  <menu id="hbfd">
+  <menu id="hbfd-menu">
     <section id="hbfd-section">
       <item>
         <attribute name="action">app.hbfd</attribute>
