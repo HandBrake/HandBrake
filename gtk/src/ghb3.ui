@@ -1,22 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.16"/>
-  <object class="GtkFileFilter" id="SourceFilterAVI"/>
-  <object class="GtkFileFilter" id="SourceFilterAll"/>
-  <object class="GtkFileFilter" id="SourceFilterEVO"/>
-  <object class="GtkFileFilter" id="SourceFilterFLV"/>
-  <object class="GtkFileFilter" id="SourceFilterMKV"/>
-  <object class="GtkFileFilter" id="SourceFilterWebM"/>
-  <object class="GtkFileFilter" id="SourceFilterMOV"/>
-  <object class="GtkFileFilter" id="SourceFilterMP4"/>
-  <object class="GtkFileFilter" id="SourceFilterMPG"/>
-  <object class="GtkFileFilter" id="SourceFilterOGG"/>
-  <object class="GtkFileFilter" id="SourceFilterTS"/>
-  <object class="GtkFileFilter" id="SourceFilterVOB"/>
-  <object class="GtkFileFilter" id="SourceFilterVideo"/>
-  <object class="GtkFileFilter" id="SourceFilterWMV"/>
-  <object class="GtkFileFilter" id="QueueFilterAll"/>
-  <object class="GtkFileFilter" id="QueueFilterJSON"/>
+  <object class="GtkFileFilter" id="SourceFilterEVO">
+    <patterns>
+      <pattern>*.evo</pattern>
+      <pattern>*.EVO</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterFLV">
+    <patterns>
+      <pattern>*.flv</pattern>
+      <pattern>*.FLV</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMKV">
+    <patterns>
+      <pattern>*.mkv</pattern>
+      <pattern>*.MKV</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterWebM">
+    <patterns>
+      <pattern>*.webm</pattern>
+      <pattern>*.WEBM</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMOV">
+    <patterns>
+      <pattern>*.mov</pattern>
+      <pattern>*.MOV</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterAVI">
+    <patterns>
+      <pattern>*.avi</pattern>
+      <pattern>*.AVI</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMP4">
+    <patterns>
+      <pattern>*.mp4</pattern>
+      <pattern>*.m4v</pattern>
+      <pattern>*.MP4</pattern>
+      <pattern>*.M4V</pattern>
+      <pattern>*.EVO</pattern>
+      <pattern>*.m4v</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMPG">
+    <patterns>
+      <pattern>*.mpeg</pattern>
+      <pattern>*.MPEG</pattern>
+      <pattern>*.mpg</pattern>
+      <pattern>*.MPG</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterOGG">
+    <patterns>
+      <pattern>*.ogg</pattern>
+      <pattern>*.OGG</pattern>
+      <pattern>*.ogv</pattern>
+      <pattern>*.OGV</pattern>
+      <pattern>*.ogm</pattern>
+      <pattern>*.OGM</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterTS">
+    <patterns>
+      <pattern>*.m2ts</pattern>
+      <pattern>*.M2TS</pattern>
+      <pattern>*.ts</pattern>
+      <pattern>*.TS</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterVOB">
+    <patterns>
+      <pattern>*.VOB</pattern>
+      <pattern>*.vob</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterVideo">
+    <mime-types>
+      <mime-type>video/*</mime-type>
+    </mime-types>
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterWMV">
+    <patterns>
+      <pattern>*.wmv</pattern>
+      <pattern>*.WMV</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="FilterAll">
+    <patterns>
+      <pattern>*</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="FilterJSON">
+    <patterns>
+      <pattern>*.json</pattern>
+      <pattern>*.JSON</pattern>
+    </patterns>
+  </object>
+  <object class="GtkFileFilter" id="FilterPlist">
+    <patterns>
+      <pattern>*.plist</pattern>
+      <pattern>*.PLIST</pattern>
+    </patterns>
+  </object>
   <object class="GtkLabel" id="SubBurnedLabel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>

@@ -1620,17 +1620,8 @@ open_queue_file(signal_user_data_t *ud)
                       NULL);
 
     // Add filters
-    GtkFileFilter *filter;
-    GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterAll"));
-    gtk_file_filter_set_name(filter, _("All"));
-    gtk_file_filter_add_pattern(filter, "*");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterJSON"));
-    gtk_file_filter_set_name(filter, "JSON");
-    gtk_file_filter_add_pattern(filter, "*.JSON");
-    gtk_file_filter_add_pattern(filter, "*.json");
-    gtk_file_chooser_add_filter(chooser, filter);
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All"), "FilterAll");
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, "JSON", "FilterJSON");
 
     if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
     {
