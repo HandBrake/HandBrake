@@ -2035,21 +2035,10 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
                 GHB_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                 NULL);
 
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, _("All (*)"));
-    gtk_file_filter_add_pattern(filter, "*");
-    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
-
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, _("Presets (*.json)"));
-    gtk_file_filter_add_pattern(filter, "*.json");
-    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("All"), "FilterAll");
+    filter = ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Presets (*.json)"), "FilterJSON");
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-
-    filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, _("Legacy Presets (*.plist)"));
-    gtk_file_filter_add_pattern(filter, "*.plist");
-    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    ghb_add_file_filter(GTK_FILE_CHOOSER(dialog), ud, _("Legacy Presets (*.plist)"), "FilterPlist");
 
     exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')

@@ -93,6 +93,9 @@ void ghb_browse_uri(signal_user_data_t *ud, const gchar *uri);
 void ghb_break_pts_duration(gint64 ptsDuration,
                             gint *hh, gint *mm, gdouble *ss);
 void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss);
+GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
+                                   signal_user_data_t *ud,
+                                   const char *name, const char *id);
 
 #endif // _CALLBACKS_H_
 

@@ -83,15 +83,15 @@
 GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
-	GtkWidget *dialog;
-	GtkBuilder *xml;
+    GtkWidget *dialog;
+    GtkBuilder *xml;
     GError *error = NULL;
 
     g_debug("create_builder_or_die()\n");
     xml = gtk_builder_new();
-	gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/ghb.ui", &error);
-	if (!error)
-	    gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/menu.ui", &error);
+    gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/ghb.ui", &error);
+    if (!error)
+        gtk_builder_add_from_resource(xml, "/fr/handbrake/ghb/ui/menu.ui", &error);
 
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
@@ -346,7 +346,6 @@ bind_presets_tree_model(signal_user_data_t *ud)
     GtkTreeStore *treestore;
     GtkTreeView  *treeview;
     GtkTreeSelection *selection;
-    GtkWidget *widget;
 
     g_debug("bind_presets_tree_model()\n");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
@@ -879,7 +878,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-export",          queue_export_action_cb          },
         { "queue-import",          queue_import_action_cb          },
         { "queue-edit",            queue_edit_action_cb            },
-		{ "dvd-open",              dvd_source_activate_cb, "s"     },
+        { "dvd-open",              dvd_source_activate_cb, "s"     },
         { "hbfd",                  NULL,
           NULL, "false",           hbfd_action_cb                  },
         { "show-presets",          NULL,
@@ -959,7 +958,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     GtkCssProvider     * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, MyCSS, -1);
-	color_scheme_set(APP_PREFERS_LIGHT);
+    color_scheme_set(APP_PREFERS_LIGHT);
 
 #if GTK_CHECK_VERSION(3, 90, 0)
     GdkDisplay *dd = gdk_display_get_default();
@@ -1142,111 +1141,25 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 
     /*
      * Filter objects in GtkBuilder xml
-     * Unfortunately, GtkFilter is poorly supported by GtkBuilder,
-     * so a lot of the setup must happen in code.
-        SourceFilterAll
-        SourceFilterVideo
-        SourceFilterTS
-        SourceFilterMPG
-        SourceFilterEVO
-        SourceFilterVOB
-        SourceFilterMKV
-        SourceFilterWebM
-        SourceFilterMP4
-        SourceFilterAVI
-        SourceFilterMOV
-        SourceFilterOGG
-        SourceFilterFLV
-        SourceFilterWMV
-    */
-    // Add filters to source chooser
-    GtkFileFilter *filter;
+     * Add filters to source chooser
+     */
     GtkFileChooser *chooser;
     chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
-    gtk_file_filter_set_name(filter, _("All"));
-    gtk_file_filter_add_pattern(filter, "*");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterVideo"));
-    gtk_file_filter_set_name(filter, _("Video"));
-    gtk_file_filter_add_mime_type(filter, "video/*");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterTS"));
-    gtk_file_filter_set_name(filter, "TS");
-    gtk_file_filter_add_pattern(filter, "*.ts");
-    gtk_file_filter_add_pattern(filter, "*.TS");
-    gtk_file_filter_add_pattern(filter, "*.m2ts");
-    gtk_file_filter_add_pattern(filter, "*.M2TS");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMPG"));
-    gtk_file_filter_set_name(filter, "MPG");
-    gtk_file_filter_add_pattern(filter, "*.mpg");
-    gtk_file_filter_add_pattern(filter, "*.MPG");
-    gtk_file_filter_add_pattern(filter, "*.mpeg");
-    gtk_file_filter_add_pattern(filter, "*.MPEG");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterEVO"));
-    gtk_file_filter_set_name(filter, "EVO");
-    gtk_file_filter_add_pattern(filter, "*.evo");
-    gtk_file_filter_add_pattern(filter, "*.EVO");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterVOB"));
-    gtk_file_filter_set_name(filter, "VOB");
-    gtk_file_filter_add_pattern(filter, "*.vob");
-    gtk_file_filter_add_pattern(filter, "*.VOB");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMKV"));
-    gtk_file_filter_set_name(filter, "MKV");
-    gtk_file_filter_add_pattern(filter, "*.mkv");
-    gtk_file_filter_add_pattern(filter, "*.MKV");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterWebM"));
-    gtk_file_filter_set_name(filter, "WebM");
-    gtk_file_filter_add_pattern(filter, "*.webm");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMP4"));
-    gtk_file_filter_set_name(filter, "MP4");
-    gtk_file_filter_add_pattern(filter, "*.mp4");
-    gtk_file_filter_add_pattern(filter, "*.MP4");
-    gtk_file_filter_add_pattern(filter, "*.m4v");
-    gtk_file_filter_add_pattern(filter, "*.M4V");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMOV"));
-    gtk_file_filter_set_name(filter, "MOV");
-    gtk_file_filter_add_pattern(filter, "*.mov");
-    gtk_file_filter_add_pattern(filter, "*.MOV");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAVI"));
-    gtk_file_filter_set_name(filter, "AVI");
-    gtk_file_filter_add_pattern(filter, "*.avi");
-    gtk_file_filter_add_pattern(filter, "*.AVI");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterOGG"));
-    gtk_file_filter_set_name(filter, "OGG");
-    gtk_file_filter_add_pattern(filter, "*.ogg");
-    gtk_file_filter_add_pattern(filter, "*.OGG");
-    gtk_file_filter_add_pattern(filter, "*.ogv");
-    gtk_file_filter_add_pattern(filter, "*.OGV");
-    gtk_file_filter_add_pattern(filter, "*.ogm");
-    gtk_file_filter_add_pattern(filter, "*.OGM");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterFLV"));
-    gtk_file_filter_set_name(filter, "FLV");
-    gtk_file_filter_add_pattern(filter, "*.flv");
-    gtk_file_filter_add_pattern(filter, "*.FLV");
-    gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterWMV"));
-    gtk_file_filter_set_name(filter, "WMV");
-    gtk_file_filter_add_pattern(filter, "*.wmv");
-    gtk_file_filter_add_pattern(filter, "*.WMV");
-    gtk_file_chooser_add_filter(chooser, filter);
+    ghb_add_file_filter(chooser, ud, _("All"), "FilterAll");
+    ghb_add_file_filter(chooser, ud, _("Video"), "SourceFilterVideo");
+    ghb_add_file_filter(chooser, ud, "TS", "SourceFilterTS");
+    ghb_add_file_filter(chooser, ud, "MPG", "SourceFilterMPG");
+    ghb_add_file_filter(chooser, ud, "EVO", "SourceFilterEVO");
+    ghb_add_file_filter(chooser, ud, "VOB", "SourceFilterVOB");
+    ghb_add_file_filter(chooser, ud, "MKV", "SourceFilterMKV");
+    ghb_add_file_filter(chooser, ud, "WebM", "SourceFilterWebM");
+    ghb_add_file_filter(chooser, ud, "MP4", "SourceFilterMP4");
+    ghb_add_file_filter(chooser, ud, "MOV", "SourceFilterMOV");
+    ghb_add_file_filter(chooser, ud, "AVI", "SourceFilterAVI");
+    ghb_add_file_filter(chooser, ud, "OGG", "SourceFilterOGG");
+    ghb_add_file_filter(chooser, ud, "FLV", "SourceFilterFLV");
+    ghb_add_file_filter(chooser, ud, "WMV", "SourceFilterWMV");
 
-    // Gtk has a really stupid bug.  If the file chooser is showing
-    // hidden files AND there is no filter set, it will not select
-    // the filename when gtk_file_chooser_set_filename is called.
-    // So add a completely unnecessary filter to prevent this behavior.
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
-    gtk_file_chooser_set_filter(chooser, filter);
 
 #if !GTK_CHECK_VERSION(3, 16, 0)
     PangoFontDescription *font_desc;
@@ -1292,7 +1205,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     window = GHB_WIDGET(ud->builder, "queue_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
 
-	GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu"));
+    GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu"));
     gtk_application_set_menubar(GTK_APPLICATION(app), menu);
 
 #if GTK_CHECK_VERSION(3, 90, 0)

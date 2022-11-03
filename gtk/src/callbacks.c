@@ -3700,8 +3700,8 @@ preferences_action_cb(GSimpleAction *action, GVariant *param,
 
         // Toss up a warning dialog
         ghb_message_dialog(hb_window, GTK_MESSAGE_WARNING,
-						   "You must restart HandBrake now",
-						   "Exit HandBrake", NULL);
+                           "You must restart HandBrake now",
+                           "Exit HandBrake", NULL);
         ghb_hb_cleanup(FALSE);
         prune_logs(ud);
         g_application_quit(G_APPLICATION(ud->app));
@@ -4901,7 +4901,7 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 {
     GtkWidget *widget;
     g_debug("ghb_hbfd");
-	widget = GHB_WIDGET(ud->builder, "queue_pause");
+    widget = GHB_WIDGET(ud->builder, "queue_pause");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "queue_add");
     gtk_widget_set_visible(widget, !hbfd);
@@ -5847,10 +5847,20 @@ gboolean on_presets_list_press_cb (GtkWidget *widget,
 {
     if((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3))
     {
-		GtkMenu *context_menu = GTK_MENU(GHB_WIDGET(ud->builder, "presets_window_submenu"));
+        GtkMenu *context_menu = GTK_MENU(GHB_WIDGET(ud->builder, "presets_window_submenu"));
         gtk_menu_popup_at_pointer(context_menu, event);
     }
-	return FALSE;
+    return FALSE;
+}
+
+GtkFileFilter *ghb_add_file_filter(GtkFileChooser *chooser,
+                                   signal_user_data_t *ud,
+                                   const char *name, const char *id)
+{
+    GtkFileFilter *filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, id));
+    gtk_file_filter_set_name(filter, name);
+    gtk_file_chooser_add_filter(chooser, filter);
+    return filter;
 }
 
 #if GTK_CHECK_VERSION(3, 90, 0)
