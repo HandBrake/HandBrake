@@ -1750,11 +1750,6 @@ start_scan(
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop Scan"));
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
-
-    widget = GHB_WIDGET(ud->builder, "source_open");
-    gtk_widget_set_sensitive(widget, FALSE);
-    widget = GHB_WIDGET(ud->builder, "source_title_open");
-    gtk_widget_set_sensitive(widget, FALSE);
     ghb_backend_scan(path, title_id, preview_count,
             90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
@@ -4371,11 +4366,6 @@ ghb_backend_events(signal_user_data_t *ud)
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source-symbolic");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Open Source"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
-
-        widget = GHB_WIDGET(ud->builder, "source_open");
-        gtk_widget_set_sensitive(widget, TRUE);
-        widget = GHB_WIDGET(ud->builder, "source_title_open");
-        gtk_widget_set_sensitive(widget, TRUE);
 
         hide_scan_progress(ud);
 
