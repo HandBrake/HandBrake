@@ -1798,7 +1798,7 @@ msgid "Automatically check for updates"
 msgstr "자동으로 업데이트 확인"
 
 #: src/ghb3.ui:7252
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "모든 인코딩이 완료됐을 때"
 
 #: src/ghb3.ui:7274

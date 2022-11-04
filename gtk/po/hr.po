@@ -1575,7 +1575,7 @@ msgid "Automatically check for updates"
 msgstr "Automatska provjera ažuriranja"
 
 #: src/ghb3.ui:7252
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr ""
 
 #: src/ghb3.ui:7274

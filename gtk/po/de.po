@@ -1907,7 +1907,7 @@ msgid "Automatically check for updates"
 msgstr "Automatisch nach Updates suchen"
 
 #: src/ghb3.ui:7936
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Wenn alle Encodierungen abgeschlossen sind"
 
 #: src/ghb3.ui:7958

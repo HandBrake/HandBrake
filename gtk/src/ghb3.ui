@@ -596,7 +596,7 @@ conjunction with the "Forced" option.</property>
                       <object class="GtkComboBox" id="QueueWhenComplete">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <signal name="changed" handler="queue_when_complete_changed_cb" swapped="no"/>
+                        <signal name="changed" handler="temp_when_complete_changed_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -2318,29 +2318,16 @@ libx264 authors:
                         <property name="tooltip_text" translatable="yes">Set the title to encode.
 By default the longest title is chosen.
 This is often the feature title of a DVD.</property>
-                        <property name="has_frame">False</property>
-                        <child>
-                          <object class="GtkFrame" id="title_frame">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-                            <child>
-                              <object class="GtkLabel" id="title_label">
+                        <property name="has-entry">True</property>
+                            <child internal-child="entry">
+                              <object class="GtkEntry" id="title_label">
                                 <property name="width-chars">30</property>
                                 <property name="max-width-chars">30</property>
-                                <property name="ellipsize">end</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-end">6</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0.0</property>
-                                <property name="use_markup">True</property>
-                                <property name="label" translatable="yes">&lt;small&gt;No Titles&lt;/small&gt;</property>
                               </object>
-                            </child>
-                          </object>
                         </child>
                         <signal name="changed" handler="title_changed_cb" swapped="no"/>
                       </object>
@@ -7196,9 +7183,10 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
             <property name="column-spacing">2</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin-top">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
+            <property name="margin-top">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-bottom">6</property>
             <child>
               <object class="GtkLabel" id="label18">
                 <property name="visible">True</property>
@@ -7272,58 +7260,84 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox46">
-            <property name="orientation">horizontal</property>
+          <object class="GtkOverlay" id="status_overlay">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="halign">start</property>
-            <property name="valign">end</property>
-            <property name="margin-top">4</property>
-            <property name="margin-bottom">4</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="spacing">4</property>
-            <child>
-              <object class="GtkLabel" id="work_status">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">False</property>
+            <child type="overlay">
+              <object class="GtkProgressBar" id="progressbar">
+                <property name="height-request">4</property>
+                <property name="can-focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">start</property>
-                <property name="hexpand">True</property>
+                <property name="valign">start</property>
+                <property name="margin-start">0</property>
+                <property name="margin-end">0</property>
+                <property name="margin-bottom">0</property>
+                <property name="margin-top">0</property>
+                <style>
+                  <class name="progress-overlay"/>
+                </style>
               </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="pending_status">
+              <object class="GtkActionBar" id="status_bar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <child>
+                  <object class="GtkLabel" id="work_status">
+                    <property name="margin-left">6</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="pending_status">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;When Done:&lt;/b&gt;</property>
+                  </object>
+                  <packing>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="MainWhenComplete">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="valign">center</property>
+                    <signal name="changed" handler="temp_when_complete_changed_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkProgressBar" id="progressbar">
-            <property name="height_request">10</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="margin-bottom">6</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-          </object>
-          <packing>
-            <property name="position">5</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -7634,7 +7648,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                           <object class="GtkLabel" id="labela1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">When all encodes are complete</property>
+                            <property name="label" translatable="yes">Default action when all encodes are complete</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>

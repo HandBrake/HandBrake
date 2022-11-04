@@ -614,6 +614,12 @@ combo_name_map_t combo_name_map[] =
         generic_opt_get
     },
     {
+        "MainWhenComplete",
+        &when_complete_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
         "QueueWhenComplete",
         &when_complete_opts,
         small_opts_set,
@@ -2454,37 +2460,31 @@ title_opts_set(signal_user_data_t *ud, const gchar *name,
     }
     if( count <= 0 )
     {
-        char *opt;
-
         // No titles.  Fill in a default.
         gtk_list_store_append(store, &iter);
-        opt = g_strdup_printf("<small>%s</small>", _("No Titles"));
         gtk_list_store_set(store, &iter,
-                           0, opt,
+                           0, _("No Titles"),
                            1, TRUE,
                            2, "none",
                            3, -1.0,
                            -1);
-        g_free(opt);
         return;
     }
     for (ii = 0; ii < count; ii++)
     {
-        char *title_opt, *title_index, *opt;
+        char *title_opt, *title_index;
 
         title = hb_list_item(list, ii);
         title_opt = ghb_create_title_label(title);
-        opt = g_strdup_printf("<small>%s</small>", title_opt);
         title_index = g_strdup_printf("%d", title->index);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, opt,
+                           0, title_opt,
                            1, TRUE,
                            2, title_index,
                            3, (gdouble)title->index,
                            -1);
-        g_free(opt);
         g_free(title_opt);
         g_free(title_index);
     }

@@ -61,6 +61,7 @@ typedef struct
     gboolean              dont_clear_presets;
     gboolean              scale_busy;
     gint                  cancel_encode;
+    gint                  when_complete;
     GtkBuilder          * builder;
     GhbValue            * globals;
     GhbValue            * prefs;

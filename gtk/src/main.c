@@ -632,6 +632,18 @@ const gchar *MyCSS =
 "@define-color gray46 #757575;"
 "@define-color white  #ffffff;"
 
+".progress-overlay"
+"{"
+"    min-height:1px;"
+"}"
+
+".progress-overlay trough, .progress-overlay progress"
+"{"
+"    border-radius: 0px;"
+"    border-width: 1px 0px;"
+"    min-height: 4px;"
+"}"
+
 "#preview_hud"
 "{"
 "    border-radius: 20px;"

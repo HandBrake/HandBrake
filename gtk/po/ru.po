@@ -1752,7 +1752,7 @@ msgid "Automatically check for updates"
 msgstr "Автоматически проверять наличие обновлений"
 
 #: src/ghb3.ui:7252
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Когда все кодирование завершено"
 
 #: src/ghb3.ui:7274

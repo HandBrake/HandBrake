@@ -1796,7 +1796,7 @@ msgid "Automatically check for updates"
 msgstr "Automatisk se etter oppdateringer"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Når alle omkoderene er ferdig"
 
 #: ../src/ghb.m4.h:622

@@ -2047,7 +2047,7 @@ msgid "Automatically check for updates"
 msgstr "アップデートを自動的にチェックする"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "すべてのエンコードが完了したとき"
 
 #: ../src/ghb.m4.h:622

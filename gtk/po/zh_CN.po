@@ -1779,7 +1779,7 @@ msgid "Automatically check for updates"
 msgstr "自动检查更新"
 
 #: src/ghb3.ui:7252
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "当所有编码完成后"
 
 #: src/ghb3.ui:7274

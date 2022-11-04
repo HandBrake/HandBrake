@@ -1907,7 +1907,7 @@ msgid "Automatically check for updates"
 msgstr "Sök automatiskt efter uppdateringar"
 
 #: src/ghb3.ui:7936
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "När alla omkodningar är slutförda"
 
 #: src/ghb3.ui:7958

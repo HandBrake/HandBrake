@@ -2824,15 +2824,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     gint               title_id, titleindex, count;
     const hb_title_t * title;
-    GtkLabel         * title_label;
+    GtkEntry         * title_label;
     char             * label;
 
     title_id = ghb_widget_int(widget);
     title = ghb_lookup_title(title_id, &titleindex);
 
     label = ghb_create_title_label(title);
-    title_label = GTK_LABEL(GHB_WIDGET(ud->builder, "title_label"));
-    gtk_label_set_markup(title_label, label);
+    title_label = GTK_ENTRY(GHB_WIDGET(ud->builder, "title_label"));
+    gtk_entry_set_text(title_label, label);
     g_free(label);
 
     count = ghb_array_len(ud->settings_array);
@@ -4127,14 +4127,14 @@ ghb_update_pending(signal_user_data_t *ud)
 {
     GtkLabel *label;
     gint pending;
-    gchar *str;
+    gchar *str = NULL;
 
     pending = queue_pending_count(ud->queue);
     if (pending == 1)
     {
         str = g_strdup_printf(_("%d encode pending"), pending);
     }
-    else
+    else if (pending > 1)
     {
         str = g_strdup_printf(_("%d encodes pending"), pending);
     }
@@ -4972,10 +4972,14 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 #endif
 }
 
+// Changes the setting for the current session
+// and also saves it for future sessions
 G_MODULE_EXPORT void
 when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue * value = ghb_widget_value(widget);
+    ud->when_complete = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    ghb_ui_update(ud, "MainWhenComplete", value);
     ghb_ui_update(ud, "QueueWhenComplete", value);
     ghb_value_free(&value);
 
@@ -4987,11 +4991,14 @@ when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_prefs_store();
 }
 
+// Only changes the setting for the current session
 G_MODULE_EXPORT void
-queue_when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+temp_when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue * value = ghb_widget_value(widget);
-    ghb_ui_update(ud, "WhenComplete", value);
+    ud->when_complete = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    ghb_ui_update(ud, "MainWhenComplete", value);
+    ghb_ui_update(ud, "QueueWhenComplete", value);
     ghb_value_free(&value);
 }
 
@@ -5688,8 +5695,7 @@ free_resources:
 void
 ghb_notify_done(signal_user_data_t *ud)
 {
-
-    if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 0)
+    if (ud->when_complete == 0)
         return;
 
     GNotification * notification;
@@ -5705,33 +5711,33 @@ ghb_notify_done(signal_user_data_t *ud)
     g_object_unref(G_OBJECT(notification));
     g_object_unref(G_OBJECT(icon));
 
-    if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 3)
-    {
-        if (ghb_can_shutdown_gsm())
-        {
+    switch (ud->when_complete)    {
+	    case 2:
             ghb_countdown_dialog(GTK_MESSAGE_WARNING,
-                _("Your encode is complete."),
-                _("Shutting down the computer"),
-                _("Cancel"), (GSourceFunc)shutdown_cb, ud, 60);
-        }
-    }
-    if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 2)
-    {
-        if (ghb_can_suspend_gpm())
-        {
-            ghb_countdown_dialog(GTK_MESSAGE_WARNING,
-                _("Your encode is complete."),
-                _("Putting computer to sleep"),
-                _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
-        }
-    }
-    if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 4)
-    {
-        ghb_countdown_dialog(GTK_MESSAGE_WARNING,
-                            _("Your encode is complete."),
-                            _("Quitting Handbrake"),
-                            _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
-    }
+                                _("Your encode is complete."),
+                                _("Quitting Handbrake"),
+                                _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
+            break;
+        case 3:
+            if (ghb_can_suspend_gpm())
+            {
+                ghb_countdown_dialog(GTK_MESSAGE_WARNING,
+                    _("Your encode is complete."),
+                    _("Putting computer to sleep"),
+                    _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
+            }
+            break;
+	    case 4:
+            if (ghb_can_shutdown_gsm())
+            {
+                ghb_countdown_dialog(GTK_MESSAGE_WARNING,
+                    _("Your encode is complete."),
+                    _("Shutting down the computer"),
+                    _("Cancel"), (GSourceFunc)shutdown_cb, ud, 60);
+            }
+
+        default:
+            break;    }
 }
 
 G_MODULE_EXPORT gboolean
