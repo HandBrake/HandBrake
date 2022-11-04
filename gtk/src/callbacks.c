@@ -97,8 +97,6 @@ static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
 gpointer ghb_check_update(signal_user_data_t *ud);
-static gboolean ghb_can_shutdown_gsm();
-static void ghb_shutdown_gsm();
 static gboolean ghb_can_suspend_logind();
 static void ghb_suspend_logind();
 static gboolean appcast_busy = FALSE;
@@ -380,75 +378,6 @@ ghb_uninhibit_gpm(guint cookie)
 #define GPM_DBUS_SM_PATH            "/org/gnome/SessionManager"
 #define GPM_DBUS_SM_INTERFACE       "org.gnome.SessionManager"
 #endif
-
-static gboolean
-ghb_can_shutdown_gsm()
-{
-    gboolean can_shutdown = FALSE;
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
-                            GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
-    if (proxy == NULL)
-        return FALSE;
-
-    res = g_dbus_proxy_call_sync(proxy, "CanShutdown", NULL,
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    g_object_unref(G_OBJECT(proxy));
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-        // Try the logind version
-        can_shutdown = ghb_can_shutdown_logind();
-    }
-    else
-    {
-        g_variant_get(res, "(b)", &can_shutdown);
-        g_variant_unref(res);
-    }
-#endif
-    return can_shutdown;
-}
-
-static void
-ghb_shutdown_gsm()
-{
-#if !defined(_WIN32)
-    GDBusProxy  *proxy;
-    GError *error = NULL;
-    GVariant *res;
-
-
-    g_debug("ghb_shutdown_gpm()");
-    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
-                            GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
-    if (proxy == NULL)
-        return;
-
-    res = g_dbus_proxy_call_sync(proxy, "Shutdown", NULL,
-                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    g_object_unref(G_OBJECT(proxy));
-    if (!res)
-    {
-        if (error != NULL)
-        {
-            g_error_free(error);
-        }
-        // Try the logind version
-        ghb_shutdown_logind();
-    }
-    else
-    {
-        g_variant_unref(res);
-    }
-#endif
-}
 
 #if !GTK_CHECK_VERSION(3, 4, 0)
 guint
@@ -3759,7 +3688,7 @@ shutdown_cb(countdown_t *cd)
         ghb_hb_cleanup(FALSE);
         prune_logs(cd->ud);
 
-        ghb_shutdown_gsm();
+        ghb_shutdown_logind();
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
@@ -5739,7 +5668,7 @@ ghb_notify_done(signal_user_data_t *ud)
             }
             break;
 	    case 4:
-            if (ghb_can_shutdown_gsm())
+            if (ghb_can_shutdown_logind())
             {
                 ghb_countdown_dialog(GTK_MESSAGE_INFO,
                     _("Your encode is complete."),
