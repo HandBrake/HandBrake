@@ -1939,7 +1939,7 @@ msgid "Automatically check for updates"
 msgstr "Soek outomaties na bywerkings"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Wanneer alle enkoderings voltooi is"
 
 #: ../src/ghb.m4.h:622

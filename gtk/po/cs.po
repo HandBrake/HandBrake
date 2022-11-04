@@ -2109,7 +2109,7 @@ msgid "Automatically check for updates"
 msgstr "Automaticky ověřit dostupnost aktualizací"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Když byla všechna kódování dokončena"
 
 #: ../src/ghb.m4.h:622

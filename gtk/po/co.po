@@ -1821,7 +1821,7 @@ msgid "Automatically check for updates"
 msgstr "Cuntrollà autumaticamente i rinnovi"
 
 #: src/ghb3.ui:7252
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Quandu tutte e cudificazioni sò compie"
 
 #: src/ghb3.ui:7274

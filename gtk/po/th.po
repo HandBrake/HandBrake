@@ -1892,7 +1892,7 @@ msgid "Automatically check for updates"
 msgstr "ตรวจสอบการอัปเดตอัตโนมัติ"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "เมื่อการเข้ารหัสทั้งหมดเสร็จสมบูรณ์"
 
 #: ../src/ghb.m4.h:622

@@ -1581,7 +1581,7 @@ msgstr ""
 msgid "Automatically check for updates"
 msgstr ""
 
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr ""
 
 msgid "Use automatic naming (uses modified source name)"

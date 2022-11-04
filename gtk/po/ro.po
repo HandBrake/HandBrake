@@ -1837,7 +1837,7 @@ msgid "Automatically check for updates"
 msgstr "Verifică automat pentru actualizări"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "Când toate codările sunt terminate"
 
 #: ../src/ghb.m4.h:622

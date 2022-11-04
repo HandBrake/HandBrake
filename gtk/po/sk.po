@@ -1774,7 +1774,7 @@ msgid "Automatically check for updates"
 msgstr "Automaticky kontrolovať aktualizácie"
 
 #: ../src/ghb.m4.h:621
-msgid "When all encodes are complete"
+msgid "Default action when all encodes are complete"
 msgstr "po dokončení všetkých dekódovaní"
 
 #: ../src/ghb.m4.h:622
