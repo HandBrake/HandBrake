@@ -99,28 +99,29 @@ void ghb_notify_done(signal_user_data_t *ud);
 gpointer ghb_check_update(signal_user_data_t *ud);
 static gboolean ghb_can_shutdown_gsm();
 static void ghb_shutdown_gsm();
-static gboolean ghb_can_suspend_gpm();
-static void ghb_suspend_gpm();
+static gboolean ghb_can_suspend_logind();
+static void ghb_suspend_logind();
 static gboolean appcast_busy = FALSE;
 
 #if !defined(_WIN32)
+#define DBUS_LOGIND_SERVICE         "org.freedesktop.login1"
+#define DBUS_LOGIND_PATH            "/org/freedesktop/login1"
+#define DBUS_LOGIND_INTERFACE       "org.freedesktop.login1.Manager"
 #define GPM_DBUS_PM_SERVICE         "org.freedesktop.PowerManagement"
-#define GPM_DBUS_PM_PATH            "/org/freedesktop/PowerManagement"
-#define GPM_DBUS_PM_INTERFACE       "org.freedesktop.PowerManagement"
 #define GPM_DBUS_INHIBIT_PATH       "/org/freedesktop/PowerManagement/Inhibit"
 #define GPM_DBUS_INHIBIT_INTERFACE  "org.freedesktop.PowerManagement.Inhibit"
 #endif
 
 #if !defined(_WIN32)
 static GDBusProxy *
-ghb_get_session_dbus_proxy(const gchar *name, const gchar *path, const gchar *interface)
+ghb_get_dbus_proxy(GBusType type, const gchar *name, const gchar *path, const gchar *interface)
 {
     GDBusConnection *conn;
     GDBusProxy *proxy;
     GError *error = NULL;
 
-    g_debug("ghb_get_session_dbus_proxy()");
-    conn = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, &error);
+    g_debug("ghb_get_dbus_proxy()");
+    conn = g_bus_get_sync(type, NULL, &error);
     if (conn == NULL)
     {
         if (error != NULL)
@@ -142,18 +143,19 @@ ghb_get_session_dbus_proxy(const gchar *name, const gchar *path, const gchar *in
 #endif
 
 static gboolean
-ghb_can_suspend_gpm()
+ghb_can_suspend_logind()
 {
     gboolean can_suspend = FALSE;
 #if !defined(_WIN32)
+    char *str = NULL;
     GDBusProxy  *proxy;
     GError *error = NULL;
     GVariant *res;
 
 
-    g_debug("ghb_can_suspend_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_PM_PATH, GPM_DBUS_PM_INTERFACE);
+    g_debug("ghb_can_suspend_logind()");
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
+                            DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
         return FALSE;
 
@@ -173,8 +175,12 @@ ghb_can_suspend_gpm()
     }
     else
     {
-        g_variant_get(res, "(b)", &can_suspend);
+        g_variant_get(res, "(s)", &str);
         g_variant_unref(res);
+        if (g_strcmp0(str, "yes") == 0)
+            can_suspend = TRUE;
+
+        g_free(str);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
@@ -182,7 +188,7 @@ ghb_can_suspend_gpm()
 }
 
 static void
-ghb_suspend_gpm()
+ghb_suspend_logind()
 {
 #if !defined(_WIN32)
     GDBusProxy  *proxy;
@@ -190,13 +196,13 @@ ghb_suspend_gpm()
     GVariant *res;
 
 
-    g_debug("ghb_suspend_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_PM_PATH, GPM_DBUS_PM_INTERFACE);
+    g_debug("ghb_suspend_logind()");
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
+                            DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
         return;
 
-    res = g_dbus_proxy_call_sync(proxy, "Suspend", NULL,
+    res = g_dbus_proxy_call_sync(proxy, "Suspend", g_variant_new("(b)", FALSE),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     if (!res)
     {
@@ -218,38 +224,43 @@ ghb_suspend_gpm()
 
 #if !defined(_WIN32)
 static gboolean
-ghb_can_shutdown_gpm()
+ghb_can_shutdown_logind()
 {
+    char *str = NULL;
     gboolean can_shutdown = FALSE;
     GDBusProxy  *proxy;
     GError *error = NULL;
     GVariant *res;
 
 
-    g_debug("ghb_can_shutdown_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_PM_PATH, GPM_DBUS_PM_INTERFACE);
+    g_debug("ghb_can_shutdown_logind()");
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
+                            DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
         return FALSE;
 
-    res = g_dbus_proxy_call_sync(proxy, "CanShutdown", NULL,
+    res = g_dbus_proxy_call_sync(proxy, "CanPowerOff", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     if (!res)
     {
         if (error != NULL)
         {
-            g_warning("CanShutdown failed: %s", error->message);
+            g_warning("CanPowerOff failed: %s", error->message);
             g_error_free(error);
         }
         else
-            g_warning("CanShutdown failed");
+            g_warning("CanPowerOff failed");
         // Try to shutdown anyway
         can_shutdown = TRUE;
     }
     else
     {
-        g_variant_get(res, "(b)", &can_shutdown);
+        g_variant_get(res, "(s)", &str);
         g_variant_unref(res);
+        if (g_strcmp0(str, "yes") == 0)
+            can_shutdown = TRUE;
+
+        g_free(str);
     }
     g_object_unref(G_OBJECT(proxy));
     return can_shutdown;
@@ -258,30 +269,30 @@ ghb_can_shutdown_gpm()
 
 #if !defined(_WIN32)
 static void
-ghb_shutdown_gpm()
+ghb_shutdown_logind(void)
 {
     GDBusProxy  *proxy;
     GError *error = NULL;
     GVariant *res;
 
 
-    g_debug("ghb_shutdown_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
-                            GPM_DBUS_PM_PATH, GPM_DBUS_PM_INTERFACE);
+    g_debug("ghb_shutdown_logind()");
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SYSTEM, DBUS_LOGIND_SERVICE,
+                            DBUS_LOGIND_PATH, DBUS_LOGIND_INTERFACE);
     if (proxy == NULL)
         return;
 
-    res = g_dbus_proxy_call_sync(proxy, "Shutdown", NULL,
+    res = g_dbus_proxy_call_sync(proxy, "PowerOff", g_variant_new("(b)", FALSE),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     if (!res)
     {
         if (error != NULL)
         {
-            g_warning("Shutdown failed: %s", error->message);
+            g_warning("PowerOff failed: %s", error->message);
             g_error_free(error);
         }
         else
-            g_warning("Shutdown failed");
+            g_warning("PowerOff failed");
     }
     else
     {
@@ -303,7 +314,7 @@ ghb_inhibit_gpm()
     GVariant *res;
 
     g_debug("ghb_inhibit_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_PM_SERVICE,
                             GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
     if (proxy == NULL)
         return 0;
@@ -339,7 +350,7 @@ ghb_uninhibit_gpm(guint cookie)
 
     g_debug("ghb_uninhibit_gpm() cookie %u", cookie);
 
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_PM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_PM_SERVICE,
                             GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
     if (proxy == NULL)
         return;
@@ -379,7 +390,7 @@ ghb_can_shutdown_gsm()
     GError *error = NULL;
     GVariant *res;
 
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_SM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
                             GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
     if (proxy == NULL)
         return FALSE;
@@ -393,8 +404,8 @@ ghb_can_shutdown_gsm()
         {
             g_error_free(error);
         }
-        // Try the gpm version
-        can_shutdown = ghb_can_shutdown_gpm();
+        // Try the logind version
+        can_shutdown = ghb_can_shutdown_logind();
     }
     else
     {
@@ -415,7 +426,7 @@ ghb_shutdown_gsm()
 
 
     g_debug("ghb_shutdown_gpm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_SM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
                             GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
     if (proxy == NULL)
         return;
@@ -429,8 +440,8 @@ ghb_shutdown_gsm()
         {
             g_error_free(error);
         }
-        // Try the gpm version
-        ghb_shutdown_gpm();
+        // Try the logind version
+        ghb_shutdown_logind();
     }
     else
     {
@@ -453,7 +464,7 @@ ghb_inhibit_gsm(signal_user_data_t *ud)
     GtkWidget *widget;
 
     g_debug("ghb_inhibit_gsm()");
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_SM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
                             GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
     if (proxy == NULL)
         return -1;
@@ -491,7 +502,7 @@ ghb_uninhibit_gsm(guint cookie)
 
     g_debug("ghb_uninhibit_gsm() cookie %u", cookie);
 
-    proxy = ghb_get_session_dbus_proxy(GPM_DBUS_SM_SERVICE,
+    proxy = ghb_get_dbus_proxy(G_BUS_TYPE_SESSION, GPM_DBUS_SM_SERVICE,
                             GPM_DBUS_SM_PATH, GPM_DBUS_SM_INTERFACE);
     if (proxy == NULL)
         return;
@@ -3740,6 +3751,9 @@ shutdown_cb(countdown_t *cd)
     gchar *str;
 
     cd->timeout--;
+    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
+                            cd->msg, cd->action, cd->timeout);
+    gtk_message_dialog_set_markup(cd->dlg, str);
     if (cd->timeout == 0)
     {
         ghb_hb_cleanup(FALSE);
@@ -3749,9 +3763,6 @@ shutdown_cb(countdown_t *cd)
         g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
-    str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
-                            cd->msg, cd->action, cd->timeout);
-    gtk_message_dialog_set_markup(cd->dlg, str);
     g_free(str);
     return TRUE;
 }
@@ -3762,15 +3773,15 @@ suspend_cb(countdown_t *cd)
     gchar *str;
 
     cd->timeout--;
-    if (cd->timeout == 0)
-    {
-        gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        ghb_suspend_gpm();
-        return FALSE;
-    }
     str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
                             cd->msg, cd->action, cd->timeout);
     gtk_message_dialog_set_markup(cd->dlg, str);
+    if (cd->timeout == 0)
+    {
+        gtk_widget_destroy (GTK_WIDGET(cd->dlg));
+        ghb_suspend_logind();
+        return FALSE;
+    }
     g_free(str);
     return TRUE;
 }
@@ -3809,7 +3820,6 @@ ghb_countdown_dialog(
     cd.dlg = GTK_MESSAGE_DIALOG(dialog);
     timeout_id = g_timeout_add(1000, action_func, &cd);
     response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
     if (response == GTK_RESPONSE_CANCEL)
     {
         GMainContext *mc;
@@ -3819,6 +3829,7 @@ ghb_countdown_dialog(
         source = g_main_context_find_source_by_id(mc, timeout_id);
         if (source != NULL)
             g_source_destroy(source);
+        gtk_widget_destroy (dialog);
     }
 }
 
@@ -5713,15 +5724,15 @@ ghb_notify_done(signal_user_data_t *ud)
 
     switch (ud->when_complete)    {
 	    case 2:
-            ghb_countdown_dialog(GTK_MESSAGE_WARNING,
+            ghb_countdown_dialog(GTK_MESSAGE_INFO,
                                 _("Your encode is complete."),
                                 _("Quitting Handbrake"),
                                 _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
             break;
         case 3:
-            if (ghb_can_suspend_gpm())
+            if (ghb_can_suspend_logind())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_WARNING,
+                ghb_countdown_dialog(GTK_MESSAGE_INFO,
                     _("Your encode is complete."),
                     _("Putting computer to sleep"),
                     _("Cancel"), (GSourceFunc)suspend_cb, ud, 60);
@@ -5730,7 +5741,7 @@ ghb_notify_done(signal_user_data_t *ud)
 	    case 4:
             if (ghb_can_shutdown_gsm())
             {
-                ghb_countdown_dialog(GTK_MESSAGE_WARNING,
+                ghb_countdown_dialog(GTK_MESSAGE_INFO,
                     _("Your encode is complete."),
                     _("Shutting down the computer"),
                     _("Cancel"), (GSourceFunc)shutdown_cb, ud, 60);
