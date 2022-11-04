@@ -17,6 +17,7 @@
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*",
+        "--talk-name=org.freedesktop.login1",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=PATH=/app/bin:/usr/bin:/app/extensions/bin",
         "--env=JAVA_HOME=/app/extensions/jre",
