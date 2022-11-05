@@ -146,7 +146,6 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     gtk_widget_set_size_request(widget, width, height);
     window = GTK_WINDOW(GHB_WIDGET(ud->builder, "preview_window"));
     ss = ghb_widget_get_surface(GTK_WIDGET(window));
-    gtk_window_unmaximize(window);
     if (ss != NULL)
     {
         geo.min_aspect = (double)(width - 4) / height;
@@ -155,7 +154,8 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
         ghb_surface_set_geometry_hints(ss, &geo,
                                        GDK_HINT_ASPECT|GDK_HINT_RESIZE_INC);
     }
-    gtk_window_resize(window, width, height);
+    if (!gtk_window_is_maximized(window))
+        gtk_window_resize(window, width, height);
 
     ud->preview->render_width = width;
     ud->preview->render_height = height;
@@ -848,7 +848,7 @@ static void _draw_pixbuf(signal_user_data_t * ud, cairo_t *cr, GdkPixbuf *pix)
     cairo_save(cr);
     cairo_rectangle(cr, 0, 0, ud->preview->render_width,
                               ud->preview->render_height);
-    cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_fill(cr);
     cairo_restore(cr);
 
