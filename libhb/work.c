@@ -1657,12 +1657,12 @@ static void do_job(hb_job_t *job)
         if (subtitle->source != IMPORTSRT &&
             subtitle->source != IMPORTSSA)
         {
-            subtitle->fifo_in  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            subtitle->fifo_in  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
         }
         if (!job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync
-            subtitle->fifo_out = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            subtitle->fifo_out = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
         }
 
         w->fifo_in = subtitle->fifo_in;
