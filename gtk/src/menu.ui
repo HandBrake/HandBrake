@@ -102,7 +102,7 @@
       <attribute name="label" translatable="yes">_Presets</attribute>
       <section>
         <item>
-          <attribute name="action">app.preset_default</attribute>
+          <attribute name="action">app.preset-default</attribute>
           <attribute name="label" translatable="yes">Set De_fault</attribute>
         </item>
       </section>

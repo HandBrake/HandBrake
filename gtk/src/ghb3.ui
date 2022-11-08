@@ -174,7 +174,7 @@ conjunction with the "Forced" option.</property>
   <menu id="preset_actions_menu">
     <section>
       <item>
-        <attribute name="action">app.preset_default</attribute>
+        <attribute name="action">app.preset-default</attribute>
         <attribute name="label" translatable="yes">Set De_fault</attribute>
       </item>
     </section>
