@@ -79,22 +79,22 @@
         <item>
           <attribute name="action">app.show-presets</attribute>
           <attribute name="label" translatable="yes">Presets _List</attribute>
-          <attribute name="accel">&lt;alt&gt;P</attribute>
+          <attribute name="accel">&lt;alt&gt;L</attribute>
         </item>
         <item>
           <attribute name="action">app.show-queue</attribute>
           <attribute name="label" translatable="yes">_Queue</attribute>
-          <attribute name="accel">&lt;alt&gt;Q</attribute>
+          <attribute name="accel">&lt;alt&gt;U</attribute>
         </item>
         <item>
           <attribute name="action">app.show-preview</attribute>
           <attribute name="label" translatable="yes">_Preview</attribute>
-          <attribute name="accel">&lt;alt&gt;V</attribute>
+          <attribute name="accel">&lt;alt&gt;R</attribute>
         </item>
         <item>
           <attribute name="action">app.show-activity</attribute>
           <attribute name="label" translatable="yes">_Activity Window</attribute>
-          <attribute name="accel">&lt;alt&gt;L</attribute>
+          <attribute name="accel">&lt;alt&gt;W</attribute>
         </item>
       </section>
     </submenu>
@@ -168,7 +168,7 @@
     <section id="dvd">
       <item>
         <attribute name="action">app.dvd-open</attribute>
-        <attribute name="icon">media-optical-symbolic</attribute>
+        <attribute name="icon">media-optical</attribute>
       </item>
     </section>
   </menu>

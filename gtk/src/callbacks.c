@@ -4303,7 +4303,7 @@ ghb_backend_events(signal_user_data_t *ud)
         GtkWidget *widget;
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source-symbolic");
+        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Open Source"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
 
