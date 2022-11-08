@@ -3210,14 +3210,23 @@ static void UpdateState( sync_common_t * common, int frame_count )
                             (common->st_dates[3]  - common->st_dates[0]);
     if (hb_get_date() > common->st_first + 4000)
     {
-        int eta;
         p.rate_avg = 1000.0 * common->st_counts[3] /
                      (common->st_dates[3] - common->st_first - job->st_paused);
-        eta = (common->est_frame_count - common->st_counts[3]) / p.rate_avg;
-        p.eta_seconds = eta;
-        p.hours       = eta / 3600;
-        p.minutes     = (eta % 3600) / 60;
-        p.seconds     = eta % 60;
+        if (common->est_frame_count >= common->st_counts[3])
+        {
+            int eta = (common->est_frame_count - common->st_counts[3]) / p.rate_avg;
+            p.eta_seconds = eta;
+            p.hours       = eta / 3600;
+            p.minutes     = (eta % 3600) / 60;
+            p.seconds     = eta % 60;
+        }
+        else
+        {
+            p.eta_seconds = 0;
+            p.hours    = -1;
+            p.minutes  = -1;
+            p.seconds  = -1;
+        }
     }
     else
     {
