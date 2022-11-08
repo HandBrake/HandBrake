@@ -1949,7 +1949,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     button = GTK_BUTTON(gtk_button_new());
     gtk_widget_set_hexpand(GTK_WIDGET(button), TRUE);
     gtk_widget_set_halign(GTK_WIDGET(button), GTK_ALIGN_FILL);
-    ghb_button_set_icon_name(button, "edit-delete-symbolic");
+    ghb_button_set_icon_name(button, "edit-delete");
     gtk_widget_set_tooltip_markup(GTK_WIDGET(button),
     _("Remove this audio encoder"));
     gtk_button_set_relief(button, GTK_RELIEF_NONE);

@@ -171,6 +171,49 @@ conjunction with the "Forced" option.</property>
     <property name="use_markup">True</property>
   </object>
 
+  <menu id="preset_actions_menu">
+    <section>
+      <item>
+        <attribute name="action">app.preset_default</attribute>
+        <attribute name="label" translatable="yes">Set De_fault</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-save-as</attribute>
+        <attribute name="label" translatable="yes">Save _As</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-rename</attribute>
+        <attribute name="label" translatable="yes">_Rename</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-remove</attribute>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.preset-import</attribute>
+        <attribute name="label" translatable="yes">_Import</attribute>
+      </item>
+      <item>
+        <attribute name="action">app.preset-export</attribute>
+        <attribute name="label" translatable="yes">_Export</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">app.presets-reload</attribute>
+        <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
+      </item>
+    </section>
+  </menu>
+
   <menu id="queue_actions_menu">
     <section>
       <item>
@@ -241,6 +284,105 @@ conjunction with the "Forced" option.</property>
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
+          <object class="GtkToolbar" id="presets_window_toolbar">
+            <property name="hexpand">True</property>
+            <property name="halign">fill</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="icon-size">GTK_ICON_SIZE_SMALL_TOOLBAR</property>
+            <child>
+              <object class="GtkToolButton" id="preset_save_as_button">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes">Save As</property>
+                <property name="icon_name">document-save-as</property>
+                <property name="action-name">app.preset-save-as</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="preset_list_tool_sep">
+                <property name="visible">True</property>
+                <property name="draw">False</property>
+                <property name="hexpand">True</property>
+                <property name="halign">GTK_ALIGN_FILL</property>
+                <property name="vexpand">False</property>
+                <property name="valign">GTK_ALIGN_FILL</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="preset_actions">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="is_important">True</property>
+                <property name="hexpand">False</property>
+                <property name="halign">end</property>
+                <child>
+                  <object class="GtkMenuButton" id="preset_actions_menu_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="direction">down</property>
+                    <property name="relief">GTK_RELIEF_NONE</property>
+                    <property name="menu-model">preset_actions_menu</property>
+                    <property name="use-popover">True</property>
+                    <property name="hexpand">False</property>
+                    <child>
+                      <object class="GtkBox" id="preset_actions_menu_button_box">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkImage" id="preset_actions_menu_button_image">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">hb-advanced</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="preset_actions_menu_button_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Actions</property>
+                            <property name="use_markup">True</property>
+                            <property name="hexpand">False</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkMenuBar" id="presets_menu_bar">
             <property name="visible">False</property>
             <property name="can_focus">False</property>
@@ -306,6 +448,20 @@ conjunction with the "Forced" option.</property>
                         <property name="action-name">app.preset-remove</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="presets_window_sep2">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="presets_window_export">
+                        <property name="label" translatable="yes">_Export</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-export</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -347,7 +503,7 @@ conjunction with the "Forced" option.</property>
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -502,11 +658,12 @@ conjunction with the "Forced" option.</property>
                                 <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkImage" id="queue_options_menu_button_image">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="icon_name">hb-advanced-symbolic</property>
+                                    <property name="icon_name">hb-advanced</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -668,7 +825,7 @@ conjunction with the "Forced" option.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="is_important">True</property>
                                 <property name="label" translatable="yes">Reset</property>
-                                <property name="icon_name">view-refresh-symbolic</property>
+                                <property name="icon_name">view-refresh</property>
                                 <property name="tooltip_text" translatable="yes">Mark selected queue entry as pending.
 Resets the queue job to pending and ready to run again.</property>
                                 <property name="action-name">app.queue-reset</property>
@@ -685,7 +842,7 @@ Resets the queue job to pending and ready to run again.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="is_important">True</property>
                                 <property name="label" translatable="yes">Edit</property>
-                                <property name="icon_name">document-edit-symbolic</property>
+                                <property name="icon_name">document-edit</property>
                                 <property name="action-name">app.queue-edit</property>
                               </object>
                               <packing>
@@ -719,7 +876,7 @@ Resets the queue job to pending and ready to run again.</property>
                                           <object class="GtkImage" id="queue_actions_menu_button_image">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="icon_name">hb-advanced-symbolic</property>
+                                            <property name="icon_name">hb-advanced</property>
                                           </object>
                                           <packing>
                                             <property name="position">0</property>
@@ -2026,7 +2183,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Open Source</property>
-                    <property name="icon_name">hb-source-symbolic</property>
+                    <property name="icon_name">hb-source</property>
                     <property name="action-name">app.source</property>
                   </object>
                   <packing>
@@ -2051,7 +2208,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Add to Queue</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Add To Queue</property>
-                    <property name="icon_name">hb-add-queue-symbolic</property>
+                    <property name="icon_name">hb-add-queue</property>
                     <property name="action-name">app.queue-add</property>
                   </object>
                   <packing>
@@ -2066,7 +2223,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Start Encoding</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Start</property>
-                    <property name="icon_name">hb-start-symbolic</property>
+                    <property name="icon_name">hb-start</property>
                     <property name="action-name">app.queue-start</property>
                   </object>
                   <packing>
@@ -2108,7 +2265,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Presets Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Presets</property>
-                    <property name="icon_name">hb-presets-symbolic</property>
+                    <property name="icon_name">hb-presets</property>
                     <property name="action-name">app.show-presets</property>
                   </object>
                   <packing>
@@ -2123,7 +2280,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Preview</property>
-                    <property name="icon_name">hb-picture-symbolic</property>
+                    <property name="icon_name">hb-picture</property>
                     <property name="action-name">app.show-preview</property>
                   </object>
                   <packing>
@@ -2138,7 +2295,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Queue</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Queue</property>
-                    <property name="icon_name">hb-showqueue-symbolic</property>
+                    <property name="icon_name">hb-showqueue</property>
                     <property name="action-name">app.show-queue</property>
                   </object>
                   <packing>
@@ -2153,7 +2310,7 @@ libx264 authors:
                     <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Activity</property>
-                    <property name="icon_name">hb-activity-symbolic</property>
+                    <property name="icon_name">hb-activity</property>
                     <property name="action-name">app.show-activity</property>
                   </object>
                   <packing>
@@ -6283,7 +6440,7 @@ segments of the audio that are in a foreign language.</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="is_important">True</property>
                                         <property name="label" translatable="yes">Reload</property>
-                                        <property name="icon_name">view-refresh-symbolic</property>
+                                        <property name="icon_name">view-refresh</property>
                                         <property name="tooltip_text" translatable="yes">Reload all subtitle settings from defaults</property>
                                         <signal name="clicked" handler="subtitle_reset_clicked_cb" swapped="no"/>
                                       </object>

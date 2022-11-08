@@ -637,11 +637,19 @@ const gchar *MyCSS =
 "    min-height:1px;"
 "}"
 
-".progress-overlay trough, .progress-overlay progress"
+".progress-overlay trough"
 "{"
 "    border-radius: 0px;"
+"    border-color: transparent;"
 "    border-width: 1px 0px;"
-"    min-height: 4px;"
+"    min-height: 3px;"
+"}"
+
+".progress-overlay progress"
+"{"
+"    border-radius: 0px;"
+"    border-width: 1px;"
+"    min-height: 3px;"
 "}"
 
 "#preview_hud"
