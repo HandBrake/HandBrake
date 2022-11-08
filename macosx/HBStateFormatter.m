@@ -80,18 +80,23 @@
                 }
             }
 
-            if (p.seconds > -1)
+            if (p.rate_avg > 0.0 || p.seconds > -1)
             {
                 NSString *eta = [NSString stringWithFormat:@"%02d:%02d:%02d", p.hours, p.minutes, p.seconds];
 
-                if (p.rate_cur > 0.0)
+                if (p.rate_avg > 0.0 && p.seconds == -1)
+                {
+                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@" (%.2f fps, avg %.2f fps)", @"HBStateFormatter -> work time format"),
+                                      p.rate_cur, p.rate_avg];
+                   [string appendString:desc];
+                }
+                else if (p.rate_avg > 0.0)
                 {
                      NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %@)", @"HBStateFormatter -> work time format"),
                                        p.rate_cur, p.rate_avg, eta];
                     [string appendString:desc];
-
                 }
-                else
+                else if (p.seconds > -1)
                 {
                     NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@" (ETA %@)", @"HBStateFormatter -> work time format"),
                                       eta];
