@@ -3072,7 +3072,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                     </child>
                     <child>
                       <object class="GtkImage" id="preview_button_image">
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin-bottom">4</property>
                         <property name="margin-start">4</property>
@@ -8385,6 +8385,24 @@ Uncheck this if you want to allow changing each title's settings independently.<
                           </object>
                           <packing>
                             <property name="top_attach">8</property>
+                            <property name="left_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="ShowMiniPreview">
+                            <property name="label" translatable="yes">Show preview image in Summary tab</property>
+                            <property name="can_focus">True</property>
+                            <property name="visible">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="halign">start</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="tooltip-text" translatable="yes">Uncheck this if you want to hide the video preview image on the Summary tab for privacy reasons.</property>
+                            <signal name="toggled" handler="show_preview_changed_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="top_attach">9</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
