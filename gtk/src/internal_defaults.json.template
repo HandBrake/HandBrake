@@ -80,6 +80,7 @@
         "AutoScan": false,
         "AddCC": false,
         "EncodeLogLocation": false,
+        "ShowMiniPreview": true,
         "allow_tweaks": false,
         "last_update_check": 0,
         "check_updates": "weekly",

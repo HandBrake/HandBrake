@@ -2212,6 +2212,26 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
         ghb_dict_set_string(metadata, name, val);
 }
 
+void ghb_update_mini_preview(gboolean has_preview, signal_user_data_t *ud)
+{
+    GtkWidget *widget;
+
+    if (ghb_dict_get_bool(ud->prefs, "ShowMiniPreview") && has_preview)
+    {
+        widget = GHB_WIDGET(ud->builder, "summary_image");
+        gtk_widget_hide(widget);
+        widget = GHB_WIDGET(ud->builder, "preview_button_image");
+        gtk_widget_show(widget);
+    }
+    else
+    {
+        widget = GHB_WIDGET(ud->builder, "summary_image");
+        gtk_widget_show(widget);
+        widget = GHB_WIDGET(ud->builder, "preview_button_image");
+        gtk_widget_hide(widget);
+    }
+}
+
 void
 ghb_update_summary_info(signal_user_data_t *ud)
 {
@@ -2232,17 +2252,10 @@ ghb_update_summary_info(signal_user_data_t *ud)
         gtk_label_set_text(GTK_LABEL(widget), "");
         widget = GHB_WIDGET(ud->builder, "dimensions_summary");
         gtk_label_set_text(GTK_LABEL(widget), "--");
-        widget = GHB_WIDGET(ud->builder, "summary_image");
-        gtk_widget_show(widget);
-        widget = GHB_WIDGET(ud->builder, "preview_button_image");
-        gtk_widget_hide(widget);
+        ghb_update_mini_preview(FALSE, ud);
         return;
     }
-
-    widget = GHB_WIDGET(ud->builder, "summary_image");
-    gtk_widget_hide(widget);
-    widget = GHB_WIDGET(ud->builder, "preview_button_image");
-    gtk_widget_show(widget);
+    ghb_update_mini_preview(TRUE, ud);
 
     // Video Track
     const hb_encoder_t * video_encoder;
@@ -5031,6 +5044,16 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
+}
+
+G_MODULE_EXPORT void
+show_preview_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    g_debug("show_preview_changed_cb");
+    ghb_widget_to_setting (ud->prefs, widget);
+    const gchar *name = ghb_get_setting_key(widget);
+    ghb_pref_set(ud->prefs, name);
+    ghb_update_mini_preview(TRUE, ud);
 }
 
 G_MODULE_EXPORT void
