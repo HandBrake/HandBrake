@@ -1304,8 +1304,7 @@ source_dialog_extra_widgets(
 {
     GtkComboBoxText *combo;
     GList *drives, *link;
-    GtkWidget *source_extra, *ok_button;
-    GtkStyleContext *ok_style;
+    GtkWidget *source_extra;
 
     g_debug("source_dialog_extra_widgets ()");
     combo = GTK_COMBO_BOX_TEXT(GHB_WIDGET(ud->builder, "source_device"));
@@ -1325,9 +1324,6 @@ source_dialog_extra_widgets(
     g_list_free(drives);
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 
-    ok_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-    ok_style = gtk_widget_get_style_context(ok_button);
-    gtk_style_context_add_class(ok_style, "suggested-action");
     source_extra = GHB_WIDGET(ud->builder, "source_extra");
     gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), source_extra);
 }
@@ -4890,7 +4886,7 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         {                                   \n\
             font-family: monospace;         \n\
             font-size: %dpt;                \n\
-            font-weight: lighter;           \n\
+            font-weight: 300;               \n\
         }                                   \n\
         ";
     char           * css      = g_strdup_printf(css_template, size);

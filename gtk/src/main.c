@@ -681,7 +681,7 @@ const gchar *MyCSS =
 "{"
 "    font-family: monospace;"
 "    font-size: 8pt;"
-"    font-weight: lighter;"
+"    font-weight: 300;"
 "}"
 #endif
 
