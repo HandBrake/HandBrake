@@ -762,6 +762,10 @@ queue_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
+queue_move_top_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_move_bottom_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 queue_open_source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_open_dest_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -837,6 +841,8 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-add-all",         queue_add_all_action_cb         },
         { "queue-start",           queue_start_action_cb           },
         { "queue-pause",           queue_pause_action_cb           },
+        { "queue-move-top",        queue_move_top_action_cb        },
+        { "queue-move-bottom",     queue_move_bottom_action_cb     },
         { "queue-open-source",     queue_open_source_action_cb     },
         { "queue-open-dest",       queue_open_dest_action_cb       },
         { "queue-open-log-dir",    queue_open_log_dir_action_cb    },
