@@ -8929,6 +8929,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="halign">fill</property>
             <property name="valign">fill</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <signal name="button-press-event" handler="preview_click_cb" swapped="no"/>
             <signal name="leave-notify-event" handler="preview_leave_cb" swapped="no"/>
             <signal name="motion-notify-event" handler="preview_motion_cb" swapped="no"/>
             <signal name="size-allocate" handler="preview_resize_cb" swapped="no"/>
@@ -8945,6 +8946,10 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
             <signal name="enter-notify-event" handler="hud_enter_cb" swapped="no"/>
             <signal name="leave-notify-event" handler="hud_leave_cb" swapped="no"/>
+            <style>
+              <class name="osd"/>
+              <class name="app-notification"/>
+            </style>
             <child>
               <object class="GtkBox" id="vbox35">
                 <property name="orientation">vertical</property>
@@ -8989,7 +8994,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                           <object class="GtkImage" id="live_preview_play_image">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="icon_name">gtk-media-play</property>
+                            <property name="icon_name">media-playbck-start</property>
                           </object>
                         </child>
                       </object>
@@ -9030,6 +9035,27 @@ Uncheck this if you want to allow changing each title's settings independently.<
                       </object>
                       <packing>
                         <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="live_preview_fullscreen">
+                        <property name="height_request">30</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Click to toggle full screen mode</property>
+                        <property name="relief">none</property>
+                        <property name="action-name">app.preview-fullscreen</property>
+                        <child>
+                          <object class="GtkImage" id="live_preview_fullscreen_image">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">view-fullscreen</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
