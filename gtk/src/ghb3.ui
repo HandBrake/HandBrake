@@ -238,6 +238,16 @@ conjunction with the "Forced" option.</property>
   <menu id="queue_options_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Move to Top</attribute>
+        <attribute name="action">app.queue-move-top</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Move to Bottom</attribute>
+        <attribute name="action">app.queue-move-bottom</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Reset Failed Jobs</attribute>
         <attribute name="action">app.queue-reset-fail</attribute>
       </item>
@@ -253,6 +263,8 @@ conjunction with the "Forced" option.</property>
         <attribute name="label" translatable="yes">Clear All Jobs</attribute>
         <attribute name="action">app.queue-delete-all</attribute>
       </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">Import Queue</attribute>
         <attribute name="action">app.queue-import</attribute>
