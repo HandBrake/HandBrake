@@ -572,4 +572,3 @@ ghb_ui_settings_update(
     ghb_widget_to_setting(settings, (GtkWidget*)object);
     return 0;
 }
-

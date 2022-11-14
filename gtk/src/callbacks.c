@@ -5367,28 +5367,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 }
 #endif
 
-typedef struct
-{
-    gint count;
-    signal_user_data_t *ud;
-} button_click_t;
-
-static gboolean
-easter_egg_timeout_cb(button_click_t *bc)
-{
-    if (bc->count == 1)
-    {
-        GtkWidget *widget;
-        widget = GHB_WIDGET(bc->ud->builder, "allow_tweaks");
-        gtk_widget_hide(widget);
-        widget = GHB_WIDGET(bc->ud->builder, "hbfd_feature");
-        gtk_widget_hide(widget);
-    }
-    bc->count = 0;
-
-    return FALSE;
-}
-
 G_MODULE_EXPORT void
 easter_egg_multi_cb(
     GtkGestureMultiPress * gest,
@@ -5415,33 +5393,16 @@ easter_egg_cb(
 {
     GdkEventType type = ghb_event_get_event_type(event);
     guint        button;
-    static button_click_t bc = { .count = 0 };
 
-    bc.ud = ud;
     ghb_event_get_button(event, &button);
-    if (type == GDK_BUTTON_PRESS && button == 1)
+    if (type == GDK_3BUTTON_PRESS && button == 1)
     {
-        bc.count++;
-        switch (bc.count)
-        {
-            case 1:
-            {
-                g_timeout_add(500, (GSourceFunc)easter_egg_timeout_cb, &bc);
-            } break;
-
-            case 3:
-            {
-                // It's a triple left mouse button click
-                GtkWidget *widget;
-                widget = GHB_WIDGET(ud->builder, "allow_tweaks");
-                gtk_widget_show(widget);
-                widget = GHB_WIDGET(ud->builder, "hbfd_feature");
-                gtk_widget_show(widget);
-            } break;
-
-            default:
-                break;
-        }
+        // It's a triple left mouse button click
+        GtkWidget *widget;
+        widget = GHB_WIDGET(ud->builder, "allow_tweaks");
+        gtk_widget_set_visible(widget, !gtk_widget_get_visible(widget));
+        widget = GHB_WIDGET(ud->builder, "hbfd_feature");
+        gtk_widget_set_visible(widget, !gtk_widget_get_visible(widget));
     }
     return FALSE;
 }

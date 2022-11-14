@@ -654,59 +654,8 @@ const gchar *MyCSS =
 
 "#preview_hud"
 "{"
-"    border-radius: 20px;"
-"    background-color: alpha(@gray18, 0.8);"
-"    color: @white;"
-"}"
-
-"#live_preview_play,"
-"#live_duration,"
-"#preview_reset"
-"{"
-"    background: @black;"
-"    background-color: @gray18;"
-"    color: @white;"
-"}"
-
-"#preview_show_crop"
-"{"
-"    background-color: @gray22;"
-"    border-color: @white;"
-"    color: @white;"
-"}"
-
-"#live_encode_progress,"
-"#live_preview_progress,"
-"#preview_frame"
-"{"
-"    background: @black;"
-"    background-color: alpha(@gray18, 0.0);"
-"    color: @white;"
-"}"
-
-#if GTK_CHECK_VERSION(3, 20, 0)
-"#preview_reset:hover"
-#else
-"#preview_reset:prelight"
-#endif
-"{"
-"    background: @black;"
-"    background-color: @gray32;"
-"    color: @white;"
-"}"
-
-"#preview_reset:active"
-"{"
-"    background: @black;"
-"    background-color: @gray32;"
-"    color: @white;"
-"}"
-
-"#preview_reset:active"
-"{"
-"    background: @black;"
-"    background-color: @gray32;"
-"    color: @white;"
+"    border-radius: 16px;"
+"    border-width: 1px;"
 "}"
 
 "textview"
@@ -865,6 +814,8 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 presets_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
+preview_fullscreen_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 about_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 guide_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -920,7 +871,9 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "about",                 about_action_cb                 },
         { "guide",                 guide_action_cb                 },
         { "preset-select",         preset_select_action_cb, "s"    },
-        { "preset-reload",         preset_reload_action_cb,        },
+        { "preset-reload",         preset_reload_action_cb         },
+        { "preview-fullscreen",    NULL,
+          NULL, "false",           preview_fullscreen_action_cb    },
     };
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
                                     G_N_ELEMENTS(entries), ud);
@@ -1050,6 +1003,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_frame"), "preview_frame");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_play"), "live_preview_play");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_fullscreen"), "live_preview_fullscreen");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_progress"), "live_preview_progress");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_encode_progress"), "live_encode_progress");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
@@ -1223,6 +1177,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     GtkWidget * window = GHB_WIDGET(ud->builder, "presets_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
     window = GHB_WIDGET(ud->builder, "queue_window");
+    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+    window = GHB_WIDGET(ud->builder, "preview_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
 
     GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(ud->builder, "handbrake-menu"));
