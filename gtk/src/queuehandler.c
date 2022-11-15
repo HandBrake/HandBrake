@@ -586,16 +586,25 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         track         = ghb_dict_get_int(asettings, "Track");
         asource       = ghb_array_get(sourceAudioList, track);
         lang          = ghb_dict_get_string(asource, "Language");
+        name          = ghb_dict_get_string(asettings, "Name");
         audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
+        if (name)
+        {
+            g_string_append_printf(str, "%s%s - ", sep, name);
+        }
+        else
+        {
+            g_string_append_printf(str, "%s", sep);
+        }
         if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            g_string_append_printf(str, "%s%s, %s", sep, lang,
+            g_string_append_printf(str, "%s, %s", lang,
                                    audio_encoder->name);
         }
         else
         {
             audio_mix = ghb_settings_mixdown(asettings, "Mixdown");
-            g_string_append_printf(str, "%s%s, %s, %s", sep, lang,
+            g_string_append_printf(str, "%s, %s, %s", lang,
                                    audio_encoder->name, audio_mix->name);
         }
         sep = "\n";
@@ -627,8 +636,13 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         force = ghb_dict_get_bool(searchDict, "Forced");
         burn  = ghb_dict_get_bool(searchDict, "Burn");
         def   = ghb_dict_get_bool(searchDict, "Default");
+        name  = ghb_dict_get_string(searchDict, "Name");
 
-        g_string_append_printf(str, _("Foreign Audio Scan"));
+        if (name)
+        {
+            g_string_append_printf(str, "%s - ", name);
+        }
+        g_string_append_printf(str, "%s", _("Foreign Audio Scan"));
         if (force)
         {
             g_string_append_printf(str, _(", Forced Only"));
@@ -657,8 +671,14 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         force       = ghb_dict_get_bool(subsettings, "Forced");
         burn        = ghb_dict_get_bool(subsettings, "Burn");
         def         = ghb_dict_get_bool(subsettings, "Default");
+        name        = ghb_dict_get_string(subsettings, "Name");
 
-        g_string_append_printf(str, "%s%s", sep, desc);
+        g_string_append_printf(str, sep);
+        if (name)
+        {
+            g_string_append_printf(str, "%s - ", name);
+        }
+        g_string_append_printf(str, desc);
         free(desc);
         if (force)
         {
