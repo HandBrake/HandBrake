@@ -217,6 +217,10 @@ conjunction with the "Forced" option.</property>
   <menu id="queue_actions_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Play File</attribute>
+        <attribute name="action">app.queue-play-file</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Open Source Directory</attribute>
         <attribute name="action">app.queue-open-source</attribute>
       </item>
@@ -224,6 +228,8 @@ conjunction with the "Forced" option.</property>
         <attribute name="label" translatable="yes">Open Destination Directory</attribute>
         <attribute name="action">app.queue-open-dest</attribute>
       </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">Open Encode Log Directory</attribute>
         <attribute name="action">app.queue-open-log-dir</attribute>
@@ -236,16 +242,6 @@ conjunction with the "Forced" option.</property>
   </menu>
 
   <menu id="queue_options_menu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Move to Top</attribute>
-        <attribute name="action">app.queue-move-top</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Move to Bottom</attribute>
-        <attribute name="action">app.queue-move-bottom</attribute>
-      </item>
-    </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Reset Failed Jobs</attribute>
@@ -541,6 +537,109 @@ conjunction with the "Forced" option.</property>
         <property name="can-focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
+          <object class="GtkMenuBar">
+            <property name="visible">False</property>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="queue_list_menu">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_play">
+                        <property name="label" translatable="yes">_Play File</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-play-file</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_source">
+                        <property name="label" translatable="yes">Open _Source Directory</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-open-source</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_dest">
+                        <property name="label" translatable="yes">Open _Destination Directory</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-open-dest</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_move_top">
+                        <property name="label" translatable="yes">Move to _Top</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-move-top</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_move_bottom">
+                        <property name="label" translatable="yes">Move to _Bottom</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-move-bottom</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_edit">
+                        <property name="label" translatable="yes">_Edit</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-edit</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_reset">
+                        <property name="label" translatable="yes">_Reset</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-reset</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_item_remove">
+                        <property name="label" translatable="yes">Re_move</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">app.queue-delete</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkBox" id="queue_box0">
             <property name="orientation">horizontal</property>
             <property name="visible">True</property>
@@ -723,9 +822,10 @@ conjunction with the "Forced" option.</property>
                         <property name="can-focus">True</property>
                         <property name="vexpand">True</property>
                         <property name="hexpand">True</property>
-                        <property name="selection-mode">single</property>
+                        <property name="selection-mode">multiple</property>
                         <property name="activate-on-single-click">False</property>
                         <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
+                        <signal name="button-press-event" handler="queue_button_press_cb" swapped="no"/>
                         <signal name="key-press-event" handler="queue_key_press_cb" swapped="no"/>
                         <signal name="drag-motion" handler="queue_drag_motion_cb" swapped="no"/>
                         <signal name="drag-leave" handler="queue_drag_leave_cb" swapped="no"/>

@@ -758,6 +758,8 @@ queue_start_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_pause_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
+queue_play_file_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 queue_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -778,6 +780,9 @@ queue_delete_all_action_cb(GSimpleAction *action, GVariant *param,
                            gpointer ud);
 G_MODULE_EXPORT void
 queue_delete_complete_action_cb(GSimpleAction *action, GVariant *param,
+                                gpointer ud);
+G_MODULE_EXPORT void
+queue_delete_action_cb(GSimpleAction *action, GVariant *param,
                                 gpointer ud);
 G_MODULE_EXPORT void
 queue_reset_fail_action_cb(GSimpleAction *action, GVariant *param,
@@ -841,6 +846,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-add-all",         queue_add_all_action_cb         },
         { "queue-start",           queue_start_action_cb           },
         { "queue-pause",           queue_pause_action_cb           },
+        { "queue-play-file",       queue_play_file_action_cb       },
         { "queue-move-top",        queue_move_top_action_cb        },
         { "queue-move-bottom",     queue_move_bottom_action_cb     },
         { "queue-open-source",     queue_open_source_action_cb     },
@@ -850,6 +856,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-reset-fail",      queue_reset_fail_action_cb      },
         { "queue-reset-all",       queue_reset_all_action_cb       },
         { "queue-reset",           queue_reset_action_cb           },
+        { "queue-delete",          queue_delete_action_cb          },
         { "queue-delete-complete", queue_delete_complete_action_cb },
         { "queue-delete-all",      queue_delete_all_action_cb      },
         { "queue-export",          queue_export_action_cb          },
