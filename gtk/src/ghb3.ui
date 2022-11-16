@@ -9306,7 +9306,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
     </child>
     <action-widgets>
       <action-widget response="cancel">source_cancel</action-widget>
-      <action-widget response="ok">source_ok</action-widget>
+      <action-widget response="no">source_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkBox" id="source_extra">
