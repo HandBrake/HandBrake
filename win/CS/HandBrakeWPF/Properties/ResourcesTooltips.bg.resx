@@ -1,0 +1,524 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>"Поправяне на макроблокове" намалява макроблоковете, причинени от компресия на видеото към ниско качество.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Изберете опциите "Премахване на гребеновиден ефект" или "Изглаждане на презредов образ".
+Филтърът за премахване на гребеновиден ефект изглажда кадрите, които изглеждат презредови.
+Това ще запази качеството на кадрите, които не са презредови.
+
+Класическият филтър за изглаждане на презредов образ се прилага към всички кадри.
+Качеството на кадрите, които не са презредови, донякъде ще се намали.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Премахване на шум намалява или отстранява шум. Това може да подобри ефикасността на компресията и да създаде по-висококачествено видео с по-малък размер.
+Твърде силни настройки могат да навредят на качеството на картината, премахвайки детайли.
+
+NLMeans  е висококачествен филтър за премахване на шум с цена на скоростта. Използвайте когато качеството е по-важно от скоростта.
+
+HQDN3D е адаптивен нискочестотен филтър, по-бърз от NLMeans, но по-неефективен откъм запазване на фините детайли.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>"Обратно кадриране" премахва гребеновидния ефект, причинен от "кадриране" – процес за конвертиране на филмови кадрови честоти към телевизионни кадрови честоти.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Сивата скала премахва цветовия компонент на видеото. Често се нарича черно-бяло видео.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Изходен път, включващ директория и име на файл. Тоест къде ще бъде създадено новото Ви видео и как ще бъде именувано.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Добавя специален MP4 маркер, за да позволи възпроизвеждането на iPod модели от 5 поколение излезли около 2006 година. Други настройки могат да повлияят на съвместимостта.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Формат на контейнера. Видео, аудио и други пътечки се обединяват в един файл от този тип. Влияе на съвместимостта.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Оптимизирай MP4 за прогресивно теглене. След кодиране, данните се пренареждат и презаписват, за да се позволи незабавно изпълнение посредством мрежата, без да трябва да се изтегля целия файл.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Избор на интервалът на източника. По подразбиране, всички глави се избират и целия източник се кодира.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Заглавие или видеоклип за кодиране.
+Blu-ray и DVD източници често имат множество заглавия, най-дългото от които е главния филм</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>"Анаморфотен" позволява за произволни размери в хранилището, запазвайки оригиналното съотношение по време на възпроизвеждане.
+
+"Никакво" изключва "Анаморфотен". Размерите на видеото в хранилището и тези на екрана ще са еднакви. Единствено е полезно за стари устройства.
+
+Автоматично максимизира разделителна способност на хранилището, докато запазва оригиналното съотношение на страните. Препоръчително.
+
+Свободно е подобно на "Автоматично", но се опитва да запази съотношението на страните на хранилището. Това може да доведе до лека загуба на разделителна способност в хранилището в сравнение с "Автоматично".
+
+Персонализиран позволява ръчно настройване на всички параметри. Полезно е за поправяне на грешно съотношение на страните на източника и за професионалисти, на които им трябва по-напреднал контрол върху постпродукцията.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Автоматично изрязване на черните рамки в ъглите на видеото</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Изрязване на видеото отдолу.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Изрязване на видеото отляво.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Изрязване на видеото отдясно.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Изрязване на видеото отгоре.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Това е височината, с която ще бъде запазено видеото
+Истинските размери на дисплея ще се различават, ако съотношението на размерите на пикселите не е 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Ръчно изрязване на видеото.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Подравни размера в хранилището до кратни на тази стойност.
+
+Тази настройка е нужна само за съвместимост с някои устройства.
+Трябва да използвате 2, освен ако не попаднете на проблеми със съвместимостта.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Съотношението на пикселите дефинира формата на пикселите.
+Съотношение 1:1  дефинира квадратен пиксел. Други стойности дефинират правоъгълни форми.
+Плеърите ще мащабират изображението да получат желаното съотношение.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Това е ширината, с която ще бъде запазено видеото
+Истинските размери на дисплея ще се различават, ако съотношението на размерите на пикселите не е 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Изтрий задачата от опашката.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Върни статуса на задачата към Чакаща.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Върни задачата към главния прозорец за редактиране.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Наглася средната побитова скорост.
+
+Моментната побитова скорост може да е много по-висока или по-ниска във всеки даден момент.
+Но средната за дълга продължителност ще бъде стойността тук. Ако трябва да ограничите моментната побитова скорост, погледнете на x264 vbv-bufsize и vbv-maxrate настройките.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Наглася постоянна кадрова честота на изхода.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Налични видео енкодери.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Настройки за оптимизиране на често срещани сценарии.
+
+Това може да подобри ефикасността за характеристиките на определен източник
+или да зададе характеристики за изходния файл. Промените ще се приложат
+след шаблона, но преди всички други параметри.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Добълнителни настройки за енкодера.
+
+Списък опции за енкодера разделени с точка и запетая.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Намалява употребата на процесора при декодиране.
+
+Избери тази опция, ако устройството ти не успява да възпроизведе изхода (пропуснати кадри).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Изходна кадрова честота.
+
+'Същата като източника' е препоръчителна. Ако източника има променлива кадрова честота, 'Същата като източника' ще я запази.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Наглася и подсигурява покриване на стандартите на определеното ниво.
+
+Презаписва всички останали настройки.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Наглася променлива кадрова честота с максимална кадрова честота определена от настройката за кадрова честота.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Настройва енкодера да разменя ефикасност откъм компресия за скорост при кодиране.
+
+Това настройва вашите настройки по подразбиране на енкодера.
+Настройки, профили, нива и разширени настройки ще се прилагат върху това.
+В общия случай, слагате тази настройка до най-бавната, която можете да понесете, защото с по-бавни настройки се получават по-добро качество или по-малки файлове.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Наглася и подсигурява покриване на стандартите на определеното профил.
+
+Презаписва всички останали настройки.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Изберете желаното ниво на качество.
+Енкодерът избира определено качество.
+Скалата за всеки енкодер е различна.
+
+Скалата на x264 е логаритмична и по-малки стойности отговарят на по-високо качество.
+Малки намаления в стойността ще доведат до все по-големи увеличения на размера на изходния файл. Стойност 0 значи без никаква загуба и ще доведе до файл много по-голям от източника, освен ако източника също не е бил без никаква загуба.
+Препоръчителни стойности са: Между 18 до 20 за източници със стандартно качество и между 20 и 23 за източници с по-високо качество.
+
+Скалите на FFMpeg и Theora са по-линейни.
+Тези енкодери нямат режим без никакви загуби.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>По време на първия цикъл от кодиране с два цикъла използвай настройки, които да го забързат.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Изпълнете кодиране с два цикъла.
+
+Опцията "побитова скорост" е задължителна. По време на първия цикъл се събира
+статистика за видеото. След това при втория цикъл, тази статистика се използва
+да се вземат решения за разпределение на побитовата скорост.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Наглася променлива кадрова честота на изхода.
+
+ПКЧ не е съвместима с някои плеъри.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Когато HandBrake завърши текущата опашка или кодиране, ще изпълни това действие.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Прелистете, за да изберете нов изходен път и име на файла за своето кодиране.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Видео ъгъл за кодиране. Приложим само за многоъгълно DVD и Blu-ray.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Добави нов шаблон.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Допълни опции за шаблон.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Шаблоните са група от настройки за енкодера, подбрани за различни употреби. Изберете тази, която са най-близка до намерението ви.
+
+Презаписва всички настройки на енкодера. Настройките могат да се променят след избиране на шаблон.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Премахни избрания шаблон.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Някои източници съдържат повече от един видеоклип или колекция от заглавия. Blu-ray и DVD източниците често имат множество заглавия.
+
+Ако знаете кое заглавие искате да кодирате, може да го въведете тук и HandBrake ще сканира само това заглавия, вместо всички заглавия в файловия източник. В противен случай, оставете това поле празно.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Персонализирани параметри за премахване на шум.
+
+NLMeans синтаксис: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans по подразбиране: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D синтаксис: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D по подразбиране: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Шаблон за премахване на шум. Определя силата на филтъра.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Настройка на "Премахване на шум". Допълнително настройва шаблона за премахване на шум, за да оптимизира настройките за специфични сценарии.
+
+- "Никакво" използва настройките на шаблона по подразбиране.
+
+- "Филм" усъвършенства настройките така, че да се ползва с предимно игрални филми.
+
+- "Текстура" обработва само цветните канали. Полезна е за запазване на филмовия вид на бляскавата текстура, докато намалява или премахва цветния шум.
+
+- "Високоскоростна картина" намалява размазването на цветовете в сцените с високоскоростна картина, като избягва временното обработване на цветните канали. Полезна е за спортни и екшън видеа.
+
+- "Анимация" е полезна за анимета и анимации.
+
+- "Лента" е полезна за източници от аналогови ленти с ниска детайлност като VHS, където "Филм" няма да произведе желания резултат.
+
+- "Спрайт" е полезна за 1-/4-/8-/16-битови двуизмерни игри. "Спрайт" не е предназначена за видеа с високо качество.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>"Изглаждане на презредов образ" премахва гребеновидния ефект от картината.
+
+Bwdif и Yadif са два популярни и бързи филтъра за изглаждане на презредов образ.
+
+"Премахване на гребеновиден ефект" сменя между множество интерполационни алгоритми за скорост и качество.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Персонализирани параметри за изглаждане на презредов образ:.
+
+Bwdif и Yadif синтаксис: mode=m:parity=p
+
+Bwdif и Yadif по подразбиране: mode=3
+
+Decomb синтаксис: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb по подразбиране: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Шаблон за филтъра за изглаждане на презредов образ.
+
+"По подразбиране" е добре балансиран откъм скорост и качество.
+
+"Пропусни проверка на пространството" позволява на Yadif да пропусне поправянето на определени несъвършенства, които могат да бъдат избегнати за сметка на леко увеличаване на скоростта.
+
+"EEDI2" използва интерполационен алгоритъм за "Премахване на гребеновиден ефект", който е по-бавен и с по-високо качество. Полезен е за най-трудните източници.
+
+"Боб" се опитва да запази движението по-добре за сметка на леко намаляване на привидната разделителна способност.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Обръща (огледално) картината по хоризонталната ос.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Когато е включен, "Засичане на презредов образ" позволява на филтъра за изглаждане на презредов образ да обработва само презредовите кадри на видеото.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Персонализирани параметри за засичане на презредов образ.
+ 
+ Синтаксис: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ По подразбиране: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Завъртане на изображението в посока на часовниковата стрелка на 90 градусови стъпки.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Продължителността на избрания интервал от източника в Часове:Минути:Секунди</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Запазване на съотношението на страните запазва ориигналното съотношение на дисплея от източника. Изключването на това може да доведе до разтегната или сплескана картина.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Персонализирани параметри за изостряне.
+
+Unsharp синтаксис: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp по подразбиране: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp синтаксис: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp по подразбиране: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Изострането подобрява наличието на детайли, особено по ръбовете. Твърде силни настройки на изострането може да навредят на качеството на картината, като създаде трептящи несъвършенства и да подобри шума, което може да намали ефикасността на компресия.
+
+Unsharp е маскиращ филтър с общо предназначение. Изостря като замъглява и после пресмята разликата между замъглената картина и оригиналната.
+
+Lasharp изостря използвайки конволюционни ядра апроксимиращи лапласови ръбови филтри, понякога се получава по-висококачествен резултат от unsharp маскирането.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Шаблон за изострящия филтър. Задава силата на филтъра.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Настройка за "изостряне". Допълнително настройва шаблона за изостряне за специфични сценарии.
+
+"Никакво" използва настройките на шаблона по подразбиране.
+
+Unsharp can be tuned for Ултрафино, Фино, Средно, Грубо, или Много Грубо изостряне. Изберете едно спрямо изходната разделителна способност и финост на детайлите за подобряване.
+
+Филмовата настройка на Lapsharp усъвършенства настройките за предимно използване с игрални филми. "Филм" използва изотропично ядро на Лаплас да изостри всички ръбове по подобен начин и информация за яркостта се изостря повече от тази за цветността.
+
+Текстурната настройка на Lapsharp е подобна на филмовата, но използва изотропично Лапласо-Гаусово ядро да намали ефекта на шума и текстурата. Полезна е за предотвратяване на лоша текстура и като обща алтернатива на филмовата настройка.
+
+Анимационната настройка на Lapsharp е полезна за анимация като аниме и анимации. "Анимация" е същата като "Филм", но силата е намалена, за да не се получават несъвършенства.
+
+Спрайтовата настройка на Lapsharp е полезна за 1-/4-/8-/16-битови двуизмерни игри. "Спрайт" се използва за 4-съседно ядро на Лаплас, което подобрява вертикалните и хоризонтални ръбове повече от диагоналните ръбове.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Подравнява началните времена на всички аудио и видео потоци като добавя празни кадри или пропуска кадри. Може да подобри аудио/видео синхронизацията за счупени плеъри, които не уважават MP4 списъците с отместване (edit lists).</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Опции за контролиране на шаблоните.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Крайната точка на този интервал.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Началната точка на този интервал.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Когато е включено, системата за автоматично именуване винаги ще използва пътя по подразбиране.
+Когато е спряно, ще използва пътя в целевото прозорче на главния прозорец, ако то е запълнено, а иначе ще използва пътя по подразбиране.</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Филтър за цветово пространство</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Филтър за изглаждане на наситеността</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColourTooltip" xml:space="preserve">
+    <value>Това поле приема RGB стойности като например "0xFF0000" или имена на цветове като "red". За пълен списък с именувани цветове, погледнете докуемнтацията за филтъра за запълване.</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Вграждане на субтитри във видео пътечката.
+
+Внимание, това ще се избере по подразбиране, ако източника, пътечката за субтитри, не се поддържа в изходния файлов тип.
+
+Например, PGS субтитри не се поддържат в MP4</value>
+  </data>
+  <data name="OptionsView_PresetDisplayModes" xml:space="preserve">
+    <value>Плоско – Шаблоните са показани като плосък списък.
+Частично плоско – Последните 8 потребителски шаблона са показани като плосък лист, последван от всички шаблони, показани в списък с категории.
+Категории – Всички шаблони са показани в подменю по категория.</value>
+  </data>
+  <data name="AudioView_AudioDefaults" xml:space="preserve">
+    <value>Настройте поведение, което да определя как този раздел автоматично да добавя аудио пътечки, когато изберете нов източник или заглавие.</value>
+  </data>
+  <data name="BehavioursReload" xml:space="preserve">
+    <value>Обновете списъка по-долу в зависимост от конфигурираното поведение</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaults" xml:space="preserve">
+    <value>Задайте поведение, което да определя как този раздел автоматично да добавя пътечки за субтитри, когато избирате нов източник или заглавие.</value>
+  </data>
+  <data name="OptionsView_SendFileToArguments" xml:space="preserve">
+    <value>Следните променливи в средата на изпълнение са винаги налични:
+HB_SOURCE
+HB_DESTINATION
+HB_EXIT_CODE
+
+Възможните изходни кодове са следните:
+0: Успешно
+2: Грешка с входните параметри
+3: Неуспешно инициализиране
+4: Непозната грешка
+5: Грешка при четене на файла източник
+
+Имайте предвид, че кодовете за грешка са възможно най-точни, но може да не са винаги точни.
+Препоръчително е да проверите изходния файл преди да работите с него.</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>Форматът на изходния файл. Освен всички поддържани символи от файловата система, може да ползваш което и да е поле за заместване, което ще бъде заместено когато се смени заглавието или сканира източник, или променят определени настройки.</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>За езици, които са от дясно наляво, може да изберете един от два режима. "Само текст" ще изобразява текста от дясно наляво. "Целият потребителски интерфейс" ще изобрази всички менюта от дясно наляво.
+
+Имайте предвид, че може интерфейсът да не е съвършен в тези режими. В зависимост от езика, може да е полезно да се пробват и двата режима и прецени кой е по-добрия.</value>
+  </data>
+  <data name="AudioView_Quality" xml:space="preserve">
+    <value>Избира определено ниво за качество на аудиото.
+1 е най-ниското качество, а 5 е най-високото качество.
+
+Побитовата скорост варира за различните източници.</value>
+  </data>
+</root>

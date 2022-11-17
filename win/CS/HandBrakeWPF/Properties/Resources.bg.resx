@@ -1,0 +1,2688 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>Пълният списък с параметри на енкодера: 
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Намали процесорното натоварване при декодиране.
+
+Задай това, ако устройството ти се мъчи при възпроизвеждане на видеото. (например пропуска кадри)</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Внимание: RF 0 означава без загуба в качеството!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>Стойност 0 означава без загуби в качеството (lossless), което ще доведе до по-голям размер на файла, 
+в сравнение с оригинала, освен ако и той също не е без загуби в качеството (lossless).
+
+Скалата при x264 и x265 е логаритмична и по-ниски стойности съответстват на по-високо качество.
+
+Така че малки промени в стойността ще имат значително въздействие върху размера на получения файл.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>По избор можете да съхраните настройки за картина с този шаблон. Има 3 режима:
+
+Никакъв: Настройките за картина не се съхраняват в този шаблон. Когато заредите източник, те ще останат както са си в границите на разделителната способност на източника. Това влияе и на "Анаморфотен", "модул", "изрязване" и т.н.
+
+Персонализиран: По избор можете да зададете максимална ширина и височина. Когато направите това, кодирането ще е по-малко или равно на тези стойности. "Запази съотношението на страните" автоматично ще бъде включено.
+
+Максимум на източника: Винаги кодирай с разделителната способност на източниците, когато е възможно.</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>ВНИМАНИЕ: Автоматичното именуване на файловете не е включено. Може да го включите от опциите.</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>ВНИМАНИЕ: В момента не е нагласено автоматично избиране на пътечки с аудио и субтитри. Можете да настроите поведението за избор по подразбиране от опциите.</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>Вградените шаблони бяха рестартирани.</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>Рестартирането завърши</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>По-високо качество |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| По-ниско качество</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Плацебо качество |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>Трябва да включите автоматичното именуване на файлове И да зададете път по подразбиране в предпочитанията, преди да можете да добавяте към опашката.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Сигурен ли сте?</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake вече кодира.</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>Има задачи на опашката със същия изходен път. Моля, изберете различен път за тази задача.
+
+Може да искате да настроите опциите за автоматично именуване в "Меню инструменти -&gt; Предпочитания -&gt; Изходни файлове"
+</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>Чакащи задачи {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>Задаване на нов шаблон по подразбиране: {0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>Налична е нова актуализация. Отидете в Инструменти &gt; Опции за инсталация</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>Не е избран шаблон.</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>Не можете да променяте вградените шаблони. Моля, изберете някой от собствените си шаблони.</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>Моля, изберете папка.</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>Подготовка за кодиране ...</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>Не можете да импортирате шаблон със същото име като някой от вградените шаблони.</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>Шаблонът "{0}" вече съществува. Искате ли да го презапишете?</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>Шаблони</value>
+  </data>
+  <data name="Main_PresetUpdateConfirmation" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да обновите избрания шаблон?</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>Шаблонът бе обновен с текущите Ви настройки.</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake установи, че вградените шаблони не са актуални... Тези шаблони ще бъдат актуализирани.
+Вашите персонализирани шаблони не бяха обновени, затова може да се наложи да ги пресъздадете като ги изтриете и добавите повторно. 
+Предишният user_presets.xml файл бе архивиран.</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>Опашката завърши</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>Сканирането е прекратено.</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>Сканирането завърши</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>Сканирането се провали:</value>
+  </data>
+  <data name="Main_ScanFailed_CheckLog" xml:space="preserve">
+    <value>Сканирането се провали... Моля, вижте дневника на дейностите за повече информация.</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>Сканиране на източника, моля, изчакайте...</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>Сканиране на заглавие {0} от {1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>Трябва да сканирате източника и да настроите задачата си, преди да започнете кодирането. Цъкнете бутона "Източник" на лентата с инструменти.</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>Моля, уверете се, че сте избрали един от собствените си шаблони. Не можете да експортирате вградени шаблони.</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>Моля, изберете шаблон за обновяване.</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>Изберете "Източник", за да продължите</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0}Чакащи задачи</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Съобщение</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>Презаписване?</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Въпрос</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>Готов</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Актуализирано</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>Версия на шаблона</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>Шаблонът, който се опитвате да импортирате, е от различна версия на HandBrake.
+Може да не е възможно да импортирате всички стойности от този шаблон.
+
+Желаете ли да продължите?</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>Шаблонът не може да се импортира!</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>Шаблонът не може да се импортира, понеже е повреден или от по-стара версия на HandBrake.</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>Трябва да зададете изходен път за изходния файл, преди да добавяте към опашката.</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>Въведеният изходен път съдържа забранени символи и няма да бъде променен.</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Визуализация {0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>Визуализация (Мащабирана)</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>Изход: {0}</value>
+  </data>
+  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
+    <value>Налични допълнителни опции: {source_path} или {source_folder_name} или {source}</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>Не можете да кодирате към файл със същия път и име като файла източник. Моля, променете името на целевия файл така, че да не съвпада с това на файла източник.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>Системата Ви попречи на HandBrake да стартира уеб браузър.</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>Можете да прегледате помощните страници, като посетите уебсайта: https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>Избраният шаблон не може да се импортира.</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>Шаблонът може да е повреден или от по-стара версия на HandBrake, която не се поддържа.
+Шаблоните от по-стари версии трябва да бъдат пресъздадени в настоящата версия.</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>Допълнителни разширени параметри, които могат да се подадат на видео енкодера.</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>Никакъв – Ще бъдат вградени само пътечки, при които контейнерът не поддържа формата.
+Пътечка с чуждо аудио – Ще бъде вградена пътечката с чуждо аудио, ако е налична.
+Предпочита се чуждо аудио, иначе първото – Ако съществува пътечка с чуждо аудио, тя ще бъде вградена, а иначе ще бъде избрана първата пътечка.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>Съвместимост за WebM субтитри </value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM в HandBrake поддържа само вградени субтитри.
+
+Трябва да промените изборите си за субтитри.
+
+Ако продължите, невградените субтитри ще бъдат загубени.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>Не са открити валиден източник или заглавия.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake няма да може да кодира избрания източник, понеже не откри валиден източник със заглавия за кодиране. Това може да се дължи на една от следните причини:
+
+- Продължителността на всяко заглавие на източника е под долната граница на "Минимална продължителност на заглавие" в "Предпочитания &gt; Разширени".
+- Файлът източник не е валиден видеофайл или е във формат, който не се поддържа от HandBrake.
+- Може да нямате достъп за четене на файла или друго приложение може да заключва файла.
+- Източникът може да е копие, защитено или включващо DRM. HandBrake не поддържа премахването на защитите на копие.
+
+В дневника на дейностите може да има допълнителна информация.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Опашка{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Започни кодирането</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Започни опашката</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>Не можете да изтриете шаблонът по подразбиране. Моля, сложете друг шаблон по подразбиране.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да изтриете шаблона:</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Кодиране: Цикъл {0} от {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Оставащо време: {5},  Изминало: {6} {7}  </value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>Шаблонът трябва да има име. Моля, попълнете полето за име на шаблона.</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>Вече съществува шаблон с това име. Искате ли да го замените?</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>Първо трябва да сканирате източник, за да използвате опцията "Максимум на източника".</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>Полетата за персонализирана ширина и дължина трябва да бъдат попълнени за опцията "Персонализирани".</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>Шаблонът не може да бъде добавен</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Неизвестна грешка</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>Аудио по подразбиране</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>Аудио пътечки</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Поведение на селекция ...</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>Върни се на пътечки</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>Неуспешно запазване на файла с маркерите за главите!</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>Имената на маркерите за главите НЯМА да се запазят в кодирания файл.</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>Следното действие "{0}" ще се случи след {1} секунди.</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>Ако проблемът не се оправи, моля, рестартирайте HandBrake.</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>Не е налична повече информация за тази грешка.</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>Възникна неизвестна грешка.</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>Налична е нова актуализация! Моля, проверете сайта за бележки по новата версия.</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>Вашата система поддържа 64-битовата версия на HandBrake! Тя предлага по-добра производителност и стабилност от тази 32-битовата версия.
+Моля, проверете уебсайта за бележки по новата версия.</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>Засега няма нови актуализации.</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>Актуализацията е свалена</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>Услугата за актуализации не е налична. Можете да свалите актуализацията от https://handbrake.fr</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>Провалено актуализиране. Можете да свалите актуализацията от https://handbrake.fr</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>Размер на хранилището: {0}х{1}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>Добави към опашката</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>Няма чакащи за кодиране</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>Няма задачи, които да се кодират в момента</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>Опашка</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfirmation" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да изчистите опашката?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Потвърди</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} чакащи задачи</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>Опашката е паузирана</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да изтриете избраните задачи?</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>Това кодиране тече в момента. Ако го изтриете, кодирането ще спре. Сигурен ли сте, че искате да продължите?</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>Няма чакащи задачи.</value>
+  </data>
+  <data name="QueueViewModel_EditConfirmation" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да редактирате тази задача? Тя ще бъде премахната от опашката и изпратена в главния прозорец.</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>Опашката е готова</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>Опашката не се изпълнява</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>Опашката е завършена</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>Последната задача на опашката е приключена</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>Опашката е стартирана</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>Кодиране: Цикъл {0} от {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Оставащо време: {5},  Изминало: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>В момента тече кодиране. Излизането от HandBrake ще спре това кодиране.
+Сигурен ли сте, че искате да излезете от HandBrake?</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>Визуализация на картина</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>Предишният файл за визуализация не може да се изтрие. Може още да имате отворена визуализация във Вашия медиен плеър. Моля, затворете го.</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>Трябва да сканирате източника си и да настроите кодирането си, преди да създадете визуализация.</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>Файлът за визуализация не може да бъде намерен. Или файлът е бил изтрит, или кодирането се е провалило. Проверете дневника на дейностите за повече подробности.</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake вече кодира видео! Само един файл може да се кодира наведнъж.</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>Субтитри по подразбиране</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>Пътечки за субтитри</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>Върни се на пътечки</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>Поведение на селекция ...</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Архивиран файл:</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Шаблоните не могат да бъдат заредени.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake не можа да зареди файла Ви с шаблони. Може да е бил от по-стара неподдържана версия на HandBrake или повреден.
+
+Старите Ви шаблони бяха архивирани в:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value>с {0} засечени грешки. Проверете прозореца на опашката за повече подробности.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Ниско дисково пространство</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Внимание, свършва Ви дисковото пространство. HandBrake няма да може да завърши това кодиране, ако Ви свърши пространството.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Ред {0} е невалиден. Нищо няма да бъде импортирано.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Неуспешно импортиране на файла с глави</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>Всички редове във файла с глави трябва да съдържат поне две колони с данни</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>Първата колона на файла с глави трябва да съдържа целочислено число по-голямо от нула (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Файлове с глави от тип "{0}" понастоящем не се поддържат.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Неподдържан тип файл с глави</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Невалидни данни за главите на източника</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>Броят на глави в източника и броя на глави във входния файл не съвпадат ({0} срещу {1})
+
+Искате ли въпреки това да импортирате имената на главите? </value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>Броят на глави в източника и броя на глави във входния файл не съвпадат ({0} срещу {1})
+
+Искате ли въпреки това да импортирате имената на главите? </value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Броят на главите на източника и входния файл не съвпада.</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>Докладваната продължителност на главите в медийния източник
+и продължителността на главите във входния файл много се различават.
+
+Много е вероятно този файл с глави да е произведен от различен медиен източник.
+
+Сигурен ли сте, че искате да импортирате имената на главите?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Продължителността на главите на източника и входния файл не съвпадат</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>Получи се грешка при спирането на сканирането. Моля, рестартирайте HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake не може да актуализира файла Ви с шаблони до формата на новата версия.
+Файлът Ви с шаблони ще бъде архивиран и ще бъде създаден нов. Ще трябва да пресъздадете собствените си шаблони.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Всички настройки, които сте променили, може да трябва да се рестартират следващия път, когато се включи HandBrake.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccurred" xml:space="preserve">
+    <value>Възникна проблем при опита настройките Ви да бъдат записани.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Внимание, настройките Ви бяха рестартирани!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Файлът с потребителските Ви настройки бе повреден или недостъпен. Настройките бяха възстановени до тези по подразбиране.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Не може да се зареди файл с потребителски настройки: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Файлът с потребителските Ви настройки е недостъпен или повреден. Може да се наложи да изтриете файла и да оставите HandBrake да генерира нов.</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>Изходната папка, която сте избрали, или не съществува, или нямате права да записвате файлове в нея.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Създаване на папка?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>Папката, в която се опитвате да пишете, не съществува. Желаете ли HandBrake да създаде следната папка?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Неуспешно отваряне на целевата директория.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Проверете, че имате валидна целева директория.</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>Обработване на цикъл {0} от {1}, (Сканиране на субтитри)  {2:00.00}%,  Оставащо време за сканиране: {3},  Изминало: {4}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>Няма друга информация</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Цикъл {2} от {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{1}%, Цикъл {2} от {3}
+Оставащо време: {4}</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>Опашката е паузирана. Внимание, дялът, в който кодирате, е с ниско дисково пространство. Моля, освободете пространство и натиснете "Започни", за да продължите. Можете и да настроите минималното ниво на пространство в предпочитания.</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>Опашката е паузирана</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>Опашката е паузирана</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Избраната директория има малко свободно дисково пространство.
+
+Може да конфигурирате кога това предупреждение се появява в настройките.
+
+Искате ли да продължите?</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Статутът на задачата не може да се рестартира, понеже не е в грешка или завършено състояние</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Неуспешно възстановяване на файла с опашката.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>Файлът може да е повреден или от по-стара несъвместима версия на HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake вече кодира файл.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Моля, прекратете текущото кодиране. Ако проблемът продължи, рестартирайте HandBrake.</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Визуализация ({0}% от истинския размер)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake изисква 64 битова версия на Windows 10 или по-късна версия, за да работи.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake изисква Windows 10 или по-късна версия, за да работи. Версии 0.9.9 (XP), 0.10.5 (Vista), 1.3.3 (7 и 8.x) бяха последните версии, които поддържаха тези стари операционни системи.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Желаете ли да продължите с добавянето на останалите?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>Фалът "{0}" вече съществува!
+Искате ли да го презапишете?</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>Системният клипборд в момента е недостъпен.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>Това може да е причинено от друго приложение, следящо или заключващо клипборда за себе си. Няма да може да ползвате клипборда докато не се отключи.</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>Лиценз: </value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>Версия: </value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- Добавяне на нова категория --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>Добавяне на шаблон</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>Категория:</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>Описание:</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>Име:</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>Измерения:</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Избор на пътечки от източника</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Позволи подаване на:</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Настройте как аудио пътечките биват автоматично избрани и настроени, когато изберете ново заглавие или видео източник.</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>Поведение при "автоматично подаване":</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Побитова скорост:</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Кодек</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Усилване</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Скрий</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Смесване</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Резервен енкодер:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Презареди</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Честота на дискретизация</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Покажи</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Име на пътечка</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Поведение на избраните пътечки:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>За допълнителни пътечки:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>Когато "автоматично подаване" е избрано като аудио кодек.</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>Маркери на глави</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>Име на глава</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>Номер на глава</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>Създай маркери на глави</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>Продължителност</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>Експорт</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>Импорт</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>Експортиране на имена</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>Импортиране на имена</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>Рестартирай имената на главите</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Отмяна на действие</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Продължи</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>При завършено действие</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Подробности за грешка:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Персонализиране:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Поправяне на макроблокове:</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Премахване на гребеновиден ефект</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Изглаждане на презредов образ:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Шаблон за изглаждане на презредов образ</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Премахване на шум:</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Шаблон за премахване на шум</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Настройване на премахване на шум</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Обратно кадриране:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Филтри</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Хоризонтален</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Сива скала</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Засичане на презредов образ:</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Завъртане:</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Изостряне:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Шаблон за изостряне</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Настройка на изостряне</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Настрой:</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>Добави</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Изчисти</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Затвори</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Копиране в клипборда</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Придвижи наляво</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Придвижи надясно</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Запиши</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>Копиране в клипборда</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>Дневник на кодиране</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>Отвори директория с дневници</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>Дневник на сканирането</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>Дневник на дейностите</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Добави всички</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Добави текущ</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Добави селекция</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>Добави към опашката</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>Разширени</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Подравняване на Аудио/Видео началото</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Ъгъл</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>Аудио</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Аудио пътечки</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>Прелистване</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>Глави</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>Контейнер</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Целева директория</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Продължителност: </value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>Запиши като:</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>Филтри</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Формат:</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>Помощ</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>Поддръжка на iPod 5G</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Метаданни</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Променен)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Мултиплексиране: Може да отнеме известно време...</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>Опции</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>Изходни настройки:</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>Измерения</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Редактиране на шаблон</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Контекстно меню за опции за шаблоните</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Изтрий шаблон</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Шаблони</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>Визуализация</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Кодиране: {0}, {1:00.00}%, Оставащо време: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Интервал:</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Презареди</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>Премахни</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>Рестартирай вградените шаблони</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Запази нов шаблон</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Търсене на начално време</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>Задай по подразбиране</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Визуализация</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>Опашка</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>Източник:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Отвори източник</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>Започни кодирането</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>Започни опашката</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>Прекрати</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Прекрати кодирането</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да спрете кодирането?</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Моля, изберете източник за кодиране, преди да се опитате да импортирате файл със субтитри.</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>Субтитри</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Пътечки за субтитри</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Обобщение</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Заглавие:</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>Обнови настоящия шаблон</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>Оптимизирано за уеб</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Управление на шаблони</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Метаданни</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>Позволи употребата на Nvidia NVENC енкодерите</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>Позволи употребата на Intel QuickSync енкодерите</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>Позволи употребата на AMD VCN енкодерите</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>Въведеният файлов формат съдържаше невалидни символи. Те бяха премахнати.</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Издавай звук, когато всяко кодиране завърши</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Издавай звук, когато опашката завърши</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Покажи визуализациите в раздела "Обобщение"</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Покажи статуса на кодирането в заглавието на приложението.</value>
+  </data>
+  <data name="Options_7DayLogClear" xml:space="preserve">
+    <value>Изчисти файл-дневници по-стари от 7 дни</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>Относно HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Разширени</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Разширени опции</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Параметри:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Автоматично именуване на файлове</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Автоматично генериране на имената на изходните файлове</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Проверка за актуализации</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Винаги изчиствай завършените елементи на опашката, след завършване на кодирането</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Изчисти история на дневниците</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Сложи копие на индивидуални дневници от кодирането в избрано място:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Сложи копие на индивидуални дневници от кодирането в същото място като кодираното видео</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Текуща версия</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Декодиране</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Път по подразбиране:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Изтегли актуализацията</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>Четене на DVD </value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Изключи LibDVDNav. (libdvdread ще се използва вместо това)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>Кодиране</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Файлов формат:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>Основни</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Дневник</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Ниво на подробност на дневника:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Път до дневника:</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Паузирай опашката при ниско дисково пространство</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Минимизирай в центъра за известия (Изисква рестартиране)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Минимална продължителност на заглавия в DVD и Blu-ray в секунди. По-къси заглавия ще бъдат пропускани:</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>MP4 файлово разширение:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>При стартиране</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Изходни файлове</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Път:</value>
+  </data>
+  <data name="Options_PathToMediaPlayer" xml:space="preserve">
+    <value>Път до медиен плеър</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Попречи на системата да заспи по време на кодиране</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Брой картинни визуализации за сканиране:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Ниво на приоритет на работа</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Предпочитай употребата на Intel QuickSync за декодиране на видео когато се използва QuickSync енкодер и има хардуерна поддръжка.</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>Също така да се използва QuickSync декодиране когато не се използва QuickSync енкодер (например x265)</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Премахни често срещана пунктуация</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Заменяне на долните черти с интервал</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Върни на "Не прави нищо", когато приложението бъде пуснато отново.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Избери мащабатор:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Мащабиране</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Изпрати файла до:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Промени първите букви на главни</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Актуализации</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>Потребителски интерфейс</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>Този път се използва за видео визуализацията.
+VLC и MPC-HC се поддържат. Други плеъри може да работят, но не са валидирани.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>Прегледай директорията с дневници</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>При завършване</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>x264/5 Настройки</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Постоянно качество дробна грануларност:</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Анаморфотен:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Автоматично</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Долу</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Отрязване:</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWidth" xml:space="preserve">
+    <value>Размер на екран:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Височина:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Автоматично</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Ляво</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Финални размери:</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Съотношение на пикселите:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Дясно</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Размер</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Горе</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Мащабиран размер:</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Експортиране към файл</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Импортиране от файл</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Официален</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Избери заглавия:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Добави към опашката</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>Избраните заглавия ще бъдат добавени, използвайки шаблона "{0}".</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Опции за видеото:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Аудио:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Изчисти всички</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Изчисти завършени</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Изчисти опашка</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Изчисти избраните</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Изтрий</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Целева директория:</value>
+  </data>
+  <data name="WhenDone_DoNothing" xml:space="preserve">
+    <value>Не прави нищо</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Продължителност на кодирането:</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Редактирай</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>Крайно време:</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Експортиране на опашка</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Размер на изходния файл:</value>
+  </data>
+  <data name="WhenDone_Hibernate" xml:space="preserve">
+    <value>Хибернация</value>
+  </data>
+  <data name="WhenDone_LockSystem" xml:space="preserve">
+    <value>Заключване на системата</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>Дневникът ще бъде наличен, след като кодирането завърши.</value>
+  </data>
+  <data name="WhenDone_Logoff" xml:space="preserve">
+    <value>Излизане</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Отваряне на целевата директория:</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Отвори директорията на източника</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Опции</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Паузирана продължителност:</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Настройки на картината:</value>
+  </data>
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
+    <value>Изход от HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Повторен опит на всички задачи</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Повторният опит се провали</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Рестартиране на избраните задачи</value>
+  </data>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Рестартиране</value>
+  </data>
+  <data name="WhenDone_Shutdown" xml:space="preserve">
+    <value>Изключване</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Източник:</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Започни опашката</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Начално време:</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
+    <value>Статистиката ще бъде налична след завършване на кодирането</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Субтитри:</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Обобщение</value>
+  </data>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Заспиване</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Видео:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>При завършване:</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Добави всички останали избрани езици</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Добави всички останали пътечки</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Добави нова пътечка</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Пътечки</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Налични езици:</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Избери езици:</value>
+  </data>
+  <data name="Shared_ChosenLanguages" xml:space="preserve">
+    <value>Избрани езици:</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Настрой поведението по подразбиране</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Презареди</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Избери диск за сканиране</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Избери файл за сканиране</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Избери папка за сканиране</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>По избор задай специфично заглавие:</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>След това избери видеото/видеата, които искаш да кодираш:</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Директория (Групово сканиране)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Отвори това DVD или Bluray устройство</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Отвори папка с един или повече файла.</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Възстанови файловете на опашката</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>Наличен е архив с предната опашка.</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Отвори единичен видео файл.</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Избор на източник</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Продължителност:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Визуализация в реално време</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Изберете изображение за визуализация</value>
+  </data>
+  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
+    <value>Предпочитай системния видео плеър по подразбиране</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Добави затворени надписи, когато са налични</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Добави "Сканиране на чуждо аудио"</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Поведение при вграждане:</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Импортиране на субтитри</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Поведение на избраните пътечки:</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Добави всички оставащи затворени надписи</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Настрой как пътечките за субтитри се избират и настройват автоматично, когато избереш ново заглавие и видео източник.</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Допълнителни аудио пътечки</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Допълнителни пътечки за субтитри</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Вграден</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Маркери на глави</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Поправяне на макроблокове</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Обратно кадриране</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>екран</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Сива скала</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>Няма аудио пътечки</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>Няма маркери на глави</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>Няма филтри</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>Няма източник</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>Няма пътечки за субтитри</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>Няма пътечки</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Визуализация на {0} от {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Завъртане</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>хранилище</value>
+  </data>
+  <data name="VideoView_2Pass" xml:space="preserve">
+    <value>Кодиране с два цикъла</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Средна побитова скорост (kb/s):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Видео енкодер</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Постоянна кадрова честота</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Постоянно качество:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Ниво на енкодера:</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Шаблон на енкодера:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Профил на енкодера:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Настройка на енкодера:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Разширени опции:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Бързо декодиране</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Кадрова честота:</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Опции за кодиране:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Максимална кадрова честота</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Качество:</value>
+  </data>
+  <data name="VideoView_TurboFirstPass" xml:space="preserve">
+    <value>Турбо първи цикъл</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Променлива кадрова честота</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Видео:</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Език:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Използвай системния език</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Относно HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Или довлачете файл или папка тук ...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Помощ</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Добави пътечка</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Настройки за аудио енкодера за всяка избрана пътечка:</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Изчисти</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Вградено</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>По подразбиране</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Само принудително</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Относно...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Дневник на дейностите</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>Проверка за _актуализации</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Изход</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_Експортиране към файл</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Файл</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_HandBrake Документация (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Помощ</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Импортиране от файл</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Настройки</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Шаблони</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Опашка</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Рестартирай вградените шаблони</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Задай настоящия да бъде по подразбиране</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>S_how Панел за шаблони</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Покажи опашката</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Инструменти</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Проверяване за актуализации ...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да изчистите директорията на файл-дневниците?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Изчисти дневници</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Изтегляне...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>Директорията с файл-дневници на HandBrake бе изчистена!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Съобщение</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Подготовка за актуализация ...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Моля изберете папка.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>Цъкнете "Прелистване", за да зададете мястото по подразбиране</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Скрий</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Покажи</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>'Добави всички' в опашката.</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>"Добави селекция" към опашка</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Изпълни файл</value>
+  </data>
+  <data name="Options_ApplicationToolbar" xml:space="preserve">
+    <value>Лента с инструменти на приложението</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Покажи "Добави всичко на опашката" в лентата с инструменти</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Покажи "Добави селекция на опашката" в лентата с инструменти</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Поддръжката за хардуерно кодиране е изключена. Ако не сте стартирали HandBrake с "--no-hardware" опцията, проверете дали ползвате най-новите версии на драйверите за видео адаптерите в тази система.
+
+Това няма да повлияе на никой от софтуерните енкодери.</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Моля, поправете настройките си за субтитри, преди да продължите.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Приложи</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Продължи кодиране</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Импортиране на опашка</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Кодиране: Цикъл {0} от {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Оставащо време: {5},  Изминало: {6} {7}  </value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Изтрий избраните</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Преносим режим: Неуспешно създаване на TMP директория. Проверете дали пътя е правилен и достъпен за писане.</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Преносим режим: Неуспешно създаване на хранилищната директория. Проверете дали пътя е правилен и достъпен за писане.</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Преносим режим: Неуспешно прочитане на portable.ini. Възможно е да има грешка в този файл. Опитайте отново използвайки portable.ini.template като насока.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Полета за заместване: {source} {title} {chapters} {creation-date} {creation-time} {date} {time} {quality_bitrate}</value>
+  </data>
+  <data name="OptionsView_PathOptions" xml:space="preserve">
+    <value>Полета за заместване: {source_path} {source_folder_name} {source}</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Питане за презаписване</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Опитай да преименуваш файла автоматично</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Презаписване на файла</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>Поведение на потребителски интерфейс</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>Поведение при презаписване на файл:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Кодирай завършените</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Звукови известия</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Опашка завършена</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>При завършване:</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Поведение при колизия на имената:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Постфикс</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Префикс</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Залепяне на число</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
+    <value>FiltersView_DeblockPreset</value>
+  </data>
+  <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
+    <value>Настройване на поправянето на макроблокове</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>Изборът на енкодер ще е достъпен в раздела "Видео"</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
+    <value>HandBrake засече недовършени задачи от опашката. Те ще са от няколко вървящи изпълнения на HandBrake. Искате ли да възстановите всички незавършени задачи?</value>
+  </data>
+  <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
+    <value>HandBrake засече недовършени задачи от опашката от последното изпълнение на приложението. Искате ли да ги възстановите?</value>
+  </data>
+  <data name="Queue_RecoveryPossible" xml:space="preserve">
+    <value>Възможно е възстановяване на опашката</value>
+  </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Настоящият Ви файл с шаблони съдържа вградени шаблони. Функцията за импортиране не поддържа импортирането на тези. Моля, използвайте "Меню с шаблони -&gt; Рестартиране на вградени шаблони", за да възстановите стандартните шаблони.
+
+Всички поддържани шаблони на потребителя ще бъдат импортирани.</value>
+  </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Веднага изпълни действието. (Това ще спре 60-секундния диалогов прозорец за потвърждение)</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Прелистване</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>Не е зададен аудио файл. Моля, цъкнете "Прелистване", за да изберете wav или mp3 файл за възпроизвеждане.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Изпълни</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Експортиране на опашка (само CLI)</value>
+  </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Използвай тъмната тема (Изисква рестартиране, само за Windows 10)</value>
+  </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Не е налично</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>ГБ</value>
+  </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>Засечена е електрическата мрежа. Продължаване на кодирането... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>Системната батерия е в критично състояние! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>Системната батерия е ниска! ({0} %). Кодирането Ви бе паузирано.</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Оставащото пространство на диска спадна под {0} ГБ на изходния диск. Паузиране на кодирането...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Автоматичен избор на аудио</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Автоматичен избор на субтитри</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Актьори:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Коментари:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Описание:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Режисьор:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Жанр:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Сюжет:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Дата на излизане:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Заглавие:</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Преглед на дневника</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Аспект:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Филтри:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Размер:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Пътечки:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Основни</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Цъкнете "Проверка за актуализации", за да проверите за нови версии</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Назад</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>В момента е паузирано</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Изходни файлове</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Глави</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Кадри</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Визуализация</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Секунди</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Всички съответстващи избрани езици</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Първи съответстващ избран език</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Първа пътечка</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Предпочита се чуждо аудио, иначе първото</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Пътечка с чуждо аудио</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Търсене на чуждо аудио</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Сканиране на чуждо аудио</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Всички съответстващи избрани езици</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Използвай всички пътечки като шаблони</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Първи съответстващ избран език</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Използвай първата пътечка като шаблон</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Без аудио</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Глави {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Автоматично</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Винаги използвай M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Винаги използвай MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Винаги използвай разделителната способност на източника</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Над нормално</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Под нормално</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Високо</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Ниско</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Нормално</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Ежемесечно</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Ежеседмично</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Винаги използвай пътя по подразбиране за всяко генерирано ново име.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Интервалът за портове трябва да е между 5000 и 32767</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Полета за заместване: {source} {destination} {exit_code}</value>
+    <comment>Note: {source}, {destination} and {exit_code} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Налична е нова версия!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2022 The HandBrake Team</value>
+  </data>
+  <data name="Options_LowBatteryLevel" xml:space="preserve">
+    <value>Ниско ниво на батерията:</value>
+  </data>
+  <data name="Options_PauseOnLowBattery" xml:space="preserve">
+    <value>Паузирай всички текущи задачи, когато батерията е ниска.</value>
+  </data>
+  <data name="SubtitleView_AddRemainingCC" xml:space="preserve">
+    <value>Добави всички оставащи затворени надписи</value>
+  </data>
+  <data name="QueueService_DuplicatesQuestion" xml:space="preserve">
+    <value>Дублиращи се задачи бяха засечени в опашковия файл, който се опитваш да импортираш. Искаш ли да презапишеш съществуващите запис?
+
+Това също така ще спре текущите изпълняващи се задачи.</value>
+  </data>
+  <data name="QueueService_DuplicatesTitle" xml:space="preserve">
+    <value>Засечени дубликати</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncLowPower" xml:space="preserve">
+    <value>Позволи Low Power QuickSync Hardware (където се поддържа).</value>
+  </data>
+  <data name="QueueView_JobInformationNotAvailable" xml:space="preserve">
+    <value>Моля, изберете една задача, за да видите обобщена информация.</value>
+  </data>
+  <data name="OptionsView_EnableWorkerProcesses" xml:space="preserve">
+    <value>Пусни всяка задача на опашката в отделен работен подпроцес.</value>
+  </data>
+  <data name="OptionsView_WorkerDefaultPort" xml:space="preserve">
+    <value>Порт по подразбиране за работния подпроцес:</value>
+  </data>
+  <data name="Presets_NotAvailableForUse" xml:space="preserve">
+    <value>Шаблонът, който сте избрали не е наличен за вашата система.
+
+Това обичайно значи, че системата ви не поддържа хардуера нужен да я изпълни.
+
+Моля, изберете друг шаблон.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation" xml:space="preserve">
+    <value>Изолация между процесите</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning1" xml:space="preserve">
+    <value>Имайте предвид, че с използването на тази функционалност, ще се стартира HTTP сървър с адрес 127.0.0.1 на избрания порт.</value>
+  </data>
+  <data name="OptionsView_ProcessIsolation_Warning2" xml:space="preserve">
+    <value>Ако избраният порт е зает, ще открие първия свободен порт измежду следващите +100.</value>
+  </data>
+  <data name="OptionsView_SimultaneousEncodes" xml:space="preserve">
+    <value>Максимален брой на паралелните кодирания:</value>
+  </data>
+  <data name="StaticPreviewView_CancelPreview" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="MainView_SelectedPresets" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="SummaryView_SameAsSource" xml:space="preserve">
+    <value>Същата като източника</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrake" xml:space="preserve">
+    <value>Рестартирай настройките</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakeQuestion" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да рестартирате HandBrake до настройките му по подразбиране?</value>
+  </data>
+  <data name="PaddingMode_Custom" xml:space="preserve">
+    <value>Персонализиран (Неограничен)</value>
+  </data>
+  <data name="PaddingMode_Fill" xml:space="preserve">
+    <value>Запълване (Околност)</value>
+  </data>
+  <data name="PaddingMode_Height" xml:space="preserve">
+    <value>Височина (Pillarbox)</value>
+  </data>
+  <data name="PaddingMode_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="PaddingMode_Width" xml:space="preserve">
+    <value>Ширина (Letterbox)</value>
+  </data>
+  <data name="PictureSettingsView_Padding" xml:space="preserve">
+    <value>Запълване:</value>
+  </data>
+  <data name="PictureSettingsView_PaddingColour" xml:space="preserve">
+    <value>Цвят:</value>
+  </data>
+  <data name="PictureSettingsView_Borders" xml:space="preserve">
+    <value>Граници:</value>
+  </data>
+  <data name="PictureSettingsView_ResAndScaling" xml:space="preserve">
+    <value>Разделителна способност и мащабиране:</value>
+  </data>
+  <data name="PictureSettingsView_RotateAndCrop" xml:space="preserve">
+    <value>Ориентация и изрязване:</value>
+  </data>
+  <data name="QueueView_FilterSettings" xml:space="preserve">
+    <value>Филтри:</value>
+  </data>
+  <data name="SummaryView_Default" xml:space="preserve">
+    <value>По подразбиране</value>
+  </data>
+  <data name="SummaryView_Forced" xml:space="preserve">
+    <value>Принудителен</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_1080p" xml:space="preserve">
+    <value>1080p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_480p" xml:space="preserve">
+    <value>480p NTSC SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_4K" xml:space="preserve">
+    <value>2160p 4K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_576p" xml:space="preserve">
+    <value>576p PAL SD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_720p" xml:space="preserve">
+    <value>720p HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_8K" xml:space="preserve">
+    <value>4320p 8K Ultra HD</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="PictureSettingsView_MaxSize" xml:space="preserve">
+    <value>Максимален размер:</value>
+  </data>
+  <data name="PictureSettingsView_ResLimit" xml:space="preserve">
+    <value>Лимит на разделителната способност:</value>
+  </data>
+  <data name="PictureSettingsResLimitModes_none" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="PresetManger_Title" xml:space="preserve">
+    <value>Управление на шаблони</value>
+  </data>
+  <data name="ManagePresetView_DeleteBuiltIn" xml:space="preserve">
+    <value>Изтрий вградените шаблони</value>
+  </data>
+  <data name="ManagePresetView_Export" xml:space="preserve">
+    <value>Експортиране на избрания шаблон</value>
+  </data>
+  <data name="ManagePresetView_Import" xml:space="preserve">
+    <value>Импортиране на шаблон(и) от файл</value>
+  </data>
+  <data name="ManagePresetView_PresetInfo" xml:space="preserve">
+    <value>Информация за шаблона:</value>
+  </data>
+  <data name="ManagePresetView_RestrictedPreset" xml:space="preserve">
+    <value>Вградените шаблони не могат да бъдат променяни.</value>
+  </data>
+  <data name="ManagePresetView_SetDefault" xml:space="preserve">
+    <value>Задай избрания шаблон по подразбиране</value>
+  </data>
+  <data name="PresetManagerView_Delete" xml:space="preserve">
+    <value>Изтрий шаблон</value>
+  </data>
+  <data name="OptionsView_NotSupported" xml:space="preserve">
+    <value>(Не се поддържа на тази система)</value>
+  </data>
+  <data name="QueueView_Stop" xml:space="preserve">
+    <value>Прекрати</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PresetService_CategoryAlreadyExists" xml:space="preserve">
+    <value>Името за категория, което въведохте, вече съществува. Моля, изберете различно име.</value>
+  </data>
+  <data name="PresetService_CategoryNameEmpty" xml:space="preserve">
+    <value>Името за категория е празно. Моля добавете име.</value>
+  </data>
+  <data name="TextEntryView_EnterName" xml:space="preserve">
+    <value>Въведете име:</value>
+  </data>
+  <data name="ManagePresetView_NoPresetSelected" xml:space="preserve">
+    <value>Няма избран шаблон</value>
+  </data>
+  <data name="ManagePresetView_ExportUserPresets" xml:space="preserve">
+    <value>Експортиране всички потребителски шаблони</value>
+  </data>
+  <data name="Options_LowDiskspaceLevelText" xml:space="preserve">
+    <value>Ниво, на което да се показва предупреждение за ниско дисково пространство:</value>
+  </data>
+  <data name="OptionsView_SimultaneousHardwareLimitNotice" xml:space="preserve">
+    <value>Внимание: Това е максималният лимит на едновременни задачи. Хардуерните ограничения може да играят роля, намалявайки истинския брой едновременни задачи по време на кодиране. Настройките ще влязат в сила на следващата група от опашката или след рестартиране на приложението.</value>
+  </data>
+  <data name="Preset_NotAvailable" xml:space="preserve">
+    <value>(Не е налично)</value>
+  </data>
+  <data name="AddPresetView_IsDefault" xml:space="preserve">
+    <value>Е по подразбиране:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="StaticPreviewView_FineTuning" xml:space="preserve">
+    <value>Настройки за фино настройване на картина</value>
+  </data>
+  <data name="StaticPreviewView_ShowPictureSettingsAdjustment" xml:space="preserve">
+    <value>Покажи контролите за настройка на изрязването</value>
+  </data>
+  <data name="DarkTheme_dark" xml:space="preserve">
+    <value>Използвай тъмна</value>
+  </data>
+  <data name="DarkTheme_light" xml:space="preserve">
+    <value>Използвай светла</value>
+  </data>
+  <data name="DarkTheme_system" xml:space="preserve">
+    <value>Според системата</value>
+  </data>
+  <data name="OptionsView_DarkThemeMode" xml:space="preserve">
+    <value>Тема:</value>
+  </data>
+  <data name="OptionsView_RequiresRestart" xml:space="preserve">
+    <value>(Изисква рестартиране)</value>
+  </data>
+  <data name="FiltersView_ChromaSmooth" xml:space="preserve">
+    <value>Изглаждане на наситеността:</value>
+  </data>
+  <data name="FiltersView_ColourSpace" xml:space="preserve">
+    <value>Цветово пространство:</value>
+  </data>
+  <data name="SummaryView_Colourspace" xml:space="preserve">
+    <value>Цветово пространство</value>
+  </data>
+  <data name="PictureSettingsView_SeePreview" xml:space="preserve">
+    <value>Отвори визуализация</value>
+  </data>
+  <data name="SummaryView_SourcePreview" xml:space="preserve">
+    <value>Визуализация на източник:</value>
+  </data>
+  <data name="QueueView_JobStatus" xml:space="preserve">
+    <value>Статус на задачата:</value>
+  </data>
+  <data name="QueueView_JobStatus_Cancelled" xml:space="preserve">
+    <value>Отменена</value>
+  </data>
+  <data name="QueueView_JobStatus_Complete" xml:space="preserve">
+    <value>Завършена</value>
+  </data>
+  <data name="QueueView_JobStatus_InitFailed" xml:space="preserve">
+    <value>Невалидни настройки. Проверете дневника за повече подробности.</value>
+  </data>
+  <data name="QueueView_JobStatus_InvalidInput" xml:space="preserve">
+    <value>Невалиден вход. Проверете дневника за повече детайли.</value>
+  </data>
+  <data name="QueueView_JobStatus_NoErrorCode" xml:space="preserve">
+    <value>Неизвестен статус. Проверете дневника за повече подробности.</value>
+  </data>
+  <data name="QueueView_JobStatus_ReadError" xml:space="preserve">
+    <value>Засечени грешки при четенето на източника.</value>
+  </data>
+  <data name="QueueView_JobStatus_Unknown" xml:space="preserve">
+    <value>Неизвестна грешка. Проверете дневника за повече подробности.</value>
+  </data>
+  <data name="QueueView_JobStatus_WorkerCrash" xml:space="preserve">
+    <value>Работният подпроцес спря да работи. Проверете дневника за повече подробности.</value>
+  </data>
+  <data name="Startup_HbDllMissing" xml:space="preserve">
+    <value>Файлът „hb.dll“ липсва. Моля, преинсталирайте.</value>
+  </data>
+  <data name="OptionsView_SafeMode" xml:space="preserve">
+    <value>Внимание: Имайте предвид, че тази версия на HandBrake е в "Безопасен режим" и не поддържа хардуерни енкодери. Ако искате да имате поддръжка за хардуерни енкодери, изтеглете версия, която не е в "Безопасен режим" от уебсайта.</value>
+  </data>
+  <data name="PadColour_Black" xml:space="preserve">
+    <value>Черно</value>
+  </data>
+  <data name="PadColour_Custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="PadColour_White" xml:space="preserve">
+    <value>Бяло</value>
+  </data>
+  <data name="PictureSettingsView_PaddingCustomColour" xml:space="preserve">
+    <value>RGB стойност:</value>
+  </data>
+  <data name="SummaryView_Padded" xml:space="preserve">
+    <value>(запълнено)</value>
+  </data>
+  <data name="FiltersView_Flip" xml:space="preserve">
+    <value>Обръщане:</value>
+  </data>
+  <data name="PictureSettingsView_SourceDimensions" xml:space="preserve">
+    <value>Измерения на източника:</value>
+  </data>
+  <data name="PictureSettingsViewModel_SourceInfo" xml:space="preserve">
+    <value>Размер на хранилище: {0}x{1}     Размер на екрана: {2}x{3}      Съотношение на страните: {4}</value>
+  </data>
+  <data name="MainViewModel_FilePathSelectError" xml:space="preserve">
+    <value>Бе засечена грешка в диалоговия прозорец на файловия мениджър.
+
+- Имайте предвид, че дълги пътища не се поддържат напълно. Дръжте пътищата по-кратки от 255 знака.
+- Последната използвана директория бе върната в начално положение, за да се предотвратят грешки при следващото сканиране за файл.</value>
+  </data>
+  <data name="PictureSettingsView_MaxHeight" xml:space="preserve">
+    <value>Максимална височина:</value>
+  </data>
+  <data name="PictureSettingsView_MaxWidth" xml:space="preserve">
+    <value>Максимална ширина:</value>
+  </data>
+  <data name="PictureSettingsViewModel_AspectRatioLabel" xml:space="preserve">
+    <value>Съотношение на страните: {0}</value>
+  </data>
+  <data name="SummaryView_MetadataPassthru" xml:space="preserve">
+    <value>Подаване на общи метаданни</value>
+  </data>
+  <data name="OptionsViewModel_InvalidAutonamePath" xml:space="preserve">
+    <value>Пътят по подразбиране за автоматично именуване не е валиден. {0} не трябва да бъде преди {1}</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheck" xml:space="preserve">
+    <value>Бихте ли искали да позволите на HandBrake автоматично да проверява за актуализации?
+
+Може да промените решението си по всяко време като промените настройката в Настройки -&gt; Основни -&gt; Проверка за актуализации</value>
+  </data>
+  <data name="FirstRun_EnableUpdateCheckHeader" xml:space="preserve">
+    <value>Проверка за актуализации?</value>
+  </data>
+  <data name="OptionsViewModel_UpdateNotice" xml:space="preserve">
+    <value>Преди да актуализирате:
+- Уверете се, че няма чакащи кодирания на опашката. 
+- Направете резервно копие или бележка с всички персонализирани шаблони, които сте създали, понеже може да не са напълно съвместими с по-новите версии.</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>(По подразбиране)</value>
+  </data>
+  <data name="PresetDisplayMode_Category" xml:space="preserve">
+    <value>Категории</value>
+  </data>
+  <data name="PresetDisplayMode_Flat" xml:space="preserve">
+    <value>Плоско</value>
+  </data>
+  <data name="PresetDisplayMode_Partial" xml:space="preserve">
+    <value>Частично плоско</value>
+  </data>
+  <data name="OptionsView_PresetDisplayMode" xml:space="preserve">
+    <value>Изберете как шаблоните да се показват в менютата:</value>
+  </data>
+  <data name="QueueView_SelectedPresets" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="LogViewModel_Complete" xml:space="preserve">
+    <value>[Готово]</value>
+  </data>
+  <data name="QueueViewModel_EditJob" xml:space="preserve">
+    <value>Редактиране на задача?</value>
+  </data>
+  <data name="QueueView_Length" xml:space="preserve">
+    <value>Изходен размер:</value>
+  </data>
+  <data name="QueueView_MoveToBottom" xml:space="preserve">
+    <value>Премести долу</value>
+  </data>
+  <data name="QueueView_MoveToTop" xml:space="preserve">
+    <value>Премести горе</value>
+  </data>
+  <data name="QueueView_VideoOutputBitrate" xml:space="preserve">
+    <value>Изходна побитова скорост:</value>
+  </data>
+  <data name="QueueView_AverageEncodeSpeed" xml:space="preserve">
+    <value>Средна скорост на кодиране:</value>
+  </data>
+  <data name="QueueViewModel_DifferenceText" xml:space="preserve">
+    <value>от файл източник</value>
+  </data>
+  <data name="QueueViewModel_NotAvailable" xml:space="preserve">
+    <value>Не е налично</value>
+  </data>
+  <data name="QueueView_SourceLength" xml:space="preserve">
+    <value>Дължина на източника:</value>
+  </data>
+  <data name="Options_Reset" xml:space="preserve">
+    <value>Рестартиране</value>
+  </data>
+  <data name="OptionsViewModel_ResetHandBrakePresetsQuestion" xml:space="preserve">
+    <value>Сигурен ли сте, че искате да изтриете всички вградени шаблони?</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresets" xml:space="preserve">
+    <value>Рестартирай всички вградени шаблони до тези по подразбиране в HandBrake:</value>
+  </data>
+  <data name="OptionsView_ResetBuildInPresetsNotice" xml:space="preserve">
+    <value>(Потребителските шаблони няма да бъдат рестартирани)</value>
+  </data>
+  <data name="OptionsView_ResetSettingsToDefaults" xml:space="preserve">
+    <value>Рестартирай всички настройки на HandBrake към тези по подразбиране:</value>
+  </data>
+  <data name="Options_BuiltInPresets" xml:space="preserve">
+    <value>Вградени шаблони</value>
+  </data>
+  <data name="Options_UserSettings" xml:space="preserve">
+    <value>Потребителски настройки</value>
+  </data>
+  <data name="PresetDisplayMode_FloatingPanel" xml:space="preserve">
+    <value>Плаващ дървовиден изглед</value>
+  </data>
+  <data name="QueueViewModel_PlayFileErrorSolution" xml:space="preserve">
+    <value>Подсигурете се, че имате правилно настроени асоциации за типовете файлове в Windows, за да може да отворите този файл с поддържан видео плеър.</value>
+  </data>
+  <data name="QueueViewModel_ImportFail" xml:space="preserve">
+    <value>Файлът на опашката не може да бъде прочетен</value>
+  </data>
+  <data name="QueueViewModel_ImportFailSolution" xml:space="preserve">
+    <value>Файлът може да е повреден или от по-ранна версия на HandBrake.
+Поддържат се само файлове на опашката от настоящата версия.</value>
+  </data>
+  <data name="Notifications_EncodeDone" xml:space="preserve">
+    <value>Вашето кодиране с HandBrake е завършено!</value>
+  </data>
+  <data name="Notifications_QueueDone" xml:space="preserve">
+    <value>Вашата опашка в HandBrake е завършена!</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalSubText" xml:space="preserve">
+    <value>Това ще спре и опциите за показване на известия в лентата на задачите на Windows в раздела "При завършване". Разрешете ги отново, ако искате пак да активирате това свойство.</value>
+  </data>
+  <data name="OptionsView_NotificationRemovalText" xml:space="preserve">
+    <value>Премахни HandBrake от контролния пател за известия на Windows.</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxHeader" xml:space="preserve">
+    <value>Деинсталиран</value>
+  </data>
+  <data name="OptionsView_UninstallMessageBoxText" xml:space="preserve">
+    <value>Настройките за известия бяха премахнати.</value>
+  </data>
+  <data name="OptionsView_UninstallToast" xml:space="preserve">
+    <value>Изчисти и деинсталирай</value>
+  </data>
+  <data name="OptionsView_WindowsNotification" xml:space="preserve">
+    <value>Изпрати известие към Windows Taskbar.</value>
+  </data>
+  <data name="OptionsView_WindowsNotificationsBanner" xml:space="preserve">
+    <value>Известия от Windows</value>
+  </data>
+  <data name="Main_QueueMultiJobStatus" xml:space="preserve">
+    <value>{0} завършени задачи. {1} Работи се по {2} задачи, като {3} чакат да бъдат обработени.</value>
+  </data>
+  <data name="MainView_AutonameRegenerate" xml:space="preserve">
+    <value>Регенерирай (Именувай автоматично)</value>
+  </data>
+  <data name="MainView_OpenDirectory" xml:space="preserve">
+    <value>Отворете тази директория</value>
+  </data>
+  <data name="Shared_CollapseAll" xml:space="preserve">
+    <value>Затваряне на всички</value>
+  </data>
+  <data name="Shared_ExpandAll" xml:space="preserve">
+    <value>Разгръщане на всички</value>
+  </data>
+  <data name="OptionsView_RightToleftMode" xml:space="preserve">
+    <value>Режим от дясно наляво на дисплея:</value>
+  </data>
+  <data name="RightToLeft_Off" xml:space="preserve">
+    <value>Изключено</value>
+  </data>
+  <data name="RightToLeft_TextOnly" xml:space="preserve">
+    <value>Само текст</value>
+  </data>
+  <data name="RightToLeft_WholeInterface" xml:space="preserve">
+    <value>Пълен потребителски интерфейс</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdate" xml:space="preserve">
+    <value>Настоящата версия за разработчици, която използвате, остарява. Може да искате да я актуализирате!</value>
+  </data>
+  <data name="SourceSelection_NightlyUpdateUrl" xml:space="preserve">
+    <value>Изтегляне чрез Github</value>
+  </data>
+  <data name="MainView_NightlyBuildsUpdate" xml:space="preserve">
+    <value>Изтеглете версии за разработчици (HTTPS)</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncHyperEncode" xml:space="preserve">
+    <value>Позволи QuickSync Deep Link Hyper Encode</value>
+  </data>
+  <data name="OptionsView_HyperEncodeDescription" xml:space="preserve">
+    <value>Предпочита употребата на множество енкодери, за да забърза едно кодиране, когато се поддържа. Изключи тази настройка, за да се позволи балансиране на натоварването между едновременни кодирания между различните енкодери.</value>
+  </data>
+  <data name="MainView_OpenHandBrake" xml:space="preserve">
+    <value>Отвори HandBrake</value>
+  </data>
+  <data name="Startup_UnableToStartInfo" xml:space="preserve">
+    <value>Поддръжката за хардуерно кодиране беше спряна, защото често е причината при проблеми по време на стартиране.
+- Моля, опитайте да рестартирайте HandBrake.
+- Ако проблемът не се отстрани, може причината да е стара версия на драйвера на видео картата (интегрирана или дискретната), която да причинява този проблем.
+
+Поддръжката за хардуерно кодиране може да се пусне отново в настройки.</value>
+  </data>
+  <data name="Startup_UnableToStart" xml:space="preserve">
+    <value>HandBrake не успя да стартира.</value>
+  </data>
+  <data name="OptionsView_ResetSafeMode" xml:space="preserve">
+    <value>Рестартирай безопасен режим</value>
+  </data>
+  <data name="OptionsView_ResetSafeModeMessage" xml:space="preserve">
+    <value>Моля, рестартирате HandBrake.</value>
+  </data>
+  <data name="Debug_QueueDataExport" xml:space="preserve">
+    <value>Експортиране на статистики за опашката (csv)</value>
+  </data>
+  <data name="Debug_QueueExportDataDone" xml:space="preserve">
+    <value>Експортирането завърши!</value>
+  </data>
+  <data name="Debug_QueueSweep_NotSetup" xml:space="preserve">
+    <value>Първо трябва да сканирате източник и да имате зададена първоначална целева директория</value>
+  </data>
+  <data name="OptionsView_FileCollisionNotice" xml:space="preserve">
+    <value>Само когато файлът вече съществува на диска.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="SubtitleView_NoSubtitlesAdded" xml:space="preserve">
+    <value>Не бяха добавени никакви пътечки за субтитри.
+
+Това може да е заради ограничения на файловия контейнер, който сте избрали. Моля, погледнете нашата документация за помощ със субтитрите за повече информация.</value>
+  </data>
+  <data name="DarkTheme_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="SourceSelection_UpdateNow" xml:space="preserve">
+    <value>Актуализирате сега!</value>
+  </data>
+  <data name="CropMode_Auto" xml:space="preserve">
+    <value>Автоматично</value>
+  </data>
+  <data name="CropMode_Loose" xml:space="preserve">
+    <value>Консервативно</value>
+  </data>
+  <data name="CropMode_None" xml:space="preserve">
+    <value>Никакъв</value>
+  </data>
+  <data name="CropMode_Custom" xml:space="preserve">
+    <value>Персонализиране</value>
+  </data>
+  <data name="OptionsView_EnableNvDecSupport" xml:space="preserve">
+    <value>Предпочитай употребата на Nvidia NVDec за декодиране на видеото, когато NVEnc енкодера и хардуерната поддръжка за него са налични.</value>
+  </data>
+  <data name="Options_Hardware" xml:space="preserve">
+    <value>Хардуерна поддръжка</value>
+  </data>
+</root>
